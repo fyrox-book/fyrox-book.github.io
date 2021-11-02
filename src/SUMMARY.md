@@ -2,11 +2,13 @@
 
 - [Introduction](./introduction.md)
 - [rg3d](./rg3d/introduction.md)
+    - [Getting started](./rg3d/beginning/getting_started.md) 
     - [Animation](./rg3d/animation/animation.md)
     - [Rendering](./rg3d/rendering/rendering.md)
       - [Shaders](./rg3d/rendering/shaders.md)
       - [Materials](./rg3d/rendering/materials.md)       
     - [Sound](./rg3d/sound/sound.md)
+    - [Physics](./rg3d/physics/physics.md)
     - [User Interface](./rg3d/ui/ui.md)
     - [Resource Management](./rg3d/resources/resources.md)
         - [3D Models](.rg3d/resources/sound.md)
