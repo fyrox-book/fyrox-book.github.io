@@ -2,7 +2,11 @@
 
 - [Introduction](./introduction.md)
 - [rg3d](./rg3d/introduction.md)
-    - [Getting started](./rg3d/beginning/getting_started.md) 
+    - [Getting started](./rg3d/beginning/getting_started.md)
+      - [Framework](./rg3d/beginning/framework.md)
+      - [Custom game loop](./rg3d/beginning/custom_game_loop.md)
+      - [Scene and scene graph](./rg3d/beginning/scene_and_scene_graph.md)
+      - [Data management](./rg3d/beginning/data_management.md)
     - [Animation](./rg3d/animation/animation.md)
     - [Rendering](./rg3d/rendering/rendering.md)
       - [Shaders](./rg3d/rendering/shaders.md)
