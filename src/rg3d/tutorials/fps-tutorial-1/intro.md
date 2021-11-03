@@ -9,4 +9,4 @@ in the main repo.
 
 **rg3d version**: specific commit ([5564b6e](https://github.com/rg3dengine/rg3d/commit/a3c3d678c361aa72fc44c36f3e37adc20a54f311))  
 **rusty-editor version**: specific commit ([ca0da2e](https://github.com/rg3dengine/rusty-editor/commit/81c942d7bd3e70d3604db803ca987af933d44773))  
-**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial1-character-controller)
+**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/)

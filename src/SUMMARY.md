@@ -21,4 +21,6 @@
     - [Tutorials](./rg3d/tutorials/tutorials.md)
       - [FPS Tutorial](./rg3d/tutorials/fps-tutorial-1/intro.md)
         - [Character controller](./rg3d/tutorials/fps-tutorial-1/1_character_controller.md)
+        - [Weapons](./rg3d/tutorials/fps-tutorial-2/tutorial-part-2.md)
+        - [Bots and AI](./rg3d/tutorials/fps-tutorial-3/tutorial-part-3.md)
 - [rusty-editor](./rusty-editor/introduction.md)
