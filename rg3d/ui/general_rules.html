@@ -135,8 +135,7 @@
                 <div id="content" class="content">
                     <main>
                         <p>This chapter covers general rules that will help you to write code that will be easy to understand.</p>
-<h2 id="general-rules"><a class="header" href="#general-rules">General rules</a></h2>
-<h3 id="fluent-syntax"><a class="header" href="#fluent-syntax">Fluent syntax</a></h3>
+<h2 id="fluent-syntax"><a class="header" href="#fluent-syntax">Fluent syntax</a></h2>
 <p>Widget builders supports fluent syntax, this means that you can create your widget in series of nested 
 call of other widget builders. In code, it looks something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
@@ -207,7 +206,7 @@ let button = ButtonBuilder::new(WidgetBuilder::new())
 // image now contains a handle of the Image widget 
 <span class="boring">}
 </span></code></pre></pre>
-<h3 id="should-i-create-a-custom-widget-or-use-composition-of-other-widgets"><a class="header" href="#should-i-create-a-custom-widget-or-use-composition-of-other-widgets">Should I create a custom widget or use composition of other widgets?</a></h3>
+<h2 id="should-i-create-a-custom-widget-or-use-composition-of-other-widgets"><a class="header" href="#should-i-create-a-custom-widget-or-use-composition-of-other-widgets">Should I create a custom widget or use composition of other widgets?</a></h2>
 <p>The answer depends on the use case, but the general rules here is quite simple: </p>
 <ul>
 <li>If your widget exist in a single instance, then there is no need to create a custom widget for it.</li>
