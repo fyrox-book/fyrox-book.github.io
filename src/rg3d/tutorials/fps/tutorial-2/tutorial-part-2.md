@@ -30,8 +30,10 @@ use weapon::Weapon;
 Switch to `weapon.rs` and paste this code into it:
 
 ```rust
+use rg3d::engine::resource_manager::MaterialSearchOptions;
+use rg3d::scene::graph::Graph;
 use rg3d::{
-    core::pool::Handle,
+    core::{algebra::Vector3, math::Vector3Ext, pool::Handle},
     engine::resource_manager::ResourceManager,
     scene::{node::Node, Scene},
 };
@@ -46,7 +48,7 @@ impl Weapon {
     pub async fn new(scene: &mut Scene, resource_manager: ResourceManager) -> Self {
         // Yeah, you need only few lines of code to load a model of any complexity.
         let model = resource_manager
-            .request_model("data/models/m4.fbx")
+            .request_model("data/models/m4.fbx", MaterialSearchOptions::RecursiveUp)
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -147,13 +149,13 @@ use rg3d::core::pool::{Handle, Pool};
 Now we need to change `Game::new()` a bit to add a weapon to the player:
 
 ```rust
-pub async fn new(engine: &mut GameEngine) -> Self {
+pub async fn new(engine: &mut Engine) -> Self {
     let mut scene = Scene::new();
 
     // Load a scene resource and create its instance.
     engine
         .resource_manager
-        .request_model("data/models/scene.rgs")
+        .request_model("data/models/scene.rgs", MaterialSearchOptions::UsePathDirectly)
         .await
         .unwrap()
         .instantiate_geometry(&mut scene);
@@ -230,7 +232,7 @@ a place to handle messages, `Game::update` seems to be the most suitable - it is
 most wide context. Let's change `Game::update` to this code:
 
 ```rust
-pub fn update(&mut self, engine: &mut GameEngine, dt: f32) {
+pub fn update(&mut self, engine: &mut Engine, dt: f32) {
     self.player.update(&mut engine.scenes[self.scene]); 
 
     // v New code v 
@@ -259,7 +261,7 @@ mysterious line `self.shoot_weapon(weapon, engine)` which is not yet defined, le
 `impl Game`:
 
 ```rust
-fn shoot_weapon(&mut self, weapon: Handle<Weapon>, engine: &mut GameEngine) {
+ fn shoot_weapon(&mut self, weapon: Handle<Weapon>, engine: &mut Engine) {
     let weapon = &mut self.weapons[weapon];
 
     if weapon.can_shoot() {
@@ -280,10 +282,11 @@ fn shoot_weapon(&mut self, weapon: Handle<Weapon>, engine: &mut GameEngine) {
 
         scene.physics.cast_ray(
             RayCastOptions {
-                ray,
+                ray_origin: Point3::from(ray.origin),
                 max_len: ray.dir.norm(),
                 groups: Default::default(),
                 sort_results: true, // We need intersections to be sorted from closest to furthest.
+                ray_direction: ray.dir,
             },
             &mut intersections,
         );
@@ -298,15 +301,17 @@ fn shoot_weapon(&mut self, weapon: Handle<Weapon>, engine: &mut GameEngine) {
             //
 
             // For now just apply some force at the point of impact.
-            let collider = scene
+            let colliders_parent = scene
                 .physics
                 .colliders
-                .get(intersection.collider.into())
+                .get(&intersection.collider)
+                .unwrap()
+                .parent()
                 .unwrap();
             scene
                 .physics
                 .bodies
-                .get_mut(collider.parent())
+                .native_mut(colliders_parent)
                 .unwrap()
                 .apply_force_at_point(
                     ray.dir.normalize().scale(10.0),
@@ -343,12 +348,15 @@ fn create_shot_trail(
 ) {
     let transform = TransformBuilder::new()
         .with_local_position(origin)
+        // Scale the trail in XZ plane to make it thin, and apply `trail_length` scale on Y axis
+        // to stretch is out.
         .with_local_scale(Vector3::new(0.0025, 0.0025, trail_length))
+        // Rotate the trail along given `direction`
         .with_local_rotation(UnitQuaternion::face_towards(&direction, &Vector3::y()))
         .build();
 
     // Create unit cylinder with caps that faces toward Z axis.
-    let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
+    let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
         6,     // Count of sides
         1.0,   // Radius
         1.0,   // Height
@@ -356,6 +364,16 @@ fn create_shot_trail(
         // Rotate vertical cylinder around X axis to make it face towards Z axis
         &UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
     )));
+
+    // Create an instance of standard material for the shot trail.
+    let mut material = Material::standard();
+    material
+        .set_property(
+            &ImmutableString::new("diffuseColor"),
+            // Set yellow-ish color.
+            PropertyValue::Color(Color::from_rgba(255, 255, 0, 120)),
+        )
+        .unwrap();
 
     MeshBuilder::new(
         BaseBuilder::new()
@@ -365,8 +383,7 @@ fn create_shot_trail(
             .with_lifetime(0.25),
     )
     .with_surfaces(vec![SurfaceBuilder::new(shape)
-        // Set yellow-ish color.
-        .with_color(Color::from_rgba(255, 255, 0, 120))
+        .with_material(Arc::new(Mutex::new(material)))
         .build()])
     // Do not cast shadows.
     .with_cast_shadows(false)
@@ -391,7 +408,7 @@ check if it can shoot (if the timer has reached zero), and "shoot" (reset the ti
 Next we're using ray casting to find the target we're shooting at:
 
 ```rust
-...
+// ...
 
 let scene = &mut engine.scenes[self.scene];
 
@@ -408,10 +425,11 @@ let mut intersections = Vec::new();
 
 scene.physics.cast_ray(
     RayCastOptions {
-        ray,
+        ray_origin: Point3::from(ray.origin),
         max_len: ray.dir.norm(),
         groups: Default::default(),
         sort_results: true, // We need intersections to be sorted from closest to furthest.
+        ray_direction: ray.dir,
     },
     &mut intersections,
 );
@@ -434,15 +452,17 @@ let trail_length = if let Some(intersection) = intersections
     //
 
     // For now just apply some force at the point of impact.
-    let collider = scene
+    let colliders_parent = scene
         .physics
         .colliders
-        .get(intersection.collider.into())
+        .get(&intersection.collider)
+        .unwrap()
+        .parent()
         .unwrap();
     scene
         .physics
         .bodies
-        .get_mut(collider.parent())
+        .native_mut(colliders_parent)
         .unwrap()
         .apply_force_at_point(
             ray.dir.normalize().scale(10.0),
@@ -505,8 +525,7 @@ Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to th
 geometry for the cylinder:
 
 ```rust
-// Create unit cylinder with caps that faces toward Z axis.
-let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
+ let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
     6,     // Count of sides
     1.0,   // Radius
     1.0,   // Height
@@ -519,6 +538,16 @@ let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
 Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:
 
 ```rust
+// Create an instance of standard material for the shot trail.
+let mut material = Material::standard();
+material
+    .set_property(
+        &ImmutableString::new("diffuseColor"),
+        // Set yellow-ish color.
+        PropertyValue::Color(Color::from_rgba(255, 255, 0, 120)),
+    )
+    .unwrap();
+
 MeshBuilder::new(
     BaseBuilder::new()
         .with_local_transform(transform)
@@ -527,8 +556,7 @@ MeshBuilder::new(
         .with_lifetime(0.25),
 )
 .with_surfaces(vec![SurfaceBuilder::new(shape)
-    // Set yellow-ish color.
-    .with_color(Color::from_rgba(255, 255, 0, 120))
+    .with_material(Arc::new(Mutex::new(material)))
     .build()])
 // Do not cast shadows.
 .with_cast_shadows(false)
@@ -711,15 +739,15 @@ fn create_bullet_impact(
         BaseEmitterBuilder::new()
             .with_max_particles(200)
             .with_spawn_rate(1000)
-            .with_size_modifier_range(NumericRange::new(-0.01, -0.0125))
-            .with_size_range(NumericRange::new(0.0010, 0.025))
-            .with_x_velocity_range(NumericRange::new(-0.01, 0.01))
-            .with_y_velocity_range(NumericRange::new(0.017, 0.02))
-            .with_z_velocity_range(NumericRange::new(-0.01, 0.01))
+            .with_size_modifier_range(-0.01..-0.0125)
+            .with_size_range(0.0010..0.025)
+            .with_x_velocity_range(-0.01..0.01)
+            .with_y_velocity_range(0.017..0.02)
+            .with_z_velocity_range(-0.01..0.01)
             .resurrect_particles(false),
     )
-        .with_radius(0.01)
-        .build();
+    .with_radius(0.01)
+    .build();
 
     // Color gradient will be used to modify color of each particle over its lifetime.
     let color_gradient = {
@@ -747,7 +775,7 @@ fn create_bullet_impact(
     .with_color_over_lifetime_gradient(color_gradient)
     .with_emitters(vec![emitter])
     // We'll use simple spark texture for each particle.
-    .with_texture(resource_manager.request_texture(Path::new("data/textures/spark.png")))
+    .with_texture(resource_manager.request_texture(Path::new("data/textures/spark.png"), None))
     .build(graph)
 }
 ```
