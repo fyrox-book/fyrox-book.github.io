@@ -1,8 +1,6 @@
 This chapter covers general rules that will help you to write code that will be easy to understand.
 
-## General rules
-
-### Fluent syntax
+## Fluent syntax
 
 Widget builders supports fluent syntax, this means that you can create your widget in series of nested 
 call of other widget builders. In code, it looks something like this:
@@ -71,7 +69,7 @@ let button = ButtonBuilder::new(WidgetBuilder::new())
 // image now contains a handle of the Image widget 
 ```
 
-### Should I create a custom widget or use composition of other widgets?
+## Should I create a custom widget or use composition of other widgets?
 
 The answer depends on the use case, but the general rules here is quite simple: 
 
