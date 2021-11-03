@@ -46,4 +46,33 @@ your needs.
 - `fn on_exit(&mut self, engine: &mut Engine)` - the function that will be called right before your application
   about to shut down allowing you to do some clean up or some other actions.
 
-As you can see it is very concise and simple, every method serves a particular purpose. 
+As you can see it is very concise and simple, every method serves a particular purpose. The most important method is
+`on_tick`, it the place where all your game logic will be updated. To demonstrate this, let's add simple animation:
+
+```rust
+struct Game {
+    hue: f32,
+}
+
+impl GameState for Game {
+    fn init(_engine: &mut Engine) -> Self
+    where
+        Self: Sized,
+    {
+        Self { hue: 0.0 }
+    }
+
+    // Implement a function that will update game logic and will be called at fixed rate of 60 Hz.
+    fn on_tick(&mut self, engine: &mut Engine, dt: f32, _: &mut ControlFlow) {
+        // Increase hue at fixed rate of 24 degrees per second.
+        self.hue += 24.0 * dt;
+
+        // Slowly change color of the window.
+        engine
+            .renderer
+            .set_backbuffer_clear_color(Color::from(Hsv::new(self.hue % 360.0, 100.0, 100.0)))
+    }
+}
+```
+
+This piece of code will slowly change the background color of the window going through all colors of rainbow. 
