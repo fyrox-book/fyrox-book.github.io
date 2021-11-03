@@ -22,10 +22,22 @@ Previous tutorials were children's play in comparison to this, prepare for some 
 a separate module for bots - add `bot.rs` and fill it with following code:
 
 ```rust
+use rg3d::engine::resource_manager::MaterialSearchOptions;
 use rg3d::{
-    core::{algebra::Vector3, pool::Handle},
-    engine::{resource_manager::ResourceManager, ColliderHandle, RigidBodyHandle},
-    physics::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
+    animation::{
+        machine::{Machine, Parameter, PoseNode, State, Transition},
+        Animation,
+    },
+    core::{
+        algebra::{UnitQuaternion, Vector3},
+        pool::Handle,
+    },
+    engine::resource_manager::ResourceManager,
+    physics3d::{
+        rapier::dynamics::RigidBodyBuilder, rapier::geometry::ColliderBuilder, ColliderHandle,
+        RigidBodyHandle,
+    },
+    resource::model::Model,
     scene::{base::BaseBuilder, node::Node, Scene},
 };
 
@@ -43,7 +55,7 @@ impl Bot {
     ) -> Self {
         // Load bot 3D model as usual.
         let model = resource_manager
-            .request_model("data/models/zombie.fbx")
+            .request_model("data/models/zombie.fbx", MaterialSearchOptions::RecursiveUp)
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -116,7 +128,7 @@ As usual, let's disassemble the code line-by-line. Creation of bot begins from l
 
 ```rust
 let model = resource_manager
-    .request_model("data/models/zombie.fbx")
+    .request_model("data/models/zombie.fbx", MaterialSearchOptions::RecursiveUp)
     .await
     .unwrap()
     .instantiate_geometry(scene);
@@ -286,9 +298,18 @@ impl BotAnimationMachine {
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
-            resource_manager.request_model("data/animations/zombie_walk.fbx"),
-            resource_manager.request_model("data/animations/zombie_idle.fbx"),
-            resource_manager.request_model("data/animations/zombie_attack.fbx"),
+            resource_manager.request_model(
+                "data/animations/zombie_walk.fbx",
+                MaterialSearchOptions::RecursiveUp
+            ),
+            resource_manager.request_model(
+                "data/animations/zombie_idle.fbx",
+                MaterialSearchOptions::RecursiveUp
+            ),
+            resource_manager.request_model(
+                "data/animations/zombie_attack.fbx",
+                MaterialSearchOptions::RecursiveUp
+            ),
         );
 
         // Now create three states with different animations.
@@ -435,10 +456,19 @@ new ABM instance, nothing fancy here. Next we're loading animations in parallel:
 let mut machine = Machine::new();
 
 // Load animations in parallel.
-let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::futures::join!(
-    resource_manager.request_model("data/animations/zombie_walk.fbx"),
-    resource_manager.request_model("data/animations/zombie_idle.fbx"),
-    resource_manager.request_model("data/animations/zombie_attack.fbx"),
+let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
+    resource_manager.request_model(
+        "data/animations/zombie_walk.fbx",
+        MaterialSearchOptions::RecursiveUp
+    ),
+    resource_manager.request_model(
+        "data/animations/zombie_idle.fbx",
+        MaterialSearchOptions::RecursiveUp
+    ),
+    resource_manager.request_model(
+        "data/animations/zombie_attack.fbx",
+        MaterialSearchOptions::RecursiveUp
+    ),
 );
 ```
 
@@ -576,7 +606,7 @@ Ok, now we have to use ABM we've made at full capacity, to do that we'll write s
 in a straight line and attack if they're close enough. Let's start by modifying `Bot::update`:
 
 ```rust
-    pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
+pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
     let attack_distance = 0.6;
 
     // Simple AI - follow target by a straight line.
