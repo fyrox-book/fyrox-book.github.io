@@ -1,0 +1,907 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Bots and AI - rg3d Cheat Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../../favicon.png">
+        <link rel="stylesheet" href="../../../../css/variables.css">
+        <link rel="stylesheet" href="../../../../css/general.css">
+        <link rel="stylesheet" href="../../../../css/chrome.css">
+        <link rel="stylesheet" href="../../../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../../highlight.css">
+        <link rel="stylesheet" href="../../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../../../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/introduction.html"><strong aria-hidden="true">2.</strong> rg3d</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/getting_started.html"><strong aria-hidden="true">2.1.</strong> Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/framework.html"><strong aria-hidden="true">2.1.1.</strong> Framework</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/custom_game_loop.html"><strong aria-hidden="true">2.1.2.</strong> Custom game loop</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">2.1.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/data_management.html"><strong aria-hidden="true">2.1.4.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/animation/animation.html"><strong aria-hidden="true">2.2.</strong> Animation</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/rendering/rendering.html"><strong aria-hidden="true">2.3.</strong> Rendering</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/rendering/shaders.html"><strong aria-hidden="true">2.3.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/rendering/materials.html"><strong aria-hidden="true">2.3.2.</strong> Materials</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/sound/sound.html"><strong aria-hidden="true">2.4.</strong> Sound</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/physics/physics.html"><strong aria-hidden="true">2.5.</strong> Physics</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/ui/ui.html"><strong aria-hidden="true">2.6.</strong> User Interface</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/resources/resources.html"><strong aria-hidden="true">2.7.</strong> Resource Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../.rg3d/resources/sound.html"><strong aria-hidden="true">2.7.1.</strong> 3D Models</a></li><li class="chapter-item expanded "><a href="../../../../.rg3d/resources/texture.html"><strong aria-hidden="true">2.7.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../../../../.rg3d/resources/sound.html"><strong aria-hidden="true">2.7.3.</strong> Sound Buffers</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/tutorials.html"><strong aria-hidden="true">2.8.</strong> Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/intro.html"><strong aria-hidden="true">2.8.1.</strong> FPS Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">2.8.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">2.8.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/tutorial-3/tutorial-part-3.html" class="active"><strong aria-hidden="true">2.8.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/rpg/intro.html"><strong aria-hidden="true">2.8.2.</strong> RPG Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">2.8.2.1.</strong> Character controller</a></li></ol></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../../rusty-editor/introduction.html"><strong aria-hidden="true">3.</strong> rusty-editor</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rg3d Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial3-character-controller">GitHub</a></p>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of contents</a></h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#bots">Bots</a></li>
+<li><a href="#animations">Animations</a></li>
+<li><a href="#simple-ai">Simple AI</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>In the previous tutorial we've added weapons, but we still have no bots to shoot at. Let's fix that! In this tutorial
+we'll add bots and a very simple AI. Bots will be a bit dumb, but it will be fixed in future tutorials. This is the
+result we're aiming in the tutorial:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dtudhbRBIq0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h2 id="bots"><a class="header" href="#bots">Bots</a></h2>
+<p>Previous tutorials were children's play in comparison to this, prepare for some advanced stuff. Let's begin by adding
+a separate module for bots - add <code>bot.rs</code> and fill it with following code:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rg3d::{
+    core::{algebra::Vector3, pool::Handle},
+    engine::{resource_manager::ResourceManager, ColliderHandle, RigidBodyHandle},
+    physics::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
+    scene::{base::BaseBuilder, node::Node, Scene},
+};
+
+pub struct Bot {
+    pivot: Handle&lt;Node&gt;,
+    rigid_body: RigidBodyHandle,
+    collider: ColliderHandle,
+}
+
+impl Bot {
+    pub async fn new(
+        scene: &amp;mut Scene,
+        position: Vector3&lt;f32&gt;,
+        resource_manager: ResourceManager,
+    ) -&gt; Self {
+        // Load bot 3D model as usual.
+        let model = resource_manager
+            .request_model(&quot;data/models/zombie.fbx&quot;)
+            .await
+            .unwrap()
+            .instantiate_geometry(scene);
+
+        scene.graph[model]
+            .local_transform_mut()
+            // Move the model a bit down to make sure bot's feet will be on ground.
+            .set_position(Vector3::new(0.0, -0.45, 0.0))
+            // Scale the model because it is too big.
+            .set_scale(Vector3::new(0.0047, 0.0047, 0.0047));
+
+        let pivot = BaseBuilder::new()
+            .with_children(&amp;[model])
+            .build(&amp;mut scene.graph);
+
+        // Create rigid body, it will be used for interaction with the world.
+        let rigid_body = scene.physics.add_body(
+            RigidBodyBuilder::new_dynamic()
+                .lock_rotations() // We don't want a bot to tilt.
+                .translation(position) // Set desired position.
+                .build(),
+        );
+
+        // Add capsule collider for the rigid body.
+        let collider = scene
+            .physics
+            .add_collider(ColliderBuilder::capsule_y(0.25, 0.2).build(), &amp;rigid_body);
+
+        // Bind pivot with rigid body. Scene will automatically sync transform of the pivot
+        // with the transform of the rigid body.
+        scene.physics_binder.bind(pivot, rigid_body);
+
+        Self {
+            pivot,
+            rigid_body,
+            collider,
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Ok, before we dive into the code, we need to add some more code in <code>main.rs</code>, let's begin by adding a container for
+bots in <code>Game</code>: <code>bots: Pool&lt;Bot&gt;,</code>. Next we need to add some more code to <code>Game::new</code> where we'll add a bot instance in
+the game. Also, you can add more than one bot at different positions if you want. Do not forget to download bot model
+with textures from <a href="./zombie.zip">here</a> and unpack <code>fbx</code> file in <code>data/models</code> and other files
+(textures), in <code>data/textures</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Add some bots.
+let mut bots = Pool::new();
+
+bots.spawn(
+    Bot::new(
+        &amp;mut scene,
+        Vector3::new(-1.0, 1.0, -1.0),
+        engine.resource_manager.clone(),
+    )
+    .await,
+);
+
+...
+
+Self {
+    ...
+    bots
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>As usual, let's disassemble the code line-by-line. Creation of bot begins from loading its 3D model in the scene:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let model = resource_manager
+    .request_model(&quot;data/models/zombie.fbx&quot;)
+    .await
+    .unwrap()
+    .instantiate_geometry(scene);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Nothing really new here, loading and instantiation of a 3D model of <em>any</em> complexity is the same as before. Next we have
+to slightly modify the model, shift it a bit down and shrink:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>scene.graph[model]
+    .local_transform_mut()
+    // Move the model a bit down to make sure bot's feet will be on ground.
+    .set_position(Vector3::new(0.0, -0.45, 0.0))
+    // Scale the model because it is too big.
+    .set_scale(Vector3::new(0.0047, 0.0047, 0.0047));
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here we're borrow model in the scene graph, and modify its local transform. Next we're creating pivot for the model:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let pivot = BaseBuilder::new()
+    .with_children(&amp;[model])
+    .build(&amp;mut scene.graph);
+<span class="boring">}
+</span></code></pre></pre>
+<p>We need this pivot because we can't assign rigid body directly to the model, because otherwise we'd lose the ability to
+add offset to the model as we want (this happens because rg3d syncs transform of a node with its rigid body). Next we're
+creating a rigid body with a capsule collider, attentive reader should notice that next piece of code is the exact copy
+of the code from <code>Player::new</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create rigid body, it will be used for interaction with the world.
+let rigid_body = scene.physics.add_body(
+    RigidBodyBuilder::new_dynamic()
+        .lock_rotations() // We don't want a bot to tilt.
+        .translation(position) // Set desired position.
+        .build(),
+);
+
+// Add capsule collider for the rigid body.
+let collider = scene
+    .physics
+    .add_collider(ColliderBuilder::capsule_y(0.25, 0.2).build(), &amp;rigid_body);
+
+// Bind pivot with rigid body. Scene will automatically sync transform of the pivot
+// with the transform of the rigid body.
+scene.physics_binder.bind(pivot, rigid_body);
+<span class="boring">}
+</span></code></pre></pre>
+<p>You're right, bots will have the same rigid body as the player has. Finally, we're returning bot's instance:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Self {
+    pivot,
+    rigid_body,
+    collider,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Ok, now for the bots instantiation, for simplicity we create a single bot in <code>Game::new</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut bots = Pool::new();
+
+bots.spawn(
+    Bot::new(
+        &amp;mut scene,
+        Vector3::new(-1.0, 1.0, 1.5),
+        engine.resource_manager.clone(),
+    )
+    .await,
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>As you can see, we'll store bots in a pool as many other game entities, this will allow us to borrow bots later on when 
+we'll be adding AI. Ok, now run the game, and you should see something like this:</p>
+<p><img src="./bot.jpg" alt="Weapon" /></p>
+<p>Wow... a T-posing bot... Is this some kind of Cyberpunk 2077 reference? This is boring, let's add some animations to 
+make it more &quot;alive&quot;.</p>
+<h3 id="animations"><a class="header" href="#animations">Animations</a></h3>
+<p>Let's start from definition of animation. Animation is a set of tracks, where each track responsible for animation
+of a single node and contains key frames placed on a timeline with some transition rules between key frames. Animation
+usually changes just position/rotation/scale of a node. When animation is playing it calculates intermediate values for
+each parameter using interpolation techniques (linear and spherical interpolation). Animations in general is very simple
+and powerful technique, but at many times it still does not enough. If you will just switch multiple animations from one
+to one, it will look very bad and unnatural. This is where animation blending machines come into play.</p>
+<p><img src="./animation.png" alt="Weapon" /></p>
+<p>rg3d provides very powerful mechanism for animations - animation blending machines. If you're already familiar with 
+Mecanim in Unity game engine or similar thing in Unreal Engine, then you'll probably already understood what will be
+in this paragraph. Animation blending machine (ABM) is a state machine that allows you to blend multiple animations
+in one and apply it to a set of bones (or nodes in general). ABM is a graph where each node is a state, each state
+has a source of animation pose which in its turn may be another subgraph of pose emitting nodes. States connected 
+between each other using transition edges which have some parameters like transition time, a rule for transition, etc.
+At each moment of time either state or transition can be active. In other words this means that ABM is either
+transitioning from a state to state or hold a state. This leads to another fact - ABM cannot jump from a state to state
+if they're not connected with transition edge. ABMs in general can be represented like this:</p>
+<p><img src="./machine.png" alt="Weapon" /></p>
+<p>States are marked yellow, animation nodes - blue, animations - green. As you can see there can be multiple transitions
+between states, each transition has corresponding <code>Rule</code> parameter which is a simple boolean value which tells a machine
+when it is possible to start transition. Each state is supplied with animation node (<code>PlayAnimation</code>, <code>BlendAnimations</code>,
+<code>BlendAnimationsByIndex</code>, etc.) which does exactly what the name states. <code>PlayAnimation</code> just plays given animation, 
+<code>BlendAnimations</code> - blends multiple animations with different weights into one, BlendAnimationsByIndex - blends multiple
+animations as the BlendAnimations, but each animation has transition time, and the node uses an index parameter to switch
+between attached animations. Please keep in mind that <code>BlendAnimations</code> node can have various sources of pose, as you can 
+see in the picture, it uses two <code>PlayAnimation</code> nodes as source of poses, but nothing keeps you from adding new pose source
+which will be yet another <code>BlendAnimations</code>. So everything depends on your needs and ABM just gives you enough flexibility.</p>
+<p>Ok, back to the game. Let's create a simple ABM for bots. For simplicity, it will contain only three states - Idle, Walk,
+Attack. Put this code somewhere at the end of <code>bot.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Simple helper method to create a state supplied with PlayAnimation node.
+fn create_play_animation_state(
+    animation_resource: Model,
+    name: &amp;str,
+    machine: &amp;mut Machine,
+    scene: &amp;mut Scene,
+    model: Handle&lt;Node&gt;,
+) -&gt; (Handle&lt;Animation&gt;, Handle&lt;State&gt;) {
+    // Animations retargetting just makes an instance of animation and binds it to
+    // given model using names of bones.
+    let animation = *animation_resource
+        .retarget_animations(model, scene)
+        .get(0)
+        .unwrap();
+    // Create new PlayAnimation node and add it to machine.
+    let node = machine.add_node(PoseNode::make_play_animation(animation));
+    // Make a state using the node we've made.
+    let state = machine.add_state(State::new(name, node));
+    (animation, state)
+}
+
+pub struct BotAnimationMachineInput {
+    // Whether a bot is walking or not.
+    pub walk: bool,
+    // Whether a bot is attacking or not.
+    pub attack: bool,
+}
+
+pub struct BotAnimationMachine {
+    machine: Machine,
+}
+
+impl BotAnimationMachine {
+    // Names of parameters that will be used for transition rules in machine.
+    const IDLE_TO_WALK: &amp;'static str = &quot;IdleToWalk&quot;;
+    const WALK_TO_IDLE: &amp;'static str = &quot;WalkToIdle&quot;;
+    const WALK_TO_ATTACK: &amp;'static str = &quot;WalkToAttack&quot;;
+    const IDLE_TO_ATTACK: &amp;'static str = &quot;IdleToAttack&quot;;
+    const ATTACK_TO_IDLE: &amp;'static str = &quot;AttackToIdle&quot;;
+    const ATTACK_TO_WALK: &amp;'static str = &quot;AttackToWalk&quot;;
+
+    pub async fn new(
+        scene: &amp;mut Scene,
+        model: Handle&lt;Node&gt;,
+        resource_manager: ResourceManager,
+    ) -&gt; Self {
+        let mut machine = Machine::new();
+
+        // Load animations in parallel.
+        let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
+            resource_manager.request_model(&quot;data/animations/zombie_walk.fbx&quot;),
+            resource_manager.request_model(&quot;data/animations/zombie_idle.fbx&quot;),
+            resource_manager.request_model(&quot;data/animations/zombie_attack.fbx&quot;),
+        );
+
+        // Now create three states with different animations.
+        let (_, idle_state) = create_play_animation_state(
+            idle_animation_resource.unwrap(),
+            &quot;Idle&quot;,
+            &amp;mut machine,
+            scene,
+            model,
+        );
+
+        let (walk_animation, walk_state) = create_play_animation_state(
+            walk_animation_resource.unwrap(),
+            &quot;Walk&quot;,
+            &amp;mut machine,
+            scene,
+            model,
+        );
+
+        let (attack_animation, attack_state) = create_play_animation_state(
+            attack_animation_resource.unwrap(),
+            &quot;Attack&quot;,
+            &amp;mut machine,
+            scene,
+            model,
+        );
+
+        // Next, define transitions between states.
+        machine.add_transition(Transition::new(
+            // A name for debugging.
+            &quot;Idle-&gt;Walk&quot;,
+            // Source state.
+            idle_state,
+            // Target state.
+            walk_state,
+            // Transition time in seconds.
+            0.4,
+            // A name of transition rule parameter.
+            Self::IDLE_TO_WALK,
+        ));
+        machine.add_transition(Transition::new(
+            &quot;Walk-&gt;Idle&quot;,
+            walk_state,
+            idle_state,
+            0.4,
+            Self::WALK_TO_IDLE,
+        ));
+        machine.add_transition(Transition::new(
+            &quot;Walk-&gt;Attack&quot;,
+            walk_state,
+            attack_state,
+            0.4,
+            Self::WALK_TO_ATTACK,
+        ));
+        machine.add_transition(Transition::new(
+            &quot;Idle-&gt;Attack&quot;,
+            idle_state,
+            attack_state,
+            0.4,
+            Self::IDLE_TO_ATTACK,
+        ));
+        machine.add_transition(Transition::new(
+            &quot;Attack-&gt;Idle&quot;,
+            attack_state,
+            idle_state,
+            0.4,
+            Self::ATTACK_TO_IDLE,
+        ));
+        machine.add_transition(Transition::new(
+            &quot;Attack-&gt;Walk&quot;,
+            attack_state,
+            walk_state,
+            0.4,
+            Self::ATTACK_TO_WALK,
+        ));
+
+        // Define entry state.
+        machine.set_entry_state(idle_state);
+
+        Self { machine }
+    }
+
+    pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, input: BotAnimationMachineInput) {
+        self.machine
+            // Set transition parameters.
+            .set_parameter(Self::WALK_TO_IDLE, Parameter::Rule(!input.walk))
+            .set_parameter(Self::IDLE_TO_WALK, Parameter::Rule(input.walk))
+            .set_parameter(Self::WALK_TO_ATTACK, Parameter::Rule(input.attack))
+            .set_parameter(Self::IDLE_TO_ATTACK, Parameter::Rule(input.attack))
+            .set_parameter(Self::ATTACK_TO_IDLE, Parameter::Rule(!input.attack))
+            .set_parameter(Self::ATTACK_TO_WALK, Parameter::Rule(!input.attack))
+            // Update machine and evaluate final pose.
+            .evaluate_pose(&amp;scene.animations, dt)
+            // Apply the pose to the graph.
+            .apply(&amp;mut scene.graph);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Ok, this might be the biggest heap of code we've ever been dealing with at once. There is lots of stuff happening, 
+let's thoroughly &quot;scan&quot; this code. It starts from the simple helper method to create states:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Simple helper method to create a state supplied with PlayAnimation node.
+fn create_play_animation_state(
+    animation_resource: Model,
+    name: &amp;str,
+    machine: &amp;mut Machine,
+    scene: &amp;mut Scene,
+    model: Handle&lt;Node&gt;,
+) -&gt; (Handle&lt;Animation&gt;, Handle&lt;State&gt;) {
+    // Animations retargetting just makes an instance of animation and binds it to
+    // given model using names of bones.
+    let animation = *animation_resource
+        .retarget_animations(model, scene)
+        .get(0)
+        .unwrap();
+    // Create new PlayAnimation node and add it to machine.
+    let node = machine.add_node(PoseNode::make_play_animation(animation));
+    // Make a state using the node we've made.
+    let state = machine.add_state(State::new(name, node));
+    (animation, state)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here we're using new method of Model resource - <a href="https://github.com/mrDIMAS/rg3d/blob/master/src/resource/model.rs#L110">retarget_animations</a>,
+in short, it creates an instance of animation, and binds animations tracks to nodes in given sub graph that starts from
+a node given as first parameter. Next we're adding a PlayAnimation node to machine and making a new state node. Now we're
+adding a structure with input parameter for ABM:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct BotAnimationMachineInput {
+    // Whether a bot is walking or not.
+    pub walk: bool,
+    // Whether a bot is attacking or not.
+    pub attack: bool,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This structure will contain more flags in the future, but now on to <code>BotAnimationMachine::new()</code>. At first, we're creating
+new ABM instance, nothing fancy here. Next we're loading animations in parallel: </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut machine = Machine::new();
+
+// Load animations in parallel.
+let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::futures::join!(
+    resource_manager.request_model(&quot;data/animations/zombie_walk.fbx&quot;),
+    resource_manager.request_model(&quot;data/animations/zombie_idle.fbx&quot;),
+    resource_manager.request_model(&quot;data/animations/zombie_attack.fbx&quot;),
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>As you may have noticed, there is no difference between animation resource and model resource, this is because any 3D
+model can have animations. The animations we're loading, contain only bones and key frames for them, but not mesh of a bot.
+We simply don't need a mesh, because we've already created the mesh earlier. This separation of animations and mesh is 
+very handy, because it saves CPU cycles and disk space. Ok, next we're creating states for ABM:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Now create three states with different animations.
+let (_, idle_state) = create_play_animation_state(
+    idle_animation_resource.unwrap(),
+    &quot;Idle&quot;,
+    &amp;mut machine,
+    scene,
+    model,
+);
+
+let (walk_animation, walk_state) = create_play_animation_state(
+    walk_animation_resource.unwrap(),
+    &quot;Walk&quot;,
+    &amp;mut machine,
+    scene,
+    model,
+);
+
+let (attack_animation, attack_state) = create_play_animation_state(
+    attack_animation_resource.unwrap(),
+    &quot;Attack&quot;,
+    &amp;mut machine,
+    scene,
+    model,
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>These states are those yellow-ish rectangles on diagram up above. As you can see we're creating three states: idle, walk,
+attack. Next we need to connect states between each other. </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Next, define transitions between states.
+machine.add_transition(Transition::new(
+    // A name for debugging.
+    &quot;Idle-&gt;Walk&quot;,
+    // Source state.
+    idle_state,
+    // Target state.
+    walk_state,
+    // Transition time in seconds.
+    0.4,
+    // A name of transition rule parameter.
+    Self::IDLE_TO_WALK,
+));
+
+... // Rest are intentionally omitted 
+<span class="boring">}
+</span></code></pre></pre>
+<p>Ok, comments should clarify what is going on here, but one thing I want to mention specifically. As you may have noticed,
+transition is that black arrow on the diagram up above, and it is linked with a parameter. Parameter have a name, and as
+you'll see later the name will be used to modify parameters. Finally, we're setting entry state to idle and return 
+ABM instance:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Define entry state.
+machine.set_entry_state(idle_state);
+
+Self { machine }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now for another important part, we have to &quot;feed&quot; machine with actual parameters for each transition:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, input: BotAnimationMachineInput) {
+    self.machine
+        // Set transition parameters.
+        .set_parameter(Self::WALK_TO_IDLE, Parameter::Rule(!input.walk))
+        .set_parameter(Self::IDLE_TO_WALK, Parameter::Rule(input.walk))
+        .set_parameter(Self::WALK_TO_ATTACK, Parameter::Rule(input.attack))
+        .set_parameter(Self::IDLE_TO_ATTACK, Parameter::Rule(input.attack))
+        .set_parameter(Self::ATTACK_TO_IDLE, Parameter::Rule(!input.attack))
+        .set_parameter(Self::ATTACK_TO_WALK, Parameter::Rule(!input.attack))
+        // Update machine and evaluate final pose.
+        .evaluate_pose(&amp;scene.animations, dt)
+        // Apply the pose to the graph.
+        .apply(&amp;mut scene.graph);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here we're setting each transition rule one by one, then forcing machine to evaluate animation pose and apply it to 
+the graph. You may ask how machine knows which nodes (bones) should be affected? Remember what was the definition of 
+animation and its tracks? Right, each track knows about the node it affects, animation blending machine just combines
+multiple sources of poses into one and animation for same node blends into a final pose and final pose contains animation
+for each node that was used in all tracks used in ABM. </p>
+<p>Next we need to use the machine we've made. Add a new field to <code>Bot</code>: <code>machine: BotAnimationMachine</code> and initialize it in
+&quot;constructor&quot;:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Self {
+    machine: BotAnimationMachine::new(scene, model, resource_manager).await,
+    ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Next we need to update machine, add following method to <code>impl Bot</code>: </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32) {
+    // For now these are set to false which will force bot to be in idle state.
+    let input = BotAnimationMachineInput {
+        walk: false,
+        attack: false,
+    };
+
+    self.machine.update(scene, dt, input);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This method will update machine and &quot;feed&quot; it with actual state, for now the state has flags combination that forces
+bot to be in idle state. This will be fixed when we'll add simple AI later in this tutorial. Finally, we need to update
+each bot we have, go to <code>Game::update</code> and add following lines there (somewhere after update of weapons):</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for bot in self.bots.iter_mut() {
+    bot.update(scene, dt);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now run the game, and you should see that bots now is in idle state and animation is playing, it should look like this:</p>
+<p><img src="./animation.jpg" alt="Weapon" /></p>
+<h2 id="simple-ai"><a class="header" href="#simple-ai">Simple AI</a></h2>
+<p>Ok, now we have to use ABM we've made at full capacity, to do that we'll write simple AI - bot will just follow player
+in a straight line and attack if they're close enough. Let's start by modifying <code>Bot::update</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, target: Vector3&lt;f32&gt;) {
+    let attack_distance = 0.6;
+
+    // Simple AI - follow target by a straight line.
+    let self_position = scene.graph[self.pivot].global_position();
+    let direction = target - self_position;
+
+    // Distance to target.
+    let distance = direction.norm();
+
+    if distance != 0.0 &amp;&amp; distance &lt; 1.5 {
+        self.follow_target = true;
+    }
+
+    if self.follow_target &amp;&amp; distance != 0.0 {
+        let rigid_body = scene
+            .physics
+            .bodies
+            .get_mut(&amp;self.rigid_body)
+            .unwrap();
+
+        // Make sure bot is facing towards the target.
+        let mut position = *rigid_body.position();
+        position.rotation = UnitQuaternion::face_towards(
+            &amp;Vector3::new(direction.x, 0.0, direction.z),
+            &amp;Vector3::y_axis(),
+        );
+        rigid_body.set_position(position, true);
+
+        // Move only if we're far enough from the target.
+        if distance &gt; attack_distance {
+            // Normalize direction vector and scale it by movement speed.
+            let xz_velocity = direction.scale(1.0 / distance).scale(0.9);
+
+            let new_velocity =
+                Vector3::new(xz_velocity.x, rigid_body.linvel().y, xz_velocity.z);
+
+            rigid_body.set_linvel(new_velocity, true);
+        }
+    }
+
+    // For now these are set to false which will force bot to be in idle state.
+    let input = BotAnimationMachineInput {
+        walk: self.follow_target &amp;&amp; distance &gt; attack_distance,
+        attack: distance &lt; attack_distance,
+    };
+
+    self.machine.update(scene, dt, input);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Also add a new field to <code>Player</code>: <code>follow_target: bool</code> and initialize it in the constructor: </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Self {
+    follow_target: false,
+    ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>So, the AI algorithm is very simple - stand still until a target (player) come closer, once it's close enough, switch
+<code>follow_target</code> flag to true and begin to follow the target. To do that, all we have to do is to find a vector between
+target and position of a bot, make sure bots is facing towards the target and move it if it is far enough. So let's 
+begin digging the code:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let attack_distance = 0.6;
+
+// Simple AI - follow target by a straight line.
+let self_position = scene.graph[self.pivot].global_position();
+let direction = target - self_position;
+
+// Distance to target.
+let distance = direction.norm();
+
+if distance != 0.0 &amp;&amp; distance &lt; 1.5 {
+    self.follow_target = true;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>At the beginning we define a melee attack distance, bot will attack target only if it close enough. Next, we're 
+building vector to from bot's position to target, calculate distance by taking length of the vector and check if 
+we should switch <code>follow_target</code> flag. Next goes the most interesting parts of the AI:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if self.follow_target &amp;&amp; distance != 0.0 {
+    let rigid_body = scene
+        .physics
+        .bodies
+        .get_mut(self.rigid_body.into())
+        .unwrap();
+
+    // Make sure bot is facing towards the target.
+    let mut position = *rigid_body.position();
+    position.rotation = UnitQuaternion::face_towards(
+        &amp;Vector3::new(direction.x, 0.0, direction.z),
+        &amp;Vector3::y_axis(),
+    );
+    rigid_body.set_position(position, true);
+
+    ...
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here we just borrow rigid body a bot, and make sure it rotated towards the target. Next we're moving bot if it is
+far enough from the target:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    ...
+
+    // Move only if we're far enough from the target.
+    if distance &gt; attack_distance {
+        // Normalize direction vector and scale it by movement speed.
+        let xz_velocity = direction.scale(1.0 / distance).scale(0.9);
+
+        let new_velocity =
+            Vector3::new(xz_velocity.x, rigid_body.linvel().y, xz_velocity.z);
+
+        rigid_body.set_linvel(new_velocity, true);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This part is pretty simple too, all we have to do is to check how far the bot is, normalize direction vector, scale it
+by movement speed and form new velocity vector using new XZ velocity + current Y velocity of a bot to preserve velocity
+added by gravity (otherwise bot would just fly, you can experiment with this part to make flying zombies). One last
+thing before we build and run the game, change lines of how we're updating bots to following lines:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let target = scene.graph[self.player.pivot].global_position();
+
+for bot in self.bots.iter_mut() {
+    bot.update(scene, dt, target);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>As you can see, here we're using player's position as target. In future tutorials we'll improve AI to be able to 
+automatically select targets to attack. Also, we'll &quot;teach&quot; bots to use weapons. Now it's the time to build and run 
+the game and you should see something like this (something like in the video at the beginning of the tutorial):</p>
+<p><img src="./ai.jpg" alt="Weapon" /></p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In this tutorial we've added bots, animations, and a simple AI. This was the most advanced tutorial so far, but I 
+promise that this series is far from completion. I hope you liked this tutorial, and if so, please consider supporting 
+the project on <a href="https://patreon.com/mrdimas">Patreon</a> or <a href="https://liberapay.com/mrDIMAS">LiberaPay</a>. Source code is 
+available on <a href="https://github.com/mrDIMAS/rg3d-tutorials">GitHub</a>.</p>
+<p>Discussion: <a href="https://www.reddit.com/r/rust/comments/m2ydjc/bots_and_ai_writing_a_3d_shooter_using_rg3d_3/">Reddit</a>, 
+<a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../../rg3d/tutorials/fps/tutorial-2/tutorial-part-2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../../../rg3d/tutorials/rpg/intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../../rg3d/tutorials/fps/tutorial-2/tutorial-part-2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../../../rg3d/tutorials/rpg/intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

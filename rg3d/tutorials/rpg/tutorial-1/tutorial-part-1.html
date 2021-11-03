@@ -1,0 +1,996 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Character controller - rg3d Cheat Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../../favicon.png">
+        <link rel="stylesheet" href="../../../../css/variables.css">
+        <link rel="stylesheet" href="../../../../css/general.css">
+        <link rel="stylesheet" href="../../../../css/chrome.css">
+        <link rel="stylesheet" href="../../../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../../highlight.css">
+        <link rel="stylesheet" href="../../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../../../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/introduction.html"><strong aria-hidden="true">2.</strong> rg3d</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/getting_started.html"><strong aria-hidden="true">2.1.</strong> Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/framework.html"><strong aria-hidden="true">2.1.1.</strong> Framework</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/custom_game_loop.html"><strong aria-hidden="true">2.1.2.</strong> Custom game loop</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">2.1.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/beginning/data_management.html"><strong aria-hidden="true">2.1.4.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/animation/animation.html"><strong aria-hidden="true">2.2.</strong> Animation</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/rendering/rendering.html"><strong aria-hidden="true">2.3.</strong> Rendering</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/rendering/shaders.html"><strong aria-hidden="true">2.3.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/rendering/materials.html"><strong aria-hidden="true">2.3.2.</strong> Materials</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/sound/sound.html"><strong aria-hidden="true">2.4.</strong> Sound</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/physics/physics.html"><strong aria-hidden="true">2.5.</strong> Physics</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/ui/ui.html"><strong aria-hidden="true">2.6.</strong> User Interface</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/resources/resources.html"><strong aria-hidden="true">2.7.</strong> Resource Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../.rg3d/resources/sound.html"><strong aria-hidden="true">2.7.1.</strong> 3D Models</a></li><li class="chapter-item expanded "><a href="../../../../.rg3d/resources/texture.html"><strong aria-hidden="true">2.7.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../../../../.rg3d/resources/sound.html"><strong aria-hidden="true">2.7.3.</strong> Sound Buffers</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/tutorials.html"><strong aria-hidden="true">2.8.</strong> Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/intro.html"><strong aria-hidden="true">2.8.1.</strong> FPS Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">2.8.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">2.8.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">2.8.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/rpg/intro.html"><strong aria-hidden="true">2.8.2.</strong> RPG Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../rg3d/tutorials/rpg/tutorial-1/tutorial-part-1.html" class="active"><strong aria-hidden="true">2.8.2.1.</strong> Character controller</a></li></ol></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../../rusty-editor/introduction.html"><strong aria-hidden="true">3.</strong> rusty-editor</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rg3d Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of contents</a></h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#framework">Framework</a></li>
+<li><a href="#assets">Assets</a></li>
+<li><a href="#player-and-camera-controller">Player and camera controller</a></li>
+<li><a href="#camera-movement">Camera movement</a></li>
+<li><a href="#player-locomotion">Player locomotion</a></li>
+<li><a href="#animations">Animations</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>In this series of tutorials we will make a game similar to The Elder Scrolls series (but much, much smaller indeed),
+we'll have a main character, a simple world with intractable items and a few kind of enemies. I'll show you how to add an inventory,
+a quests journal, and the quests itself. This series should have at least 5 tutorials, but this might change. At the end
+of the series we'll have a playable RPG which you will be able to use to continue making your own game. It is very ambitious,
+but totally doable with the current state of the engine.</p>
+<p>Most of the role-playing games (RPGs for short) using 3rd person camera which allows you to see your character entirely.
+In this tutorial we'll make something similar. Check the video with final result of the tutorial:</p>
+<p>{% include video.html id=&quot;l2ZbDpoIdqk&quot; %}</p>
+<p>As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by creating
+a new cargo project:</p>
+<p><code>cargo init rpg-tutorial</code></p>
+<p>Add <code>rg3d</code> as dependency:</p>
+<pre><code class="language-toml">rg3d = &quot;0.21&quot;
+</code></pre>
+<h2 id="framework"><a class="header" href="#framework">Framework</a></h2>
+<p>Now let's create the window and initialize the engine. We'll skip most engine initialization by using new <code>Framework</code> helper
+that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
+your game code. <code>Framework</code> is not mandatory, you may use the <a href="https://rg3d.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window">previous</a>
+variant with manual engine initialization and &quot;opened&quot; main loop.</p>
+<pre><pre class="playground"><code class="language-rust">// Import everything we need for the tutorial.
+use rg3d::{
+    core::{color::Color, futures::executor::block_on, pool::Handle},
+    engine::framework::{Framework, GameEngine, GameState},
+    event::{DeviceEvent, DeviceId, WindowEvent},
+    scene::Scene,
+};
+
+struct Game {
+    // Empty for now.
+}
+
+impl GameState for Game {
+    fn init(engine: &amp;mut GameEngine) -&gt; Self
+    where
+        Self: Sized,
+    {
+        Self {}
+    }
+
+    fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+        // This method is called at fixed rate of 60 FPS.
+        // It will contain all the logic of the game.
+    }
+}
+
+fn main() {
+    Framework::&lt;Game&gt;::new().unwrap().title(&quot;RPG&quot;).run()
+}
+</code></pre></pre>
+<p>It is much easier to initialize the engine now compared to the initialization described in the series of tutorials about
+writing a 3D shooter. If you run it, you'll see a window with black background with an &quot;RPG&quot; title.</p>
+<h2 id="assets"><a class="header" href="#assets">Assets</a></h2>
+<p>For any kind of game you need a lot of various assets, in our case we need a 3D model for our character, a set of
+animations, a level, a set of textures for terrain, trees and bushes, barrels, etc. I prepared all assets as a single
+ZIP archive which can be downloaded <a href="./data.zip">here</a>. Once you've downloaded it, unpack it in <code>./data</code> folder.</p>
+<h2 id="player-and-camera-controller"><a class="header" href="#player-and-camera-controller">Player and camera controller</a></h2>
+<p>Now we can start adding Player to our game. Create a folder <code>player</code> under your <code>src</code> directory and add <code>mod.rs</code> with
+following content:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use crate::player::camera::CameraController;
+
+// Import everything we need for the tutorial.
+use rg3d::{
+    animation::{
+        machine::{Machine, Parameter, PoseNode, State, Transition},
+        Animation,
+    },
+    core::{
+        algebra::{Isometry3, UnitQuaternion, Vector3},
+        pool::Handle,
+    },
+    engine::{
+        resource_manager::{MaterialSearchOptions, ResourceManager},
+        ColliderHandle, RigidBodyHandle,
+    },
+    event::{DeviceEvent, ElementState, KeyboardInput, VirtualKeyCode},
+    physics::{
+        dynamics::{CoefficientCombineRule, RigidBodyBuilder},
+        geometry::ColliderBuilder,
+    },
+    resource::model::Model,
+    scene::{base::BaseBuilder, node::Node, Scene},
+};
+
+mod camera;
+
+pub struct Player {
+    pivot: Handle&lt;Node&gt;,
+    model: Handle&lt;Node&gt;,
+    camera_controller: CameraController,
+}
+
+impl Player {
+    pub async fn new(resource_manager: ResourceManager, scene: &amp;mut Scene) -&gt; Self {
+        // Create pivot for our character.
+        let pivot = BaseBuilder::new().build(&amp;mut scene.graph);
+
+        // Load paladin 3D model and create its instance in the scene.
+        let model = resource_manager
+            .request_model(
+                &quot;data/models/paladin/paladin.fbx&quot;,
+                MaterialSearchOptions::RecursiveUp,
+            )
+            .await
+            .unwrap()
+            .instantiate_geometry(scene);
+
+        scene.graph[model]
+            .local_transform_mut()
+            // Move the model a bit down because its center is at model's feet
+            // and we'd get floating model without this offset.
+            .set_position(Vector3::new(0.0, -0.75, 0.0))
+            // Scale down paladin's model because it is too big. 
+            .set_scale(Vector3::new(0.02, 0.02, 0.02));
+
+        // Finally attach the model to the pivot. This will force model to move together with the pivot.
+        scene.graph.link_nodes(model, pivot);
+
+        Self {
+            pivot,
+            model,
+
+            // As a final stage create camera controller.
+            camera_controller: CameraController::new(&amp;mut scene.graph, resource_manager).await,
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Let's disassemble this heap of code line by line. At first, we're creating pivot for our character, we'll use it as a
+&quot;mounting point&quot; for character's 3D model, also it will have a physical body, but that will be added later in this
+tutorial. Next, we're loading paladin 3D model and creating its instance in the scene, we need only geometry without
+animations, so we use <code>instantiate_geometry</code> here, animations will be added later in this tutorial. Next we scale the
+model a bit, because it is too big. Also, we're moving the model a bit down because its center is at paladin's feet so
+when we're attaching the model to the pivot, it will &quot;stay&quot; on the pivot. We want it to stay on ground, so we're moving
+it down by height of the model. Finally, we're attaching the model to the pivot, forcing the engine to move
+the model together with pivot. In the end we're creating camera controller, it needs its own module, so add <code>camera.rs</code>
+module under <code>src/player</code> with following content:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Import everything we need for the tutorial.
+use rg3d::{
+    core::{
+        algebra::{UnitQuaternion, Vector3},
+        pool::Handle,
+    },
+    engine::resource_manager::ResourceManager,
+    event::DeviceEvent,
+    resource::texture::TextureWrapMode,
+    scene::{
+        base::BaseBuilder,
+        camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
+        graph::Graph,
+        node::Node,
+        transform::TransformBuilder,
+    },
+};
+
+async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
+    // Load skybox textures in parallel.
+    let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
+        resource_manager.request_texture(&quot;data/textures/skybox/front.jpg&quot;),
+        resource_manager.request_texture(&quot;data/textures/skybox/back.jpg&quot;),
+        resource_manager.request_texture(&quot;data/textures/skybox/left.jpg&quot;),
+        resource_manager.request_texture(&quot;data/textures/skybox/right.jpg&quot;),
+        resource_manager.request_texture(&quot;data/textures/skybox/up.jpg&quot;),
+        resource_manager.request_texture(&quot;data/textures/skybox/down.jpg&quot;)
+    );
+
+    // Unwrap everything.
+    let skybox = SkyBoxBuilder {
+        front: Some(front.unwrap()),
+        back: Some(back.unwrap()),
+        left: Some(left.unwrap()),
+        right: Some(right.unwrap()),
+        top: Some(top.unwrap()),
+        bottom: Some(bottom.unwrap()),
+    }
+        .build()
+        .unwrap();
+
+    // Set S and T coordinate wrap mode, ClampToEdge will remove any possible seams on edges
+    // of the skybox.
+    let cubemap = skybox.cubemap();
+    let mut data = cubemap.as_ref().unwrap().data_ref();
+    data.set_s_wrap_mode(TextureWrapMode::ClampToEdge);
+    data.set_t_wrap_mode(TextureWrapMode::ClampToEdge);
+
+    skybox
+}
+
+pub struct CameraController {
+    pivot: Handle&lt;Node&gt;,
+    hinge: Handle&lt;Node&gt;,
+    camera: Handle&lt;Node&gt;,
+}
+
+impl CameraController {
+    pub async fn new(graph: &amp;mut Graph, resource_manager: ResourceManager) -&gt; Self {
+        let camera;
+        let hinge;
+        let pivot = BaseBuilder::new()
+            .with_children(&amp;[{
+                hinge = BaseBuilder::new()
+                    .with_local_transform(
+                        TransformBuilder::new()
+                            .with_local_position(Vector3::new(0.0, 0.55, 0.0))
+                            .build(),
+                    )
+                    .with_children(&amp;[{
+                        camera = CameraBuilder::new(
+                            BaseBuilder::new().with_local_transform(
+                                TransformBuilder::new()
+                                    .with_local_position(Vector3::new(0.0, 0.0, -2.0))
+                                    .build(),
+                            ),
+                        )
+                            .with_skybox(create_skybox(resource_manager).await)
+                            .build(graph);
+                        camera
+                    }])
+                    .build(graph);
+                hinge
+            }])
+            .build(graph);
+
+        Self {
+            pivot,
+            hinge,
+            camera,
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>To understand what this code does let's look closely at this picture:</p>
+<p><img src="./camera-layout.png" alt="Camera Layout" /></p>
+<p>The pivot is marked yellow here, the hinge - green, and finally the camera is just a trapeze. Lines with arrows shows
+how the nodes linked together. As you can see we're attaching the hinge to the pivot and move it up slightly (usually to the
+height of the character). Next we're attaching the camera to the hinge and move it back so in default position it will
+be behind the character. To understand why we need such layout, let's find out how we need to move and rotate the
+camera. We need to rotate the camera around imaginary axis that goes through hinge (&quot;in&quot; the screen on the picture) -
+in this layout the camera will always look at character's head and rotate around <strong>local</strong> hinge's X axis. So to do that
+we need to rotate the hinge around X axis, not the camera. Here's the picture to help your understanding this better.</p>
+<p><img src="./camera-layout-rotated.png" alt="Camera Layout" /></p>
+<p>That was just one of the axes, now we need to understand how to rotate the camera around Y axis, but preserving the
+rotation around X axis. This is very simple, we have the pivot for that. Remember that each of the nodes (pivot, hinge, camera)
+are linked together, so if we'll rotate the pivot around Y axis the hinge will rotate too as well as the camera. Fow
+now our camera controller does not have an ability to rotate, we'll add this later in the tutorial.</p>
+<p>Now let's load a level where our character will &quot;live&quot;, add <code>level.rs</code> with following content:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rg3d::{
+    core::pool::Handle,
+    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+    scene::{node::Node, Scene},
+};
+
+pub struct Level {
+    root: Handle&lt;Node&gt;,
+}
+
+impl Level {
+    pub async fn new(resource_manager: ResourceManager, scene: &amp;mut Scene) -&gt; Self {
+        let root = resource_manager
+            .request_model(
+                &quot;data/levels/level.rgs&quot;,
+                MaterialSearchOptions::UsePathDirectly,
+            )
+            .await
+            .unwrap()
+            .instantiate_geometry(scene);
+
+        Self { root }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This small piece of code just loads the scene I made for this tutorial. It has a terrain and some decorations, including
+houses, trees, bushes, barrels, etc. The scene was made in the rusty-editor and can be freely edited without any
+problems. Just open the scene and modify it as you need.</p>
+<p>Now we need to &quot;glue&quot; all the pieces (the player, and the level) together, let's go back to <code>main.rs</code> and change it to
+the following code:</p>
+<pre><pre class="playground"><code class="language-rust">
+use crate::{level::Level, player::Player};
+use rg3d::{
+    core::{color::Color, futures::executor::block_on, pool::Handle},
+    engine::framework::{Framework, GameEngine, GameState},
+    event::{DeviceEvent, DeviceId, WindowEvent},
+    scene::Scene,
+};
+
+mod level;
+mod player;
+
+struct Game {
+    scene: Handle&lt;Scene&gt;,
+    level: Level,
+    player: Player,
+}
+
+impl GameState for Game {
+    fn init(engine: &amp;mut GameEngine) -&gt; Self
+    where
+        Self: Sized,
+    {
+        let mut scene = Scene::new();
+
+        scene.ambient_lighting_color = Color::opaque(150, 150, 150);
+
+        let player = block_on(Player::new(engine.resource_manager.clone(), &amp;mut scene));
+
+        Self {
+            player,
+            level: block_on(Level::new(engine.resource_manager.clone(), &amp;mut scene)),
+            scene: engine.scenes.add(scene),
+        }
+    }
+
+    fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+        // This method is called at fixed rate of 60 FPS.
+        // It will contain all the logic of the game.
+    }
+}
+
+fn main() {
+    Framework::&lt;Game&gt;::new().unwrap().title(&quot;RPG&quot;).run()
+}
+</code></pre></pre>
+<p>As you can see, everything is pretty straightforward: at first we're creating a new scene, set its ambient lighting to
+&quot;daylight&quot;, next we're creating the player and the level. Finally, we're adding the scene to the engine and now if you
+run the game you should see something like this:</p>
+<p><img src="./scene.jpg" alt="Scene" /></p>
+<p>For now everything is static, let's fix that by adding the ability to move the character and rotate the camera.</p>
+<h2 id="camera-movement"><a class="header" href="#camera-movement">Camera movement</a></h2>
+<p>Let's start from the camera movement and rotation. We need two new fields in the <code>CameraController</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// An angle around local Y axis of the pivot.
+yaw: f32,
+// An angle around local X axis of the hinge.
+pitch: f32,
+<span class="boring">}
+</span></code></pre></pre>
+<p>Do not forget to initialize them with zeros:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Self {
+    ...,
+    yaw: 0.0,
+    pitch: 0.0,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now we need to handle device events coming from the OS to rotate the camera. Add following method to the <code>impl CameraController</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn handle_device_event(&amp;mut self, device_event: &amp;DeviceEvent) {
+    if let DeviceEvent::MouseMotion { delta } = device_event {
+        const MOUSE_SENSITIVITY: f32 = 0.015;
+
+        self.yaw -= (delta.0 as f32) * MOUSE_SENSITIVITY;
+        self.pitch = (self.pitch + (delta.1 as f32) * MOUSE_SENSITIVITY)
+            // Limit vertical angle to [-90; 90] degrees range
+            .max(-90.0f32.to_radians())
+            .min(90.0f32.to_radians());
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>In this method we use only <code>MouseMotion</code> events, because CameraController does not move - it can only rotate. The method
+is pretty straightforward. We're changing yaw and pitch using mouse offsets in two axes. X axis changes yaw, Y axis changes
+pitch. Pitch should be limited in specific range to prevent camera to rotate 360 degrees around object, we need angle
+to be in <code>[-90; 90]</code> range.</p>
+<p>Once we've changed yaw and pitch, we need to apply rotations to the hinge and the camera. To do that, we need to add
+a new method to the <code>impl CameraController</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn update(&amp;mut self, graph: &amp;mut Graph) {
+    // Apply rotation to the pivot.
+    graph[self.pivot]
+        .local_transform_mut()
+        .set_rotation(UnitQuaternion::from_axis_angle(
+            &amp;Vector3::y_axis(),
+            self.yaw,
+        ));
+
+    // Apply rotation to the hinge.
+    graph[self.hinge]
+        .local_transform_mut()
+        .set_rotation(UnitQuaternion::from_axis_angle(
+            &amp;Vector3::x_axis(),
+            self.pitch,
+        ));
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>It is a very simple method, it borrows nodes, and applies rotations around specific axes. Now we need to call those two
+methods from somewhere. The most suitable place is <code>impl Player</code>, because <code>Player</code> owns an instance of <code>CameraController</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn handle_device_event(&amp;mut self, device_event: &amp;DeviceEvent) {
+    self.camera_controller.handle_device_event(device_event)
+}
+
+pub fn update(&amp;mut self, scene: &amp;mut Scene) {
+    self.camera_controller.update(&amp;mut scene.graph);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>For now both methods are just proxies, but it will be changed pretty soon. Now we need to call the proxies, but from where?
+The most suitable place is <code>on_tick</code> and <code>on_device_event</code> of the <code>GameState</code> trait implementation for our <code>Game</code> structure:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+    let scene = &amp;mut engine.scenes[self.scene];
+
+    self.player.update(scene);
+}
+
+fn on_device_event(
+    &amp;mut self,
+    _engine: &amp;mut GameEngine,
+    _device_id: DeviceId,
+    event: DeviceEvent,
+) {
+    self.player.handle_device_event(&amp;event);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now you can run the game, and the camera should rotate when you're moving your mouse. Now it's the time to add an ability
+to walk for our character.</p>
+<h2 id="player-locomotion"><a class="header" href="#player-locomotion">Player locomotion</a></h2>
+<p>Our player still can't move, in this section we'll fix it. Player's movement for third person camera differs from the
+movement of first person. For the third person camera we must move the player either where the camera looks or according
+to pressed keys on the keyboard. Let's start by adding input controller, it will hold info about needed movement:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Default)]
+struct InputController {
+    walk_forward: bool,
+    walk_backward: bool,
+    walk_left: bool,
+    walk_right: bool,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Add new field to the <code>Player</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>input_controller: InputController,
+<span class="boring">}
+</span></code></pre></pre>
+<p>And initialize it with <code>Default::default</code> in the <code>Player::new</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Self {
+    ...,
+    input_controller: Default::default(),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now we need to change the state of the input controller, to do that we'll use keyboard events. Add following method to
+the <code>impl Player</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn handle_key_event(&amp;mut self, key: &amp;KeyboardInput) {
+    if let Some(key_code) = key.virtual_keycode {
+        match key_code {
+            VirtualKeyCode::W =&gt; {
+                self.input_controller.walk_forward = key.state == ElementState::Pressed
+            }
+            VirtualKeyCode::S =&gt; {
+                self.input_controller.walk_backward = key.state == ElementState::Pressed
+            }
+            VirtualKeyCode::A =&gt; {
+                self.input_controller.walk_left = key.state == ElementState::Pressed
+            }
+            VirtualKeyCode::D =&gt; {
+                self.input_controller.walk_right = key.state == ElementState::Pressed
+            }
+            _ =&gt; (),
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now we need to call this method, we'll do it from <code>on_window_event</code> in the <code>GameState</code> trait implementation for our
+<code>Game</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_window_event(&amp;mut self, _engine: &amp;mut GameEngine, event: WindowEvent) {
+    match event {
+        WindowEvent::KeyboardInput { input, .. } =&gt; {
+            self.player.handle_key_event(&amp;input);
+        }
+        _ =&gt; (),
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Ok, now we have input controller functioning. Now we can start adding movement logic to the player. Let's start by adding
+a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
+in <code>Player::new</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create new rigid body and offset it a bit to prevent falling through the ground.
+let body = scene.physics.add_body(
+    RigidBodyBuilder::new_dynamic()
+        .position(Isometry3::translation(0.0, 2.0, 0.0))
+        .build(),
+);
+
+// Create capsule collider with friction disabled. We need to disable friction because linear
+// velocity will be set manually, but the physics engine will reduce it using friction so it
+// won't let us to set linear velocity precisely.
+let capsule = ColliderBuilder::capsule_y(0.55, 0.25)
+    .friction_combine_rule(CoefficientCombineRule::Min)
+    .friction(0.0)
+    .build();
+let collider = scene.physics.add_collider(capsule, &amp;body);
+
+// Finally bind the pivot with the body.
+scene.physics_binder.bind(pivot, body);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now, once our character has physical body, we can move it. Add these lines to the end of <code>Player::update</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let pivot = &amp;scene.graph[self.pivot];
+
+let look_vector = pivot
+    .look_vector()
+    .try_normalize(f32::EPSILON)
+    .unwrap_or(Vector3::z());
+
+let side_vector = pivot
+    .side_vector()
+    .try_normalize(f32::EPSILON)
+    .unwrap_or(Vector3::x());
+
+let position = **pivot.local_transform().position();
+
+let mut velocity = Vector3::default();
+
+if self.input_controller.walk_right {
+    velocity -= side_vector;
+}
+if self.input_controller.walk_left {
+    velocity += side_vector;
+}
+if self.input_controller.walk_forward {
+    velocity += look_vector;
+}
+if self.input_controller.walk_backward {
+    velocity -= look_vector;
+}
+
+let speed = 1.35 * dt;
+let velocity = velocity
+    .try_normalize(f32::EPSILON)
+    .and_then(|v| Some(v.scale(speed)))
+    .unwrap_or(Vector3::default());
+
+let body = scene.physics.bodies.get_mut(&amp;self.body).unwrap();
+
+// Apply linear velocity.
+body.set_linvel(
+    Vector3::new(velocity.x / dt, body.linvel().y, velocity.z / dt),
+    true,
+);
+
+// Lock any angular movement of the player's body.
+body.set_angvel(Default::default(), true);
+
+let is_moving = velocity.norm_squared() &gt; 0.0;
+if is_moving {
+    // Since we have free camera while not moving, we have to sync rotation of pivot
+    // with rotation of camera so character will start moving in look direction.
+    let mut current_position = *body.position();
+    current_position.rotation =
+        UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.camera_controller.yaw);
+    body.set_position(current_position, true);
+
+    // Apply additional rotation to model - it will turn in front of walking direction.
+    let angle: f32 = if self.input_controller.walk_left {
+        if self.input_controller.walk_forward {
+            45.0
+        } else if self.input_controller.walk_backward {
+            135.0
+        } else {
+            90.0
+        }
+    } else if self.input_controller.walk_right {
+        if self.input_controller.walk_forward {
+            -45.0
+        } else if self.input_controller.walk_backward {
+            -135.0
+        } else {
+            -90.0
+        }
+    } else if self.input_controller.walk_backward {
+        180.0
+    } else {
+        0.0
+    };
+
+    scene.graph[self.model]
+        .local_transform_mut()
+        .set_rotation(UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle.to_radians()));
+}
+
+// Sync camera controller position with player's position.
+scene.graph[self.camera_controller.pivot]
+    .local_transform_mut()
+    .set_position(position + velocity);
+<span class="boring">}
+</span></code></pre></pre>
+<p>There is lots of code, let's thoroughly go through. At first, we're getting two vectors from the pivot: X and Z axes of
+the global transform of the pivot. We'll use them to move the character. Next we're using the state of the input
+controller to form a new velocity vector. Then we're normalizing velocity vector and multiply it with desired speed of
+movement. Normalization is needed to make the vector unit length to prevent speed variations in various directions. Next
+we're applying the velocity to the rigid body, also we're locking any angular movement to prevent player's capsule
+from tilting.</p>
+<p>If the player is not moving, we're not syncing its rotation with camera's rotation - this allows us to look at the
+character from any side while not moving. However, if the player is moving, we must sync its rotation with the rotation
+of the camera controller. If we'd do this straightforward (by just syncing rotations) it would look very unnatural,
+especially in case of side movements. To fix this we have this large chain of <code>if..else</code> that selects appropriate
+additional rotation for the player's model. This rotation allows us, for example, look forward and move the character
+backwards.</p>
+<p>As the final step we're syncing position of the camera controller with the position of the pivot. Now if you run the game
+you'll be able to walk around using <code>[W][S][A][D]</code> keys. However, it looks very ugly - the character's model is in T-pose,
+let's fix this.</p>
+<h2 id="animations"><a class="header" href="#animations">Animations</a></h2>
+<p>At this point our character can move, and we can rotate the camera around it, but the character is still in T-pose and
+does not have any animation. In this section we'll animate it. To keep this tutorial at reasonable length, we'll
+add just an idle and walk animations and smooth transitions between them. Add following code at the end of <code>player.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span>
+<span class="boring">fn main() {
+</span>// Simple helper method to create a state supplied with PlayAnimation node.
+fn create_play_animation_state(
+    animation_resource: Model,
+    name: &amp;str,
+    machine: &amp;mut Machine,
+    scene: &amp;mut Scene,
+    model: Handle&lt;Node&gt;,
+) -&gt; (Handle&lt;Animation&gt;, Handle&lt;State&gt;) {
+    // Animations retargetting just makes an instance of animation and binds it to
+    // given model using names of bones.
+    let animation = *animation_resource
+        .retarget_animations(model, scene)
+        .get(0)
+        .unwrap();
+    // Create new PlayAnimation node and add it to machine.
+    let node = machine.add_node(PoseNode::make_play_animation(animation));
+    // Make a state using the node we've made.
+    let state = machine.add_state(State::new(name, node));
+    (animation, state)
+}
+
+pub struct AnimationMachineInput {
+    // Whether a bot is walking or not.
+    pub walk: bool,
+}
+
+pub struct AnimationMachine {
+    machine: Machine,
+}
+
+impl AnimationMachine {
+    // Names of parameters that will be used for transition rules in machine.
+    const IDLE_TO_WALK: &amp;'static str = &quot;IdleToWalk&quot;;
+    const WALK_TO_IDLE: &amp;'static str = &quot;WalkToIdle&quot;;
+
+    pub async fn new(
+        scene: &amp;mut Scene,
+        model: Handle&lt;Node&gt;,
+        resource_manager: ResourceManager,
+    ) -&gt; Self {
+        let mut machine = Machine::new();
+
+        // Load animations in parallel.
+        let (walk_animation_resource, idle_animation_resource) = rg3d::core::futures::join!(
+            resource_manager.request_model(
+                &quot;data/models/paladin/walk.fbx&quot;,
+                MaterialSearchOptions::RecursiveUp
+            ),
+            resource_manager.request_model(
+                &quot;data/models/paladin/idle.fbx&quot;,
+                MaterialSearchOptions::RecursiveUp
+            ),
+        );
+
+        // Now create two states with different animations.
+        let (_, idle_state) = create_play_animation_state(
+            idle_animation_resource.unwrap(),
+            &quot;Idle&quot;,
+            &amp;mut machine,
+            scene,
+            model,
+        );
+
+        let (walk_animation, walk_state) = create_play_animation_state(
+            walk_animation_resource.unwrap(),
+            &quot;Walk&quot;,
+            &amp;mut machine,
+            scene,
+            model,
+        );
+
+        // Next, define transitions between states.
+        machine.add_transition(Transition::new(
+            // A name for debugging.
+            &quot;Idle-&gt;Walk&quot;,
+            // Source state.
+            idle_state,
+            // Target state.
+            walk_state,
+            // Transition time in seconds.
+            0.4,
+            // A name of transition rule parameter.
+            Self::IDLE_TO_WALK,
+        ));
+        machine.add_transition(Transition::new(
+            &quot;Walk-&gt;Idle&quot;,
+            walk_state,
+            idle_state,
+            0.4,
+            Self::WALK_TO_IDLE,
+        ));
+
+        // Define entry state.
+        machine.set_entry_state(idle_state);
+
+        Self { machine }
+    }
+
+    pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, input: AnimationMachineInput) {
+        self.machine
+            // Set transition parameters.
+            .set_parameter(Self::WALK_TO_IDLE, Parameter::Rule(!input.walk))
+            .set_parameter(Self::IDLE_TO_WALK, Parameter::Rule(input.walk))
+            // Update machine and evaluate final pose.
+            .evaluate_pose(&amp;scene.animations, dt)
+            // Apply the pose to the graph.
+            .apply(&amp;mut scene.graph);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This is a simple animation blending machine, for more info check
+<a href="https://rg3d.rs/tutorials/2021/03/11/tutorial3.html#animations">&quot;Animations&quot; section of &quot;Writing a 3D shooter using rg3d #3&quot;</a>
+tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
+and create two transitions between them and then applying final pose to the character.</p>
+<p>Now we need to create an instance of the <code>AnimationMachine</code>, add a field to the <code>Player</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>...,
+animation_machine: AnimationMachine,
+<span class="boring">}
+</span></code></pre></pre>
+<p>And initialize it in the <code>Player::new</code>, before <code>camera_controller</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>...,
+animation_machine: AnimationMachine::new(scene, model, resource_manager.clone()).await,
+...
+<span class="boring">}
+</span></code></pre></pre>
+<p>The last thing we need to do is to update animation machine each frame, we'll do this in <code>Player::update</code>, at the end
+of the method:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>self.animation_machine
+        .update(scene, dt, AnimationMachineInput { walk: is_moving });
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now if you run the game, you should see the character idling if not moving, and it should play &quot;walking&quot; animation if
+moving. That's it for this tutorial, in the next tutorial we'll &quot;teach&quot; the character to use swords.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In this tutorial we've learned how create a walking character. Created simple character controller and walked on
+the scene. I hope you liked this tutorial, and if so, please consider supporting the project on
+<a href="https://patreon.com/mrdimas">Patreon</a> or do a one-time donation via <a href="https://www.buymeacoffee.com/mrDIMAS">BuyMeACoffee</a>.
+The source code for this tutorial is available on <a href="https://github.com/mrDIMAS/rg3d-tutorials">GitHub</a>.</p>
+<p>Discussion: <a href="https://www.reddit.com/r/rust/comments/ois776/media_writing_a_roleplaying_game_using_rg3d_game/">Reddit</a>,
+<a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../../rg3d/tutorials/rpg/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../../../rusty-editor/introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../../rg3d/tutorials/rpg/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../../../rusty-editor/introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
