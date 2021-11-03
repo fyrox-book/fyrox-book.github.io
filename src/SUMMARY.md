@@ -18,4 +18,7 @@
         - [3D Models](.rg3d/resources/sound.md)
         - [Textures](.rg3d/resources/texture.md)
         - [Sound Buffers](.rg3d/resources/sound.md)
+    - [Tutorials](./rg3d/tutorials/tutorials.md)
+      - [FPS Tutorial](./rg3d/tutorials/fps-tutorial-1/intro.md)
+        - [Character controller](./rg3d/tutorials/fps-tutorial-1/1_character_controller.md)
 - [rusty-editor](./rusty-editor/introduction.md)
