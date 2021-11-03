@@ -15,7 +15,7 @@
     - [Physics](./rg3d/physics/physics.md)
     - [User Interface](./rg3d/ui/ui.md)
       - [Setting up a user interface](./rg3d/ui/setting_up.md)
-      - [Creating a button](./rg3d/ui/button.md)
+      - [Creating a button](./rg3d/ui/creating_button.md)
       - [General rules](./rg3d/ui/general_rules.md)
     - [Resource Management](./rg3d/resources/resources.md)
         - [3D Models](./rg3d/resources/model.md)
