@@ -2242,10 +2242,22 @@ a separate module for bots - add <code>bot.rs</code> and fill it with following 
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use rg3d::{
-    core::{algebra::Vector3, pool::Handle},
-    engine::{resource_manager::ResourceManager, ColliderHandle, RigidBodyHandle},
-    physics::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
+</span>use rg3d::engine::resource_manager::MaterialSearchOptions;
+use rg3d::{
+    animation::{
+        machine::{Machine, Parameter, PoseNode, State, Transition},
+        Animation,
+    },
+    core::{
+        algebra::{UnitQuaternion, Vector3},
+        pool::Handle,
+    },
+    engine::resource_manager::ResourceManager,
+    physics3d::{
+        rapier::dynamics::RigidBodyBuilder, rapier::geometry::ColliderBuilder, ColliderHandle,
+        RigidBodyHandle,
+    },
+    resource::model::Model,
     scene::{base::BaseBuilder, node::Node, Scene},
 };
 
@@ -2263,7 +2275,7 @@ impl Bot {
     ) -&gt; Self {
         // Load bot 3D model as usual.
         let model = resource_manager
-            .request_model(&quot;data/models/zombie.fbx&quot;)
+            .request_model(&quot;data/models/zombie.fbx&quot;, MaterialSearchOptions::RecursiveUp)
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -2338,7 +2350,7 @@ Self {
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let model = resource_manager
-    .request_model(&quot;data/models/zombie.fbx&quot;)
+    .request_model(&quot;data/models/zombie.fbx&quot;, MaterialSearchOptions::RecursiveUp)
     .await
     .unwrap()
     .instantiate_geometry(scene);
@@ -2505,9 +2517,18 @@ impl BotAnimationMachine {
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
-            resource_manager.request_model(&quot;data/animations/zombie_walk.fbx&quot;),
-            resource_manager.request_model(&quot;data/animations/zombie_idle.fbx&quot;),
-            resource_manager.request_model(&quot;data/animations/zombie_attack.fbx&quot;),
+            resource_manager.request_model(
+                &quot;data/animations/zombie_walk.fbx&quot;,
+                MaterialSearchOptions::RecursiveUp
+            ),
+            resource_manager.request_model(
+                &quot;data/animations/zombie_idle.fbx&quot;,
+                MaterialSearchOptions::RecursiveUp
+            ),
+            resource_manager.request_model(
+                &quot;data/animations/zombie_attack.fbx&quot;,
+                MaterialSearchOptions::RecursiveUp
+            ),
         );
 
         // Now create three states with different animations.
@@ -2657,10 +2678,19 @@ new ABM instance, nothing fancy here. Next we're loading animations in parallel:
 </span>let mut machine = Machine::new();
 
 // Load animations in parallel.
-let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::futures::join!(
-    resource_manager.request_model(&quot;data/animations/zombie_walk.fbx&quot;),
-    resource_manager.request_model(&quot;data/animations/zombie_idle.fbx&quot;),
-    resource_manager.request_model(&quot;data/animations/zombie_attack.fbx&quot;),
+let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
+    resource_manager.request_model(
+        &quot;data/animations/zombie_walk.fbx&quot;,
+        MaterialSearchOptions::RecursiveUp
+    ),
+    resource_manager.request_model(
+        &quot;data/animations/zombie_idle.fbx&quot;,
+        MaterialSearchOptions::RecursiveUp
+    ),
+    resource_manager.request_model(
+        &quot;data/animations/zombie_attack.fbx&quot;,
+        MaterialSearchOptions::RecursiveUp
+    ),
 );
 <span class="boring">}
 </span></code></pre></pre>
@@ -2802,7 +2832,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, target: Vector3&lt;f32&gt;) {
+</span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, target: Vector3&lt;f32&gt;) {
     let attack_distance = 0.6;
 
     // Simple AI - follow target by a straight line.
