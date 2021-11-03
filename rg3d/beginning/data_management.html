@@ -144,11 +144,58 @@ created handle leading to the entry invalid. This is a very simple and efficient
 <em>generation</em> number. When you put an object in the pool, it gives you the handle that &quot;leads&quot; to the object.
 At this moment the generation of the handle matches the generation of the corresponding entry so the handle
 is valid. It will remain valid util you &quot;free&quot; the object, which will make the entry vacant again.</p>
+<h2 id="advantages"><a class="header" href="#advantages">Advantages</a></h2>
 <p>Since the pool is just a contiguous memory block, it is much more CPU cache-friendly. This means that in most
 cases the data portions will be loaded in CPU caches, making the access to the data blazing fast.</p>
 <p>Almost every entity in the engine &quot;lives&quot; in its own pool, this make it easy to create such data structures
 like graphs, where a node refers to other nodes. In this case scene nodes stores just handles (which is just
 8 bytes of memory) to other nodes.</p>
+<h2 id="borrowing"><a class="header" href="#borrowing">Borrowing</a></h2>
+<p>Once an object was placed in a pool, you have to use respective handle to get a reference to it. This could 
+be done either with <code>.borrow[_mut](handle)</code> or by using <code>Index</code> trait: <code>pool[handle]</code>. These methods panic
+when handle is invalid, if you want to prevent that, use <code>try_borrow[_mut](handle)</code> method.</p>
+<h2 id="freeing"><a class="header" href="#freeing">Freeing</a></h2>
+<p>You can extract an object from a pool by calling <code>pool.free(handle)</code>, it will give you the object back, making
+all handles to the object invalid.</p>
+<h2 id="take--reserve"><a class="header" href="#take--reserve">Take &amp; reserve</a></h2>
+<p>Sometimes you may need to temporarily extract an object from a pool, do something with it and then put it back
+while preserving handles to that object. There are three special methods for that:</p>
+<ol>
+<li><code>take_reserve</code> + <code>try_take_reserve</code> - moves object out of the pool, but leaves the entry in &quot;occupied&quot; state. This function returns
+a tuple with two values <code>(Ticket&lt;T&gt;, T)</code>. The latter value is obviously is your object, but the first object is 
+more interesting. It is a special wrapper over object index that allows you to return the object back. It is used
+in <code>put_back</code> method. <strong>Caveat:</strong> an attempt to borrow moved object in the pool will cause panic! </li>
+<li><code>put_back</code> - moves the object back in the pool using given ticket. Ticket says where to put the object in the 
+pool. </li>
+<li><code>forget_ticket</code> - makes the entry of the pool vacant again. It is useful in situations when you've moved object
+out of the pool, but for some reason you don't want to return it back in pool, in this case you <strong>must</strong> call
+this method, otherwise the corresponding entry will be unusable.</li>
+</ol>
+<h2 id="iterators"><a class="header" href="#iterators">Iterators</a></h2>
+<p>There are few possible iterators, each one is useful for particular purpose:</p>
+<ol>
+<li><code>iter/iter_mut</code> - creates an iterator that iterates over occupied pool entries returning references to an 
+object associated with an entry.</li>
+<li><code>pair_iter/pair_iter_mut</code> - creates an iterator that iterates over occupied pool entries returning tuples with
+two elements <code>(handle, reference)</code>. </li>
+</ol>
+<h2 id="direct-access"><a class="header" href="#direct-access">Direct access</a></h2>
+<p>There is ability to get an object from a pool using only indices, there are two methods for that <code>at</code> and <code>at_mut</code>.</p>
+<h2 id="validation"><a class="header" href="#validation">Validation</a></h2>
+<p>Sometimes you may need to check if a handle is valid, to do that use <code>is_valid_handle</code> method.</p>
+<h2 id="type-erased-handles"><a class="header" href="#type-erased-handles">Type-erased handles</a></h2>
+<p>The pool module offers type-erased handles that could be useful for some situations. Try to avoid using type-erased
+handles, because they may introduce hardly-reproducible bugs and type safety is always good :)</p>
+<p>Type-erased handle is called <code>ErasedHandle</code> and it can be created either manually, or from strongly-typed handles.
+Both handle types are interchangeable, you can use <code>From</code> and <code>Into</code> traits to convert them one into another.</p>
+<h2 id="special"><a class="header" href="#special">Special</a></h2>
+<p>Uncategorized stuff.</p>
+<h3 id="getting-a-handle-of-an-object-by-its-reference"><a class="header" href="#getting-a-handle-of-an-object-by-its-reference">Getting a handle of an object by its reference</a></h3>
+<p>Sometimes you may need to get a handle of an object having only a reference to it, there is a <code>handle_of</code> method
+exactly for that.</p>
+<h3 id="iterate-over-and-discard-unnecessary-objects"><a class="header" href="#iterate-over-and-discard-unnecessary-objects">Iterate over and discard unnecessary objects</a></h3>
+<p>There is a <code>retain</code> method for that, it allows you to &quot;filter&quot; your pool using a closure with custom filtering
+logic.</p>
 
                     </main>
 
