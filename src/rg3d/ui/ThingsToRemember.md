@@ -33,3 +33,10 @@ information needs to be stored on the outside of the brackets.
 - GridBuilder::new starts off at row(0)
 - Only the most recent parent GridBuilder can affect your 
 widgets placement
+- UiMessageData doesn't change much between different Ui events.
+To find information on their differences, looking deep in the docs
+is necessary.
+
+To find information on widget options, click [here](https://docs.rs/rg3d).
+
+To learn more about WidgetBuilder option click [here](https://docs.rs/rg3d-ui/0.14.0/rg3d_ui/widget/struct.WidgetBuilder.html)
