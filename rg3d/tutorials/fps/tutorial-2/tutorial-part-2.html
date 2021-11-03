@@ -150,10 +150,7 @@ For simplicity, we'll add only one weapon, as you'll see later it is pretty easy
 is the result we're aiming in the tutorial:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/GmVAdBdnqeM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <h2 id="adding-weapons"><a class="header" href="#adding-weapons">Adding weapons</a></h2>
-<p>Let's begin by changing version of the engine first, as I wrote in the previous tutorial, the engine changes rapidly:</p>
-<pre><code class="language-toml">rg3d = &quot;0.20&quot;
-</code></pre>
-<p>Next, add new module <code>weapon.rs</code> near your <code>main.rs</code> and use it somewhere after other imports:</p>
+<p>Add a new module <code>weapon.rs</code> near your <code>main.rs</code> and use it somewhere after other imports:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
