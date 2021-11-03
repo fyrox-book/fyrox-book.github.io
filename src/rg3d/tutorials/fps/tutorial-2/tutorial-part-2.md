@@ -19,13 +19,7 @@ is the result we're aiming in the tutorial:
 
 ## Adding weapons
 
-Let's begin by changing version of the engine first, as I wrote in the previous tutorial, the engine changes rapidly:
-
-```toml
-rg3d = "0.20"
-```
-
-Next, add new module `weapon.rs` near your `main.rs` and use it somewhere after other imports:
+Add a new module `weapon.rs` near your `main.rs` and use it somewhere after other imports:
 
 ```rust
 pub mod weapon;

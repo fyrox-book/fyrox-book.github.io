@@ -1,3 +1,5 @@
+**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/rpg-tutorial1-character-controller)
+
 ## Table of contents
 
 - [Introduction](#introduction)
@@ -20,7 +22,7 @@ but totally doable with the current state of the engine.
 Most of the role-playing games (RPGs for short) using 3rd person camera which allows you to see your character entirely.
 In this tutorial we'll make something similar. Check the video with final result of the tutorial:
 
-{% include video.html id="l2ZbDpoIdqk" %}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by creating
 a new cargo project:
@@ -30,7 +32,10 @@ a new cargo project:
 Add `rg3d` as dependency:
 
 ```toml
-rg3d = "0.21"
+[dependencies]
+# Use specific version from GitHub, because engine changes rapidly and we must use specific version
+# to make sure it compiles.
+rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "a3c3d678c361aa72fc44c36f3e37adc20a54f311" }
 ```
 
 ## Framework
