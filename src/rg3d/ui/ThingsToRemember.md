@@ -37,6 +37,8 @@ widgets placement
 To find information on their differences, looking deep in the docs
 is necessary.
 
+## Further resources and information
+
 To find information on widget options, click [here](https://docs.rs/rg3d).
 
 To learn more about WidgetBuilder option click [here](https://docs.rs/rg3d-ui/0.14.0/rg3d_ui/widget/struct.WidgetBuilder.html)
