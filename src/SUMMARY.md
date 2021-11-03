@@ -14,6 +14,7 @@
     - [Sound](./rg3d/sound/sound.md)
     - [Physics](./rg3d/physics/physics.md)
     - [User Interface](./rg3d/ui/ui.md)
+      - [Setting up a UI program](./rg3d/ui/settingup.md)
     - [Resource Management](./rg3d/resources/resources.md)
         - [3D Models](.rg3d/resources/sound.md)
         - [Textures](.rg3d/resources/texture.md)
