@@ -1409,8 +1409,10 @@ use weapon::Weapon;
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use rg3d::{
-    core::pool::Handle,
+</span>use rg3d::engine::resource_manager::MaterialSearchOptions;
+use rg3d::scene::graph::Graph;
+use rg3d::{
+    core::{algebra::Vector3, math::Vector3Ext, pool::Handle},
     engine::resource_manager::ResourceManager,
     scene::{node::Node, Scene},
 };
@@ -1425,7 +1427,7 @@ impl Weapon {
     pub async fn new(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Self {
         // Yeah, you need only few lines of code to load a model of any complexity.
         let model = resource_manager
-            .request_model(&quot;data/models/m4.fbx&quot;)
+            .request_model(&quot;data/models/m4.fbx&quot;, MaterialSearchOptions::RecursiveUp)
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -1532,13 +1534,13 @@ use rg3d::core::pool::{Handle, Pool};
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub async fn new(engine: &amp;mut GameEngine) -&gt; Self {
+</span>pub async fn new(engine: &amp;mut Engine) -&gt; Self {
     let mut scene = Scene::new();
 
     // Load a scene resource and create its instance.
     engine
         .resource_manager
-        .request_model(&quot;data/models/scene.rgs&quot;)
+        .request_model(&quot;data/models/scene.rgs&quot;, MaterialSearchOptions::UsePathDirectly)
         .await
         .unwrap()
         .instantiate_geometry(&amp;mut scene);
@@ -1614,7 +1616,7 @@ most wide context. Let's change <code>Game::update</code> to this code:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub fn update(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+</span>pub fn update(&amp;mut self, engine: &amp;mut Engine, dt: f32) {
     self.player.update(&amp;mut engine.scenes[self.scene]); 
 
     // v New code v 
@@ -1644,7 +1646,7 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn shoot_weapon(&amp;mut self, weapon: Handle&lt;Weapon&gt;, engine: &amp;mut GameEngine) {
+</span> fn shoot_weapon(&amp;mut self, weapon: Handle&lt;Weapon&gt;, engine: &amp;mut Engine) {
     let weapon = &amp;mut self.weapons[weapon];
 
     if weapon.can_shoot() {
@@ -1665,10 +1667,11 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 
         scene.physics.cast_ray(
             RayCastOptions {
-                ray,
+                ray_origin: Point3::from(ray.origin),
                 max_len: ray.dir.norm(),
                 groups: Default::default(),
                 sort_results: true, // We need intersections to be sorted from closest to furthest.
+                ray_direction: ray.dir,
             },
             &amp;mut intersections,
         );
@@ -1683,15 +1686,17 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
             //
 
             // For now just apply some force at the point of impact.
-            let collider = scene
+            let colliders_parent = scene
                 .physics
                 .colliders
-                .get(intersection.collider.into())
+                .get(&amp;intersection.collider)
+                .unwrap()
+                .parent()
                 .unwrap();
             scene
                 .physics
                 .bodies
-                .get_mut(collider.parent())
+                .native_mut(colliders_parent)
                 .unwrap()
                 .apply_force_at_point(
                     ray.dir.normalize().scale(10.0),
@@ -1730,12 +1735,15 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 ) {
     let transform = TransformBuilder::new()
         .with_local_position(origin)
+        // Scale the trail in XZ plane to make it thin, and apply `trail_length` scale on Y axis
+        // to stretch is out.
         .with_local_scale(Vector3::new(0.0025, 0.0025, trail_length))
+        // Rotate the trail along given `direction`
         .with_local_rotation(UnitQuaternion::face_towards(&amp;direction, &amp;Vector3::y()))
         .build();
 
     // Create unit cylinder with caps that faces toward Z axis.
-    let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
+    let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
         6,     // Count of sides
         1.0,   // Radius
         1.0,   // Height
@@ -1743,6 +1751,16 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
         // Rotate vertical cylinder around X axis to make it face towards Z axis
         &amp;UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
     )));
+
+    // Create an instance of standard material for the shot trail.
+    let mut material = Material::standard();
+    material
+        .set_property(
+            &amp;ImmutableString::new(&quot;diffuseColor&quot;),
+            // Set yellow-ish color.
+            PropertyValue::Color(Color::from_rgba(255, 255, 0, 120)),
+        )
+        .unwrap();
 
     MeshBuilder::new(
         BaseBuilder::new()
@@ -1752,8 +1770,7 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
             .with_lifetime(0.25),
     )
     .with_surfaces(vec![SurfaceBuilder::new(shape)
-        // Set yellow-ish color.
-        .with_color(Color::from_rgba(255, 255, 0, 120))
+        .with_material(Arc::new(Mutex::new(material)))
         .build()])
     // Do not cast shadows.
     .with_cast_shadows(false)
@@ -1780,7 +1797,7 @@ check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (re
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>...
+</span>// ...
 
 let scene = &amp;mut engine.scenes[self.scene];
 
@@ -1797,10 +1814,11 @@ let mut intersections = Vec::new();
 
 scene.physics.cast_ray(
     RayCastOptions {
-        ray,
+        ray_origin: Point3::from(ray.origin),
         max_len: ray.dir.norm(),
         groups: Default::default(),
         sort_results: true, // We need intersections to be sorted from closest to furthest.
+        ray_direction: ray.dir,
     },
     &amp;mut intersections,
 );
@@ -1824,15 +1842,17 @@ let trail_length = if let Some(intersection) = intersections
     //
 
     // For now just apply some force at the point of impact.
-    let collider = scene
+    let colliders_parent = scene
         .physics
         .colliders
-        .get(intersection.collider.into())
+        .get(&amp;intersection.collider)
+        .unwrap()
+        .parent()
         .unwrap();
     scene
         .physics
         .bodies
-        .get_mut(collider.parent())
+        .native_mut(colliders_parent)
         .unwrap()
         .apply_force_at_point(
             ray.dir.normalize().scale(10.0),
@@ -1899,8 +1919,7 @@ geometry for the cylinder:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>// Create unit cylinder with caps that faces toward Z axis.
-let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
+</span> let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
     6,     // Count of sides
     1.0,   // Radius
     1.0,   // Height
@@ -1914,7 +1933,17 @@ let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>MeshBuilder::new(
+</span>// Create an instance of standard material for the shot trail.
+let mut material = Material::standard();
+material
+    .set_property(
+        &amp;ImmutableString::new(&quot;diffuseColor&quot;),
+        // Set yellow-ish color.
+        PropertyValue::Color(Color::from_rgba(255, 255, 0, 120)),
+    )
+    .unwrap();
+
+MeshBuilder::new(
     BaseBuilder::new()
         .with_local_transform(transform)
         // Shot trail should live ~0.25 seconds, after that it will be automatically
@@ -1922,8 +1951,7 @@ let shape = Arc::new(RwLock::new(SurfaceData::make_cylinder(
         .with_lifetime(0.25),
 )
 .with_surfaces(vec![SurfaceBuilder::new(shape)
-    // Set yellow-ish color.
-    .with_color(Color::from_rgba(255, 255, 0, 120))
+    .with_material(Arc::new(Mutex::new(material)))
     .build()])
 // Do not cast shadows.
 .with_cast_shadows(false)
@@ -2111,15 +2139,15 @@ that! This is the first time when we'll use particle systems. Let's add this fun
         BaseEmitterBuilder::new()
             .with_max_particles(200)
             .with_spawn_rate(1000)
-            .with_size_modifier_range(NumericRange::new(-0.01, -0.0125))
-            .with_size_range(NumericRange::new(0.0010, 0.025))
-            .with_x_velocity_range(NumericRange::new(-0.01, 0.01))
-            .with_y_velocity_range(NumericRange::new(0.017, 0.02))
-            .with_z_velocity_range(NumericRange::new(-0.01, 0.01))
+            .with_size_modifier_range(-0.01..-0.0125)
+            .with_size_range(0.0010..0.025)
+            .with_x_velocity_range(-0.01..0.01)
+            .with_y_velocity_range(0.017..0.02)
+            .with_z_velocity_range(-0.01..0.01)
             .resurrect_particles(false),
     )
-        .with_radius(0.01)
-        .build();
+    .with_radius(0.01)
+    .build();
 
     // Color gradient will be used to modify color of each particle over its lifetime.
     let color_gradient = {
@@ -2147,7 +2175,7 @@ that! This is the first time when we'll use particle systems. Let's add this fun
     .with_color_over_lifetime_gradient(color_gradient)
     .with_emitters(vec![emitter])
     // We'll use simple spark texture for each particle.
-    .with_texture(resource_manager.request_texture(Path::new(&quot;data/textures/spark.png&quot;)))
+    .with_texture(resource_manager.request_texture(Path::new(&quot;data/textures/spark.png&quot;), None))
     .build(graph)
 }
 <span class="boring">}
