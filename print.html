@@ -441,6 +441,14 @@ loading screens and loading screen has some fancy interactive stuff with progres
 responsive while the game doing hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking main thread, thus leaving the game 
 fully responsive. </p>
+<p>There is comprehensive example of asynchronous scene loading, it can be found 
+<a href="https://github.com/rg3dengine/rg3d/blob/master/examples/async.rs">here</a></p>
+<h2 id="managing-multiple-scenes"><a class="header" href="#managing-multiple-scenes">Managing multiple scenes</a></h2>
+<p>Usually you should have only one scene active (unless you're making something very special), you should use 
+<code>.enabled</code> flag of a scene to turn it off or on. Deactivated scenes won't be rendered, the physics won't be
+updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
+when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
+can be useful is menus. In most games when you're entering the menu, game world is paused. </p>
 <div style="break-before: page; page-break-before: always;"></div><p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
 entities in the engine. Graph takes care of your scene objects and does a lot of job for you.</p>
 <div style="break-before: page; page-break-before: always;"></div><p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
