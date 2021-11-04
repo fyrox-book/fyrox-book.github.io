@@ -3,9 +3,12 @@
 The user interface in the engine is extremely powerful, it allows you to build user interfaces of any complexity
 with low effort. To start off we will use the simplest framework:
 
-```rust
+```rust,no_run
+# extern crate rg3d;
+
 use rg3d::{
     engine::{framework::prelude::*, Engine},
+    gui::message::UiMessage
 };
 
 struct Game {

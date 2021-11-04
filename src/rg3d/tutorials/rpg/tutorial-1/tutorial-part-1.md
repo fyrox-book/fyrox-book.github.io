@@ -45,7 +45,7 @@ that hides most of the engine initialization and provides unified interface for 
 your game code. `Framework` is not mandatory, you may use the [previous](https://rg3d.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window)
 variant with manual engine initialization and "opened" main loop.
 
-```rust
+```rust,compile_fail
 // Import everything we need for the tutorial.
 use rg3d::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
@@ -91,7 +91,7 @@ ZIP archive which can be downloaded [here](./data.zip). Once you've downloaded i
 Now we can start adding Player to our game. Create a folder `player` under your `src` directory and add `mod.rs` with
 following content:
 
-```rust
+```rust,compile_fail
 use crate::player::camera::CameraController;
 
 // Import everything we need for the tutorial.
@@ -172,7 +172,7 @@ it down by height of the model. Finally, we're attaching the model to the pivot,
 the model together with pivot. In the end we're creating camera controller, it needs its own module, so add `camera.rs`
 module under `src/player` with following content:
 
-```rust
+```rust,compile_fail
 // Import everything we need for the tutorial.
 use rg3d::{
     core::{
@@ -289,7 +289,7 @@ now our camera controller does not have an ability to rotate, we'll add this lat
 
 Now let's load a level where our character will "live", add `level.rs` with following content:
 
-```rust
+```rust,compile_fail
 use rg3d::{
     core::pool::Handle,
     engine::resource_manager::{MaterialSearchOptions, ResourceManager},
@@ -323,7 +323,7 @@ problems. Just open the scene and modify it as you need.
 Now we need to "glue" all the pieces (the player, and the level) together, let's go back to `main.rs` and change it to
 the following code:
 
-```rust
+```rust,compile_fail
 
 use crate::{level::Level, player::Player};
 use rg3d::{
@@ -383,7 +383,7 @@ For now everything is static, let's fix that by adding the ability to move the c
 
 Let's start from the camera movement and rotation. We need two new fields in the `CameraController`:
 
-```rust
+```rust,compile_fail
 // An angle around local Y axis of the pivot.
 yaw: f32,
 // An angle around local X axis of the hinge.
@@ -392,7 +392,7 @@ pitch: f32,
 
 Do not forget to initialize them with zeros:
 
-```rust
+```rust,compile_fail
 Self {
     ...,
     yaw: 0.0,
@@ -402,7 +402,7 @@ Self {
 
 Now we need to handle device events coming from the OS to rotate the camera. Add following method to the `impl CameraController`:
 
-```rust
+```rust,compile_fail
 pub fn handle_device_event(&mut self, device_event: &DeviceEvent) {
     if let DeviceEvent::MouseMotion { delta } = device_event {
         const MOUSE_SENSITIVITY: f32 = 0.015;
@@ -424,7 +424,7 @@ to be in `[-90; 90]` range.
 Once we've changed yaw and pitch, we need to apply rotations to the hinge and the camera. To do that, we need to add
 a new method to the `impl CameraController`:
 
-```rust
+```rust,compile_fail
 pub fn update(&mut self, graph: &mut Graph) {
     // Apply rotation to the pivot.
     graph[self.pivot]
@@ -447,7 +447,7 @@ pub fn update(&mut self, graph: &mut Graph) {
 It is a very simple method, it borrows nodes, and applies rotations around specific axes. Now we need to call those two
 methods from somewhere. The most suitable place is `impl Player`, because `Player` owns an instance of `CameraController`:
 
-```rust
+```rust,compile_fail
 pub fn handle_device_event(&mut self, device_event: &DeviceEvent) {
     self.camera_controller.handle_device_event(device_event)
 }
@@ -460,7 +460,7 @@ pub fn update(&mut self, scene: &mut Scene) {
 For now both methods are just proxies, but it will be changed pretty soon. Now we need to call the proxies, but from where?
 The most suitable place is `on_tick` and `on_device_event` of the `GameState` trait implementation for our `Game` structure:
 
-```rust
+```rust,compile_fail
 fn on_tick(&mut self, engine: &mut GameEngine, dt: f32) {
     let scene = &mut engine.scenes[self.scene];
 
@@ -498,13 +498,13 @@ struct InputController {
 
 Add new field to the `Player`:
 
-```rust
+```rust,compile_fail
 input_controller: InputController,
 ```
 
 And initialize it with `Default::default` in the `Player::new`:
 
-```rust
+```rust,compile_fail
 Self {
     ...,
     input_controller: Default::default(),
@@ -514,7 +514,7 @@ Self {
 Now we need to change the state of the input controller, to do that we'll use keyboard events. Add following method to
 the `impl Player`:
 
-```rust
+```rust,compile_fail
 pub fn handle_key_event(&mut self, key: &KeyboardInput) {
     if let Some(key_code) = key.virtual_keycode {
         match key_code {
@@ -539,7 +539,7 @@ pub fn handle_key_event(&mut self, key: &KeyboardInput) {
 Now we need to call this method, we'll do it from `on_window_event` in the `GameState` trait implementation for our
 `Game`:
 
-```rust
+```rust,compile_fail
 fn on_window_event(&mut self, _engine: &mut GameEngine, event: WindowEvent) {
     match event {
         WindowEvent::KeyboardInput { input, .. } => {
@@ -554,7 +554,7 @@ Ok, now we have input controller functioning. Now we can start adding movement l
 a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
 in `Player::new`:
 
-```rust
+```rust,compile_fail
 // Create new rigid body and offset it a bit to prevent falling through the ground.
 let body = scene.physics.add_body(
     RigidBodyBuilder::new_dynamic()
@@ -577,7 +577,7 @@ scene.physics_binder.bind(pivot, body);
 
 Now, once our character has physical body, we can move it. Add these lines to the end of `Player::update`:
 
-```rust
+```rust,compile_fail
 let pivot = &scene.graph[self.pivot];
 
 let look_vector = pivot
@@ -691,7 +691,7 @@ At this point our character can move, and we can rotate the camera around it, bu
 does not have any animation. In this section we'll animate it. To keep this tutorial at reasonable length, we'll
 add just an idle and walk animations and smooth transitions between them. Add following code at the end of `player.rs`:
 
-```rust
+```rust,compile_fail
 
 // Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
@@ -811,14 +811,14 @@ and create two transitions between them and then applying final pose to the char
 
 Now we need to create an instance of the `AnimationMachine`, add a field to the `Player`:
 
-```rust
+```rust,compile_fail
 ...,
 animation_machine: AnimationMachine,
 ```
 
 And initialize it in the `Player::new`, before `camera_controller`:
 
-```rust
+```rust,compile_fail
 ...,
 animation_machine: AnimationMachine::new(scene, model, resource_manager.clone()).await,
 ...
@@ -827,7 +827,7 @@ animation_machine: AnimationMachine::new(scene, model, resource_manager.clone())
 The last thing we need to do is to update animation machine each frame, we'll do this in `Player::update`, at the end
 of the method:
 
-```rust
+```rust,compile_fail
 self.animation_machine
         .update(scene, dt, AnimationMachineInput { walk: is_moving });
 ```

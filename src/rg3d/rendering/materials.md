@@ -64,7 +64,17 @@ The standard material offers very basic transparency support, to use it you have
 path on you mesh object. It could be done something like this:
 
 ```rust
-graph[mesh_handle].as_mesh_mut().set_render_path(RenderPath::Forward);
+# extern crate rg3d;
+# use rg3d::{
+#     core::pool::Handle,
+#     scene::{mesh::RenderPath, node::Node, Scene},
+# };
+# 
+# fn set_forward_render_path(scene: &mut Scene, mesh_handle: Handle<Node>) {
+    scene.graph[mesh_handle]
+        .as_mesh_mut()
+        .set_render_path(RenderPath::Forward);
+# }
 ```
 
 After this your mesh will be rendered using specialized render pass called Forward which supports alpha-blending

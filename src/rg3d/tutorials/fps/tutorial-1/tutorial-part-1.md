@@ -37,7 +37,8 @@ rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "a3c3d678c361aa72fc44
 Great! Now we can start writing the game. Let's start from something very simple - a window and a main loop. Just copy 
 and paste this code in the `main.rs`:
 
-```rust
+```rust,no_run
+# extern crate rg3d;
 use rg3d::{
     core::{
         algebra::{UnitQuaternion, Vector3},
@@ -175,20 +176,20 @@ impl Game {
 
 Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating a window builder:
 
-```rust
+```rust,compile_fail
 let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
 ```
 
 The builder will be used later by the engine to create a window. Next we're creating our event loop: 
 
-```rust
+```rust,compile_fail
 let event_loop = EventLoop::new();
 ```
 
 The event loop is a "magic" thing that receives events from the operating system and feeds your application, this is a very 
 important part which makes the application work. Finally, we're creating an instance of the engine:
 
-```rust
+```rust,compile_fail
 let mut engine = Engine::new(window_builder, &event_loop, false).unwrap();
 ```
 
@@ -197,13 +198,13 @@ synchronization (VSync). In this tutorial we'll have VSync disabled, because it 
 extenstions which are not always available and callind `.unwrap()` might result in panic on some platforms. Next we're 
 creating an instance of the game, remember this line, it will be changed soon:
 
-```rust
+```rust,compile_fail
 let mut game = Game::new();
 ```
 
 Next we define two variables for the game loop: 
 
-```rust
+```rust,compile_fail
 let clock = time::Instant::now();
 let mut elapsed_time = 0.0;
 ```
@@ -211,7 +212,7 @@ let mut elapsed_time = 0.0;
 At first, we "remember" the starting point of the game in time. The next variable is used to control the game loop. Finally, we run the
 event loop and start checking for events coming from the OS:
 
-```rust
+```rust,compile_fail
 event_loop.run(move |event, _, control_flow| {
     match event {
         ...
@@ -221,7 +222,7 @@ event_loop.run(move |event, _, control_flow| {
 
 Let's look at each event separately starting from `Event::MainEventsCleared`:
 
-```rust
+```rust,compile_fail
 Event::MainEventsCleared => {
     // This main game loop - it has fixed time step which means that game
     // code will run at fixed speed even if renderer can't give you desired
@@ -249,7 +250,7 @@ rate independent of FPS - it will be always 60 Hz for game logic even if FPS is 
 `game.update()` and `engine.update(TIMESTEP)` calls to update game's logic and engine internals respectively. After the
 loop we're asking the engine to render the next frame. In the next match arm `Event::RedrawRequested` we're handing our request: 
 
-```rust
+```rust,compile_fail
 Event::RedrawRequested(_) => {
     // Render at max speed - it is not tied to the game code.
     engine.render().unwrap();
@@ -258,7 +259,7 @@ Event::RedrawRequested(_) => {
 
 As you can see rendering happens in a single line of code. Next we need to handle window events:
 
-```rust
+```rust,compile_fail
 Event::WindowEvent { event, .. } => match event {
     WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
     WindowEvent::KeyboardInput { input, .. } => {
@@ -281,7 +282,7 @@ Here we're just checking if the player has hit Escape button and exit game if so
 received, we're notifying renderer about that, so it's render targets will be resized too. The final match arm is for 
 every other event, nothing fancy here - just asking engine to continue listening for new events.
 
-```rust
+```rust,compile_fail
 _ => *control_flow = ControlFlow::Poll,
 ```
 
@@ -370,7 +371,7 @@ of the scene in the field it should be `scene.rgs`.
 Now it's the time to load the scene we've made earlier in the game. This is very simple, all we need to do is to load
 scene as resource and create its instance. Change `fn new()` body to:
 
-```rust
+```rust,compile_fail
 pub async fn new(engine: &mut GameEngine) -> Self {
     let mut scene = Scene::new();
 
@@ -402,7 +403,7 @@ pub async fn new(engine: &mut GameEngine) -> Self {
 
 You may have noticed that the `Game` structure now has two new fields: 
 
-```rust
+```rust,compile_fail
 struct Game {
     scene: Handle<Scene>, // A handle to the scene
     camera: Handle<Node>, // A handle to the camera
@@ -411,7 +412,7 @@ struct Game {
 
 These fields are just handles to the "entities" we've created in the `Game::new()`. Also, change `let mut game = Game::new();` to this:
 
-```rust
+```rust,compile_fail
 let mut game = rg3d::core::futures::executor::block_on(Game::new(&mut engine));
 ```
 
@@ -422,13 +423,13 @@ Run the game and you should see this:
 
 Cool! Now let's disassemble `fn new()` line by line. First, we're creating an empty scene:
 
-```rust
+```rust,compile_fail
 let mut scene = Scene::new();
 ```
 
 The next few lines are the most interesting:
 
-```rust
+```rust,compile_fail
 engine
     .resource_manager
     .request_model("data/models/scene.rgs", MaterialSearchOptions::UsePathDirectly)
@@ -443,7 +444,7 @@ to some other scene, the engine remembers connections between clones and origina
 from resource for the instance. At this point we've successfully instantiated the scene. However, we won't see anything
 yet - we need a camera:
 
-```rust
+```rust,compile_fail
 let camera = CameraBuilder::new(
     BaseBuilder::new().with_local_transform(
         TransformBuilder::new()
@@ -458,7 +459,7 @@ Camera is our "eyes" in the world, here we're just creating a camera and moving 
 scene. Finally, we're adding the scene to the engine's container for scenes, and it gives us a handle to the scene. Later
 we'll use the handle to borrow scene and modify it.
 
-```rust
+```rust,compile_fail
 Self {
     camera,
     scene: engine.scenes.add(scene),
@@ -470,7 +471,7 @@ Self {
 We've made a lot of things already, but still can't move in the scene. Let's fix this! We'll start writing the character
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:
 
-```rust
+```rust,compile_fail
 #[derive(Default)]
 struct InputController {
     move_forward: bool,
@@ -621,7 +622,7 @@ impl Player {
 This is all the code we need for character controller, quite a lot actually, but as usual everything here is pretty
 straightforward.
 
-```rust
+```rust,compile_fail
 // Also we must change Game structure a bit too and the new() code.
 struct Game {
     scene: Handle<Scene>,
@@ -655,7 +656,7 @@ impl Game {
 We've moved camera creation to `Player`, because now the camera is attached to the player's body. Also, we must add this line
 in the beginning of `event_loop.run(...)` to let `player` handle input events:
 
-```rust
+```rust,compile_fail
 game.player.process_input_event(&event);        
 ```
 
@@ -677,7 +678,7 @@ struct InputController {
 Next goes the `Player::new()` function. First, we're creating a simple chain of nodes of different kinds in the
 [scene graph](https://en.wikipedia.org/wiki/Scene_graph). 
 
-```rust
+```rust,compile_fail
 let camera;
 let pivot = BaseBuilder::new()
     .with_children(&[{
@@ -702,7 +703,7 @@ As you can see, the camera is attached to the pivot and has a **relative** posit
 move pivot, the camera will move too (and rotate of course). Next we're adding a rigid body with a capsule collider and
 link it with the pivot.
 
-```rust
+```rust,compile_fail
 // Create rigid body, it will be used for interaction with the world.
 let rigid_body_handle = scene.physics.add_body(
     RigidBodyBuilder::new_dynamic()
@@ -724,7 +725,7 @@ scene.physics_binder.bind(pivot, rigid_body_handle);
 
 Comments should clarify what is going on here. Finally, we're creating Player instance and return it:
 
-```rust
+```rust,compile_fail
 Self {
     pivot,
     camera,
@@ -735,7 +736,7 @@ Self {
 
 Next goes the `fn update(...)` function, it is responsible for movement of the player. It starts from these lines:
 
-```rust
+```rust,compile_fail
 // Set pitch for the camera. These lines responsible for up-down camera rotation.
 scene.graph[self.camera].local_transform_mut().set_rotation(
     UnitQuaternion::from_axis_angle(&Vector3::x_axis(), self.controller.pitch.to_radians()),
@@ -749,7 +750,7 @@ engine "lives" in generational arenas (pool in rg3d's terminology). Pool is a co
 able to "reference" an object in a pool rg3d uses handles. Almost every entity has a single owner - the engine,
 so to mutate or read data from an entity your have to borrow it first, like this:
 
-```rust
+```rust,compile_fail
 // Borrow the pivot from the graph.
 let pivot = &mut scene.graph[self.pivot];
 
@@ -765,7 +766,7 @@ This piece of code `scene.graph[self.pivot]` borrows `pivot` as either mutable o
 it is just an implementation of Index + IndexMut traits). Once we've borrowed objects, we can modify them. As the next
 step we calculate new horizontal speed for the player:
 
-```rust
+```rust,compile_fail
 // Keep only vertical velocity, and drop horizontal.
 let mut velocity = Vector3::new(0.0, body.linvel().y, 0.0);
 
@@ -794,7 +795,7 @@ body.set_linvel(velocity, true);
 We don't need to modify vertical speed, because it should be controlled by the physics engine. Finally, we're setting
 rotation of the rigid body:
 
-```rust
+```rust,compile_fail
 // Change the rotation of the rigid body according to current yaw. These lines responsible for
 // left-right rotation.
 let mut position = *body.position();
@@ -807,7 +808,7 @@ we check input events and configure input controller accordingly. Basically we'r
 pressed or released. In the `MouseMotion` arm, we're modifying yaw and pitch of the controller according to mouse 
 velocity. Nothing fancy, except this line:
 
-```rust
+```rust,compile_fail
 self.controller.pitch = (self.controller.pitch + delta.1 as f32).clamp(-90.0, 90.0);
 ```
 
@@ -822,7 +823,7 @@ One more thing before we end the tutorial. Black "void" around us isn't nice, le
 that. Skybox is a very simple effect that significantly improves scene quality. To add a skybox, add this code first
 somewhere before `impl Player`:
 
-```rust
+```rust,compile_fail
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
@@ -859,20 +860,20 @@ async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
 
 Then modify signature of `Player::new` to 
 
-```rust
+```rust,compile_fail
 async fn new(scene: &mut Scene, resource_manager: ResourceManager) -> Self
 ```
 
 We just added resource manager parameter here, and made the function async, because we'll load a bunch of textures 
 in the `create_skybox` function. Add following line at camera builder (before `.build`):
 
-```rust
+```rust,compile_fail
 .with_skybox(create_skybox(resource_manager).await)
 ```
 
 Also modify player creation in `Game::new` to this
 
-```rust
+```rust,compile_fail
 player: Player::new(&mut scene, engine.resource_manager.clone()).await,
 ```
 
