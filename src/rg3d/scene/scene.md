@@ -99,3 +99,14 @@ loading screens and loading screen has some fancy interactive stuff with progres
 responsive while the game doing hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking main thread, thus leaving the game 
 fully responsive. 
+
+There is comprehensive example of asynchronous scene loading, it can be found 
+[here](https://github.com/rg3dengine/rg3d/blob/master/examples/async.rs)  
+
+## Managing multiple scenes
+
+Usually you should have only one scene active (unless you're making something very special), you should use 
+`.enabled` flag of a scene to turn it off or on. Deactivated scenes won't be rendered, the physics won't be
+updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
+when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
+can be useful is menus. In most games when you're entering the menu, game world is paused. 
