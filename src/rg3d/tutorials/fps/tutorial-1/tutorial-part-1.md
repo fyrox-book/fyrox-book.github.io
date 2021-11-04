@@ -176,13 +176,17 @@ impl Game {
 
 Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating a window builder:
 
-```rust,compile_fail
+```rust
+# extern crate rg3d;
+# use rg3d::window::WindowBuilder;
 let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
 ```
 
 The builder will be used later by the engine to create a window. Next we're creating our event loop: 
 
-```rust,compile_fail
+```rust
+# extern crate rg3d;
+# use rg3d::event_loop::EventLoop;
 let event_loop = EventLoop::new();
 ```
 
@@ -471,7 +475,35 @@ Self {
 We've made a lot of things already, but still can't move in the scene. Let's fix this! We'll start writing the character
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:
 
-```rust,compile_fail
+```rust
+# extern crate rg3d;
+# use rg3d::{
+#     core::{
+#         algebra::{UnitQuaternion, Vector3},
+#         pool::Handle,
+#     },
+#     engine::{
+#         resource_manager::{MaterialSearchOptions, ResourceManager},
+#         Engine,
+#     },
+#     event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
+#     event_loop::{ControlFlow, EventLoop},
+#     physics3d::{
+#         rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
+#         RigidBodyHandle,
+#     },
+#     resource::texture::TextureWrapMode,
+#     scene::{
+#         base::BaseBuilder,
+#         camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
+#         node::Node,
+#         transform::TransformBuilder,
+#         Scene,
+#     },
+#     window::WindowBuilder,
+# };
+# use std::time;
+
 #[derive(Default)]
 struct InputController {
     move_forward: bool,
@@ -823,7 +855,17 @@ One more thing before we end the tutorial. Black "void" around us isn't nice, le
 that. Skybox is a very simple effect that significantly improves scene quality. To add a skybox, add this code first
 somewhere before `impl Player`:
 
-```rust,compile_fail
+```rust,edition2018
+# extern crate rg3d;
+# use rg3d::{
+#     engine::{
+#         resource_manager::{MaterialSearchOptions, ResourceManager},
+#     },
+#     resource::texture::TextureWrapMode,
+#     scene::{
+#         camera::{SkyBox, SkyBoxBuilder},
+#     },
+# };
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
