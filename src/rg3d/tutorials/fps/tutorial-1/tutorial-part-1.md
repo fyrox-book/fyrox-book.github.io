@@ -176,7 +176,7 @@ impl Game {
 
 Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating a window builder:
 
-```rust
+```rust,no_run
 # extern crate rg3d;
 # use rg3d::window::WindowBuilder;
 let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
@@ -184,7 +184,7 @@ let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
 
 The builder will be used later by the engine to create a window. Next we're creating our event loop: 
 
-```rust
+```rust,no_run
 # extern crate rg3d;
 # use rg3d::event_loop::EventLoop;
 let event_loop = EventLoop::new();

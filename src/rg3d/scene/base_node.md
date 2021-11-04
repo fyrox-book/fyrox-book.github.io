@@ -2,7 +2,8 @@ Base node is a scene node that stores hierarchical information (a handle to the 
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
 is used as a base node for every other scene node (via composition).
 
-It has no graphical information, so it is invisible all the time.
+It has no graphical information, so it is invisible all the time, but it is useful as a "container" for children
+nodes.
 
 ## How to create
 
@@ -80,5 +81,23 @@ to move a node at specific location you could use this:
 scene.graph[node_handle]
     .local_transform_mut()
     .set_position(Vector3::new(1.0, 0.0, 2.0));
+# }
+```
+
+You could also chain multiple `set_x` calls, like so:
+
+```rust
+# extern crate rg3d;
+# use rg3d::{
+#    core::{algebra::Vector3, pool::Handle},
+#    scene::{node::Node, Scene},
+# };
+#
+# fn transform_node(scene: &mut Scene, node_handle: Handle<Node>) {
+scene.graph[node_handle]
+    .local_transform_mut()
+    .set_position(Vector3::new(1.0, 0.0, 2.0))
+    .set_scale(Vector3::new(2.0, 2.0, 2.0))
+    .set_rotation_offset(Vector3::new(1.0, 1.0, 0.0));
 # }
 ```
