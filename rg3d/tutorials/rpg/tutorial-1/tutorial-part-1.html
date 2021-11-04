@@ -169,7 +169,7 @@ rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot;, rev = &quot;a3c3d
 that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
 your game code. <code>Framework</code> is not mandatory, you may use the <a href="https://rg3d.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window">previous</a>
 variant with manual engine initialization and &quot;opened&quot; main loop.</p>
-<pre><pre class="playground"><code class="language-rust">// Import everything we need for the tutorial.
+<pre><pre class="playground"><code class="language-rust compile_fail">// Import everything we need for the tutorial.
 use rg3d::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
     engine::framework::{Framework, GameEngine, GameState},
@@ -208,7 +208,7 @@ ZIP archive which can be downloaded <a href="./data.zip">here</a>. Once you've d
 <h2 id="player-and-camera-controller"><a class="header" href="#player-and-camera-controller">Player and camera controller</a></h2>
 <p>Now we can start adding Player to our game. Create a folder <code>player</code> under your <code>src</code> directory and add <code>mod.rs</code> with
 following content:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::player::camera::CameraController;
@@ -290,7 +290,7 @@ when we're attaching the model to the pivot, it will &quot;stay&quot; on the piv
 it down by height of the model. Finally, we're attaching the model to the pivot, forcing the engine to move
 the model together with pivot. In the end we're creating camera controller, it needs its own module, so add <code>camera.rs</code>
 module under <code>src/player</code> with following content:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Import everything we need for the tutorial.
@@ -403,7 +403,7 @@ rotation around X axis. This is very simple, we have the pivot for that. Remembe
 are linked together, so if we'll rotate the pivot around Y axis the hinge will rotate too as well as the camera. Fow
 now our camera controller does not have an ability to rotate, we'll add this later in the tutorial.</p>
 <p>Now let's load a level where our character will &quot;live&quot;, add <code>level.rs</code> with following content:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use rg3d::{
@@ -437,7 +437,7 @@ houses, trees, bushes, barrels, etc. The scene was made in the rusty-editor and 
 problems. Just open the scene and modify it as you need.</p>
 <p>Now we need to &quot;glue&quot; all the pieces (the player, and the level) together, let's go back to <code>main.rs</code> and change it to
 the following code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 use crate::{level::Level, player::Player};
 use rg3d::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
@@ -490,7 +490,7 @@ run the game you should see something like this:</p>
 <p>For now everything is static, let's fix that by adding the ability to move the character and rotate the camera.</p>
 <h2 id="camera-movement"><a class="header" href="#camera-movement">Camera movement</a></h2>
 <p>Let's start from the camera movement and rotation. We need two new fields in the <code>CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// An angle around local Y axis of the pivot.
@@ -500,7 +500,7 @@ pitch: f32,
 <span class="boring">}
 </span></code></pre></pre>
 <p>Do not forget to initialize them with zeros:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -511,7 +511,7 @@ pitch: f32,
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now we need to handle device events coming from the OS to rotate the camera. Add following method to the <code>impl CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn handle_device_event(&amp;mut self, device_event: &amp;DeviceEvent) {
@@ -533,7 +533,7 @@ pitch. Pitch should be limited in specific range to prevent camera to rotate 360
 to be in <code>[-90; 90]</code> range.</p>
 <p>Once we've changed yaw and pitch, we need to apply rotations to the hinge and the camera. To do that, we need to add
 a new method to the <code>impl CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, graph: &amp;mut Graph) {
@@ -557,7 +557,7 @@ a new method to the <code>impl CameraController</code>:</p>
 </span></code></pre></pre>
 <p>It is a very simple method, it borrows nodes, and applies rotations around specific axes. Now we need to call those two
 methods from somewhere. The most suitable place is <code>impl Player</code>, because <code>Player</code> owns an instance of <code>CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn handle_device_event(&amp;mut self, device_event: &amp;DeviceEvent) {
@@ -571,7 +571,7 @@ pub fn update(&amp;mut self, scene: &amp;mut Scene) {
 </span></code></pre></pre>
 <p>For now both methods are just proxies, but it will be changed pretty soon. Now we need to call the proxies, but from where?
 The most suitable place is <code>on_tick</code> and <code>on_device_event</code> of the <code>GameState</code> trait implementation for our <code>Game</code> structure:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
@@ -609,14 +609,14 @@ struct InputController {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Add new field to the <code>Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>input_controller: InputController,
 <span class="boring">}
 </span></code></pre></pre>
 <p>And initialize it with <code>Default::default</code> in the <code>Player::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -627,7 +627,7 @@ struct InputController {
 </span></code></pre></pre>
 <p>Now we need to change the state of the input controller, to do that we'll use keyboard events. Add following method to
 the <code>impl Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn handle_key_event(&amp;mut self, key: &amp;KeyboardInput) {
@@ -653,7 +653,7 @@ the <code>impl Player</code>:</p>
 </span></code></pre></pre>
 <p>Now we need to call this method, we'll do it from <code>on_window_event</code> in the <code>GameState</code> trait implementation for our
 <code>Game</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_window_event(&amp;mut self, _engine: &amp;mut GameEngine, event: WindowEvent) {
@@ -669,7 +669,7 @@ the <code>impl Player</code>:</p>
 <p>Ok, now we have input controller functioning. Now we can start adding movement logic to the player. Let's start by adding
 a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
 in <code>Player::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Create new rigid body and offset it a bit to prevent falling through the ground.
@@ -693,7 +693,7 @@ scene.physics_binder.bind(pivot, body);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now, once our character has physical body, we can move it. Add these lines to the end of <code>Player::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let pivot = &amp;scene.graph[self.pivot];
@@ -804,7 +804,7 @@ let's fix this.</p>
 <p>At this point our character can move, and we can rotate the camera around it, but the character is still in T-pose and
 does not have any animation. In this section we'll animate it. To keep this tutorial at reasonable length, we'll
 add just an idle and walk animations and smooth transitions between them. Add following code at the end of <code>player.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span>
 <span class="boring">fn main() {
@@ -924,7 +924,7 @@ impl AnimationMachine {
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
 and create two transitions between them and then applying final pose to the character.</p>
 <p>Now we need to create an instance of the <code>AnimationMachine</code>, add a field to the <code>Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...,
@@ -932,7 +932,7 @@ animation_machine: AnimationMachine,
 <span class="boring">}
 </span></code></pre></pre>
 <p>And initialize it in the <code>Player::new</code>, before <code>camera_controller</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...,
@@ -942,7 +942,7 @@ animation_machine: AnimationMachine::new(scene, model, resource_manager.clone())
 </span></code></pre></pre>
 <p>The last thing we need to do is to update animation machine each frame, we'll do this in <code>Player::update</code>, at the end
 of the method:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>self.animation_machine

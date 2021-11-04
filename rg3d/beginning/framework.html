@@ -138,7 +138,9 @@
 handles window events, calls every required methods and so on. In other words it helps you to get started as quickly
 as possible with a need to put dozens lines of code to just create a window with a game loop.</p>
 <p>The simplest app could be created with this code:</p>
-<pre><pre class="playground"><code class="language-rust">use rg3d::{
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate rg3d;
+</span>
+use rg3d::{
     engine::Engine,
     engine::framework::prelude::*,
 };
@@ -183,6 +185,12 @@ about to shut down allowing you to do some clean up or some other actions.</li>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">  core::color::{Color, Hsv},
+</span><span class="boring">  engine::{framework::prelude::*, Engine},
+</span><span class="boring">  event_loop::ControlFlow,
+</span><span class="boring">};
 </span>struct Game {
     hue: f32,
 }

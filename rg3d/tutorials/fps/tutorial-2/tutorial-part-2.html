@@ -151,7 +151,7 @@ is the result we're aiming in the tutorial:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/GmVAdBdnqeM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <h2 id="adding-weapons"><a class="header" href="#adding-weapons">Adding weapons</a></h2>
 <p>Add a new module <code>weapon.rs</code> near your <code>main.rs</code> and use it somewhere after other imports:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub mod weapon;
@@ -160,7 +160,7 @@ use weapon::Weapon;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Switch to <code>weapon.rs</code> and paste this code into it:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use rg3d::engine::resource_manager::MaterialSearchOptions;
@@ -226,7 +226,7 @@ the pace of shooting. You may ask &quot;why <code>shoot</code> method just modif
 please be patient, I will explain this later in <a href="#game-architecture">game architecture</a> section of the tutorial.
 OK, now we need to make a point where every weapon will be &quot;mounted&quot; on, go to <code>Player::new</code> and add these lines in 
 the <code>CameraBuilder</code> instance:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>.with_children(&amp;[{
@@ -245,14 +245,14 @@ the <code>CameraBuilder</code> instance:</p>
 be attached to this pivot. Please keep in mind that the offset given in <strong>local</strong> coordinates, which means that weapon
 pivot will move with the camera, but with some offset relative to it. Also, do not forget to add this line after 
 <code>let camera;</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let weapon_pivot;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, add the weapon pivot to <code>Self { ... }</code> (and also add <code>weapon_pivot: Handle&lt;Node&gt;</code> to the <code>Player</code> struct):</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -265,7 +265,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we need a container for weapons, let's add it to the <code>Game</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Game {
@@ -276,7 +276,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
 <span class="boring">}
 </span></code></pre></pre>
 <p>Also do not forget to import <code>Pool</code> from <code>rg3d::core::pool</code> in <code>main.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...
@@ -285,7 +285,7 @@ use rg3d::core::pool::{Handle, Pool};
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now we need to change <code>Game::new()</code> a bit to add a weapon to the player:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub async fn new(engine: &amp;mut Engine) -&gt; Self {
@@ -337,7 +337,7 @@ multiple times. So we need a way to change strong coupling to loose coupling. To
 execution of some actions that require too much of a context. In general, we'll replace direct function call with a 
 message that will be put in a common queue and executed later on one by one at the top of call hierarchy (in 
 <code>Game::update</code> in our case). Let's begin by adding a MPSC (Multiple Producer Single Consumer) queue to the <code>Game</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Game {
@@ -351,7 +351,7 @@ message that will be put in a common queue and executed later on one by one at t
 </span></code></pre></pre>
 <p>Now we need a <code>Message</code> enumeration, add <code>message.rs</code> module, import it in <code>main.rs</code> (<code>pub mod message;</code>) and fill it
 with the following code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::weapon::Weapon;
@@ -367,7 +367,7 @@ pub enum Message {
 <p>For now, we have only one message kind - <code>ShootWeapon</code> with a single parameter, a handle of a weapon to shoot. We need
 a place to handle messages, <code>Game::update</code> seems to be the most suitable - it is on top of &quot;call hierarchy&quot; and has 
 most wide context. Let's change <code>Game::update</code> to this code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, engine: &amp;mut Engine, dt: f32) {
@@ -397,7 +397,7 @@ to pass this parameter in <code>fn main()</code>: <code>game.update(&amp;mut eng
 handling messages from the queue one by one. As you can see we're handling <code>ShootWeapon</code> message, but there is a 
 mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet defined, let's fix that, add these lines to 
 <code>impl Game</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> fn shoot_weapon(&amp;mut self, weapon: Handle&lt;Weapon&gt;, engine: &amp;mut Engine) {
@@ -471,14 +471,14 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 <span class="boring">}
 </span></code></pre></pre>
 <p>Wow! Why is there so much code to shoot a weapon!? Actually, this is not all the code - check the last line</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
 <span class="boring">}
 </span></code></pre></pre>
 <p>This is yet another function we must add, it is a standalone helper function that creates a shot trail:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_shot_trail(
@@ -537,7 +537,7 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 </span></code></pre></pre>
 <p>Okay... Let's disassemble this heap of code line by line. At first, we're borrowing the weapon by its handle and 
 check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (reset the timer) if so:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> let weapon = &amp;mut self.weapons[weapon];
@@ -548,7 +548,7 @@ check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (re
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we're using ray casting to find the target we're shooting at:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// ...
@@ -583,7 +583,7 @@ scene.physics.cast_ray(
 <p>To determine the &quot;target&quot;, we're have to make a ray first. It starts from the &quot;shot point&quot; we've attached to the weapon.
 Direction of the ray is the &quot;look&quot; vector of the weapon model scaled by some large value which defines a &quot;length&quot; of the
 ray. Finally, we're casting the ray. Next we have to check each intersection and find the target:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Ignore intersections with player's capsule.
@@ -625,7 +625,7 @@ let trail_length = if let Some(intersection) = intersections
 <p>First intersection most likely will be player's capsule, because shot point may be inside player's capsule. We're 
 filtering such intersection in the first three lines. To do that, we have to remember the handle of player's capsule
 in <code>Player</code>: <code>collider: ColliderHandle</code> and fill the field in <code>Player::new</code> like this:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Add capsule collider for the rigid body.
@@ -648,14 +648,14 @@ Self {
 Until we have no bots, we should somehow emulate shot impact, to do that we'll just apply some force at the point of
 impact. Finally, we're calculating desired shot trail length - it is just distance between point of impact and ray's 
 origin. In the <code>else</code> branch we're setting the length to be the length of the ray. Finally, we're creating a shot trail: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now let's dive into this function. It starts from the definition of local transform of the trail:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let transform = TransformBuilder::new()
@@ -670,7 +670,7 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
 </span></code></pre></pre>
 <p>Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to the length of the trail. Next we're making
 geometry for the cylinder:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
@@ -684,7 +684,7 @@ geometry for the cylinder:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Create an instance of standard material for the shot trail.
@@ -723,7 +723,7 @@ but rg3d has <code>Forward</code> renderer for such objects. Check this <a href=
 about Deferred and Forward rendering techniques. Ok, now we have to &quot;teach&quot; player how to shoot. At first, let's add new 
 field to <code>InputController</code>: <code>shoot: bool</code>. We'll be changing this flag by left mouse click, to do that let's add these lines
 at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}</code> in <code>Player::process_input_event</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>&amp;WindowEvent::MouseInput { button, state, .. } =&gt; {
@@ -735,7 +735,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
 </span></code></pre></pre>
 <p>Now we need a way to send messages to the game from the player. We need a new field in <code>Player</code> struct 
 <code>sender: Sender&lt;Message&gt;</code>. Also, we must change signature of <code>Player::new()</code> to this:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn new(
@@ -746,7 +746,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
 <span class="boring">}
 </span></code></pre></pre>
 <p>Just pass the <code>sender</code> in the <code>Self { .. }</code> like this: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -759,7 +759,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
 <p>Player must know about its weapons, let's fix this by adding new field to the <code>Player</code>: <code>weapon: Handle&lt;Weapon&gt;</code>, we'll
 fill this field in the <code>Game::new()</code>, not in <code>Player::new()</code> because at the moment of creation of the player there are
 no weapons:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...
@@ -774,7 +774,7 @@ player.weapon = weapon;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, at the end of <code>Player::update</code> we will handle the state of the input controller:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if self.controller.shoot {
@@ -793,7 +793,7 @@ you'll press left mouse button:</p>
 <h2 id="recoil"><a class="header" href="#recoil">Recoil</a></h2>
 <p>Ok, the weapon shoots but looks kinda unnatural, to fix that we need to add a recoil. This is very simple to do, let's 
 start by adding these fields in the <code>Weapon</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>recoil_offset: Vector3&lt;f32&gt;,
@@ -801,7 +801,7 @@ recoil_target_offset: Vector3&lt;f32&gt;,
 <span class="boring">}
 </span></code></pre></pre>
 <p>Initialize these fields with default values (zero vector):</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>recoil_offset: Default::default(),
@@ -812,7 +812,7 @@ recoil_target_offset: Default::default(),
 first vector will follow. Why do we need two vectors instead just one? The answer is very simple, we need to smoothly
 change offset over time, and to do that offset will just &quot;follow&quot; target offset which will give us desired smooth 
 movement. Let's add the code responsible for the recoil to the <code>Weapon::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Notice new `graph` parameter
@@ -848,7 +848,7 @@ pub fn update(&amp;mut self, dt: f32, graph: &amp;mut Graph) {
 applying offset to weapon's model. Finally, we're checking if we've reached target offset and if so, just reset target
 offset to return a weapon to its default position. Also we have to slightly modify <code>Weapon::shoot</code> to modify target
 offset:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn shoot(&amp;mut self) {
@@ -860,7 +860,7 @@ offset:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>The last thing we need to do is to slightly modify code at the <code>Game::update</code> to pass new parameter to <code>Weapon::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> pub fn update(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
@@ -879,7 +879,7 @@ offset:</p>
 <h2 id="impact-effects"><a class="header" href="#impact-effects">Impact effects</a></h2>
 <p>Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in <code>main.rs</code></p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_bullet_impact(
@@ -942,7 +942,7 @@ in world space. Finally, we're creating particle system itself, using pre-made p
 <a href="./spark.png">spark texture</a>, it should be placed in <code>data/textures</code>. Now we need to find
 correct place to create this particle system. It should be placed right after we're applying force to target we've hit 
 in <code>Game::shoot_weapon</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Add bullet impact effect.

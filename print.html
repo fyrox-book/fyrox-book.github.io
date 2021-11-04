@@ -151,7 +151,9 @@ rg3d = &quot;^0.23.1&quot; # Please check crates.io for actual version.
 handles window events, calls every required methods and so on. In other words it helps you to get started as quickly
 as possible with a need to put dozens lines of code to just create a window with a game loop.</p>
 <p>The simplest app could be created with this code:</p>
-<pre><pre class="playground"><code class="language-rust">use rg3d::{
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate rg3d;
+</span>
+use rg3d::{
     engine::Engine,
     engine::framework::prelude::*,
 };
@@ -196,6 +198,12 @@ about to shut down allowing you to do some clean up or some other actions.</li>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">  core::color::{Color, Hsv},
+</span><span class="boring">  engine::{framework::prelude::*, Engine},
+</span><span class="boring">  event_loop::ControlFlow,
+</span><span class="boring">};
 </span>struct Game {
     hue: f32,
 }
@@ -633,8 +641,18 @@ path on you mesh object. It could be done something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>graph[mesh_handle].as_mesh_mut().set_render_path(RenderPath::Forward);
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{mesh::RenderPath, node::Node, Scene},
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn set_forward_render_path(scene: &amp;mut Scene, mesh_handle: Handle&lt;Node&gt;) {
+</span>    scene.graph[mesh_handle]
+        .as_mesh_mut()
+        .set_render_path(RenderPath::Forward);
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>After this your mesh will be rendered using specialized render pass called Forward which supports alpha-blending
 and transparent objects. <strong>Caveat:</strong> Current forward renderer implementation does not support any kind of lighting,
@@ -660,8 +678,11 @@ basic concepts, provide information about most commonly used widgets, and so on.
 <div style="break-before: page; page-break-before: always;"></div><h1 id="setting-up"><a class="header" href="#setting-up">Setting up</a></h1>
 <p>The user interface in the engine is extremely powerful, it allows you to build user interfaces of any complexity
 with low effort. To start off we will use the simplest framework:</p>
-<pre><pre class="playground"><code class="language-rust">use rg3d::{
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate rg3d;
+</span>
+use rg3d::{
     engine::{framework::prelude::*, Engine},
+    gui::message::UiMessage
 };
 
 struct Game {
@@ -704,26 +725,47 @@ fn main() {
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let button = ButtonBuilder::new(WidgetBuilder::new())
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    gui::{button::ButtonBuilder, widget::WidgetBuilder, UiNode, UserInterface},
+</span><span class="boring">};
+</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    ButtonBuilder::new(WidgetBuilder::new())
         .with_text(&quot;Click me!&quot;)
-        .build(ctx);
+        .build(&amp;mut ui.build_ctx())
+}
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="a-button-with-image"><a class="header" href="#a-button-with-image">A button with image</a></h2>
-<p>More fancy-looking button could be created using this code snippet:</p>
+<p>More fancy-looking button with an image as a background could be created using this code snippet:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let button = ButtonBuilder::new(WidgetBuilder::new())
-    .with_back(
-        ImageBuilder::new(WidgetBuilder::new())
-            .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;path/to/your/texture&quot;),
-            ))
-            .build(ctx),
-    )
-    .with_text(&quot;Click me!&quot;)
-    .build(ctx);
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+</span><span class="boring">        UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span>fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+    let ctx = &amp;mut ui.build_ctx();
+
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_back(
+            ImageBuilder::new(WidgetBuilder::new())
+                .with_texture(into_gui_texture(
+                    resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
+                ))
+                .build(ctx),
+        )
+        .with_text(&quot;Click me!&quot;)
+        .build(ctx)
+}
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="message-handling"><a class="header" href="#message-handling">Message handling</a></h2>
@@ -732,12 +774,42 @@ useful:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn on_ui_message(&amp;mut self, engine: &amp;mut Engine, message: UiMessage) {    
-    if let UiMessageData::Button(ButtonMessage::Click) = message.data() {
-        if message.destination() == self.button {
-            // 
-            // Insert your code clicking handling code here.
-            //
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::{framework::GameState, Engine},
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder,
+</span><span class="boring">        message::{ButtonMessage, UiMessage, UiMessageData},
+</span><span class="boring">        widget::WidgetBuilder,
+</span><span class="boring">        UiNode,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">struct Game {
+</span><span class="boring">    button: Handle&lt;UiNode&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl GameState for Game {
+      // ...
+<span class="boring">    fn init(engine: &amp;mut Engine) -&gt; Self
+</span><span class="boring">        where
+</span><span class="boring">            Self: Sized,
+</span><span class="boring">    {
+</span><span class="boring">        Self {
+</span><span class="boring">            button: ButtonBuilder::new(WidgetBuilder::new())
+</span><span class="boring">                .with_text(&quot;Click me!&quot;)
+</span><span class="boring">                .build(&amp;mut engine.user_interface.build_ctx()),
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">
+</span>    fn on_ui_message(&amp;mut self, engine: &amp;mut Engine, message: UiMessage) {
+        if let UiMessageData::Button(ButtonMessage::Click) = message.data() {
+            if message.destination() == self.button {
+                //
+                // Insert your code clicking handling code here.
+                //
+            }
         }
     }
 }
@@ -750,17 +822,30 @@ call of other widget builders. In code, it looks something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let button = ButtonBuilder::new(WidgetBuilder::new())
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+</span><span class="boring">        UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span><span class="boring">fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span><span class="boring">let ctx = &amp;mut ui.build_ctx();
+</span>ButtonBuilder::new(WidgetBuilder::new())
     .with_back(
         ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;your_texture&quot;),
+                resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
             ))
             .build(ctx),
     )
-    .with_text(&quot;My Button&quot;)
-    .build(ctx);
+    .with_text(&quot;Click me!&quot;)
+    .build(ctx)
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>This code snippet creates a button with an image and a text. Actually it creates <strong>three</strong> widgets, that forms 
 complex hierarchy. The topmost widget in hierarchy is the <code>Button</code> widget itself, it has two children widgets:
@@ -771,48 +856,84 @@ that contains text with some icon. To do that, replace <code>.with_text(&quot;My
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>.with_content(
-        GridBuilder::new(
-            WidgetBuilder::new()
-                .with_child(
-                    ImageBuilder::new(WidgetBuilder::new().on_column(0))
-                        .with_texture(into_gui_texture(
-                            resource_manager.request_texture(&quot;your_icon&quot;),
-                        ))
-                        .build(ctx),
-                )
-                .with_child(
-                    TextBuilder::new(WidgetBuilder::new().on_column(1))
-                        .with_text(&quot;My Button&quot;)
-                        .build(ctx),
-                ),
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder,
+</span><span class="boring">        grid::{Column, GridBuilder, Row},
+</span><span class="boring">        image::ImageBuilder,
+</span><span class="boring">        text::TextBuilder,
+</span><span class="boring">        widget::WidgetBuilder,
+</span><span class="boring">        UiNode, UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn create_fancy_button(
+</span><span class="boring">    ui: &amp;mut UserInterface,
+</span><span class="boring">    resource_manager: ResourceManager,
+</span><span class="boring">) -&gt; Handle&lt;UiNode&gt; {
+</span><span class="boring">    let ctx = &amp;mut ui.build_ctx();
+</span><span class="boring">
+</span><span class="boring">    ButtonBuilder::new(WidgetBuilder::new())
+</span>        .with_content(
+            GridBuilder::new(
+                WidgetBuilder::new()
+                    .with_child(
+                        ImageBuilder::new(WidgetBuilder::new().on_column(0))
+                            .with_texture(into_gui_texture(
+                                resource_manager.request_texture(&quot;your_icon&quot;, None),
+                            ))
+                            .build(ctx),
+                    )
+                    .with_child(
+                        TextBuilder::new(WidgetBuilder::new().on_column(1))
+                            .with_text(&quot;My Button&quot;)
+                            .build(ctx),
+                    ),
+            )
+            .add_row(Row::stretch())
+            .add_column(Column::auto())
+            .add_column(Column::stretch())
+            .build(ctx),
         )
-        .add_row(Row::strect())
-        .add_column(Column::auto())
-        .add_column(Column::stretch())
-        .build(ctx),
-    )
-<span class="boring">}
+<span class="boring">      .build(ctx)
+</span><span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+</span><span class="boring">        UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span><span class="boring">fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span><span class="boring">let ctx = &amp;mut ui.build_ctx();
 </span>let image;
-let button = ButtonBuilder::new(WidgetBuilder::new())
+ButtonBuilder::new(WidgetBuilder::new())
     .with_back({
         image = ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;your_texture&quot;),
+                resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
             ))
             .build(ctx);
         image
     })
-    .with_text(&quot;My Button&quot;)
-    .build(ctx);
-
-// image now contains a handle of the Image widget 
+    .with_text(&quot;Click me!&quot;)
+    .build(ctx)
+<span class="boring">}
+</span>// image now contains a handle of the Image widget 
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="should-i-create-a-custom-widget-or-use-composition-of-other-widgets"><a class="header" href="#should-i-create-a-custom-widget-or-use-composition-of-other-widgets">Should I create a custom widget or use composition of other widgets?</a></h2>
@@ -874,7 +995,8 @@ rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot;, rev = &quot;a3c3d
 <h3 id="creating-a-window"><a class="header" href="#creating-a-window">Creating a window</a></h3>
 <p>Great! Now we can start writing the game. Let's start from something very simple - a window and a main loop. Just copy 
 and paste this code in the <code>main.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust">use rg3d::{
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate rg3d;
+</span>use rg3d::{
     core::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
@@ -1011,14 +1133,14 @@ impl Game {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, we at the point where the interesting stuff happens - <code>fn main()</code>. We're starting by creating a window builder:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let window_builder = WindowBuilder::new().with_title(&quot;3D Shooter Tutorial&quot;);
 <span class="boring">}
 </span></code></pre></pre>
 <p>The builder will be used later by the engine to create a window. Next we're creating our event loop: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let event_loop = EventLoop::new();
@@ -1026,7 +1148,7 @@ impl Game {
 </span></code></pre></pre>
 <p>The event loop is a &quot;magic&quot; thing that receives events from the operating system and feeds your application, this is a very 
 important part which makes the application work. Finally, we're creating an instance of the engine:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut engine = Engine::new(window_builder, &amp;event_loop, false).unwrap();
@@ -1036,14 +1158,14 @@ important part which makes the application work. Finally, we're creating an inst
 synchronization (VSync). In this tutorial we'll have VSync disabled, because it requires specific platform-dependent
 extenstions which are not always available and callind <code>.unwrap()</code> might result in panic on some platforms. Next we're 
 creating an instance of the game, remember this line, it will be changed soon:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut game = Game::new();
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we define two variables for the game loop: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let clock = time::Instant::now();
@@ -1052,7 +1174,7 @@ let mut elapsed_time = 0.0;
 </span></code></pre></pre>
 <p>At first, we &quot;remember&quot; the starting point of the game in time. The next variable is used to control the game loop. Finally, we run the
 event loop and start checking for events coming from the OS:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>event_loop.run(move |event, _, control_flow| {
@@ -1063,7 +1185,7 @@ event loop and start checking for events coming from the OS:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Let's look at each event separately starting from <code>Event::MainEventsCleared</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Event::MainEventsCleared =&gt; {
@@ -1092,7 +1214,7 @@ and performs a various amount of iterations based on an amount of time since las
 rate independent of FPS - it will be always 60 Hz for game logic even if FPS is 10. The <code>while</code> loop contains 
 <code>game.update()</code> and <code>engine.update(TIMESTEP)</code> calls to update game's logic and engine internals respectively. After the
 loop we're asking the engine to render the next frame. In the next match arm <code>Event::RedrawRequested</code> we're handing our request: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Event::RedrawRequested(_) =&gt; {
@@ -1102,7 +1224,7 @@ loop we're asking the engine to render the next frame. In the next match arm <co
 <span class="boring">}
 </span></code></pre></pre>
 <p>As you can see rendering happens in a single line of code. Next we need to handle window events:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Event::WindowEvent { event, .. } =&gt; match event {
@@ -1126,7 +1248,7 @@ loop we're asking the engine to render the next frame. In the next match arm <co
 <p>Here we're just checking if the player has hit Escape button and exit game if so. Also, when <code>WindowEvent::Resized</code> is 
 received, we're notifying renderer about that, so it's render targets will be resized too. The final match arm is for 
 every other event, nothing fancy here - just asking engine to continue listening for new events.</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>_ =&gt; *control_flow = ControlFlow::Poll,
@@ -1191,7 +1313,7 @@ of the scene in the field it should be <code>scene.rgs</code>.</p>
 <h2 id="using-the-scene"><a class="header" href="#using-the-scene">Using the scene</a></h2>
 <p>Now it's the time to load the scene we've made earlier in the game. This is very simple, all we need to do is to load
 scene as resource and create its instance. Change <code>fn new()</code> body to:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub async fn new(engine: &amp;mut GameEngine) -&gt; Self {
@@ -1224,7 +1346,7 @@ scene as resource and create its instance. Change <code>fn new()</code> body to:
 <span class="boring">}
 </span></code></pre></pre>
 <p>You may have noticed that the <code>Game</code> structure now has two new fields: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Game {
@@ -1234,7 +1356,7 @@ scene as resource and create its instance. Change <code>fn new()</code> body to:
 <span class="boring">}
 </span></code></pre></pre>
 <p>These fields are just handles to the &quot;entities&quot; we've created in the <code>Game::new()</code>. Also, change <code>let mut game = Game::new();</code> to this:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut game = rg3d::core::futures::executor::block_on(Game::new(&amp;mut engine));
@@ -1244,14 +1366,14 @@ scene as resource and create its instance. Change <code>fn new()</code> body to:
 Run the game and you should see this:</p>
 <p><img src="rg3d/tutorials/fps/tutorial-1/./tutorial1-scene.jpg" alt="Barrel" /></p>
 <p>Cool! Now let's disassemble <code>fn new()</code> line by line. First, we're creating an empty scene:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut scene = Scene::new();
 <span class="boring">}
 </span></code></pre></pre>
 <p>The next few lines are the most interesting:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>engine
@@ -1267,7 +1389,7 @@ it on the <code>scene</code>. What does &quot;instantiation&quot; mean? In short
 to some other scene, the engine remembers connections between clones and original entities and is capable of restoring data
 from resource for the instance. At this point we've successfully instantiated the scene. However, we won't see anything
 yet - we need a camera:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let camera = CameraBuilder::new(
@@ -1283,7 +1405,7 @@ yet - we need a camera:</p>
 <p>Camera is our &quot;eyes&quot; in the world, here we're just creating a camera and moving it a bit up and back to be able to see the 
 scene. Finally, we're adding the scene to the engine's container for scenes, and it gives us a handle to the scene. Later
 we'll use the handle to borrow scene and modify it.</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -1295,7 +1417,7 @@ we'll use the handle to borrow scene and modify it.</p>
 <h2 id="character-controller"><a class="header" href="#character-controller">Character controller</a></h2>
 <p>We've made a lot of things already, but still can't move in the scene. Let's fix this! We'll start writing the character
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Default)]
@@ -1447,7 +1569,7 @@ impl Player {
 </span></code></pre></pre>
 <p>This is all the code we need for character controller, quite a lot actually, but as usual everything here is pretty
 straightforward.</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Also we must change Game structure a bit too and the new() code.
@@ -1482,7 +1604,7 @@ impl Game {
 </span></code></pre></pre>
 <p>We've moved camera creation to <code>Player</code>, because now the camera is attached to the player's body. Also, we must add this line
 in the beginning of <code>event_loop.run(...)</code> to let <code>player</code> handle input events:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>game.player.process_input_event(&amp;event);        
@@ -1506,7 +1628,7 @@ struct InputController {
 </span></code></pre></pre>
 <p>Next goes the <code>Player::new()</code> function. First, we're creating a simple chain of nodes of different kinds in the
 <a href="https://en.wikipedia.org/wiki/Scene_graph">scene graph</a>. </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let camera;
@@ -1530,7 +1652,7 @@ let pivot = BaseBuilder::new()
 <p>As you can see, the camera is attached to the pivot and has a <strong>relative</strong> position of <code>(0.0, 0.25, 0.0)</code>. So when we'll
 move pivot, the camera will move too (and rotate of course). Next we're adding a rigid body with a capsule collider and
 link it with the pivot.</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Create rigid body, it will be used for interaction with the world.
@@ -1553,7 +1675,7 @@ scene.physics_binder.bind(pivot, rigid_body_handle);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Comments should clarify what is going on here. Finally, we're creating Player instance and return it:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -1565,7 +1687,7 @@ scene.physics_binder.bind(pivot, rigid_body_handle);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next goes the <code>fn update(...)</code> function, it is responsible for movement of the player. It starts from these lines:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Set pitch for the camera. These lines responsible for up-down camera rotation.
@@ -1580,7 +1702,7 @@ This rotates camera in vertical direction. Let's talk about borrowing in the eng
 engine &quot;lives&quot; in generational arenas (pool in rg3d's terminology). Pool is a contiguous chunk of memory, to be
 able to &quot;reference&quot; an object in a pool rg3d uses handles. Almost every entity has a single owner - the engine,
 so to mutate or read data from an entity your have to borrow it first, like this:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Borrow the pivot from the graph.
@@ -1597,7 +1719,7 @@ let body = scene
 <p>This piece of code <code>scene.graph[self.pivot]</code> borrows <code>pivot</code> as either mutable or shared, depending on the context (basically
 it is just an implementation of Index + IndexMut traits). Once we've borrowed objects, we can modify them. As the next
 step we calculate new horizontal speed for the player:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Keep only vertical velocity, and drop horizontal.
@@ -1627,7 +1749,7 @@ body.set_linvel(velocity, true);
 </span></code></pre></pre>
 <p>We don't need to modify vertical speed, because it should be controlled by the physics engine. Finally, we're setting
 rotation of the rigid body:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Change the rotation of the rigid body according to current yaw. These lines responsible for
@@ -1641,7 +1763,7 @@ body.set_position(position, true);
 we check input events and configure input controller accordingly. Basically we're just checking if W, S, A, D keys were 
 pressed or released. In the <code>MouseMotion</code> arm, we're modifying yaw and pitch of the controller according to mouse 
 velocity. Nothing fancy, except this line:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>self.controller.pitch = (self.controller.pitch + delta.1 as f32).clamp(-90.0, 90.0);
@@ -1654,7 +1776,7 @@ game, you should see something like this and be able to walk and turn the camera
 <p>One more thing before we end the tutorial. Black &quot;void&quot; around us isn't nice, let's add skybox for the camera to improve
 that. Skybox is a very simple effect that significantly improves scene quality. To add a skybox, add this code first
 somewhere before <code>impl Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
@@ -1692,7 +1814,7 @@ somewhere before <code>impl Player</code>:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Then modify signature of <code>Player::new</code> to </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn new(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Self
@@ -1700,14 +1822,14 @@ somewhere before <code>impl Player</code>:</p>
 </span></code></pre></pre>
 <p>We just added resource manager parameter here, and made the function async, because we'll load a bunch of textures 
 in the <code>create_skybox</code> function. Add following line at camera builder (before <code>.build</code>):</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>.with_skybox(create_skybox(resource_manager).await)
 <span class="boring">}
 </span></code></pre></pre>
 <p>Also modify player creation in <code>Game::new</code> to this</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>player: Player::new(&amp;mut scene, engine.resource_manager.clone()).await,
@@ -1742,7 +1864,7 @@ is the result we're aiming in the tutorial:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/GmVAdBdnqeM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <h2 id="adding-weapons"><a class="header" href="#adding-weapons">Adding weapons</a></h2>
 <p>Add a new module <code>weapon.rs</code> near your <code>main.rs</code> and use it somewhere after other imports:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub mod weapon;
@@ -1751,7 +1873,7 @@ use weapon::Weapon;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Switch to <code>weapon.rs</code> and paste this code into it:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use rg3d::engine::resource_manager::MaterialSearchOptions;
@@ -1817,7 +1939,7 @@ the pace of shooting. You may ask &quot;why <code>shoot</code> method just modif
 please be patient, I will explain this later in <a href="rg3d/tutorials/fps/tutorial-2/tutorial-part-2.html#game-architecture">game architecture</a> section of the tutorial.
 OK, now we need to make a point where every weapon will be &quot;mounted&quot; on, go to <code>Player::new</code> and add these lines in 
 the <code>CameraBuilder</code> instance:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>.with_children(&amp;[{
@@ -1836,14 +1958,14 @@ the <code>CameraBuilder</code> instance:</p>
 be attached to this pivot. Please keep in mind that the offset given in <strong>local</strong> coordinates, which means that weapon
 pivot will move with the camera, but with some offset relative to it. Also, do not forget to add this line after 
 <code>let camera;</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let weapon_pivot;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, add the weapon pivot to <code>Self { ... }</code> (and also add <code>weapon_pivot: Handle&lt;Node&gt;</code> to the <code>Player</code> struct):</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -1856,7 +1978,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we need a container for weapons, let's add it to the <code>Game</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Game {
@@ -1867,7 +1989,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
 <span class="boring">}
 </span></code></pre></pre>
 <p>Also do not forget to import <code>Pool</code> from <code>rg3d::core::pool</code> in <code>main.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...
@@ -1876,7 +1998,7 @@ use rg3d::core::pool::{Handle, Pool};
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now we need to change <code>Game::new()</code> a bit to add a weapon to the player:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub async fn new(engine: &amp;mut Engine) -&gt; Self {
@@ -1928,7 +2050,7 @@ multiple times. So we need a way to change strong coupling to loose coupling. To
 execution of some actions that require too much of a context. In general, we'll replace direct function call with a 
 message that will be put in a common queue and executed later on one by one at the top of call hierarchy (in 
 <code>Game::update</code> in our case). Let's begin by adding a MPSC (Multiple Producer Single Consumer) queue to the <code>Game</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Game {
@@ -1942,7 +2064,7 @@ message that will be put in a common queue and executed later on one by one at t
 </span></code></pre></pre>
 <p>Now we need a <code>Message</code> enumeration, add <code>message.rs</code> module, import it in <code>main.rs</code> (<code>pub mod message;</code>) and fill it
 with the following code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::weapon::Weapon;
@@ -1958,7 +2080,7 @@ pub enum Message {
 <p>For now, we have only one message kind - <code>ShootWeapon</code> with a single parameter, a handle of a weapon to shoot. We need
 a place to handle messages, <code>Game::update</code> seems to be the most suitable - it is on top of &quot;call hierarchy&quot; and has 
 most wide context. Let's change <code>Game::update</code> to this code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, engine: &amp;mut Engine, dt: f32) {
@@ -1988,7 +2110,7 @@ to pass this parameter in <code>fn main()</code>: <code>game.update(&amp;mut eng
 handling messages from the queue one by one. As you can see we're handling <code>ShootWeapon</code> message, but there is a 
 mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet defined, let's fix that, add these lines to 
 <code>impl Game</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> fn shoot_weapon(&amp;mut self, weapon: Handle&lt;Weapon&gt;, engine: &amp;mut Engine) {
@@ -2062,14 +2184,14 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 <span class="boring">}
 </span></code></pre></pre>
 <p>Wow! Why is there so much code to shoot a weapon!? Actually, this is not all the code - check the last line</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
 <span class="boring">}
 </span></code></pre></pre>
 <p>This is yet another function we must add, it is a standalone helper function that creates a shot trail:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_shot_trail(
@@ -2128,7 +2250,7 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 </span></code></pre></pre>
 <p>Okay... Let's disassemble this heap of code line by line. At first, we're borrowing the weapon by its handle and 
 check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (reset the timer) if so:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> let weapon = &amp;mut self.weapons[weapon];
@@ -2139,7 +2261,7 @@ check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (re
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we're using ray casting to find the target we're shooting at:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// ...
@@ -2174,7 +2296,7 @@ scene.physics.cast_ray(
 <p>To determine the &quot;target&quot;, we're have to make a ray first. It starts from the &quot;shot point&quot; we've attached to the weapon.
 Direction of the ray is the &quot;look&quot; vector of the weapon model scaled by some large value which defines a &quot;length&quot; of the
 ray. Finally, we're casting the ray. Next we have to check each intersection and find the target:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Ignore intersections with player's capsule.
@@ -2216,7 +2338,7 @@ let trail_length = if let Some(intersection) = intersections
 <p>First intersection most likely will be player's capsule, because shot point may be inside player's capsule. We're 
 filtering such intersection in the first three lines. To do that, we have to remember the handle of player's capsule
 in <code>Player</code>: <code>collider: ColliderHandle</code> and fill the field in <code>Player::new</code> like this:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Add capsule collider for the rigid body.
@@ -2239,14 +2361,14 @@ Self {
 Until we have no bots, we should somehow emulate shot impact, to do that we'll just apply some force at the point of
 impact. Finally, we're calculating desired shot trail length - it is just distance between point of impact and ray's 
 origin. In the <code>else</code> branch we're setting the length to be the length of the ray. Finally, we're creating a shot trail: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now let's dive into this function. It starts from the definition of local transform of the trail:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let transform = TransformBuilder::new()
@@ -2261,7 +2383,7 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
 </span></code></pre></pre>
 <p>Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to the length of the trail. Next we're making
 geometry for the cylinder:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
@@ -2275,7 +2397,7 @@ geometry for the cylinder:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Create an instance of standard material for the shot trail.
@@ -2314,7 +2436,7 @@ but rg3d has <code>Forward</code> renderer for such objects. Check this <a href=
 about Deferred and Forward rendering techniques. Ok, now we have to &quot;teach&quot; player how to shoot. At first, let's add new 
 field to <code>InputController</code>: <code>shoot: bool</code>. We'll be changing this flag by left mouse click, to do that let's add these lines
 at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}</code> in <code>Player::process_input_event</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>&amp;WindowEvent::MouseInput { button, state, .. } =&gt; {
@@ -2326,7 +2448,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
 </span></code></pre></pre>
 <p>Now we need a way to send messages to the game from the player. We need a new field in <code>Player</code> struct 
 <code>sender: Sender&lt;Message&gt;</code>. Also, we must change signature of <code>Player::new()</code> to this:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn new(
@@ -2337,7 +2459,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
 <span class="boring">}
 </span></code></pre></pre>
 <p>Just pass the <code>sender</code> in the <code>Self { .. }</code> like this: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -2350,7 +2472,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
 <p>Player must know about its weapons, let's fix this by adding new field to the <code>Player</code>: <code>weapon: Handle&lt;Weapon&gt;</code>, we'll
 fill this field in the <code>Game::new()</code>, not in <code>Player::new()</code> because at the moment of creation of the player there are
 no weapons:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...
@@ -2365,7 +2487,7 @@ player.weapon = weapon;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, at the end of <code>Player::update</code> we will handle the state of the input controller:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if self.controller.shoot {
@@ -2384,7 +2506,7 @@ you'll press left mouse button:</p>
 <h2 id="recoil"><a class="header" href="#recoil">Recoil</a></h2>
 <p>Ok, the weapon shoots but looks kinda unnatural, to fix that we need to add a recoil. This is very simple to do, let's 
 start by adding these fields in the <code>Weapon</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>recoil_offset: Vector3&lt;f32&gt;,
@@ -2392,7 +2514,7 @@ recoil_target_offset: Vector3&lt;f32&gt;,
 <span class="boring">}
 </span></code></pre></pre>
 <p>Initialize these fields with default values (zero vector):</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>recoil_offset: Default::default(),
@@ -2403,7 +2525,7 @@ recoil_target_offset: Default::default(),
 first vector will follow. Why do we need two vectors instead just one? The answer is very simple, we need to smoothly
 change offset over time, and to do that offset will just &quot;follow&quot; target offset which will give us desired smooth 
 movement. Let's add the code responsible for the recoil to the <code>Weapon::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Notice new `graph` parameter
@@ -2439,7 +2561,7 @@ pub fn update(&amp;mut self, dt: f32, graph: &amp;mut Graph) {
 applying offset to weapon's model. Finally, we're checking if we've reached target offset and if so, just reset target
 offset to return a weapon to its default position. Also we have to slightly modify <code>Weapon::shoot</code> to modify target
 offset:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn shoot(&amp;mut self) {
@@ -2451,7 +2573,7 @@ offset:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>The last thing we need to do is to slightly modify code at the <code>Game::update</code> to pass new parameter to <code>Weapon::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span> pub fn update(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
@@ -2470,7 +2592,7 @@ offset:</p>
 <h2 id="impact-effects"><a class="header" href="#impact-effects">Impact effects</a></h2>
 <p>Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in <code>main.rs</code></p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_bullet_impact(
@@ -2533,7 +2655,7 @@ in world space. Finally, we're creating particle system itself, using pre-made p
 <a href="rg3d/tutorials/fps/tutorial-2/./spark.png">spark texture</a>, it should be placed in <code>data/textures</code>. Now we need to find
 correct place to create this particle system. It should be placed right after we're applying force to target we've hit 
 in <code>Game::shoot_weapon</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Add bullet impact effect.
@@ -2584,7 +2706,7 @@ result we're aiming in the tutorial:</p>
 <h2 id="bots"><a class="header" href="#bots">Bots</a></h2>
 <p>Previous tutorials were children's play in comparison to this, prepare for some advanced stuff. Let's begin by adding
 a separate module for bots - add <code>bot.rs</code> and fill it with following code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use rg3d::engine::resource_manager::MaterialSearchOptions;
@@ -2667,7 +2789,7 @@ bots in <code>Game</code>: <code>bots: Pool&lt;Bot&gt;,</code>. Next we need to 
 the game. Also, you can add more than one bot at different positions if you want. Do not forget to download bot model
 with textures from <a href="rg3d/tutorials/fps/tutorial-3/./zombie.zip">here</a> and unpack <code>fbx</code> file in <code>data/models</code> and other files
 (textures), in <code>data/textures</code>.</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Add some bots.
@@ -2691,7 +2813,7 @@ Self {
 <span class="boring">}
 </span></code></pre></pre>
 <p>As usual, let's disassemble the code line-by-line. Creation of bot begins from loading its 3D model in the scene:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let model = resource_manager
@@ -2703,7 +2825,7 @@ Self {
 </span></code></pre></pre>
 <p>Nothing really new here, loading and instantiation of a 3D model of <em>any</em> complexity is the same as before. Next we have
 to slightly modify the model, shift it a bit down and shrink:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>scene.graph[model]
@@ -2715,7 +2837,7 @@ to slightly modify the model, shift it a bit down and shrink:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Here we're borrow model in the scene graph, and modify its local transform. Next we're creating pivot for the model:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let pivot = BaseBuilder::new()
@@ -2727,7 +2849,7 @@ to slightly modify the model, shift it a bit down and shrink:</p>
 add offset to the model as we want (this happens because rg3d syncs transform of a node with its rigid body). Next we're
 creating a rigid body with a capsule collider, attentive reader should notice that next piece of code is the exact copy
 of the code from <code>Player::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Create rigid body, it will be used for interaction with the world.
@@ -2749,7 +2871,7 @@ scene.physics_binder.bind(pivot, rigid_body);
 <span class="boring">}
 </span></code></pre></pre>
 <p>You're right, bots will have the same rigid body as the player has. Finally, we're returning bot's instance:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -2760,7 +2882,7 @@ scene.physics_binder.bind(pivot, rigid_body);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Ok, now for the bots instantiation, for simplicity we create a single bot in <code>Game::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut bots = Pool::new();
@@ -2809,7 +2931,7 @@ see in the picture, it uses two <code>PlayAnimation</code> nodes as source of po
 which will be yet another <code>BlendAnimations</code>. So everything depends on your needs and ABM just gives you enough flexibility.</p>
 <p>Ok, back to the game. Let's create a simple ABM for bots. For simplicity, it will contain only three states - Idle, Walk,
 Attack. Put this code somewhere at the end of <code>bot.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Simple helper method to create a state supplied with PlayAnimation node.
@@ -2975,7 +3097,7 @@ impl BotAnimationMachine {
 </span></code></pre></pre>
 <p>Ok, this might be the biggest heap of code we've ever been dealing with at once. There is lots of stuff happening, 
 let's thoroughly &quot;scan&quot; this code. It starts from the simple helper method to create states:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Simple helper method to create a state supplied with PlayAnimation node.
@@ -3017,7 +3139,7 @@ adding a structure with input parameter for ABM:</p>
 </span></code></pre></pre>
 <p>This structure will contain more flags in the future, but now on to <code>BotAnimationMachine::new()</code>. At first, we're creating
 new ABM instance, nothing fancy here. Next we're loading animations in parallel: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut machine = Machine::new();
@@ -3043,7 +3165,7 @@ let (walk_animation_resource, idle_animation_resource, attack_animation_resource
 model can have animations. The animations we're loading, contain only bones and key frames for them, but not mesh of a bot.
 We simply don't need a mesh, because we've already created the mesh earlier. This separation of animations and mesh is 
 very handy, because it saves CPU cycles and disk space. Ok, next we're creating states for ABM:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Now create three states with different animations.
@@ -3074,7 +3196,7 @@ let (attack_animation, attack_state) = create_play_animation_state(
 </span></code></pre></pre>
 <p>These states are those yellow-ish rectangles on diagram up above. As you can see we're creating three states: idle, walk,
 attack. Next we need to connect states between each other. </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Next, define transitions between states.
@@ -3098,7 +3220,7 @@ machine.add_transition(Transition::new(
 transition is that black arrow on the diagram up above, and it is linked with a parameter. Parameter have a name, and as
 you'll see later the name will be used to modify parameters. Finally, we're setting entry state to idle and return 
 ABM instance:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Define entry state.
@@ -3108,7 +3230,7 @@ Self { machine }
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now for another important part, we have to &quot;feed&quot; machine with actual parameters for each transition:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, input: BotAnimationMachineInput) {
@@ -3134,7 +3256,7 @@ multiple sources of poses into one and animation for same node blends into a fin
 for each node that was used in all tracks used in ABM. </p>
 <p>Next we need to use the machine we've made. Add a new field to <code>Bot</code>: <code>machine: BotAnimationMachine</code> and initialize it in
 &quot;constructor&quot;:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -3144,7 +3266,7 @@ for each node that was used in all tracks used in ABM. </p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we need to update machine, add following method to <code>impl Bot</code>: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32) {
@@ -3161,7 +3283,7 @@ for each node that was used in all tracks used in ABM. </p>
 <p>This method will update machine and &quot;feed&quot; it with actual state, for now the state has flags combination that forces
 bot to be in idle state. This will be fixed when we'll add simple AI later in this tutorial. Finally, we need to update
 each bot we have, go to <code>Game::update</code> and add following lines there (somewhere after update of weapons):</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>for bot in self.bots.iter_mut() {
@@ -3174,7 +3296,7 @@ each bot we have, go to <code>Game::update</code> and add following lines there 
 <h2 id="simple-ai"><a class="header" href="#simple-ai">Simple AI</a></h2>
 <p>Ok, now we have to use ABM we've made at full capacity, to do that we'll write simple AI - bot will just follow player
 in a straight line and attack if they're close enough. Let's start by modifying <code>Bot::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, target: Vector3&lt;f32&gt;) {
@@ -3229,7 +3351,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
 <span class="boring">}
 </span></code></pre></pre>
 <p>Also add a new field to <code>Player</code>: <code>follow_target: bool</code> and initialize it in the constructor: </p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -3242,7 +3364,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
 <code>follow_target</code> flag to true and begin to follow the target. To do that, all we have to do is to find a vector between
 target and position of a bot, make sure bots is facing towards the target and move it if it is far enough. So let's 
 begin digging the code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let attack_distance = 0.6;
@@ -3262,7 +3384,7 @@ if distance != 0.0 &amp;&amp; distance &lt; 1.5 {
 <p>At the beginning we define a melee attack distance, bot will attack target only if it close enough. Next, we're 
 building vector to from bot's position to target, calculate distance by taking length of the vector and check if 
 we should switch <code>follow_target</code> flag. Next goes the most interesting parts of the AI:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if self.follow_target &amp;&amp; distance != 0.0 {
@@ -3285,7 +3407,7 @@ we should switch <code>follow_target</code> flag. Next goes the most interesting
 </span></code></pre></pre>
 <p>Here we just borrow rigid body a bot, and make sure it rotated towards the target. Next we're moving bot if it is
 far enough from the target:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    ...
@@ -3307,7 +3429,7 @@ far enough from the target:</p>
 by movement speed and form new velocity vector using new XZ velocity + current Y velocity of a bot to preserve velocity
 added by gravity (otherwise bot would just fly, you can experiment with this part to make flying zombies). One last
 thing before we build and run the game, change lines of how we're updating bots to following lines:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let target = scene.graph[self.player.pivot].global_position();
@@ -3373,7 +3495,7 @@ rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot;, rev = &quot;a3c3d
 that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
 your game code. <code>Framework</code> is not mandatory, you may use the <a href="https://rg3d.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window">previous</a>
 variant with manual engine initialization and &quot;opened&quot; main loop.</p>
-<pre><pre class="playground"><code class="language-rust">// Import everything we need for the tutorial.
+<pre><pre class="playground"><code class="language-rust compile_fail">// Import everything we need for the tutorial.
 use rg3d::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
     engine::framework::{Framework, GameEngine, GameState},
@@ -3412,7 +3534,7 @@ ZIP archive which can be downloaded <a href="rg3d/tutorials/rpg/tutorial-1/./dat
 <h2 id="player-and-camera-controller"><a class="header" href="#player-and-camera-controller">Player and camera controller</a></h2>
 <p>Now we can start adding Player to our game. Create a folder <code>player</code> under your <code>src</code> directory and add <code>mod.rs</code> with
 following content:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::player::camera::CameraController;
@@ -3494,7 +3616,7 @@ when we're attaching the model to the pivot, it will &quot;stay&quot; on the piv
 it down by height of the model. Finally, we're attaching the model to the pivot, forcing the engine to move
 the model together with pivot. In the end we're creating camera controller, it needs its own module, so add <code>camera.rs</code>
 module under <code>src/player</code> with following content:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Import everything we need for the tutorial.
@@ -3607,7 +3729,7 @@ rotation around X axis. This is very simple, we have the pivot for that. Remembe
 are linked together, so if we'll rotate the pivot around Y axis the hinge will rotate too as well as the camera. Fow
 now our camera controller does not have an ability to rotate, we'll add this later in the tutorial.</p>
 <p>Now let's load a level where our character will &quot;live&quot;, add <code>level.rs</code> with following content:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use rg3d::{
@@ -3641,7 +3763,7 @@ houses, trees, bushes, barrels, etc. The scene was made in the rusty-editor and 
 problems. Just open the scene and modify it as you need.</p>
 <p>Now we need to &quot;glue&quot; all the pieces (the player, and the level) together, let's go back to <code>main.rs</code> and change it to
 the following code:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 use crate::{level::Level, player::Player};
 use rg3d::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
@@ -3694,7 +3816,7 @@ run the game you should see something like this:</p>
 <p>For now everything is static, let's fix that by adding the ability to move the character and rotate the camera.</p>
 <h2 id="camera-movement"><a class="header" href="#camera-movement">Camera movement</a></h2>
 <p>Let's start from the camera movement and rotation. We need two new fields in the <code>CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// An angle around local Y axis of the pivot.
@@ -3704,7 +3826,7 @@ pitch: f32,
 <span class="boring">}
 </span></code></pre></pre>
 <p>Do not forget to initialize them with zeros:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -3715,7 +3837,7 @@ pitch: f32,
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now we need to handle device events coming from the OS to rotate the camera. Add following method to the <code>impl CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn handle_device_event(&amp;mut self, device_event: &amp;DeviceEvent) {
@@ -3737,7 +3859,7 @@ pitch. Pitch should be limited in specific range to prevent camera to rotate 360
 to be in <code>[-90; 90]</code> range.</p>
 <p>Once we've changed yaw and pitch, we need to apply rotations to the hinge and the camera. To do that, we need to add
 a new method to the <code>impl CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, graph: &amp;mut Graph) {
@@ -3761,7 +3883,7 @@ a new method to the <code>impl CameraController</code>:</p>
 </span></code></pre></pre>
 <p>It is a very simple method, it borrows nodes, and applies rotations around specific axes. Now we need to call those two
 methods from somewhere. The most suitable place is <code>impl Player</code>, because <code>Player</code> owns an instance of <code>CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn handle_device_event(&amp;mut self, device_event: &amp;DeviceEvent) {
@@ -3775,7 +3897,7 @@ pub fn update(&amp;mut self, scene: &amp;mut Scene) {
 </span></code></pre></pre>
 <p>For now both methods are just proxies, but it will be changed pretty soon. Now we need to call the proxies, but from where?
 The most suitable place is <code>on_tick</code> and <code>on_device_event</code> of the <code>GameState</code> trait implementation for our <code>Game</code> structure:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
@@ -3813,14 +3935,14 @@ struct InputController {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Add new field to the <code>Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>input_controller: InputController,
 <span class="boring">}
 </span></code></pre></pre>
 <p>And initialize it with <code>Default::default</code> in the <code>Player::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
@@ -3831,7 +3953,7 @@ struct InputController {
 </span></code></pre></pre>
 <p>Now we need to change the state of the input controller, to do that we'll use keyboard events. Add following method to
 the <code>impl Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn handle_key_event(&amp;mut self, key: &amp;KeyboardInput) {
@@ -3857,7 +3979,7 @@ the <code>impl Player</code>:</p>
 </span></code></pre></pre>
 <p>Now we need to call this method, we'll do it from <code>on_window_event</code> in the <code>GameState</code> trait implementation for our
 <code>Game</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_window_event(&amp;mut self, _engine: &amp;mut GameEngine, event: WindowEvent) {
@@ -3873,7 +3995,7 @@ the <code>impl Player</code>:</p>
 <p>Ok, now we have input controller functioning. Now we can start adding movement logic to the player. Let's start by adding
 a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
 in <code>Player::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Create new rigid body and offset it a bit to prevent falling through the ground.
@@ -3897,7 +4019,7 @@ scene.physics_binder.bind(pivot, body);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now, once our character has physical body, we can move it. Add these lines to the end of <code>Player::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let pivot = &amp;scene.graph[self.pivot];
@@ -4008,7 +4130,7 @@ let's fix this.</p>
 <p>At this point our character can move, and we can rotate the camera around it, but the character is still in T-pose and
 does not have any animation. In this section we'll animate it. To keep this tutorial at reasonable length, we'll
 add just an idle and walk animations and smooth transitions between them. Add following code at the end of <code>player.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span>
 <span class="boring">fn main() {
@@ -4128,7 +4250,7 @@ impl AnimationMachine {
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
 and create two transitions between them and then applying final pose to the character.</p>
 <p>Now we need to create an instance of the <code>AnimationMachine</code>, add a field to the <code>Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...,
@@ -4136,7 +4258,7 @@ animation_machine: AnimationMachine,
 <span class="boring">}
 </span></code></pre></pre>
 <p>And initialize it in the <code>Player::new</code>, before <code>camera_controller</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...,
@@ -4146,7 +4268,7 @@ animation_machine: AnimationMachine::new(scene, model, resource_manager.clone())
 </span></code></pre></pre>
 <p>The last thing we need to do is to update animation machine each frame, we'll do this in <code>Player::update</code>, at the end
 of the method:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>self.animation_machine

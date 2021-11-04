@@ -141,17 +141,30 @@ call of other widget builders. In code, it looks something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let button = ButtonBuilder::new(WidgetBuilder::new())
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+</span><span class="boring">        UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span><span class="boring">fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span><span class="boring">let ctx = &amp;mut ui.build_ctx();
+</span>ButtonBuilder::new(WidgetBuilder::new())
     .with_back(
         ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;your_texture&quot;),
+                resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
             ))
             .build(ctx),
     )
-    .with_text(&quot;My Button&quot;)
-    .build(ctx);
+    .with_text(&quot;Click me!&quot;)
+    .build(ctx)
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>This code snippet creates a button with an image and a text. Actually it creates <strong>three</strong> widgets, that forms 
 complex hierarchy. The topmost widget in hierarchy is the <code>Button</code> widget itself, it has two children widgets:
@@ -162,48 +175,84 @@ that contains text with some icon. To do that, replace <code>.with_text(&quot;My
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>.with_content(
-        GridBuilder::new(
-            WidgetBuilder::new()
-                .with_child(
-                    ImageBuilder::new(WidgetBuilder::new().on_column(0))
-                        .with_texture(into_gui_texture(
-                            resource_manager.request_texture(&quot;your_icon&quot;),
-                        ))
-                        .build(ctx),
-                )
-                .with_child(
-                    TextBuilder::new(WidgetBuilder::new().on_column(1))
-                        .with_text(&quot;My Button&quot;)
-                        .build(ctx),
-                ),
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder,
+</span><span class="boring">        grid::{Column, GridBuilder, Row},
+</span><span class="boring">        image::ImageBuilder,
+</span><span class="boring">        text::TextBuilder,
+</span><span class="boring">        widget::WidgetBuilder,
+</span><span class="boring">        UiNode, UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn create_fancy_button(
+</span><span class="boring">    ui: &amp;mut UserInterface,
+</span><span class="boring">    resource_manager: ResourceManager,
+</span><span class="boring">) -&gt; Handle&lt;UiNode&gt; {
+</span><span class="boring">    let ctx = &amp;mut ui.build_ctx();
+</span><span class="boring">
+</span><span class="boring">    ButtonBuilder::new(WidgetBuilder::new())
+</span>        .with_content(
+            GridBuilder::new(
+                WidgetBuilder::new()
+                    .with_child(
+                        ImageBuilder::new(WidgetBuilder::new().on_column(0))
+                            .with_texture(into_gui_texture(
+                                resource_manager.request_texture(&quot;your_icon&quot;, None),
+                            ))
+                            .build(ctx),
+                    )
+                    .with_child(
+                        TextBuilder::new(WidgetBuilder::new().on_column(1))
+                            .with_text(&quot;My Button&quot;)
+                            .build(ctx),
+                    ),
+            )
+            .add_row(Row::stretch())
+            .add_column(Column::auto())
+            .add_column(Column::stretch())
+            .build(ctx),
         )
-        .add_row(Row::strect())
-        .add_column(Column::auto())
-        .add_column(Column::stretch())
-        .build(ctx),
-    )
-<span class="boring">}
+<span class="boring">      .build(ctx)
+</span><span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+</span><span class="boring">        UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">    utils::into_gui_texture,
+</span><span class="boring">};
+</span><span class="boring">fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span><span class="boring">let ctx = &amp;mut ui.build_ctx();
 </span>let image;
-let button = ButtonBuilder::new(WidgetBuilder::new())
+ButtonBuilder::new(WidgetBuilder::new())
     .with_back({
         image = ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;your_texture&quot;),
+                resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
             ))
             .build(ctx);
         image
     })
-    .with_text(&quot;My Button&quot;)
-    .build(ctx);
-
-// image now contains a handle of the Image widget 
+    .with_text(&quot;Click me!&quot;)
+    .build(ctx)
+<span class="boring">}
+</span>// image now contains a handle of the Image widget 
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="should-i-create-a-custom-widget-or-use-composition-of-other-widgets"><a class="header" href="#should-i-create-a-custom-widget-or-use-composition-of-other-widgets">Should I create a custom widget or use composition of other widgets?</a></h2>

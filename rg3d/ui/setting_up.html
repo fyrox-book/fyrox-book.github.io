@@ -137,8 +137,11 @@
                         <h1 id="setting-up"><a class="header" href="#setting-up">Setting up</a></h1>
 <p>The user interface in the engine is extremely powerful, it allows you to build user interfaces of any complexity
 with low effort. To start off we will use the simplest framework:</p>
-<pre><pre class="playground"><code class="language-rust">use rg3d::{
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate rg3d;
+</span>
+use rg3d::{
     engine::{framework::prelude::*, Engine},
+    gui::message::UiMessage
 };
 
 struct Game {

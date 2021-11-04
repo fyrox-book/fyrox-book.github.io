@@ -191,8 +191,18 @@ path on you mesh object. It could be done something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>graph[mesh_handle].as_mesh_mut().set_render_path(RenderPath::Forward);
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{mesh::RenderPath, node::Node, Scene},
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn set_forward_render_path(scene: &amp;mut Scene, mesh_handle: Handle&lt;Node&gt;) {
+</span>    scene.graph[mesh_handle]
+        .as_mesh_mut()
+        .set_render_path(RenderPath::Forward);
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>After this your mesh will be rendered using specialized render pass called Forward which supports alpha-blending
 and transparent objects. <strong>Caveat:</strong> Current forward renderer implementation does not support any kind of lighting,
