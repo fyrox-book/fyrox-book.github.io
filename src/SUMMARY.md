@@ -8,7 +8,7 @@
       - [Scene and scene graph](./rg3d/beginning/scene_and_scene_graph.md)
       - [Data management](./rg3d/beginning/data_management.md)
     - [Scene](./rg3d/scene/scene.md)
-      - [Graph (WIP)](./rg3d/scene/graph.md) 
+      - [Graph](./rg3d/scene/graph.md) 
       - [Base node](./rg3d/scene/base_node.md)
       - [Mesh node](./rg3d/scene/mesh_node.md)
       - [Light node (WIP)](./rg3d/scene/light_node.md)
