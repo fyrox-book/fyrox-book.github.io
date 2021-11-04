@@ -1,0 +1,41 @@
+name: Test Code
+
+env:
+  CARGO_TERM_COLOR: always
+  
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update
+        run: sudo apt update
+        
+      - name: Update Rust
+        run: rustup update
+                
+      - name: Install Dependencies
+        run: sudo apt-get install libasound2-dev libudev-dev pkg-config xorg-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev
+      
+      - name: Install rg3d
+        run: git clone https://github.com/rg3dengine/rg3d             
+        
+      - name: Build rg3d
+        run: cd rg3d && cargo build && cd ../.
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: 'latest'
+
+      - name: Test Code
+        run: mdbook test -L ../rg3d/target/debug/deps
