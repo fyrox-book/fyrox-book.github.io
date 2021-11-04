@@ -1133,16 +1133,20 @@ impl Game {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, we at the point where the interesting stuff happens - <code>fn main()</code>. We're starting by creating a window builder:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::window::WindowBuilder;
 </span>let window_builder = WindowBuilder::new().with_title(&quot;3D Shooter Tutorial&quot;);
 <span class="boring">}
 </span></code></pre></pre>
 <p>The builder will be used later by the engine to create a window. Next we're creating our event loop: </p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::event_loop::EventLoop;
 </span>let event_loop = EventLoop::new();
 <span class="boring">}
 </span></code></pre></pre>
@@ -1417,10 +1421,38 @@ we'll use the handle to borrow scene and modify it.</p>
 <h2 id="character-controller"><a class="header" href="#character-controller">Character controller</a></h2>
 <p>We've made a lot of things already, but still can't move in the scene. Let's fix this! We'll start writing the character
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default)]
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{
+</span><span class="boring">        algebra::{UnitQuaternion, Vector3},
+</span><span class="boring">        pool::Handle,
+</span><span class="boring">    },
+</span><span class="boring">    engine::{
+</span><span class="boring">        resource_manager::{MaterialSearchOptions, ResourceManager},
+</span><span class="boring">        Engine,
+</span><span class="boring">    },
+</span><span class="boring">    event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
+</span><span class="boring">    event_loop::{ControlFlow, EventLoop},
+</span><span class="boring">    physics3d::{
+</span><span class="boring">        rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
+</span><span class="boring">        RigidBodyHandle,
+</span><span class="boring">    },
+</span><span class="boring">    resource::texture::TextureWrapMode,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
+</span><span class="boring">        node::Node,
+</span><span class="boring">        transform::TransformBuilder,
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">    window::WindowBuilder,
+</span><span class="boring">};
+</span><span class="boring">use std::time;
+</span>
+#[derive(Default)]
 struct InputController {
     move_forward: bool,
     move_backward: bool,
@@ -1776,9 +1808,19 @@ game, you should see something like this and be able to walk and turn the camera
 <p>One more thing before we end the tutorial. Black &quot;void&quot; around us isn't nice, let's add skybox for the camera to improve
 that. Skybox is a very simple effect that significantly improves scene quality. To add a skybox, add this code first
 somewhere before <code>impl Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    engine::{
+</span><span class="boring">        resource_manager::{MaterialSearchOptions, ResourceManager},
+</span><span class="boring">    },
+</span><span class="boring">    resource::texture::TextureWrapMode,
+</span><span class="boring">    scene::{
+</span><span class="boring">        camera::{SkyBox, SkyBoxBuilder},
+</span><span class="boring">    },
+</span><span class="boring">};
 </span>async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
