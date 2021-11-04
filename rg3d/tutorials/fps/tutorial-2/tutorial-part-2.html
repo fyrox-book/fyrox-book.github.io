@@ -160,9 +160,10 @@ use weapon::Weapon;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Switch to <code>weapon.rs</code> and paste this code into it:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
 </span>use rg3d::engine::resource_manager::MaterialSearchOptions;
 use rg3d::scene::graph::Graph;
 use rg3d::{
@@ -478,10 +479,30 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 <span class="boring">}
 </span></code></pre></pre>
 <p>This is yet another function we must add, it is a standalone helper function that creates a shot trail:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_shot_trail(
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{
+</span><span class="boring">        algebra::{UnitQuaternion, Vector3},
+</span><span class="boring">        color::Color,
+</span><span class="boring">        parking_lot::Mutex,
+</span><span class="boring">        sstorage::ImmutableString,
+</span><span class="boring">    },
+</span><span class="boring">    material::{Material, PropertyValue},
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        mesh::{
+</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData},
+</span><span class="boring">            MeshBuilder, RenderPath,
+</span><span class="boring">        },
+</span><span class="boring">        transform::TransformBuilder,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>use std::sync::Arc;
+fn create_shot_trail(
     graph: &amp;mut Graph,
     origin: Vector3&lt;f32&gt;,
     direction: Vector3&lt;f32&gt;,
@@ -879,9 +900,30 @@ offset:</p>
 <h2 id="impact-effects"><a class="header" href="#impact-effects">Impact effects</a></h2>
 <p>Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in <code>main.rs</code></p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{
+</span><span class="boring">        algebra::{UnitQuaternion, Vector3},
+</span><span class="boring">        color::Color,
+</span><span class="boring">        color_gradient::{ColorGradient, GradientPoint},
+</span><span class="boring">        pool::Handle,
+</span><span class="boring">    },
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">        particle_system::{
+</span><span class="boring">            emitter::{base::BaseEmitterBuilder, sphere::SphereEmitterBuilder},
+</span><span class="boring">            ParticleSystemBuilder,
+</span><span class="boring">        },
+</span><span class="boring">        transform::TransformBuilder,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">use std::path::Path;
 </span>fn create_bullet_impact(
     graph: &amp;mut Graph,
     resource_manager: ResourceManager,
