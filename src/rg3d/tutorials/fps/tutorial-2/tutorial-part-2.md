@@ -29,7 +29,8 @@ use weapon::Weapon;
 
 Switch to `weapon.rs` and paste this code into it:
 
-```rust,compile_fail
+```rust,edition2018
+# extern crate rg3d;
 use rg3d::engine::resource_manager::MaterialSearchOptions;
 use rg3d::scene::graph::Graph;
 use rg3d::{
@@ -339,7 +340,27 @@ create_shot_trail(&mut scene.graph, ray.origin, ray.dir, trail_length);
 
 This is yet another function we must add, it is a standalone helper function that creates a shot trail:
 
-```rust,compile_fail
+```rust
+# extern crate rg3d;
+# use rg3d::{
+#     core::{
+#         algebra::{UnitQuaternion, Vector3},
+#         color::Color,
+#         parking_lot::Mutex,
+#         sstorage::ImmutableString,
+#     },
+#     material::{Material, PropertyValue},
+#     scene::{
+#         base::BaseBuilder,
+#         graph::Graph,
+#         mesh::{
+#             surface::{SurfaceBuilder, SurfaceData},
+#             MeshBuilder, RenderPath,
+#         },
+#         transform::TransformBuilder,
+#     },
+# };
+use std::sync::Arc;
 fn create_shot_trail(
     graph: &mut Graph,
     origin: Vector3<f32>,
@@ -727,7 +748,28 @@ Ok, run the game, and the weapon should feel more natural now.
 Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in `main.rs`
 
-```rust,compile_fail
+```rust
+# extern crate rg3d;
+# use rg3d::{
+#     core::{
+#         algebra::{UnitQuaternion, Vector3},
+#         color::Color,
+#         color_gradient::{ColorGradient, GradientPoint},
+#         pool::Handle,
+#     },
+#     engine::resource_manager::ResourceManager,
+#     scene::{
+#         base::BaseBuilder,
+#         graph::Graph,
+#         node::Node,
+#         particle_system::{
+#             emitter::{base::BaseEmitterBuilder, sphere::SphereEmitterBuilder},
+#             ParticleSystemBuilder,
+#         },
+#         transform::TransformBuilder,
+#     },
+# };
+# use std::path::Path;
 fn create_bullet_impact(
     graph: &mut Graph,
     resource_manager: ResourceManager,
