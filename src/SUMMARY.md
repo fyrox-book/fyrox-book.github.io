@@ -11,7 +11,7 @@
       - [Graph](./rg3d/scene/graph.md) 
       - [Base node](./rg3d/scene/base_node.md)
       - [Mesh node](./rg3d/scene/mesh_node.md)
-      - [Light node (WIP)](./rg3d/scene/light_node.md)
+      - [Light node](./rg3d/scene/light_node.md)
       - [Sprite node (WIP)](./rg3d/scene/sprite_node.md)
       - [Particle system node (WIP)](./rg3d/scene/particle_system_node.md)
       - [Terrain node (WIP)](./rg3d/scene/particle_system_node.md)
