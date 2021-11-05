@@ -1,3 +1,5 @@
+# Base node
+
 Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
 is used as a base node for every other scene node (via composition).

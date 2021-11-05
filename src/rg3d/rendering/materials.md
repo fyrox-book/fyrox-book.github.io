@@ -1,3 +1,5 @@
+# Materials
+
 Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission,
 etc. maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
 textures. Each parameter can be changed in runtime giving you the ability to create animated materials. However,

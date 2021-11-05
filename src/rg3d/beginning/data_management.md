@@ -1,3 +1,5 @@
+# Data management
+
 The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
 vector with entries that can be either vacant or occupied. Each entry, no matter occupied it or vacant, also
 stores a special number called _generation_. The generation number is used to understand whether an entry has

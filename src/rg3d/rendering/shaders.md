@@ -1,3 +1,5 @@
+# Shaders
+
 Shader is a set of programs that runs directly on graphics adapter. Each program from the set is called
 _sub-shader_. Sub-shaders linked with render pass, each render pass defines "where" to draw and an object.
 "where" means that you can set up your own render pass and the renderer will use the sub-shader with 

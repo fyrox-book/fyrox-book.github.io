@@ -1,3 +1,5 @@
+# Model resources
+
 ## Supported formats
 
 rg3d supports these file formats for 3D models:

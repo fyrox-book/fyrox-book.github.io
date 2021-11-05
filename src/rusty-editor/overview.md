@@ -1,3 +1,5 @@
+# Overview
+
 The editor has lots of windows with various purposes. Typical look of the editor could be something like this
 (please note that it can change over time, because the development is quite rapid and image can become outdated
 pretty easily):

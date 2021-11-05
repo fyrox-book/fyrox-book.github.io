@@ -1,3 +1,5 @@
+# FPS Tutorial Part 1 - Bots and AI
+
 **Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial3-character-controller)
 
 ## Table of contents

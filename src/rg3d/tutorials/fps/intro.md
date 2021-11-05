@@ -1,3 +1,5 @@
+# First-Person Shooter Tutorial
+
 In this tutorial we'll make a 3D shooter - something similar to [rusty-shooter](https://github.com/mrDIMAS/rusty-shooter).
 Also, the series should help you to learn basic principles which lies in the foundation of the engine.
 

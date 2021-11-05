@@ -1,3 +1,5 @@
+# Role-Playing Game Tutorial
+
 This tutorial starts the series of tutorials about writing a role-playing game in Rust using rg3d game engine. Strangely,
 but rg3d has a reputation of an engine for 3D shooters. In this series I'll try to prove that it is a general purpose
 game engine.

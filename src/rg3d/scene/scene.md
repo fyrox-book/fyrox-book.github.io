@@ -1,3 +1,5 @@
+# Scene 
+
 Scene is a container for game entities. Currently, scenes in the engine manage following entities:
 
 1) Graph

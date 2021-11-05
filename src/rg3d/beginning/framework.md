@@ -1,3 +1,5 @@
+# Framework
+
 The engine offers special framework to start making games as quickly as possible. It cares about engine initialization,
 handles window events, calls every required methods and so on. In other words it helps you to get started as quickly
 as possible with a need to put dozens lines of code to just create a window with a game loop.

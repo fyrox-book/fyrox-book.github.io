@@ -1,3 +1,5 @@
+# FPS Tutorial Part 2 - Weapons
+
 **Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial2-character-controller)
 
 ## Table of contents

@@ -1,3 +1,5 @@
+# General rules
+
 This chapter covers general rules that will help you to write code that will be easy to understand.
 
 ## Fluent syntax

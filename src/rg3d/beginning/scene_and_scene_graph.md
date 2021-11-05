@@ -1,3 +1,5 @@
+# Scene and scene graph
+
 When you're playing a game, you often see various objects scattered around on screen, all of them forming a
 _scene_. Scene is just a set of various objects, as in many other game engines, rg3d allows you to create multiple
 scenes for various purposes. For example, one scene could be used for menu, a bunch could be used for game levels,
