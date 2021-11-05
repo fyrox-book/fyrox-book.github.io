@@ -140,20 +140,27 @@
 <a href="https://github.com/rg3dengine/rusty-editor">rusty-editor</a>.</p>
 <p>The book is in early development stage, you can help to improve it by making a contribution in its
 <a href="https://github.com/rg3d-book/rg3d-book.github.io">repository</a>. Don't be shy, every tip is helpful!</p>
+<h2 id="how-to-read-the-book"><a class="header" href="#how-to-read-the-book">How to read the book</a></h2>
+<p>Almost every chapter in this book can be read in any order, but we recommend reading Chapter 1 and then going
+through the First-Person Shooter Tutorial while learning more about specific areas that interest you from the 
+other chapters.</p>
 <h2 id="support-the-development"><a class="header" href="#support-the-development">Support the development</a></h2>
 <p>The future of the project fully depends on community support, every bit is important!</p>
 <p><a href="https://www.patreon.com/mrdimas"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a patron!" /></a></p>
-<div style="break-before: page; page-break-before: always;"></div><p>rg3d is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rg3d"><a class="header" href="#rg3d">rg3d</a></h1>
+<p>rg3d is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
 games with small- or medium-sized worlds, large-sized world most likely will require some manual work. This chapter
 of the book will help you to get familiar with core engine concepts and will help you start writing your first game!</p>
-<div style="break-before: page; page-break-before: always;"></div><p>Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
+<p>Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
 of the book will guide you the basics of the engine.</p>
 <p>To begin using the engine, just add following lines to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
 rg3d = &quot;^0.23.1&quot; # Please check crates.io for actual version. 
 </code></pre>
 <p>Check the next chapter to create a simple application.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>The engine offers special framework to start making games as quickly as possible. It cares about engine initialization,
+<div style="break-before: page; page-break-before: always;"></div><h1 id="framework"><a class="header" href="#framework">Framework</a></h1>
+<p>The engine offers special framework to start making games as quickly as possible. It cares about engine initialization,
 handles window events, calls every required methods and so on. In other words it helps you to get started as quickly
 as possible with a need to put dozens lines of code to just create a window with a game loop.</p>
 <p>The simplest app could be created with this code:</p>
@@ -236,11 +243,12 @@ impl GameState for Game {
 <span class="boring">}
 </span></code></pre></pre>
 <p>This piece of code will slowly change the background color of the window going through all colors of rainbow. </p>
-<div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="custom-game-loop-wip"><a class="header" href="#custom-game-loop-wip">Custom game loop (WIP)</a></h1>
 <p>The framework might be limiting for some cases, in such situations the engine could be initialized manually. It
 requires some decent amount of code and could error-prone for beginners. You should use custom game loop only if
 you're experienced game developer!</p>
-<div style="break-before: page; page-break-before: always;"></div><p>When you're playing a game, you often see various objects scattered around on screen, all of them forming a
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scene-and-scene-graph"><a class="header" href="#scene-and-scene-graph">Scene and scene graph</a></h1>
+<p>When you're playing a game, you often see various objects scattered around on screen, all of them forming a
 <em>scene</em>. Scene is just a set of various objects, as in many other game engines, rg3d allows you to create multiple
 scenes for various purposes. For example, one scene could be used for menu, a bunch could be used for game levels,
 and one for ending screen. Scenes also could be used to create a source of data for other scenes, such scenes called
@@ -295,7 +303,8 @@ global transform will include the transform of the character.</p>
 <p>This mechanism is very simple, yet powerful. The full grace of it unfolds when you're working with 3D models with
 skeleton, each bone in the skeleton has its parent and a set of children. You can rotate/translate/scale bones to
 animate your character.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data-management"><a class="header" href="#data-management">Data management</a></h1>
+<p>The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
 vector with entries that can be either vacant or occupied. Each entry, no matter occupied it or vacant, also
 stores a special number called <em>generation</em>. The generation number is used to understand whether an entry has
 been changed over time or not. When an entry is reused, its generation number is increased leaving all previously
@@ -357,7 +366,8 @@ exactly for that.</p>
 <h3 id="iterate-over-and-discard-unnecessary-objects"><a class="header" href="#iterate-over-and-discard-unnecessary-objects">Iterate over and discard unnecessary objects</a></h3>
 <p>There is a <code>retain</code> method for that, it allows you to &quot;filter&quot; your pool using a closure with custom filtering
 logic.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
+<p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
 <ol>
 <li>Graph</li>
 <li>Animations</li>
@@ -455,9 +465,11 @@ fully responsive. </p>
 updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
 when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused. </p>
-<div style="break-before: page; page-break-before: always;"></div><p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
+<div style="break-before: page; page-break-before: always;"></div><h1 id="graph-wip"><a class="header" href="#graph-wip">Graph (WIP)</a></h1>
+<p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
 entities in the engine. Graph takes care of your scene objects and does a lot of job for you.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
+<div style="break-before: page; page-break-before: always;"></div><h1 id="base-node"><a class="header" href="#base-node">Base node</a></h1>
+<p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
 is used as a base node for every other scene node (via composition).</p>
 <p>It has no graphical information, so it is invisible all the time, but it is useful as a &quot;container&quot; for children
@@ -559,7 +571,8 @@ to move a node at specific location you could use this:</p>
 <span class="boring">}
 </span><span class="boring">}
 </span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><p>Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
+<div style="break-before: page; page-break-before: always;"></div><h1 id="mesh-node"><a class="header" href="#mesh-node">Mesh node</a></h1>
+<p>Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
 Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
 and loaded in your scene.</p>
 <h2 id="how-to-create-2"><a class="header" href="#how-to-create-2">How to create</a></h2>
@@ -719,9 +732,16 @@ scene.animations[animations[0]]
 <p>You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
 in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated
 3D model in separate file, and all animations in their own files.</p>
-<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
-<div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
-<div style="break-before: page; page-break-before: always;"></div><p>Shader is a set of programs that runs directly on graphics adapter. Each program from the set is called
+<div style="break-before: page; page-break-before: always;"></div><h1 id="light-node-wip"><a class="header" href="#light-node-wip">Light node (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sprite-wip"><a class="header" href="#sprite-wip">Sprite (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system-wip"><a class="header" href="#particle-system-wip">Particle system (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system-wip-1"><a class="header" href="#particle-system-wip-1">Particle system (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="camera-node-wip"><a class="header" href="#camera-node-wip">Camera node (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="decal-node-wip"><a class="header" href="#decal-node-wip">Decal node (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="animation-wip"><a class="header" href="#animation-wip">Animation (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rendering-wip"><a class="header" href="#rendering-wip">Rendering (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="shaders"><a class="header" href="#shaders">Shaders</a></h1>
+<p>Shader is a set of programs that runs directly on graphics adapter. Each program from the set is called
 <em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines &quot;where&quot; to draw and an object.
 &quot;where&quot; means that you can set up your own render pass and the renderer will use the sub-shader with 
 your render pass. For the ease of use there are number of <a href="rg3d/rendering/shaders.html#predefined-render-passes">predefined render passes</a>.</p>
@@ -870,7 +890,8 @@ void main()
 }
 </code></pre>
 <p>This is the simplest pixel shader, it just fills the render target with red color.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission,
+<div style="break-before: page; page-break-before: always;"></div><h1 id="materials"><a class="header" href="#materials">Materials</a></h1>
+<p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission,
 etc. maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
 textures. Each parameter can be changed in runtime giving you the ability to create animated materials. However,
 in practice, most materials are static, this means that once it created, it won't be changed anymore.</p>
@@ -954,13 +975,13 @@ used formats (such as FBX).</p>
 to engine's standard material at almost 100% fidelity. </p>
 <h3 id="3ds-max"><a class="header" href="#3ds-max">3Ds max</a></h3>
 <p>It highly depends on the version of the 3Ds max, but in general the default material should work fine.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
-<div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ui-engine"><a class="header" href="#ui-engine">UI Engine</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sound-wip"><a class="header" href="#sound-wip">Sound (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="physics-wip"><a class="header" href="#physics-wip">Physics (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="user-interface"><a class="header" href="#user-interface">User Interface</a></h1>
 <p>rg3d features an extremely powerful and flexible node-based user interface system. Power and flexibility comes with
 a certain price: it has a steep learning curve. This chapter will cover user interface usage in the engine, explain
 basic concepts, provide information about most commonly used widgets, and so on.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="basic-concepts-wip"><a class="header" href="#basic-concepts-wip">Basic concepts (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="setting-up"><a class="header" href="#setting-up">Setting up</a></h1>
 <p>The user interface in the engine is extremely powerful, it allows you to build user interfaces of any complexity
 with low effort. To start off we will use the simplest framework:</p>
@@ -1006,7 +1027,8 @@ fn main() {
 
 </code></pre></pre>
 <p>This will be the basis for all next chapters. The most important places marked with respective comments.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="simple-button-with-text"><a class="header" href="#simple-button-with-text">Simple button with text</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="button"><a class="header" href="#button">Button</a></h1>
+<h2 id="simple-button-with-text"><a class="header" href="#simple-button-with-text">Simple button with text</a></h2>
 <p>To create a simple button with text you should do something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -1101,7 +1123,8 @@ useful:</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><p>This chapter covers general rules that will help you to write code that will be easy to understand.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="general-rules"><a class="header" href="#general-rules">General rules</a></h1>
+<p>This chapter covers general rules that will help you to write code that will be easy to understand.</p>
 <h2 id="fluent-syntax"><a class="header" href="#fluent-syntax">Fluent syntax</a></h2>
 <p>Widget builders supports fluent syntax, this means that you can create your widget in series of nested 
 call of other widget builders. In code, it looks something like this:</p>
@@ -1232,8 +1255,10 @@ definitely need a custom widget.</li>
 <p>Custom widgets have some limitations that could be limiting, one of them is that custom widgets do not have 
 access to your code, since they're &quot;living&quot; inside UI and know nothing about the &quot;environment&quot; where they're 
 being used.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>This chapter covers resource management in the engine.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="supported-formats"><a class="header" href="#supported-formats">Supported formats</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="resource-management"><a class="header" href="#resource-management">Resource management</a></h1>
+<p>This chapter covers resource management in the engine.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="model-resources"><a class="header" href="#model-resources">Model resources</a></h1>
+<h2 id="supported-formats"><a class="header" href="#supported-formats">Supported formats</a></h2>
 <p>rg3d supports these file formats for 3D models:</p>
 <ul>
 <li>FBX</li>
@@ -1243,12 +1268,14 @@ being used.</p>
 <p>Blender's FBX exporter has exporting scale properties usually set to 100%, this may lead to incorrect scale
 of your model in the engine. It will have <code>(100.0, 100.0, 100.0)</code> scale which is very huge. To fix that, set
 the scale in the exporter to <code>0.01</code>.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>(WIP)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="textures-wip"><a class="header" href="#textures-wip">Textures (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sound-buffers"><a class="header" href="#sound-buffers">Sound Buffers</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><p>The book offers a set of tutorials of how to write a game of specific genre using the engine. Every tutorial starts
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tutorials"><a class="header" href="#tutorials">Tutorials</a></h1>
+<p>The book offers a set of tutorials of how to write a game of specific genre using the engine. Every tutorial starts
 from mild difficulty and keep increasing the difficulty until the end. All tutorials are very well structured and
 you shouldn't be able to lost in them.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>In this tutorial we'll make a 3D shooter - something similar to <a href="https://github.com/mrDIMAS/rusty-shooter">rusty-shooter</a>.
+<div style="break-before: page; page-break-before: always;"></div><h1 id="first-person-shooter-tutorial"><a class="header" href="#first-person-shooter-tutorial">First-Person Shooter Tutorial</a></h1>
+<p>In this tutorial we'll make a 3D shooter - something similar to <a href="https://github.com/mrDIMAS/rusty-shooter">rusty-shooter</a>.
 Also, the series should help you to learn basic principles which lies in the foundation of the engine.</p>
 <h2 id="rg3d-and-rusty-editor-version"><a class="header" href="#rg3d-and-rusty-editor-version">rg3d and rusty-editor version</a></h2>
 <p>rg3d changes rapidly and tutorial's code could not compile with the newest versions of the engine, to prevent that
@@ -1257,7 +1284,8 @@ in the main repo.</p>
 <p><strong>rg3d version</strong>: specific commit (<a href="https://github.com/rg3dengine/rg3d/commit/a3c3d678c361aa72fc44c36f3e37adc20a54f311">5564b6e</a>)<br />
 <strong>rusty-editor version</strong>: specific commit (<a href="https://github.com/rg3dengine/rusty-editor/commit/81c942d7bd3e70d3604db803ca987af933d44773">ca0da2e</a>)<br />
 <strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/">GitHub</a></p>
-<div style="break-before: page; page-break-before: always;"></div><p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial1-character-controller">GitHub</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="fps-tutorial-part-1---character-controller"><a class="header" href="#fps-tutorial-part-1---character-controller">FPS Tutorial Part 1 - Character Controller.</a></h1>
+<p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial1-character-controller">GitHub</a></p>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of contents</a></h2>
 <ul>
 <li><a href="rg3d/tutorials/fps/tutorial-1/tutorial-part-1.html#introduction">Introduction</a></li>
@@ -2178,7 +2206,8 @@ the scene we've made in the editor. I hope you liked this tutorial, and if so, p
 <a href="https://github.com/mrDIMAS/rg3d-tutorials">GitHub</a>. In the next tutorial we'll start adding weapons.</p>
 <p>Discussion: <a href="https://www.reddit.com/r/rust/comments/lyj1tq/writing_a_3d_shooter_using_rg3d_game_engine_1/">Reddit</a>,
 <a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial2-character-controller">GitHub</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="fps-tutorial-part-2---weapons"><a class="header" href="#fps-tutorial-part-2---weapons">FPS Tutorial Part 2 - Weapons</a></h1>
+<p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial2-character-controller">GitHub</a></p>
 <h2 id="table-of-contents-1"><a class="header" href="#table-of-contents-1">Table of contents</a></h2>
 <ul>
 <li><a href="rg3d/tutorials/fps/tutorial-2/tutorial-part-2.html#introduction">Introduction</a></li>
@@ -3062,7 +3091,8 @@ hope you liked this tutorial, and if so, please consider supporting the project 
 special (let it be a surprise).</p>
 <p>Discussion: <a href="https://www.reddit.com/r/rust/comments/m2055c/writing_a_3d_shooter_using_rg3d_2_adding_shooting/">Reddit</a>,
 <a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial3-character-controller">GitHub</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="fps-tutorial-part-1---bots-and-ai"><a class="header" href="#fps-tutorial-part-1---bots-and-ai">FPS Tutorial Part 1 - Bots and AI</a></h1>
+<p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial3-character-controller">GitHub</a></p>
 <h2 id="table-of-contents-2"><a class="header" href="#table-of-contents-2">Table of contents</a></h2>
 <ul>
 <li><a href="rg3d/tutorials/fps/tutorial-3/tutorial-part-3.html#introduction">Introduction</a></li>
@@ -3823,7 +3853,8 @@ the project on <a href="https://patreon.com/mrdimas">Patreon</a> or <a href="htt
 available on <a href="https://github.com/mrDIMAS/rg3d-tutorials">GitHub</a>.</p>
 <p>Discussion: <a href="https://www.reddit.com/r/rust/comments/m2ydjc/bots_and_ai_writing_a_3d_shooter_using_rg3d_3/">Reddit</a>, 
 <a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>This tutorial starts the series of tutorials about writing a role-playing game in Rust using rg3d game engine. Strangely,
+<div style="break-before: page; page-break-before: always;"></div><h1 id="role-playing-game-tutorial"><a class="header" href="#role-playing-game-tutorial">Role-Playing Game Tutorial</a></h1>
+<p>This tutorial starts the series of tutorials about writing a role-playing game in Rust using rg3d game engine. Strangely,
 but rg3d has a reputation of an engine for 3D shooters. In this series I'll try to prove that it is a general purpose
 game engine.</p>
 <h2 id="rg3d-and-rusty-editor-version-1"><a class="header" href="#rg3d-and-rusty-editor-version-1">rg3d and rusty-editor version</a></h2>
@@ -3833,7 +3864,8 @@ in the main repo.</p>
 <p><strong>rg3d version</strong>: specific commit (<a href="https://github.com/rg3dengine/rg3d/commit/a3c3d678c361aa72fc44c36f3e37adc20a54f311">5564b6e</a>)<br />
 <strong>rusty-editor version</strong>: specific commit (<a href="https://github.com/rg3dengine/rusty-editor/commit/81c942d7bd3e70d3604db803ca987af933d44773">ca0da2e</a>)<br />
 <strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/">GitHub</a></p>
-<div style="break-before: page; page-break-before: always;"></div><p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/rpg-tutorial1-character-controller">GitHub</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rpg-tutorial-part-1---character-controller"><a class="header" href="#rpg-tutorial-part-1---character-controller">RPG Tutorial Part 1 - Character Controller</a></h1>
+<p><strong>Source code</strong>: <a href="https://github.com/rg3dengine/rg3d-tutorials/tree/main/rpg-tutorial1-character-controller">GitHub</a></p>
 <h2 id="table-of-contents-3"><a class="header" href="#table-of-contents-3">Table of contents</a></h2>
 <ul>
 <li><a href="rg3d/tutorials/rpg/tutorial-1/tutorial-part-1.html#introduction">Introduction</a></li>
@@ -3863,7 +3895,7 @@ a new cargo project:</p>
 # to make sure it compiles.
 rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot;, rev = &quot;a3c3d678c361aa72fc44c36f3e37adc20a54f311&quot; }
 </code></pre>
-<h2 id="framework"><a class="header" href="#framework">Framework</a></h2>
+<h2 id="framework-1"><a class="header" href="#framework-1">Framework</a></h2>
 <p>Now let's create the window and initialize the engine. We'll skip most engine initialization by using new <code>Framework</code> helper
 that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
 your game code. <code>Framework</code> is not mandatory, you may use the <a href="https://rg3d.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window">previous</a>
@@ -4657,9 +4689,11 @@ the scene. I hope you liked this tutorial, and if so, please consider supporting
 The source code for this tutorial is available on <a href="https://github.com/mrDIMAS/rg3d-tutorials">GitHub</a>.</p>
 <p>Discussion: <a href="https://www.reddit.com/r/rust/comments/ois776/media_writing_a_roleplaying_game_using_rg3d_game/">Reddit</a>,
 <a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>rusty-editor is a native <strong>scene</strong> editor for rg3d game engine. It offers wide variety of tools to make creation of
+<div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-4"><a class="header" href="#introduction-4">Introduction</a></h1>
+<p>rusty-editor is a native <strong>scene</strong> editor for rg3d game engine. It offers wide variety of tools to make creation of
 the scenes comfortable and intuitive.</p>
-<div style="break-before: page; page-break-before: always;"></div><p>The editor has lots of windows with various purposes. Typical look of the editor could be something like this
+<div style="break-before: page; page-break-before: always;"></div><h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+<p>The editor has lots of windows with various purposes. Typical look of the editor could be something like this
 (please note that it can change over time, because the development is quite rapid and image can become outdated
 pretty easily):</p>
 <p><img src="rusty-editor/./typical_look.png" alt="Typical look" /></p>

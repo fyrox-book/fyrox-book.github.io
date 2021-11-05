@@ -134,7 +134,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
+                        <h1 id="data-management"><a class="header" href="#data-management">Data management</a></h1>
+<p>The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
 vector with entries that can be either vacant or occupied. Each entry, no matter occupied it or vacant, also
 stores a special number called <em>generation</em>. The generation number is used to understand whether an entry has
 been changed over time or not. When an entry is reused, its generation number is increased leaving all previously
