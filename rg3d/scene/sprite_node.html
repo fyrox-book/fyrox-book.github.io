@@ -159,10 +159,11 @@ fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>A sprite with texture could be created by using <code>.with_texture</code> method of the builder:</p>
+<p>A sprite with a texture could be created by using <code>.with_texture</code> method of the builder:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
 </span>use rg3d::{
     core::pool::Handle,
     engine::resource_manager::ResourceManager,
@@ -181,10 +182,10 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
 same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
 a lot of &quot;useless&quot; info that bloats its size up to 600 bytes. </p>
-<p>Current the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
+<p>Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
 avoid creating lots of sprites.</p>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
-<p>Sprites are not support any sort of lighting, if you need lighted sprites, you need to create your own render
+<p>Sprites are not supporting any sort of lighting, if you need lighted sprites, you need to create your own render
 pass and use <code>Mesh</code> node with custom shader that will orient all faces towards camera and will do lighting 
 calculations. </p>
 

@@ -465,16 +465,204 @@ fully responsive. </p>
 updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
 when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused. </p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="graph-wip"><a class="header" href="#graph-wip">Graph (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="graph"><a class="header" href="#graph">Graph</a></h1>
 <p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
 entities in the engine. Graph takes care of your scene objects and does a lot of job for you.</p>
+<h2 id="how-to-create-1"><a class="header" href="#how-to-create-1">How to create</a></h2>
+<p>You don't need to create graph manually, every scene has its own instance of the graph. It can be accessed pretty
+easily: <code>scene_ref.graph</code></p>
+<h2 id="adding-nodes"><a class="header" href="#adding-nodes">Adding nodes</a></h2>
+<p>There are two ways of adding nodes to the graph, either using <em>node builders</em> or manually, by calling <code>graph.add_node</code>.</p>
+<h3 id="using-node-builders"><a class="header" href="#using-node-builders">Using node builders</a></h3>
+<p>Every node in the engine has its respective builder, which can be used to create an instance of the node. Using
+builders is a preferable way to create scene nodes. There are following node builders:</p>
+<ol>
+<li><code>BaseBuilder</code> - creates an instance of base node. See <a href="rg3d/scene/./base_node.html">Base node</a> for more info.</li>
+<li><code>CameraBuilder</code> - creates an instance of camera node. See <a href="rg3d/scene/./camera_node.html">Camera node</a> for more info.</li>
+<li><code>MeshBuilder</code> - creates an instance of mesh node. See <a href="rg3d/scene/./mesh_node.html">Mesh node</a> for more info.</li>
+<li><code>LightBuilder</code> - creates an instance of light node. See <a href="rg3d/scene/./light_node.html">Light node</a> for more info.</li>
+<li><code>SpriteBuilder</code> - creates an instance of sprite node. See <a href="rg3d/scene/./sprite_node.html">Sprite node</a> for more info.</li>
+<li><code>ParticleSystemBuilder</code> - creates an instance of particle system node. 
+See <a href="rg3d/scene/./particle_system_node.html">Particle system node</a> for more info.</li>
+<li><code>TerrainBuilder</code> - creates an instance of terrain node. See <a href="rg3d/scene/./terrain_node.html">Terrain node</a> for more info.</li>
+<li><code>DecalBuilder</code> - creates an instance of decal node. See <a href="rg3d/scene/./decal_node.html">Decal node</a> for more info.</li>
+</ol>
+<p>Every builder, other than <code>BaseBuilder</code>, accepts <code>BaseBuilder</code> as a parameter in <code>.new(..)</code> method. Why so?
+This is needed, because every node (other than Base) is &quot;derived&quot; from Base via composition and the derived
+builder must know how to build Base node. While it may sound confusing, it is actually very useful and clear.
+Consider this example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder, camera::CameraBuilder, node::Node, transform::TransformBuilder,
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>
+fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(
+        // Here we passing a base builder. Note that, since we can build Base node separately
+        // we can pass any custom values to it while building.
+        BaseBuilder::new().with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(2.0, 0.0, 3.0))
+                .build(),
+        ),
+    ) 
+    // Here we just setting desired Camera properties.
+    .with_fov(60.0f32.to_radians())
+    .build(&amp;mut scene.graph)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>As you can see, we're creating an instance of BaseBuilder and fill it with desired properties as well as filling
+the CameraBuilder's instance properties. This is very flexible mechanism, allowing you to build complex hierarchies
+in declarative manner:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder, camera::CameraBuilder, mesh::MeshBuilder, node::Node,
+</span><span class="boring">        sprite::SpriteBuilder, transform::TransformBuilder, Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>
+fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(
+        BaseBuilder::new()
+            // Add some children nodes.
+            .with_children(&amp;[
+                // A staff...
+                MeshBuilder::new(
+                    BaseBuilder::new()
+                        .with_name(&quot;MyFancyStaff&quot;)
+                        .with_local_transform(
+                            TransformBuilder::new()
+                                .with_local_position(Vector3::new(0.5, 0.5, 1.0))
+                                .build(),
+                        ),
+                )
+                .build(&amp;mut scene.graph),
+                // and a spell.
+                SpriteBuilder::new(
+                    BaseBuilder::new()
+                        .with_name(&quot;MyFancyFireball&quot;)
+                        .with_local_transform(
+                            TransformBuilder::new()
+                                .with_local_position(Vector3::new(-0.5, 0.5, 1.0))
+                                .build(),
+                        ),
+                )
+                .build(&amp;mut scene.graph),
+            ])
+            .with_local_transform(
+                TransformBuilder::new()
+                    .with_local_position(Vector3::new(2.0, 0.0, 3.0))
+                    .build(),
+            ),
+    )
+    .with_fov(60.0f32.to_radians())
+    .build(&amp;mut scene.graph)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This code snippet create a camera for first-person role-playing game's player, it will have a staff in &quot;right-hand&quot;
+and a spell in the left hand. Of course all of this is very simplified, but should give you the main idea. Note
+that staff and fireball will be children nodes of camera, and when setting their transform we're actually setting
+<strong>local</strong> transform which means that the transform will be relative to camera's. The staff and the spell will move
+together with the camera.</p>
+<h3 id="adding-a-node-manually"><a class="header" href="#adding-a-node-manually">Adding a node manually</a></h3>
+<p>For some rare cases you may also want delay adding a node to the graph, specifically for that purpose, every node 
+builder has <code>.build_node</code> method which creates an instance of <code>Node</code>  but does not add it to the graph.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
+</span><span class="boring">};
+</span>
+fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+    let node: Node = CameraBuilder::new(BaseBuilder::new()).build_node();
+
+    // We must explicitly add the node to the graph.
+    scene.graph.add_node(node)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="how-to-modify-the-hierarchy"><a class="header" href="#how-to-modify-the-hierarchy">How to modify the hierarchy</a></h2>
+<p>For many cases you can't use builders to create complex hierarchy, the simplest example of such situation when 
+you're creating an instance of some 3D model. If you want the instance to be a child object of some other object,
+you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
+</span><span class="boring">    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+</span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
+</span><span class="boring">};
+</span>
+fn link_weapon_to_camera(
+    scene: &amp;mut Scene,
+    camera: Handle&lt;Node&gt;,
+    resource_manager: ResourceManager,
+) {
+    let weapon = block_on(
+        resource_manager
+            .request_model(&quot;path/to/weapon.fbx&quot;, MaterialSearchOptions::RecursiveUp),
+    )
+    .unwrap()
+    .instantiate_geometry(scene);
+
+    // Link weapon to the camera.
+    scene.graph.link_nodes(weapon, camera);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here we've loaded a weapon 3D model, instantiated it on scene and attached to <em>existing</em> camera. </p>
+<h2 id="how-to-remove-nodes"><a class="header" href="#how-to-remove-nodes">How to remove nodes</a></h2>
+<p>A node could be removed by simply calling <code>graph.remove_node(handle)</code>, this method removes the node from the 
+graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behaviour, and you want to preserve children
+nodes while deleting parent node. To do that you need to explicitly detach children nodes of the node you're about
+to delete:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{node::Node, Scene},
+</span><span class="boring">};
+</span>
+fn remove_preserve_children(scene: &amp;mut Scene, node_to_remove: Handle&lt;Node&gt;) {
+    for child in scene.graph[node_to_remove].children().to_vec() {
+        scene.graph.unlink_node(child);
+    }
+
+    scene.graph.remove_node(node_to_remove);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>After calling this function, every child node of <code>node_to_remove</code> will be detached from it and the <code>node_to_remove</code>
+will be deleted. <code>remove_node</code> has some limitations: it cannot be used to extract &quot;sub-graph&quot; from the graph, it
+just drops nodes immediately. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="base-node"><a class="header" href="#base-node">Base node</a></h1>
 <p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
 is used as a base node for every other scene node (via composition).</p>
 <p>It has no graphical information, so it is invisible all the time, but it is useful as a &quot;container&quot; for children
 nodes.</p>
-<h2 id="how-to-create-1"><a class="header" href="#how-to-create-1">How to create</a></h2>
+<h2 id="how-to-create-2"><a class="header" href="#how-to-create-2">How to create</a></h2>
 <p>Use the <code>BaseBuilder</code> to create an instance of the Base node:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -575,7 +763,7 @@ to move a node at specific location you could use this:</p>
 <p>Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
 Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
 and loaded in your scene.</p>
-<h2 id="how-to-create-2"><a class="header" href="#how-to-create-2">How to create</a></h2>
+<h2 id="how-to-create-3"><a class="header" href="#how-to-create-3">How to create</a></h2>
 <p>There are basically two ways, how to pick one depends your needs. In general, using a 3D modelling software is
 the way to go, especially with tons and tons of free 3D models available online.</p>
 <p><strong>Caveat:</strong> The engine supports <em>only</em> FBX file format for 3D models!</p>
@@ -923,7 +1111,7 @@ the more performance you'll get. The most expensive shadows are from point light
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.</p>
 <p><strong>Important:</strong> It should be noted that <strong>sprites are not meant to be used for 2D games</strong>, they're only for 3D. 
 There is a separate 2D scenes with their own nodes, which are very well optimized for 2D games.</p>
-<h2 id="how-to-create-3"><a class="header" href="#how-to-create-3">How to create</a></h2>
+<h2 id="how-to-create-4"><a class="header" href="#how-to-create-4">How to create</a></h2>
 <p>A sprite instance could be created using <code>SpriteBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -943,10 +1131,11 @@ fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>A sprite with texture could be created by using <code>.with_texture</code> method of the builder:</p>
+<p>A sprite with a texture could be created by using <code>.with_texture</code> method of the builder:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
 </span>use rg3d::{
     core::pool::Handle,
     engine::resource_manager::ResourceManager,
@@ -965,14 +1154,32 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
 same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
 a lot of &quot;useless&quot; info that bloats its size up to 600 bytes. </p>
-<p>Current the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
+<p>Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
 avoid creating lots of sprites.</p>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
-<p>Sprites are not support any sort of lighting, if you need lighted sprites, you need to create your own render
+<p>Sprites are not supporting any sort of lighting, if you need lighted sprites, you need to create your own render
 pass and use <code>Mesh</code> node with custom shader that will orient all faces towards camera and will do lighting 
 calculations. </p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system-wip"><a class="header" href="#particle-system-wip">Particle system (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system-wip-1"><a class="header" href="#particle-system-wip-1">Particle system (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system"><a class="header" href="#particle-system">Particle system</a></h1>
+<p>Particle system is a scene node that is used to create complex visual effects (VFX). It operates on huge amount
+of particles at once allowing you to do complex simulation that involves large amount of particles. Typically,
+particle systems are used to create following visual effects: smoke, sparks, blood splatters, steam, etc. </p>
+<p><strong>Important:</strong> Current particle system implementation is <strong>not deterministic</strong>, this means that the state of the
+particles will be different at each run of your game. Also you <strong>cannot</strong> rewind the particle system, nor set
+a particular position in time. This fact limits potential usages of the particle system, however it is still useful
+for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is known issue, and
+it will eventually be fixed by adding a new kind of particle systems. Tracking issue could be found 
+<a href="https://github.com/rg3dengine/rg3d/issues/120">here</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system-1"><a class="header" href="#particle-system-1">Particle system</a></h1>
+<p>Particle system is a scene node that is used to create complex visual effects (VFX). It operates on huge amount
+of particles at once allowing you to do complex simulation that involves large amount of particles. Typically,
+particle systems are used to create following visual effects: smoke, sparks, blood splatters, steam, etc. </p>
+<p><strong>Important:</strong> Current particle system implementation is <strong>not deterministic</strong>, this means that the state of the
+particles will be different at each run of your game. Also you <strong>cannot</strong> rewind the particle system, nor set
+a particular position in time. This fact limits potential usages of the particle system, however it is still useful
+for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is known issue, and
+it will eventually be fixed by adding a new kind of particle systems. Tracking issue could be found 
+<a href="https://github.com/rg3dengine/rg3d/issues/120">here</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="camera-node-wip"><a class="header" href="#camera-node-wip">Camera node (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="decal-node-wip"><a class="header" href="#decal-node-wip">Decal node (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="animation-wip"><a class="header" href="#animation-wip">Animation (WIP)</a></h1>
