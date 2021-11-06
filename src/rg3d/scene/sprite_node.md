@@ -26,9 +26,10 @@ fn create_sprite(scene: &mut Scene) -> Handle<Node> {
 }
 ```
 
-A sprite with texture could be created by using `.with_texture` method of the builder:
+A sprite with a texture could be created by using `.with_texture` method of the builder:
 
 ```rust
+# extern crate rg3d;
 use rg3d::{
     core::pool::Handle,
     engine::resource_manager::ResourceManager,
@@ -49,11 +50,11 @@ systems for that. Why so? Particles systems are very well optimized for managing
 same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
 a lot of "useless" info that bloats its size up to 600 bytes. 
 
-Current the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
+Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
 avoid creating lots of sprites.
 
 ## Limitations
 
-Sprites are not support any sort of lighting, if you need lighted sprites, you need to create your own render
+Sprites are not supporting any sort of lighting, if you need lighted sprites, you need to create your own render
 pass and use `Mesh` node with custom shader that will orient all faces towards camera and will do lighting 
 calculations. 
