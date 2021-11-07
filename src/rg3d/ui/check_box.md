@@ -3,6 +3,7 @@
 To create a checkbox you should do something like this:
 
 ```rust
+# extern crate rg3d;
 # use rg3d::{
 #     core::pool::Handle,
 #     gui::{check_box::CheckBoxBuilder, widget::WidgetBuilder, UiNode, UserInterface},
@@ -61,7 +62,3 @@ impl GameState for Game {
     }
 }
 ```
-
-# I copied the ButtonMessage reading code for this.
-
-I cant test it so i:m hoping it is correct. It looks that way to me.
