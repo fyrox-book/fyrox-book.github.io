@@ -6,7 +6,7 @@ To create a simple thick border you should do something like this:
 # extern crate rg3d;
 # use rg3d::{
 #     core::pool::Handle,
-#     gui::{button::ButtonBuilder, widget::WidgetBuilder, border::BorderBuilder, UiNode, UserInterface},
+#     gui::{button::ButtonBuilder, widget::WidgetBuilder, border::BorderBuilder, UiNode, Thickness, UserInterface},
 # };
 fn create_border_with_button(ui: &mut UserInterface) -> Handle<UiNode> {
     BorderBuilder::new(WidgetBuilder::new()
