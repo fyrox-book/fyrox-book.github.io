@@ -3,6 +3,7 @@
 To create a window you should do something like this:
 
 ```rust
+# extern crate rg3d;
 # use rg3d::{
 #     core::pool::Handle,
 #     gui::{window::{WindowBuilder, WindowTitle}, widget::WidgetBuilder, UiNode, UserInterface},
@@ -33,6 +34,4 @@ rest is human readable and shouldn't need to be explained.
 Window is editable object but can only be affected by UI Messages if
 their corresponding variable has been set to true.
 
-## TODO example of each ui message. 
-I (DuckEater54) dont want to do it. ill probably get a lot wrong. Sorry
 ## FIXME missing lines, invalid syntax, missing imports
