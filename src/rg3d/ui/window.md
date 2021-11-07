@@ -23,6 +23,7 @@ fn create_window(ui: &mut UserInterface) {
     .can_resize(false)
     .build(&mut ui.build_ctx());
 }
+```
 
 Something to point out is the .with_desired_position. Its default 
 position is the top-left of the screen. Also the .with_content should 
