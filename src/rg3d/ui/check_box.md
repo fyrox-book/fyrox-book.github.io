@@ -23,16 +23,17 @@ To handle a message from a checkbox, you need to read a
 something like this:
 
 ```rust
-use rg3d::{
-    core::pool::Handle,
-    engine::{framework::GameState, Engine},
-    gui::{
-        check_box::CheckBoxBuilder,
-        message::{CheckboxMessage, UiMessage, UiMessageData},
-        widget::WidgetBuilder,
-        UiNode,
-    },
-};
+# extern crate rg3d;
+# use rg3d::{
+#     core::pool::Handle,
+#     engine::{framework::GameState, Engine},
+#     gui::{
+#         check_box::CheckBoxBuilder,
+#         message::{CheckboxMessage, UiMessage, UiMessageData},
+#         widget::WidgetBuilder,
+#         UiNode,
+#     },
+# };
 
 struct Game {
     checkbox: Handle<UiNode>,
