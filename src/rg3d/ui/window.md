@@ -5,13 +5,13 @@ To create a window you should do something like this:
 ```rust
 # extern crate rg3d;
 # use rg3d::{
-#     core::pool::Handle,
+#     core::{pool::Handle, algebra::Vector2},
 #     gui::{window::{WindowBuilder, WindowTitle}, widget::WidgetBuilder, UiNode, UserInterface},
 # };
 fn create_window(ui: &mut UserInterface) {
     WindowBuilder::new(
         WidgetBuilder::new()
-            .with_desired_position(Vector2::new(300.0, 0.0)
+            .with_desired_position(Vector2::new(300.0, 0.0))
             .with_width(300.0),
     )
     .with_content(
