@@ -29,7 +29,7 @@ something like this:
 #     engine::{framework::GameState, Engine},
 #     gui::{
 #         check_box::CheckBoxBuilder,
-#         message::{CheckboxMessage, UiMessage, UiMessageData},
+#         message::{CheckboxMessage::Check, UiMessage, UiMessageData},
 #         widget::WidgetBuilder,
 #         UiNode,
 #     },
@@ -41,14 +41,14 @@ struct Game {
 
 impl GameState for Game {
       // ...
-    fn init(engine: &mut Engine) -> Self
+    fn init(engine: &mut Engine, ui: &mut UserInterfacd) -> Self
         where
             Self: Sized,
     {
         Self {
             checkbox: CheckBoxBuilder::new(WidgetBuilder::new())
-                .checked(false)
-                .build(&mut ui.build_ctx()),
+                .checked(Option{false})
+                .build(&mut engine.user_interface.build_ctx()),
         }
     }
 
