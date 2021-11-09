@@ -16,7 +16,7 @@ fn create_border_with_button(ui: &mut UserInterface) -> Handle<UiNode> {
                 .build(&mut ui.build_ctx()),
             )
     )
-    .with_stroke_thickness(left: 1.0, right: 1.0, top: 1.0, bottom: 1.0)
+    .with_stroke_thickness(Thickness {left: 1.0, right: 1.0, top: 1.0, bottom: 1.0})
     .build(&mut ui.build_ctx())
 }
 ```
