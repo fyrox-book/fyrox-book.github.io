@@ -33,5 +33,3 @@ rest is human readable and shouldn't need to be explained.
 
 Window is editable object but can only be affected by UI Messages if
 their corresponding variable has been set to true.
-
-## FIXME missing lines, invalid syntax, missing imports
