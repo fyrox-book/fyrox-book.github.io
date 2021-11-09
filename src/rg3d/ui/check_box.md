@@ -47,7 +47,7 @@ impl GameState for Game {
     {
         Self {
             checkbox: CheckBoxBuilder::new(WidgetBuilder::new())
-                .checked(Option: false)
+                .checked(Option)
                 .build(&mut engine.user_interface.build_ctx()),
         }
     }
