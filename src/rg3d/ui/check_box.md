@@ -51,7 +51,7 @@ impl GameState for Game {
     }
 
     fn on_ui_message(&mut self, engine: &mut Engine, message: UiMessage) {
-        if let UiMessageData::CheckBox(CheckBoxMessage::Check) = message.data() {
+        if let UiMessageData::CheckBox(CheckBoxMessage::Check(value)) = message.data() {
             if message.destination() == self.checkbox {
                 //
                 // Insert your code clicking handling code here.
