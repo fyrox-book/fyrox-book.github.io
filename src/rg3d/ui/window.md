@@ -15,7 +15,7 @@ fn create_window(ui: &mut UserInterface) {
             .with_width(300.0),
     )
     .with_content(
-        // This is where the gui is written
+#       Handle::NONE
     )
     .with_title(WindowTitle::text("Window"))
     .can_close(true)
