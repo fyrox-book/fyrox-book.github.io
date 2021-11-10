@@ -74,5 +74,8 @@
         - [Bots and AI](./rg3d/tutorials/fps/tutorial-3/tutorial-part-3.md)
       - [RPG Tutorial](./rg3d/tutorials/rpg/intro.md)
         - [Character controller](./rg3d/tutorials/rpg/tutorial-1/tutorial-part-1.md)
+
+---
+
 - [rusty-editor](./rusty-editor/introduction.md)
   - [Overview](./rusty-editor/overview.md)
