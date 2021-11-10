@@ -10,7 +10,7 @@ To create a checkbox you should do something like this:
 # };
 fn create_checkbox(ui: &mut UserInterface) -> Handle<UiNode> {
     CheckBoxBuilder::new(WidgetBuilder::new())
-        .checked(Option<book>)
+        .checked(Option<bool>)
         .build(&mut ui.build_ctx())
 }
 ```
@@ -47,7 +47,7 @@ impl GameState for Game {
     {
         Self {
             checkbox: CheckBoxBuilder::new(WidgetBuilder::new())
-                .checked(Option<book>)
+                .checked(Option<bool>)
                 .build(&mut engine.user_interface.build_ctx()),
         }
     }
