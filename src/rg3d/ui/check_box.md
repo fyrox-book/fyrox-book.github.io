@@ -28,7 +28,7 @@ something like this:
 #     engine::{framework::GameState, Engine},
 #     gui::{
 #         check_box::CheckBoxBuilder,
-#         message::{CheckBoxMessage::Check, UiMessage, UiMessageData},
+#         message::{CheckBoxMessage, UiMessage, UiMessageData},
 #         widget::WidgetBuilder,
 #         UiNode,
 #     },
