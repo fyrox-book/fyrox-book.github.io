@@ -59,7 +59,7 @@
         - [Scroll viewer (WIP)](./rg3d/ui/scroll_viewer.md)        
         - [Stack panel (WIP)](./rg3d/ui/stack_panel.md)        
         - [Tab control (WIP)](./rg3d/ui/tab_control.md)        
-        - [Text (WIP)](./rg3d/ui/text.md)        
+        - [Text](./rg3d/ui/text.md)        
         - [Text box (WIP)](./rg3d/ui/text_box.md)        
         - [Tree (WIP)](./rg3d/ui/tree.md)        
         - [Vector image (WIP)](./rg3d/ui/vector_image.md)        
