@@ -1649,7 +1649,9 @@ definitely need a custom widget.</li>
 access to your code, since they're &quot;living&quot; inside UI and know nothing about the &quot;environment&quot; where they're 
 being used.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="font-wip"><a class="header" href="#font-wip">Font (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="theme-wip"><a class="header" href="#theme-wip">Theme (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="theme"><a class="header" href="#theme">Theme</a></h1>
+<p>The engine has an ability to customize the look of widgets, however it is not centralized, and has to be done 
+per widget. Check <code>Theme</code> section of each widget.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="widgets-wip"><a class="header" href="#widgets-wip">Widgets (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="button"><a class="header" href="#button">Button</a></h1>
 <h2 id="simple-button-with-text"><a class="header" href="#simple-button-with-text">Simple button with text</a></h2>
@@ -1880,7 +1882,7 @@ impl GameState for Game {
 </span></code></pre></pre>
 <p>Keep in mind that checkbox (as any other widget) generates <code>WidgetMessage</code> instances. You can catch them too and
 do a custom handling if you need.</p>
-<h2 id="theme"><a class="header" href="#theme">Theme</a></h2>
+<h2 id="theme-1"><a class="header" href="#theme-1">Theme</a></h2>
 <p>Checkbox can be fully customized to have any look you want, there are few methods that will help you with 
 customization:</p>
 <ol>
