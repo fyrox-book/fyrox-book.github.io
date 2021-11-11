@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="190.35297mm"
+   height="48.78286mm"
+   viewBox="0 0 190.35297 48.78286"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="button.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.38885732"
+     inkscape:cx="550.33038"
+     inkscape:cy="744.489"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Слой 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-7.9060405,-71.909129)">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.418;stroke-opacity:1"
+       id="rect879"
+       width="78.927834"
+       height="29.257732"
+       x="109.8866"
+       y="83.350517" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="137.4433"
+       y="102.06186"
+       id="text1961"><tspan
+         sodipodi:role="line"
+         id="tspan1959"
+         style="stroke-width:0.264583"
+         x="137.4433"
+         y="102.06186">Text</tspan></text>
+    <g
+       id="g12744"
+       transform="translate(-13.948453,-7.4845361)">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:7.76111px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="21.092783"
+         y="85.051544"
+         id="text3441"><tspan
+           sodipodi:role="line"
+           id="tspan3439"
+           style="font-size:7.76111px;stroke-width:0.264583"
+           x="21.092783"
+           y="85.051544">Button</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="28.917528"
+         y="97.298973"
+         id="text5755"><tspan
+           sodipodi:role="line"
+           id="tspan5753"
+           style="font-size:7.05556px;stroke-width:0.264583"
+           x="28.917528"
+           y="97.298973">Background widget</tspan><tspan
+           sodipodi:role="line"
+           style="font-size:7.05556px;stroke-width:0.264583"
+           x="28.917528"
+           y="106.11842"
+           id="tspan8721">Foreground widget</tspan></text>
+    </g>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.518;stroke-miterlimit:4;stroke-dasharray:4.144, 1.036, 0.518, 1.036;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect12768"
+       width="95.257736"
+       height="45.587627"
+       x="102.74226"
+       y="74.84536" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 102.74226,74.845359 H 35.381443"
+       id="path17103" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 109.88659,91.175255 85.051544,87.092784"
+       id="path17218"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 81.989691,96.27835 54.432989,3.402062"
+       id="path17220" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 8.9266591,78.03284 V 96.233871 H 14.880267"
+       id="path17428" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 8.9691848,87.345985 H 14.922793"
+       id="path17430" />
+  </g>
+</svg>

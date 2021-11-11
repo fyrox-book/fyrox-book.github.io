@@ -27,7 +27,7 @@
       - [Collider (WIP)](./rg3d/physics/collider.md)
       - [Joint (WIP)](./rg3d/physics/joint.md)
     - [User Interface](./rg3d/ui/ui.md)
-      - [Basic concepts (WIP)](./rg3d/ui/basic_concepts.md)
+      - [Basic concepts](./rg3d/ui/basic_concepts/basic_concepts.md)
       - [Setting up a user interface](./rg3d/ui/setting_up.md)      
       - [General rules](./rg3d/ui/general_rules.md)
       - [Fonts (WIP)](./rg3d/ui/font.md)
