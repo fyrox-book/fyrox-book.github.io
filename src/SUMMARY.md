@@ -31,7 +31,7 @@
       - [Setting up a user interface](./rg3d/ui/setting_up.md)      
       - [General rules](./rg3d/ui/general_rules.md)
       - [Fonts (WIP)](./rg3d/ui/font.md)
-      - [Theme (WIP)](./rg3d/ui/theme.md)
+      - [Theme](./rg3d/ui/theme.md)
       - [Widgets (WIP)](.rg3d/ui/widgets.md)
         - [Button (WIP)](./rg3d/ui/creating_button.md)
         - [Border (WIP)](./rg3d/ui/border.md)
