@@ -36,7 +36,7 @@
         - [Button (WIP)](./rg3d/ui/creating_button.md)
         - [Border (WIP)](./rg3d/ui/border.md)
         - [Canvas (WIP)](./rg3d/ui/canvas.md)
-        - [Check box (WIP)](./rg3d/ui/check_box.md)
+        - [Check box](./rg3d/ui/checkbox/check_box.md)
         - [Curve editor (WIP)](./rg3d/ui/curve_editor.md)
         - [Decorator (WIP)](./rg3d/ui/decorator.md)
         - [Docking manager (WIP)](./rg3d/ui/dock.md)
