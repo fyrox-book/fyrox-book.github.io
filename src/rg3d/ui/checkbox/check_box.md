@@ -74,8 +74,8 @@ a `CheckBoxMessage::Check` message. To do so, you can do something like this:
 #     core::pool::Handle,
 #     engine::{framework::GameState, Engine},
 #     gui::{
-#         check_box::CheckBoxBuilder,
-#         message::{CheckBoxMessage, UiMessage, UiMessageData},
+#         check_box::{CheckBoxBuilder, CheckBoxMessage},
+#         message::{UiMessage},
 #         widget::WidgetBuilder,
 #         UiNode,
 #     },
@@ -98,7 +98,7 @@ impl GameState for Game {
     }
 
     fn on_ui_message(&mut self, engine: &mut Engine, message: UiMessage) {
-        if let UiMessageData::CheckBox(CheckBoxMessage::Check(value)) = message.data() {
+        if let Some(CheckBoxMessage::Check(value)) = message.data() {
             if message.destination() == self.checkbox {
                 //
                 // Insert your clicking handling code here.

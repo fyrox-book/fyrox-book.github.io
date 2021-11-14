@@ -59,8 +59,8 @@ useful:
 #     core::pool::Handle,
 #     engine::{framework::GameState, Engine},
 #     gui::{
-#         button::ButtonBuilder,
-#         message::{ButtonMessage, UiMessage, UiMessageData},
+#         button::{ButtonMessage, ButtonBuilder},
+#         message::{UiMessage},
 #         widget::WidgetBuilder,
 #         UiNode,
 #     },
@@ -84,7 +84,7 @@ impl GameState for Game {
 #     }
 # 
     fn on_ui_message(&mut self, engine: &mut Engine, message: UiMessage) {
-        if let UiMessageData::Button(ButtonMessage::Click) = message.data() {
+        if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 //
                 // Insert your code clicking handling code here.

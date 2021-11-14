@@ -135,8 +135,9 @@ and `HorizontalAlignment`. An example of changing text at runtime could be somet
 # use rg3d::{
 #     core::pool::Handle,
 #     gui::{
-#         message::{MessageDirection, TextMessage},
+#         message::{MessageDirection},
 #         UiNode, UserInterface,
+#         text::TextMessage
 #     },
 # };
 fn request_change_text(ui: &UserInterface, text_widget_handle: Handle<UiNode>, text: &str) {
