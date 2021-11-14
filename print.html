@@ -1783,8 +1783,8 @@ useful:</p>
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    engine::{framework::GameState, Engine},
 </span><span class="boring">    gui::{
-</span><span class="boring">        button::ButtonBuilder,
-</span><span class="boring">        message::{ButtonMessage, UiMessage, UiMessageData},
+</span><span class="boring">        button::{ButtonMessage, ButtonBuilder},
+</span><span class="boring">        message::{UiMessage},
 </span><span class="boring">        widget::WidgetBuilder,
 </span><span class="boring">        UiNode,
 </span><span class="boring">    },
@@ -1808,7 +1808,7 @@ useful:</p>
 </span><span class="boring">    }
 </span><span class="boring">
 </span>    fn on_ui_message(&amp;mut self, engine: &amp;mut Engine, message: UiMessage) {
-        if let UiMessageData::Button(ButtonMessage::Click) = message.data() {
+        if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 //
                 // Insert your code clicking handling code here.
@@ -1915,8 +1915,8 @@ a <code>CheckBoxMessage::Check</code> message. To do so, you can do something li
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    engine::{framework::GameState, Engine},
 </span><span class="boring">    gui::{
-</span><span class="boring">        check_box::CheckBoxBuilder,
-</span><span class="boring">        message::{CheckBoxMessage, UiMessage, UiMessageData},
+</span><span class="boring">        check_box::{CheckBoxBuilder, CheckBoxMessage},
+</span><span class="boring">        message::{UiMessage},
 </span><span class="boring">        widget::WidgetBuilder,
 </span><span class="boring">        UiNode,
 </span><span class="boring">    },
@@ -1939,7 +1939,7 @@ impl GameState for Game {
     }
 
     fn on_ui_message(&amp;mut self, engine: &amp;mut Engine, message: UiMessage) {
-        if let UiMessageData::CheckBox(CheckBoxMessage::Check(value)) = message.data() {
+        if let Some(CheckBoxMessage::Check(value)) = message.data() {
             if message.destination() == self.checkbox {
                 //
                 // Insert your clicking handling code here.
@@ -2118,8 +2118,9 @@ and <code>HorizontalAlignment</code>. An example of changing text at runtime cou
 </span><span class="boring">use rg3d::{
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    gui::{
-</span><span class="boring">        message::{MessageDirection, TextMessage},
+</span><span class="boring">        message::{MessageDirection},
 </span><span class="boring">        UiNode, UserInterface,
+</span><span class="boring">        text::TextMessage
 </span><span class="boring">    },
 </span><span class="boring">};
 </span>fn request_change_text(ui: &amp;UserInterface, text_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {

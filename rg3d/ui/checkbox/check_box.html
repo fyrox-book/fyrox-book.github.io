@@ -203,8 +203,8 @@ a <code>CheckBoxMessage::Check</code> message. To do so, you can do something li
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    engine::{framework::GameState, Engine},
 </span><span class="boring">    gui::{
-</span><span class="boring">        check_box::CheckBoxBuilder,
-</span><span class="boring">        message::{CheckBoxMessage, UiMessage, UiMessageData},
+</span><span class="boring">        check_box::{CheckBoxBuilder, CheckBoxMessage},
+</span><span class="boring">        message::{UiMessage},
 </span><span class="boring">        widget::WidgetBuilder,
 </span><span class="boring">        UiNode,
 </span><span class="boring">    },
@@ -227,7 +227,7 @@ impl GameState for Game {
     }
 
     fn on_ui_message(&amp;mut self, engine: &amp;mut Engine, message: UiMessage) {
-        if let UiMessageData::CheckBox(CheckBoxMessage::Check(value)) = message.data() {
+        if let Some(CheckBoxMessage::Check(value)) = message.data() {
             if message.destination() == self.checkbox {
                 //
                 // Insert your clicking handling code here.

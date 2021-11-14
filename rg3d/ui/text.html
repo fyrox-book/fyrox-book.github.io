@@ -269,8 +269,9 @@ and <code>HorizontalAlignment</code>. An example of changing text at runtime cou
 </span><span class="boring">use rg3d::{
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    gui::{
-</span><span class="boring">        message::{MessageDirection, TextMessage},
+</span><span class="boring">        message::{MessageDirection},
 </span><span class="boring">        UiNode, UserInterface,
+</span><span class="boring">        text::TextMessage
 </span><span class="boring">    },
 </span><span class="boring">};
 </span>fn request_change_text(ui: &amp;UserInterface, text_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
