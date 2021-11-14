@@ -22,6 +22,7 @@
       - [Shaders](./rg3d/rendering/shaders.md)
       - [Materials](./rg3d/rendering/materials.md)       
     - [Sound (WIP)](./rg3d/sound/sound.md)
+      - [HRTF (WIP)](./rg3d/sound/hrtf.md)
     - [Physics (WIP)](./rg3d/physics/physics.md)
       - [Rigid body (WIP)](./rg3d/physics/rigid_body.md)
       - [Collider (WIP)](./rg3d/physics/collider.md)
