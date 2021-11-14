@@ -215,8 +215,15 @@ in respective message. </p>
 <p>This is a very simple, yet powerful mechanism to satisfy make your code clearer and satisfy borrow checker. One
 may argue that such approach has some performance impact. It is indeed has performance impact, but it is tiny, in
 most cases it can't be even measured.</p>
+<p>Borrowing issues cannot be fully prevented, even the right architecture can't help borrow checker to prove that 
+your code is safe in some cases (graph data structure for example). To solve this problem, the engine uses
+generational arenas (<em>pool</em> in rg3d's terminology) and handles. Instead of storing the objects in various places,
+you put all your objects in a pool, and it gives you handles which can later be used to borrow a reference to
+that object. This approach allows you to build any data structures that may hold &quot;references&quot; to other objects.
+The references replaced with handles, which can be treated (very roughly) as just an index. See
+<a href="rg3d/./beginning/data_management.html">separate chapter</a> in the book for more info.</p>
 <h3 id="can-i-use-ecs-anyways"><a class="header" href="#can-i-use-ecs-anyways">Can I use ECS anyways?</a></h3>
-<p>Indeed, you can! You can use it for your game code without no problems, all you should do is to write some glue
+<p>Indeed, you can! You can use it for your game code with no problems, all you should do is to write some glue
 code that will provide the engine with required information. Please check examples for your favourite ECS crate
 to understand how to do that.</p>
 <h3 id="afterword"><a class="header" href="#afterword">Afterword</a></h3>
