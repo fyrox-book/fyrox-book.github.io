@@ -46,8 +46,8 @@ units at the same time. More often you have a range from five hundreds up to few
 - Specific genres - games with destructible environment and so on.
 
 Note that the list does not include games with vast worlds, why so? The reason is that such games does **not**
-process every tiny object in the world at once, instead they split the world in small chunks and process the
-chunk and process only few chunks at once, those where the player is present. 
+process every tiny object in the world at once, instead they split the world in small chunks and process only
+few chunks at once, those where the player is present. 
 
 The rest of genres operate on a tiny amount of object compared to those up above, maybe a few hundreds at max.
 One might say - hey, each object could contain lots of tiny "moving parts", what's about them? Usually each 
