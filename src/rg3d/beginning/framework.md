@@ -12,8 +12,8 @@ The simplest app could be created with this code:
 use rg3d::{
     engine::Engine,
     engine::framework::prelude::*,
+    gui::node::StubNode,
 };
-use rg3d::gui::node::StubNode;
 
 struct Game { }
 
@@ -60,13 +60,14 @@ As you can see it is very concise and simple, every method serves a particular p
 #   core::color::{Color, Hsv},
 #   engine::{framework::prelude::*, Engine},
 #   event_loop::ControlFlow,
+#   gui::node::StubNode,
 # };
 struct Game {
     hue: f32,
 }
 
 impl GameState for Game {
-    fn init(_engine: &mut Engine) -> Self
+    fn init(_engine: &mut Engine<(), StubNode>) -> Self
     where
         Self: Sized,
     {
