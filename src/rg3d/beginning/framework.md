@@ -13,11 +13,12 @@ use rg3d::{
     engine::Engine,
     engine::framework::prelude::*,
 };
+use rg3d::gui::node::StubNode;
 
 struct Game { }
 
 impl GameState for Game {
-    fn init(_engine: &mut Engine) -> Self where Self: Sized {
+    fn init(_engine: &mut Engine<(), StubNode>) -> Self where Self: Sized {
         Self { }
     }
 }
