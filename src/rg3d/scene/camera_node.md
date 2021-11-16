@@ -44,7 +44,7 @@ Outdoor scenes usually have distant objects that can't be reached, these can be 
 such objects can be pre-rendered and then applied to a huge cube around camera, it always be rendered first and will
 be the background of your scene. To create a skybox and set it to a camera, you can use following code:
 
-```rust
+```rust,edition2018
 # extern crate rg3d;
 # use rg3d::{
 #     core::{futures::executor::block_on, pool::Handle},
