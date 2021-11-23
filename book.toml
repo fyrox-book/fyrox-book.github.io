@@ -3,7 +3,7 @@ authors = ["Dmitry Stepanov"]
 language = "en"
 multilingual = false
 src = "src"
-title = "rg3d Cheat Book"
+title = "RG3D Cheat Book"
 
 [output.html]
 default-theme = "light"
