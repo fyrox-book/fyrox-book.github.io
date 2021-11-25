@@ -16,7 +16,7 @@
       - [Particle system node (WIP)](./rg3d/scene/particle_system_node.md)
       - [Terrain node (WIP)](./rg3d/scene/terrain_node.md)
       - [Camera node](./rg3d/scene/camera_node.md)
-      - [Decal node (WIP)](./rg3d/scene/decal_node.md)
+      - [Decal node](./rg3d/scene/decal_node.md)
     - [Animation (WIP)](./rg3d/animation/animation.md)
     - [Rendering](./rg3d/rendering/rendering.md)
       - [Shaders](./rg3d/rendering/shaders.md)
