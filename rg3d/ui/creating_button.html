@@ -155,6 +155,32 @@
 }
 <span class="boring">}
 </span></code></pre></pre>
+<p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal right aligned):</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    gui::{button::ButtonBuilder, widget::WidgetBuilder, UiNode, UserInterface, HorizontalAlignment, VerticalAlignment, text::TextBuilder},
+</span><span class="boring">};
+</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    ButtonBuilder::new(
+        WidgetBuilder::new()
+            .with_width(100.0)
+            .with_height(100.0),
+    )
+    .with_content(
+        TextBuilder::new(WidgetBuilder::new())
+            .with_text(&quot;Click me!&quot;)
+            .with_horizontal_text_alignment(HorizontalAlignment::Right)
+            .with_vertical_text_alignment(VerticalAlignment::Center)
+            .build(&amp;mut ui.build_ctx()),
+    )
+    .build(&amp;mut ui.build_ctx())
+}
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="a-button-with-image"><a class="header" href="#a-button-with-image">A button with image</a></h2>
 <p>More fancy-looking button with an image as a background could be created using this code snippet:</p>
 <pre><pre class="playground"><code class="language-rust">
