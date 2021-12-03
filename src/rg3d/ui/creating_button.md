@@ -127,7 +127,7 @@ Add a flag to your Game struct like `exit: bool` and set it in button handler to
 ```rust
 # extern crate rg3d;
 #
-#use rg3d::{
+# use rg3d::{
 #    core::pool::Handle,
 #    engine::{framework::{GameState, Framework}, Engine},
 #    event_loop::ControlFlow,
@@ -137,12 +137,12 @@ Add a flag to your Game struct like `exit: bool` and set it in button handler to
 #        widget::WidgetBuilder,
 #        UiNode, UserInterface, text::TextBuilder,
 #    },
-#};
+# };
 
-#struct Game {
+# struct Game {
 #    quit_button_handle: Handle<UiNode>,
     exit: bool,
-#}
+# }
 
 impl GameState for Game {
     fn init(engine: &mut Engine) -> Self
