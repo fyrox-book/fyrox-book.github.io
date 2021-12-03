@@ -18,6 +18,7 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
 ```
 
 How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal right aligned):
+
 ```rust
 # extern crate rg3d;
 # use rg3d::{
@@ -125,28 +126,34 @@ Add a flag to your Game struct like `exit: bool` and set it in button handler to
 
 ```rust
 # extern crate rg3d;
-# use rg3d::{
-#     core::pool::Handle,
-#     engine::{framework::GameState, Engine},
-#     event_loop::ControlFlow,
-#     gui::{
-#         button::{ButtonMessage, ButtonBuilder},
-#         message::{UiMessage},
-#         widget::WidgetBuilder,
-#         UiNode,
-#     },
-# };
+#
+#use rg3d::{
+#    core::pool::Handle,
+#    engine::{framework::{GameState, Framework}, Engine},
+#    event_loop::ControlFlow,
+#    gui::{
+#        button::{ButtonBuilder, ButtonMessage},
+#        message::UiMessage,
+#        widget::WidgetBuilder,
+#        UiNode, UserInterface, text::TextBuilder,
+#    },
+#};
 
-struct Game {
+#struct Game {
+#    quit_button_handle: Handle<UiNode>,
     exit: bool,
-}
+#}
 
 impl GameState for Game {
-    fn init(_engine: &mut Engine) -> Self
+    fn init(engine: &mut Engine) -> Self
     where
         Self: Sized,
     {
-        Self { exit:false }
+        let quit_button_handle = create_button(&mut engine.user_interface);
+        Self {
+            quit_button_handle,
+            exit: false,
+        }
     }
 
     fn on_tick(&mut self, engine: &mut Engine, dt: f32, control_flow: &mut ControlFlow) {
@@ -163,5 +170,19 @@ impl GameState for Game {
         }
     }
 }
+fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Quit")
+                .build(&mut ui.build_ctx()),
+        )
+        .build(&mut ui.build_ctx())
+}
+
+fn main() {
+    Framework::<Game>::new().unwrap().title("Simple").run();
+}
+
 '''
 
