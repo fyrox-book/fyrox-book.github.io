@@ -119,3 +119,48 @@ impl GameState for Game {
 }
 ```
 
+## Using a button to exit the game
+
+Add a flag to your Game struct like ```exit: bool``` and set it in button handler to ```true```, then check it in ```on_tick``` and set ```*control_flow = ControlFlow::Exit``` if the flag is raised
+
+```rust
+# extern crate rg3d;
+# use rg3d::{
+#     core::pool::Handle,
+#     engine::{framework::GameState, Engine},
+#     gui::{
+#         button::{ButtonMessage, ButtonBuilder},
+#         message::{UiMessage},
+#         widget::WidgetBuilder,
+#         UiNode,
+#     },
+# };
+
+struct Game {
+    exit: bool,
+}
+
+impl GameState for Game {
+    fn init(_engine: &mut Engine) -> Self
+    where
+        Self: Sized,
+    {
+        Self { exit:false }
+    }
+
+    fn on_tick(&mut self, engine: &mut Engine, dt: f32, control_flow: &mut ControlFlow) {
+        if self.exit {
+            *control_flow = ControlFlow::Exit;
+        }
+    }
+
+    fn on_ui_message(&mut self, _engine: &mut Engine, message: UiMessage) {
+        if let Some(ButtonMessage::Click) = message.data() {
+            if message.destination() == self.quit_button_handle {
+                self.exit = true;
+            }
+        }
+    }
+}
+'''
+
