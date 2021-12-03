@@ -180,9 +180,5 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
         .build(&mut ui.build_ctx())
 }
 
-fn main() {
-    Framework::<Game>::new().unwrap().title("Simple").run();
-}
-
-'''
+```
 
