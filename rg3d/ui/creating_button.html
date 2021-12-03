@@ -259,6 +259,68 @@ useful:</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
+<h2 id="using-a-button-to-exit-the-game"><a class="header" href="#using-a-button-to-exit-the-game">Using a button to exit the game</a></h2>
+<p>Add a flag to your Game struct like <code>exit: bool</code> and set it in button handler to <code>true</code>, then check it in <code>on_tick</code> and set <code>*control_flow = ControlFlow::Exit</code> if the flag is raised</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">
+</span><span class="boring">use rg3d::{
+</span><span class="boring">   core::pool::Handle,
+</span><span class="boring">   engine::{framework::{GameState, Framework}, Engine},
+</span><span class="boring">   event_loop::ControlFlow,
+</span><span class="boring">   gui::{
+</span><span class="boring">       button::{ButtonBuilder, ButtonMessage},
+</span><span class="boring">       message::UiMessage,
+</span><span class="boring">       widget::WidgetBuilder,
+</span><span class="boring">       UiNode, UserInterface, text::TextBuilder,
+</span><span class="boring">   },
+</span><span class="boring">};
+</span>
+<span class="boring">struct Game {
+</span><span class="boring">   quit_button_handle: Handle&lt;UiNode&gt;,
+</span>    exit: bool,
+<span class="boring">}
+</span>
+impl GameState for Game {
+    fn init(engine: &amp;mut Engine) -&gt; Self
+    where
+        Self: Sized,
+    {
+        let quit_button_handle = create_button(&amp;mut engine.user_interface);
+        Self {
+            quit_button_handle,
+            exit: false,
+        }
+    }
+
+    fn on_tick(&amp;mut self, engine: &amp;mut Engine, dt: f32, control_flow: &amp;mut ControlFlow) {
+        if self.exit {
+            *control_flow = ControlFlow::Exit;
+        }
+    }
+
+    fn on_ui_message(&amp;mut self, _engine: &amp;mut Engine, message: UiMessage) {
+        if let Some(ButtonMessage::Click) = message.data() {
+            if message.destination() == self.quit_button_handle {
+                self.exit = true;
+            }
+        }
+    }
+}
+fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;Quit&quot;)
+                .build(&amp;mut ui.build_ctx()),
+        )
+        .build(&amp;mut ui.build_ctx())
+}
+
+<span class="boring">}
+</span></code></pre></pre>
 
                     </main>
 
