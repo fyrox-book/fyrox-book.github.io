@@ -18,6 +18,7 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
 ```
 
 How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal right aligned):
+
 ```rust
 # extern crate rg3d;
 # use rg3d::{
@@ -117,5 +118,67 @@ impl GameState for Game {
         }
     }
 }
+```
+
+## Using a button to exit the game
+
+Add a flag to your Game struct like `exit: bool` and set it in button handler to `true`, then check it in `on_tick` and set `*control_flow = ControlFlow::Exit` if the flag is raised
+
+```rust
+# extern crate rg3d;
+#
+# use rg3d::{
+#    core::pool::Handle,
+#    engine::{framework::{GameState, Framework}, Engine},
+#    event_loop::ControlFlow,
+#    gui::{
+#        button::{ButtonBuilder, ButtonMessage},
+#        message::UiMessage,
+#        widget::WidgetBuilder,
+#        UiNode, UserInterface, text::TextBuilder,
+#    },
+# };
+
+# struct Game {
+#    quit_button_handle: Handle<UiNode>,
+    exit: bool,
+# }
+
+impl GameState for Game {
+    fn init(engine: &mut Engine) -> Self
+    where
+        Self: Sized,
+    {
+        let quit_button_handle = create_button(&mut engine.user_interface);
+        Self {
+            quit_button_handle,
+            exit: false,
+        }
+    }
+
+    fn on_tick(&mut self, engine: &mut Engine, dt: f32, control_flow: &mut ControlFlow) {
+        if self.exit {
+            *control_flow = ControlFlow::Exit;
+        }
+    }
+
+    fn on_ui_message(&mut self, _engine: &mut Engine, message: UiMessage) {
+        if let Some(ButtonMessage::Click) = message.data() {
+            if message.destination() == self.quit_button_handle {
+                self.exit = true;
+            }
+        }
+    }
+}
+fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Quit")
+                .build(&mut ui.build_ctx()),
+        )
+        .build(&mut ui.build_ctx())
+}
+
 ```
 
