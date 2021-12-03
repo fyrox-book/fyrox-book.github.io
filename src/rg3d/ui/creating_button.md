@@ -121,13 +121,14 @@ impl GameState for Game {
 
 ## Using a button to exit the game
 
-Add a flag to your Game struct like ```exit: bool``` and set it in button handler to ```true```, then check it in ```on_tick``` and set ```*control_flow = ControlFlow::Exit``` if the flag is raised
+Add a flag to your Game struct like `exit: bool` and set it in button handler to `true`, then check it in `on_tick` and set `*control_flow = ControlFlow::Exit` if the flag is raised
 
 ```rust
 # extern crate rg3d;
 # use rg3d::{
 #     core::pool::Handle,
 #     engine::{framework::GameState, Engine},
+#     event_loop::ControlFlow,
 #     gui::{
 #         button::{ButtonMessage, ButtonBuilder},
 #         message::{UiMessage},
