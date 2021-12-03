@@ -236,8 +236,11 @@ to understand how to do that.</p>
 of the book will guide you the basics of the engine.</p>
 <p>To begin using the engine, just add following lines to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
-rg3d = &quot;^0.23.1&quot; # Please check crates.io for actual version. 
+rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot; }
 </code></pre>
+<p>This will update your build files fairly often. If you dont want game breaking changes to occur because of engine updates or want to not compile daily,
+change <code>rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot; }</code> to <code>rg3d = { git = &quot;https://github.com/rg3dengine/rg3d&quot;, rev = &quot;&quot; }</code> with the commit
+hash in the quotes.</p>
 <p>Check the next chapter to create a simple application.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="framework"><a class="header" href="#framework">Framework</a></h1>
 <p>The engine offers special framework to start making games as quickly as possible. It cares about engine initialization,
