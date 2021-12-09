@@ -20,6 +20,7 @@
     - [Animation (WIP)](./rg3d/animation/animation.md)
     - [Rendering](./rg3d/rendering/rendering.md)
       - [Shaders](./rg3d/rendering/shaders.md)
+      - [How to use shaders](./rg3d/rendering/usingshaders.md)
       - [Materials](./rg3d/rendering/materials.md)       
     - [Sound (WIP)](./rg3d/sound/sound.md)
       - [HRTF (WIP)](./rg3d/sound/hrtf.md)
