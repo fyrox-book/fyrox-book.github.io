@@ -89,23 +89,26 @@ void main(
 To use this file in your program, call the `Shader::from_str` function. *Example below*
 
 ```rust
+# extern crate rg3d;
+
 use rg3d::{
-    engine::prelude::*,
-    engine::framework::Framework,
+#     engine::prelude::*,
+#     engine::framework::Framework,
     material::shader::Shader,
 };
 struct Game { }
 
 impl GameState for Game {
     fn init(_engine: &mut Engine) -> Self where Self: Sized {
+        let shader = Shader::from_str("data/shader/shader.glsl");
         Self { }
     }
 }
 
-fn main() {
-    Framework::<Game>::new()
-        .unwrap()
-        .title("Shader")
-        .run();
-}
+# fn main() {
+#     Framework::<Game>::new()
+#         .unwrap()
+#         .title("Shader")
+#         .run();
+# }
 ```
