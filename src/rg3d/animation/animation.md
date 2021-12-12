@@ -46,7 +46,7 @@
 
  Example:
 
- ```no_run
+ ```rust,no_run,compile_fail
  use rg3d::{
      animation::machine::{
          Machine, State, Transition, PoseNode, blend_nodes::BlendPose,
