@@ -86,29 +86,43 @@ void main(
 )
 ```
 
-To use this file in your program, call the `Shader::from_str` function. *Example below*
+To use this file in your scene, call the `Shader::from_str` function. *Example below*
 
 ```rust
 # extern crate rg3d;
-
 use rg3d::{
-#     engine::prelude::*,
-#     engine::framework::Framework,
     material::shader::Shader,
 };
-struct Game { }
-
-impl GameState for Game {
-    fn init(_engine: &mut Engine) -> Self where Self: Sized {
-        let shader = Shader::from_str("data/shader/shader.glsl");
-        Self { }
-    }
+fn use_shader(resource_manager: ResourceManager) {
+    let shader = Shader::from_str("data/shader/shader.glsl").await.unwrap();
+    shader
 }
+```
 
-# fn main() {
-#     Framework::<Game>::new()
-#         .unwrap()
-#         .title("Shader")
-#         .run();
-# }
+### Using a shader in a material
+
+Using shaders in a material is arguable a lot easier than using it in a scene.
+To do so, here is a template for you to use.
+
+```rust
+# use rg3d::{
+#     engine::resource_manager::ResourceManager,
+#     material::{Material, PropertyValue},
+#     core::algebra::Vector3
+# };
+
+async fn create_grass_material(resource_manager: ResourceManager) -> Material {
+    let shader = resource_manager.request_shader("my_grass_shader.glsl").await.unwrap();
+     
+    // Here we assume that the material really has the properties defined below.
+    let mut material = Material::from_shader(shader, Some(resource_manager));
+
+    material.set_property(
+        "windDirection",
+        PropertyValue::Vector3(Vector3::new(1.0, 0.0, 0.5))
+        )
+        .unwrap();
+
+    material
+}
 ```
