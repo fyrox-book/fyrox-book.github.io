@@ -46,7 +46,8 @@
 
  Example:
 
- ```rust,no_run,ignore
+ ```rust,no_run
+ # extern crate rg3d;
  use rg3d::{
      animation::machine::{
          Machine, State, Transition, PoseNode, blend_nodes::BlendPose,
