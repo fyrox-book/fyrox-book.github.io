@@ -138,6 +138,90 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="animation-wip"><a class="header" href="#animation-wip">Animation (WIP)</a></h1>
+<p>Animation blending state machine.</p>
+<p>Machine is used to blend multiple animation as well as perform automatic &quot;smooth transition
+between states. Let have a quick look at simple machine graph:</p>
+<pre><code class="language-text">                                                 +-------------+
+                                                 |  Idle Anim  |
+                                                 +------+------+
+                                                        |
+          Walk Weight                                   |
++-----------+      +-------+           Walk-&gt;Idle Rule  |
+| Walk Anim +------+       |                            |
++-----------+      |       |      +-------+         +---+---+
+                   | Blend |      |       +--------&gt;+       |
+                   |       +------+ Walk  |         |  Idle |
++-----------+      |       |      |       +&lt;--------+       |
+| Aim Anim  +------+       |      +--+----+         +---+---+
++-----------+      +-------+         |                  ^
+          Aim Weight                 | Idle-&gt;Walk Rule  |
+                                     |                  |
+                      Walk-&gt;Run Rule |    +---------+   | Run-&gt;Idle Rule
+                                     |    |         |   |
+                                     +---&gt;+   Run   +---+
+                                          |         |
+                                          +----+----+
+                                               |
+                                               |
+                                        +------+------+
+                                        |  Run Anim   |
+                                        +-------------+
+</code></pre>
+<p>Here we have Walk, Idle, Run states which uses different sources of poses:</p>
+<ul>
+<li>Walk - is most complicated here - it uses result of blending between
+Aim and Walk animations with different weights. This is useful if your
+character can only walk or can walk <em>and</em> aim at the same time. Desired pose
+determined by Walk Weight and Aim Weight parameters combination.</li>
+<li>Run and idle both directly uses animation as pose source.</li>
+</ul>
+<p>There are four transitions between three states each with its own rule. Rule
+is just Rule parameter which can have boolean value that indicates that transition
+should be activated.</p>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span>use rg3d::{
+    animation::machine::{
+        Machine, State, Transition, PoseNode, blend_nodes::BlendPose,
+        Parameter, PlayAnimation, PoseWeight, blend_nodes::BlendAnimations
+    },
+    core::pool::Handle
+};
+
+// Assume that these are correct handles.
+let idle_animation = Handle::default();
+let walk_animation = Handle::default();
+let aim_animation = Handle::default();
+
+let mut machine = Machine::new();
+
+let aim = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
+let walk = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
+
+// Blend two animations together
+let blend_aim_walk = machine.add_node(PoseNode::BlendAnimations(
+    BlendAnimations::new(vec![
+        BlendPose::new(PoseWeight::Constant(0.75), aim),
+        BlendPose::new(PoseWeight::Constant(0.25), walk)
+    ])
+));
+
+let walk_state = machine.add_state(State::new(&quot;Walk&quot;, blend_aim_walk));
+
+let idle = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
+let idle_state = machine.add_state(State::new(&quot;Idle&quot;, idle));
+
+machine.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
+machine.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>You can use multiple machines to animation single model - for example one machine can be for
+locomotion and other is for combat. This means that locomotion machine will take control over
+lower body and combat machine will control upper body.</p>
 
                     </main>
 

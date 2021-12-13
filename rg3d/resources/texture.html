@@ -138,6 +138,20 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="textures-wip"><a class="header" href="#textures-wip">Textures (WIP)</a></h1>
+<p>Texture is an image that used to fill faces to add details to them.</p>
+<p>In most cases textures are just 2D images, however there are some exclusions to that -
+for example cube maps, that may be used for environment mapping. rg3d supports 1D, 2D,
+3D and Cube textures.</p>
+<h2 id="supported-formats"><a class="header" href="#supported-formats">Supported formats</a></h2>
+<p>To load images and decode them, rg3d uses image and ddsfile crates. Here is the list of
+supported formats: png, tga, bmp, dds, jpg, gif, tiff, dds.</p>
+<h2 id="compressed-textures"><a class="header" href="#compressed-textures">Compressed textures</a></h2>
+<p>rg3d supports most commonly used formats of compressed textures: DXT1, DXT3, DXT5.</p>
+<h2 id="render-target"><a class="header" href="#render-target">Render target</a></h2>
+<p>Texture can be used as render target to render scene in it. To do this you should use
+new_render_target method and pass its result to scene's render target property. Renderer
+will automatically provide you info about metrics of texture, but it won't give you
+access to pixels of render target.</p>
 
                     </main>
 
