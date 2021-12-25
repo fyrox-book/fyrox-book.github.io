@@ -807,7 +807,7 @@ impl AnimationMachine {
 ```
 
 This is a simple animation blending machine, for more info check
-["Animations" section of "Writing a 3D shooter using rg3d #3"](https://rg3d.rs/tutorials/2021/03/11/tutorial3.html#animations)
+["Animations" section of "Writing a 3D shooter using rg3d #3"](..\\..\\rpg\\tutorial-3\\tutorial-part-3.md#animations)
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
 and create two transitions between them and then applying final pose to the character.
 
