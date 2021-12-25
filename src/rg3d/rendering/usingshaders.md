@@ -86,6 +86,8 @@ void main(
 )
 ```
 
+### Using shaders in scenes
+
 To use this file in your scene, call the `Shader::from_str` function. *Example below*
 
 ```rust
@@ -98,6 +100,7 @@ fn use_shader(resource_manager: ResourceManager) {
     shader
 }
 ```
+<!--May I ask you to do shaders in scene-->
 
 ### Using a shader in a material
 
