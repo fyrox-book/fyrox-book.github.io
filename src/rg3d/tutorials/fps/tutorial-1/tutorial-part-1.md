@@ -31,7 +31,7 @@ Open Cargo.toml and add `rg3d` dependency:
 [dependencies]
 # Use specific version from GitHub, because engine changes rapidly and we must use specific version
 # to make sure it compiles.
-rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "a3c3d678c361aa72fc44c36f3e37adc20a54f311" }
+rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "d511b92aa6aa132794e25d0f3c0cc110272f9f56" }
 ```
 
 ### Creating a window
@@ -46,21 +46,16 @@ use rg3d::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::{
-        resource_manager::{MaterialSearchOptions, ResourceManager},
-        Engine,
-    },
+    engine::{resource_manager::ResourceManager, Engine},
     event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
-    physics3d::{
-        rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
-        RigidBodyHandle,
-    },
     resource::texture::TextureWrapMode,
     scene::{
         base::BaseBuilder,
         camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
+        collider::{ColliderBuilder, ColliderShape},
         node::Node,
+        rigidbody::RigidBodyBuilder,
         transform::TransformBuilder,
         Scene,
     },
@@ -298,12 +293,12 @@ writing the game.
 ![Window](./tutorial1-window.jpg)
 
 Let's start by creating a simple scene where we'll test our character controller. This is the time when 
-[rusty-editor](https://github.com/mrDIMAS/rusty-editor) comes into play - rusty-editor is a native scene editor of the
+[rusty-editor](https://github.com/rg3dengine/rg3d/tree/master/editor) comes into play - rusty-editor is a native scene editor of the
 engine. It is worth mentioning what "scene editor" means: unlike many other engines (Unity, UnrealEngine, etc.),
 rusty-editor does **not** allow you to run your game inside it, instead you just edit your scene, save it in the editor and load it in
 your game. Being able to run a game inside the editor was a very huge task for one person, and I just chose the 
 easiest way. Alright, back to the interesting stuff. Build the editor first using instructions from its
-[GitHub page](https://github.com/mrDIMAS/rusty-editor) using specific commit stated in the beginning of the article.
+[GitHub page](https://github.com/rg3dengine/rg3d/tree/master/editor) using specific commit stated in the beginning of the article.
 
 ## Creating your first scene 
 
@@ -329,8 +324,11 @@ select the cube and use Scale tool from the toolbar to squash it to form the flo
 ![Floor](./tutorial1-rusty-editor-floor.jpg)
 
 Next we need to add physical body to the floor to not fall through it. This is very simple, click `Create -> Physics -> Rigid Body`
-then right-click on the rigid body in the World Viewer and click `Add Trimesh Collider`. The last step is to bind the 
-floor 3D model with the rigid body, to do that drag'n'drop the rigid body on the floor entry in the World Viewer.
+then right-click on the rigid body in the World Viewer and click `Create -> Physics -> Collider`. Next we need to bind the 
+floor 3D model with the rigid body, to do that drag'n'drop the floor entity to the rigid body. Now we need to configure the
+collider of the rigid body. Select it and go to Inspector, find Shape property and select Trimesh from the dropdown list.
+Next, click `+` sign in Sources and then drag'n'drop floor entity to `Unassigned` entry while holding `Alt` on the keyboard.
+By doing this, we've added a source of geometry for triangle mesh collider.
 
 ![Floor Body](./tutorial1-rusty-editor-floor-body.jpg)
 
@@ -343,22 +341,15 @@ and select `floor.jpg`. Now just drag-n-drop the texture to the floor, this is w
 
 Now let's add some decorations, to do that [download 3D model](./barrel.zip) I prepared for
 this tutorial and unpack it in `data/models`. Now go to the `data/models` in the asset browser and just drag-n-drop the
-`barrel.FBX` to the scene. When you'll release the mouse button after dragging, the editor will ask you where to search 
-textures for your model, leave everything as is and click "ok". You can find more info about import options 
-[here](https://docs.rs/rg3d/0.23.1/rg3d/engine/resource_manager/enum.MaterialSearchOptions.html). Now use the Scale and 
-Move tools to adjust scale and position of the barrel, it should look like this: 
-
-![Barrel](./tutorial1-rusty-editor-barrel.jpg)
-
-Barrel does not have any rigid body yet, and it won't interact with world. Let's fix this. As usual, click `Create -> Physics -> Rigid Body` 
-then click on the added rigid body and add a cylinder collider by right-click on it and selecting `Add Cylinder Collider`.
-Now select the collider and adjust its height and radius. As a final step drag'n'drop the body on the `barrel.FBX` scene 
-node. Keep in mind that every physical body **must** be assigned to "root" node of an object, in case of barrel it will
-be `barrel.FBX` node. Why so? Physical bodies operate in **global** coordinates, and if you'll assign a body to a child node,
-rg3d will apply global coordinates of the body as **local** coordinates of the child node. This will result in a desync of
-coordinates of the body and the node. This a common mistake made by editor's users.
+`barrel.FBX` to the scene. Now use the Scale and Move tools to adjust scale and position of the barrel, it should look 
+like this: 
 
 ![Barrel Body](./tutorial1-rusty-editor-barrel-body.jpg)
+
+Barrel does not have any rigid body yet, and it won't interact with world. Let's fix this. As usual, click `Create -> Physics -> Rigid Body` 
+then click on the added rigid body and add a cylinder collider by right-click on it and selecting `Create -> Physics -> Colider`.
+Now select the collider and set its shape to Cylinder adjust its height and radius. As a final step drag'n'drop the `barrel.FBX` scene 
+node on the rigid body node.
 
 Now clone some barrels, to do that select a `barrel.FBX` in the `World Outliner`, right-click on the scene preview and
 press `Ctrl+C` to copy the barrel and `Ctrl+V` to paste. Repeat multiple times.
@@ -384,7 +375,7 @@ pub async fn new(engine: &mut GameEngine) -> Self {
     // Load a scene resource and create its instance.
     engine
         .resource_manager
-        .request_model("data/models/scene.rgs", MaterialSearchOptions::UsePathDirectly)
+        .request_model("data/models/scene.rgs")
         .await
         .unwrap()
         .instantiate_geometry(&mut scene);
@@ -438,7 +429,7 @@ The next few lines are the most interesting:
 ```rust,compile_fail
 engine
     .resource_manager
-    .request_model("data/models/scene.rgs", MaterialSearchOptions::UsePathDirectly)
+    .request_model("data/models/scene.rgs")
     .await
     .unwrap()
     .instantiate_geometry(&mut scene);
@@ -484,21 +475,16 @@ controller which will allow us to walk in our scene. Let's start with a chunk of
 #         algebra::{UnitQuaternion, Vector3},
 #         pool::Handle,
 #     },
-#     engine::{
-#         resource_manager::{MaterialSearchOptions, ResourceManager},
-#         Engine,
-#     },
+#     engine::{resource_manager::ResourceManager, Engine},
 #     event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
 #     event_loop::{ControlFlow, EventLoop},
-#     physics3d::{
-#         rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder},
-#         RigidBodyHandle,
-#     },
 #     resource::texture::TextureWrapMode,
 #     scene::{
 #         base::BaseBuilder,
 #         camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
+#         collider::{ColliderBuilder, ColliderShape},
 #         node::Node,
+#         rigidbody::RigidBodyBuilder,
 #         transform::TransformBuilder,
 #         Scene,
 #     },
@@ -517,52 +503,50 @@ struct InputController {
 }
 
 struct Player {
-    pivot: Handle<Node>,
     camera: Handle<Node>,
-    rigid_body: RigidBodyHandle,
+    rigid_body: Handle<Node>,
     controller: InputController,
 }
 
 impl Player {
     fn new(scene: &mut Scene) -> Self {
-        // Create a pivot and attach a camera to it, move it a bit up to "emulate" head.
+        // Create rigid body with a camera, move it a bit up to "emulate" head.
         let camera;
-        let pivot = BaseBuilder::new()
-            .with_children(&[{
-                camera = CameraBuilder::new(
-                    BaseBuilder::new().with_local_transform(
-                        TransformBuilder::new()
-                            .with_local_position(Vector3::new(0.0, 0.25, 0.0))
-                            .build(),
-                    ),
+        let rigid_body_handle = RigidBodyBuilder::new(
+            BaseBuilder::new()
+                .with_local_transform(
+                    TransformBuilder::new()
+                        // Offset player a bit.
+                        .with_local_position(Vector3::new(0.0, 1.0, -1.0))
+                        .build(),
                 )
-                .build(&mut scene.graph);
-                camera
-            }])
-            .build(&mut scene.graph);
-
-        // Create rigid body, it will be used for interaction with the world.
-        let rigid_body_handle = scene.physics.add_body(
-            RigidBodyBuilder::new_dynamic()
-                .lock_rotations() // We don't want the player to tilt.
-                .translation(Vector3::new(0.0, 1.0, -1.0)) // Offset player a bit.
-                .build(),
-        );
-
-        // Add capsule collider for the rigid body.
-        scene.physics.add_collider(
-            ColliderBuilder::capsule_y(0.25, 0.2).build(),
-            &rigid_body_handle,
-        );
-
-        // Bind pivot with rigid body. Scene will automatically sync transform of the pivot
-        // with the transform of the rigid body.
-        scene.physics_binder.bind(pivot, rigid_body_handle);
+                .with_children(&[
+                    {
+                        camera = CameraBuilder::new(
+                            BaseBuilder::new().with_local_transform(
+                                TransformBuilder::new()
+                                    .with_local_position(Vector3::new(0.0, 0.25, 0.0))
+                                    .build(),
+                            ),
+                        )
+                        .build(&mut scene.graph);
+                        camera
+                    },
+                    // Add capsule collider for the rigid body.
+                    ColliderBuilder::new(BaseBuilder::new())
+                        .with_shape(ColliderShape::capsule_y(0.25, 0.2))
+                        .build(&mut scene.graph),
+                ]),
+        )
+        // We don't want the player to tilt.
+        .with_locked_rotations(true)
+        // We don't want the rigid body to sleep (be excluded from simulation)
+        .with_can_sleep(false)
+        .build(&mut scene.graph);
 
         Self {
-            pivot,
             camera,
-            rigid_body: rigid_body_handle.into(),
+            rigid_body: rigid_body_handle,
             controller: Default::default(),
         }
     }
@@ -573,46 +557,40 @@ impl Player {
             UnitQuaternion::from_axis_angle(&Vector3::x_axis(), self.controller.pitch.to_radians()),
         );
 
-        // Borrow the pivot from the graph.
-        let pivot = &mut scene.graph[self.pivot];
-
-        // Borrow rigid body from physics.
-        let body = scene
-            .physics
-            .bodies
-            .get_mut(&self.rigid_body)
-            .unwrap();
+        // Borrow rigid body node.
+        let body = scene.graph[self.rigid_body].as_rigid_body_mut();
 
         // Keep only vertical velocity, and drop horizontal.
-        let mut velocity = Vector3::new(0.0, body.linvel().y, 0.0);
+        let mut velocity = Vector3::new(0.0, body.lin_vel().y, 0.0);
 
         // Change the velocity depending on the keys pressed.
         if self.controller.move_forward {
-            // If we moving forward then add "look" vector of the pivot.
-            velocity += pivot.look_vector();
+            // If we moving forward then add "look" vector of the body.
+            velocity += body.look_vector();
         }
         if self.controller.move_backward {
-            // If we moving backward then subtract "look" vector of the pivot.
-            velocity -= pivot.look_vector();
+            // If we moving backward then subtract "look" vector of the body.
+            velocity -= body.look_vector();
         }
         if self.controller.move_left {
-            // If we moving left then add "side" vector of the pivot.
-            velocity += pivot.side_vector();
+            // If we moving left then add "side" vector of the body.
+            velocity += body.side_vector();
         }
         if self.controller.move_right {
-            // If we moving right then subtract "side" vector of the pivot.
-            velocity -= pivot.side_vector();
+            // If we moving right then subtract "side" vector of the body.
+            velocity -= body.side_vector();
         }
 
         // Finally new linear velocity.
-        body.set_linvel(velocity, true);
+        body.set_lin_vel(velocity);
 
         // Change the rotation of the rigid body according to current yaw. These lines responsible for
         // left-right rotation.
-        let mut position = *body.position();
-        position.rotation =
-            UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.controller.yaw.to_radians());
-        body.set_position(position, true);
+        body.local_transform_mut()
+            .set_rotation(UnitQuaternion::from_axis_angle(
+                &Vector3::y_axis(),
+                self.controller.yaw.to_radians(),
+            ));
     }
 
     fn process_input_event(&mut self, event: &Event<()>) {
@@ -670,7 +648,7 @@ impl Game {
         // Load a scene resource and create its instance.
         engine
             .resource_manager
-            .request_model("data/models/scene.rgs", MaterialSearchOptions::UsePathDirectly)
+            .request_model("data/models/scene.rgs")
             .await
             .unwrap()
             .instantiate_geometry(&mut scene);
@@ -714,18 +692,36 @@ Next goes the `Player::new()` function. First, we're creating a simple chain of 
 
 ```rust,compile_fail
 let camera;
-let pivot = BaseBuilder::new()
-    .with_children(&[{
-        camera = CameraBuilder::new(
-            BaseBuilder::new().with_local_transform(
+let rigid_body_handle = RigidBodyBuilder::new(
+        BaseBuilder::new()
+            .with_local_transform(
                 TransformBuilder::new()
-                    .with_local_position(Vector3::new(0.0, 0.25, 0.0))
+                    // Offset player a bit.
+                    .with_local_position(Vector3::new(0.0, 1.0, -1.0))
                     .build(),
-            ),
-        )
-        .build(&mut scene.graph);
-        camera
-    }])
+            )
+            .with_children(&[
+                {
+                    camera = CameraBuilder::new(
+                        BaseBuilder::new().with_local_transform(
+                            TransformBuilder::new()
+                                .with_local_position(Vector3::new(0.0, 0.25, 0.0))
+                                .build(),
+                        ),
+                    )
+                    .build(&mut scene.graph);
+                    camera
+                },
+                // Add capsule collider for the rigid body.
+                ColliderBuilder::new(BaseBuilder::new())
+                    .with_shape(ColliderShape::capsule_y(0.25, 0.2))
+                    .build(&mut scene.graph),
+            ]),
+    )
+    // We don't want the player to tilt.
+    .with_locked_rotations(true)
+    // We don't want the rigid body to sleep (be excluded from simulation)
+    .with_can_sleep(false)
     .build(&mut scene.graph);
 ```
 
@@ -733,37 +729,13 @@ Basically we're making something like this:
 
 ![Graph](./tutorial1-graph-example.png)
 
-As you can see, the camera is attached to the pivot and has a **relative** position of `(0.0, 0.25, 0.0)`. So when we'll
-move pivot, the camera will move too (and rotate of course). Next we're adding a rigid body with a capsule collider and
-link it with the pivot.
-
-```rust,compile_fail
-// Create rigid body, it will be used for interaction with the world.
-let rigid_body_handle = scene.physics.add_body(
-    RigidBodyBuilder::new_dynamic()
-        .lock_rotations() // We don't want the player to tilt.
-        .translation(Vector3::new(0.0, 1.0, -1.0)) // Offset player a bit.
-        .build(),
-);
-
-// Add capsule collider for the rigid body.
-scene.physics.add_collider(
-    ColliderBuilder::capsule_y(0.25, 0.2).build(),
-    rigid_body_handle,
-);
-
-// Bind pivot with rigid body. Scene will automatically sync transform of the pivot
-// with the transform of the rigid body.
-scene.physics_binder.bind(pivot, rigid_body_handle);
-```
-
-Comments should clarify what is going on here. Finally, we're creating Player instance and return it:
+As you can see, the camera is attached to the rigid body and has a **relative** position of `(0.0, 0.25, 0.0)`. So when we'll
+move rigid body, the camera will move too (and rotate of course). 
 
 ```rust,compile_fail
 Self {
-    pivot,
     camera,
-    rigid_body: rigid_body_handle.into(),
+    rigid_body: rigid_body_handle,
     controller: Default::default(),
 }
 ```
@@ -785,45 +757,38 @@ able to "reference" an object in a pool rg3d uses handles. Almost every entity h
 so to mutate or read data from an entity your have to borrow it first, like this:
 
 ```rust,compile_fail
-// Borrow the pivot from the graph.
-let pivot = &mut scene.graph[self.pivot];
-
-// Borrow rigid body from physics.
-let body = scene
-    .physics
-    .bodies
-    .get_mut(self.rigid_body.into())
-    .unwrap();
+// Borrow rigid body node.
+let body = scene.graph[self.rigid_body].as_rigid_body_mut();
 ```
 
-This piece of code `scene.graph[self.pivot]` borrows `pivot` as either mutable or shared, depending on the context (basically
+This piece of code `scene.graph[self.rigid_body]` borrows `rigid_body` as either mutable or shared, depending on the context (basically
 it is just an implementation of Index + IndexMut traits). Once we've borrowed objects, we can modify them. As the next
 step we calculate new horizontal speed for the player:
 
 ```rust,compile_fail
 // Keep only vertical velocity, and drop horizontal.
-let mut velocity = Vector3::new(0.0, body.linvel().y, 0.0);
+let mut velocity = Vector3::new(0.0, body.lin_vel().y, 0.0);
 
 // Change the velocity depending on the keys pressed.
 if self.controller.move_forward {
-    // If we moving forward then add "look" vector of the pivot.
-    velocity += pivot.look_vector();
+    // If we moving forward then add "look" vector of the body.
+    velocity += body.look_vector();
 }
 if self.controller.move_backward {
-    // If we moving backward then subtract "look" vector of the pivot.
-    velocity -= pivot.look_vector();
+    // If we moving backward then subtract "look" vector of the body.
+    velocity -= body.look_vector();
 }
 if self.controller.move_left {
-    // If we moving left then add "side" vector of the pivot.
-    velocity += pivot.side_vector();
+    // If we moving left then add "side" vector of the body.
+    velocity += body.side_vector();
 }
 if self.controller.move_right {
-    // If we moving right then subtract "side" vector of the pivot.
-    velocity -= pivot.side_vector();
+    // If we moving right then subtract "side" vector of the body.
+    velocity -= body.side_vector();
 }
 
 // Finally new linear velocity.
-body.set_linvel(velocity, true);
+body.set_lin_vel(velocity);
 ```
 
 We don't need to modify vertical speed, because it should be controlled by the physics engine. Finally, we're setting
@@ -832,9 +797,11 @@ rotation of the rigid body:
 ```rust,compile_fail
 // Change the rotation of the rigid body according to current yaw. These lines responsible for
 // left-right rotation.
-let mut position = *body.position();
-position.rotation = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.controller.yaw.to_radians());
-body.set_position(position, true);
+body.local_transform_mut()
+    .set_rotation(UnitQuaternion::from_axis_angle(
+        &Vector3::y_axis(),
+        self.controller.yaw.to_radians(),
+    ));
 ```
 
 The next piece of code is a bit boring, but still should be addressed - it is input handling. In the `process_input_event`
@@ -861,7 +828,7 @@ somewhere before `impl Player`:
 # extern crate rg3d;
 # use rg3d::{
 #     engine::{
-#         resource_manager::{MaterialSearchOptions, ResourceManager},
+#         resource_manager::{ResourceManager},
 #     },
 #     resource::texture::TextureWrapMode,
 #     scene::{
@@ -871,12 +838,12 @@ somewhere before `impl Player`:
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
-        resource_manager.request_texture("data/textures/skybox/front.jpg", None),
-        resource_manager.request_texture("data/textures/skybox/back.jpg", None),
-        resource_manager.request_texture("data/textures/skybox/left.jpg", None),
-        resource_manager.request_texture("data/textures/skybox/right.jpg", None),
-        resource_manager.request_texture("data/textures/skybox/up.jpg", None),
-        resource_manager.request_texture("data/textures/skybox/down.jpg", None)
+        resource_manager.request_texture("data/textures/skybox/front.jpg"),
+        resource_manager.request_texture("data/textures/skybox/back.jpg"),
+        resource_manager.request_texture("data/textures/skybox/left.jpg"),
+        resource_manager.request_texture("data/textures/skybox/right.jpg"),
+        resource_manager.request_texture("data/textures/skybox/up.jpg"),
+        resource_manager.request_texture("data/textures/skybox/down.jpg")
     );
 
     // Unwrap everything.

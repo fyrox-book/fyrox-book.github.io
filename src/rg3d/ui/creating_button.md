@@ -64,7 +64,7 @@ fn create_fancy_button(ui: &mut UserInterface, resource_manager: ResourceManager
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
                 .with_texture(into_gui_texture(
-                    resource_manager.request_texture("path/to/your/texture", None),
+                    resource_manager.request_texture("path/to/your/texture"),
                 ))
                 .build(ctx),
         )

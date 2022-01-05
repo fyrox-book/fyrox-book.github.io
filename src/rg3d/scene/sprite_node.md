@@ -38,7 +38,7 @@ use rg3d::{
 
 fn create_sprite(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
     SpriteBuilder::new(BaseBuilder::new())
-        .with_texture(resource_manager.request_texture("path/to/your/texture.png", None))
+        .with_texture(resource_manager.request_texture("path/to/your/texture.png"))
         .build(&mut scene.graph)
 }
 ```

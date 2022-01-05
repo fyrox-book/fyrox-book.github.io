@@ -21,7 +21,7 @@ To load your 3D model in the game, you should do few simple steps:
 
 use rg3d::{
     core::{futures::executor::block_on, pool::Handle},
-    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+    engine::resource_manager::{ResourceManager},
     scene::{node::Node, Scene},
 };
 use std::path::Path;
@@ -33,7 +33,7 @@ fn load_model_to_scene(
 ) -> Handle<Node> {
     // Request model resource and block until it loading. 
     let model_resource =
-        block_on(resource_manager.request_model(path, MaterialSearchOptions::RecursiveUp))
+        block_on(resource_manager.request_model(path))
             .unwrap();
 
     // Create an instance of the resource in the scene. 
@@ -87,7 +87,7 @@ fn create_procedural_mesh(
         .set_property(
             &ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request_texture("some_texture.jpg", None)),
+                value: Some(resource_manager.request_texture("some_texture.jpg")),
                 fallback: SamplerFallback::White,
             },
         )
@@ -127,7 +127,7 @@ method instead of `instantiate_geometry` and then manually apply animation to th
 # use rg3d::resource::model::ModelInstance;
 # use rg3d::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+#     engine::resource_manager::{ResourceManager},
 #     scene::{node::Node, Scene},
 # };
 # use std::path::Path;
@@ -139,7 +139,7 @@ fn load_model_to_scene(
 ) -> ModelInstance {
     // Request model resource and block until it loading.
     let model_resource =
-        block_on(resource_manager.request_model(path, MaterialSearchOptions::RecursiveUp))
+        block_on(resource_manager.request_model(path))
             .unwrap();
 
     // Create an instance of the resource in the scene.

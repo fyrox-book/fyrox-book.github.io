@@ -147,7 +147,7 @@ you should attach it explicitly by using `graph.link_nodes(..)`:
 # extern crate rg3d;
 # use rg3d::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+#     engine::resource_manager::{ResourceManager},
 #     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
 # };
 
@@ -158,7 +158,7 @@ fn link_weapon_to_camera(
 ) {
     let weapon = block_on(
         resource_manager
-            .request_model("path/to/weapon.fbx", MaterialSearchOptions::RecursiveUp),
+            .request_model("path/to/weapon.fbx"),
     )
     .unwrap()
     .instantiate_geometry(scene);

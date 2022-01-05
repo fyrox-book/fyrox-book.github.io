@@ -61,12 +61,12 @@ be the background of your scene. To create a skybox and set it to a camera, you 
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
-        resource_manager.request_texture("path/to/front.jpg", None),
-        resource_manager.request_texture("path/to/back.jpg", None),
-        resource_manager.request_texture("path/to/left.jpg", None),
-        resource_manager.request_texture("path/to/right.jpg", None),
-        resource_manager.request_texture("path/to/up.jpg", None),
-        resource_manager.request_texture("path/to/down.jpg", None)
+        resource_manager.request_texture("path/to/front.jpg"),
+        resource_manager.request_texture("path/to/back.jpg"),
+        resource_manager.request_texture("path/to/left.jpg"),
+        resource_manager.request_texture("path/to/right.jpg"),
+        resource_manager.request_texture("path/to/up.jpg"),
+        resource_manager.request_texture("path/to/down.jpg")
     );
 
     // Unwrap everything.
@@ -134,7 +134,7 @@ fn create_camera_with_lut(
         .with_color_grading_enabled(true)
         .with_color_grading_lut(
             block_on(ColorGradingLut::new(
-                resource_manager.request_texture("path/to/lut.jpg", None),
+                resource_manager.request_texture("path/to/lut.jpg"),
             ))
             .unwrap(),
         )
