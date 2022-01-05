@@ -31,7 +31,7 @@ Open Cargo.toml and add `rg3d` dependency:
 [dependencies]
 # Use specific version from GitHub, because engine changes rapidly and we must use specific version
 # to make sure it compiles.
-rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "d511b92aa6aa132794e25d0f3c0cc110272f9f56" }
+rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0" }
 ```
 
 ### Creating a window

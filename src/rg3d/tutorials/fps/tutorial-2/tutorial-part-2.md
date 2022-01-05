@@ -33,7 +33,6 @@ Switch to `weapon.rs` and paste this code into it:
 
 ```rust,edition2018
 # extern crate rg3d;
-use rg3d::engine::resource_manager::MaterialSearchOptions;
 use rg3d::scene::graph::Graph;
 use rg3d::{
     core::{algebra::Vector3, math::Vector3Ext, pool::Handle},
@@ -51,7 +50,7 @@ impl Weapon {
     pub async fn new(scene: &mut Scene, resource_manager: ResourceManager) -> Self {
         // Yeah, you need only few lines of code to load a model of any complexity.
         let model = resource_manager
-            .request_model("data/models/m4.fbx", MaterialSearchOptions::RecursiveUp)
+            .request_model("data/models/m4.fbx")
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -123,7 +122,6 @@ Finally, add the weapon pivot to `Self { ... }` (and also add `weapon_pivot: Han
 
 ```rust,compile_fail
 Self {
-    pivot,
     camera,
     weapon_pivot, // <- here
     rigid_body: rigid_body_handle.into(),
@@ -158,7 +156,7 @@ pub async fn new(engine: &mut Engine) -> Self {
     // Load a scene resource and create its instance.
     engine
         .resource_manager
-        .request_model("data/models/scene.rgs", MaterialSearchOptions::UsePathDirectly)
+        .request_model("data/models/scene.rgs")
         .await
         .unwrap()
         .instantiate_geometry(&mut scene);
@@ -283,7 +281,7 @@ mysterious line `self.shoot_weapon(weapon, engine)` which is not yet defined, le
 
         let mut intersections = Vec::new();
 
-        scene.physics.cast_ray(
+        scene.graph.physics.cast_ray(
             RayCastOptions {
                 ray_origin: Point3::from(ray.origin),
                 max_len: ray.dir.norm(),
@@ -304,23 +302,13 @@ mysterious line `self.shoot_weapon(weapon, engine)` which is not yet defined, le
             //
 
             // For now just apply some force at the point of impact.
-            let colliders_parent = scene
-                .physics
-                .colliders
-                .get(&intersection.collider)
-                .unwrap()
-                .parent()
-                .unwrap();
-            scene
-                .physics
-                .bodies
-                .native_mut(colliders_parent)
-                .unwrap()
-                .apply_force_at_point(
-                    ray.dir.normalize().scale(10.0),
-                    intersection.position,
-                    true,
-                );
+            let colliders_parent = scene.graph[intersection.collider].parent();
+            let picked_rigid_body = scene.graph[colliders_parent].as_rigid_body_mut();
+            picked_rigid_body.apply_force_at_point(
+                ray.dir.normalize().scale(10.0),
+                intersection.position.coords,
+            );
+            picked_rigid_body.wake_up();
 
             // Trail length will be the length of line between intersection point and ray origin.
             (intersection.position.coords - ray.origin).norm()
@@ -446,7 +434,7 @@ let ray = Ray::new(
 
 let mut intersections = Vec::new();
 
-scene.physics.cast_ray(
+scene.graph.physics.cast_ray(
     RayCastOptions {
         ray_origin: Point3::from(ray.origin),
         max_len: ray.dir.norm(),
@@ -475,23 +463,13 @@ let trail_length = if let Some(intersection) = intersections
     //
 
     // For now just apply some force at the point of impact.
-    let colliders_parent = scene
-        .physics
-        .colliders
-        .get(&intersection.collider)
-        .unwrap()
-        .parent()
-        .unwrap();
-    scene
-        .physics
-        .bodies
-        .native_mut(colliders_parent)
-        .unwrap()
-        .apply_force_at_point(
-            ray.dir.normalize().scale(10.0),
-            intersection.position,
-            true,
-        );
+    let colliders_parent = scene.graph[intersection.collider].parent();
+    let picked_rigid_body = scene.graph[colliders_parent].as_rigid_body_mut();
+    picked_rigid_body.apply_force_at_point(
+        ray.dir.normalize().scale(10.0),
+        intersection.position.coords,
+    );
+    picked_rigid_body.wake_up();
 
     // Trail length will be the length of line between intersection point and ray origin.
     (intersection.position.coords - ray.origin).norm()
@@ -503,14 +481,18 @@ let trail_length = if let Some(intersection) = intersections
 
 First intersection most likely will be player's capsule, because shot point may be inside player's capsule. We're 
 filtering such intersection in the first three lines. To do that, we have to remember the handle of player's capsule
-in `Player`: `collider: ColliderHandle` and fill the field in `Player::new` like this:
+in `Player`: `collider: Handle<Node>` and fill the field in `Player::new` like this:
 
 ```rust,compile_fail
+let collider;
+...
 // Add capsule collider for the rigid body.
-let collider = scene.physics.add_collider(
-    ColliderBuilder::capsule_y(0.25, 0.2).build(),
-    rigid_body_handle,
-);
+{
+    collider = ColliderBuilder::new(BaseBuilder::new())
+        .with_shape(ColliderShape::capsule_y(0.25, 0.2))
+        .build(&mut scene.graph);
+    collider
+}
 
 ...
 
@@ -782,12 +764,13 @@ fn create_bullet_impact(
     let emitter = SphereEmitterBuilder::new(
         BaseEmitterBuilder::new()
             .with_max_particles(200)
-            .with_spawn_rate(1000)
+            .with_spawn_rate(3000)
             .with_size_modifier_range(-0.01..-0.0125)
-            .with_size_range(0.0010..0.025)
-            .with_x_velocity_range(-0.01..0.01)
-            .with_y_velocity_range(0.017..0.02)
-            .with_z_velocity_range(-0.01..0.01)
+            .with_size_range(0.0075..0.015)
+            .with_lifetime_range(0.05..0.2)
+            .with_x_velocity_range(-0.0075..0.0075)
+            .with_y_velocity_range(-0.0075..0.0075)
+            .with_z_velocity_range(0.025..0.045)
             .resurrect_particles(false),
     )
     .with_radius(0.01)
@@ -815,11 +798,11 @@ fn create_bullet_impact(
             .with_lifetime(1.0)
             .with_local_transform(transform),
     )
-    .with_acceleration(Vector3::new(0.0, -10.0, 0.0))
+    .with_acceleration(Vector3::new(0.0, 0.0, 0.0))
     .with_color_over_lifetime_gradient(color_gradient)
     .with_emitters(vec![emitter])
     // We'll use simple spark texture for each particle.
-    .with_texture(resource_manager.request_texture(Path::new("data/textures/spark.png"), None))
+    .with_texture(resource_manager.request_texture(Path::new("data/textures/spark.png")))
     .build(graph)
 }
 ```
@@ -835,12 +818,7 @@ in `Game::shoot_weapon`:
 
 ```rust,compile_fail
 // Add bullet impact effect.
-let effect_orientation = if intersection.normal.normalize() == Vector3::y() {
-    // Handle singularity when normal of impact point is collinear with Y axis.
-    UnitQuaternion::from_axis_angle(&Vector3::y_axis(), 0.0)
-} else {
-    UnitQuaternion::face_towards(&intersection.normal, &Vector3::y())
-};
+let effect_orientation = vector_to_quat(intersection.normal);
 
 create_bullet_impact(
     &mut scene.graph,
