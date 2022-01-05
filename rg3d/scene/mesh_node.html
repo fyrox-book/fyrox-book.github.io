@@ -155,7 +155,7 @@ To load your 3D model in the game, you should do few simple steps:</p>
 </span>
 use rg3d::{
     core::{futures::executor::block_on, pool::Handle},
-    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+    engine::resource_manager::{ResourceManager},
     scene::{node::Node, Scene},
 };
 use std::path::Path;
@@ -167,7 +167,7 @@ fn load_model_to_scene(
 ) -&gt; Handle&lt;Node&gt; {
     // Request model resource and block until it loading. 
     let model_resource =
-        block_on(resource_manager.request_model(path, MaterialSearchOptions::RecursiveUp))
+        block_on(resource_manager.request_model(path))
             .unwrap();
 
     // Create an instance of the resource in the scene. 
@@ -220,7 +220,7 @@ fn create_procedural_mesh(
         .set_property(
             &amp;ImmutableString::new(&quot;diffuseTexture&quot;),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request_texture(&quot;some_texture.jpg&quot;, None)),
+                value: Some(resource_manager.request_texture(&quot;some_texture.jpg&quot;)),
                 fallback: SamplerFallback::White,
             },
         )
@@ -259,7 +259,7 @@ method instead of <code>instantiate_geometry</code> and then manually apply anim
 </span><span class="boring">use rg3d::resource::model::ModelInstance;
 </span><span class="boring">use rg3d::{
 </span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+</span><span class="boring">    engine::resource_manager::{ResourceManager},
 </span><span class="boring">    scene::{node::Node, Scene},
 </span><span class="boring">};
 </span><span class="boring">use std::path::Path;
@@ -271,7 +271,7 @@ fn load_model_to_scene(
 ) -&gt; ModelInstance {
     // Request model resource and block until it loading.
     let model_resource =
-        block_on(resource_manager.request_model(path, MaterialSearchOptions::RecursiveUp))
+        block_on(resource_manager.request_model(path))
             .unwrap();
 
     // Create an instance of the resource in the scene.

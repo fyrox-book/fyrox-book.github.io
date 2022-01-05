@@ -156,7 +156,7 @@ bullet holes, blood splatter, dirt, cracks and so on. Here is the example of the
 </span>
 fn create_decal(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     DecalBuilder::new(BaseBuilder::new())
-        .with_diffuse_texture(resource_manager.request_texture(&quot;path/to/your/decal.png&quot;, None))
+        .with_diffuse_texture(resource_manager.request_texture(&quot;path/to/your/decal.png&quot;))
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}

@@ -161,7 +161,7 @@ call of other widget builders. In code, it looks something like this:</p>
     .with_back(
         ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
+                resource_manager.request_texture(&quot;path/to/your/texture&quot;),
             ))
             .build(ctx),
     )
@@ -207,7 +207,7 @@ that contains text with some icon. To do that, replace <code>.with_text(&quot;My
                     .with_child(
                         ImageBuilder::new(WidgetBuilder::new().on_column(0))
                             .with_texture(into_gui_texture(
-                                resource_manager.request_texture(&quot;your_icon&quot;, None),
+                                resource_manager.request_texture(&quot;your_icon&quot;),
                             ))
                             .build(ctx),
                     )
@@ -248,7 +248,7 @@ ButtonBuilder::new(WidgetBuilder::new())
     .with_back({
         image = ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture(&quot;path/to/your/texture&quot;, None),
+                resource_manager.request_texture(&quot;path/to/your/texture&quot;),
             ))
             .build(ctx);
         image

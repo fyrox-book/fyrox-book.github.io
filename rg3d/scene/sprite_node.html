@@ -175,7 +175,7 @@ fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 
 fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     SpriteBuilder::new(BaseBuilder::new())
-        .with_texture(resource_manager.request_texture(&quot;path/to/your/texture.png&quot;, None))
+        .with_texture(resource_manager.request_texture(&quot;path/to/your/texture.png&quot;))
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}

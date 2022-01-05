@@ -160,7 +160,7 @@ manually.</p>
 </span><span class="boring">extern crate rg3d;
 </span><span class="boring">use rg3d::{
 </span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+</span><span class="boring">    engine::resource_manager::{ResourceManager},
 </span><span class="boring">    scene::{node::Node, Scene},
 </span><span class="boring">};
 </span><span class="boring">use std::path::Path;
@@ -172,7 +172,7 @@ fn load_scene(resource_manager: ResourceManager) -&gt; Scene {
     // Request child scene and block until it loading.
     let scene_resource = block_on(
         resource_manager
-            .request_model(&quot;path/to/your/scene.rgs&quot;, MaterialSearchOptions::RecursiveUp),
+            .request_model(&quot;path/to/your/scene.rgs&quot;),
     )
         .unwrap();
 

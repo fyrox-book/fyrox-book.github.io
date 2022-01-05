@@ -280,7 +280,7 @@ you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
 </span><span class="boring">extern crate rg3d;
 </span><span class="boring">use rg3d::{
 </span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+</span><span class="boring">    engine::resource_manager::{ResourceManager},
 </span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
 </span><span class="boring">};
 </span>
@@ -291,7 +291,7 @@ fn link_weapon_to_camera(
 ) {
     let weapon = block_on(
         resource_manager
-            .request_model(&quot;path/to/weapon.fbx&quot;, MaterialSearchOptions::RecursiveUp),
+            .request_model(&quot;path/to/weapon.fbx&quot;),
     )
     .unwrap()
     .instantiate_geometry(scene);
