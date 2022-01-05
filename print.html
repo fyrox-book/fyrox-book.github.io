@@ -1855,7 +1855,28 @@ to engine's standard material at almost 100% fidelity. </p>
 <h3 id="3ds-max"><a class="header" href="#3ds-max">3Ds max</a></h3>
 <p>It highly depends on the version of the 3Ds max, but in general the default material should work fine.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sound-wip"><a class="header" href="#sound-wip">Sound (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="physics-wip"><a class="header" href="#physics-wip">Physics (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="physics"><a class="header" href="#physics">Physics</a></h1>
+<p>The engine have full-featured physics engine under the hood (Rapier), it helps you to simulate physics in your games.
+There is first-class support for both 2D and 3D physics. There are three main physics entities in the engine:</p>
+<ul>
+<li>Rigid Body - responsible for rigid body dynamics simulation, must have at least one collider to be able to interact with
+other rigid bodies in the world.</li>
+<li>Collider - responsible for collision detection.</li>
+<li>Joint - responsible for motion restriction between two rigid bodies.</li>
+</ul>
+<p>All these entities are ordinary scene nodes, so they can be arranged into any hierarchy in the scene. However there some
+rules that have to be followed to make physics simulation work as intended:</p>
+<ul>
+<li>Rigid body node must have at least one <em>direct child</em> Collider node, otherwise rigid body won't interact with other
+rigid bodies in the world.</li>
+<li>Joint node must have two <em>direct child</em> rigid bodies, otherwise joint will have no effect.</li>
+</ul>
+<h2 id="differences-between-3d-and-2d"><a class="header" href="#differences-between-3d-and-2d">Differences between 3D and 2D</a></h2>
+<p>There is a very few differences between 3D and 2D physics, the most obvious is that 2D physics does simulation only in 
+oXY plane (the plane of the screen). 2D physics has less collider shapes available since some 3D shapes degenerates in
+2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser amount of joints available in 2D, 
+there is no revolute joint for example. Unlike 3D physics entities, 2D physics entities exists in the separate
+<code>scene::dim2</code> module.</p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="user-interface"><a class="header" href="#user-interface">User Interface</a></h1>
 <p>rg3d features an extremely powerful and flexible node-based user interface system. Power and flexibility comes with
 a certain price: it has a steep learning curve. This chapter will cover user interface usage in the engine, explain
