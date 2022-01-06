@@ -21,7 +21,7 @@ Use RigidBodyBuilder to create a rigid body instance:
 #     },
 # };
 fn create_cube_rigid_body(graph: &mut Graph) -> Handle<Node> {
-    RigidBodyBuilder::new(BaseBuilder::new().with_children(vec![
+    RigidBodyBuilder::new(BaseBuilder::new().with_children(&[
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
@@ -77,7 +77,7 @@ do simulation for the body. This can be achieved by making the rigid body _kinem
 # };
 
 fn create_kinematic_rigid_body(graph: &mut Graph) -> Handle<Node> {
-    RigidBodyBuilder::new(BaseBuilder::new().with_children(vec![
+    RigidBodyBuilder::new(BaseBuilder::new().with_children(&[
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
