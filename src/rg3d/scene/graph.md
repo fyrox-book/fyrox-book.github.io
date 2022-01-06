@@ -26,6 +26,10 @@ builders is a preferable way to create scene nodes. There are following node bui
 See [Particle system node](./particle_system_node.md) for more info.
 7) `TerrainBuilder` - creates an instance of terrain node. See [Terrain node](./terrain_node.md) for more info.
 8) `DecalBuilder` - creates an instance of decal node. See [Decal node](./decal_node.md) for more info.
+9) `RigidBody` - creates an instance of rigid body node. See [Rigid body](../physics/rigid_body.md) for more info.
+10) `Collider` - creates an instance of collider node. See [Rigid body](../physics/collider.md) for more info.
+11) `Joint` - creates an instance of joint node. See [Rigid body](../physics/joint.md) for more info.
+12) `Rectangle` - creates an instance of 2D rectangle node. See [Rigid body](./rectangle.md) for more info.
 
 Every builder, other than `BaseBuilder`, accepts `BaseBuilder` as a parameter in `.new(..)` method. Why so?
 This is needed, because every node (other than Base) is "derived" from Base via composition and the derived

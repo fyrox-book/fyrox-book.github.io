@@ -26,7 +26,7 @@
       - [HRTF (WIP)](./rg3d/sound/hrtf.md)
     - [Physics](./rg3d/physics/physics.md)
       - [Rigid body](./rg3d/physics/rigid_body.md)
-      - [Collider (WIP)](./rg3d/physics/collider.md)
+      - [Collider](./rg3d/physics/collider.md)
       - [Joint (WIP)](./rg3d/physics/joint.md)
     - [User Interface](./rg3d/ui/ui.md)
       - [Basic concepts](./rg3d/ui/basic_concepts/basic_concepts.md)
