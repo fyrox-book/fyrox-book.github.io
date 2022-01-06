@@ -1877,7 +1877,99 @@ oXY plane (the plane of the screen). 2D physics has less collider shapes availab
 2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser amount of joints available in 2D, 
 there is no revolute joint for example. Unlike 3D physics entities, 2D physics entities exists in the separate
 <code>scene::dim2</code> module.</p>
-<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="user-interface"><a class="header" href="#user-interface">User Interface</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rigid-body-node"><a class="header" href="#rigid-body-node">Rigid body node</a></h1>
+<p>Rigid body node is the one of main physical entities in the engine. Rigid body nodes can be affected by gravity, 
+external forces, other rigid bodies, etc. Use rigid body node everywhere you need natural physical behaviour for
+your objects.</p>
+<h2 id="how-to-create-8"><a class="header" href="#how-to-create-8">How to create</a></h2>
+<p>Use RigidBodyBuilder to create a rigid body instance:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">        rigidbody::RigidBodyBuilder,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>fn create_cube_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    RigidBodyBuilder::new(BaseBuilder::new().with_children(vec![
+            // Rigid body must have at least one collider
+            ColliderBuilder::new(BaseBuilder::new())
+                .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
+                .build(graph),
+        ]))
+    .with_mass(2.0)
+    .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
+    .build(graph)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="colliders"><a class="header" href="#colliders">Colliders</a></h2>
+<p>Rigid body must have at least one collider to participate in simulation properly, multiple colliders can be used to
+create complex shapes from simple shapes, you can create concave objects this way.</p>
+<h2 id="force-and-torque"><a class="header" href="#force-and-torque">Force and torque</a></h2>
+<p>You can apply forces and torque to any rigid body, but only dynamic bodies will be affected. There is two ways of
+applying force to a rigid body: at center of mass or at particular point at the body:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{core::algebra::Vector3, scene::rigidbody::RigidBody};
+</span>fn apply_force_and_torque(rigid_body: &amp;mut RigidBody) {
+    // Push rigid body forward at the center of mass.
+    rigid_body.apply_force(Vector3::new(0.0, 0.0, 1.0));
+
+    // Kick rigid body at the side (this will also make it rotate)
+    rigid_body.apply_force_at_point(Vector3::new(0.0, 0.0, 1.0), Vector3::new(1.0, 0.0, 0.0));
+
+    // Turn rigid body around center of mass.
+    rigid_body.apply_torque(Vector3::new(0.0, 3.0, 0.0));
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="kinematic-rigid-bodies"><a class="header" href="#kinematic-rigid-bodies">Kinematic rigid bodies</a></h2>
+<p>Sometimes you may want to have direct control over position/rotation of a rigid body and tell the physics engine to not
+do simulation for the body. This can be achieved by making the rigid body <em>kinematic</em>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate rg3d;
+</span><span class="boring">use rg3d::{
+</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">        rigidbody::{RigidBodyBuilder, RigidBodyType},
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>
+fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    RigidBodyBuilder::new(BaseBuilder::new().with_children(vec![
+            // Rigid body must have at least one collider
+            ColliderBuilder::new(BaseBuilder::new())
+                .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
+                .build(graph),
+        ]))
+    .with_body_type(RigidBodyType::KinematicPositionBased)
+    .build(graph)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="continuous-collision-detection"><a class="header" href="#continuous-collision-detection">Continuous collision detection</a></h2>
+<p>Fast-moving rigid bodies can &quot;fly through&quot; other objects (for example a bullet can completely ignore walls if it is 
+moving too fast), this happens because of discrete calculation. This can be fixed by using continuous collision detection,
+to enable it use either <code>.with_ccd_enabled(state)</code> of <code>RigidBodyBuilder</code> or <code>.set_ccd_enabled(state)</code> of <code>RigidBody</code>.</p>
+<h2 id="2d-rigid-bodies"><a class="header" href="#2d-rigid-bodies">2D rigid bodies</a></h2>
+<p>2D rigid bodies have no difference with 3D, except the simulation happens in oXY plane and Z coordinate is ignored.</p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="user-interface"><a class="header" href="#user-interface">User Interface</a></h1>
 <p>rg3d features an extremely powerful and flexible node-based user interface system. Power and flexibility comes with
 a certain price: it has a steep learning curve. This chapter will cover user interface usage in the engine, explain
 basic concepts, provide information about most commonly used widgets, and so on.</p>
@@ -2329,7 +2421,7 @@ data have such state. </p>
 <p><img src="rg3d/ui/checkbox/./checked.png" alt="Checked" /></p>
 <p>Checkbox in <code>Unchecked</code> state:</p>
 <p><img src="rg3d/ui/checkbox/./unchecked.png" alt="Unchecked" /></p>
-<h2 id="how-to-create-8"><a class="header" href="#how-to-create-8">How to create</a></h2>
+<h2 id="how-to-create-9"><a class="header" href="#how-to-create-9">How to create</a></h2>
 <p>To create a checkbox you should do something like this:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -2475,7 +2567,7 @@ list to select its current item. It is build using composition with standard lis
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text"><a class="header" href="#text">Text</a></h1>
 <p>Text is a simple widget that allows you to print text on screen. It has various options like word wrapping, text
 alignment, and so on.</p>
-<h2 id="how-to-create-9"><a class="header" href="#how-to-create-9">How to create</a></h2>
+<h2 id="how-to-create-10"><a class="header" href="#how-to-create-10">How to create</a></h2>
 <p>An instance of the Text widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
