@@ -30,7 +30,7 @@ jobs:
         run: git clone https://github.com/FyroxEngine/Fyrox
 
       - name: Build fyrox
-        run: cd rg3d && cargo build && cd ../.
+        run: cd Fyrox && cargo build && cd ../.
 
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
