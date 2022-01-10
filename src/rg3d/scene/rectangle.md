@@ -13,7 +13,7 @@ As you can see it is a good basis for 2D games.
 Use the RectangleBuilder to create Rectangle nodes:
 
 ```rust
-# extern crate rg3d;
+# extern crate Fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, color::Color, pool::Handle},
 #     engine::resource_manager::ResourceManager,
@@ -50,7 +50,7 @@ diving too deep into details (shaders, render passes, etc.). You can still creat
 Mesh node with single rectangle surface:
 
 ```rust
-# extern crate rg3d;
+# extern crate Fyrox;
 # use fyrox::{
 #     core::{
 #         algebra::{Matrix4, Vector3},

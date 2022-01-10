@@ -40,7 +40,7 @@ Great! Now we can start writing the game. Let's start from something very simple
 and paste this code in the `main.rs`:
 
 ```rust,no_run
-# extern crate rg3d;
+# extern crate Fyrox;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
@@ -174,7 +174,7 @@ impl Game {
 Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating a window builder:
 
 ```rust,no_run
-# extern crate rg3d;
+# extern crate Fyrox;
 # use fyrox::window::WindowBuilder;
 let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
 ```
@@ -182,7 +182,7 @@ let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
 The builder will be used later by the engine to create a window. Next we're creating our event loop: 
 
 ```rust,no_run
-# extern crate rg3d;
+# extern crate Fyrox;
 # use fyrox::event_loop::EventLoop;
 let event_loop = EventLoop::new();
 ```
@@ -469,7 +469,7 @@ We've made a lot of things already, but still can't move in the scene. Let's fix
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:
 
 ```rust
-# extern crate rg3d;
+# extern crate Fyrox;
 # use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
@@ -825,7 +825,7 @@ that. Skybox is a very simple effect that significantly improves scene quality. 
 somewhere before `impl Player`:
 
 ```rust,edition2018
-# extern crate rg3d;
+# extern crate Fyrox;
 # use fyrox::{
 #     engine::{
 #         resource_manager::{ResourceManager},
