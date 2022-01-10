@@ -20,3 +20,20 @@ stuff). Allows you to select, move, rotate, scale, delete, etc. various entities
 6) **Navmesh panel** - allows you to create/delete and edit navigational meshes.
 7) **Command stack** - shows the most recent actions you've done, allows you to undo and redo the changes on demand.
 8) **Asset browser** - inspects the assets of your game, allows you to instantiate resources in the scene and so on.
+
+## Controls
+
+- [Click] - Select
+- [W][S][A][D] - Move camera
+- [Space][Q]/[E] - Raise/Lower Camera
+- [Ctrl] - speed up
+- [Shift]- slowdown
+- Middle mouse button to pan camera in viewing plane
+
+- [1] - Select interaction mode
+- [2] - Move interaction mode
+- [3] - Scale interaction mode
+- [4] - Rotate interaction mode
+
+- [Ctrl]+[Z] - Undo
+- [Ctrl]+[Y] - Redo
