@@ -8,8 +8,8 @@ Widget builders supports fluent syntax, this means that you can create your widg
 call of other widget builders. In code, it looks something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     engine::resource_manager::ResourceManager,
 #     gui::{
@@ -41,8 +41,8 @@ the button. The structure of the button can contain _any_ amount of nodes, for e
 that contains text with some icon. To do that, replace `.with_text("My Button")` with this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     engine::resource_manager::ResourceManager,
 #     gui::{
@@ -92,8 +92,8 @@ Quite often you need to store a handle to a widget in a variable, there is one n
 the fluent syntax:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     engine::resource_manager::ResourceManager,
 #     gui::{

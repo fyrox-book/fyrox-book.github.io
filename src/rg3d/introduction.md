@@ -1,6 +1,6 @@
-# rg3d
+# fyrox
 
-rg3d is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
+fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
 games with small- or medium-sized worlds, large-sized world most likely will require some manual work. This chapter
 of the book will help you to get familiar with core engine concepts and will help you start writing your first game!
 
@@ -84,7 +84,7 @@ most cases it can't be even measured.
 
 Borrowing issues cannot be fully prevented, even the right architecture can't help borrow checker to prove that 
 your code is safe in some cases (graph data structure for example). To solve this problem, the engine uses
-generational arenas (_pool_ in rg3d's terminology) and handles. Instead of storing the objects in various places,
+generational arenas (_pool_ in fyrox's terminology) and handles. Instead of storing the objects in various places,
 you put all your objects in a pool, and it gives you handles which can later be used to borrow a reference to
 that object. This approach allows you to build any data structures that may hold "references" to other objects.
 The references replaced with handles, which can be treated (very roughly) as just an index. See

@@ -1,4 +1,4 @@
-cd ../rg3d
+cd ../fyrox
 cargo build
 cd ../rg3d-book.github.io
-mdbook test -L ../rg3d/target/debug/deps
+mdbook test -L ../fyrox/target/debug/deps

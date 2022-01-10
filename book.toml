@@ -3,7 +3,7 @@ authors = ["Dmitry Stepanov"]
 language = "en"
 multilingual = false
 src = "src"
-title = "RG3D Cheat Book"
+title = "Fyrox Cheat Book"
 
 [output.html]
 default-theme = "light"

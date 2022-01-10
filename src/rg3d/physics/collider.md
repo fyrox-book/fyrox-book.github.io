@@ -38,8 +38,8 @@ rigid bodies.
 Use ColliderBuilder to create an instance of collider with any shape you want.
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{
 #         base::BaseBuilder,

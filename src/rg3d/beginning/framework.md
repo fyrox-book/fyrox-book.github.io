@@ -7,9 +7,9 @@ as possible with a need to put dozens lines of code to just create a window with
 The simplest app could be created with this code:
 
 ```rust,no_run
-# extern crate rg3d;
+# extern crate fyrox;
 
-use rg3d::{
+use fyrox::{
     engine::Engine,
     engine::framework::prelude::*,
 };
@@ -54,8 +54,8 @@ As you can see it is very concise and simple, every method serves a particular p
 `on_tick`, it the place where all your game logic will be updated. To demonstrate this, let's add simple animation:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #   core::color::{Color, Hsv},
 #   engine::{framework::prelude::*, Engine},
 #   event_loop::ControlFlow,

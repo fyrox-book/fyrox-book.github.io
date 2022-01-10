@@ -1,5 +1,5 @@
-# rg3d Cheat Book
+# fyrox Cheat Book
 
-A cheat book for rg3d game engine
+A cheat book for fyrox game engine
 
 Read the book [here](https://rg3d-book.github.io)

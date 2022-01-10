@@ -12,8 +12,8 @@ nodes.
 Use the `BaseBuilder` to create an instance of the Base node:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::scene::{base::BaseBuilder, Scene};
+# extern crate fyrox;
+# use fyrox::scene::{base::BaseBuilder, Scene};
 # fn build_node(scene: &mut Scene) {
 let handle = BaseBuilder::new().build(&mut scene.graph);
 # }
@@ -25,8 +25,8 @@ To build a complex hierarchy of some nodes, use `.with_children()` method of the
 to build a hierarchy of any complexity:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::scene::{base::BaseBuilder, camera::CameraBuilder, Scene};
+# extern crate fyrox;
+# use fyrox::scene::{base::BaseBuilder, camera::CameraBuilder, Scene};
 #
 # fn build_node(scene: &mut Scene) {
 let handle = BaseBuilder::new()
@@ -46,8 +46,8 @@ instance can also be used to set some properties and a set of children nodes.
 The "fluent syntax" is not mandatory to use, the above code snipped could be rewritten like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::scene::{base::BaseBuilder, camera::CameraBuilder, Scene};
+# extern crate fyrox;
+# use fyrox::scene::{base::BaseBuilder, camera::CameraBuilder, Scene};
 # 
 # fn build_node(scene: &mut Scene) {
 let camera = CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
@@ -73,8 +73,8 @@ Base node has a local transform that allows you to translate/scale/rotate/etc. y
 to move a node at specific location you could use this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #    core::{algebra::Vector3, pool::Handle},
 #    scene::{node::Node, Scene},
 # };
@@ -89,8 +89,8 @@ scene.graph[node_handle]
 You could also chain multiple `set_x` calls, like so:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #    core::{algebra::Vector3, pool::Handle},
 #    scene::{node::Node, Scene},
 # };

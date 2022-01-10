@@ -3,8 +3,8 @@
 To create a window you should do something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{pool::Handle, algebra::Vector2},
 #     gui::{window::{WindowBuilder, WindowTitle}, widget::WidgetBuilder, UiNode, UserInterface},
 # };

@@ -1,6 +1,6 @@
 # FPS Tutorial Part 2 - Weapons
 
-**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial2-character-controller)
+**Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/tutorial2-character-controller)
 
 ## Table of contents
 
@@ -32,9 +32,9 @@ use weapon::Weapon;
 Switch to `weapon.rs` and paste this code into it:
 
 ```rust,edition2018
-# extern crate rg3d;
-use rg3d::scene::graph::Graph;
-use rg3d::{
+# extern crate fyrox;
+use fyrox::scene::graph::Graph;
+use fyrox::{
     core::{algebra::Vector3, math::Vector3Ext, pool::Handle},
     engine::resource_manager::ResourceManager,
     scene::{node::Node, Scene},
@@ -139,11 +139,11 @@ struct Game {
 }
 ```
 
-Also do not forget to import `Pool` from `rg3d::core::pool` in `main.rs`:
+Also do not forget to import `Pool` from `fyrox::core::pool` in `main.rs`:
 
 ```rust,compile_fail
 ...
-use rg3d::core::pool::{Handle, Pool};
+use fyrox::core::pool::{Handle, Pool};
 ...
 ```
 
@@ -219,7 +219,7 @@ with the following code:
 
 ```rust,compile_fail
 use crate::weapon::Weapon;
-use rg3d::core::pool::Handle;
+use fyrox::core::pool::Handle;
 
 pub enum Message {
     ShootWeapon {
@@ -331,8 +331,8 @@ create_shot_trail(&mut scene.graph, ray.origin, ray.dir, trail_length);
 This is yet another function we must add, it is a standalone helper function that creates a shot trail:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
 #         color::Color,
@@ -571,11 +571,11 @@ MeshBuilder::new(
 .build(graph);
 ```
 
-The trail will live just 0.25 seconds, rg3d has built-in functionality for short-living objects, you have to just set 
+The trail will live just 0.25 seconds, fyrox has built-in functionality for short-living objects, you have to just set 
 desired lifetime, and an object will be removed at the time. Also, we don't want the trail to cast shadows, and we want 
 the trail to be transparent yellow, to do that we have to change render path of the mesh to `Forward`. In short, every
 mesh by default rendered using `Deferred` renderer which does not support transparent objects due to technical reasons,
-but rg3d has `Forward` renderer for such objects. Check this [article](https://www.3dgep.com/forward-plus/) to learn more 
+but fyrox has `Forward` renderer for such objects. Check this [article](https://www.3dgep.com/forward-plus/) to learn more 
 about Deferred and Forward rendering techniques. Ok, now we have to "teach" player how to shoot. At first, let's add new 
 field to `InputController`: `shoot: bool`. We'll be changing this flag by left mouse click, to do that let's add these lines
 at the end of `Event::WindowEvent` match arm before `_ => {}` in `Player::process_input_event`:
@@ -733,8 +733,8 @@ Shooting have become much better after we've added a recoil, but there is still 
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in `main.rs`
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
 #         color::Color,

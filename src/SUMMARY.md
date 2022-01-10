@@ -1,7 +1,7 @@
 # Summary
 
 - [Introduction](./introduction.md)
-- [rg3d](./rg3d/introduction.md)
+- [fyrox](./rg3d/introduction.md)
     - [Getting started](./rg3d/beginning/getting_started.md)
       - [Framework](./rg3d/beginning/framework.md)
       - [Custom game loop](./rg3d/beginning/custom_game_loop.md)

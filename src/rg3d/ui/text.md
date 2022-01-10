@@ -8,8 +8,8 @@ alignment, and so on.
 An instance of the Text widget could be created like so:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     gui::{text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
 # };
@@ -27,8 +27,8 @@ There are various text alignment options for both vertical and horizontal axes. 
 centered text could be created like so:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     gui::{
 #         text::TextBuilder, widget::WidgetBuilder, HorizontalAlignment, UiNode, UserInterface,
@@ -48,8 +48,8 @@ Long text is usually needs to wrap on available bounds, there are three possible
 `NoWrap`, `Letter`, `Word`. An instance of text with word-based wrapping could be created like so:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     gui::{
 #         formatted_text::WrapMode, text::TextBuilder, widget::WidgetBuilder, UiNode,
@@ -69,8 +69,8 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 To set a color of the text just use `.with_foreground(..)` of the `WidgetBuilder` while building the text instance:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{color::Color, pool::Handle},
 #     gui::{brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
 # };
@@ -85,8 +85,8 @@ fn create_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 By default, text is created with default font, however it is possible to set any custom font:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     gui::{
 #         text::TextBuilder,
@@ -123,7 +123,7 @@ fn create_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 ### Font size
 
 There is no way to change font size without changing the entire font used by Text, it is known issue and there is
-[tracking issue](https://github.com/rg3dengine/rg3d/issues/74) for that.
+[tracking issue](https://github.com/FyroxEngine/Fyrox/issues/74) for that.
 
 ## Messages
 
@@ -131,8 +131,8 @@ There are few message types that Text widget can produce, most common are `Text`
 and `HorizontalAlignment`. An example of changing text at runtime could be something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     gui::{
 #         message::{MessageDirection},

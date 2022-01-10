@@ -2,7 +2,7 @@
 
 ## Supported formats
 
-rg3d supports these file formats for 3D models:
+fyrox supports these file formats for 3D models:
 
 - FBX
 - RGS - native scenes format produced by rusty-editor

@@ -66,8 +66,8 @@ The standard material offers very basic transparency support, to use it you have
 path on you mesh object. It could be done something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{mesh::RenderPath, node::Node, Scene},
 # };

@@ -1,6 +1,6 @@
 # FPS Tutorial Part 1 - Character Controller.
 
-**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial1-character-controller)
+**Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/tutorial1-character-controller)
 
 ## Table of contents
 
@@ -14,7 +14,7 @@
 
 ## Introduction
 
-rg3d is a general purpose 3D engine, it allows creating any kind of 3D game, but today we'll focus on classic 3D shooter.
+fyrox is a general purpose 3D engine, it allows creating any kind of 3D game, but today we'll focus on classic 3D shooter.
 In this tutorial we'll write a simple character controller. This is what we're aiming for:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VcN3NUdfg3E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -25,13 +25,13 @@ Let's start by creating a new cargo project, make a folder and execute this:
 cargo init --bin
 ```
 
-Open Cargo.toml and add `rg3d` dependency:
+Open Cargo.toml and add `fyrox` dependency:
 
 ```toml
 [dependencies]
 # Use specific version from GitHub, because engine changes rapidly and we must use specific version
 # to make sure it compiles.
-rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0" }
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0" }
 ```
 
 ### Creating a window
@@ -40,8 +40,8 @@ Great! Now we can start writing the game. Let's start from something very simple
 and paste this code in the `main.rs`:
 
 ```rust,no_run
-# extern crate rg3d;
-use rg3d::{
+# extern crate fyrox;
+use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
@@ -174,16 +174,16 @@ impl Game {
 Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating a window builder:
 
 ```rust,no_run
-# extern crate rg3d;
-# use rg3d::window::WindowBuilder;
+# extern crate fyrox;
+# use fyrox::window::WindowBuilder;
 let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
 ```
 
 The builder will be used later by the engine to create a window. Next we're creating our event loop: 
 
 ```rust,no_run
-# extern crate rg3d;
-# use rg3d::event_loop::EventLoop;
+# extern crate fyrox;
+# use fyrox::event_loop::EventLoop;
 let event_loop = EventLoop::new();
 ```
 
@@ -293,12 +293,12 @@ writing the game.
 ![Window](./tutorial1-window.jpg)
 
 Let's start by creating a simple scene where we'll test our character controller. This is the time when 
-[rusty-editor](https://github.com/rg3dengine/rg3d/tree/master/editor) comes into play - rusty-editor is a native scene editor of the
+[rusty-editor](https://github.com/FyroxEngine/Fyrox/tree/master/editor) comes into play - rusty-editor is a native scene editor of the
 engine. It is worth mentioning what "scene editor" means: unlike many other engines (Unity, UnrealEngine, etc.),
 rusty-editor does **not** allow you to run your game inside it, instead you just edit your scene, save it in the editor and load it in
 your game. Being able to run a game inside the editor was a very huge task for one person, and I just chose the 
 easiest way. Alright, back to the interesting stuff. Build the editor first using instructions from its
-[GitHub page](https://github.com/rg3dengine/rg3d/tree/master/editor) using specific commit stated in the beginning of the article.
+[GitHub page](https://github.com/FyroxEngine/Fyrox/tree/master/editor) using specific commit stated in the beginning of the article.
 
 ## Creating your first scene 
 
@@ -410,7 +410,7 @@ struct Game {
 These fields are just handles to the "entities" we've created in the `Game::new()`. Also, change `let mut game = Game::new();` to this:
 
 ```rust,compile_fail
-let mut game = rg3d::core::futures::executor::block_on(Game::new(&mut engine));
+let mut game = fyrox::core::futures::executor::block_on(Game::new(&mut engine));
 ```
 
 Here we execute async function `Game::new()` and it creates game's instance with the scene we've made previously.
@@ -469,8 +469,8 @@ We've made a lot of things already, but still can't move in the scene. Let's fix
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
 #         pool::Handle,
@@ -753,7 +753,7 @@ We're borrowing the camera from the graph (`scene.graph[self.camera]`) and modif
 [quaternion](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation) built from an axis, and an angle.
 This rotates camera in vertical direction. Let's talk about borrowing in the engine. Almost every object in the 
 engine "lives" in generational arenas (pool in rg3d's terminology). Pool is a contiguous chunk of memory, to be
-able to "reference" an object in a pool rg3d uses handles. Almost every entity has a single owner - the engine,
+able to "reference" an object in a pool fyrox uses handles. Almost every entity has a single owner - the engine,
 so to mutate or read data from an entity your have to borrow it first, like this:
 
 ```rust,compile_fail
@@ -825,8 +825,8 @@ that. Skybox is a very simple effect that significantly improves scene quality. 
 somewhere before `impl Player`:
 
 ```rust,edition2018
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     engine::{
 #         resource_manager::{ResourceManager},
 #     },
@@ -837,7 +837,7 @@ somewhere before `impl Player`:
 # };
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
-    let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
+    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
         resource_manager.request_texture("data/textures/skybox/front.jpg"),
         resource_manager.request_texture("data/textures/skybox/back.jpg"),
         resource_manager.request_texture("data/textures/skybox/left.jpg"),

@@ -7,11 +7,11 @@ To begin using the engine, just add following lines to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rg3d = { git = "https://github.com/rg3dengine/rg3d" } 
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox" } 
 ```
 
 This will update your build files fairly often. If you dont want game breaking changes to occur because of engine updates or want to not compile daily,
-change `rg3d = { git = "https://github.com/rg3dengine/rg3d" }` to `rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "" }` with the commit
+change `fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }` to `fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "" }` with the commit
 hash in the quotes.
 
 Check the next chapter to create a simple application.

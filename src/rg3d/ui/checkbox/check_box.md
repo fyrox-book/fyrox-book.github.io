@@ -19,8 +19,8 @@ Checkbox in `Unchecked` state:
 To create a checkbox you should do something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     gui::{check_box::CheckBoxBuilder, widget::WidgetBuilder, UiNode, UserInterface},
 # };
@@ -40,8 +40,8 @@ For checkbox with text, you could use `TextBuilder` to create textual content, f
 Here's an example of checkbox with textual content.
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     gui::{
 #         check_box::CheckBoxBuilder, text::TextBuilder, widget::WidgetBuilder, UiNode,
@@ -69,8 +69,8 @@ Checkboxes are not static widget and have multiple states. To handle a message f
 a `CheckBoxMessage::Check` message. To do so, you can do something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     engine::{framework::GameState, Engine},
 #     gui::{

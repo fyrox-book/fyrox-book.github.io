@@ -17,9 +17,9 @@ To create 3D model in you could use [Blender](https://www.blender.org/) and then
 To load your 3D model in the game, you should do few simple steps:
 
 ```rust
-# extern crate rg3d;
+# extern crate fyrox;
 
-use rg3d::{
+use fyrox::{
     core::{futures::executor::block_on, pool::Handle},
     engine::resource_manager::{ResourceManager},
     scene::{node::Node, Scene},
@@ -51,9 +51,9 @@ A mesh instance could be created from code, such meshes called "procedural". The
 cannot create a mesh in 3D modelling software.
 
 ```rust
-# extern crate rg3d;
+# extern crate fyrox;
 
-use rg3d::{
+use fyrox::{
     core::{
         algebra::{Matrix4, Vector3},
         parking_lot::Mutex,
@@ -123,9 +123,9 @@ it will play animation with no problems. One difference that should be noted is 
 method instead of `instantiate_geometry` and then manually apply animation to the mesh in you game loop.
 
 ```rust
-# extern crate rg3d;
-# use rg3d::resource::model::ModelInstance;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::resource::model::ModelInstance;
+# use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::{ResourceManager},
 #     scene::{node::Node, Scene},

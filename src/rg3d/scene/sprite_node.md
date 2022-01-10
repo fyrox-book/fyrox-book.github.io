@@ -11,8 +11,8 @@ There is a separate 2D scenes with their own nodes, which are very well optimize
 A sprite instance could be created using `SpriteBuilder`:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{color::Color, pool::Handle},
 #     scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
 # };
@@ -29,8 +29,8 @@ fn create_sprite(scene: &mut Scene) -> Handle<Node> {
 A sprite with a texture could be created by using `.with_texture` method of the builder:
 
 ```rust
-# extern crate rg3d;
-use rg3d::{
+# extern crate fyrox;
+use fyrox::{
     core::pool::Handle,
     engine::resource_manager::ResourceManager,
     scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},

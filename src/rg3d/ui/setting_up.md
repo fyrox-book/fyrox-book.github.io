@@ -4,9 +4,9 @@ The user interface in the engine is extremely powerful, it allows you to build u
 with low effort. To start off we will use the simplest framework:
 
 ```rust,no_run
-# extern crate rg3d;
+# extern crate fyrox;
 
-use rg3d::{
+use fyrox::{
     engine::{framework::prelude::*, Engine},
     gui::message::UiMessage
 };

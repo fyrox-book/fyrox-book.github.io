@@ -11,8 +11,8 @@ that "intersects" with the frustum will be rendered.
 An instance of camera node could be created using `CameraBuilder`: 
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
 # };
@@ -45,8 +45,8 @@ such objects can be pre-rendered and then applied to a huge cube around camera, 
 be the background of your scene. To create a skybox and set it to a camera, you can use following code:
 
 ```rust,edition2018
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::ResourceManager,
 #     resource::texture::TextureWrapMode,
@@ -60,7 +60,7 @@ be the background of your scene. To create a skybox and set it to a camera, you 
 
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
-    let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
+    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
         resource_manager.request_texture("path/to/front.jpg"),
         resource_manager.request_texture("path/to/back.jpg"),
         resource_manager.request_texture("path/to/left.jpg"),
@@ -114,8 +114,8 @@ Here is the same scene with no color correction and with "mexico" color correcti
 To use color grading LUT you could do something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::ResourceManager,
 #     scene::{

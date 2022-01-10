@@ -16,8 +16,8 @@ scenes.
 A directional light source could be created something like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{
 #         base::BaseBuilder,
@@ -38,8 +38,8 @@ By default, the light source will be oriented to lit "the ground". In other word
 like this:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
 #         pool::Handle,
@@ -74,8 +74,8 @@ Point light is a light source that emits lights in all directions, it has a posi
 An example of a point light source: light bulb. 
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{
 #         base::BaseBuilder,
@@ -98,8 +98,8 @@ Spot light is a light source that emits lights in cone shape, it has a position 
 a spot light source: flashlight.
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{
 #         base::BaseBuilder,
@@ -127,8 +127,8 @@ it, you can do this either while building a light source or change light scatter
 Here is the small example how to do that.
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{node::Node, Scene},
 # };
@@ -144,8 +144,8 @@ You could also change the amount of scattering per each color channel, using thi
 [Rayleigh scattering](https://en.wikipedia.org/wiki/Rayleigh_scattering):
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
 #     scene::{node::Node, Scene},
 # };
@@ -160,7 +160,7 @@ fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
 ## Shadows
 
 Spot and point lights are both supports shadows, however directional light still lacks shadows. There is a
-[tracking issue](https://github.com/rg3dengine/rg3d/issues/220) for that.
+[tracking issue](https://github.com/FyroxEngine/Fyrox/issues/220) for that.
 
 ## Performance
 
@@ -174,8 +174,8 @@ shadows at lowest possible amount to keep performance at good levels. You can al
 need:
 
 ```rust
-# extern crate rg3d;
-# use rg3d::{
+# extern crate fyrox;
+# use fyrox::{
 #     core::pool::Handle,
 #     scene::{node::Node, Scene},
 # };

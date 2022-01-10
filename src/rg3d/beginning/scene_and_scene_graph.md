@@ -1,7 +1,7 @@
 # Scene and scene graph
 
 When you're playing a game, you often see various objects scattered around on screen, all of them forming a
-_scene_. Scene is just a set of various objects, as in many other game engines, rg3d allows you to create multiple
+_scene_. Scene is just a set of various objects, as in many other game engines, fyrox allows you to create multiple
 scenes for various purposes. For example, one scene could be used for menu, a bunch could be used for game levels,
 and one for ending screen. Scenes also could be used to create a source of data for other scenes, such scenes called
 _prefabs_. A scene could also be rendered in a texture, and the texture can be used in other scene - this way you

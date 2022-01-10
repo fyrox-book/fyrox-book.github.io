@@ -9,5 +9,5 @@ particles will be different at each run of your game. Also you **cannot** rewind
 a particular position in time. This fact limits potential usages of the particle system, however it is still useful
 for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is known issue, and
 it will eventually be fixed by adding a new kind of particle systems. Tracking issue could be found 
-[here](https://github.com/rg3dengine/rg3d/issues/120).
+[here](https://github.com/FyroxEngine/Fyrox/issues/120).
 

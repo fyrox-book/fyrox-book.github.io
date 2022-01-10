@@ -1,6 +1,6 @@
 # RPG Tutorial Part 1 - Character Controller
 
-**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/rpg-tutorial1-character-controller)
+**Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/rpg-tutorial1-character-controller)
 
 ## Table of contents
 
@@ -31,13 +31,13 @@ a new cargo project:
 
 `cargo init rpg-tutorial`
 
-Add `rg3d` as dependency:
+Add `fyrox` as dependency:
 
 ```toml
 [dependencies]
 # Use specific version from GitHub, because engine changes rapidly and we must use specific version
 # to make sure it compiles.
-rg3d = { git = "https://github.com/rg3dengine/rg3d", rev = "431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0" }
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0" }
 ```
 
 ## Framework
@@ -49,7 +49,7 @@ variant with manual engine initialization and "opened" main loop.
 
 ```rust,compile_fail
 // Import everything we need for the tutorial.
-use rg3d::{
+use fyrox::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
     engine::framework::{Framework, GameEngine, GameState},
     event::{DeviceEvent, DeviceId, WindowEvent},
@@ -97,7 +97,7 @@ following content:
 use crate::player::camera::CameraController;
 
 // Import everything we need for the tutorial.
-use rg3d::{
+use fyrox::{
     animation::{
         machine::{Machine, Parameter, PoseNode, State, Transition},
         Animation,
@@ -176,7 +176,7 @@ module under `src/player` with following content:
 
 ```rust,compile_fail
 // Import everything we need for the tutorial.
-use rg3d::{
+use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
@@ -195,7 +195,7 @@ use rg3d::{
 
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
-    let (front, back, left, right, top, bottom) = rg3d::core::futures::join!(
+    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
         resource_manager.request_texture("data/textures/skybox/front.jpg"),
         resource_manager.request_texture("data/textures/skybox/back.jpg"),
         resource_manager.request_texture("data/textures/skybox/left.jpg"),
@@ -292,7 +292,7 @@ now our camera controller does not have an ability to rotate, we'll add this lat
 Now let's load a level where our character will "live", add `level.rs` with following content:
 
 ```rust,compile_fail
-use rg3d::{
+use fyrox::{
     core::pool::Handle,
     engine::resource_manager::{MaterialSearchOptions, ResourceManager},
     scene::{node::Node, Scene},
@@ -328,7 +328,7 @@ the following code:
 ```rust,compile_fail
 
 use crate::{level::Level, player::Player};
-use rg3d::{
+use fyrox::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
     engine::framework::{Framework, GameEngine, GameState},
     event::{DeviceEvent, DeviceId, WindowEvent},
@@ -738,7 +738,7 @@ impl AnimationMachine {
         let mut machine = Machine::new();
 
         // Load animations in parallel.
-        let (walk_animation_resource, idle_animation_resource) = rg3d::core::futures::join!(
+        let (walk_animation_resource, idle_animation_resource) = fyrox::core::futures::join!(
             resource_manager.request_model(
                 "data/models/paladin/walk.fbx",
                 MaterialSearchOptions::RecursiveUp
@@ -807,7 +807,7 @@ impl AnimationMachine {
 ```
 
 This is a simple animation blending machine, for more info check
-["Animations" section of "Writing a 3D shooter using rg3d #3"](https://rg3d.rs/tutorials/2021/03/11/tutorial3.html#animations)
+["Animations" section of "Writing a 3D shooter using fyrox #3"](https://rg3d.rs/tutorials/2021/03/11/tutorial3.html#animations)
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
 and create two transitions between them and then applying final pose to the character.
 

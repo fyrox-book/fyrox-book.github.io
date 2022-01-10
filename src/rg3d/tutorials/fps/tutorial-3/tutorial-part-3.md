@@ -1,6 +1,6 @@
 # FPS Tutorial Part 1 - Bots and AI
 
-**Source code**: [GitHub](https://github.com/rg3dengine/rg3d-tutorials/tree/main/tutorial3-character-controller)
+**Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/tutorial3-character-controller)
 
 ## Table of contents
 
@@ -24,8 +24,8 @@ Previous tutorials were children's play in comparison to this, prepare for some 
 a separate module for bots - add `bot.rs` and fill it with following code:
 
 ```rust,compile_fail
-use rg3d::engine::resource_manager::MaterialSearchOptions;
-use rg3d::{
+use fyrox::engine::resource_manager::MaterialSearchOptions;
+use fyrox::{
     animation::{
         machine::{Machine, Parameter, PoseNode, State, Transition},
         Animation,
@@ -224,7 +224,7 @@ to one, it will look very bad and unnatural. This is where animation blending ma
 
 ![Weapon](./animation.png)
 
-rg3d provides very powerful mechanism for animations - animation blending machines. If you're already familiar with 
+fyrox provides very powerful mechanism for animations - animation blending machines. If you're already familiar with 
 Mecanim in Unity game engine or similar thing in Unreal Engine, then you'll probably already understood what will be
 in this paragraph. Animation blending machine (ABM) is a state machine that allows you to blend multiple animations
 in one and apply it to a set of bones (or nodes in general). ABM is a graph where each node is a state, each state
@@ -299,7 +299,7 @@ impl BotAnimationMachine {
         let mut machine = Machine::new();
 
         // Load animations in parallel.
-        let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
+        let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = fyrox::core::futures::join!(
             resource_manager.request_model("data/animations/zombie_walk.fbx"),
             resource_manager.request_model("data/animations/zombie_idle.fbx"),
             resource_manager.request_model("data/animations/zombie_attack.fbx"),
@@ -449,7 +449,7 @@ new ABM instance, nothing fancy here. Next we're loading animations in parallel:
 let mut machine = Machine::new();
 
 // Load animations in parallel.
-let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
+let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = fyrox::core::futures::join!(
     resource_manager.request_model("data/animations/zombie_walk.fbx"),
     resource_manager.request_model("data/animations/zombie_idle.fbx"),
     resource_manager.request_model("data/animations/zombie_attack.fbx"),
