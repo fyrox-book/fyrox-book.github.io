@@ -23,7 +23,7 @@ There is a [separate chapter](../../rusty-editor/introduction.md) in the book th
 After a scene is created, you can load it as any other 3D model using the resource manager:
 
 ```rust
-# extern crate fyrox;
+# extern crate rg3d;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::{ResourceManager},
@@ -76,7 +76,7 @@ it. After that every prefab instance will have your changes!
 A scene could also be created manually:
 
 ```rust
-# extern crate fyrox;
+# extern crate rg3d;
 # use fyrox::{core::pool::Handle, engine::Engine, scene::Scene};
 
 fn create_scene(engine: &mut Engine) -> Handle<Scene> {

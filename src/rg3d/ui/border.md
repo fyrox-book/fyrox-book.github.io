@@ -3,7 +3,7 @@
 To create a simple thick border you should do something like this:
 
 ```rust
-# extern crate fyrox;
+# extern crate rg3d;
 # use fyrox::{
 #     core::pool::Handle,
 #     gui::{button::ButtonBuilder, widget::WidgetBuilder, border::BorderBuilder, UiNode, Thickness, UserInterface},

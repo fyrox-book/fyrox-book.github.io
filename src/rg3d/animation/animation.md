@@ -47,7 +47,7 @@
  Example:
 
  ```rust,no_run
- # extern crate fyrox;
+ # extern crate rg3d;
  use fyrox::{
      animation::machine::{
          Machine, State, Transition, PoseNode, blend_nodes::BlendPose,
