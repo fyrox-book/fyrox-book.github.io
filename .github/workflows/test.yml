@@ -30,7 +30,7 @@ jobs:
         run: git clone https://github.com/FyroxEngine/Fyrox
 
       - name: Build fyrox
-        run: cd fyrox && cargo build && cd ../.
+        run: cd rg3d && cargo build && cd ../.
 
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
@@ -38,4 +38,4 @@ jobs:
           mdbook-version: "latest"
 
       - name: Test Code
-        run: mdbook test -L ./fyrox/target/debug/deps
+        run: mdbook test -L ./rg3d/target/debug/deps
