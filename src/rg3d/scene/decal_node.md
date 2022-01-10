@@ -21,7 +21,7 @@ A decal instance can be created using DecalBuilder:
 
 fn create_decal(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
     DecalBuilder::new(BaseBuilder::new())
-        .with_diffuse_texture(resource_manager.request_texture("path/to/your/decal.png", None))
+        .with_diffuse_texture(resource_manager.request_texture("path/to/your/decal.png"))
         .build(&mut scene.graph)
 }
 ```

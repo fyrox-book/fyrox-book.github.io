@@ -44,9 +44,8 @@ use rg3d::{
 };
 
 pub struct Bot {
-    pivot: Handle<Node>,
-    rigid_body: RigidBodyHandle,
-    collider: ColliderHandle,
+    rigid_body: Handle<Node>,
+    collider: Handle<Node>,
 }
 
 impl Bot {
@@ -57,7 +56,7 @@ impl Bot {
     ) -> Self {
         // Load bot 3D model as usual.
         let model = resource_manager
-            .request_model("data/models/zombie.fbx", MaterialSearchOptions::RecursiveUp)
+            .request_model("data/models/zombie.fbx")
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -69,29 +68,32 @@ impl Bot {
             // Scale the model because it is too big.
             .set_scale(Vector3::new(0.0047, 0.0047, 0.0047));
 
-        let pivot = BaseBuilder::new()
-            .with_children(&[model])
-            .build(&mut scene.graph);
-
-        // Create rigid body, it will be used for interaction with the world.
-        let rigid_body = scene.physics.add_body(
-            RigidBodyBuilder::new_dynamic()
-                .lock_rotations() // We don't want a bot to tilt.
-                .translation(position) // Set desired position.
-                .build(),
-        );
-
-        // Add capsule collider for the rigid body.
-        let collider = scene
-            .physics
-            .add_collider(ColliderBuilder::capsule_y(0.25, 0.2).build(), &rigid_body);
-
-        // Bind pivot with rigid body. Scene will automatically sync transform of the pivot
-        // with the transform of the rigid body.
-        scene.physics_binder.bind(pivot, rigid_body);
+        let collider;
+        let rigid_body = RigidBodyBuilder::new(
+            BaseBuilder::new()
+                .with_local_transform(
+                    TransformBuilder::new()
+                        .with_local_position(Vector3::new(position.x, position.y, position.z))
+                        .build(),
+                )
+                .with_children(&[
+                    // Attach model to the rigid body.
+                    model,
+                    // Add capsule collider for the rigid body.
+                    {
+                        collider = ColliderBuilder::new(BaseBuilder::new())
+                            .with_shape(ColliderShape::capsule_y(0.25, 0.2))
+                            .build(&mut scene.graph);
+                        collider
+                    },
+                ]),
+        )
+        // We don't want a bot to tilt.
+        .with_locked_rotations(true)
+        .with_can_sleep(false)
+        .build(&mut scene.graph);
 
         Self {
-            pivot,
             rigid_body,
             collider,
         }
@@ -130,7 +132,7 @@ As usual, let's disassemble the code line-by-line. Creation of bot begins from l
 
 ```rust,compile_fail
 let model = resource_manager
-    .request_model("data/models/zombie.fbx", MaterialSearchOptions::RecursiveUp)
+    .request_model("data/models/zombie.fbx")
     .await
     .unwrap()
     .instantiate_geometry(scene);
@@ -148,39 +150,37 @@ scene.graph[model]
     .set_scale(Vector3::new(0.0047, 0.0047, 0.0047));
 ```
 
-Here we're borrow model in the scene graph, and modify its local transform. Next we're creating pivot for the model:
+Here we're borrow model in the scene graph, and modify its local transform. Next we're creating rigid body with a capsule
+collider, and attaching the model to the rigid body:
 
 ```rust,compile_fail
-let pivot = BaseBuilder::new()
-    .with_children(&[model])
-    .build(&mut scene.graph);
+let collider;
+let rigid_body = RigidBodyBuilder::new(
+    BaseBuilder::new()
+        .with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(position.x, position.y, position.z))
+                .build(),
+        )
+        .with_children(&[
+            // Attach model to the rigid body.
+            model,
+            // Add capsule collider for the rigid body.
+            {
+                collider = ColliderBuilder::new(BaseBuilder::new())
+                    .with_shape(ColliderShape::capsule_y(0.25, 0.2))
+                    .build(&mut scene.graph);
+                collider
+            },
+        ]),
+)
+// We don't want a bot to tilt.
+.with_locked_rotations(true)
+.with_can_sleep(false)
+.build(&mut scene.graph);
 ```
 
-We need this pivot because we can't assign rigid body directly to the model, because otherwise we'd lose the ability to
-add offset to the model as we want (this happens because rg3d syncs transform of a node with its rigid body). Next we're
-creating a rigid body with a capsule collider, attentive reader should notice that next piece of code is the exact copy
-of the code from `Player::new`:
-
-```rust,compile_fail
-// Create rigid body, it will be used for interaction with the world.
-let rigid_body = scene.physics.add_body(
-    RigidBodyBuilder::new_dynamic()
-        .lock_rotations() // We don't want a bot to tilt.
-        .translation(position) // Set desired position.
-        .build(),
-);
-
-// Add capsule collider for the rigid body.
-let collider = scene
-    .physics
-    .add_collider(ColliderBuilder::capsule_y(0.25, 0.2).build(), &rigid_body);
-
-// Bind pivot with rigid body. Scene will automatically sync transform of the pivot
-// with the transform of the rigid body.
-scene.physics_binder.bind(pivot, rigid_body);
-```
-
-You're right, bots will have the same rigid body as the player has. Finally, we're returning bot's instance:
+Finally, we're returning bot's instance:
 
 ```rust,compile_fail
 Self {
@@ -300,18 +300,9 @@ impl BotAnimationMachine {
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
-            resource_manager.request_model(
-                "data/animations/zombie_walk.fbx",
-                MaterialSearchOptions::RecursiveUp
-            ),
-            resource_manager.request_model(
-                "data/animations/zombie_idle.fbx",
-                MaterialSearchOptions::RecursiveUp
-            ),
-            resource_manager.request_model(
-                "data/animations/zombie_attack.fbx",
-                MaterialSearchOptions::RecursiveUp
-            ),
+            resource_manager.request_model("data/animations/zombie_walk.fbx"),
+            resource_manager.request_model("data/animations/zombie_idle.fbx"),
+            resource_manager.request_model("data/animations/zombie_attack.fbx"),
         );
 
         // Now create three states with different animations.
@@ -459,18 +450,9 @@ let mut machine = Machine::new();
 
 // Load animations in parallel.
 let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = rg3d::core::futures::join!(
-    resource_manager.request_model(
-        "data/animations/zombie_walk.fbx",
-        MaterialSearchOptions::RecursiveUp
-    ),
-    resource_manager.request_model(
-        "data/animations/zombie_idle.fbx",
-        MaterialSearchOptions::RecursiveUp
-    ),
-    resource_manager.request_model(
-        "data/animations/zombie_attack.fbx",
-        MaterialSearchOptions::RecursiveUp
-    ),
+    resource_manager.request_model("data/animations/zombie_walk.fbx"),
+    resource_manager.request_model("data/animations/zombie_idle.fbx"),
+    resource_manager.request_model("data/animations/zombie_attack.fbx"),
 );
 ```
 
@@ -612,7 +594,7 @@ pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
     let attack_distance = 0.6;
 
     // Simple AI - follow target by a straight line.
-    let self_position = scene.graph[self.pivot].global_position();
+    let self_position = scene.graph[self.rigid_body].global_position();
     let direction = target - self_position;
 
     // Distance to target.
@@ -623,19 +605,15 @@ pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
     }
 
     if self.follow_target && distance != 0.0 {
-        let rigid_body = scene
-            .physics
-            .bodies
-            .get_mut(&self.rigid_body)
-            .unwrap();
+        let rigid_body = scene.graph[self.rigid_body].as_rigid_body_mut();
 
         // Make sure bot is facing towards the target.
-        let mut position = *rigid_body.position();
-        position.rotation = UnitQuaternion::face_towards(
-            &Vector3::new(direction.x, 0.0, direction.z),
-            &Vector3::y_axis(),
-        );
-        rigid_body.set_position(position, true);
+        rigid_body
+            .local_transform_mut()
+            .set_rotation(UnitQuaternion::face_towards(
+                &Vector3::new(direction.x, 0.0, direction.z),
+                &Vector3::y_axis(),
+            ));
 
         // Move only if we're far enough from the target.
         if distance > attack_distance {
@@ -643,9 +621,9 @@ pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
             let xz_velocity = direction.scale(1.0 / distance).scale(0.9);
 
             let new_velocity =
-                Vector3::new(xz_velocity.x, rigid_body.linvel().y, xz_velocity.z);
+                Vector3::new(xz_velocity.x, rigid_body.lin_vel().y, xz_velocity.z);
 
-            rigid_body.set_linvel(new_velocity, true);
+            rigid_body.set_lin_vel(new_velocity);
         }
     }
 
@@ -694,19 +672,15 @@ we should switch `follow_target` flag. Next goes the most interesting parts of t
 
 ```rust,compile_fail
 if self.follow_target && distance != 0.0 {
-    let rigid_body = scene
-        .physics
-        .bodies
-        .get_mut(self.rigid_body.into())
-        .unwrap();
+    let rigid_body = scene.graph[self.rigid_body].as_rigid_body_mut();
 
     // Make sure bot is facing towards the target.
-    let mut position = *rigid_body.position();
-    position.rotation = UnitQuaternion::face_towards(
-        &Vector3::new(direction.x, 0.0, direction.z),
-        &Vector3::y_axis(),
-    );
-    rigid_body.set_position(position, true);
+    rigid_body
+        .local_transform_mut()
+        .set_rotation(UnitQuaternion::face_towards(
+            &Vector3::new(direction.x, 0.0, direction.z),
+            &Vector3::y_axis(),
+        ));
 
     ...
 ```
@@ -723,9 +697,9 @@ far enough from the target:
         let xz_velocity = direction.scale(1.0 / distance).scale(0.9);
 
         let new_velocity =
-            Vector3::new(xz_velocity.x, rigid_body.linvel().y, xz_velocity.z);
+            Vector3::new(xz_velocity.x, rigid_body.lin_vel().y, xz_velocity.z);
 
-        rigid_body.set_linvel(new_velocity, true);
+        rigid_body.set_lin_vel(new_velocity);
     }
 }
 ```

@@ -7,7 +7,7 @@ To begin using the engine, just add following lines to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rg3d = { git = "https://github.com/rg3dengine/rg3d" }
+rg3d = { git = "https://github.com/rg3dengine/rg3d" } 
 ```
 
 This will update your build files fairly often. If you dont want game breaking changes to occur because of engine updates or want to not compile daily,

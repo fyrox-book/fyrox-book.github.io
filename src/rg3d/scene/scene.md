@@ -26,7 +26,7 @@ After a scene is created, you can load it as any other 3D model using the resour
 # extern crate rg3d;
 # use rg3d::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+#     engine::resource_manager::{ResourceManager},
 #     scene::{node::Node, Scene},
 # };
 # use std::path::Path;
@@ -38,7 +38,7 @@ fn load_scene(resource_manager: ResourceManager) -> Scene {
     // Request child scene and block until it loading.
     let scene_resource = block_on(
         resource_manager
-            .request_model("path/to/your/scene.rgs", MaterialSearchOptions::RecursiveUp),
+            .request_model("path/to/your/scene.rgs"),
     )
         .unwrap();
 

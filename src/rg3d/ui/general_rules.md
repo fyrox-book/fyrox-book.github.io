@@ -24,7 +24,7 @@ ButtonBuilder::new(WidgetBuilder::new())
     .with_back(
         ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture("path/to/your/texture", None),
+                resource_manager.request_texture("path/to/your/texture"),
             ))
             .build(ctx),
     )
@@ -69,7 +69,7 @@ that contains text with some icon. To do that, replace `.with_text("My Button")`
                     .with_child(
                         ImageBuilder::new(WidgetBuilder::new().on_column(0))
                             .with_texture(into_gui_texture(
-                                resource_manager.request_texture("your_icon", None),
+                                resource_manager.request_texture("your_icon"),
                             ))
                             .build(ctx),
                     )
@@ -109,7 +109,7 @@ ButtonBuilder::new(WidgetBuilder::new())
     .with_back({
         image = ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture("path/to/your/texture", None),
+                resource_manager.request_texture("path/to/your/texture"),
             ))
             .build(ctx);
         image
