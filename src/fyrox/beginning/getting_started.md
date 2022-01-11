@@ -9,7 +9,21 @@ Since the engine is distributed as a library, it has to be added to `[dependecie
 your project to start using it, there is no pre-built executables or library files. If you don't know what is
 `Cargo.toml` or `cargo`, please [read this](https://doc.rust-lang.org/cargo/) before continue. 
 
+### Using stable version
+
 To begin using the engine, just add following lines to your `Cargo.toml`:
+
+```toml
+[dependencies]
+fyrox = "^0.24"
+```
+
+This will force Cargo to use latest **stable** version of the engine. 
+
+### Using latest unstable version
+
+Sometimes you want to use the latest features that are not yet released in a stable version, then you can use
+the engine directly from its repository, simply add the following line to your `Cargo.toml`:
 
 ```toml
 [dependencies]
