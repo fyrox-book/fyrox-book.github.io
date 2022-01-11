@@ -1,7 +1,7 @@
-# fyrox Cheat/Guide Book
+# Fyrox Cheat/Guide Book
 
-Practical reference and user guides for [fyrox game engine](https://github.com/FyroxEngine/Fyrox) and
-[rusty-editor](https://github.com/FyroxEngine/Fyrox/tree/master/editor.
+Practical reference and user guides for [Fyrox game engine](https://github.com/FyroxEngine/Fyrox) and
+[Fyroxed](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
 
 The book is in early development stage, you can help to improve it by making a contribution in its
 [repository](https://github.com/fyrox-book/fyrox-book.github.io). Don't be shy, every tip is helpful!

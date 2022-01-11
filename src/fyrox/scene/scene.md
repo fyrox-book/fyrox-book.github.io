@@ -12,11 +12,11 @@ more or less complex games.
 
 ## How to create
 
-A scene could be created either in rusty-editor or programmatically. You can also combine both approaches, where
+A scene could be created either in Fyroxed or programmatically. You can also combine both approaches, where
 you build all "static" content in the editor and adding rest of the entities (bots, interactive objects, etc.)
 manually.
 
-### Using rusty-editor
+### Using Fyroxed
 
 There is a [separate chapter](../../rusty-editor/introduction.md) in the book that should help you to create a scene.
 

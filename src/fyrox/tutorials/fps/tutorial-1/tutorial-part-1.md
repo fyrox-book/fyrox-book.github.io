@@ -14,7 +14,7 @@
 
 ## Introduction
 
-fyrox is a general purpose 3D engine, it allows creating any kind of 3D game, but today we'll focus on classic 3D shooter.
+Fyrox is a general purpose 3D engine, it allows creating any kind of 3D game, but today we'll focus on classic 3D shooter.
 In this tutorial we'll write a simple character controller. This is what we're aiming for:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VcN3NUdfg3E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -293,9 +293,9 @@ writing the game.
 ![Window](./tutorial1-window.jpg)
 
 Let's start by creating a simple scene where we'll test our character controller. This is the time when 
-[rusty-editor](https://github.com/FyroxEngine/Fyrox/tree/master/editor) comes into play - rusty-editor is a native scene editor of the
+[Fyroxed](https://github.com/FyroxEngine/Fyrox/tree/master/editor) comes into play - Fyroxed is a native scene editor of the
 engine. It is worth mentioning what "scene editor" means: unlike many other engines (Unity, UnrealEngine, etc.),
-rusty-editor does **not** allow you to run your game inside it, instead you just edit your scene, save it in the editor and load it in
+Fyroxed does **not** allow you to run your game inside it, instead you just edit your scene, save it in the editor and load it in
 your game. Being able to run a game inside the editor was a very huge task for one person, and I just chose the 
 easiest way. Alright, back to the interesting stuff. Build the editor first using instructions from its
 [GitHub page](https://github.com/FyroxEngine/Fyrox/tree/master/editor) using specific commit stated in the beginning of the article.
@@ -304,9 +304,9 @@ easiest way. Alright, back to the interesting stuff. Build the editor first usin
 
 This section is completely optional, if you eager to make the game - just use a 
 [pre-made scene](./data.zip) (download it and unpack in the folder of your game) and go to
-the [next section](#using-the-scene). Open rusty-editor, it should look like this:
+the [next section](#using-the-scene). Open Fyroxed, it should look like this:
 
-![rusty-editor](./tutorial1-rusty-editor.jpg)
+![Fyroxed](./tutorial1-rusty-editor.jpg)
 
 It will ask you to choose a working directory.
 
@@ -753,7 +753,7 @@ We're borrowing the camera from the graph (`scene.graph[self.camera]`) and modif
 [quaternion](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation) built from an axis, and an angle.
 This rotates camera in vertical direction. Let's talk about borrowing in the engine. Almost every object in the 
 engine "lives" in generational arenas (pool in fyrox's terminology). Pool is a contiguous chunk of memory, to be
-able to "reference" an object in a pool fyrox uses handles. Almost every entity has a single owner - the engine,
+able to "reference" an object in a pool Fyrox uses handles. Almost every entity has a single owner - the engine,
 so to mutate or read data from an entity your have to borrow it first, like this:
 
 ```rust,compile_fail

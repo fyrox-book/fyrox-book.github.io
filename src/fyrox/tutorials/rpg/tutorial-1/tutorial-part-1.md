@@ -319,7 +319,7 @@ impl Level {
 ```
 
 This small piece of code just loads the scene I made for this tutorial. It has a terrain and some decorations, including
-houses, trees, bushes, barrels, etc. The scene was made in the rusty-editor and can be freely edited without any
+houses, trees, bushes, barrels, etc. The scene was made in the Fyroxed and can be freely edited without any
 problems. Just open the scene and modify it as you need.
 
 Now we need to "glue" all the pieces (the player, and the level) together, let's go back to `main.rs` and change it to
@@ -807,7 +807,7 @@ impl AnimationMachine {
 ```
 
 This is a simple animation blending machine, for more info check
-["Animations" section of "Writing a 3D shooter using fyrox #3"](https://fyrox.rs/tutorials/2021/03/11/tutorial3.html#animations)
+["Animations" section of "Writing a 3D shooter using Fyrox #3"](https://fyrox.rs/tutorials/2021/03/11/tutorial3.html#animations)
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
 and create two transitions between them and then applying final pose to the character.
 

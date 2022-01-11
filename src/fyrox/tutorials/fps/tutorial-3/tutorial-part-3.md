@@ -224,7 +224,7 @@ to one, it will look very bad and unnatural. This is where animation blending ma
 
 ![Weapon](./animation.png)
 
-fyrox provides very powerful mechanism for animations - animation blending machines. If you're already familiar with 
+Fyrox provides very powerful mechanism for animations - animation blending machines. If you're already familiar with 
 Mecanim in Unity game engine or similar thing in Unreal Engine, then you'll probably already understood what will be
 in this paragraph. Animation blending machine (ABM) is a state machine that allows you to blend multiple animations
 in one and apply it to a set of bones (or nodes in general). ABM is a graph where each node is a state, each state

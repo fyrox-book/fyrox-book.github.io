@@ -2,10 +2,10 @@
 
 ## Supported formats
 
-fyrox supports these file formats for 3D models:
+Fyrox supports these file formats for 3D models:
 
 - FBX
-- RGS - native scenes format produced by rusty-editor
+- RGS - native scenes format produced by Fyroxed
 
 ## Tips for Blender
 

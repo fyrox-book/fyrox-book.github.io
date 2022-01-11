@@ -571,11 +571,11 @@ MeshBuilder::new(
 .build(graph);
 ```
 
-The trail will live just 0.25 seconds, fyrox has built-in functionality for short-living objects, you have to just set 
+The trail will live just 0.25 seconds, Fyrox has built-in functionality for short-living objects, you have to just set 
 desired lifetime, and an object will be removed at the time. Also, we don't want the trail to cast shadows, and we want 
 the trail to be transparent yellow, to do that we have to change render path of the mesh to `Forward`. In short, every
 mesh by default rendered using `Deferred` renderer which does not support transparent objects due to technical reasons,
-but fyrox has `Forward` renderer for such objects. Check this [article](https://www.3dgep.com/forward-plus/) to learn more 
+but Fyrox has `Forward` renderer for such objects. Check this [article](https://www.3dgep.com/forward-plus/) to learn more 
 about Deferred and Forward rendering techniques. Ok, now we have to "teach" player how to shoot. At first, let's add new 
 field to `InputController`: `shoot: bool`. We'll be changing this flag by left mouse click, to do that let's add these lines
 at the end of `Event::WindowEvent` match arm before `_ => {}` in `Player::process_input_event`:
