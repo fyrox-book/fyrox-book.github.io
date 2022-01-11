@@ -44,7 +44,7 @@ fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "431c8dc16d75f7b87
 
 Now let's create the window and initialize the engine. We'll skip most engine initialization by using new `Framework` helper
 that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
-your game code. `Framework` is not mandatory, you may use the [previous](https://rg3d.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window)
+your game code. `Framework` is not mandatory, you may use the [previous](https://fyrox.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window)
 variant with manual engine initialization and "opened" main loop.
 
 ```rust,compile_fail
@@ -807,7 +807,7 @@ impl AnimationMachine {
 ```
 
 This is a simple animation blending machine, for more info check
-["Animations" section of "Writing a 3D shooter using fyrox #3"](https://rg3d.rs/tutorials/2021/03/11/tutorial3.html#animations)
+["Animations" section of "Writing a 3D shooter using fyrox #3"](https://fyrox.rs/tutorials/2021/03/11/tutorial3.html#animations)
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
 and create two transitions between them and then applying final pose to the character.
 
@@ -842,7 +842,7 @@ moving. That's it for this tutorial, in the next tutorial we'll "teach" the char
 In this tutorial we've learned how create a walking character. Created simple character controller and walked on
 the scene. I hope you liked this tutorial, and if so, please consider supporting the project on
 [Patreon](https://patreon.com/mrdimas) or do a one-time donation via [BuyMeACoffee](https://www.buymeacoffee.com/mrDIMAS).
-The source code for this tutorial is available on [GitHub](https://github.com/mrDIMAS/rg3d-tutorials).
+The source code for this tutorial is available on [GitHub](https://github.com/mrDIMAS/fyrox-tutorials).
 
 Discussion: [Reddit](https://www.reddit.com/r/rust/comments/ois776/media_writing_a_roleplaying_game_using_rg3d_game/),
 [Discord](https://discord.gg/xENF5Uh).

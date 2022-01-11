@@ -8,5 +8,5 @@ title = "Fyrox Cheat Book"
 [output.html]
 default-theme = "light"
 preferred-dark-theme = "navy"
-git-repository-url = "https://github.com/rg3d-book/rg3d-book.github.io"
+git-repository-url = "https://github.com/fyrox-book/fyrox-book.github.io"
 git-repository-icon = "fa-github"

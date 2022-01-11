@@ -428,7 +428,7 @@ fn create_play_animation_state(
 }
 ```
 
-Here we're using new method of Model resource - [retarget_animations](https://github.com/mrDIMAS/rg3d/blob/master/src/resource/model.rs#L110),
+Here we're using new method of Model resource - [retarget_animations](https://github.com/mrDIMAS/fyrox/blob/master/src/resource/model.rs#L110),
 in short, it creates an instance of animation, and binds animations tracks to nodes in given sub graph that starts from
 a node given as first parameter. Next we're adding a PlayAnimation node to machine and making a new state node. Now we're
 adding a structure with input parameter for ABM:
@@ -728,7 +728,7 @@ the game and you should see something like this (something like in the video at 
 In this tutorial we've added bots, animations, and a simple AI. This was the most advanced tutorial so far, but I 
 promise that this series is far from completion. I hope you liked this tutorial, and if so, please consider supporting 
 the project on [Patreon](https://patreon.com/mrdimas) or [LiberaPay](https://liberapay.com/mrDIMAS). Source code is 
-available on [GitHub](https://github.com/mrDIMAS/rg3d-tutorials).
+available on [GitHub](https://github.com/mrDIMAS/fyrox-tutorials).
 
 Discussion: [Reddit](https://www.reddit.com/r/rust/comments/m2ydjc/bots_and_ai_writing_a_3d_shooter_using_rg3d_3/), 
 [Discord](https://discord.gg/xENF5Uh).

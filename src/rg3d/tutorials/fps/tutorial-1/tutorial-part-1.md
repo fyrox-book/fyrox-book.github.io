@@ -752,7 +752,7 @@ scene.graph[self.camera].local_transform_mut().set_rotation(
 We're borrowing the camera from the graph (`scene.graph[self.camera]`) and modifying its **local** rotation, using a 
 [quaternion](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation) built from an axis, and an angle.
 This rotates camera in vertical direction. Let's talk about borrowing in the engine. Almost every object in the 
-engine "lives" in generational arenas (pool in rg3d's terminology). Pool is a contiguous chunk of memory, to be
+engine "lives" in generational arenas (pool in fyrox's terminology). Pool is a contiguous chunk of memory, to be
 able to "reference" an object in a pool fyrox uses handles. Almost every entity has a single owner - the engine,
 so to mutate or read data from an entity your have to borrow it first, like this:
 
@@ -901,7 +901,7 @@ This was the last step of this tutorial.
 In this tutorial we've learned how to use the engine and the editor. Created simple character controller and walked on
 the scene we've made in the editor. I hope you liked this tutorial, and if so, please consider supporting the project on 
 [Patreon](https://patreon.com/mrdimas) or [LiberaPay](https://liberapay.com/mrDIMAS). Source code is available on
-[GitHub](https://github.com/mrDIMAS/rg3d-tutorials). In the next tutorial we'll start adding weapons.
+[GitHub](https://github.com/mrDIMAS/fyrox-tutorials). In the next tutorial we'll start adding weapons.
 
 Discussion: [Reddit](https://www.reddit.com/r/rust/comments/lyj1tq/writing_a_3d_shooter_using_rg3d_game_engine_1/),
 [Discord](https://discord.gg/xENF5Uh).

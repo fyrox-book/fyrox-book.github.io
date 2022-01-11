@@ -115,7 +115,7 @@ a "global namespace", which means that every sub-shader have "access" to the pro
 ## Built-in properties
 
 There are number of built-in properties, the full list is available
-[here](https://docs.rs/rg3d/0.23.1/rg3d/material/shader/struct.Shader.html#built-in-variables)
+[here](https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#built-in-variables)
 
 ## Predefined render passes
 
@@ -137,7 +137,7 @@ Drawing parameters defines which GPU functions to use and at which state. For ex
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
 from both sides. This is when draw parameters comes in handy. There are relatively large list of drawing
 parameters, and it could confuse a person who didn't get used to work with graphics. Thankfully there is a good
-documentation about this available [here](https://docs.rs/rg3d/0.23.1/rg3d/material/shader/struct.Shader.html#drawing-parameters)
+documentation about this available [here](https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#drawing-parameters)
 
 ## Vertex shader
 
