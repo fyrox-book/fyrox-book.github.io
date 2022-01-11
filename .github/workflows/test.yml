@@ -38,4 +38,4 @@ jobs:
           mdbook-version: "latest"
 
       - name: Test Code
-        run: mdbook test -L ./fyrox/target/debug/deps
+        run: mdbook test -L ./Fyrox/target/debug/deps
