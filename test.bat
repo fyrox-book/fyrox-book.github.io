@@ -1,4 +1,4 @@
-cd ../fyrox
+cd ../Fyrox
 cargo build
 cd ../fyrox-book.github.io
-mdbook test -L ../fyrox/target/debug/deps
+mdbook test -L ../Fyrox/target/debug/deps
