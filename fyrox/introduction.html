@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>fyrox - Fyrox Cheat Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../fyrox/introduction.html" class="active"><strong aria-hidden="true">2.</strong> fyrox</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/beginning/getting_started.html"><strong aria-hidden="true">2.1.</strong> Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/beginning/framework.html"><strong aria-hidden="true">2.1.1.</strong> Framework</a></li><li class="chapter-item expanded "><a href="../fyrox/beginning/custom_game_loop.html"><strong aria-hidden="true">2.1.2.</strong> Custom game loop</a></li><li class="chapter-item expanded "><a href="../fyrox/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">2.1.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../fyrox/beginning/data_management.html"><strong aria-hidden="true">2.1.4.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/scene/scene.html"><strong aria-hidden="true">2.2.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/scene/graph.html"><strong aria-hidden="true">2.2.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/base_node.html"><strong aria-hidden="true">2.2.2.</strong> Base node</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/mesh_node.html"><strong aria-hidden="true">2.2.3.</strong> Mesh node</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/light_node.html"><strong aria-hidden="true">2.2.4.</strong> Light node</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/sprite_node.html"><strong aria-hidden="true">2.2.5.</strong> Sprite node</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/particle_system_node.html"><strong aria-hidden="true">2.2.6.</strong> Particle system node (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/terrain_node.html"><strong aria-hidden="true">2.2.7.</strong> Terrain node (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/camera_node.html"><strong aria-hidden="true">2.2.8.</strong> Camera node</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/decal_node.html"><strong aria-hidden="true">2.2.9.</strong> Decal node</a></li><li class="chapter-item expanded "><a href="../fyrox/scene/rectangle.html"><strong aria-hidden="true">2.2.10.</strong> Rectangle node</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/animation/animation.html"><strong aria-hidden="true">2.3.</strong> Animation (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/rendering/rendering.html"><strong aria-hidden="true">2.4.</strong> Rendering</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/rendering/shaders.html"><strong aria-hidden="true">2.4.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../fyrox/rendering/materials.html"><strong aria-hidden="true">2.4.2.</strong> Materials</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/sound/sound.html"><strong aria-hidden="true">2.5.</strong> Sound (WIP)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/sound/hrtf.html"><strong aria-hidden="true">2.5.1.</strong> HRTF (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/physics/physics.html"><strong aria-hidden="true">2.6.</strong> Physics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/physics/rigid_body.html"><strong aria-hidden="true">2.6.1.</strong> Rigid body</a></li><li class="chapter-item expanded "><a href="../fyrox/physics/collider.html"><strong aria-hidden="true">2.6.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="../fyrox/physics/joint.html"><strong aria-hidden="true">2.6.3.</strong> Joint (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/ui/ui.html"><strong aria-hidden="true">2.7.</strong> User Interface</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">2.7.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/setting_up.html"><strong aria-hidden="true">2.7.2.</strong> Setting up a user interface</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/general_rules.html"><strong aria-hidden="true">2.7.3.</strong> General rules</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/font.html"><strong aria-hidden="true">2.7.4.</strong> Fonts (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/theme.html"><strong aria-hidden="true">2.7.5.</strong> Theme</a></li><li class="chapter-item expanded "><a href="../.fyrox/ui/widgets.html"><strong aria-hidden="true">2.7.6.</strong> Widgets (WIP)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/ui/creating_button.html"><strong aria-hidden="true">2.7.6.1.</strong> Button (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/border.html"><strong aria-hidden="true">2.7.6.2.</strong> Border (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/canvas.html"><strong aria-hidden="true">2.7.6.3.</strong> Canvas (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/checkbox/check_box.html"><strong aria-hidden="true">2.7.6.4.</strong> Check box</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/curve_editor.html"><strong aria-hidden="true">2.7.6.5.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/decorator.html"><strong aria-hidden="true">2.7.6.6.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/dock.html"><strong aria-hidden="true">2.7.6.7.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/dropdown_list.html"><strong aria-hidden="true">2.7.6.8.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/expander.html"><strong aria-hidden="true">2.7.6.9.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/file_browser.html"><strong aria-hidden="true">2.7.6.10.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/grid.html"><strong aria-hidden="true">2.7.6.11.</strong> Grid (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/image.html"><strong aria-hidden="true">2.7.6.12.</strong> Image (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/inspector.html"><strong aria-hidden="true">2.7.6.13.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/list_view.html"><strong aria-hidden="true">2.7.6.14.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/menu.html"><strong aria-hidden="true">2.7.6.15.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/message_box.html"><strong aria-hidden="true">2.7.6.16.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/numeric.html"><strong aria-hidden="true">2.7.6.17.</strong> Numeric field (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/popup.html"><strong aria-hidden="true">2.7.6.18.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/progress_bar.html"><strong aria-hidden="true">2.7.6.19.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/range.html"><strong aria-hidden="true">2.7.6.20.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/rect.html"><strong aria-hidden="true">2.7.6.21.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/scroll_bar.html"><strong aria-hidden="true">2.7.6.22.</strong> Scroll bar (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/scroll_panel.html"><strong aria-hidden="true">2.7.6.23.</strong> Scroll panel (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/scroll_viewer.html"><strong aria-hidden="true">2.7.6.24.</strong> Scroll viewer (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/stack_panel.html"><strong aria-hidden="true">2.7.6.25.</strong> Stack panel (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/tab_control.html"><strong aria-hidden="true">2.7.6.26.</strong> Tab control (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/text.html"><strong aria-hidden="true">2.7.6.27.</strong> Text</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/text_box.html"><strong aria-hidden="true">2.7.6.28.</strong> Text box (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/tree.html"><strong aria-hidden="true">2.7.6.29.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/vector_image.html"><strong aria-hidden="true">2.7.6.30.</strong> Vector image (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/window.html"><strong aria-hidden="true">2.7.6.31.</strong> Window (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/ui/wrap_panel.html"><strong aria-hidden="true">2.7.6.32.</strong> Wrap panel (WIP)</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/serialization/serialization.html"><strong aria-hidden="true">2.8.</strong> Serialization (WIP)</a></li><li class="chapter-item expanded "><a href="../fyrox/resources/resources.html"><strong aria-hidden="true">2.9.</strong> Resource Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/resources/model.html"><strong aria-hidden="true">2.9.1.</strong> 3D Models</a></li><li class="chapter-item expanded "><a href="../fyrox/resources/texture.html"><strong aria-hidden="true">2.9.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../.fyrox/resources/sound.html"><strong aria-hidden="true">2.9.3.</strong> Sound Buffers</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/tutorials/tutorials.html"><strong aria-hidden="true">2.10.</strong> Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/tutorials/fps/intro.html"><strong aria-hidden="true">2.10.1.</strong> FPS Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">2.10.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../fyrox/tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">2.10.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">2.10.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../fyrox/tutorials/rpg/intro.html"><strong aria-hidden="true">2.10.2.</strong> RPG Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">2.10.2.1.</strong> Character controller</a></li><li class="spacer"></li></ol></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../rusty-editor/introduction.html"><strong aria-hidden="true">3.</strong> rusty-editor</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rusty-editor/overview.html"><strong aria-hidden="true">3.1.</strong> Overview</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Fyrox Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="fyrox"><a class="header" href="#fyrox">fyrox</a></h1>
+<p>fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
+games with small- or medium-sized worlds, large-sized world most likely will require some manual work. This chapter
+of the book will help you to get familiar with core engine concepts and will help you start writing your first game!</p>
+<p>Let's briefly get over some basic concepts of the engine, there's not much, but all of them are crucial to understand
+design decisions made in the engine.</p>
+<h2 id="ecs-and-classic-oop"><a class="header" href="#ecs-and-classic-oop">ECS and classic OOP</a></h2>
+<p>The engine <strong>does not</strong> use ECS, instead it uses <strong>classic OOP</strong> with composition over inheritance. More specifically,
+complex objects in the engine can be constructed using simpler objects. As a very simple example of this, let's 
+check the scene node. The base object in for every scene node is a <code>Base</code> node, it contains a transform, a list
+of children, etc. The more complex object, that <em>extends</em> functionality of the <code>Base</code> node stores an instance of
+<code>Base</code> inside of them. For example, a <code>Mesh</code> node is a <code>Base</code> node <em>plus</em> some specific info (a list of surfaces,
+material, etc.). The &quot;hierarchy&quot; depth is unlimited - a <code>Light</code> node in the engine is an enumeration of three 
+possible types of light source. <code>Directional</code>, <code>Point</code>, and <code>Spot</code> light sources both use <code>BaseLight</code> node, 
+which in its turn contains <code>Base</code> node inside. Graphically it can be represented like so:</p>
+<pre><code class="language-text">`Point`
+|__ Point Light Properties (radius, etc.)
+|__`BaseLight`
+   |__ Base Light Properties (color, etc.)
+   |__`Base`
+      |__ Base Node Properties (transform, children nodes, etc.)
+</code></pre>
+<p>As you can see, this forms the nice tree that shows what the object contains. This is very natural way of describing
+scene nodes, it gives you the full power of building an object of any complexity. On the other hand, in ECS, all
+you have is just a set of components that you have to query in your systems, the structure becomes flat, and you lose
+all &quot;relationships&quot; between object parts.</p>
+<h3 id="performance"><a class="header" href="#performance">Performance</a></h3>
+<p>Theoretically, the ECS approach <em>can</em> give you better performance, but let's at first see where ECS is beneficial,
+and why classic approach is still viable. The ECS is beneficial <em>only</em> in cases where you have to process 
+<strong>ten or hundreds thousands</strong> objects every frame, the performance gain of cache friendliness can be significant
+in such cases. But let's stop for a second and ask ourselves again: how <em>often</em> games have such huge amount of objects 
+that has to be processed every frame? There are very few examples of such games:</p>
+<ul>
+<li>Strategy games - at some extent, because there are very few games that allows you to control tens of thousands
+units at the same time. More often you have a range from five hundreds up to few thousands.</li>
+<li>Sandboxes - there could be lots of tiny objects that has to be processed every frame.</li>
+<li>Specific genres - games with destructible environment and so on.</li>
+</ul>
+<p>Note that the list does not include games with vast worlds, why so? The reason is that such games does <strong>not</strong>
+process every tiny object in the world at once, instead they split the world in small chunks and process only
+few chunks at once, those where the player is present. </p>
+<p>The rest of genres operate on a tiny amount of object compared to those up above, maybe a few hundreds at max.
+One might say - hey, each object could contain lots of tiny &quot;moving parts&quot;, what's about them? Usually each 
+object contains up to 10-15 sub-parts, which leads us to few thousands of &quot;atomic&quot; object. Is it much? Not really.</p>
+<h3 id="architecture"><a class="header" href="#architecture">Architecture</a></h3>
+<p>One might also think that ECS is a silver bullet for borrow checker in Rust, which &quot;shuts its noisy mouth&quot; once
+and for all leaving you only with your game code. That's not quite true, it somewhat solves the problem of unique
+mutable access to data, but interaction between systems can still be painful. Standard OOP-approach is always being
+criticized by allowing you to create spaghetti-code for which borrow checker will yell at you (which is indeed 
+reasonable). We should consider borrow checker not as our enemy, that prevents us from writing code, but as 
+our friend that tells us - &quot;dude, this won't work without potential crashes, memory issues, etc.&quot;. What borrow
+checker tries to tell us, it that we need to re-think the architecture of our game. </p>
+<p>So how the engine solves the problem of unique mutable access? It forces you to use a &quot;top-down&quot; flow in your game.
+What does that mean? In short, you have to change the data only by going from top to bottom on a call tree. But 
+isn't that too restrictive, what if I want to call some higher-level function while being in lower-level function?
+This is a very good question, and a short answer for it: <em>no</em>. It isn't restrictive at all, because you can always
+invert the &quot;bottom-to-top&quot; flow to &quot;top-down&quot;. The &quot;bottom-to-top&quot; calls are prohibited, because they're violating
+unique mutable borrow rules.</p>
+<p>The flow can be easily inverted by <em>deferring</em> actions for later, not for a next frame, but for a moment after 
+the place where &quot;bottom-to-top&quot; call was required. How this can be achieved? All you should do is to collect the
+info that is needed to perform inverted &quot;bottom-to-top&quot; call and do a call right after that place where it was 
+required, but starting from the top level of your game. One of the most common approaches for this is to use 
+message passing with Rust's channels (MPSC queue). The receiver should be polled at the top level of your game
+and every other place that needs &quot;bottom-to-top&quot; call should just queue desired actions by providing required info
+in respective message. </p>
+<p>This is a very simple, yet powerful mechanism to satisfy make your code clearer and satisfy borrow checker. One
+may argue that such approach has some performance impact. It is indeed has performance impact, but it is tiny, in
+most cases it can't be even measured.</p>
+<p>Borrowing issues cannot be fully prevented, even the right architecture can't help borrow checker to prove that 
+your code is safe in some cases (graph data structure for example). To solve this problem, the engine uses
+generational arenas (<em>pool</em> in fyrox's terminology) and handles. Instead of storing the objects in various places,
+you put all your objects in a pool, and it gives you handles which can later be used to borrow a reference to
+that object. This approach allows you to build any data structures that may hold &quot;references&quot; to other objects.
+The references replaced with handles, which can be treated (very roughly) as just an index. See
+<a href="./beginning/data_management.html">separate chapter</a> in the book for more info.</p>
+<h3 id="can-i-use-ecs-anyways"><a class="header" href="#can-i-use-ecs-anyways">Can I use ECS anyways?</a></h3>
+<p>Indeed, you can! You can use it for your game code with no problems, all you should do is to write some glue
+code that will provide the engine with required information. Please check examples for your favourite ECS crate
+to understand how to do that.</p>
+<h3 id="afterword"><a class="header" href="#afterword">Afterword</a></h3>
+<p>ECS and classic OOP are <em>just tools</em>, pick one which suits you the most, don't be a blind zealot, choose wisely!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../fyrox/beginning/getting_started.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../fyrox/beginning/getting_started.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
