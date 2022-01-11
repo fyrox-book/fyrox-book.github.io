@@ -137,10 +137,116 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="custom-game-loop-wip"><a class="header" href="#custom-game-loop-wip">Custom game loop (WIP)</a></h1>
+                        <h1 id="custom-game-loop"><a class="header" href="#custom-game-loop">Custom game loop</a></h1>
 <p>The framework might be limiting for some cases, in such situations the engine could be initialized manually. It
 requires some decent amount of code and could error-prone for beginners. You should use custom game loop only if
 you're experienced game developer!</p>
+<p>Here is an example of custom game loop with comments that will guide your through all aspects of it:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::instant::Instant,
+</span><span class="boring">    engine::Engine,
+</span><span class="boring">    event::{Event, WindowEvent},
+</span><span class="boring">    event_loop::{ControlFlow, EventLoop},
+</span><span class="boring">    utils::{
+</span><span class="boring">        log::{Log, MessageKind},
+</span><span class="boring">        translate_event,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>
+fn main() {
+    let event_loop = EventLoop::new();
+
+    // Create window builder first.
+    let window_builder = fyrox::window::WindowBuilder::new()
+        .with_title(&quot;Example - Custom Game Loop&quot;)
+        .with_resizable(true);
+
+    // Then initialize the engine.
+    let mut engine = Engine::new(window_builder, &amp;event_loop, true).unwrap();
+
+    // Define game loop variables.
+    let clock = Instant::now();
+    let fixed_timestep = 1.0 / 60.0;
+    let mut elapsed_time = 0.0;
+
+    // Finally run our event loop which will respond to OS and window events and update
+    // engine state accordingly. Engine lets you to decide which event should be handled,
+    // this is minimal working example if how it should be.
+    event_loop.run(move |event, _, control_flow| {
+        match event {
+            Event::MainEventsCleared =&gt; {
+                // This main game loop - it has fixed time step which means that game
+                // code will run at fixed speed even if renderer can't give you desired
+                // 60 fps.
+                let mut dt = clock.elapsed().as_secs_f32() - elapsed_time;
+                while dt &gt;= fixed_timestep {
+                    dt -= fixed_timestep;
+                    elapsed_time += fixed_timestep;
+
+                    // ************************
+                    // ************************
+                    // Put your game logic here.
+                    // ************************
+                    // ************************
+
+                    // It is very important to update the engine every frame!
+                    engine.update(fixed_timestep);
+                }
+
+                // It is very important to &quot;pump&quot; messages from UI. Even if don't need to
+                // respond to such message, you should call this method, otherwise UI
+                // might behave very weird.
+                while let Some(_ui_event) = engine.user_interface.poll_message() {
+                    // ************************
+                    // ************************
+                    // Put your data model synchronization code here. It should
+                    // take message and update data in your game according to
+                    // changes in UI.
+                    // ************************
+                    // ************************
+                }
+
+                // Rendering must be explicitly requested and handled after RedrawRequested event is received.
+                engine.get_window().request_redraw();
+            }
+            Event::RedrawRequested(_) =&gt; {
+                // Run renderer at max speed - it is not tied to game code.
+                engine.render().unwrap();
+            }
+            Event::WindowEvent { event, .. } =&gt; {
+                match event {
+                    WindowEvent::CloseRequested =&gt; *control_flow = ControlFlow::Exit,
+                    WindowEvent::Resized(size) =&gt; {
+                        // It is very important to handle Resized event from window, because
+                        // renderer knows nothing about window size - it must be notified
+                        // directly when window size has changed.
+                        if let Err(e) = engine.set_frame_size(size.into()) {
+                            Log::writeln(
+                                MessageKind::Error,
+                                format!(&quot;Unable to set frame size: {:?}&quot;, e),
+                            );
+                        }
+                    }
+                    // Handle rest of events here if necessary.
+                    _ =&gt; (),
+                }
+
+                // It is very important to &quot;feed&quot; user interface (UI) with events coming
+                // from main window, otherwise UI won't respond to mouse, keyboard, or any
+                // other event.
+                if let Some(os_event) = translate_event(&amp;event) {
+                    engine.user_interface.process_os_event(&amp;os_event);
+                }
+            }
+            // Continue polling messages from OS.
+            _ =&gt; *control_flow = ControlFlow::Poll,
+        }
+    });
+}
+</code></pre></pre>
+<p>As you can see it is tremendously bigger, compared to <a href="framework.html">Framework</a>, but it provides greater
+flexibility compared to <code>Framework</code> which may lack a particular feature.</p>
 
                     </main>
 
