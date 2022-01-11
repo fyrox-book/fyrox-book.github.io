@@ -82,5 +82,5 @@
 
 ---
 
-- [Fyroxed](./rusty-editor/introduction.md)
-  - [Overview](./rusty-editor/overview.md)
+- [Fyroxed](./fyroxed/introduction.md)
+  - [Overview](./fyroxed/overview.md)
