@@ -140,13 +140,24 @@
                         <h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
 <p>Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
 of the book will guide you the basics of the engine.</p>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<p>Since the engine is distributed as a library, it has to be added to <code>[dependecies]</code> section of <code>Cargo.toml</code> of 
+your project to start using it, there is no pre-built executables or library files. If you don't know what is
+<code>Cargo.toml</code> or <code>cargo</code>, please <a href="https://doc.rust-lang.org/cargo/">read this</a> before continue. </p>
 <p>To begin using the engine, just add following lines to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; } 
 </code></pre>
-<p>This will update your build files fairly often. If you dont want game breaking changes to occur because of engine updates or want to not compile daily,
+<p>This will update your build files fairly often. If you don't want game breaking changes to occur because of engine updates or want to not compile daily,
 change <code>fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }</code> to <code>fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;&quot; }</code> with the commit
 hash in the quotes.</p>
+<h2 id="editor-installation"><a class="header" href="#editor-installation">Editor installation</a></h2>
+<p>The engine offers a <strong>scene</strong> editor, to install it, use <code>cargo install</code>:</p>
+<pre><code class="language-shell">cargo install fyroxed
+</code></pre>
+<p>After that you can run the editor with a single command:</p>
+<pre><code class="language-shell">fyroxed
+</code></pre>
 <p>Check the next chapter to create a simple application.</p>
 
                     </main>
