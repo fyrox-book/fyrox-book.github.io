@@ -1,10 +1,10 @@
-# rg3d Cheat/Guide Book
+# fyrox Cheat/Guide Book
 
-Practical reference and user guides for [rg3d game engine](https://github.com/rg3dengine/rg3d) and
-[rusty-editor](https://github.com/rg3dengine/rusty-editor).
+Practical reference and user guides for [fyrox game engine](https://github.com/FyroxEngine/Fyrox) and
+[rusty-editor](https://github.com/FyroxEngine/Fyrox/tree/master/editor.
 
 The book is in early development stage, you can help to improve it by making a contribution in its
-[repository](https://github.com/rg3d-book/rg3d-book.github.io). Don't be shy, every tip is helpful!
+[repository](https://github.com/fyrox-book/fyrox-book.github.io). Don't be shy, every tip is helpful!
 
 ## How to read the book
 
