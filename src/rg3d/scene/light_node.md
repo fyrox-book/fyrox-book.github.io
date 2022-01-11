@@ -16,7 +16,7 @@ scenes.
 A directional light source could be created something like this:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{
@@ -38,7 +38,7 @@ By default, the light source will be oriented to lit "the ground". In other word
 like this:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
@@ -74,7 +74,7 @@ Point light is a light source that emits lights in all directions, it has a posi
 An example of a point light source: light bulb. 
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{
@@ -98,7 +98,7 @@ Spot light is a light source that emits lights in cone shape, it has a position 
 a spot light source: flashlight.
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{
@@ -127,7 +127,7 @@ it, you can do this either while building a light source or change light scatter
 Here is the small example how to do that.
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{node::Node, Scene},
@@ -144,7 +144,7 @@ You could also change the amount of scattering per each color channel, using thi
 [Rayleigh scattering](https://en.wikipedia.org/wiki/Rayleigh_scattering):
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
 #     scene::{node::Node, Scene},
@@ -174,7 +174,7 @@ shadows at lowest possible amount to keep performance at good levels. You can al
 need:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{node::Node, Scene},

@@ -32,7 +32,7 @@ use weapon::Weapon;
 Switch to `weapon.rs` and paste this code into it:
 
 ```rust,edition2018
-# extern crate Fyrox;
+# extern crate fyrox;
 use fyrox::scene::graph::Graph;
 use fyrox::{
     core::{algebra::Vector3, math::Vector3Ext, pool::Handle},
@@ -331,7 +331,7 @@ create_shot_trail(&mut scene.graph, ray.origin, ray.dir, trail_length);
 This is yet another function we must add, it is a standalone helper function that creates a shot trail:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},
@@ -733,7 +733,7 @@ Shooting have become much better after we've added a recoil, but there is still 
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in `main.rs`
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{
 #         algebra::{UnitQuaternion, Vector3},

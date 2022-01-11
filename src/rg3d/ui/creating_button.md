@@ -5,7 +5,7 @@
 To create a simple button with text you should do something like this:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     gui::{button::ButtonBuilder, widget::WidgetBuilder, UiNode, UserInterface},
@@ -20,7 +20,7 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
 How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal right aligned):
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     gui::{button::ButtonBuilder, widget::WidgetBuilder, UiNode, UserInterface, HorizontalAlignment, VerticalAlignment, text::TextBuilder},
@@ -47,7 +47,7 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
 More fancy-looking button with an image as a background could be created using this code snippet:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     engine::resource_manager::ResourceManager,
@@ -79,7 +79,7 @@ When clicked, a button sends a `ButtonMessage::Click` message, you can catch it 
 useful:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     engine::{framework::GameState, Engine},
@@ -125,7 +125,7 @@ impl GameState for Game {
 Add a flag to your Game struct like `exit: bool` and set it in button handler to `true`, then check it in `on_tick` and set `*control_flow = ControlFlow::Exit` if the flag is raised
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 #
 # use fyrox::{
 #    core::pool::Handle,

@@ -11,7 +11,7 @@ that "intersects" with the frustum will be rendered.
 An instance of camera node could be created using `CameraBuilder`: 
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
@@ -45,7 +45,7 @@ such objects can be pre-rendered and then applied to a huge cube around camera, 
 be the background of your scene. To create a skybox and set it to a camera, you can use following code:
 
 ```rust,edition2018
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::ResourceManager,
@@ -114,7 +114,7 @@ Here is the same scene with no color correction and with "mexico" color correcti
 To use color grading LUT you could do something like this:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::ResourceManager,

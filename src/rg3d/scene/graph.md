@@ -37,7 +37,7 @@ builder must know how to build Base node. While it may sound confusing, it is ac
 Consider this example:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
 #     scene::{
@@ -67,7 +67,7 @@ the CameraBuilder's instance properties. This is very flexible mechanism, allowi
 in declarative manner:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
 #     scene::{
@@ -127,7 +127,7 @@ For some rare cases you may also want delay adding a node to the graph, specific
 builder has `.build_node` method which creates an instance of `Node`  but does not add it to the graph.
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
@@ -148,7 +148,7 @@ you're creating an instance of some 3D model. If you want the instance to be a c
 you should attach it explicitly by using `graph.link_nodes(..)`:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
 #     engine::resource_manager::{ResourceManager},
@@ -182,7 +182,7 @@ nodes while deleting parent node. To do that you need to explicitly detach child
 to delete:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
 #     scene::{node::Node, Scene},

@@ -9,7 +9,7 @@ your objects.
 Use RigidBodyBuilder to create a rigid body instance:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
 #     scene::{
@@ -44,7 +44,7 @@ You can apply forces and torque to any rigid body, but only dynamic bodies will 
 applying force to a rigid body: at center of mass or at particular point at the body:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{core::algebra::Vector3, scene::rigidbody::RigidBody};
 fn apply_force_and_torque(rigid_body: &mut RigidBody) {
     // Push rigid body forward at the center of mass.
@@ -64,7 +64,7 @@ Sometimes you may want to have direct control over position/rotation of a rigid 
 do simulation for the body. This can be achieved by making the rigid body _kinematic_:
 
 ```rust
-# extern crate Fyrox;
+# extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
 #     scene::{
