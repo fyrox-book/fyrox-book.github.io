@@ -28,6 +28,82 @@ fn create_camera(scene: &mut Scene) -> Handle<Node> {
 
 Orientation and position should be set in `BaseBuilder` as usual.
 
+## Projection modes
+
+Projection mode defines how your scene will look like after rendering, there are two projection modes available.
+
+### Perspective
+
+Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
+common projection type for 3D games. By default, each camera uses perspective projection. It defined by three 
+parameters that describes frustum volume:
+
+- Field of view angle
+- Near clipping plane location
+- Far clipping plane location
+
+Here is a simple example of how to create a camera with perspective projection:
+
+```rust
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     scene::{
+#         base::BaseBuilder,
+#         camera::{CameraBuilder, PerspectiveProjection, Projection},
+#         graph::Graph,
+#         node::Node,
+#     },
+# };
+fn create_perspective_camera(graph: &mut Graph) -> Handle<Node> {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Perspective(PerspectiveProjection {
+            // Keep in mind that field of view expressed in radians!
+            fov: 60.0f32.to_radians(),
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+```
+
+### Orthographic
+
+Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
+If you're making 2D games or isometric 3D games this is the projection mode you're looking for. Orthographic
+projection defined by three parameters:
+
+- Vertical size
+- Near clipping plane location
+- Far clipping
+
+Vertical size defines how large the "box" will be in vertical axis, horizontal size is derived from vertical
+size by multiplying vertical size with aspect ratio.
+
+Here is a simple example of how to create a camera with orthographic projection:
+
+```rust
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     scene::{
+#         base::BaseBuilder,
+#         camera::{CameraBuilder, OrthographicProjection, Projection},
+#         graph::Graph,
+#         node::Node,
+#     },
+# };
+fn create_perspective_camera(graph: &mut Graph) -> Handle<Node> {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Orthographic(OrthographicProjection {
+            vertical_size: 5.0,
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+```
+
 ## Performance
 
 Each camera forces engine to re-render scene one more time, which can be very resource intensive (both CPU and GPU)
