@@ -41,6 +41,16 @@ The engine offers various types of "building blocks" for your scene, each such b
 - **Terrain** - a node that allows you to create complex landscapes with minimal effort.
 - **Decal** - a node that paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
   damaged parts of the road, blood splatters, bullet holes, etc.
+- **Rigid Body (2D)** - a physical entity that is responsible for dynamic of the rigid. There is a special variant
+for 2D - `RigidBody2D`.
+- **Collider (2D)** - a physical shape for a rigid body, it is responsible for contact manifold generation, 
+without it any rigid body will not participate in simulation correctly, so every rigid body must have at least
+one collider. There is a special variant for 2D - `Collider2D`.
+- **Joint (2D)** - a physical entity that restricts motion between two rigid bodies, it has various amounts
+of degrees of freedom depending on the type of the joint. There is a special variant for 2D - `Joint2D`.
+- **Rectangle** - a simple rectangle mesh that can have a texture and a color, it is a very simple version of 
+a Mesh node, yet it uses very optimized renderer, that allows you to render dozens of rectangles simultaneously.
+This node is intended to be used for **2D games** only.
 
 These scene nodes allow you to build almost any kind of game.
 
