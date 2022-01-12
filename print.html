@@ -1423,6 +1423,79 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Orientation and position should be set in <code>BaseBuilder</code> as usual.</p>
+<h2 id="projection-modes"><a class="header" href="#projection-modes">Projection modes</a></h2>
+<p>Projection mode defines how your scene will look like after rendering, there are two projection modes available.</p>
+<h3 id="perspective"><a class="header" href="#perspective">Perspective</a></h3>
+<p>Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
+common projection type for 3D games. By default, each camera uses perspective projection. It defined by three 
+parameters that describes frustum volume:</p>
+<ul>
+<li>Field of view angle</li>
+<li>Near clipping plane location</li>
+<li>Far clipping plane location</li>
+</ul>
+<p>Here is a simple example of how to create a camera with perspective projection:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, PerspectiveProjection, Projection},
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Perspective(PerspectiveProjection {
+            // Keep in mind that field of view expressed in radians!
+            fov: 60.0f32.to_radians(),
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h3 id="orthographic"><a class="header" href="#orthographic">Orthographic</a></h3>
+<p>Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
+If you're making 2D games or isometric 3D games this is the projection mode you're looking for. Orthographic
+projection defined by three parameters:</p>
+<ul>
+<li>Vertical size</li>
+<li>Near clipping plane location</li>
+<li>Far clipping</li>
+</ul>
+<p>Vertical size defines how large the &quot;box&quot; will be in vertical axis, horizontal size is derived from vertical
+size by multiplying vertical size with aspect ratio.</p>
+<p>Here is a simple example of how to create a camera with orthographic projection:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, OrthographicProjection, Projection},
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Orthographic(OrthographicProjection {
+            vertical_size: 5.0,
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="performance-2"><a class="header" href="#performance-2">Performance</a></h2>
 <p>Each camera forces engine to re-render scene one more time, which can be very resource intensive (both CPU and GPU)
 operation. </p>
