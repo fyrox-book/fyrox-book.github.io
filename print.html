@@ -3100,7 +3100,7 @@ Also, the series should help you to learn basic principles which lies in the fou
 <p>Fyrox changes rapidly and tutorial's code could not compile with the newest versions of the engine, to prevent that
 and keep the code compilable over time the versions of both the engine and the editor are set to specific commits 
 in the main repo.</p>
-<p><strong>Fyrox version</strong>: specific commit (<a href="https://github.com/FyroxEngine/Fyrox/commit/431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0">5564b6e</a>)<br />
+<p><strong>Fyrox version</strong>: 0.24<br />
 <strong>Source code</strong>: <a href="https://github.com/FyroxEngine/Fyrox-tutorials/">GitHub</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fps-tutorial-part-1---character-controller"><a class="header" href="#fps-tutorial-part-1---character-controller">FPS Tutorial Part 1 - Character Controller.</a></h1>
 <p><strong>Source code</strong>: <a href="https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/tutorial1-character-controller">GitHub</a></p>
@@ -3418,7 +3418,9 @@ then right-click on the rigid body in the World Viewer and click <code>Create -&
 floor 3D model with the rigid body, to do that drag'n'drop the floor entity to the rigid body. Now we need to configure the
 collider of the rigid body. Select it and go to Inspector, find Shape property and select Trimesh from the dropdown list.
 Next, click <code>+</code> sign in Sources and then drag'n'drop floor entity to <code>Unassigned</code> entry while holding <code>Alt</code> on the keyboard.
-By doing this, we've added a source of geometry for triangle mesh collider.</p>
+By doing this, we've added a source of geometry for triangle mesh collider. Also, we need to make the rigid body
+static, so it won't be affected by gravity and external forces, otherwise the floor will fall as any other
+dynamic rigid body. To do that, simply select the body and change its <code>Body Type</code> property to <code>Static</code>.</p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-rusty-editor-floor-body.jpg" alt="Floor Body" /></p>
 <p>Ok, good, but it looks awful, let's add some texture to it, to do that, 
 <a href="fyrox/tutorials/fps/tutorial-1/./floor.jpg">download floor texture</a>, place it to <code>data/textures</code> and apply it to the floor. 
@@ -3434,8 +3436,8 @@ like this: </p>
 then click on the added rigid body and add a cylinder collider by right-click on it and selecting <code>Create -&gt; Physics -&gt; Colider</code>.
 Now select the collider and set its shape to Cylinder adjust its height and radius. As a final step drag'n'drop the <code>barrel.FBX</code> scene 
 node on the rigid body node.</p>
-<p>Now clone some barrels, to do that select a <code>barrel.FBX</code> in the <code>World Outliner</code>, right-click on the scene preview and
-press <code>Ctrl+C</code> to copy the barrel and <code>Ctrl+V</code> to paste. Repeat multiple times.</p>
+<p>Now clone some barrels, to do that select a parent rigid body of some <code>barrel.FBX</code> in the <code>World Outliner</code>, 
+right-click on the scene preview and press <code>Ctrl+C</code> to copy the barrel and <code>Ctrl+V</code> to paste. Repeat multiple times.</p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-rusty-editor-barrels.jpg" alt="Barrel" /></p>
 <p>Also add a light source, to do that go to <code>Create -&gt; Light -&gt; Point</code> and adjust its position using the Move tool.</p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-rusty-editor-light.jpg" alt="Barrel" /></p>
@@ -3444,10 +3446,24 @@ of the scene in the field it should be <code>scene.rgs</code>.</p>
 <h2 id="using-the-scene"><a class="header" href="#using-the-scene">Using the scene</a></h2>
 <p>Now it's the time to load the scene we've made earlier in the game. This is very simple, all we need to do is to load
 scene as resource and create its instance. Change <code>fn new()</code> body to:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub async fn new(engine: &amp;mut GameEngine) -&gt; Self {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
+</span><span class="boring">    engine::Engine,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder, camera::CameraBuilder, node::Node, transform::TransformBuilder,
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">struct Stub {
+</span><span class="boring">    camera: Handle&lt;Node&gt;,
+</span><span class="boring">    scene: Handle&lt;Scene&gt;,
+</span><span class="boring">}
+</span><span class="boring">impl Stub {
+</span>pub async fn new(engine: &amp;mut Engine) -&gt; Self {
     let mut scene = Scene::new();
 
     // Load a scene resource and create its instance.
@@ -3475,6 +3491,7 @@ scene as resource and create its instance. Change <code>fn new()</code> body to:
     }
 }
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>You may have noticed that the <code>Game</code> structure now has two new fields: </p>
 <pre><pre class="playground"><code class="language-rust compile_fail">
@@ -3715,9 +3732,19 @@ impl Player {
 </span></code></pre></pre>
 <p>This is all the code we need for character controller, quite a lot actually, but as usual everything here is pretty
 straightforward.</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::pool::Handle;
+</span><span class="boring">use fyrox::engine::Engine;
+</span><span class="boring">use fyrox::scene::Scene;
+</span><span class="boring">struct Player;
+</span><span class="boring">impl Player {
+</span><span class="boring">    fn new(_scene: &amp;mut Scene) -&gt; Self {
+</span><span class="boring">        Self
+</span><span class="boring">    }
+</span><span class="boring">}
 </span>// Also we must change Game structure a bit too and the new() code.
 struct Game {
     scene: Handle&lt;Scene&gt;,
@@ -3725,7 +3752,7 @@ struct Game {
 }
 
 impl Game {
-    pub async fn new(engine: &amp;mut GameEngine) -&gt; Self {
+    pub async fn new(engine: &amp;mut Engine) -&gt; Self {
         let mut scene = Scene::new();
 
         // Load a scene resource and create its instance.
@@ -5597,7 +5624,7 @@ game engine.</p>
 <p>Fyrox changes rapidly and tutorial's code could not compile with the newest versions of the engine, to prevent that
 and keep the code compilable over time the versions of both the engine and the editor are set to specific commits 
 in the main repo.</p>
-<p><strong>fyrox version</strong>: specific commit (<a href="https://github.com/FyroxEngine/Fyrox/commit/431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0">5564b6e</a>)<br />
+<p><strong>fyrox version</strong>: 0.24<br />
 <strong>Source code</strong>: <a href="https://github.com/FyroxEngine/Fyrox-tutorials/">GitHub</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rpg-tutorial-part-1---character-controller"><a class="header" href="#rpg-tutorial-part-1---character-controller">RPG Tutorial Part 1 - Character Controller</a></h1>
 <p><strong>Source code</strong>: <a href="https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/rpg-tutorial1-character-controller">GitHub</a></p>
