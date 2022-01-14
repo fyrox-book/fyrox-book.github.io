@@ -10,5 +10,5 @@ Fyrox changes rapidly and tutorial's code could not compile with the newest vers
 and keep the code compilable over time the versions of both the engine and the editor are set to specific commits 
 in the main repo.
 
-**fyrox version**: specific commit ([5564b6e](https://github.com/FyroxEngine/Fyrox/commit/431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0))  
+**fyrox version**: 0.24  
 **Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/)

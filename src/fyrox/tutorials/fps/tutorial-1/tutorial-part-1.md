@@ -328,7 +328,9 @@ then right-click on the rigid body in the World Viewer and click `Create -> Phys
 floor 3D model with the rigid body, to do that drag'n'drop the floor entity to the rigid body. Now we need to configure the
 collider of the rigid body. Select it and go to Inspector, find Shape property and select Trimesh from the dropdown list.
 Next, click `+` sign in Sources and then drag'n'drop floor entity to `Unassigned` entry while holding `Alt` on the keyboard.
-By doing this, we've added a source of geometry for triangle mesh collider.
+By doing this, we've added a source of geometry for triangle mesh collider. Also, we need to make the rigid body
+static, so it won't be affected by gravity and external forces, otherwise the floor will fall as any other
+dynamic rigid body. To do that, simply select the body and change its `Body Type` property to `Static`.
 
 ![Floor Body](./tutorial1-rusty-editor-floor-body.jpg)
 
@@ -351,8 +353,8 @@ then click on the added rigid body and add a cylinder collider by right-click on
 Now select the collider and set its shape to Cylinder adjust its height and radius. As a final step drag'n'drop the `barrel.FBX` scene 
 node on the rigid body node.
 
-Now clone some barrels, to do that select a `barrel.FBX` in the `World Outliner`, right-click on the scene preview and
-press `Ctrl+C` to copy the barrel and `Ctrl+V` to paste. Repeat multiple times.
+Now clone some barrels, to do that select a parent rigid body of some `barrel.FBX` in the `World Outliner`, 
+right-click on the scene preview and press `Ctrl+C` to copy the barrel and `Ctrl+V` to paste. Repeat multiple times.
 
 ![Barrel](./tutorial1-rusty-editor-barrels.jpg)
 
@@ -368,8 +370,22 @@ of the scene in the field it should be `scene.rgs`.
 Now it's the time to load the scene we've made earlier in the game. This is very simple, all we need to do is to load
 scene as resource and create its instance. Change `fn new()` body to:
 
-```rust,compile_fail
-pub async fn new(engine: &mut GameEngine) -> Self {
+```rust,edition2018
+# extern crate fyrox;
+# use fyrox::{
+#     core::{algebra::Vector3, pool::Handle},
+#     engine::Engine,
+#     scene::{
+#         base::BaseBuilder, camera::CameraBuilder, node::Node, transform::TransformBuilder,
+#         Scene,
+#     },
+# };
+# struct Stub {
+#     camera: Handle<Node>,
+#     scene: Handle<Scene>,
+# }
+# impl Stub {
+pub async fn new(engine: &mut Engine) -> Self {
     let mut scene = Scene::new();
 
     // Load a scene resource and create its instance.
@@ -396,6 +412,7 @@ pub async fn new(engine: &mut GameEngine) -> Self {
         scene: engine.scenes.add(scene),
     }
 }
+# }
 ```
 
 You may have noticed that the `Game` structure now has two new fields: 
@@ -634,7 +651,17 @@ impl Player {
 This is all the code we need for character controller, quite a lot actually, but as usual everything here is pretty
 straightforward.
 
-```rust,compile_fail
+```rust,edition2018
+# extern crate fyrox;
+# use fyrox::core::pool::Handle;
+# use fyrox::engine::Engine;
+# use fyrox::scene::Scene;
+# struct Player;
+# impl Player {
+#     fn new(_scene: &mut Scene) -> Self {
+#         Self
+#     }
+# }
 // Also we must change Game structure a bit too and the new() code.
 struct Game {
     scene: Handle<Scene>,
@@ -642,7 +669,7 @@ struct Game {
 }
 
 impl Game {
-    pub async fn new(engine: &mut GameEngine) -> Self {
+    pub async fn new(engine: &mut Engine) -> Self {
         let mut scene = Scene::new();
 
         // Load a scene resource and create its instance.
