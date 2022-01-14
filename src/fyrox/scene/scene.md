@@ -112,3 +112,21 @@ Usually you should have only one scene active (unless you're making something ve
 updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
 when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused. 
+
+## Ambient lighting
+
+Every scene has default ambient lighting, it is defined by a single RGB color. By default, every scene has 
+some pre-defined ambient lighting, it is bright enough, so you can see your objects. In some cases you may 
+need to adjust it or even make it black (for horror games for instance), this can be achieved by a single
+line of code:
+
+```rust
+# use fyrox::scene::Scene;
+# use fyrox::core::color::Color;
+# let mut scene = Scene::default();
+# 
+scene.ambient_lighting_color = Color::opaque(30, 30, 30); 
+```
+
+Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
+which is not available in the engine yet.
