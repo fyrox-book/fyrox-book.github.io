@@ -29,9 +29,7 @@ Open Cargo.toml and add `fyrox` dependency:
 
 ```toml
 [dependencies]
-# Use specific version from GitHub, because engine changes rapidly and we must use specific version
-# to make sure it compiles.
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "431c8dc16d75f7b8755a7ac6a7b43bd43fdcfca0" }
+fyrox = "0.24.0"
 ```
 
 ### Creating a window
