@@ -843,7 +843,7 @@ this function when shooting a weapon.
 In this tutorial we added weapon to the game, added recoil to make shooting more natural, and added impact effects. I 
 hope you liked this tutorial, and if so, please consider supporting the project on
 [Patreon](https://patreon.com/mrdimas) or [LiberaPay](https://liberapay.com/mrDIMAS). Source code is available on
-[GitHub](https://github.com/mrDIMAS/fyrox-tutorials). In the next tutorial we'll add sounds to the game and something
+[GitHub](https://github.com/FyroxEngine/Fyrox-tutorials). In the next tutorial we'll add sounds to the game and something
 special (let it be a surprise).
 
 Discussion: [Reddit](https://www.reddit.com/r/rust/comments/m2055c/writing_a_3d_shooter_using_rg3d_2_adding_shooting/),
