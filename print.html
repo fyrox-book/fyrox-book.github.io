@@ -687,6 +687,23 @@ fully responsive. </p>
 updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
 when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused. </p>
+<h2 id="ambient-lighting"><a class="header" href="#ambient-lighting">Ambient lighting</a></h2>
+<p>Every scene has default ambient lighting, it is defined by a single RGB color. By default, every scene has 
+some pre-defined ambient lighting, it is bright enough, so you can see your objects. In some cases you may 
+need to adjust it or even make it black (for horror games for instance), this can be achieved by a single
+line of code:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox::scene::Scene;
+</span><span class="boring">use fyrox::core::color::Color;
+</span><span class="boring">let mut scene = Scene::default();
+</span><span class="boring">
+</span>scene.ambient_lighting_color = Color::opaque(30, 30, 30); 
+<span class="boring">}
+</span></code></pre></pre>
+<p>Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
+which is not available in the engine yet.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="graph"><a class="header" href="#graph">Graph</a></h1>
 <p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
 entities in the engine. Graph takes care of your scene objects and does a lot of job for you.</p>
