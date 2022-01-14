@@ -173,11 +173,16 @@ fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;43
 that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
 your game code. <code>Framework</code> is not mandatory, you may use the <a href="https://fyrox.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window">previous</a>
 variant with manual engine initialization and &quot;opened&quot; main loop.</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">// Import everything we need for the tutorial.
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
+</span>// Import everything we need for the tutorial.
 use fyrox::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
-    engine::framework::{Framework, GameEngine, GameState},
+    engine::{
+        framework::{Framework, GameState},
+        Engine,
+    },
     event::{DeviceEvent, DeviceId, WindowEvent},
+    event_loop::ControlFlow,
     scene::Scene,
 };
 
@@ -186,14 +191,14 @@ struct Game {
 }
 
 impl GameState for Game {
-    fn init(engine: &amp;mut GameEngine) -&gt; Self
+    fn init(engine: &amp;mut Engine) -&gt; Self
     where
         Self: Sized,
     {
         Self {}
     }
 
-    fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+    fn on_tick(&amp;mut self, engine: &amp;mut Engine, dt: f32, _control_flow: &amp;mut ControlFlow) {
         // This method is called at fixed rate of 60 FPS.
         // It will contain all the logic of the game.
     }
@@ -212,9 +217,12 @@ ZIP archive which can be downloaded <a href="./data.zip">here</a>. Once you've d
 <h2 id="player-and-camera-controller"><a class="header" href="#player-and-camera-controller">Player and camera controller</a></h2>
 <p>Now we can start adding Player to our game. Create a folder <code>player</code> under your <code>src</code> directory and add <code>mod.rs</code> with
 following content:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span>
+<span class="boring">#[cfg(test)]
 </span>use crate::player::camera::CameraController;
 
 // Import everything we need for the tutorial.
@@ -224,41 +232,37 @@ use fyrox::{
         Animation,
     },
     core::{
-        algebra::{Isometry3, UnitQuaternion, Vector3},
+        algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::{
-        resource_manager::{MaterialSearchOptions, ResourceManager},
-        ColliderHandle, RigidBodyHandle,
-    },
+    engine::resource_manager::ResourceManager,
     event::{DeviceEvent, ElementState, KeyboardInput, VirtualKeyCode},
-    physics::{
-        dynamics::{CoefficientCombineRule, RigidBodyBuilder},
-        geometry::ColliderBuilder,
-    },
     resource::model::Model,
-    scene::{base::BaseBuilder, node::Node, Scene},
+    scene::{
+        base::BaseBuilder, collider::ColliderBuilder, collider::ColliderShape,
+        graph::physics::CoefficientCombineRule, node::Node, rigidbody::RigidBodyBuilder,
+        transform::TransformBuilder, Scene, graph::Graph
+    },
 };
 
-mod camera;
+<span class="boring">#[cfg(test)]
+</span>mod camera;
 
+<span class="boring">struct CameraController;
+</span><span class="boring">impl CameraController {
+</span><span class="boring">    async fn new(_: &amp;mut Graph, _: ResourceManager) -&gt; Self { Self }
+</span><span class="boring">}
+</span>
 pub struct Player {
-    pivot: Handle&lt;Node&gt;,
     model: Handle&lt;Node&gt;,
     camera_controller: CameraController,
 }
 
 impl Player {
     pub async fn new(resource_manager: ResourceManager, scene: &amp;mut Scene) -&gt; Self {
-        // Create pivot for our character.
-        let pivot = BaseBuilder::new().build(&amp;mut scene.graph);
-
         // Load paladin 3D model and create its instance in the scene.
         let model = resource_manager
-            .request_model(
-                &quot;data/models/paladin/paladin.fbx&quot;,
-                MaterialSearchOptions::RecursiveUp,
-            )
+            .request_model(&quot;data/models/paladin/paladin.fbx&quot;)
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -270,12 +274,8 @@ impl Player {
             .set_position(Vector3::new(0.0, -0.75, 0.0))
             // Scale down paladin's model because it is too big. 
             .set_scale(Vector3::new(0.02, 0.02, 0.02));
-
-        // Finally attach the model to the pivot. This will force model to move together with the pivot.
-        scene.graph.link_nodes(model, pivot);
-
+        
         Self {
-            pivot,
             model,
 
             // As a final stage create camera controller.
@@ -294,9 +294,10 @@ when we're attaching the model to the pivot, it will &quot;stay&quot; on the piv
 it down by height of the model. Finally, we're attaching the model to the pivot, forcing the engine to move
 the model together with pivot. In the end we're creating camera controller, it needs its own module, so add <code>camera.rs</code>
 module under <code>src/player</code> with following content:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
 </span>// Import everything we need for the tutorial.
 use fyrox::{
     core::{
@@ -407,12 +408,13 @@ rotation around X axis. This is very simple, we have the pivot for that. Remembe
 are linked together, so if we'll rotate the pivot around Y axis the hinge will rotate too as well as the camera. Fow
 now our camera controller does not have an ability to rotate, we'll add this later in the tutorial.</p>
 <p>Now let's load a level where our character will &quot;live&quot;, add <code>level.rs</code> with following content:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
 </span>use fyrox::{
     core::pool::Handle,
-    engine::resource_manager::{MaterialSearchOptions, ResourceManager},
+    engine::resource_manager::{ResourceManager},
     scene::{node::Node, Scene},
 };
 
@@ -423,10 +425,7 @@ pub struct Level {
 impl Level {
     pub async fn new(resource_manager: ResourceManager, scene: &amp;mut Scene) -&gt; Self {
         let root = resource_manager
-            .request_model(
-                &quot;data/levels/level.rgs&quot;,
-                MaterialSearchOptions::UsePathDirectly,
-            )
+            .request_model(&quot;data/levels/level.rgs&quot;)
             .await
             .unwrap()
             .instantiate_geometry(scene);
@@ -441,18 +440,36 @@ houses, trees, bushes, barrels, etc. The scene was made in the Fyroxed and can b
 problems. Just open the scene and modify it as you need.</p>
 <p>Now we need to &quot;glue&quot; all the pieces (the player, and the level) together, let's go back to <code>main.rs</code> and change it to
 the following code:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
-use crate::{level::Level, player::Player};
+<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">extern crate fyrox;
+</span><span class="boring">#[cfg(test)]
+</span>use crate::{level::Level, player::Player};
 use fyrox::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
-    engine::framework::{Framework, GameEngine, GameState},
+    engine::{
+        framework::{Framework, GameState},
+        resource_manager::ResourceManager,
+        Engine,
+    },
     event::{DeviceEvent, DeviceId, WindowEvent},
+    event_loop::ControlFlow,
     scene::Scene,
 };
 
-mod level;
-mod player;
+<span class="boring">#[cfg(test)]
+</span>mod level;
+<span class="boring">#[cfg(test)]
+</span>mod player;
 
+<span class="boring">struct Player;
+</span><span class="boring">impl Player {
+</span><span class="boring">   async fn new(_: ResourceManager, _: &amp;mut Scene) -&gt; Self { Self }
+</span><span class="boring">}
+</span>
+<span class="boring">struct Level;
+</span><span class="boring">impl Level {
+</span><span class="boring">   async fn new(_: ResourceManager, _: &amp;mut Scene) -&gt; Self { Self }
+</span><span class="boring">}
+</span>
 struct Game {
     scene: Handle&lt;Scene&gt;,
     level: Level,
@@ -460,7 +477,7 @@ struct Game {
 }
 
 impl GameState for Game {
-    fn init(engine: &amp;mut GameEngine) -&gt; Self
+    fn init(engine: &amp;mut Engine) -&gt; Self
     where
         Self: Sized,
     {
@@ -477,7 +494,7 @@ impl GameState for Game {
         }
     }
 
-    fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+    fn on_tick(&amp;mut self, engine: &amp;mut Engine, dt: f32, _control_flow: &amp;mut ControlFlow) {
         // This method is called at fixed rate of 60 FPS.
         // It will contain all the logic of the game.
     }
@@ -494,14 +511,16 @@ run the game you should see something like this:</p>
 <p>For now everything is static, let's fix that by adding the ability to move the character and rotate the camera.</p>
 <h2 id="camera-movement"><a class="header" href="#camera-movement">Camera movement</a></h2>
 <p>Let's start from the camera movement and rotation. We need two new fields in the <code>CameraController</code>:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">struct Stub {
 </span>// An angle around local Y axis of the pivot.
 yaw: f32,
 // An angle around local X axis of the hinge.
 pitch: f32,
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>Do not forget to initialize them with zeros:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail">
@@ -578,7 +597,7 @@ The most suitable place is <code>on_tick</code> and <code>on_device_event</code>
 <pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn on_tick(&amp;mut self, engine: &amp;mut GameEngine, dt: f32) {
+</span>fn on_tick(&amp;mut self, engine: &amp;mut Engine, dt: f32, _control_flow: &amp;mut ControlFlow) {
     let scene = &amp;mut engine.scenes[self.scene];
 
     self.player.update(scene);
@@ -586,7 +605,7 @@ The most suitable place is <code>on_tick</code> and <code>on_device_event</code>
 
 fn on_device_event(
     &amp;mut self,
-    _engine: &amp;mut GameEngine,
+    _engine: &amp;mut Engine,
     _device_id: DeviceId,
     event: DeviceEvent,
 ) {
@@ -660,7 +679,7 @@ the <code>impl Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn on_window_event(&amp;mut self, _engine: &amp;mut GameEngine, event: WindowEvent) {
+</span>fn on_window_event(&amp;mut self, _engine: &amp;mut Engine, event: WindowEvent) {
     match event {
         WindowEvent::KeyboardInput { input, .. } =&gt; {
             self.player.handle_key_event(&amp;input);
@@ -673,46 +692,73 @@ the <code>impl Player</code>:</p>
 <p>Ok, now we have input controller functioning. Now we can start adding movement logic to the player. Let's start by adding
 a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
 in <code>Player::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>// Create new rigid body and offset it a bit to prevent falling through the ground.
-let body = scene.physics.add_body(
-    RigidBodyBuilder::new_dynamic()
-        .position(Isometry3::translation(0.0, 2.0, 0.0))
-        .build(),
-);
-
-// Create capsule collider with friction disabled. We need to disable friction because linear
-// velocity will be set manually, but the physics engine will reduce it using friction so it
-// won't let us to set linear velocity precisely.
-let capsule = ColliderBuilder::capsule_y(0.55, 0.25)
-    .friction_combine_rule(CoefficientCombineRule::Min)
-    .friction(0.0)
-    .build();
-let collider = scene.physics.add_collider(capsule, &amp;body);
-
-// Finally bind the pivot with the body.
-scene.physics_binder.bind(pivot, body);
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::algebra::Vector3,
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{
+</span><span class="boring">        Scene,
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
+</span><span class="boring">        graph::physics::CoefficientCombineRule,
+</span><span class="boring">        rigidbody::RigidBodyBuilder,
+</span><span class="boring">        transform::TransformBuilder,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">fn f(scene: &amp;mut Scene) {
+</span><span class="boring">let model = Handle::NONE;
+</span>let collider;
+let body = RigidBodyBuilder::new(
+    BaseBuilder::new()
+        .with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(0.0, 2.0, 0.0))
+                .build(),
+        )
+        .with_children(&amp;[
+            {
+                // Attach the model to the pivot. This will force model to move together with the pivot.
+                model
+            },
+            {
+                // Create capsule collider with friction disabled. We need to disable friction because linear
+                // velocity will be set manually, but the physics engine will reduce it using friction so it
+                // won't let us to set linear velocity precisely.
+                collider = ColliderBuilder::new(BaseBuilder::new())
+                    .with_shape(ColliderShape::capsule_y(0.55, 0.15))
+                    .with_friction_combine_rule(CoefficientCombineRule::Min)
+                    .with_friction(0.0)
+                    .build(&amp;mut scene.graph);
+                collider
+            },
+        ]),
+)
+.with_locked_rotations(true)
+.with_can_sleep(false)
+.build(&amp;mut scene.graph);
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <p>Now, once our character has physical body, we can move it. Add these lines to the end of <code>Player::update</code>:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let pivot = &amp;scene.graph[self.pivot];
+</span>let body = scene.graph[self.body].as_rigid_body_mut();
 
-let look_vector = pivot
+let look_vector = body
     .look_vector()
     .try_normalize(f32::EPSILON)
     .unwrap_or(Vector3::z());
 
-let side_vector = pivot
+let side_vector = body
     .side_vector()
     .try_normalize(f32::EPSILON)
     .unwrap_or(Vector3::x());
 
-let position = **pivot.local_transform().position();
+let position = **body.local_transform().position();
 
 let mut velocity = Vector3::default();
 
@@ -735,25 +781,22 @@ let velocity = velocity
     .and_then(|v| Some(v.scale(speed)))
     .unwrap_or(Vector3::default());
 
-let body = scene.physics.bodies.get_mut(&amp;self.body).unwrap();
-
 // Apply linear velocity.
-body.set_linvel(
-    Vector3::new(velocity.x / dt, body.linvel().y, velocity.z / dt),
-    true,
-);
-
-// Lock any angular movement of the player's body.
-body.set_angvel(Default::default(), true);
+body.set_lin_vel(Vector3::new(
+    velocity.x / dt,
+    body.lin_vel().y,
+    velocity.z / dt,
+));
 
 let is_moving = velocity.norm_squared() &gt; 0.0;
 if is_moving {
     // Since we have free camera while not moving, we have to sync rotation of pivot
     // with rotation of camera so character will start moving in look direction.
-    let mut current_position = *body.position();
-    current_position.rotation =
-        UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.camera_controller.yaw);
-    body.set_position(current_position, true);
+    body.local_transform_mut()
+        .set_rotation(UnitQuaternion::from_axis_angle(
+            &amp;Vector3::y_axis(),
+            self.camera_controller.yaw,
+        ));
 
     // Apply additional rotation to model - it will turn in front of walking direction.
     let angle: f32 = if self.input_controller.walk_left {
@@ -778,9 +821,9 @@ if is_moving {
         0.0
     };
 
-    scene.graph[self.model]
-        .local_transform_mut()
-        .set_rotation(UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle.to_radians()));
+    scene.graph[self.model].local_transform_mut().set_rotation(
+        UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle.to_radians()),
+    );
 }
 
 // Sync camera controller position with player's position.
@@ -808,11 +851,22 @@ let's fix this.</p>
 <p>At this point our character can move, and we can rotate the camera around it, but the character is still in T-pose and
 does not have any animation. In this section we'll animate it. To keep this tutorial at reasonable length, we'll
 add just an idle and walk animations and smooth transitions between them. Add following code at the end of <code>player.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">
+<pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    animation::{
+</span><span class="boring">        machine::{Machine, Parameter, PoseNode, State, Transition},
+</span><span class="boring">        Animation,
+</span><span class="boring">    },
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    resource::model::Model,
+</span><span class="boring">    scene::{node::Node, Scene},
+</span><span class="boring">};
 </span>
-<span class="boring">fn main() {
-</span>// Simple helper method to create a state supplied with PlayAnimation node.
+// Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
     animation_resource: Model,
     name: &amp;str,
@@ -856,14 +910,8 @@ impl AnimationMachine {
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource) = fyrox::core::futures::join!(
-            resource_manager.request_model(
-                &quot;data/models/paladin/walk.fbx&quot;,
-                MaterialSearchOptions::RecursiveUp
-            ),
-            resource_manager.request_model(
-                &quot;data/models/paladin/idle.fbx&quot;,
-                MaterialSearchOptions::RecursiveUp
-            ),
+            resource_manager.request_model(&quot;data/models/paladin/walk.fbx&quot;),
+            resource_manager.request_model(&quot;data/models/paladin/idle.fbx&quot;),
         );
 
         // Now create two states with different animations.
@@ -959,7 +1007,7 @@ moving. That's it for this tutorial, in the next tutorial we'll &quot;teach&quot
 <p>In this tutorial we've learned how create a walking character. Created simple character controller and walked on
 the scene. I hope you liked this tutorial, and if so, please consider supporting the project on
 <a href="https://patreon.com/mrdimas">Patreon</a> or do a one-time donation via <a href="https://www.buymeacoffee.com/mrDIMAS">BuyMeACoffee</a>.
-The source code for this tutorial is available on <a href="https://github.com/mrDIMAS/fyrox-tutorials">GitHub</a>.</p>
+The source code for this tutorial is available on <a href="https://github.com/FyroxEngine/Fyrox-tutorials">GitHub</a>.</p>
 <p>Discussion: <a href="https://www.reddit.com/r/rust/comments/ois776/media_writing_a_roleplaying_game_using_rg3d_game/">Reddit</a>,
 <a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
 

@@ -779,6 +779,7 @@ straightforward.</p>
 </span><span class="boring">    fn new(_scene: &amp;mut Scene) -&gt; Self {
 </span><span class="boring">        Self
 </span><span class="boring">    }
+</span><span class="boring">    fn update(&amp;mut self, _scene: &amp;mut Scene) {}
 </span><span class="boring">}
 </span>// Also we must change Game structure a bit too and the new() code.
 struct Game {
@@ -1050,7 +1051,7 @@ should see something like this:</p>
 <p>In this tutorial we've learned how to use the engine and the editor. Created simple character controller and walked on
 the scene we've made in the editor. I hope you liked this tutorial, and if so, please consider supporting the project on 
 <a href="https://patreon.com/mrdimas">Patreon</a> or <a href="https://liberapay.com/mrDIMAS">LiberaPay</a>. Source code is available on
-<a href="https://github.com/mrDIMAS/fyrox-tutorials">GitHub</a>. In the next tutorial we'll start adding weapons.</p>
+<a href="https://github.com/FyroxEngine/Fyrox-tutorials">GitHub</a>. In the next tutorial we'll start adding weapons.</p>
 <p>Discussion: <a href="https://www.reddit.com/r/rust/comments/lyj1tq/writing_a_3d_shooter_using_rg3d_game_engine_1/">Reddit</a>,
 <a href="https://discord.gg/xENF5Uh">Discord</a>.</p>
 
