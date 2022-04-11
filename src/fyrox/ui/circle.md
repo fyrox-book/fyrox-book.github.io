@@ -37,8 +37,8 @@ In this example the circle is formed from 4 segments so it will appear like a rh
             WidgetBuilder::new()
                 .with_desired_position(Vector2::new(100f32, 100f32))
                 .with_foreground(Brush::Solid(Color::BLUE))
-                .with_height(100f32)
-                .with_width(100f32)
+                .with_height(200f32) // optional
+                .with_width(200f32) // optional
                 .with_opacity(Some(0.5)),
         )
         .with_primitives(vec![Primitive::Circle {
