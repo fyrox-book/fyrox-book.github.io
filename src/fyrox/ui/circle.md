@@ -1,4 +1,6 @@
-# Circle (WIP)
+# Circle
+
+This section will show how to create Custom widgets using `VectorImageBuilder` in order to create a circle
 
 Increasing the number of segments the result will be more likely a circle.
 
