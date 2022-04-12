@@ -22,6 +22,6 @@ fn create_border_with_button(ui: &mut UserInterface) -> Handle<UiNode> {
 ```
 
 BorderBuilder is a completely static item that only helps to
-beautify the widgets around it, it doesnt have many usages.
+beautify the widgets around it, it doesn't have many usages.
 
 // FIXME
