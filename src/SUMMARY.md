@@ -45,7 +45,7 @@
         - [Dropdown list (WIP)](./fyrox/ui/dropdown_list.md)
         - [Expander (WIP)](./fyrox/ui/expander.md)
         - [File browser (WIP)](./fyrox/ui/file_browser.md)
-        - [Grid (WIP)](./fyrox/ui/grid.md)        
+        - [Grid](./fyrox/ui/grid.md)        
         - [Image (WIP)](./fyrox/ui/image.md)        
         - [Inspector (WIP)](./fyrox/ui/inspector.md)        
         - [List view (WIP)](./fyrox/ui/list_view.md)        
