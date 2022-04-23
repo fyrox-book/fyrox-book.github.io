@@ -59,7 +59,7 @@
         - [Scroll bar (WIP)](./fyrox/ui/scroll_bar.md)        
         - [Scroll panel (WIP)](./fyrox/ui/scroll_panel.md)        
         - [Scroll viewer (WIP)](./fyrox/ui/scroll_viewer.md)        
-        - [Stack panel (WIP)](./fyrox/ui/stack_panel.md)        
+        - [Stack panel](./fyrox/ui/stack_panel.md)        
         - [Tab control (WIP)](./fyrox/ui/tab_control.md)        
         - [Text](./fyrox/ui/text.md)        
         - [Text box (WIP)](./fyrox/ui/text_box.md)        
