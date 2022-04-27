@@ -34,7 +34,7 @@
       - [General rules](./fyrox/ui/general_rules.md)
       - [Fonts (WIP)](./fyrox/ui/font.md)
       - [Theme](./fyrox/ui/theme.md)
-      - [Widgets (WIP)](.fyrox/ui/widgets.md)
+      - [Widgets](./fyrox/ui/widgets.md)
         - [Button (WIP)](./fyrox/ui/creating_button.md)
         - [Border (WIP)](./fyrox/ui/border.md)
         - [Canvas (WIP)](./fyrox/ui/canvas.md)
