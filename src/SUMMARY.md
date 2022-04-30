@@ -36,7 +36,7 @@
       - [Theme](./fyrox/ui/theme.md)
       - [Widgets](./fyrox/ui/widgets.md)
         - [Button (WIP)](./fyrox/ui/creating_button.md)
-        - [Border (WIP)](./fyrox/ui/border.md)
+        - [Border](./fyrox/ui/border.md)
         - [Canvas (WIP)](./fyrox/ui/canvas.md)
         - [Check box](./fyrox/ui/checkbox/check_box.md)
         - [Curve editor (WIP)](./fyrox/ui/curve_editor.md)
