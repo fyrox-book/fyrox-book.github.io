@@ -189,6 +189,7 @@ use fyrox::{
         graph::Graph,
         node::Node,
         transform::TransformBuilder,
+        pivot::PivotBuilder
     },
 };
 
@@ -235,9 +236,9 @@ impl CameraController {
     pub async fn new(graph: &mut Graph, resource_manager: ResourceManager) -> Self {
         let camera;
         let hinge;
-        let pivot = BaseBuilder::new()
+        let pivot = PivotBuilder::new(BaseBuilder::new()
             .with_children(&[{
-                hinge = BaseBuilder::new()
+                hinge = PivotBuilder::new(BaseBuilder::new()
                     .with_local_transform(
                         TransformBuilder::new()
                             .with_local_position(Vector3::new(0.0, 0.55, 0.0))
@@ -251,13 +252,14 @@ impl CameraController {
                                     .build(),
                             ),
                         )
-                            .with_skybox(create_skybox(resource_manager).await)
-                            .build(graph);
+                        .with_z_far(48.0)
+                        .with_skybox(create_skybox(resource_manager).await)
+                        .build(graph);
                         camera
-                    }])
+                    }]))
                     .build(graph);
                 hinge
-            }])
+            }]))
             .build(graph);
 
         Self {
@@ -787,7 +789,7 @@ impl AnimationMachine {
         model: Handle<Node>,
         resource_manager: ResourceManager,
     ) -> Self {
-        let mut machine = Machine::new();
+        let mut machine = Machine::new(model);
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource) = fyrox::core::futures::join!(
