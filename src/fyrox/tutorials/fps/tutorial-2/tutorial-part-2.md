@@ -94,19 +94,22 @@ access to inner fields (`model`, `shot_point`). `update` method just decreases t
 the pace of shooting. You may ask "why `shoot` method just modifies timer's value and does not create bullets, etc.?" -
 please be patient, I will explain this later in [game architecture](#game-architecture) section of the tutorial.
 OK, now we need to make a point where every weapon will be "mounted" on, go to `Player::new` and add these lines in 
-the `CameraBuilder` instance:
+the `BaseBuilder` of the `CameraBuilder` instance (you also need to import `PivotBuilder`):
 
 ```rust,compile_fail
 .with_children(&[{
-	weapon_pivot = BaseBuilder::new()
-		.with_local_transform(
-			TransformBuilder::new()
-				.with_local_position(Vector3::new(-0.1, -0.05, 0.015))
-				.build(),
-		)
-		.build(&mut scene.graph);
-	weapon_pivot
-}]
+    weapon_pivot = PivotBuilder::new(
+        BaseBuilder::new().with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(
+                    -0.1, -0.05, 0.015,
+                ))
+                .build(),
+        ),
+    )
+    .build(&mut scene.graph);
+    weapon_pivot
+}]),
 ```
 
 What is going on here? We're just adding new child node to the camera and offset it by some vector. Every weapon will
@@ -388,6 +391,8 @@ fn create_shot_trail(
 
     MeshBuilder::new(
         BaseBuilder::new()
+            // Do not cast shadows.
+            .with_cast_shadows(false)
             .with_local_transform(transform)
             // Shot trail should live ~0.25 seconds, after that it will be automatically
             // destroyed.
@@ -396,8 +401,6 @@ fn create_shot_trail(
     .with_surfaces(vec![SurfaceBuilder::new(shape)
         .with_material(Arc::new(Mutex::new(material)))
         .build()])
-    // Do not cast shadows.
-    .with_cast_shadows(false)
     // Make sure to set Forward render path, otherwise the object won't be
     // transparent.
     .with_render_path(RenderPath::Forward)
