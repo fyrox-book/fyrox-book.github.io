@@ -44,7 +44,7 @@ use fyrox::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::{resource_manager::ResourceManager, Engine},
+    engine::{resource_manager::ResourceManager, Engine, EngineInitParams, SerializationContext},
     event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
     resource::texture::TextureWrapMode,
@@ -59,7 +59,7 @@ use fyrox::{
     },
     window::WindowBuilder,
 };
-use std::time;
+use std::{sync::Arc, time};
 
 // Our game logic will be updated at 60 Hz rate.
 const TIMESTEP: f32 = 1.0 / 60.0;
@@ -85,7 +85,15 @@ fn main() {
     let event_loop = EventLoop::new();
 
     // Finally create an instance of the engine.
-    let mut engine = Engine::new(window_builder, &event_loop, false).unwrap();
+    let serialization_context = Arc::new(SerializationContext::new());
+    let mut engine = Engine::new(EngineInitParams {
+        window_builder,
+        resource_manager: ResourceManager::new(serialization_context.clone()),
+        serialization_context,
+        events_loop: &event_loop,
+        vsync: false,
+    })
+    .unwrap();
 
     // Initialize game instance. It is empty for now.
     let mut game = Game::new();
@@ -189,13 +197,22 @@ The event loop is a "magic" thing that receives events from the operating system
 important part which makes the application work. Finally, we're creating an instance of the engine:
 
 ```rust,compile_fail
-let mut engine = Engine::new(window_builder, &event_loop, false).unwrap();
+let serialization_context = Arc::new(SerializationContext::new());
+let mut engine = Engine::new(EngineInitParams {
+    window_builder,
+    resource_manager: ResourceManager::new(serialization_context.clone()),
+    serialization_context,
+    events_loop: &event_loop,
+    vsync: false,
+})
+.unwrap();
 ```
 
-The first two parameters are the window builder and the event loop, the last one is a boolean flag that is responsible for vertical
-synchronization (VSync). In this tutorial we'll have VSync disabled, because it requires specific platform-dependent
-extenstions which are not always available and callind `.unwrap()` might result in panic on some platforms. Next we're 
-creating an instance of the game, remember this line, it will be changed soon:
+At first, we're creating an instance of `SerializationContext` - it is used to store type constructors used for 
+serialization needs. Next, we're filling `EngineInitParams` structure, there is nothing interesting there, except maybe
+a flag that is responsible for vertical synchronization (VSync). In this tutorial we'll have VSync disabled, because
+it requires specific platform-dependent extensions which are not always available and calling `.unwrap()` might result
+in panic on some platforms. Next we're creating an instance of the game, remember this line, it will be changed soon:
 
 ```rust,compile_fail
 let mut game = Game::new();
