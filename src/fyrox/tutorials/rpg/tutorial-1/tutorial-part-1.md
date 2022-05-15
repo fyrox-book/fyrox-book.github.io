@@ -35,7 +35,7 @@ Add `fyrox` as dependency:
 
 ```toml
 [dependencies]
-fyrox = "0.24.0"
+fyrox = "0.25.0"
 ```
 
 ## Framework
