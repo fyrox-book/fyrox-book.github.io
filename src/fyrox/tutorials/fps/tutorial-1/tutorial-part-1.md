@@ -154,14 +154,14 @@ fn main() {
 Wow! There is lots of code for such a simple task. Fear not, everything here is pretty straightforward, let's dive into
 this code and disassemble it line by line. Just skip imports, it's too boring. Let's look at this line:
 
-```rust
+```rust,no_run
 const TIMESTEP: f32 = 1.0 / 60.0;
 ```
 
 Here we define a rate of update for logic of our future game, just sticking to common 60 FPS. Next goes the skeleton of
 the game, just a struct with two methods. It will be filled later in this tutorial.
 
-```rust
+```rust,no_run
 struct Game {
     // Empty for now.
 }
@@ -196,7 +196,7 @@ let event_loop = EventLoop::new();
 The event loop is a "magic" thing that receives events from the operating system and feeds your application, this is a very 
 important part which makes the application work. Finally, we're creating an instance of the engine:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let serialization_context = Arc::new(SerializationContext::new());
 let mut engine = Engine::new(EngineInitParams {
     window_builder,
@@ -214,13 +214,13 @@ a flag that is responsible for vertical synchronization (VSync). In this tutoria
 it requires specific platform-dependent extensions which are not always available and calling `.unwrap()` might result
 in panic on some platforms. Next we're creating an instance of the game, remember this line, it will be changed soon:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let mut game = Game::new();
 ```
 
 Next we define two variables for the game loop: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let clock = time::Instant::now();
 let mut elapsed_time = 0.0;
 ```
@@ -228,7 +228,7 @@ let mut elapsed_time = 0.0;
 At first, we "remember" the starting point of the game in time. The next variable is used to control the game loop. Finally, we run the
 event loop and start checking for events coming from the OS:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 event_loop.run(move |event, _, control_flow| {
     match event {
         ...
@@ -238,7 +238,7 @@ event_loop.run(move |event, _, control_flow| {
 
 Let's look at each event separately starting from `Event::MainEventsCleared`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Event::MainEventsCleared => {
     // This main game loop - it has fixed time step which means that game
     // code will run at fixed speed even if renderer can't give you desired
@@ -266,7 +266,7 @@ rate independent of FPS - it will be always 60 Hz for game logic even if FPS is 
 `game.update()` and `engine.update(TIMESTEP)` calls to update game's logic and engine internals respectively. After the
 loop we're asking the engine to render the next frame. In the next match arm `Event::RedrawRequested` we're handing our request: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Event::RedrawRequested(_) => {
     // Render at max speed - it is not tied to the game code.
     engine.render().unwrap();
@@ -275,7 +275,7 @@ Event::RedrawRequested(_) => {
 
 As you can see rendering happens in a single line of code. Next we need to handle window events:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Event::WindowEvent { event, .. } => match event {
     WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
     WindowEvent::KeyboardInput { input, .. } => {
@@ -298,7 +298,7 @@ Here we're just checking if the player has hit Escape button and exit game if so
 received, we're notifying renderer about that, so it's render targets will be resized too. The final match arm is for 
 every other event, nothing fancy here - just asking engine to continue listening for new events.
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 _ => *control_flow = ControlFlow::Poll,
 ```
 
@@ -385,7 +385,7 @@ of the scene in the field it should be `scene.rgs`.
 Now it's the time to load the scene we've made earlier in the game. This is very simple, all we need to do is to load
 scene as resource and create its instance. Change `fn new()` body to:
 
-```rust,edition2018
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
@@ -432,7 +432,7 @@ pub async fn new(engine: &mut Engine) -> Self {
 
 You may have noticed that the `Game` structure now has two new fields: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 struct Game {
     scene: Handle<Scene>, // A handle to the scene
     camera: Handle<Node>, // A handle to the camera
@@ -441,7 +441,7 @@ struct Game {
 
 These fields are just handles to the "entities" we've created in the `Game::new()`. Also, change `let mut game = Game::new();` to this:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let mut game = fyrox::core::futures::executor::block_on(Game::new(&mut engine));
 ```
 
@@ -452,13 +452,13 @@ Run the game and you should see this:
 
 Cool! Now let's disassemble `fn new()` line by line. First, we're creating an empty scene:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let mut scene = Scene::new();
 ```
 
 The next few lines are the most interesting:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 engine
     .resource_manager
     .request_model("data/models/scene.rgs")
@@ -473,7 +473,7 @@ to some other scene, the engine remembers connections between clones and origina
 from resource for the instance. At this point we've successfully instantiated the scene. However, we won't see anything
 yet - we need a camera:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let camera = CameraBuilder::new(
     BaseBuilder::new().with_local_transform(
         TransformBuilder::new()
@@ -488,7 +488,7 @@ Camera is our "eyes" in the world, here we're just creating a camera and moving 
 scene. Finally, we're adding the scene to the engine's container for scenes, and it gives us a handle to the scene. Later
 we'll use the handle to borrow scene and modify it.
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     camera,
     scene: engine.scenes.add(scene),
@@ -500,7 +500,7 @@ Self {
 We've made a lot of things already, but still can't move in the scene. Let's fix this! We'll start writing the character
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{
@@ -666,7 +666,7 @@ impl Player {
 This is all the code we need for character controller, quite a lot actually, but as usual everything here is pretty
 straightforward.
 
-```rust,edition2018
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::core::pool::Handle;
 # use fyrox::engine::Engine;
@@ -711,14 +711,14 @@ impl Game {
 We've moved camera creation to `Player`, because now the camera is attached to the player's body. Also, we must add this line
 in the beginning of `event_loop.run(...)` to let `player` handle input events:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 game.player.process_input_event(&event);        
 ```
 
 So, let's try to understand what happens in this huge chunk of code. Let's start from the `InputController` struct,
 it holds the state of the input for a single frame and rotations of player "parts". 
 
-```rust
+```rust,no_run
 #[derive(Default)]
 struct InputController {
     move_forward: bool,
@@ -733,7 +733,7 @@ struct InputController {
 Next goes the `Player::new()` function. First, we're creating a simple chain of nodes of different kinds in the
 [scene graph](https://en.wikipedia.org/wiki/Scene_graph). 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let camera;
 let rigid_body_handle = RigidBodyBuilder::new(
         BaseBuilder::new()
@@ -775,7 +775,7 @@ Basically we're making something like this:
 As you can see, the camera is attached to the rigid body and has a **relative** position of `(0.0, 0.25, 0.0)`. So when we'll
 move rigid body, the camera will move too (and rotate of course). 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     camera,
     rigid_body: rigid_body_handle,
@@ -785,7 +785,7 @@ Self {
 
 Next goes the `fn update(...)` function, it is responsible for movement of the player. It starts from these lines:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Set pitch for the camera. These lines responsible for up-down camera rotation.
 scene.graph[self.camera].local_transform_mut().set_rotation(
     UnitQuaternion::from_axis_angle(&Vector3::x_axis(), self.controller.pitch.to_radians()),
@@ -799,7 +799,7 @@ engine "lives" in generational arenas (pool in fyrox's terminology). Pool is a c
 able to "reference" an object in a pool Fyrox uses handles. Almost every entity has a single owner - the engine,
 so to mutate or read data from an entity your have to borrow it first, like this:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Borrow rigid body node.
 let body = scene.graph[self.rigid_body].as_rigid_body_mut();
 ```
@@ -808,7 +808,7 @@ This piece of code `scene.graph[self.rigid_body]` borrows `rigid_body` as either
 it is just an implementation of Index + IndexMut traits). Once we've borrowed objects, we can modify them. As the next
 step we calculate new horizontal speed for the player:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Keep only vertical velocity, and drop horizontal.
 let mut velocity = Vector3::new(0.0, body.lin_vel().y, 0.0);
 
@@ -837,7 +837,7 @@ body.set_lin_vel(velocity);
 We don't need to modify vertical speed, because it should be controlled by the physics engine. Finally, we're setting
 rotation of the rigid body:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Change the rotation of the rigid body according to current yaw. These lines responsible for
 // left-right rotation.
 body.local_transform_mut()
@@ -852,7 +852,7 @@ we check input events and configure input controller accordingly. Basically we'r
 pressed or released. In the `MouseMotion` arm, we're modifying yaw and pitch of the controller according to mouse 
 velocity. Nothing fancy, except this line:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 self.controller.pitch = (self.controller.pitch + delta.1 as f32).clamp(-90.0, 90.0);
 ```
 
@@ -867,7 +867,7 @@ One more thing before we end the tutorial. Black "void" around us isn't nice, le
 that. Skybox is a very simple effect that significantly improves scene quality. To add a skybox, add this code first
 somewhere before `impl Player`:
 
-```rust,edition2018
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::{
 #     engine::{
@@ -914,20 +914,20 @@ async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
 
 Then modify signature of `Player::new` to 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 async fn new(scene: &mut Scene, resource_manager: ResourceManager) -> Self
 ```
 
 We just added resource manager parameter here, and made the function async, because we'll load a bunch of textures 
 in the `create_skybox` function. Add following line at camera builder (before `.build`):
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 .with_skybox(create_skybox(resource_manager).await)
 ```
 
 Also modify player creation in `Game::new` to this
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 player: Player::new(&mut scene, engine.resource_manager.clone()).await,
 ```
 

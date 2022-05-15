@@ -11,7 +11,7 @@ The rust marks are applied on existing geometry of the scene by projecting a rus
 
 A decal instance can be created using DecalBuilder:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

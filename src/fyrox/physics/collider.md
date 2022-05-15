@@ -37,7 +37,7 @@ rigid bodies.
 
 Use ColliderBuilder to create an instance of collider with any shape you want.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

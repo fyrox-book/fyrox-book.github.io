@@ -4,14 +4,15 @@ Grids are one of several methods to position multiple widgets in relation to eac
 
 Here is a simple example that positions several text widgets into a 2 by 2 grid:
 
-```rust
-use fyrox::gui::{
-    UiNode,
-    BuildContext,
-    widget::WidgetBuilder,
-    text::TextBuilder,
-    grid::{GridBuilder, GridDimension},
-};
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::gui::{
+#     UiNode,
+#     BuildContext,
+#     widget::WidgetBuilder,
+#     text::TextBuilder,
+#     grid::{GridBuilder, GridDimension},
+# };
 
 fn create_text_grid(ctx: &mut BuildContext) -> fyrox::core::pool::Handle<UiNode> {
 

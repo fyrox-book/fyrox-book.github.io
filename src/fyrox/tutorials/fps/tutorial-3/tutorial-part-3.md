@@ -23,7 +23,7 @@ result we're aiming in the tutorial:
 Previous tutorials were children's play in comparison to this, prepare for some advanced stuff. Let's begin by adding
 a separate module for bots - add `bot.rs` and fill it with following code:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 use fyrox::engine::resource_manager::MaterialSearchOptions;
 use fyrox::{
     animation::{
@@ -107,7 +107,7 @@ the game. Also, you can add more than one bot at different positions if you want
 with textures from [here](./zombie.zip) and unpack `fbx` file in `data/models` and other files
 (textures), in `data/textures`.
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Add some bots.
 let mut bots = Pool::new();
 
@@ -130,7 +130,7 @@ Self {
 
 As usual, let's disassemble the code line-by-line. Creation of bot begins from loading its 3D model in the scene:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let model = resource_manager
     .request_model("data/models/zombie.fbx")
     .await
@@ -141,7 +141,7 @@ let model = resource_manager
 Nothing really new here, loading and instantiation of a 3D model of _any_ complexity is the same as before. Next we have
 to slightly modify the model, shift it a bit down and shrink:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 scene.graph[model]
     .local_transform_mut()
     // Move the model a bit down to make sure bot's feet will be on ground.
@@ -153,7 +153,7 @@ scene.graph[model]
 Here we're borrow model in the scene graph, and modify its local transform. Next we're creating rigid body with a capsule
 collider, and attaching the model to the rigid body:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let collider;
 let rigid_body = RigidBodyBuilder::new(
     BaseBuilder::new()
@@ -182,7 +182,7 @@ let rigid_body = RigidBodyBuilder::new(
 
 Finally, we're returning bot's instance:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     pivot,
     rigid_body,
@@ -192,7 +192,7 @@ Self {
 
 Ok, now for the bots instantiation, for simplicity we create a single bot in `Game::new`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let mut bots = Pool::new();
 
 bots.spawn(
@@ -249,7 +249,7 @@ which will be yet another `BlendAnimations`. So everything depends on your needs
 Ok, back to the game. Let's create a simple ABM for bots. For simplicity, it will contain only three states - Idle, Walk,
 Attack. Put this code somewhere at the end of `bot.rs`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
     animation_resource: Model,
@@ -405,7 +405,7 @@ impl BotAnimationMachine {
 Ok, this might be the biggest heap of code we've ever been dealing with at once. There is lots of stuff happening, 
 let's thoroughly "scan" this code. It starts from the simple helper method to create states:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
     animation_resource: Model,
@@ -433,7 +433,7 @@ in short, it creates an instance of animation, and binds animations tracks to no
 a node given as first parameter. Next we're adding a PlayAnimation node to machine and making a new state node. Now we're
 adding a structure with input parameter for ABM:
 
-```rust
+```rust,no_run
 pub struct BotAnimationMachineInput {
     // Whether a bot is walking or not.
     pub walk: bool,
@@ -445,7 +445,7 @@ pub struct BotAnimationMachineInput {
 This structure will contain more flags in the future, but now on to `BotAnimationMachine::new()`. At first, we're creating
 new ABM instance, nothing fancy here. Next we're loading animations in parallel: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let mut machine = Machine::new();
 
 // Load animations in parallel.
@@ -461,7 +461,7 @@ model can have animations. The animations we're loading, contain only bones and 
 We simply don't need a mesh, because we've already created the mesh earlier. This separation of animations and mesh is 
 very handy, because it saves CPU cycles and disk space. Ok, next we're creating states for ABM:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Now create three states with different animations.
 let (_, idle_state) = create_play_animation_state(
     idle_animation_resource.unwrap(),
@@ -491,7 +491,7 @@ let (attack_animation, attack_state) = create_play_animation_state(
 These states are those yellow-ish rectangles on diagram up above. As you can see we're creating three states: idle, walk,
 attack. Next we need to connect states between each other. 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Next, define transitions between states.
 machine.add_transition(Transition::new(
     // A name for debugging.
@@ -514,7 +514,7 @@ transition is that black arrow on the diagram up above, and it is linked with a 
 you'll see later the name will be used to modify parameters. Finally, we're setting entry state to idle and return 
 ABM instance:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Define entry state.
 machine.set_entry_state(idle_state);
 
@@ -523,7 +523,7 @@ Self { machine }
 
 Now for another important part, we have to "feed" machine with actual parameters for each transition:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub fn update(&mut self, scene: &mut Scene, dt: f32, input: BotAnimationMachineInput) {
     self.machine
         // Set transition parameters.
@@ -549,7 +549,7 @@ for each node that was used in all tracks used in ABM.
 Next we need to use the machine we've made. Add a new field to `Bot`: `machine: BotAnimationMachine` and initialize it in
 "constructor":
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     machine: BotAnimationMachine::new(scene, model, resource_manager).await,
     ...
@@ -558,7 +558,7 @@ Self {
 
 Next we need to update machine, add following method to `impl Bot`: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub fn update(&mut self, scene: &mut Scene, dt: f32) {
     // For now these are set to false which will force bot to be in idle state.
     let input = BotAnimationMachineInput {
@@ -574,7 +574,7 @@ This method will update machine and "feed" it with actual state, for now the sta
 bot to be in idle state. This will be fixed when we'll add simple AI later in this tutorial. Finally, we need to update
 each bot we have, go to `Game::update` and add following lines there (somewhere after update of weapons):
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 for bot in self.bots.iter_mut() {
     bot.update(scene, dt);
 }
@@ -589,7 +589,7 @@ Now run the game, and you should see that bots now is in idle state and animatio
 Ok, now we have to use ABM we've made at full capacity, to do that we'll write simple AI - bot will just follow player
 in a straight line and attack if they're close enough. Let's start by modifying `Bot::update`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
     let attack_distance = 0.6;
 
@@ -639,7 +639,7 @@ pub fn update(&mut self, scene: &mut Scene, dt: f32, target: Vector3<f32>) {
 
 Also add a new field to `Player`: `follow_target: bool` and initialize it in the constructor: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     follow_target: false,
     ...
@@ -651,7 +651,7 @@ So, the AI algorithm is very simple - stand still until a target (player) come c
 target and position of a bot, make sure bots is facing towards the target and move it if it is far enough. So let's 
 begin digging the code:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let attack_distance = 0.6;
 
 // Simple AI - follow target by a straight line.
@@ -670,7 +670,7 @@ At the beginning we define a melee attack distance, bot will attack target only 
 building vector to from bot's position to target, calculate distance by taking length of the vector and check if 
 we should switch `follow_target` flag. Next goes the most interesting parts of the AI:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 if self.follow_target && distance != 0.0 {
     let rigid_body = scene.graph[self.rigid_body].as_rigid_body_mut();
 
@@ -688,7 +688,7 @@ if self.follow_target && distance != 0.0 {
 Here we just borrow rigid body a bot, and make sure it rotated towards the target. Next we're moving bot if it is
 far enough from the target:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
     ...
 
     // Move only if we're far enough from the target.
@@ -709,7 +709,7 @@ by movement speed and form new velocity vector using new XZ velocity + current Y
 added by gravity (otherwise bot would just fly, you can experiment with this part to make flying zombies). One last
 thing before we build and run the game, change lines of how we're updating bots to following lines:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let target = scene.graph[self.player.pivot].global_position();
 
 for bot in self.bots.iter_mut() {

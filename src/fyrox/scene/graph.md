@@ -36,7 +36,7 @@ This is needed, because every node (other than Base) is "derived" from Base via 
 builder must know how to build Base node. While it may sound confusing, it is actually very useful and clear.
 Consider this example:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
@@ -66,7 +66,7 @@ As you can see, we're creating an instance of BaseBuilder and fill it with desir
 the CameraBuilder's instance properties. This is very flexible mechanism, allowing you to build complex hierarchies
 in declarative manner:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
@@ -126,7 +126,7 @@ together with the camera.
 For some rare cases you may also want delay adding a node to the graph, specifically for that purpose, every node 
 builder has `.build_node` method which creates an instance of `Node`  but does not add it to the graph.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -147,7 +147,7 @@ For many cases you can't use builders to create complex hierarchy, the simplest 
 you're creating an instance of some 3D model. If you want the instance to be a child object of some other object,
 you should attach it explicitly by using `graph.link_nodes(..)`:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
@@ -181,7 +181,7 @@ graph **with all of its children nodes**. Sometimes this is unwanted behaviour, 
 nodes while deleting parent node. To do that you need to explicitly detach children nodes of the node you're about
 to delete:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

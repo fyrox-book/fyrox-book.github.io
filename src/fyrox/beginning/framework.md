@@ -53,7 +53,7 @@ your needs.
 As you can see it is very concise and simple, every method serves a particular purpose. The most important method is
 `on_tick`, it the place where all your game logic will be updated. To demonstrate this, let's add simple animation:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #   core::color::{Color, Hsv},

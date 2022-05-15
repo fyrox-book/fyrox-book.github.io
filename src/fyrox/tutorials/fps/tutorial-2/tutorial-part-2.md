@@ -23,7 +23,7 @@ is the result we're aiming in the tutorial:
 
 Add a new module `weapon.rs` near your `main.rs` and use it somewhere after other imports:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub mod weapon;
 ...
 use weapon::Weapon;
@@ -31,7 +31,7 @@ use weapon::Weapon;
 
 Switch to `weapon.rs` and paste this code into it:
 
-```rust,edition2018
+```rust,no_run,edition2018
 # extern crate fyrox;
 use fyrox::scene::graph::Graph;
 use fyrox::{
@@ -96,7 +96,7 @@ please be patient, I will explain this later in [game architecture](#game-archit
 OK, now we need to make a point where every weapon will be "mounted" on, go to `Player::new` and add these lines in 
 the `BaseBuilder` of the `CameraBuilder` instance (you also need to import `PivotBuilder`):
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 .with_children(&[{
     weapon_pivot = PivotBuilder::new(
         BaseBuilder::new().with_local_transform(
@@ -117,13 +117,13 @@ be attached to this pivot. Please keep in mind that the offset given in **local*
 pivot will move with the camera, but with some offset relative to it. Also, do not forget to add this line after 
 `let camera;`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let weapon_pivot;
 ```
 
 Finally, add the weapon pivot to `Self { ... }` (and also add `weapon_pivot: Handle<Node>` to the `Player` struct):
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     camera,
     weapon_pivot, // <- here
@@ -134,7 +134,7 @@ Self {
 
 Next we need a container for weapons, let's add it to the `Game` struct:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 struct Game {
     scene: Handle<Scene>,
     player: Player,
@@ -144,7 +144,7 @@ struct Game {
 
 Also do not forget to import `Pool` from `fyrox::core::pool` in `main.rs`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 ...
 use fyrox::core::pool::{Handle, Pool};
 ...
@@ -152,7 +152,7 @@ use fyrox::core::pool::{Handle, Pool};
 
 Now we need to change `Game::new()` a bit to add a weapon to the player:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub async fn new(engine: &mut Engine) -> Self {
     let mut scene = Scene::new();
 
@@ -207,7 +207,7 @@ execution of some actions that require too much of a context. In general, we'll 
 message that will be put in a common queue and executed later on one by one at the top of call hierarchy (in 
 `Game::update` in our case). Let's begin by adding a MPSC (Multiple Producer Single Consumer) queue to the `Game`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 struct Game {
     scene: Handle<Scene>,
     player: Player,
@@ -220,7 +220,7 @@ struct Game {
 Now we need a `Message` enumeration, add `message.rs` module, import it in `main.rs` (`pub mod message;`) and fill it
 with the following code:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 use crate::weapon::Weapon;
 use fyrox::core::pool::Handle;
 
@@ -235,7 +235,7 @@ For now, we have only one message kind - `ShootWeapon` with a single parameter, 
 a place to handle messages, `Game::update` seems to be the most suitable - it is on top of "call hierarchy" and has 
 most wide context. Let's change `Game::update` to this code:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub fn update(&mut self, engine: &mut Engine, dt: f32) {
     self.player.update(&mut engine.scenes[self.scene]); 
 
@@ -264,7 +264,7 @@ handling messages from the queue one by one. As you can see we're handling `Shoo
 mysterious line `self.shoot_weapon(weapon, engine)` which is not yet defined, let's fix that, add these lines to 
 `impl Game`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
  fn shoot_weapon(&mut self, weapon: Handle<Weapon>, engine: &mut Engine) {
     let weapon = &mut self.weapons[weapon];
 
@@ -327,13 +327,13 @@ mysterious line `self.shoot_weapon(weapon, engine)` which is not yet defined, le
 
 Wow! Why is there so much code to shoot a weapon!? Actually, this is not all the code - check the last line
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 create_shot_trail(&mut scene.graph, ray.origin, ray.dir, trail_length);
 ```
 
 This is yet another function we must add, it is a standalone helper function that creates a shot trail:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{
@@ -411,7 +411,7 @@ fn create_shot_trail(
 Okay... Let's disassemble this heap of code line by line. At first, we're borrowing the weapon by its handle and 
 check if it can shoot (if the timer has reached zero), and "shoot" (reset the timer) if so:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
  let weapon = &mut self.weapons[weapon];
 
     if weapon.can_shoot() {
@@ -421,7 +421,7 @@ check if it can shoot (if the timer has reached zero), and "shoot" (reset the ti
 
 Next we're using ray casting to find the target we're shooting at:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // ...
 
 let scene = &mut engine.scenes[self.scene];
@@ -455,7 +455,7 @@ To determine the "target", we're have to make a ray first. It starts from the "s
 Direction of the ray is the "look" vector of the weapon model scaled by some large value which defines a "length" of the
 ray. Finally, we're casting the ray. Next we have to check each intersection and find the target:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Ignore intersections with player's capsule.
 let trail_length = if let Some(intersection) = intersections
     .iter()
@@ -486,7 +486,7 @@ First intersection most likely will be player's capsule, because shot point may 
 filtering such intersection in the first three lines. To do that, we have to remember the handle of player's capsule
 in `Player`: `collider: Handle<Node>` and fill the field in `Player::new` like this:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let collider;
 ...
 // Add capsule collider for the rigid body.
@@ -512,13 +512,13 @@ Until we have no bots, we should somehow emulate shot impact, to do that we'll j
 impact. Finally, we're calculating desired shot trail length - it is just distance between point of impact and ray's 
 origin. In the `else` branch we're setting the length to be the length of the ray. Finally, we're creating a shot trail: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 create_shot_trail(&mut scene.graph, ray.origin, ray.dir, trail_length);
 ```
 
 Now let's dive into this function. It starts from the definition of local transform of the trail:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 let transform = TransformBuilder::new()
     .with_local_position(origin)
     // Scale the trail in XZ plane to make it thin, and apply `trail_length` scale on Y axis
@@ -532,7 +532,7 @@ let transform = TransformBuilder::new()
 Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to the length of the trail. Next we're making
 geometry for the cylinder:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
  let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
     6,     // Count of sides
     1.0,   // Radius
@@ -545,7 +545,7 @@ geometry for the cylinder:
 
 Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Create an instance of standard material for the shot trail.
 let mut material = Material::standard();
 material
@@ -583,7 +583,7 @@ about Deferred and Forward rendering techniques. Ok, now we have to "teach" play
 field to `InputController`: `shoot: bool`. We'll be changing this flag by left mouse click, to do that let's add these lines
 at the end of `Event::WindowEvent` match arm before `_ => {}` in `Player::process_input_event`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 &WindowEvent::MouseInput { button, state, .. } => {
     if button == MouseButton::Left {
         self.controller.shoot = state == ElementState::Pressed;
@@ -594,7 +594,7 @@ at the end of `Event::WindowEvent` match arm before `_ => {}` in `Player::proces
 Now we need a way to send messages to the game from the player. We need a new field in `Player` struct 
 `sender: Sender<Message>`. Also, we must change signature of `Player::new()` to this:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 async fn new(
     scene: &mut Scene,
     resource_manager: ResourceManager,
@@ -604,7 +604,7 @@ async fn new(
 
 Just pass the `sender` in the `Self { .. }` like this: 
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 Self {
     ...
     sender, // <- Pass sender 
@@ -616,7 +616,7 @@ Player must know about its weapons, let's fix this by adding new field to the `P
 fill this field in the `Game::new()`, not in `Player::new()` because at the moment of creation of the player there are
 no weapons:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 ...
 
 // Put the weapon into it - this operation moves the weapon in the pool and returns handle.
@@ -630,7 +630,7 @@ player.weapon = weapon;
 
 Finally, at the end of `Player::update` we will handle the state of the input controller:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 if self.controller.shoot {
     self.sender
         .send(Message::ShootWeapon {
@@ -652,14 +652,14 @@ Barrels should react to shots as in the video at the beginning of the tutorial.
 Ok, the weapon shoots but looks kinda unnatural, to fix that we need to add a recoil. This is very simple to do, let's 
 start by adding these fields in the `Weapon` struct:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 recoil_offset: Vector3<f32>,
 recoil_target_offset: Vector3<f32>,
 ```
 
 Initialize these fields with default values (zero vector):
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 recoil_offset: Default::default(),
 recoil_target_offset: Default::default(),
 ```
@@ -669,7 +669,7 @@ first vector will follow. Why do we need two vectors instead just one? The answe
 change offset over time, and to do that offset will just "follow" target offset which will give us desired smooth 
 movement. Let's add the code responsible for the recoil to the `Weapon::update`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Notice new `graph` parameter
 pub fn update(&mut self, dt: f32, graph: &mut Graph) {  
     self.shot_timer = (self.shot_timer - dt).max(0.0);
@@ -704,7 +704,7 @@ applying offset to weapon's model. Finally, we're checking if we've reached targ
 offset to return a weapon to its default position. Also we have to slightly modify `Weapon::shoot` to modify target
 offset:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 pub fn shoot(&mut self) {
     self.shot_timer = 0.1;
 
@@ -715,7 +715,7 @@ pub fn shoot(&mut self) {
 
 The last thing we need to do is to slightly modify code at the `Game::update` to pass new parameter to `Weapon::update`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
  pub fn update(&mut self, engine: &mut GameEngine, dt: f32) {
     let scene = &mut engine.scenes[self.scene];
 
@@ -735,7 +735,7 @@ Ok, run the game, and the weapon should feel more natural now.
 Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
 that! This is the first time when we'll use particle systems. Let's add this function somewhere in `main.rs`
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{
@@ -819,7 +819,7 @@ in world space. Finally, we're creating particle system itself, using pre-made p
 correct place to create this particle system. It should be placed right after we're applying force to target we've hit 
 in `Game::shoot_weapon`:
 
-```rust,compile_fail
+```rust,no_run,compile_fail
 // Add bullet impact effect.
 let effect_orientation = vector_to_quat(intersection.normal);
 

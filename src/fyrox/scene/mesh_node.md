@@ -16,7 +16,7 @@ the way to go, especially with tons and tons of free 3D models available online.
 To create 3D model in you could use [Blender](https://www.blender.org/) and then export it to `FBX` file format.
 To load your 3D model in the game, you should do few simple steps:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 
 use fyrox::{
@@ -50,7 +50,7 @@ properly.
 A mesh instance could be created from code, such meshes called "procedural". They're suitable for cases when you
 cannot create a mesh in 3D modelling software.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 
 use fyrox::{
@@ -122,7 +122,7 @@ Meshes have full support of bone animation, it means that you can load pretty mu
 it will play animation with no problems. One difference that should be noted is that you should use `instantiate`
 method instead of `instantiate_geometry` and then manually apply animation to the mesh in you game loop.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::resource::model::ModelInstance;
 # use fyrox::{
