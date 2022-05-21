@@ -65,7 +65,7 @@ your `emissionTexture`
 The standard material offers very basic transparency support, to use it you have to explicitly switch render
 path on you mesh object. It could be done something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

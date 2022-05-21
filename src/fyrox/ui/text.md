@@ -7,7 +7,7 @@ alignment, and so on.
 
 An instance of the Text widget could be created like so:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -26,7 +26,7 @@ There are various text alignment options for both vertical and horizontal axes. 
 `Left`, `Center`, `Right` for horizontal axis, and `Top`, `Center`, `Bottom` for vertical axis. An instance of 
 centered text could be created like so:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -47,7 +47,7 @@ fn create_centered_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 Long text is usually needs to wrap on available bounds, there are three possible options for word wrapping:
 `NoWrap`, `Letter`, `Word`. An instance of text with word-based wrapping could be created like so:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -68,7 +68,7 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 
 To set a color of the text just use `.with_foreground(..)` of the `WidgetBuilder` while building the text instance:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{color::Color, pool::Handle},
@@ -84,7 +84,7 @@ fn create_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 
 By default, text is created with default font, however it is possible to set any custom font:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
@@ -130,7 +130,7 @@ There is no way to change font size without changing the entire font used by Tex
 There are few message types that Text widget can produce, most common are `Text`, `Wrap`, `Font`, `VerticalAlignment`,
 and `HorizontalAlignment`. An example of changing text at runtime could be something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

@@ -4,13 +4,14 @@ The Tab Control handles the visibility of several tabs, only showing a single ta
 
 The following example makes a 2 tab, Tab Control containing some simple text widgets:
 
-```rust
-use fyrox::gui::{
-    BuildContext,
-    widget::WidgetBuilder,
-    text::TextBuilder,
-    tab_control::{TabControlBuilder, TabDefinition},
-};
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::gui::{
+#     BuildContext,
+#     widget::WidgetBuilder,
+#     text::TextBuilder,
+#     tab_control::{TabControlBuilder, TabDefinition},
+# };
 
 fn create_tab_control(ctx: &mut BuildContext) {
 
@@ -51,13 +52,27 @@ Notice that you can put any widget into the tab header, so if you want images to
 
 You will also likely want to style whatever widgets you add. As can be seen when running the code example above, the tab headers are scrunched when there are no margins provided to your text widgets. Simply add something like the below code example and you will get a decent look:
 
-```rust
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::gui::{
+#     BuildContext,
+#     widget::WidgetBuilder,
+#     text::TextBuilder,
+#     Thickness, 
+#     tab_control::{TabDefinition},
+# };
+
+# fn build(ctx: &mut BuildContext) {
+# TabDefinition{
 header: TextBuilder::new(
             WidgetBuilder::new()
                 .with_margin(Thickness::uniform(4.0))
         )
             .with_text("First")
             .build(ctx),
+# content: Default::default()
+# };
+# }
 
 ```
 

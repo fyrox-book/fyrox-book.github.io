@@ -12,7 +12,7 @@ As you can see it is a good basis for 2D games.
 
 Use the RectangleBuilder to create Rectangle nodes:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, color::Color, pool::Handle},
@@ -49,7 +49,7 @@ rectangle with a texture and a color. Its main purpose is to be able to start ma
 diving too deep into details (shaders, render passes, etc.). You can still create a "rectangle" with custom material, use
 Mesh node with single rectangle surface:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{

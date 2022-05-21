@@ -18,7 +18,7 @@ Checkbox in `Unchecked` state:
 
 To create a checkbox you should do something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -39,7 +39,7 @@ For checkbox with text, you could use `TextBuilder` to create textual content, f
 
 Here's an example of checkbox with textual content.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -68,7 +68,7 @@ fn create_checkbox(ui: &mut UserInterface) -> Handle<UiNode> {
 Checkboxes are not static widget and have multiple states. To handle a message from a checkbox, you need to handle
 a `CheckBoxMessage::Check` message. To do so, you can do something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

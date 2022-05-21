@@ -10,7 +10,7 @@ There is a separate 2D scenes with their own nodes, which are very well optimize
 
 A sprite instance could be created using `SpriteBuilder`:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{color::Color, pool::Handle},
@@ -28,7 +28,7 @@ fn create_sprite(scene: &mut Scene) -> Handle<Node> {
 
 A sprite with a texture could be created by using `.with_texture` method of the builder:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 use fyrox::{
     core::pool::Handle,

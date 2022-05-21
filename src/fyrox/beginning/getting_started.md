@@ -15,7 +15,7 @@ To begin using the engine, just add following lines to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fyrox = "^0.24"
+fyrox = "^0.25"
 ```
 
 This will force Cargo to use latest **stable** version of the engine. 
@@ -36,11 +36,13 @@ hash in the quotes.
 
 ## Editor installation
 
-The engine offers a **scene** editor, to install it, use `cargo install`:
+The engine offers an editor, to install a standalone version it, use `cargo install`:
 
 ```shell
 cargo install fyroxed
 ```
+
+Standalone version does not allow you to run your game inside it, but only allows you to edit scenes. 
 
 After that you can run the editor with a single command:
 

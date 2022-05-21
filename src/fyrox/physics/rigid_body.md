@@ -8,7 +8,7 @@ your objects.
 
 Use RigidBodyBuilder to create a rigid body instance:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
@@ -43,7 +43,7 @@ create complex shapes from simple shapes, you can create concave objects this wa
 You can apply forces and torque to any rigid body, but only dynamic bodies will be affected. There is two ways of
 applying force to a rigid body: at center of mass or at particular point at the body:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{core::algebra::Vector3, scene::rigidbody::RigidBody};
 fn apply_force_and_torque(rigid_body: &mut RigidBody) {
@@ -63,7 +63,7 @@ fn apply_force_and_torque(rigid_body: &mut RigidBody) {
 Sometimes you may want to have direct control over position/rotation of a rigid body and tell the physics engine to not
 do simulation for the body. This can be achieved by making the rigid body _kinematic_:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},

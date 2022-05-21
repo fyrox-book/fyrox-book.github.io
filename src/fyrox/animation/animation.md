@@ -50,8 +50,8 @@
  # extern crate fyrox;
  use fyrox::{
      animation::machine::{
-         Machine, State, Transition, PoseNode, blend_nodes::BlendPose,
-         Parameter, PlayAnimation, PoseWeight, blend_nodes::BlendAnimations
+         Machine, State, Transition, PoseNode, node::blend::BlendPose,
+         Parameter, PlayAnimation, PoseWeight, node::blend::BlendAnimations
      },
      core::pool::Handle
  };
@@ -60,8 +60,9 @@
  let idle_animation = Handle::default();
  let walk_animation = Handle::default();
  let aim_animation = Handle::default();
+ let model_root = Handle::default();
 
- let mut machine = Machine::new();
+ let mut machine = Machine::new(model_root);
 
  let aim = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
  let walk = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));

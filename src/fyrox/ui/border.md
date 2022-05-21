@@ -2,7 +2,7 @@
 
 The Border widget provides a stylized, static border around it's child widget. Below is an example of creating a 1 pixel thick border around a button widget:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 use fyrox::gui::{
     UserInterface,
@@ -31,11 +31,19 @@ As with other UI elements, we create the border using the BorderBuilder helper s
 
 You can style the border by creating a Brush and setting the border's base WidgetBuilder's foreground or background. The foreground will set the style of the boarder itself, while setting the background will color the whole area within the border. Below is an example of a blue border and a red background with white text inside.
 
-```rust
-use fyrox::gui::{
-    brush::Brush,
-    core::color::Color,
-};
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::gui::{
+#     brush::Brush,
+#     core::color::Color,
+#     widget::WidgetBuilder, 
+#     text::TextBuilder,
+#     border::BorderBuilder,
+#     UserInterface,
+#     Thickness, 
+# };
+
+# let mut ui = UserInterface::new(Default::default());
 
 BorderBuilder::new(
     WidgetBuilder::new()

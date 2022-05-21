@@ -10,7 +10,7 @@ that "intersects" with the frustum will be rendered.
 
 An instance of camera node could be created using `CameraBuilder`: 
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -44,7 +44,7 @@ parameters that describes frustum volume:
 
 Here is a simple example of how to create a camera with perspective projection:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -82,7 +82,7 @@ size by multiplying vertical size with aspect ratio.
 
 Here is a simple example of how to create a camera with orthographic projection:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -120,7 +120,7 @@ Outdoor scenes usually have distant objects that can't be reached, these can be 
 such objects can be pre-rendered and then applied to a huge cube around camera, it always be rendered first and will
 be the background of your scene. To create a skybox and set it to a camera, you can use following code:
 
-```rust,edition2018
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
@@ -189,7 +189,7 @@ Here is the same scene with no color correction and with "mexico" color correcti
 
 To use color grading LUT you could do something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},

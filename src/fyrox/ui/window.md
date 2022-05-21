@@ -10,7 +10,7 @@ The Window widget provides a standared window that can contain another widget. B
 
 As with other UI elements, you create and configure the window using the WindowBuilder.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 use fyrox::{
     core::{pool::Handle, algebra::Vector2},
@@ -32,7 +32,7 @@ fn create_window(ui: &mut UserInterface) {
     .with_content(
         TextBuilder::new(WidgetBuilder::new())
             .with_text("Example Window content.")
-            .build(ctx)
+            .build(&mut ui.build_ctx())
     )
     .with_title(WindowTitle::text("Window"))
     .can_close(true)

@@ -1,6 +1,6 @@
 # Fyrox Game Engine Guide Book
 
-Practical reference and user guides for [Fyrox Game Engine](https://github.com/FyroxEngine/Fyrox) and its scene 
+Practical reference and user guides for [Fyrox Game Engine](https://github.com/FyroxEngine/Fyrox) and its 
 editor [Fyroxed](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
 
 **Warning:** The book is in early development stage, you can help to improve it by making a contribution in its

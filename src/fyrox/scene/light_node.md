@@ -15,7 +15,7 @@ scenes.
 
 A directional light source could be created something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -37,7 +37,7 @@ By default, the light source will be oriented to lit "the ground". In other word
 `(0.0, -1.0, 0.0)` vector. You can rotate it as you want by setting local transform of it while building. Something
 like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{
@@ -73,7 +73,7 @@ fn create_directional_light(scene: &mut Scene) -> Handle<Node> {
 Point light is a light source that emits lights in all directions, it has a position, but does not have an orientation.
 An example of a point light source: light bulb. 
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -97,7 +97,7 @@ fn create_point_light(scene: &mut Scene) -> Handle<Node> {
 Spot light is a light source that emits lights in cone shape, it has a position and orientation. An example of 
 a spot light source: flashlight.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -126,16 +126,17 @@ the fog will scatter the light from your flashlight making it, so you'll see the
 it, you can do this either while building a light source or change light scattering options on existing light source.
 Here is the small example how to do that.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     scene::{node::Node, Scene},
+#     scene::{node::Node, light::BaseLight, Scene},
 # };
 
 fn disable_light_scatter(scene: &mut Scene, light_handle: Handle<Node>) {
     scene.graph[light_handle]
-        .as_light_mut()
+        .query_component_mut::<BaseLight>()
+        .unwrap()
         .enable_scatter(false);
 }
 ```
@@ -143,16 +144,17 @@ fn disable_light_scatter(scene: &mut Scene, light_handle: Handle<Node>) {
 You could also change the amount of scattering per each color channel, using this you could imitate the 
 [Rayleigh scattering](https://en.wikipedia.org/wiki/Rayleigh_scattering):
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
-#     scene::{node::Node, Scene},
+#     scene::{node::Node, light::BaseLight, Scene},
 # };
 
 fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
     scene.graph[light_handle]
-        .as_light_mut()
+        .query_component_mut::<BaseLight>()
+        .unwrap()
         .set_scatter(Vector3::new(0.03, 0.035, 0.055))
 }
 ```
@@ -173,16 +175,17 @@ Shadows giving the most significant performance impact, you should keep amount o
 shadows at lowest possible amount to keep performance at good levels. You can also turn on/off shadows when you 
 need:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     scene::{node::Node, Scene},
+#     scene::{node::Node, light::BaseLight, Scene},
 # };
 
 fn switch_shadows(scene: &mut Scene, light_handle: Handle<Node>, cast_shadows: bool) {
     scene.graph[light_handle]
-        .as_light_mut()
+        .query_component_mut::<BaseLight>()
+        .unwrap()
         .set_cast_shadows(cast_shadows)
 }
 ```

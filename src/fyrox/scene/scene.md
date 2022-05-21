@@ -22,7 +22,7 @@ There is a [separate chapter](../../fyroxed/introduction.md) in the book that sh
 
 After a scene is created, you can load it as any other 3D model using the resource manager:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
@@ -75,7 +75,7 @@ it. After that every prefab instance will have your changes!
 
 A scene could also be created manually:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{core::pool::Handle, engine::Engine, scene::Scene};
 
@@ -120,7 +120,8 @@ some pre-defined ambient lighting, it is bright enough, so you can see your obje
 need to adjust it or even make it black (for horror games for instance), this can be achieved by a single
 line of code:
 
-```rust
+```rust,no_run
+# extern crate fyrox;
 # use fyrox::scene::Scene;
 # use fyrox::core::color::Color;
 # let mut scene = Scene::default();

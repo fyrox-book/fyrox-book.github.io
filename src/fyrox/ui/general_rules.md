@@ -7,7 +7,7 @@ This chapter covers general rules that will help you to write code that will be 
 Widget builders supports fluent syntax, this means that you can create your widget in series of nested 
 call of other widget builders. In code, it looks something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -40,7 +40,7 @@ texture. The text is created implicitly, the button builder creates `Text` widge
 the button. The structure of the button can contain _any_ amount of nodes, for example you can create a button
 that contains text with some icon. To do that, replace `.with_text("My Button")` with this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -91,7 +91,7 @@ that contains text with some icon. To do that, replace `.with_text("My Button")`
 Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

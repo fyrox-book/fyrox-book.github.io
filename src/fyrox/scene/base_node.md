@@ -9,13 +9,14 @@ nodes.
 
 ## How to create
 
-Use the `BaseBuilder` to create an instance of the Base node:
+Use the `PivotBuilder` to create an instance of the Pivot node (remember `Base` node itself is used only to build other
+node types):
 
-```rust
+```rust,no_run
 # extern crate fyrox;
-# use fyrox::scene::{base::BaseBuilder, Scene};
+# use fyrox::scene::{base::BaseBuilder, pivot::PivotBuilder, Scene};
 # fn build_node(scene: &mut Scene) {
-let handle = BaseBuilder::new().build(&mut scene.graph);
+let handle = PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
 # }
 ```
 
@@ -24,18 +25,18 @@ let handle = BaseBuilder::new().build(&mut scene.graph);
 To build a complex hierarchy of some nodes, use `.with_children()` method of the `BaseBuilder`, it allows you
 to build a hierarchy of any complexity:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
-# use fyrox::scene::{base::BaseBuilder, camera::CameraBuilder, Scene};
+# use fyrox::scene::{base::BaseBuilder, pivot::PivotBuilder, camera::CameraBuilder, Scene};
 #
 # fn build_node(scene: &mut Scene) {
-let handle = BaseBuilder::new()
+let handle = PivotBuilder::new(BaseBuilder::new()
     .with_children(&[
         CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph),
-        BaseBuilder::new()
-            .with_children(&[BaseBuilder::new().build(&mut scene.graph)])
+        PivotBuilder::new(BaseBuilder::new()
+            .with_children(&[PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph)]))
             .build(&mut scene.graph),
-    ])
+    ]))
     .build(&mut scene.graph);
 # }
 ```
@@ -45,21 +46,21 @@ instance can also be used to set some properties and a set of children nodes.
 
 The "fluent syntax" is not mandatory to use, the above code snipped could be rewritten like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
-# use fyrox::scene::{base::BaseBuilder, camera::CameraBuilder, Scene};
+# use fyrox::scene::{base::BaseBuilder, pivot::PivotBuilder, camera::CameraBuilder, Scene};
 # 
 # fn build_node(scene: &mut Scene) {
 let camera = CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
 
-let child_base = BaseBuilder::new().build(&mut scene.graph);
+let child_base = PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
 
-let base = BaseBuilder::new()
-    .with_children(&[child_base])
+let base = PivotBuilder::new(BaseBuilder::new()
+    .with_children(&[child_base]))
     .build(&mut scene.graph);
 
-let handle = BaseBuilder::new()
-    .with_children(&[camera, base])
+let handle = PivotBuilder::new(BaseBuilder::new()
+    .with_children(&[camera, base]))
     .build(&mut scene.graph);
 # }
 ```
@@ -72,7 +73,7 @@ between objects.
 Base node has a local transform that allows you to translate/scale/rotate/etc. your node as you want to. For example,
 to move a node at specific location you could use this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #    core::{algebra::Vector3, pool::Handle},
@@ -88,7 +89,7 @@ scene.graph[node_handle]
 
 You could also chain multiple `set_x` calls, like so:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #    core::{algebra::Vector3, pool::Handle},
