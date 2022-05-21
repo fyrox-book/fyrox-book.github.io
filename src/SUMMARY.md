@@ -79,6 +79,7 @@
         - [Bots and AI](./fyrox/tutorials/fps/tutorial-3/tutorial-part-3.md)
       - [RPG Tutorial](./fyrox/tutorials/rpg/intro.md)
         - [Character controller](./fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.md)
+      - [2D Platformer tutorial](./fyrox/tutorials/platformer/part1.md)
 
 ---
 
