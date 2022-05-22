@@ -48,6 +48,21 @@ assert_eq!(*obj, 11);
 You can extract an object from a pool by calling `pool.free(handle)`, it will give you the object back, making
 all handles to the object invalid.
 
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+pool.free(handle);
+
+let obj = pool.try_borrow(handle);
+assert_eq!(obj, None);
+# }
+```
+
 ## Take & reserve
 
 Sometimes you may need to temporarily extract an object from a pool, do something with it and then put it back
