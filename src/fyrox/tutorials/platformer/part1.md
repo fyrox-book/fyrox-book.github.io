@@ -71,6 +71,27 @@ move.
 Navigate to `game/src/lib.rs` and at the end of the file add the following code snippet:
 
 ```rust,no_run
+# extern crate fyrox;
+use fyrox::{
+    core::{
+        inspect::{Inspect, PropertyInfo},
+        uuid::{uuid, Uuid},
+        visitor::{Visit, VisitResult, Visitor},
+    },
+    event::Event,
+    gui::inspector::PropertyChanged,
+    scene::node::TypeUuidProvider,
+    script::{ScriptContext, ScriptTrait},
+};
+
+struct Game {}
+
+impl TypeUuidProvider for Game {
+    fn type_uuid() -> Uuid {
+        todo!()
+    }
+}
+
 #[derive(Visit, Inspect, Debug, Clone)]
 struct Player {}
 
@@ -116,6 +137,16 @@ impl ScriptTrait for Player {
     // Returns unique id of parent plugin.
     fn plugin_uuid(&self) -> Uuid {
         Game::type_uuid()
+    }
+
+    fn remap_handles(
+        &mut self,
+        #[allow(unused_variables)] old_new_mapping: &fyrox::fxhash::FxHashMap<
+            fyrox::core::pool::Handle<fyrox::scene::node::Node>,
+            fyrox::core::pool::Handle<fyrox::scene::node::Node>,
+        >,
+    ) {
+        todo!()
     }
 }
 ```
