@@ -6892,7 +6892,142 @@ the <code>FyroxEd</code> section of the book.</p>
 <p>Download the scene from <a href="fyrox/tutorials/platformer/scene.zip">here</a> and unpack it to <code>platformer/data</code>, run the editor and use <code>File -&gt; Load Scene</code> to 
 load the scene. You should see something like this (do not forget to switch to Orthographic camera mode in scene previewer).</p>
 <p><img src="fyrox/tutorials/platformer/editor_with_scene.png" alt="editor with scene" /></p>
-<p>Run the game using <code>Play/Stop</code> button at the top of the scene previewer.</p>
+<p>Run the game using <code>Play/Stop</code> button at the top of the scene previewer. Now we can start writing code, at first let's make our
+life easier and force the editor to load the scene for us on startup. Go to <code>editor/src/main.rs</code> and replace this:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Some(StartupData {
+    working_directory: Default::default(),
+    // Set this to `&quot;path/to/your/scene.rgs&quot;.into()` to force the editor to load the scene on startup.
+    scene: Default::default(),
+})
+<span class="boring">}
+</span></code></pre></pre>
+<p>with this</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Some(StartupData {
+    working_directory: Default::default(),
+    scene: &quot;data/scene.rgs&quot;.into(),
+})
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now if you run the editor, it will automatically load the requested scene, this saves some extra clicks and only a few seconds,
+but if you multiply that to a number of restarts, this will give you decent time save.</p>
+<p>Our scene has pretty much everything we need to start adding scripts, we'll start from <code>Player</code> script and make our character 
+move.</p>
+<p>Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Visit, Inspect, Debug, Clone)]
+struct Player {}
+
+impl Default for Player {
+    fn default() -&gt; Self {
+        Self {}
+    }
+}
+
+impl TypeUuidProvider for Player {
+    // Returns unique script id for serialization needs.
+    fn type_uuid() -&gt; Uuid {
+        uuid!(&quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)
+    }
+}
+
+impl ScriptTrait for Player {
+    // Accepts events from Inspector in the editor and modifies self state accordingly.
+    fn on_property_changed(&amp;mut self, args: &amp;PropertyChanged) -&gt; bool {
+        todo!()
+    }
+
+    // Called once at initialization.
+    fn on_init(&amp;mut self, context: ScriptContext) {
+        todo!()
+    }
+
+    // Called everytime when there is an event from OS (mouse click, key press, etc.)
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: ScriptContext) {
+        todo!()
+    }
+
+    // Called every frame at fixed rate of 60 FPS.
+    fn on_update(&amp;mut self, context: ScriptContext) {
+        todo!()
+    }
+
+    // Returns unique script id for serialization needs.
+    fn id(&amp;self) -&gt; Uuid {
+        Self::type_uuid()
+    }
+
+    // Returns unique id of parent plugin.
+    fn plugin_uuid(&amp;self) -&gt; Uuid {
+        Game::type_uuid()
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This is a typical &quot;skeleton&quot; of any script, for now it is filled with lots of <code>todo</code>s, we'll fill it with actual code right now.
+But before we continue, we must tell the engine that our script exist - we must register it. Remember that <code>on_register</code> method
+in <code>Plugin</code> trait implementation? It is exactly for script registration, replace its implementation with following code snippet:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_register(&amp;mut self, context: PluginRegistrationContext) {
+    let script_constructors = &amp;context.serialization_context.script_constructors;
+    script_constructors.add::&lt;Game, Player, _&gt;(&quot;Player&quot;);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now the engine know about our script and will be able to use it. You cannot use it in current state yet, we need to take care about
+all <code>todo</code>s first, otherwise the game will panic. If you're eager to see what will happen in the editor, just remove all <code>todo</code>s and
+run the editor.</p>
+<p>What do we need to use to make player move? We'll be using physical rigid body that is already added in the scene, we just need to
+somehow be able to pass it to the script. Let's start by adding required field in the <code>Player</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Visit, Inspect, Debug, Clone)]
+struct Player {
+    body: Handle&lt;Node&gt;,
+}
+
+impl Default for Player {
+    fn default() -&gt; Self {
+        Self { body: Handle::NONE }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>After adding this, the editor will be able to see the field and give you an ability to edit it in the Inspector, but for now any
+changes done in Inspector will not be applied to the script instance. We need to take care about this, it is a bit of manual work,
+future versions of the engine will do this automatically. We're interested in <code>on_property_changed</code> method, fill it the following
+code snippet:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if let FieldKind::Object(ref value) = args.value {
+    match args.name.as_ref() {
+        Player::BODY =&gt; {
+            self.body = value.cast_clone().unwrap();
+            true
+        }
+        _ =&gt; false,
+    }
+} else {
+    false
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>At first, the code checks value kind, if it is a simple object, then we're checking the name of the property and if it is our <code>body</code>,
+setting the value. The method expects <code>true</code> or <code>false</code> as a return value, what does each mean? <code>true</code> means that the property was 
+handled and <code>false</code> - otherwise. If the editor sees <code>false</code> it prints warning message informing you that something is missing.</p>
+<p>Finally we can add our script to the player instance, run the editor, find the player and change its <code>Script</code> property to <code>Player</code>:</p>
+<p><img src="fyrox/tutorials/platformer/script_selection.png" alt="script_selection" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-4"><a class="header" href="#introduction-4">Introduction</a></h1>
 <p>Fyroxed is a native <strong>scene</strong> editor for Fyrox game engine. It offers wide variety of tools to make creation of
 the scenes comfortable and intuitive.</p>
