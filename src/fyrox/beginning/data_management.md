@@ -136,6 +136,26 @@ object associated with an entry.
 2) `pair_iter/pair_iter_mut` - creates an iterator that iterates over occupied pool entries returning tuples with
 two elements `(handle, reference)`. 
 
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let _handle = pool.spawn(1);
+
+let mut iter = pool.iter_mut();
+
+let next_obj = iter.next().unwrap();
+
+assert_eq!(next_obj, &1);
+
+let next_obj = iter.next();
+
+assert_eq!(next_obj, None);
+# }
+```
+
 ## Direct access
 
 There is ability to get an object from a pool using only indices, there are two methods for that `at` and `at_mut`.
