@@ -78,6 +78,55 @@ pool.
 out of the pool, but for some reason you don't want to return it back in pool, in this case you **must** call
 this method, otherwise the corresponding entry will be unusable.
 
+Reservation example:
+
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+let (ticket, ref mut obj) = pool.take_reserve(handle);
+
+*obj = 123;
+
+// Attempting to fetch while there is an existing reservation, will fail.
+
+let attempt_obj = pool.try_borrow(handle);
+assert_eq!(attempt_obj, None);
+
+// Put back, allowing borrowing again.
+
+pool.put_back(ticket, *obj);
+
+let obj = pool.borrow(handle);
+
+assert_eq!(obj, &123);
+# }
+```
+
+Forget example:
+
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+let (ticket, _obj) = pool.take_reserve(handle);
+
+pool.forget_ticket(ticket);
+
+let obj = pool.try_borrow(handle);
+
+assert_eq!(obj, None);
+# }
+```
+
 ## Iterators
 
 There are few possible iterators, each one is useful for particular purpose:
