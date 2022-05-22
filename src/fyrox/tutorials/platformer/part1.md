@@ -125,10 +125,54 @@ But before we continue, we must tell the engine that our script exist - we must 
 in `Plugin` trait implementation? It is exactly for script registration, replace its implementation with following code snippet:
 
 ```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{
+#         inspect::{Inspect, PropertyInfo},
+#         visitor::{Visit, VisitResult, Visitor},
+#     },
+#     plugin::{Plugin, PluginRegistrationContext},
+#     scene::node::TypeUuidProvider,
+#     script::ScriptTrait,
+# };
+#
+# struct Game {}
+# #[derive(Debug, Clone, Default, Inspect, Visit)]
+# struct Player {}
+# struct MyPlugin {}
+#
+# impl TypeUuidProvider for Game {
+#     fn type_uuid() -> fyrox::core::uuid::Uuid {
+#         todo!()
+#     }
+# }
+#
+# impl TypeUuidProvider for Player {
+#     fn type_uuid() -> fyrox::core::uuid::Uuid {
+#         todo!()
+#     }
+# }
+#
+# impl ScriptTrait for Player {
+#     fn id(&self) -> fyrox::core::uuid::Uuid {
+#         todo!()
+#     }
+#
+#     fn plugin_uuid(&self) -> fyrox::core::uuid::Uuid {
+#         todo!()
+#     }
+# }
+#
+# impl Plugin for MyPlugin {
 fn on_register(&mut self, context: PluginRegistrationContext) {
     let script_constructors = &context.serialization_context.script_constructors;
     script_constructors.add::<Game, Player, _>("Player");
 }
+#
+#     fn id(&self) -> fyrox::core::uuid::Uuid {
+#         todo!()
+#     }
+# }
 ```
 
 Now the engine know about our script and will be able to use it. You cannot use it in current state yet, we need to take care about
