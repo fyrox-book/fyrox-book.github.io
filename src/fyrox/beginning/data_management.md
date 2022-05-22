@@ -27,10 +27,41 @@ Once an object was placed in a pool, you have to use respective handle to get a 
 be done either with `.borrow[_mut](handle)` or by using `Index` trait: `pool[handle]`. These methods panic
 when handle is invalid, if you want to prevent that, use `try_borrow[_mut](handle)` method.
 
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+let obj = pool.borrow_mut(handle);
+*obj = 11;
+
+let obj = pool.borrow(handle);
+assert_eq!(*obj, 11);
+# }
+```
+
 ## Freeing 
 
 You can extract an object from a pool by calling `pool.free(handle)`, it will give you the object back, making
 all handles to the object invalid.
+
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+pool.free(handle);
+
+let obj = pool.try_borrow(handle);
+assert_eq!(obj, None);
+# }
+```
 
 ## Take & reserve
 
@@ -47,6 +78,55 @@ pool.
 out of the pool, but for some reason you don't want to return it back in pool, in this case you **must** call
 this method, otherwise the corresponding entry will be unusable.
 
+Reservation example:
+
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+let (ticket, ref mut obj) = pool.take_reserve(handle);
+
+*obj = 123;
+
+// Attempting to fetch while there is an existing reservation, will fail.
+
+let attempt_obj = pool.try_borrow(handle);
+assert_eq!(attempt_obj, None);
+
+// Put back, allowing borrowing again.
+
+pool.put_back(ticket, *obj);
+
+let obj = pool.borrow(handle);
+
+assert_eq!(obj, &123);
+# }
+```
+
+Forget example:
+
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+let (ticket, _obj) = pool.take_reserve(handle);
+
+pool.forget_ticket(ticket);
+
+let obj = pool.try_borrow(handle);
+
+assert_eq!(obj, None);
+# }
+```
+
 ## Iterators
 
 There are few possible iterators, each one is useful for particular purpose:
@@ -55,6 +135,26 @@ There are few possible iterators, each one is useful for particular purpose:
 object associated with an entry.
 2) `pair_iter/pair_iter_mut` - creates an iterator that iterates over occupied pool entries returning tuples with
 two elements `(handle, reference)`. 
+
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let _handle = pool.spawn(1);
+
+let mut iter = pool.iter_mut();
+
+let next_obj = iter.next().unwrap();
+
+assert_eq!(next_obj, &1);
+
+let next_obj = iter.next();
+
+assert_eq!(next_obj, None);
+# }
+```
 
 ## Direct access
 
