@@ -158,9 +158,36 @@ like graphs, where a node refers to other nodes. In this case scene nodes stores
 <p>Once an object was placed in a pool, you have to use respective handle to get a reference to it. This could 
 be done either with <code>.borrow[_mut](handle)</code> or by using <code>Index</code> trait: <code>pool[handle]</code>. These methods panic
 when handle is invalid, if you want to prevent that, use <code>try_borrow[_mut](handle)</code> method.</p>
+<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::pool::Pool;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span>let mut pool = Pool::&lt;u32&gt;::new();
+let handle = pool.spawn(1);
+
+let obj = pool.borrow_mut(handle);
+*obj = 11;
+
+let obj = pool.borrow(handle);
+assert_eq!(*obj, 11);
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="freeing"><a class="header" href="#freeing">Freeing</a></h2>
 <p>You can extract an object from a pool by calling <code>pool.free(handle)</code>, it will give you the object back, making
 all handles to the object invalid.</p>
+<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::pool::Pool;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span>let mut pool = Pool::&lt;u32&gt;::new();
+let handle = pool.spawn(1);
+
+pool.free(handle);
+
+let obj = pool.try_borrow(handle);
+assert_eq!(obj, None);
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="take--reserve"><a class="header" href="#take--reserve">Take &amp; reserve</a></h2>
 <p>Sometimes you may need to temporarily extract an object from a pool, do something with it and then put it back
 while preserving handles to that object. There are three special methods for that:</p>
@@ -175,6 +202,49 @@ pool. </li>
 out of the pool, but for some reason you don't want to return it back in pool, in this case you <strong>must</strong> call
 this method, otherwise the corresponding entry will be unusable.</li>
 </ol>
+<p>Reservation example:</p>
+<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::pool::Pool;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span>let mut pool = Pool::&lt;u32&gt;::new();
+let handle = pool.spawn(1);
+
+let (ticket, ref mut obj) = pool.take_reserve(handle);
+
+*obj = 123;
+
+// Attempting to fetch while there is an existing reservation, will fail.
+
+let attempt_obj = pool.try_borrow(handle);
+assert_eq!(attempt_obj, None);
+
+// Put back, allowing borrowing again.
+
+pool.put_back(ticket, *obj);
+
+let obj = pool.borrow(handle);
+
+assert_eq!(obj, &amp;123);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Forget example:</p>
+<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::pool::Pool;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span>let mut pool = Pool::&lt;u32&gt;::new();
+let handle = pool.spawn(1);
+
+let (ticket, _obj) = pool.take_reserve(handle);
+
+pool.forget_ticket(ticket);
+
+let obj = pool.try_borrow(handle);
+
+assert_eq!(obj, None);
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="iterators"><a class="header" href="#iterators">Iterators</a></h2>
 <p>There are few possible iterators, each one is useful for particular purpose:</p>
 <ol>
@@ -183,6 +253,24 @@ object associated with an entry.</li>
 <li><code>pair_iter/pair_iter_mut</code> - creates an iterator that iterates over occupied pool entries returning tuples with
 two elements <code>(handle, reference)</code>. </li>
 </ol>
+<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::pool::Pool;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span>let mut pool = Pool::&lt;u32&gt;::new();
+let _handle = pool.spawn(1);
+
+let mut iter = pool.iter_mut();
+
+let next_obj = iter.next().unwrap();
+
+assert_eq!(next_obj, &amp;1);
+
+let next_obj = iter.next();
+
+assert_eq!(next_obj, None);
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="direct-access"><a class="header" href="#direct-access">Direct access</a></h2>
 <p>There is ability to get an object from a pool using only indices, there are two methods for that <code>at</code> and <code>at_mut</code>.</p>
 <h2 id="validation"><a class="header" href="#validation">Validation</a></h2>
