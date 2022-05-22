@@ -27,6 +27,22 @@ Once an object was placed in a pool, you have to use respective handle to get a 
 be done either with `.borrow[_mut](handle)` or by using `Index` trait: `pool[handle]`. These methods panic
 when handle is invalid, if you want to prevent that, use `try_borrow[_mut](handle)` method.
 
+```rust,norun
+# extern crate fyrox;
+# use fyrox::core::pool::Pool;
+#
+# fn main() {
+let mut pool = Pool::<u32>::new();
+let handle = pool.spawn(1);
+
+let obj = pool.borrow_mut(handle);
+*obj = 11;
+
+let obj = pool.borrow(handle);
+assert_eq!(*obj, 11);
+# }
+```
+
 ## Freeing 
 
 You can extract an object from a pool by calling `pool.free(handle)`, it will give you the object back, making
