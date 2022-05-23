@@ -139,7 +139,10 @@
                     <main>
                         <h1 id="2d-platformer-tutorial-work-in-progress"><a class="header" href="#2d-platformer-tutorial-work-in-progress">2D Platformer Tutorial (WORK IN PROGRESS)</a></h1>
 <p><strong>THIS IS UNFINISHED TUTORIAL, IGNORE IT</strong></p>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>In this tutorial we'll make a 2D platformer using new plugin and scripting system that was become available in Fyrox 0.25.</p>
+<h2 id="project"><a class="header" href="#project">Project</a></h2>
 <p>Let's start by making a new project using special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
 parts in a single call. Install it using following command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
@@ -160,6 +163,7 @@ example - to a store).</li>
 <p>Great! Now we can actually start making our game. Go to <code>game/src/lib.rs</code> - it is where your game logic located, as you can see 
 the <code>fyrox-template</code> generate quite some code for you. There are tiny comments about which place is for what. For more info
 about each method, please refer <a href="https://docs.rs/fyrox/0.25.0/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
+<h2 id="editor"><a class="header" href="#editor">Editor</a></h2>
 <p>For now we don't even need to write a single line of code, we can create a scene entirely in the editor. To save your time,
 I prepared game-ready scene which we'll be using for the rest of the tutorial. To learn how to use the editor, please refer to
 the <code>FyroxEd</code> section of the book.</p>
@@ -190,6 +194,7 @@ life easier and force the editor to load the scene for us on startup. Go to <cod
 </span></code></pre></pre>
 <p>Now if you run the editor, it will automatically load the requested scene, this saves some extra clicks and only a few seconds,
 but if you multiply that to a number of restarts, this will give you decent time save.</p>
+<h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
 <p>Our scene has pretty much everything we need to start adding scripts, we'll start from <code>Player</code> script and make our character 
 move.</p>
 <p>Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
@@ -260,19 +265,20 @@ in <code>Plugin</code> trait implementation? It is exactly for script registrati
 <p>Now the engine know about our script and will be able to use it. You cannot use it in current state yet, we need to take care about
 all <code>todo</code>s first, otherwise the game will panic. If you're eager to see what will happen in the editor, just remove all <code>todo</code>s and
 run the editor.</p>
-<p>What do we need to use to make player move? We'll be using physical rigid body that is already added in the scene, we just need to
-somehow be able to pass it to the script. Let's start by adding required field in the <code>Player</code> struct:</p>
+<p>What do we need to use to make player move? We'll be using physical rigid body that is already added in the scene, but we also need to
+animate sprite (which is static for now) - we just need to somehow be able to pass it to the script. Let's start by adding required 
+field in the <code>Player</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Inspect, Debug, Clone)]
 struct Player {
-    body: Handle&lt;Node&gt;,
+    sprite: Handle&lt;Node&gt;,
 }
 
 impl Default for Player {
     fn default() -&gt; Self {
-        Self { body: Handle::NONE }
+        Self { sprite: Handle::NONE }
     }
 }
 <span class="boring">}
@@ -286,8 +292,8 @@ code snippet:</p>
 </span><span class="boring">fn main() {
 </span>if let FieldKind::Object(ref value) = args.value {
     match args.name.as_ref() {
-        Player::BODY =&gt; {
-            self.body = value.cast_clone().unwrap();
+        Player::SPRITE =&gt; {
+            self.sprite = value.cast_clone().unwrap();
             true
         }
         _ =&gt; false,
@@ -302,6 +308,120 @@ setting the value. The method expects <code>true</code> or <code>false</code> as
 handled and <code>false</code> - otherwise. If the editor sees <code>false</code> it prints warning message informing you that something is missing.</p>
 <p>Finally we can add our script to the player instance, run the editor, find the player and change its <code>Script</code> property to <code>Player</code>:</p>
 <p><img src="script_selection.png" alt="script_selection" /></p>
+<p>To assign the correct handle to the sprite, hold <code>Alt</code> and start dragging sprite node from the world viewer to the respective field
+in the player script.</p>
+<p>Now we can start adding basic movement for the player. Go to <code>Player</code> structure and add following fields:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>move_left: bool,
+move_right: bool,
+jump: bool,
+<span class="boring">}
+</span></code></pre></pre>
+<p>Don't forget to initialize the fields in <code>Default</code> trait implementation:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Default for Player {
+    fn default() -&gt; Self {
+        Self {
+            body: Handle::NONE,
+            move_left: false,
+            move_right: false,
+            jump: false,
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>These fields will store state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add following code in there:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if let Event::WindowEvent { event, .. } = event {
+    if let WindowEvent::KeyboardInput { input, .. } = event {
+        if let Some(keycode) = input.virtual_keycode {
+            let is_pressed = input.state == ElementState::Pressed;
+
+            match keycode {
+                VirtualKeyCode::A =&gt; self.move_left = is_pressed,
+                VirtualKeyCode::D =&gt; self.move_right = is_pressed,
+                VirtualKeyCode::Space =&gt; self.jump = is_pressed,
+                _ =&gt; (),
+            }
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
+<code>on_update</code>. The method is called each frame and allows you to put game logic there:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Called every frame at fixed rate of 60 FPS.
+fn on_update(&amp;mut self, context: ScriptContext) {
+    // The script can be assigned to any scene node, but we assert that it will work only with
+    // 2d rigid body nodes.
+    if let Some(rigid_body) = context.node.cast_mut::&lt;RigidBody&gt;() {
+        let x_speed = if self.move_left {
+            3.0
+        } else if self.move_right {
+            -3.0
+        } else {
+            0.0
+        };
+
+        if self.jump {
+            rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0))
+        } else {
+            rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y))
+        };
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally, some interesting code. At first we checking if the node to which the script is assigned is actually a 2d rigid body, next
+we're checking movement flags and forming horizontal speed and applying velocity to the body. Velocity is applied in two ways: if 
+the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If jump button wasn't pressed - 
+just change horizontal velocity - this will allow the player to free fall.</p>
+<p>Run the editor and enter play mode, press <code>[A][D][Space]</code> buttons to check if everything works correctly - the player should move 
+horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge. </p>
+<p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks of (despite lack of animation),
+but if we'll move to the right - it looks like player moves backwards. Let's fix that by changing horizontal scaling of the player's 
+sprite. Add following code at the end of the <code>if let ...</code> block of the code above:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// It is always a good practice to check whether the handles are valid, at this point we don't know
+// for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
+// execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
+if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
+    // We want to change player orientation only if he's moving.
+    if x_speed != 0.0 {
+        let local_transform = sprite.local_transform_mut();
+
+        let current_scale = **local_transform.scale();
+
+        local_transform.set_scale(Vector3::new(
+            // Just change X scaling to mirror player's sprite.
+            current_scale.x.copysign(-x_speed),
+            current_scale.y,
+            current_scale.z,
+        ));
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The comments should clarify what's going on here, but in short we're changing horizontal scaling of player's sprite if the player is
+moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces sign of current horizontal scaling
+using the opposite sign of <code>x_speed</code>. </p>
+<p>Now if you run the game, the player will &quot;look&quot; in correct direction depending on velocity vector.</p>
+<h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
+<p>Since we're making 2d game, we'll be using simple animations based on continuous change of key frames. In other words we'll be changing
+texture on player body sprite. The engine does not provide such functionality yet, simply because it was focused primarily on 3D games
+for quite long period of time. It is easy to make such animation &quot;system&quot; ourselves.</p>
 
                     </main>
 
