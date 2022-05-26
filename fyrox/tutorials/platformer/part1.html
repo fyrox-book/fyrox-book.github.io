@@ -657,7 +657,8 @@ current animation. Experienced game developers could immediately ask - why not t
 better performance and stuff. Well, the main purpose of this tutorial is to teach how to use the engine to 
 achieve some goal, such as <em>making a game</em>. You can always optimize your game later, when you'll have something
 working and playable.</p>
-<p>Two more steps before we can run the game, we need to call <code>restore_resources</code> for each animation. To do that,
+<h2 id="final-steps"><a class="header" href="#final-steps">Final Steps</a></h2>
+<p>Three more steps before we can run the game, we need to call <code>restore_resources</code> for each animation. To do that,
 the script trait has <code>on_restore_resources</code> method, add the following code to <code>impl ScriptTrait for Player</code></p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -669,6 +670,62 @@ the script trait has <code>on_restore_resources</code> method, add the following
 }
 <span class="boring">}
 </span></code></pre></pre>
+<p>As a second step, replace contents of the <code>editor/src/main.rs</code> with the following code snippet:</p>
+<pre><pre class="playground"><code class="language-rust no_run">//! Editor with your game connected to it as a plugin.
+use fyrox::gui::inspector::editors::collection::VecCollectionPropertyEditorDefinition;
+use fyrox::{
+    event_loop::EventLoop,
+    gui::inspector::editors::inspectable::InspectablePropertyEditorDefinition,
+};
+use fyroxed_base::{Editor, StartupData};
+use platformer::{Animation, Game, KeyFrameTexture};
+
+fn main() {
+    let event_loop = EventLoop::new();
+    let mut editor = Editor::new(
+        &amp;event_loop,
+        Some(StartupData {
+            working_directory: Default::default(),
+            scene: &quot;data/scene.rgs&quot;.into(),
+        }),
+    );
+    editor.add_game_plugin(Game::new());
+
+    // Register property editors here.
+    let property_editors = &amp;editor.inspector.property_editors;
+    property_editors.insert(InspectablePropertyEditorDefinition::&lt;KeyFrameTexture&gt;::new());
+    property_editors.insert(InspectablePropertyEditorDefinition::&lt;Animation&gt;::new());
+    property_editors.insert(VecCollectionPropertyEditorDefinition::&lt;KeyFrameTexture&gt;::new());
+    property_editors.insert(VecCollectionPropertyEditorDefinition::&lt;Animation&gt;::new());
+
+    editor.run(event_loop)
+}
+</code></pre></pre>
+<p>The most interesting code in here is this:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Register property editors here.
+let property_editors = &amp;editor.inspector.property_editors;
+property_editors.insert(InspectablePropertyEditorDefinition::&lt;KeyFrameTexture&gt;::new());
+property_editors.insert(InspectablePropertyEditorDefinition::&lt;Animation&gt;::new());
+property_editors.insert(VecCollectionPropertyEditorDefinition::&lt;KeyFrameTexture&gt;::new());
+property_editors.insert(VecCollectionPropertyEditorDefinition::&lt;Animation&gt;::new());
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here we're registering <em>property editors</em> for our game types. This very important step, it tells the editor how to 
+visualize your data. In most cases you'll be using those two generic types - <code>InspectablePropertyEditorDefinition</code> 
+and <code>VecCollectionPropertyEditorDefinition</code>. Which is responsible for what? </p>
+<ul>
+<li><code>InspectablePropertyEditorDefinition</code> - it is responsible for showing properties of any object that implements 
+<code>Inspect</code> trait. All of your game entities must implement such trait.</li>
+<li><code>VecCollectionPropertyEditorDefinition</code> - it is responsible for showing <code>Vec&lt;T: Inspect&gt;</code> collection, every
+collection item <strong>must</strong> implement <code>Inspect</code> trait. This is a bit tedious, especially in case of simple collections
+like <code>Vec&lt;f32&gt;</code>, but that's a limitation of current implementation. It can be mitigated by using a new-type technique,
+which was shown earlier.</li>
+</ul>
+<p>This is yet another place for manual work, but it must be done, editor cannot use &quot;magic&quot; to understand which widget 
+to use to visualize your data, there's no magic here.</p>
 <p>And a final step is to change how the script properties are handled:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
