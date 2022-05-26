@@ -545,7 +545,9 @@ better performance and stuff. Well, the main purpose of this tutorial is to teac
 achieve some goal, such as _making a game_. You can always optimize your game later, when you'll have something
 working and playable.
 
-Two more steps before we can run the game, we need to call `restore_resources` for each animation. To do that,
+## Final Steps
+
+Three more steps before we can run the game, we need to call `restore_resources` for each animation. To do that,
 the script trait has `on_restore_resources` method, add the following code to `impl ScriptTrait for Player`
 
 ```rust,no_run
@@ -555,6 +557,65 @@ fn restore_resources(&mut self, resource_manager: ResourceManager) {
     }
 }
 ```
+
+As a second step, replace contents of the `editor/src/main.rs` with the following code snippet:
+
+```rust,no_run
+//! Editor with your game connected to it as a plugin.
+use fyrox::gui::inspector::editors::collection::VecCollectionPropertyEditorDefinition;
+use fyrox::{
+    event_loop::EventLoop,
+    gui::inspector::editors::inspectable::InspectablePropertyEditorDefinition,
+};
+use fyroxed_base::{Editor, StartupData};
+use platformer::{Animation, Game, KeyFrameTexture};
+
+fn main() {
+    let event_loop = EventLoop::new();
+    let mut editor = Editor::new(
+        &event_loop,
+        Some(StartupData {
+            working_directory: Default::default(),
+            scene: "data/scene.rgs".into(),
+        }),
+    );
+    editor.add_game_plugin(Game::new());
+
+    // Register property editors here.
+    let property_editors = &editor.inspector.property_editors;
+    property_editors.insert(InspectablePropertyEditorDefinition::<KeyFrameTexture>::new());
+    property_editors.insert(InspectablePropertyEditorDefinition::<Animation>::new());
+    property_editors.insert(VecCollectionPropertyEditorDefinition::<KeyFrameTexture>::new());
+    property_editors.insert(VecCollectionPropertyEditorDefinition::<Animation>::new());
+
+    editor.run(event_loop)
+}
+```
+
+The most interesting code in here is this:
+
+```rust,no_run
+// Register property editors here.
+let property_editors = &editor.inspector.property_editors;
+property_editors.insert(InspectablePropertyEditorDefinition::<KeyFrameTexture>::new());
+property_editors.insert(InspectablePropertyEditorDefinition::<Animation>::new());
+property_editors.insert(VecCollectionPropertyEditorDefinition::<KeyFrameTexture>::new());
+property_editors.insert(VecCollectionPropertyEditorDefinition::<Animation>::new());
+```
+
+Here we're registering _property editors_ for our game types. This very important step, it tells the editor how to 
+visualize your data. In most cases you'll be using those two generic types - `InspectablePropertyEditorDefinition` 
+and `VecCollectionPropertyEditorDefinition`. Which is responsible for what? 
+
+- `InspectablePropertyEditorDefinition` - it is responsible for showing properties of any object that implements 
+`Inspect` trait. All of your game entities must implement such trait.
+- `VecCollectionPropertyEditorDefinition` - it is responsible for showing `Vec<T: Inspect>` collection, every
+collection item **must** implement `Inspect` trait. This is a bit tedious, especially in case of simple collections
+like `Vec<f32>`, but that's a limitation of current implementation. It can be mitigated by using a new-type technique,
+which was shown earlier.
+
+This is yet another place for manual work, but it must be done, editor cannot use "magic" to understand which widget 
+to use to visualize your data, there's no magic here.
 
 And a final step is to change how the script properties are handled:
 
