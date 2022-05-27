@@ -13,7 +13,7 @@
 
 ## Introduction
 
-In this tutorial we'll make a 2D platformer using new plugin and scripting system that was become available in Fyrox 0.25 and 
+In this tutorial we'll make a 2D platformer using new plugin and scripting system that has become available in Fyrox 0.25 and 
 improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:
 
 <iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
