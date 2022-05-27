@@ -137,14 +137,24 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="2d-platformer-tutorial-work-in-progress"><a class="header" href="#2d-platformer-tutorial-work-in-progress">2D Platformer Tutorial (WORK IN PROGRESS)</a></h1>
-<h2 id="this-is-unfinished-tutorial-ignore-it"><a class="header" href="#this-is-unfinished-tutorial-ignore-it">THIS IS UNFINISHED TUTORIAL, IGNORE IT</a></h2>
+                        <h1 id="2d-platformer-tutorial"><a class="header" href="#2d-platformer-tutorial">2D Platformer Tutorial</a></h1>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
 <ul>
-<li>TODO</li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#project">Project</a></li>
+<li><a href="#using-the-editor">Using the Editor</a></li>
+<li><a href="#scripts---player">Scripts - Player</a></li>
+<li><a href="#animation">Animation</a></li>
+<li><a href="#final-steps">Final Steps</a></li>
+<li><a href="#standalone-game">Standalone Game</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
 </ul>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
-<p>In this tutorial we'll make a 2D platformer using new plugin and scripting system that was become available in Fyrox 0.25.</p>
+<p>In this tutorial we'll make a 2D platformer using new plugin and scripting system that was become available in Fyrox 0.25 and 
+improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:</p>
+<iframe width="560" height="315" src="https://youtu.be/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>You can find source code of the tutorial <a href="https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/platformer">here</a>, you can 
+test it yourself by cloning the repository and <code>cargo run --package editor --release</code> in <code>platformer</code> directory.</p>
 <h2 id="project"><a class="header" href="#project">Project</a></h2>
 <p>Let's start by making a new project using special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
 parts in a single call. Install it using following command:</p>
@@ -165,7 +175,7 @@ example - to a store).</li>
 <p><img src="editor.png" alt="editor" /></p>
 <p>Great! Now we can actually start making our game. Go to <code>game/src/lib.rs</code> - it is where your game logic located, as you can see 
 the <code>fyrox-template</code> generate quite some code for you. There are tiny comments about which place is for what. For more info
-about each method, please refer <a href="https://docs.rs/fyrox/0.25.0/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
+about each method, please refer <a href="https://docs.rs/fyrox/0.26.0/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
 <h2 id="using-the-editor"><a class="header" href="#using-the-editor">Using the Editor</a></h2>
 <p>For now we don't even need to write a single line of code, we can create a scene entirely in the editor. This section will guide
 you through the process of scene creation, as a final result we'll get something similar to this:</p>
@@ -173,10 +183,10 @@ you through the process of scene creation, as a final result we'll get something
 <p>At first, we need some assets, I prepared all required (and some more) in a separate zip archive, so you don't need to search 
 assets all over the internet. Download assets from <a href="assets.zip">here</a> and unpack them in a <code>data</code> folder in the root folder of
 your project. </p>
-<p>Let's start by creating a new scene, go to <code>File -&gt; New Scene</code>. Since we're making 2D game, switch the editor camera mode to 
-<code>Orthographic</code> at the right top corner of scene preview window. Now we need to populate the scene with some objects, we'll start
-by adding a simple ground block. Right click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select 
-<code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the future ground block, select the rigid body and 
+<p>Let's start by creating a new scene. Run the editor and go to <code>File -&gt; New Scene</code>. Since we're making 2D game, switch the editor 
+camera mode to <code>Orthographic</code> at the right top corner of scene preview window. Now we need to populate the scene with some objects,
+we'll start by adding a simple ground block. Right click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select 
+<code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body and 
 set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we're telling the physics engine that our ground block should not move
 and be rock-solid. Every rigid body requires a collider, otherwise the physics engine will not know how to handle collisions, right 
 click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We've just added a new collider to the rigid
@@ -200,17 +210,21 @@ should get something like this:</p>
 (right click <code>__ROOT__</code> and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>) and assigning a texture to it:</p>
 <p><img src="editor_step3.png" alt="editor_step3" /></p>
 <p>As a last step of world editing, let's add some dynamic objects, like boxes. Pick some random ground block, select its rigid body and 
-clone it. Switch body type of the copy to <code>Dynamic</code>. Now change it's sprite texture to a box and clone the box few times, you should get
-something like this:</p>
+clone it. Switch body type of the copy to <code>Dynamic</code>. Now change it's sprite texture to a box (drag'n'drop <code>data/objects/Crate.png</code> to
+<code>Texture</code> field) and clone the box few times, you should get something like this:</p>
 <p><img src="editor_step4.png" alt="editor_step4" /></p>
 <p>Now for the player. As always, let's start by creating a new rigid body, add a 2D collider to it and set its shape to capsule with following
 parameters - <code>Begin = 0.0, 0.0</code> and <code>End = 0.0, 0.3</code>. Add a 2D sprite (rectangle) to the rigid body and set its texture to a texture from
 <code>data/characters/adventurer/Individual Sprites</code>. We also need a camera, otherwise we won't see anything. Add it as a child to player's 
-rigid body, in the end you should get something like this:</p>
+rigid body. By default our camera will have no background, there'll be a black &quot;void&quot;, this is not great and let's fix that. Select the camera
+and set <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag'n'drop it to the <code>Front</code> field of the 
+<code>Skybox</code> property. Don't forget to adjust far plane distance to something like <code>20.0</code>, otherwise you'll see just a portion of background image.
+If everything is done correctly, you should get something like this:</p>
 <p><img src="editor_step5.png" alt="editor_step5" /></p>
-<p>Run the game using <code>Play/Stop</code> button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
-service graphics, such as rigid body shapes and so on. Now we can start writing scripts, but at first let's make our life easier and force the editor 
-to load the scene for us on startup. Go to <code>editor/src/main.rs</code> and replace this:</p>
+<p>Save your scene to <code>data/scene.rgs</code> - go to <code>File -&gt; Save Scene</code>, select <code>data</code> folder in the tree and set file name to <code>scene.rgs</code>. Now we can
+run the game using <code>Play/Stop</code> button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
+service graphics, such as rigid body shapes, node bounds and so on. Now we can start writing scripts, but at first let's make our life easier
+and force the editor to load the scene for us on startup. Go to <code>editor/src/main.rs</code> and replace this:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -265,8 +279,7 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
 </span></code></pre></pre>
 <h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
 <p>Our scene has pretty much everything we need to start adding scripts, we'll start from <code>Player</code> script and make our character 
-move.</p>
-<p>Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
+move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -319,9 +332,27 @@ impl ScriptTrait for Player {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>This is a typical &quot;skeleton&quot; of any script, for now its methods are pretty much empty, we'll fill it with actual code right now.
-But before we continue, we must tell the engine that our script exist - we must register it. Remember that <code>on_register</code> method
-in <code>Plugin</code> trait implementation? It is exactly for script registration, replace its implementation with following code snippet:</p>
+<p>This is a typical &quot;skeleton&quot; of any script, for now its methods are pretty much empty, we'll fill it with actual code very soon.
+Let's go over most important parts. The snippet starts from <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone)]</code>
+attributes:</p>
+<ul>
+<li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to scene file.</li>
+<li><code>Inspect</code> implements read-only static reflection that provides introspection for your type - in other words it allows the editor
+to &quot;see&quot; what's inside your structure.</li>
+<li><code>Debug</code> - provides debugging functionality, it is mostly for editor to let it print stuff into console.</li>
+<li><code>Clone</code> - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be 
+copied.</li>
+</ul>
+<p>Next goes <code>Default</code> implementation, it is very important - scripting system uses it to create your scripts in default state and then 
+it is able to set some data to it and so on.</p>
+<p><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script *<em>must</em> have unique id, otherwise the engine will 
+not be able to save and load your scripts. To generate a new uuid, use <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or
+any other tool that is able to generate UUIDs.</p>
+<p>Finally we implement <code>ScriptTrait</code> for the <code>Player</code>. It has a bunch of methods, their names speaks for themselves. Learn more about
+every method in <a href="https://docs.rs/fyrox/0.26.0/fyrox/script/trait.ScriptTrait.html">documentation</a></p>
+<p>Before we can use the script in the editor, we must tell the engine that our script exist - we must register it. Remember that 
+<code>on_register</code> method in <code>Plugin</code> trait implementation? It is exactly for script registration, replace its implementation with following 
+code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -335,10 +366,9 @@ in <code>Plugin</code> trait implementation? It is exactly for script registrati
 assign it to the player. Select player's rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from respective 
 drop-down list and that's pretty much it - now the script is assigned:</p>
 <p><img src="script_selection.png" alt="script_selection" /></p>
-<p>Let's do something useful with it, for example - let's learn how to edit script properties from the editor. In the next section, 
-we'll be adding key frame animation for you character, it is perfect opportunity to learn how the engine and the editor operate with
-user-defined properties in scripts. To animate the player we need to get its sprite first. Let's start by adding required field in 
-the <code>Player</code> structure:</p>
+<p>Let's learn how to edit script properties from the editor. In the next section, we'll be adding key frame animation for you character,
+it is perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
+we need to get its sprite first. Let's start by adding required field in the <code>Player</code> structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -383,9 +413,9 @@ code from you, when macro is expanded the result code would look like:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>It is good to know what it is doing, before use macros. At first, the code checks value kind, if it is a simple object, then we're 
-checking the name of the property and if it is our <code>body</code>, setting the value. The method expects <code>true</code> or <code>false</code> as a return value,
-what does each mean? <code>true</code> means that the property was handled and <code>false</code> - otherwise. If the editor sees <code>false</code> it prints warning
-message informing you that something is missing.</p>
+checking the name of the property and if it is our <code>sprite</code>, setting the value. The method expects <code>true</code> or <code>false</code> as a return value,
+what does each mean? <code>true</code> means that the property was handled and <code>false</code> - opposite. If the editor sees <code>false</code> it prints warning
+message informing you that property handler is missing.</p>
 <p>To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging sprite node from
 the world viewer to the respective field in the player script. Release the mouse button and if everything is ok, the field should &quot;say&quot;
 something different than &quot;Unassigned&quot;.</p>
@@ -468,7 +498,7 @@ the jump button was pressed - apply horizontal velocity and some vertical veloci
 just change horizontal velocity - this will allow the player to free fall.</p>
 <p>Run the editor and enter play mode, press <code>[A][D][Space]</code> buttons to check if everything works correctly - the player should move 
 horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge. </p>
-<p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks of (despite lack of animation),
+<p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite lack of animation),
 but if we'll move to the right - it looks like player moves backwards. Let's fix that by changing horizontal scaling of the player's 
 sprite. Add following code at the end of the <code>if let ...</code> block of the code above:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
