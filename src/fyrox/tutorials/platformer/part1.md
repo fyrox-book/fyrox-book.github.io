@@ -1,14 +1,25 @@
-# 2D Platformer Tutorial (WORK IN PROGRESS)
-
-## THIS IS UNFINISHED TUTORIAL, IGNORE IT
+# 2D Platformer Tutorial
 
 ## Table of Contents
 
-- TODO
+- [Introduction](#introduction)
+- [Project](#project)
+- [Using the Editor](#using-the-editor)
+- [Scripts - Player](#scripts---player)
+- [Animation](#animation)
+- [Final Steps](#final-steps)
+- [Standalone Game](#standalone-game)
+- [Conclusion](#conclusion)
 
 ## Introduction
 
-In this tutorial we'll make a 2D platformer using new plugin and scripting system that was become available in Fyrox 0.25.
+In this tutorial we'll make a 2D platformer using new plugin and scripting system that was become available in Fyrox 0.25 and 
+improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:
+
+<iframe width="560" height="315" src="https://youtu.be/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+You can find source code of the tutorial [here](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/platformer), you can 
+test it yourself by cloning the repository and `cargo run --package editor --release` in `platformer` directory.
 
 ## Project
 
@@ -39,7 +50,7 @@ Navigate to the `platformer` directory and run `cargo run --package editor --rel
 
 Great! Now we can actually start making our game. Go to `game/src/lib.rs` - it is where your game logic located, as you can see 
 the `fyrox-template` generate quite some code for you. There are tiny comments about which place is for what. For more info
-about each method, please refer [to the docs](https://docs.rs/fyrox/0.25.0/fyrox/plugin/trait.Plugin.html).
+about each method, please refer [to the docs](https://docs.rs/fyrox/0.26.0/fyrox/plugin/trait.Plugin.html).
 
 ## Using the Editor
 
@@ -52,10 +63,10 @@ At first, we need some assets, I prepared all required (and some more) in a sepa
 assets all over the internet. Download assets from [here](assets.zip) and unpack them in a `data` folder in the root folder of
 your project. 
 
-Let's start by creating a new scene, go to `File -> New Scene`. Since we're making 2D game, switch the editor camera mode to 
-`Orthographic` at the right top corner of scene preview window. Now we need to populate the scene with some objects, we'll start
-by adding a simple ground block. Right click on `__ROOT__` of the scene in `World Viewer` and select 
-`Add Child -> Physics2D -> Rigid Body`. This will create a rigid body for the future ground block, select the rigid body and 
+Let's start by creating a new scene. Run the editor and go to `File -> New Scene`. Since we're making 2D game, switch the editor 
+camera mode to `Orthographic` at the right top corner of scene preview window. Now we need to populate the scene with some objects,
+we'll start by adding a simple ground block. Right click on `__ROOT__` of the scene in `World Viewer` and select 
+`Add Child -> Physics2D -> Rigid Body`. This will create a rigid body for the ground block, select the rigid body and 
 set `Body Type` to `Static` in `Inspector`, by doing this we're telling the physics engine that our ground block should not move
 and be rock-solid. Every rigid body requires a collider, otherwise the physics engine will not know how to handle collisions, right 
 click on the rigid body in `Inspector` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
@@ -85,21 +96,25 @@ Repeat these steps if you like, to add more platforms. You can also add some bac
 ![editor_step3](editor_step3.png)
 
 As a last step of world editing, let's add some dynamic objects, like boxes. Pick some random ground block, select its rigid body and 
-clone it. Switch body type of the copy to `Dynamic`. Now change it's sprite texture to a box and clone the box few times, you should get
-something like this:
+clone it. Switch body type of the copy to `Dynamic`. Now change it's sprite texture to a box (drag'n'drop `data/objects/Crate.png` to
+`Texture` field) and clone the box few times, you should get something like this:
 
 ![editor_step4](editor_step4.png)
 
 Now for the player. As always, let's start by creating a new rigid body, add a 2D collider to it and set its shape to capsule with following
 parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to a texture from
 `data/characters/adventurer/Individual Sprites`. We also need a camera, otherwise we won't see anything. Add it as a child to player's 
-rigid body, in the end you should get something like this:
+rigid body. By default our camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
+and set `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to the `Front` field of the 
+`Skybox` property. Don't forget to adjust far plane distance to something like `20.0`, otherwise you'll see just a portion of background image.
+If everything is done correctly, you should get something like this:
 
 ![editor_step5](editor_step5.png)
 
-Run the game using `Play/Stop` button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
-service graphics, such as rigid body shapes and so on. Now we can start writing scripts, but at first let's make our life easier and force the editor 
-to load the scene for us on startup. Go to `editor/src/main.rs` and replace this:
+Save your scene to `data/scene.rgs` - go to `File -> Save Scene`, select `data` folder in the tree and set file name to `scene.rgs`. Now we can
+run the game using `Play/Stop` button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
+service graphics, such as rigid body shapes, node bounds and so on. Now we can start writing scripts, but at first let's make our life easier
+and force the editor to load the scene for us on startup. Go to `editor/src/main.rs` and replace this:
 
 ```rust,no_run
 Some(StartupData {
@@ -153,9 +168,7 @@ use fyrox::{
 ## Scripts - Player
 
 Our scene has pretty much everything we need to start adding scripts, we'll start from `Player` script and make our character 
-move.
-
-Navigate to `game/src/lib.rs` and at the end of the file add the following code snippet:
+move. Navigate to `game/src/lib.rs` and at the end of the file add the following code snippet:
 
 ```rust,no_run
 #[derive(Visit, Inspect, Debug, Clone)]
@@ -207,9 +220,30 @@ impl ScriptTrait for Player {
 }
 ```
 
-This is a typical "skeleton" of any script, for now its methods are pretty much empty, we'll fill it with actual code right now.
-But before we continue, we must tell the engine that our script exist - we must register it. Remember that `on_register` method
-in `Plugin` trait implementation? It is exactly for script registration, replace its implementation with following code snippet:
+This is a typical "skeleton" of any script, for now its methods are pretty much empty, we'll fill it with actual code very soon.
+Let's go over most important parts. The snippet starts from `Player` structure definition which has `#[derive(Visit, Inspect, Debug, Clone)]`
+attributes:
+
+- `Visit` implements serialization/deserialization functionality, it is used by the editor to save your object to scene file.
+- `Inspect` implements read-only static reflection that provides introspection for your type - in other words it allows the editor
+to "see" what's inside your structure.
+- `Debug` - provides debugging functionality, it is mostly for editor to let it print stuff into console.
+- `Clone` - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be 
+copied.
+
+Next goes `Default` implementation, it is very important - scripting system uses it to create your scripts in default state and then 
+it is able to set some data to it and so on.
+
+`TypeUuidProvider` is used to attach some unique id for your type, every script **must* have unique id, otherwise the engine will 
+not be able to save and load your scripts. To generate a new uuid, use [Online UUID Generator](https://www.uuidgenerator.net/) or
+any other tool that is able to generate UUIDs.
+
+Finally we implement `ScriptTrait` for the `Player`. It has a bunch of methods, their names speaks for themselves. Learn more about
+every method in [documentation](https://docs.rs/fyrox/0.26.0/fyrox/script/trait.ScriptTrait.html)
+
+Before we can use the script in the editor, we must tell the engine that our script exist - we must register it. Remember that 
+`on_register` method in `Plugin` trait implementation? It is exactly for script registration, replace its implementation with following 
+code snippet:
 
 ```rust,no_run
 fn on_register(&mut self, context: PluginRegistrationContext) {
@@ -224,10 +258,9 @@ drop-down list and that's pretty much it - now the script is assigned:
 
 ![script_selection](script_selection.png)
 
-Let's do something useful with it, for example - let's learn how to edit script properties from the editor. In the next section, 
-we'll be adding key frame animation for you character, it is perfect opportunity to learn how the engine and the editor operate with
- user-defined properties in scripts. To animate the player we need to get its sprite first. Let's start by adding required field in 
- the `Player` structure:
+Let's learn how to edit script properties from the editor. In the next section, we'll be adding key frame animation for you character,
+it is perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
+we need to get its sprite first. Let's start by adding required field in the `Player` structure:
 
 ```rust,no_run
 #[derive(Visit, Inspect, Debug, Clone)]
@@ -269,9 +302,9 @@ if let FieldKind::Object(ref value) = args.value {
 ```
 
 It is good to know what it is doing, before use macros. At first, the code checks value kind, if it is a simple object, then we're 
-checking the name of the property and if it is our `body`, setting the value. The method expects `true` or `false` as a return value,
-what does each mean? `true` means that the property was handled and `false` - otherwise. If the editor sees `false` it prints warning
-message informing you that something is missing.
+checking the name of the property and if it is our `sprite`, setting the value. The method expects `true` or `false` as a return value,
+what does each mean? `true` means that the property was handled and `false` - opposite. If the editor sees `false` it prints warning
+message informing you that property handler is missing.
 
 To assign the correct handle of the sprite to the respective field in script properties, hold `Alt` and start dragging sprite node from
 the world viewer to the respective field in the player script. Release the mouse button and if everything is ok, the field should "say"
@@ -354,7 +387,7 @@ just change horizontal velocity - this will allow the player to free fall.
 Run the editor and enter play mode, press `[A][D][Space]` buttons to check if everything works correctly - the player should move 
 horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge. 
 
-The movement is working, but the player does not change orientation, if we'll go to the left - it looks of (despite lack of animation),
+The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite lack of animation),
 but if we'll move to the right - it looks like player moves backwards. Let's fix that by changing horizontal scaling of the player's 
 sprite. Add following code at the end of the `if let ...` block of the code above:
 
