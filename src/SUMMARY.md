@@ -22,7 +22,7 @@
     - [Rendering](./fyrox/rendering/rendering.md)
       - [Shaders](./fyrox/rendering/shaders.md)
       - [Materials](./fyrox/rendering/materials.md)       
-    - [Sound (WIP)](./fyrox/sound/sound.md)
+    - [Sound](./fyrox/sound/sound.md)
       - [HRTF (WIP)](./fyrox/sound/hrtf.md)
     - [Physics](./fyrox/physics/physics.md)
       - [Rigid body](./fyrox/physics/rigid_body.md)
