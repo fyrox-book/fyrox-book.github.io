@@ -7221,7 +7221,7 @@ impl ScriptTrait for Player {
 <span class="boring">}
 </span></code></pre></pre>
 <p>This is a typical &quot;skeleton&quot; of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
-Let's go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone)]</code>
+Let's go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone, Default)]</code>
 attributes:</p>
 <ul>
 <li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.</li>
