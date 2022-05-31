@@ -98,7 +98,7 @@ Repeat these steps if you like, to add more platforms. You can also add some bac
 ![editor_step3](editor_step3.png)
 
 As the last step of world editing, let's add some dynamic objects, like boxes. Pick some random ground block, select its rigid body, and
-clone it. The switch body type of the copy to `Dynamic`. Now change its sprite texture to a box (drag'n'drop `data/objects/Crate.png` to
+clone it. Switch body type of the copy to `Dynamic`. Now change its sprite texture to a box (drag'n'drop `data/objects/Crate.png` to
 `Texture` field) and clone the box a few times, you should get something like this:
 
 ![editor_step4](editor_step4.png)
@@ -136,7 +136,7 @@ Some(StartupData {
 ```
 
 Now if you re-run the editor, it will automatically load the requested scene, this saves some extra clicks and only a few seconds,
-but if you multiply that by several restarts, this will give you a decent time save.
+but if you multiply that by a number of restarts, this will give you a decent time save.
 
 As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
 at the beginning of the `game/src/lib.rs`:
@@ -258,7 +258,7 @@ struct Player {
 
 After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector, but for now, any
 changes done in Inspector will not be applied to the script instance. We need to take care of this, it is a bit of manual work,
-future versions of the engine will most likely do this automatically. We're interested in the `on_property_changed` method, fill in
+future versions of the engine will most likely do this automatically. We're interested in the `on_property_changed` method, fill it
 the following code snippet:
 
 ```rust,no_run
@@ -379,7 +379,7 @@ The comments should clarify what's going on here, but in short, we're changing t
 moving. The line `current_scale.x.copysign(-x_speed)` could be confusing, what it does? It replaces the sign of current horizontal scaling
 using the opposite sign of `x_speed`.
 
-Now if you run the game, the player will "look" incorrect direction depending on the velocity vector.
+Now if you run the game, the player will "look" in correct direction depending on the velocity vector.
 
 ## Animation
 
