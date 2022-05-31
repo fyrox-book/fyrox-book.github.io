@@ -7037,6 +7037,9 @@ The source code for this tutorial is available on <a href="https://github.com/Fy
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2d-platformer-tutorial"><a class="header" href="#2d-platformer-tutorial">2D Platformer Tutorial</a></h1>
 <h2 id="table-of-contents-4"><a class="header" href="#table-of-contents-4">Table of Contents</a></h2>
 <ul>
+<li><a href="fyrox/tutorials/platformer/part1.html#2d-platformer-tutorial">2D Platformer Tutorial</a>
+<ul>
+<li><a href="fyrox/tutorials/platformer/part1.html#table-of-contents">Table of Contents</a></li>
 <li><a href="fyrox/tutorials/platformer/part1.html#introduction">Introduction</a></li>
 <li><a href="fyrox/tutorials/platformer/part1.html#project">Project</a></li>
 <li><a href="fyrox/tutorials/platformer/part1.html#using-the-editor">Using the Editor</a></li>
@@ -7046,81 +7049,83 @@ The source code for this tutorial is available on <a href="https://github.com/Fy
 <li><a href="fyrox/tutorials/platformer/part1.html#standalone-game">Standalone Game</a></li>
 <li><a href="fyrox/tutorials/platformer/part1.html#conclusion">Conclusion</a></li>
 </ul>
+</li>
+</ul>
 <h2 id="introduction-4"><a class="header" href="#introduction-4">Introduction</a></h2>
-<p>In this tutorial we'll make a 2D platformer using new plugin and scripting system that has become available in Fyrox 0.25 and 
+<p>In this tutorial, we'll make a 2D platformer using the new plugin and scripting system that has become available in Fyrox 0.25 and
 improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:</p>
 <iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<p>You can find source code of the tutorial <a href="https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/platformer">here</a>, you can 
-test it yourself by cloning the repository and <code>cargo run --package editor --release</code> in <code>platformer</code> directory.</p>
+<p>You can find the source code of the tutorial <a href="https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/platformer">here</a>, you can
+test it yourself by cloning the repository and <code>cargo run --package editor --release</code> in the <code>platformer</code> directory.</p>
 <h2 id="project"><a class="header" href="#project">Project</a></h2>
-<p>Let's start by making a new project using special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
-parts in a single call. Install it using following command:</p>
+<p>Let's start by making a new project using the special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
+parts in a single call. Install it using the following command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
 <p>Navigate to a folder where you want the project to be created and do the following command:</p>
 <pre><code class="language-shell">fyrox-template --name platformer
 </code></pre>
-<p>The tool accepts only one argument - project name (it could be extended in the future). After the project is generated, you 
+<p>The tool accepts only one argument - project name (it could be extended in the future). After the project is generated, you
 should memorize two commands:</p>
 <ul>
 <li><code>cargo run --package editor --release</code> - launches the editor with your game attached, the editor allows you to run your game
 inside it and edit game entities. It is intended to be used only for development.</li>
-<li><code>cargo run --package executor --release</code> - creates and runs production binary of your game that can be shipped (for
+<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game that can be shipped (for
 example - to a store).</li>
 </ul>
 <p>Navigate to the <code>platformer</code> directory and run <code>cargo run --package editor --release</code>, after some time you should see the editor:</p>
 <p><img src="fyrox/tutorials/platformer/editor.png" alt="editor" /></p>
-<p>Great! Now we can actually start making our game. Go to <code>game/src/lib.rs</code> - it is where your game logic located, as you can see 
+<p>Great! Now we can start making our game. Go to <code>game/src/lib.rs</code> - it is where your game logic is located, as you can see
 the <code>fyrox-template</code> generate quite some code for you. There are tiny comments about which place is for what. For more info
 about each method, please refer <a href="https://docs.rs/fyrox/0.26.0/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
 <h2 id="using-the-editor"><a class="header" href="#using-the-editor">Using the Editor</a></h2>
-<p>For now we don't even need to write a single line of code, we can create a scene entirely in the editor. This section will guide
+<p>For now, we don't even need to write a single line of code, we can create a scene entirely in the editor. This section will guide
 you through the process of scene creation, as a final result we'll get something similar to this:</p>
 <p><img src="fyrox/tutorials/platformer/editor_with_scene.png" alt="editor with scene" /></p>
-<p>At first, we need some assets, I prepared all required (and some more) in a separate zip archive, so you don't need to search 
+<p>At first, we need some assets, I prepared all required (and some more) in a separate zip archive, so you don't need to search
 assets all over the internet. Download assets from <a href="fyrox/tutorials/platformer/assets.zip">here</a> and unpack them in a <code>data</code> folder in the root folder of
-your project. </p>
-<p>Let's start by creating a new scene. Run the editor and go to <code>File -&gt; New Scene</code>. Since we're making 2D game, switch the editor 
-camera mode to <code>Orthographic</code> at the right top corner of scene preview window. Now we need to populate the scene with some objects,
-we'll start by adding a simple ground block. Right click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select 
-<code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body and 
+your project.</p>
+<p>Let's start by creating a new scene. Run the editor and go to <code>File -&gt; New Scene</code>. Since we're making a 2D game, switch the editor
+camera mode to <code>Orthographic</code> at the right top corner of the scene preview window. Now we need to populate the scene with some objects,
+we'll start by adding a simple ground block. Right-click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select
+<code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body, and
 set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we're telling the physics engine that our ground block should not move
-and be rock-solid. Every rigid body requires a collider, otherwise the physics engine will not know how to handle collisions, right 
-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We've just added a new collider to the rigid
-body, by default it has <code>Cuboid</code> shape with <code>1.0</code> meter in height and width. Finally we need to add some graphics to the rigid body,
-right click on the rigid body and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>. This adds a simple 2D sprite, select it and set a texture
-to it by drag'n'dropping it from asset browser on the white field of <code>Texture</code> field in the <code>Inspector</code>. For my scene I'm gonna
-be using three sprites </p>
+and be rock-solid.
+Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions, right-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We've just added a new collider to the rigid
+body, by default it has a <code>Cuboid</code> shape with a <code>1.0</code> meter in height and width. Finally, we need to add some graphics to the rigid body,
+right-click on the rigid body and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>. This adds a simple 2D sprite, select it and set a texture
+to it by drag'n'dropping it from the asset browser on the white field of the <code>Texture</code> field in the <code>Inspector</code>. For my scene, I'm gonna
+be using three sprites.</p>
 <ul>
 <li><code>data/tiles/13.png</code> - left ground block</li>
 <li><code>data/tiles/14.png</code> - center ground block</li>
 <li><code>data/tiles/15.png</code> - right ground block</li>
 </ul>
-<p>You can use any other textures and build your own level as you like. After doing all these steps you should get something like this:</p>
+<p>You can use any other textures and build your level as you like. After doing all these steps you should get something like this:</p>
 <p><img src="fyrox/tutorials/platformer/editor_step1.png" alt="editor_step1" /></p>
 <p>Clone the block by selecting its rigid body and pressing <code>Ctrl+C</code> followed by <code>Ctrl+V</code>, navigate to sprite in the copy and change its
-texture to either left or right end of the block. Use <code>Move Tool</code> to move the block somewhere you like (you can also using grid snapping
-by going to <code>File -&gt; Setting</code> and setting <code>Snap To Grid</code> for <code>Move Interaction Mode</code>). Do this one more time for opposite end and you
+texture to either the left or right end of the block. Use <code>Move Tool</code> to move the block somewhere you like (you can also use grid-snapping
+by going to <code>File -&gt; Setting</code> and setting <code>Snap To Grid</code> for <code>Move Interaction Mode</code>). Do this one more time for the opposite end and you
 should get something like this:</p>
 <p><img src="fyrox/tutorials/platformer/editor_step2.png" alt="editor_step2" /></p>
-<p>Repeat these steps if you like, to add more platforms. You can also add some background objects, by creating a new sprite 
+<p>Repeat these steps if you like, to add more platforms. You can also add some background objects, by creating a new sprite
 (right click <code>__ROOT__</code> and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>) and assigning a texture to it:</p>
 <p><img src="fyrox/tutorials/platformer/editor_step3.png" alt="editor_step3" /></p>
-<p>As a last step of world editing, let's add some dynamic objects, like boxes. Pick some random ground block, select its rigid body and 
-clone it. Switch body type of the copy to <code>Dynamic</code>. Now change it's sprite texture to a box (drag'n'drop <code>data/objects/Crate.png</code> to
-<code>Texture</code> field) and clone the box few times, you should get something like this:</p>
+<p>As the last step of world editing, let's add some dynamic objects, like boxes. Pick some random ground block, select its rigid body, and
+clone it. Switch body type of the copy to <code>Dynamic</code>. Now change its sprite texture to a box (drag'n'drop <code>data/objects/Crate.png</code> to
+<code>Texture</code> field) and clone the box a few times, you should get something like this:</p>
 <p><img src="fyrox/tutorials/platformer/editor_step4.png" alt="editor_step4" /></p>
-<p>Now for the player. As always, let's start by creating a new rigid body, add a 2D collider to it and set its shape to capsule with following
+<p>Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - <code>Begin = 0.0, 0.0</code> and <code>End = 0.0, 0.3</code>. Add a 2D sprite (rectangle) to the rigid body and set its texture to a texture from
-<code>data/characters/adventurer/Individual Sprites</code>. We also need a camera, otherwise we won't see anything. Add it as a child to player's 
+<code>data/characters/adventurer/Individual Sprites</code>. We also need a camera, otherwise, we won't see anything. Add it as a child to a player's
 rigid body. By default our camera will have no background, there'll be a black &quot;void&quot;, this is not great and let's fix that. Select the camera
-and set <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag'n'drop it to the <code>Front</code> field of the 
-<code>Skybox</code> property. Don't forget to adjust far plane distance to something like <code>20.0</code>, otherwise you'll see just a portion of background image.
+and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag'n'drop it to the <code>Front</code> field of the
+<code>Skybox</code> property. Don't forget to adjust the far plane distance to something like <code>20.0</code>, otherwise, you'll see just a portion of the background image.
 If everything is done correctly, you should get something like this:</p>
 <p><img src="fyrox/tutorials/platformer/editor_step5.png" alt="editor_step5" /></p>
-<p>Save your scene to <code>data/scene.rgs</code> - go to <code>File -&gt; Save Scene</code>, select <code>data</code> folder in the tree and set file name to <code>scene.rgs</code>. Now we can
-run the game using <code>Play/Stop</code> button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
-service graphics, such as rigid body shapes, node bounds and so on. Now we can start writing scripts, but at first let's make our life easier
+<p>Save your scene to <code>data/scene.rgs</code> - go to <code>File -&gt; Save Scene</code>, select <code>data</code> folder in the tree and set filename to <code>scene.rgs</code>. Now we can
+run the game using the <code>Play/Stop</code> button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
+for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts, but at first, let's make our life easier
 and force the editor to load the scene for us on startup. Go to <code>editor/src/main.rs</code> and replace this:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -7143,8 +7148,8 @@ and force the editor to load the scene for us on startup. Go to <code>editor/src
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now if you re-run the editor, it will automatically load the requested scene, this saves some extra clicks and only a few seconds,
-but if you multiply that to a number of restarts, this will give you decent time save.</p>
-<p>And a last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code 
+but if you multiply that by a number of restarts, this will give you a decent time save.</p>
+<p>As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
 at the beginning of the <code>game/src/lib.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -7175,19 +7180,13 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
-<p>Our scene has pretty much everything we need to start adding scripts, we'll start from <code>Player</code> script and make our character 
+<p>Our scene has pretty much everything we need to start adding scripts, we'll start from the <code>Player</code> script and make our character
 move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Inspect, Debug, Clone)]
-struct Player {}
-
-impl Default for Player {
-    fn default() -&gt; Self {
-        Self {}
-    }
-}
+</span>#[derive(Visit, Inspect, Debug, Clone, Default)]
+struct Player;
 
 impl TypeUuidProvider for Player {
     // Returns unique script id for serialization needs.
@@ -7198,26 +7197,18 @@ impl TypeUuidProvider for Player {
 
 impl ScriptTrait for Player {
     // Accepts events from Inspector in the editor and modifies self state accordingly.
-    fn on_property_changed(&amp;mut self, args: &amp;PropertyChanged) -&gt; bool {
-        
-    }
+    fn on_property_changed(&amp;mut self, args: &amp;PropertyChanged) -&gt; bool {}
 
     // Called once at initialization.
-    fn on_init(&amp;mut self, context: ScriptContext) {
-        
-    }
+    fn on_init(&amp;mut self, context: ScriptContext) {}
 
-    // Called everytime when there is an event from OS (mouse click, key press, etc.)
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: ScriptContext) {
-        
-    }
+    // Called whenever there is an event from OS (mouse click, keypress, etc.)
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: ScriptContext) {}
 
     // Called every frame at fixed rate of 60 FPS.
-    fn on_update(&amp;mut self, context: ScriptContext) {
-        
-    }
+    fn on_update(&amp;mut self, context: ScriptContext) {}
 
-    // Returns unique script id for serialization needs.
+    // Returns unique script ID for serialization needs.
     fn id(&amp;self) -&gt; Uuid {
         Self::type_uuid()
     }
@@ -7229,26 +7220,27 @@ impl ScriptTrait for Player {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>This is a typical &quot;skeleton&quot; of any script, for now its methods are pretty much empty, we'll fill it with actual code very soon.
-Let's go over most important parts. The snippet starts from <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone)]</code>
+<p>This is a typical &quot;skeleton&quot; of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
+Let's go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone)]</code>
 attributes:</p>
 <ul>
-<li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to scene file.</li>
-<li><code>Inspect</code> implements read-only static reflection that provides introspection for your type - in other words it allows the editor
+<li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.</li>
+<li><code>Inspect</code> implements read-only static reflection that provides introspection for your type - in other words, it allows the editor
 to &quot;see&quot; what's inside your structure.</li>
-<li><code>Debug</code> - provides debugging functionality, it is mostly for editor to let it print stuff into console.</li>
-<li><code>Clone</code> - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be 
+<li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.</li>
+<li><code>Clone</code> - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be
 copied.</li>
+<li><code>Default</code> implementation is very important - the scripting system uses it to create your scripts in the default state.
+This is necessary to set some data to it and so on. If it's a special case, you can always implement your own <code>Default</code>'s
+implementation if it's necessary for your script.</li>
+<li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script *<em>must</em> have a unique ID, otherwise, the engine will
+not be able to save and load your scripts. To generate a new UUID, use <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or
+any other tool that can generate UUIDs.</li>
 </ul>
-<p>Next goes <code>Default</code> implementation, it is very important - scripting system uses it to create your scripts in default state and then 
-it is able to set some data to it and so on.</p>
-<p><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script *<em>must</em> have unique id, otherwise the engine will 
-not be able to save and load your scripts. To generate a new uuid, use <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or
-any other tool that is able to generate UUIDs.</p>
-<p>Finally we implement <code>ScriptTrait</code> for the <code>Player</code>. It has a bunch of methods, their names speaks for themselves. Learn more about
+<p>Finally, we implement <code>ScriptTrait</code> for the <code>Player</code>. It has a bunch of methods, their names speak for themselves. Learn more about
 every method in <a href="https://docs.rs/fyrox/0.26.0/fyrox/script/trait.ScriptTrait.html">documentation</a></p>
-<p>Before we can use the script in the editor, we must tell the engine that our script exist - we must register it. Remember that 
-<code>on_register</code> method in <code>Plugin</code> trait implementation? It is exactly for script registration, replace its implementation with following 
+<p>Before we can use the script in the editor, we must tell the engine that our script exists - we must register it. Remember that
+<code>on_register</code> method in the <code>Plugin</code> trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -7259,31 +7251,25 @@ code snippet:</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Now the engine know about our script and will be able to use it. It is pretty much useless in the current state, but we can already
-assign it to the player. Select player's rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from respective 
+<p>Now the engine knows about our script and will be able to use it. It is pretty much useless in the current state, but we can already
+assign it to the player. Select the player's rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from the respective
 drop-down list and that's pretty much it - now the script is assigned:</p>
 <p><img src="fyrox/tutorials/platformer/script_selection.png" alt="script_selection" /></p>
-<p>Let's learn how to edit script properties from the editor. In the next section, we'll be adding key frame animation for you character,
-it is perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
-we need to get its sprite first. Let's start by adding required field in the <code>Player</code> structure:</p>
+<p>Let's learn how to edit script properties from the editor. In the next section, we'll be adding keyframe animation for your character,
+it is a perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
+we need to get its sprite first. Let's start by adding the required field in the <code>Player</code> structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Inspect, Debug, Clone)]
+</span>#[derive(Visit, Inspect, Debug, Clone, Default)]
 struct Player {
     sprite: Handle&lt;Node&gt;,
 }
-
-impl Default for Player {
-    fn default() -&gt; Self {
-        Self { sprite: Handle::NONE }
-    }
-}
 <span class="boring">}
 </span></code></pre></pre>
-<p>After adding this, the editor will be able to see the field and give you an ability to edit it in the Inspector, but for now any
-changes done in Inspector will not be applied to the script instance. We need to take care about this, it is a bit of manual work,
-future versions of the engine will most likely do this automatically. We're interested in <code>on_property_changed</code> method, fill it 
+<p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector, but for now, any
+changes done in Inspector will not be applied to the script instance. We need to take care of this, it is a bit of manual work,
+future versions of the engine will most likely do this automatically. We're interested in the <code>on_property_changed</code> method, fill it
 the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -7291,8 +7277,8 @@ the following code snippet:</p>
 </span>handle_object_property_changed!(self, args, Self::SPRITE =&gt; sprite)
 <span class="boring">}
 </span></code></pre></pre>
-<p>This single line of code applies changes to <code>sprite</code> field if in the editor it's &quot;view&quot; was edited. The macro hides most of boilerplate
-code from you, when macro is expanded the result code would look like:</p>
+<p>This single line of code applies changes to the <code>sprite</code> field if in the editor it's &quot;view&quot; was edited. The macro hides most of boilerplate
+code from you, when a macro is expanded the result code would look like:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7309,15 +7295,15 @@ code from you, when macro is expanded the result code would look like:</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>It is good to know what it is doing, before use macros. At first, the code checks value kind, if it is a simple object, then we're 
-checking the name of the property and if it is our <code>sprite</code>, setting the value. The method expects <code>true</code> or <code>false</code> as a return value,
-what does each mean? <code>true</code> means that the property was handled and <code>false</code> - opposite. If the editor sees <code>false</code> it prints warning
-message informing you that property handler is missing.</p>
-<p>To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging sprite node from
+<p>It is good to know what it is doing, before using macros. At first, the code checks value kind, if it is a simple object, then we're
+checking the name of the property, and if it is our <code>sprite</code>, setting the value. The method expects <code>true</code> or <code>false</code> as a return value,
+what does each mean? <code>true</code> means that the property was handled, and <code>false</code> - the opposite. If the editor sees <code>false</code> it prints a warning
+message informing you that the property handler is missing.</p>
+<p>To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging the sprite node from
 the world viewer to the respective field in the player script. Release the mouse button and if everything is ok, the field should &quot;say&quot;
 something different than &quot;Unassigned&quot;.</p>
-<p>Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player. Go to <code>Player</code> 
-structure and add following fields:</p>
+<p>Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player.
+Go to the <code>Player</code> structure and add the following fields:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7326,23 +7312,7 @@ move_right: bool,
 jump: bool,
 <span class="boring">}
 </span></code></pre></pre>
-<p>Don't forget to initialize the fields in <code>Default</code> trait implementation:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>impl Default for Player {
-    fn default() -&gt; Self {
-        Self {
-            body: Handle::NONE,
-            move_left: false,
-            move_right: false,
-            jump: false,
-        }
-    }
-}
-<span class="boring">}
-</span></code></pre></pre>
-<p>These fields will store state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add following code in there:</p>
+<p>These fields will store the state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add the following code there:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7372,32 +7342,30 @@ fn on_update(&amp;mut self, context: ScriptContext) {
     // The script can be assigned to any scene node, but we assert that it will work only with
     // 2d rigid body nodes.
     if let Some(rigid_body) = context.node.cast_mut::&lt;RigidBody&gt;() {
-        let x_speed = if self.move_left {
-            3.0
-        } else if self.move_right {
-            -3.0
-        } else {
-            0.0
+        let x_speed = match (self.move_left, self.move_right) {
+            (true, false) =&gt; 3.0,
+            (false, true) -&gt; -3.0,
+            _ =&gt; 0.0,
         };
 
         if self.jump {
-            rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0))
+            rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0));
         } else {
-            rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y))
-        };
+            rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y));
+        }
     }
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Finally, some interesting code. At first we checking if the node to which the script is assigned is actually a 2d rigid body, next
-we're checking movement flags and forming horizontal speed and applying velocity to the body. Velocity is applied in two ways: if 
-the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If jump button wasn't pressed - 
+<p>Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
+we're checking movement flags and form horizontal speed, and applying velocity to the body. Velocity is applied in two ways: if
+the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If the jump button wasn't pressed -
 just change horizontal velocity - this will allow the player to free fall.</p>
-<p>Run the editor and enter play mode, press <code>[A][D][Space]</code> buttons to check if everything works correctly - the player should move 
-horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge. </p>
-<p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite lack of animation),
-but if we'll move to the right - it looks like player moves backwards. Let's fix that by changing horizontal scaling of the player's 
-sprite. Add following code at the end of the <code>if let ...</code> block of the code above:</p>
+<p>Run the editor and enter play mode, press <code>[A][D][Space]</code> buttons to check if everything works correctly - the player should move
+horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge.</p>
+<p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite the lack of animation),
+but if we'll move to the right - it looks like the player moves backward. Let's fix that by changing the horizontal scaling of the player's
+sprite. Add the following code at the end of the <code>if let ...</code> block of the code above:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7408,7 +7376,6 @@ if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
     // We want to change player orientation only if he's moving.
     if x_speed != 0.0 {
         let local_transform = sprite.local_transform_mut();
-
         let current_scale = **local_transform.scale();
 
         local_transform.set_scale(Vector3::new(
@@ -7421,15 +7388,15 @@ if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>The comments should clarify what's going on here, but in short we're changing horizontal scaling of player's sprite if the player is
-moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces sign of current horizontal scaling
-using the opposite sign of <code>x_speed</code>. </p>
-<p>Now if you run the game, the player will &quot;look&quot; in correct direction depending on velocity vector.</p>
+<p>The comments should clarify what's going on here, but in short, we're changing the horizontal scaling of the player's sprite if the player is
+moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces the sign of current horizontal scaling
+using the opposite sign of <code>x_speed</code>.</p>
+<p>Now if you run the game, the player will &quot;look&quot; in correct direction depending on the velocity vector.</p>
 <h2 id="animation-1"><a class="header" href="#animation-1">Animation</a></h2>
-<p>Since we're making 2d game, we'll be using simple animations based on continuous change of key frames. In other words we'll be changing
-texture on player body sprite. The engine does not provide such functionality yet, simply because it was focused primarily on 3D games
-for quite long period of time. It is easy to make such animation &quot;system&quot; ourselves.</p>
-<p>Put this code snippets somewhere at the end of <code>lib.rs</code> of the <code>game</code> project and we'll start learning what it's doing:</p>
+<p>Since we're making a 2D game, we'll be using simple animations based on the continuous change of keyframes. In other words, we'll be changing
+the texture of the player's body sprite. The engine does not provide such functionality yet, simply because it was focused primarily on 3D games
+for quite a long period. It is easy to make such an animation &quot;system&quot; ourselves.</p>
+<p>Put this code snippet somewhere at the end of <code>lib.rs</code> of the <code>game</code> project and we'll start learning what it's doing:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7470,10 +7437,8 @@ impl Default for Animation {
     fn default() -&gt; Self {
         Self {
             name: &quot;Unnamed&quot;.to_string(),
-            keyframes: vec![],
-            current_frame: 0,
             speed: 10.0,
-            t: 0.0,
+            ..Default::default()
         }
     }
 }
@@ -7512,20 +7477,20 @@ impl Animation {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>The code snippets is quite big, but this is pretty much everything we need for simple key frame animation.
-We start by defining <code>KeyFrameTexture</code> structure - it is a simple new-type-ish structure that holds single
-field - optional texture handle. </p>
+<p>The code snippets are quite big, but this is pretty much everything we need for simple keyframe animation.
+We start by defining the <code>KeyFrameTexture</code> structure - it is a simple new-type-ish structure that holds a single
+field - optional texture handle.</p>
 <p>Next goes the implementation of the structure, in the <code>on_property_changed</code> we're handing editor's messages
-and syncing state of key frame. The next method is more interesting - <code>restore_resources</code> restores texture
+and syncing the state of the keyframe. The next method is more interesting - <code>restore_resources</code> restores texture
 handle on deserialization. Sounds complicated, why do we need to do anything after deserialization? Well,
-the answer is simple - we don't store texture data in the texture, instead we just saving path to external
-resource and requesting the resource manager to load the texture.</p>
-<p>Finally we're at <code>Animation</code> structure, nothing unusual there, it just stores a list of key frames, index 
-of current key frame, speed, and some service fields. The implementation of it is very straightforward too,
-the most interesting method is <code>update</code>. Inside it we're updating internal <code>t</code> parameter which holds &quot;fraction&quot;
-of next frame's index, when it reaches <code>1.0</code> we're increasing index of current frame and wrapping it so it
-never exceed maximum amount of key frames - instead it will start counting from 0.</p>
-<p>It's time to start using new animation system, just add the following fields to the <code>Player</code>: </p>
+the answer is simple - we don't store texture data in the texture, instead, we just save the path to an external
+resource and request the resource manager to load the texture.</p>
+<p>Finally, we're at the <code>Animation</code> structure, nothing unusual there, it just stores a list of keyframes, an index
+of a current keyframe, speed, and some service fields. The implementation of it is very straightforward too,
+the most interesting method is <code>update</code>. Inside it, we're updating the internal <code>t</code> parameter which holds the &quot;fraction&quot;
+of the next frame's index, when it reaches <code>1.0</code> we're increasing the index of the current frame and wrapping it so it
+never exceeds the maximum amount of keyframes - instead, it will start counting from 0.</p>
+<p>It's time to start using the new animation system, just add the following fields to the <code>Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7533,17 +7498,16 @@ never exceed maximum amount of key frames - instead it will start counting from 
 current_animation: u32,
 <span class="boring">}
 </span></code></pre></pre>
-<p>Don't forget to initialize the field in <code>impl Default for Player</code>:</p>
+<p>Currently, we just pass default values.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>animations: Default::default(),
-current_animation: 0,
+</span>..Default::default()
 <span class="boring">}
 </span></code></pre></pre>
-<p>Player will use multiple animations in future tutorials, but for now it will use only two - idle and run.
-Now we need to somehow switch animations. Go to <code>on_update</code> in <code>Player</code> and add following lines after 
-<code>x_speed</code> declaration:</p>
+<p>The Player will use multiple animations in future tutorials, but for now, it will use only two - idle and run.
+Now we need to somehow switch animations. Go to <code>on_update</code> in <code>Player</code> and add the following lines after
+the <code>x_speed</code> declaration:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7554,8 +7518,8 @@ Now we need to somehow switch animations. Go to <code>on_update</code> in <code>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Here we assume that run animation will be at index <code>0</code> and the idle animation at index <code>1</code>. We also need to 
-apply texture from current animation to the player's sprite, add following lines in the end of <code>on_update</code></p>
+<p>Here we assume that the run animation will be at index <code>0</code> and the idle animation at index <code>1</code>. We also need to
+apply the texture from the current animation to the player's sprite, and add the following lines at the end of <code>on_update</code></p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7578,15 +7542,15 @@ apply texture from current animation to the player's sprite, add following lines
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>The code is pretty straightforward - we start by trying to get a reference to current animation by its index,
-if we're succeeded, we update it. At the next step we're getting sprite and assigning a current frame of 
-current animation. Experienced game developers could immediately ask - why not to use sprite sheets and get
-better performance and stuff. Well, the main purpose of this tutorial is to teach how to use the engine to 
-achieve some goal, such as <em>making a game</em>. You can always optimize your game later, when you'll have something
+<p>The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,
+and if we're succeeded, we update it. At the next step, we're getting sprite and assigning a current frame of
+the current animation. Experienced game developers could immediately ask - why not use sprite sheets and get
+better performance and stuff. Well, the main purpose of this tutorial is to teach how to use the engine to
+achieve some goal, such as <em>making a game</em>. You can always optimize your game later when you'll have something
 working and playable.</p>
 <h2 id="final-steps"><a class="header" href="#final-steps">Final Steps</a></h2>
 <p>Three more steps before we can run the game, we need to call <code>restore_resources</code> for each animation. To do that,
-the script trait has <code>on_restore_resources</code> method, add the following code to <code>impl ScriptTrait for Player</code></p>
+the script trait has the <code>on_restore_resources</code> method, add the following code to <code>impl ScriptTrait for Player</code></p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7597,7 +7561,7 @@ the script trait has <code>on_restore_resources</code> method, add the following
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As a second step, replace contents of the <code>editor/src/main.rs</code> with the following code snippet:</p>
+<p>As a second step, replace the contents of the <code>editor/src/main.rs</code> with the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run">//! Editor with your game connected to it as a plugin.
 use fyrox::gui::inspector::editors::collection::VecCollectionPropertyEditorDefinition;
 use fyrox::{
@@ -7628,7 +7592,7 @@ fn main() {
     editor.run(event_loop)
 }
 </code></pre></pre>
-<p>The most interesting code in here is this:</p>
+<p>The most interesting code here is this:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7640,18 +7604,18 @@ property_editors.insert(VecCollectionPropertyEditorDefinition::&lt;KeyFrameTextu
 property_editors.insert(VecCollectionPropertyEditorDefinition::&lt;Animation&gt;::new());
 <span class="boring">}
 </span></code></pre></pre>
-<p>Here we're registering <em>property editors</em> for our game types. This very important step, it tells the editor how to 
-visualize your data. In most cases you'll be using those two generic types - <code>InspectablePropertyEditorDefinition</code> 
-and <code>VecCollectionPropertyEditorDefinition</code>. Which is responsible for what? </p>
+<p>Here we're registering <em>property editors</em> for our game types. This very important step, tells the editor how to
+visualize your data. In most cases, you'll be using those two generic types - <code>InspectablePropertyEditorDefinition</code>
+and <code>VecCollectionPropertyEditorDefinition</code>. Which is responsible for what?</p>
 <ul>
-<li><code>InspectablePropertyEditorDefinition</code> - it is responsible for showing properties of any object that implements 
-<code>Inspect</code> trait. All of your game entities must implement such trait.</li>
+<li><code>InspectablePropertyEditorDefinition</code> - is responsible for showing properties of any object that implements
+<code>Inspect</code> trait. All of your game entities must implement such traits.</li>
 <li><code>VecCollectionPropertyEditorDefinition</code> - it is responsible for showing <code>Vec&lt;T: Inspect&gt;</code> collection, every
-collection item <strong>must</strong> implement <code>Inspect</code> trait. This is a bit tedious, especially in case of simple collections
-like <code>Vec&lt;f32&gt;</code>, but that's a limitation of current implementation. It can be mitigated by using a new-type technique,
+collection item <strong>must</strong> implement <code>Inspect</code> trait. This is a bit tedious, especially in the case of simple collections
+like <code>Vec&lt;f32&gt;</code>, but that's a limitation of the current implementation. It can be mitigated by using a new-type technique,
 which was shown earlier.</li>
 </ul>
-<p>This is yet another place for manual work, but it must be done, editor cannot use &quot;magic&quot; to understand which widget 
+<p>This is yet another place for manual work, but it must be done, the editor cannot use &quot;magic&quot; to understand which widget
 to use to visualize your data, there's no magic here.</p>
 <p>And a final step is to change how the script properties are handled:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
@@ -7664,11 +7628,11 @@ to use to visualize your data, there's no magic here.</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Now we need to go to the editor again and add the animations to the <code>Player</code>, select player's rigid body and 
-find <code>Script</code> section in the <code>Inspector</code>. Add two animations there like so:</p>
+<p>Now we need to go to the editor again and add the animations to the <code>Player</code>, select the player's rigid body, and
+find the <code>Script</code> section in the <code>Inspector</code>. Add two animations there like so:</p>
 <p><img src="fyrox/tutorials/platformer/editor_step6.png" alt="editor_step6" /></p>
 <h2 id="standalone-game"><a class="header" href="#standalone-game">Standalone Game</a></h2>
-<p>As a final step we'll add proper support for standalone mode (&quot;production builds&quot;), let's replace <code>on_standalone_init</code>
+<p>As a final step, we'll add proper support for standalone mode (&quot;production builds&quot;), let's replace <code>on_standalone_init</code>
 with the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -7688,11 +7652,11 @@ with the following code:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>The code just loads our scene and sets it as current, we need to do this manually when the game runs in standalone mode
-(without editor), because the editor does some work for us when we running the game inside it.</p>
+(without editor), because the editor does some work for us when we run the game inside it.</p>
 <h2 id="conclusion-4"><a class="header" href="#conclusion-4">Conclusion</a></h2>
-<p>In this tutorial we've learned basics of the new scripting system of the engine that was added in Fyrox 0.25. The game 
-we've built is very simple, but it is just a beginning. It is easy to add more scripts for enemies, weapons, collectable
-items and so on. </p>
+<p>In this tutorial, we've learned the basics of the new scripting system of the engine that was added in Fyrox 0.25. The game
+we've built it very simple, but it is just the beginning.
+It is easy to add more scripts for enemies, weapons, collectible items, and so on.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-5"><a class="header" href="#introduction-5">Introduction</a></h1>
 <p>Fyroxed is a native <strong>scene</strong> editor for Fyrox game engine. It offers wide variety of tools to make creation of
 the scenes comfortable and intuitive.</p>
