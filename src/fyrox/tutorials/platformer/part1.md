@@ -209,7 +209,7 @@ impl ScriptTrait for Player {
 ```
 
 This is a typical "skeleton" of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
-Let's go over the most important parts. The snippet starts from the `Player` structure definition which has `#[derive(Visit, Inspect, Debug, Clone)]`
+Let's go over the most important parts. The snippet starts from the `Player` structure definition which has `#[derive(Visit, Inspect, Debug, Clone, Default)]`
 attributes:
 
 - `Visit` implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.
