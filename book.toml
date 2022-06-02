@@ -3,7 +3,7 @@ authors = ["Dmitry Stepanov"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Fyrox Cheat Book"
+title = "Fyrox Book"
 
 [output.html]
 default-theme = "light"

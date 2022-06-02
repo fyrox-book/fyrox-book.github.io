@@ -1,5 +1,7 @@
 # Framework
 
+**WARNING: Since Fyrox 0.25 Framework considered obsolete, use plugins and scripts instead.**
+
 The engine offers special framework to start making games as quickly as possible. It cares about engine initialization,
 handles window events, calls every required methods and so on. In other words it helps you to get started as quickly
 as possible without a need to put dozens lines of code to just create a window with a game loop.
