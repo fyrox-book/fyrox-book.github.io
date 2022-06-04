@@ -17,7 +17,8 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
 }
 ```
 
-How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal right aligned):
+How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal 
+right aligned):
 
 ```rust,no_run
 # extern crate fyrox;
@@ -122,7 +123,8 @@ impl GameState for Game {
 
 ## Using a button to exit the game
 
-Add a flag to your Game struct like `exit: bool` and set it in button handler to `true`, then check it in `on_tick` and set `*control_flow = ControlFlow::Exit` if the flag is raised
+Add a flag to your Game struct like `exit: bool` and set it in button handler to `true`, then check it in `on_tick` 
+and set `*control_flow = ControlFlow::Exit` if the flag is raised
 
 ```rust,no_run
 # extern crate fyrox;
