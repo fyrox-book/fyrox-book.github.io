@@ -46,6 +46,27 @@ otherwise you won't see anything.
 Typical script structure could be like this:
 
 ```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{
+#         inspect::{Inspect, PropertyInfo},
+#         uuid::{uuid, Uuid},
+#         visitor::prelude::*,
+#     },
+#     event::Event,
+#     gui::inspector::PropertyChanged,
+#     scene::node::TypeUuidProvider,
+#     script::{ScriptContext, ScriptTrait},
+# };
+# 
+# struct Game;
+# 
+# impl Game {
+#     fn type_uuid() -> Uuid {
+#         todo!()
+#     }
+# }
+# 
 #[derive(Visit, Inspect, Debug, Clone, Default)]
 struct MyScript;
 
@@ -58,7 +79,9 @@ impl TypeUuidProvider for MyScript {
 
 impl ScriptTrait for MyScript {
     // Accepts events from Inspector in the editor and modifies self state accordingly.
-    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {}
+    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
+        false
+    }
 
     // Called once at initialization.
     fn on_init(&mut self, context: ScriptContext) {}
@@ -67,7 +90,7 @@ impl ScriptTrait for MyScript {
     fn on_os_event(&mut self, event: &Event<()>, context: ScriptContext) {}
 
     // Called every frame at fixed rate of 60 FPS. Put entity game logic here.
-    fn on_update(&mut self, context: ScriptContext) { }
+    fn on_update(&mut self, context: ScriptContext) {}
 
     // Returns unique script ID for serialization needs.
     fn id(&self) -> Uuid {
@@ -103,10 +126,55 @@ to an object. `Plugin` trait has `on_register` method exactly for script registr
 to register it in the list of script constructors like so: 
 
 ```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{
+#         inspect::{Inspect, PropertyInfo},
+#         uuid::Uuid,
+#         visitor::prelude::*,
+#     },
+#     plugin::{Plugin, PluginRegistrationContext},
+#     scene::node::TypeUuidProvider,
+#     script::ScriptTrait,
+# };
+# 
+# struct Game;
+# 
+# impl TypeUuidProvider for Game {
+#     fn type_uuid() -> Uuid {
+#         todo!()
+#     }
+# }
+# 
+# #[derive(Visit, Inspect, Default, Debug, Clone)]
+# struct MyScript;
+# 
+# impl TypeUuidProvider for MyScript {
+#     fn type_uuid() -> Uuid {
+#         todo!()
+#     }
+# }
+# 
+# impl ScriptTrait for MyScript {
+#     fn id(&self) -> Uuid {
+#         todo!()
+#     }
+# 
+#     fn plugin_uuid(&self) -> Uuid {
+#         Game::type_uuid()
+#     }
+# }
+# 
+# impl Plugin for Game {
+#     fn id(&self) -> Uuid {
+#         todo!()
+#     }
+# 
 fn on_register(&mut self, context: PluginRegistrationContext) {
     let script_constructors = &context.serialization_context.script_constructors;
     script_constructors.add::<Game, MyScript, _>("MyScript");
 }
+# }
 ```
 
 ## Script Attachment

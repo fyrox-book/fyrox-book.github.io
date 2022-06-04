@@ -5,7 +5,7 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:
 
 ## Usage
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -37,7 +37,7 @@ width and height, then putting it to some container like Grid' cell will stretch
 Sometimes you need your image to have equal size with the texture it uses, in this case you should fetch texture 
 bounds first and then create an Image width these bounds:
 
-```rust
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -79,7 +79,7 @@ marked as `async` because resource loading (texture is a resource) happens in se
 data we must wait it. If you don't want to use async, then use any executor to block current thread and execute the
 promise immediately:
 
-```rust
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -105,7 +105,7 @@ fn create_image_sync(
 
 In some rare cases you need to flip your source image before showing it, there is `.with_flip` option for that:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

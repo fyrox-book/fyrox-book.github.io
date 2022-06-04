@@ -118,7 +118,7 @@ run the game using the `Play/Stop` button at the top of the scene previewer. You
 for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts, but at first, let's make our life easier
 and force the editor to load the scene for us on startup. Go to `editor/src/main.rs` and replace this:
 
-```rust,no_run
+```rust,no_run,compile_fail
 Some(StartupData {
     working_directory: Default::default(),
     // Set this to `"path/to/your/scene.rgs".into()` to force the editor to load the scene on startup.
@@ -128,7 +128,7 @@ Some(StartupData {
 
 with this
 
-```rust,no_run
+```rust,no_run,compile_fail
 Some(StartupData {
     working_directory: Default::default(),
     scene: "data/scene.rgs".into(),
@@ -142,6 +142,7 @@ As the last preparation step, let's import all entities at the beginning, so you
 at the beginning of the `game/src/lib.rs`:
 
 ```rust,no_run
+# extern crate fyrox;
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
@@ -173,6 +174,27 @@ Our scene has pretty much everything we need to start adding scripts, we'll star
 move. Navigate to `game/src/lib.rs` and at the end of the file add the following code snippet:
 
 ```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{
+#         inspect::{Inspect, PropertyInfo},
+#         uuid::{uuid, Uuid},
+#         visitor::prelude::*,
+#     },
+#     event::Event,
+#     gui::inspector::PropertyChanged,
+#     scene::node::TypeUuidProvider,
+#     script::{ScriptContext, ScriptTrait},
+# };
+# 
+# struct Game;
+# 
+# impl Game {
+#     fn type_uuid() -> Uuid {
+#         todo!()
+#     }
+# }
+# 
 #[derive(Visit, Inspect, Debug, Clone, Default)]
 struct Player;
 
@@ -185,7 +207,9 @@ impl TypeUuidProvider for Player {
 
 impl ScriptTrait for Player {
     // Accepts events from Inspector in the editor and modifies self state accordingly.
-    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {}
+    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
+        false
+    }
 
     // Called once at initialization.
     fn on_init(&mut self, context: ScriptContext) {}
@@ -232,7 +256,7 @@ Before we can use the script in the editor, we must tell the engine that our scr
 `on_register` method in the `Plugin` trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:
 
-```rust,no_run
+```rust,no_run,compile_fail
 fn on_register(&mut self, context: PluginRegistrationContext) {
     let script_constructors = &context.serialization_context.script_constructors;
     script_constructors.add::<Game, Player, _>("Player");
@@ -249,7 +273,7 @@ Let's learn how to edit script properties from the editor. In the next section, 
 it is a perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
 we need to get its sprite first. Let's start by adding the required field in the `Player` structure:
 
-```rust,no_run
+```rust,no_run,compile_fail
 #[derive(Visit, Inspect, Debug, Clone, Default)]
 struct Player {
     sprite: Handle<Node>,
@@ -261,14 +285,14 @@ changes done in Inspector will not be applied to the script instance. We need to
 future versions of the engine will most likely do this automatically. We're interested in the `on_property_changed` method, fill it
 the following code snippet:
 
-```rust,no_run
+```rust,no_run,compile_fail
 handle_object_property_changed!(self, args, Self::SPRITE => sprite)
 ```
 
 This single line of code applies changes to the `sprite` field if in the editor it's "view" was edited. The macro hides most of boilerplate
 code from you, when a macro is expanded the result code would look like:
 
-```rust,no_run
+```rust,no_run,compile_fail
 if let FieldKind::Object(ref value) = args.value {
     match args.name.as_ref() {
         Self::SPRITE => {
@@ -294,7 +318,7 @@ something different than "Unassigned".
 Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player.
 Go to the `Player` structure and add the following fields:
 
-```rust,no_run
+```rust,no_run,compile_fail
 move_left: bool,
 move_right: bool,
 jump: bool,
@@ -302,7 +326,7 @@ jump: bool,
 
 These fields will store the state of keyboard keys responsible for player movement. Now for `on_os_event`, add the following code there:
 
-```rust,no_run
+```rust,no_run,compile_fail
 if let Event::WindowEvent { event, .. } = event {
     if let WindowEvent::KeyboardInput { input, .. } = event {
         if let Some(keycode) = input.virtual_keycode {
@@ -322,7 +346,7 @@ if let Event::WindowEvent { event, .. } = event {
 The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
 `on_update`. The method is called each frame and allows you to put game logic there:
 
-```rust,no_run
+```rust,no_run,compile_fail
 // Called every frame at fixed rate of 60 FPS.
 fn on_update(&mut self, context: ScriptContext) {
     // The script can be assigned to any scene node, but we assert that it will work only with
@@ -355,7 +379,7 @@ The movement is working, but the player does not change orientation, if we'll go
 but if we'll move to the right - it looks like the player moves backward. Let's fix that by changing the horizontal scaling of the player's
 sprite. Add the following code at the end of the `if let ...` block of the code above:
 
-```rust,no_run
+```rust,no_run,compile_fail
 // It is always a good practice to check whether the handles are valid, at this point we don't know
 // for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
 // execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
@@ -389,7 +413,7 @@ for quite a long period. It is easy to make such an animation "system" ourselves
 
 Put this code snippet somewhere at the end of `lib.rs` of the `game` project and we'll start learning what it's doing:
 
-```rust
+```rust,no_run,compile_fail
 #[derive(Default, Inspect, Visit, Debug, Clone)]
 pub struct KeyFrameTexture {
     texture: Option<Texture>,
@@ -486,13 +510,17 @@ never exceeds the maximum amount of keyframes - instead, it will start counting 
 It's time to start using the new animation system, just add the following fields to the `Player`:
 
 ```rust,no_run
+# extern crate fyrox;
+# struct Animation;
+# struct Player {
 animations: Vec<Animation>,
 current_animation: u32,
+# }
 ```
 
 Currently, we just pass default values.
 
-```rust,no_run
+```rust,no_run,compile_fail
 ..Default::default()
 ```
 
@@ -501,17 +529,25 @@ Now we need to somehow switch animations. Go to `on_update` in `Player` and add 
 the `x_speed` declaration:
 
 ```rust,no_run
+# struct Player {
+#     current_animation: usize,
+# }
+# impl Player {
+#     pub fn on_update(&mut self) {
+#       let x_speed = 0.0;
 if x_speed != 0.0 {
     self.current_animation = 0;
 } else {
     self.current_animation = 1;
 }
+#    }
+# }
 ```
 
 Here we assume that the run animation will be at index `0` and the idle animation at index `1`. We also need to
 apply the texture from the current animation to the player's sprite, and add the following lines at the end of `on_update`
 
-```rust,no_run
+```rust,no_run,compile_fail
 if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
     current_animation.update(context.dt);
 
@@ -543,7 +579,7 @@ working and playable.
 Three more steps before we can run the game, we need to call `restore_resources` for each animation. To do that,
 the script trait has the `on_restore_resources` method, add the following code to `impl ScriptTrait for Player`
 
-```rust,no_run
+```rust,no_run,compile_fail
 fn restore_resources(&mut self, resource_manager: ResourceManager) {
     for animation in self.animations.iter_mut() {
         animation.restore_resources(resource_manager.clone());
@@ -553,7 +589,7 @@ fn restore_resources(&mut self, resource_manager: ResourceManager) {
 
 As a second step, replace the contents of the `editor/src/main.rs` with the following code snippet:
 
-```rust,no_run
+```rust,no_run,compile_fail
 //! Editor with your game connected to it as a plugin.
 use fyrox::gui::inspector::editors::collection::VecCollectionPropertyEditorDefinition;
 use fyrox::{
@@ -587,7 +623,7 @@ fn main() {
 
 The most interesting code here is this:
 
-```rust,no_run
+```rust,no_run,compile_fail
 // Register property editors here.
 let property_editors = &editor.inspector.property_editors;
 property_editors.insert(InspectablePropertyEditorDefinition::<KeyFrameTexture>::new());
@@ -612,7 +648,7 @@ to use to visualize your data, there's no magic here.
 
 And a final step is to change how the script properties are handled:
 
-```rust,no_run
+```rust,no_run,compile_fail
 fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
     handle_object_property_changed!(self, args, Self::SPRITE => sprite)
         // The following line handles collection modification.
@@ -630,7 +666,7 @@ find the `Script` section in the `Inspector`. Add two animations there like so:
 As a final step, we'll add proper support for standalone mode ("production builds"), let's replace `on_standalone_init`
 with the following code:
 
-```rust,no_run
+```rust,no_run,compile_fail
 fn on_standalone_init(&mut self, context: PluginContext) {
     let mut scene = block_on(
         block_on(SceneLoader::from_file(

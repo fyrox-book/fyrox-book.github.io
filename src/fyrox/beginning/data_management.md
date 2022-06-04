@@ -27,7 +27,7 @@ Once an object was placed in a pool, you have to use respective handle to get a 
 be done either with `.borrow[_mut](handle)` or by using `Index` trait: `pool[handle]`. These methods panic
 when handle is invalid, if you want to prevent that, use `try_borrow[_mut](handle)` method.
 
-```rust,norun
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::pool::Pool;
 #
@@ -48,7 +48,7 @@ assert_eq!(*obj, 11);
 You can extract an object from a pool by calling `pool.free(handle)`, it will give you the object back, making
 all handles to the object invalid.
 
-```rust,norun
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::pool::Pool;
 #
@@ -80,7 +80,7 @@ this method, otherwise the corresponding entry will be unusable.
 
 Reservation example:
 
-```rust,norun
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::pool::Pool;
 #
@@ -109,7 +109,7 @@ assert_eq!(obj, &123);
 
 Forget example:
 
-```rust,norun
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::pool::Pool;
 #
@@ -136,7 +136,7 @@ object associated with an entry.
 2) `pair_iter/pair_iter_mut` - creates an iterator that iterates over occupied pool entries returning tuples with
 two elements `(handle, reference)`. 
 
-```rust,norun
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::pool::Pool;
 #
