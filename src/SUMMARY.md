@@ -48,7 +48,7 @@
         - [Expander (WIP)](./fyrox/ui/expander.md)
         - [File browser (WIP)](./fyrox/ui/file_browser.md)
         - [Grid](./fyrox/ui/grid.md)        
-        - [Image (WIP)](./fyrox/ui/image.md)        
+        - [Image](./fyrox/ui/image.md)        
         - [Inspector (WIP)](./fyrox/ui/inspector.md)        
         - [List view (WIP)](./fyrox/ui/list_view.md)        
         - [Menu (WIP)](./fyrox/ui/menu.md)        
