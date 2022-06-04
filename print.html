@@ -2938,7 +2938,8 @@ per widget. Check <code>Theme</code> section of each widget.</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal right aligned):</p>
+<p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal 
+right aligned):</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3043,7 +3044,8 @@ useful:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="using-a-button-to-exit-the-game"><a class="header" href="#using-a-button-to-exit-the-game">Using a button to exit the game</a></h2>
-<p>Add a flag to your Game struct like <code>exit: bool</code> and set it in button handler to <code>true</code>, then check it in <code>on_tick</code> and set <code>*control_flow = ControlFlow::Exit</code> if the flag is raised</p>
+<p>Add a flag to your Game struct like <code>exit: bool</code> and set it in button handler to <code>true</code>, then check it in <code>on_tick</code> 
+and set <code>*control_flow = ControlFlow::Exit</code> if the flag is raised</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3105,7 +3107,8 @@ fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
 <span class="boring">}
 </span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="border"><a class="header" href="#border">Border</a></h1>
-<p>The Border widget provides a stylized, static border around it's child widget. Below is an example of creating a 1 pixel thick border around a button widget:</p>
+<p>The Border widget provides a stylized, static border around it's child widget. Below is an example of creating a 1 pixel
+thick border around a button widget:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3133,8 +3136,13 @@ fn create_border_with_button(ui: &amp;mut UserInterface) {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As with other UI elements, we create the border using the BorderBuilder helper struct. The widget that should have a border around it is added as a child of the base WidgetBuilder, and the border thickness can be set by providing a Thickness struct to the BorderBuilder's <em>with_stroke_thickness</em> function. This means you can set different thicknesses for each edge of the border.</p>
-<p>You can style the border by creating a Brush and setting the border's base WidgetBuilder's foreground or background. The foreground will set the style of the boarder itself, while setting the background will color the whole area within the border. Below is an example of a blue border and a red background with white text inside.</p>
+<p>As with other UI elements, we create the border using the BorderBuilder helper struct. The widget that should have a
+border around it is added as a child of the base WidgetBuilder, and the border thickness can be set by providing a 
+Thickness struct to the BorderBuilder's <em>with_stroke_thickness</em> function. This means you can set different thicknesses 
+for each edge of the border.</p>
+<p>You can style the border by creating a Brush and setting the border's base WidgetBuilder's foreground or background. 
+The foreground will set the style of the boarder itself, while setting the background will color the whole area within 
+the border. Below is an example of a blue border and a red background with white text inside.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3172,9 +3180,9 @@ only with two values which fits in <code>bool</code> type. Third, undefined, sta
 data have such state. </p>
 <h2 id="how-it-looks"><a class="header" href="#how-it-looks">How it looks</a></h2>
 <p>Checkbox in <code>Checked</code> state:</p>
-<p><img src="fyrox/ui/checkbox/./checked.png" alt="Checked" /></p>
+<p><img src="fyrox/ui/checkbox/checked.PNG" alt="Checked" /></p>
 <p>Checkbox in <code>Unchecked</code> state:</p>
-<p><img src="fyrox/ui/checkbox/./unchecked.png" alt="Unchecked" /></p>
+<p><img src="fyrox/ui/checkbox/unchecked.PNG" alt="Unchecked" /></p>
 <h2 id="how-to-create-10"><a class="header" href="#how-to-create-10">How to create</a></h2>
 <p>To create a checkbox you should do something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
@@ -3303,7 +3311,8 @@ list to select its current item. It is build using composition with standard lis
 <div style="break-before: page; page-break-before: always;"></div><h1 id="file-browser-wip"><a class="header" href="#file-browser-wip">File browser (WIP)</a></h1>
 <p>FileBrowser widget is a simple file system tree, FileSelector is a window with FileBrowser and few buttons.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="grid"><a class="header" href="#grid">Grid</a></h1>
-<p>Grids are one of several methods to position multiple widgets in relation to each other. A Grid Widget, as the name implies, is able to position children widgets into a grid of specifically sized rows and columns. </p>
+<p>Grids are one of several methods to position multiple widgets in relation to each other. A Grid Widget, as the name 
+implies, is able to position children widgets into a grid of specifically sized rows and columns. </p>
 <p>Here is a simple example that positions several text widgets into a 2 by 2 grid:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -3360,15 +3369,23 @@ fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled by the Grid should be added as a child of the GridBuilder's base widget.</p>
-<p>You then need to tell each child what row and column it belongs to via the on_column and on_row functions of their base widget. By default, all children will be placed into row 0, column 0. </p>
-<p>After that you need to provide sizing constraints for each row and column to the GridBuilder by using the add_row and add_column functions while providing a GridDimension instance to the call. GridDimension can be constructed with the following functions:</p>
+<p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled
+by the Grid should be added as a child of the GridBuilder's base widget.</p>
+<p>You then need to tell each child what row and column it belongs to via the on_column and on_row functions of their base
+widget. By default, all children will be placed into row 0, column 0. </p>
+<p>After that you need to provide sizing constraints for each row and column to the GridBuilder by using the add_row and 
+add_column functions while providing a GridDimension instance to the call. GridDimension can be constructed with the 
+following functions:</p>
 <ul>
 <li>GridDimension::auto() - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
-<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or columns have this option the size is evenly distributed between them.</li>
-<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only be the given number of pixels wide, while a column will be that many pixels tall.</li>
+<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or </li>
+<li>columns have this option the size is evenly distributed between them.</li>
+<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only </li>
+<li>be the given number of pixels wide, while a column will be that many pixels tall.</li>
 </ul>
-<p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between two other columns.</p>
+<p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget 
+in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between
+two other columns.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="image"><a class="header" href="#image">Image</a></h1>
 <p>Image widget is a rectangle with a texture, it is used draw custom bitmaps. The UI in the engine is vector-based, Image
 widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
@@ -3513,7 +3530,10 @@ to mismatch of coordinates of UI and graphics API. The UI has origin at left top
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scroll-panel-wip"><a class="header" href="#scroll-panel-wip">Scroll panel (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scroll-viewer-wip"><a class="header" href="#scroll-viewer-wip">Scroll viewer (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="stack-panel"><a class="header" href="#stack-panel">Stack Panel</a></h1>
-<p>Stack Panels are one of several methods to position multiple widgets in relation to each other. A Stack Panel Widget orders it's children widgets linerarly, aka in a stack of widgets, based on the order the widgets were added as children. So the first widget added will be at the top or left most position, while each additional widget will decend from top to bottom or continue from left most to right most. The below example code places 3 text widgets into a vertical stack:</p>
+<p>Stack Panels are one of several methods to position multiple widgets in relation to each other. A Stack Panel Widget 
+orders it's children widgets linerarly, aka in a stack of widgets, based on the order the widgets were added as children. 
+So the first widget added will be at the top or left most position, while each additional widget will decend from top to 
+bottom or continue from left most to right most. The below example code places 3 text widgets into a vertical stack:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3551,9 +3571,13 @@ fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handl
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As you can see from the example, creating a Stack Panel uses the standard method for creating widgets. Create a new StackPanelBuilder and provide it with a new WidgetBuilder. Adding widgets to the stack is done by adding childeren to the StackBuilder's WidgetBuilder.</p>
+<p>As you can see from the example, creating a Stack Panel uses the standard method for creating widgets. Create a new 
+StackPanelBuilder and provide it with a new WidgetBuilder. Adding widgets to the stack is done by adding childeren to 
+the StackBuilder's WidgetBuilder.</p>
 <h2 id="stack-panel-orientation"><a class="header" href="#stack-panel-orientation">Stack Panel Orientation</a></h2>
-<p>As has been indicated, Stack Panels can be oriented to order it's children either Vertical, from top to bottom, or Horizontal, Left most to right most. This is done using the StackPanelBuilder's with_orientation function providing it with a gui::Orientation enum value. <strong>By default</strong> all Stack Panel's are Vertical.</p>
+<p>As has been indicated, Stack Panels can be oriented to order it's children either Vertical, from top to bottom, or 
+Horizontal, Left most to right most. This is done using the StackPanelBuilder's with_orientation function providing it 
+with a gui::Orientation enum value. <strong>By default</strong> all Stack Panel's are Vertical.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3575,7 +3599,9 @@ fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handl
 </span><span class="boring">}
 </span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tab-control"><a class="header" href="#tab-control">Tab Control</a></h1>
-<p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the tab header buttons. Each tab is defined via a Tab Definition struct which takes two widgets, one representing the tab header and the other representing the tab's contents.</p>
+<p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the 
+tab header buttons. Each tab is defined via a Tab Definition struct which takes two widgets, one representing the tab
+header and the other representing the tab's contents.</p>
 <p>The following example makes a 2 tab, Tab Control containing some simple text widgets:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -3617,11 +3643,20 @@ fn create_tab_control(ctx: &amp;mut BuildContext) {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As usual, we create the widget via the builder TabControlBuilder. Tabs are added via the <em>with_tab</em> function in the order you want them to appear, passing each call to the function a directly constructed TabDefinition struct. Tab headers will appear from left to right at the top with tab contents shown directly below the tabs. As usual, if no constraints are given to the base WidgetBuilder of the TabControlBuilder, then the tab content area will resize to fit whatever is in the current tab.</p>
-<p>Each tab's content is made up of one widget, so to be useful you will want to use one of the container widgets to help arrange additional widgets within the tab.</p>
+<p>As usual, we create the widget via the builder TabControlBuilder. Tabs are added via the <em>with_tab</em> function in the 
+order you want them to appear, passing each call to the function a directly constructed TabDefinition struct. Tab 
+headers will appear from left to right at the top with tab contents shown directly below the tabs. As usual, if no 
+constraints are given to the base WidgetBuilder of the TabControlBuilder, then the tab content area will resize to fit
+whatever is in the current tab.</p>
+<p>Each tab's content is made up of one widget, so to be useful you will want to use one of the container widgets to help 
+arrange additional widgets within the tab.</p>
 <h2 id="tab-header-styling"><a class="header" href="#tab-header-styling">Tab Header Styling</a></h2>
-<p>Notice that you can put any widget into the tab header, so if you want images to denote each tab you can add an Image widget to each header, and if you want an image <em>and</em> some text you can insert a stack panel with an image on top and text below it. </p>
-<p>You will also likely want to style whatever widgets you add. As can be seen when running the code example above, the tab headers are scrunched when there are no margins provided to your text widgets. Simply add something like the below code example and you will get a decent look:</p>
+<p>Notice that you can put any widget into the tab header, so if you want images to denote each tab you can add an Image
+widget to each header, and if you want an image <em>and</em> some text you can insert a stack panel with an image on top and 
+text below it. </p>
+<p>You will also likely want to style whatever widgets you add. As can be seen when running the code example above, the 
+tab headers are scrunched when there are no margins provided to your text widgets. Simply add something like the below 
+code example and you will get a decent look:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3804,7 +3839,8 @@ code (or will be done automatically if you're using Framework).</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tree-wip"><a class="header" href="#tree-wip">Tree (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="vector-image-wip"><a class="header" href="#vector-image-wip">Vector image (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="window"><a class="header" href="#window">Window</a></h1>
-<p>The Window widget provides a standared window that can contain another widget. Based on setting windows can be configured so users can do any of the following:</p>
+<p>The Window widget provides a standared window that can contain another widget. Based on setting windows can be configured
+so users can do any of the following:</p>
 <ul>
 <li>Movable by the user. Not configurable.</li>
 <li>Have title text on the title bar. Set by the <em>with_title</em> function.</li>
@@ -3848,17 +3884,27 @@ fn create_window(ui: &amp;mut UserInterface) {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>You will likely want to constrain the initial size of the window to somethig as shown in the example by providing a set width and/or height to the base WidgetBuilder. Otherwise it will expand to fit it's content.</p>
-<p>You may also want to set an inital position with the <em>with_desired_position</em> function called on the base WidgetBuilder which sets the position of the window's top-left corner. Otherwise all your windows will start with it's top-left corner at 0,0 and be stacked on top of eachother.</p>
+<p>You will likely want to constrain the initial size of the window to somethig as shown in the example by providing a set
+width and/or height to the base WidgetBuilder. Otherwise it will expand to fit it's content.</p>
+<p>You may also want to set an inital position with the <em>with_desired_position</em> function called on the base WidgetBuilder 
+which sets the position of the window's top-left corner. Otherwise all your windows will start with it's top-left corner
+at 0,0 and be stacked on top of eachother.</p>
 <p>Windows can only contain a single direct child widget, set by using the <em>with_content</em> function. 
-Additional calls to <em>with_content</em> replaces the widgets given in previous calls, and the old widgets exist outside the window, so you should delete old widgets before changing a window's widget.  If you want multiple widgets, you need to use one of the layout container widgets like the Grid, Stack Panel, etc then add the additional widgets to that widget as needed.</p>
-<p>The Window is a user editable object, but can only be affected by UI Messages they trigger if the message's corresponding variable has been set to true aka what is set by the <em>can_close</em>, <em>can_minimize</em>, and <em>can_resize</em> functions.</p>
+Additional calls to <em>with_content</em> replaces the widgets given in previous calls, and the old widgets exist outside the 
+window, so you should delete old widgets before changing a window's widget.  If you want multiple widgets, you need to 
+use one of the layout container widgets like the Grid, Stack Panel, etc then add the additional widgets to that widget 
+as needed.</p>
+<p>The Window is a user editable object, but can only be affected by UI Messages they trigger if the message's corresponding
+variable has been set to true aka what is set by the <em>can_close</em>, <em>can_minimize</em>, and <em>can_resize</em> functions.</p>
 <h2 id="initial-open-state"><a class="header" href="#initial-open-state">Initial Open State</a></h2>
-<p>By default, the window will be created in the open, or maximized, state. You can manually set this state via the <em>open</em> function providing a true or false as desired.</p>
+<p>By default, the window will be created in the open, or maximized, state. You can manually set this state via the <em>open</em>
+function providing a true or false as desired.</p>
 <h2 id="styling-the-buttons"><a class="header" href="#styling-the-buttons">Styling the Buttons</a></h2>
-<p>The window close and minimise buttons can be configured with the <em>with_close_button</em> and <em>with_minimize_button</em> functions. You will want to pass them a button widget, but can do anything else you like past that.</p>
+<p>The window close and minimise buttons can be configured with the <em>with_close_button</em> and <em>with_minimize_button</em> functions.
+You will want to pass them a button widget, but can do anything else you like past that.</p>
 <h2 id="modal-aka-forced-focus"><a class="header" href="#modal-aka-forced-focus">Modal (AKA Forced Focus)</a></h2>
-<p>A Modal in UI design terms indicates a window or box that has forced focus. The user is not able to interact with anything else until the modal is dissmissed. </p>
+<p>A Modal in UI design terms indicates a window or box that has forced focus. The user is not able to interact with anything 
+else until the modal is dissmissed. </p>
 <p>Any window can be set and unset as a modal via the <em>modal</em> function.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="wrap-panel-wip"><a class="header" href="#wrap-panel-wip">Wrap panel (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="resource-management"><a class="header" href="#resource-management">Resource management</a></h1>

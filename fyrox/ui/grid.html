@@ -138,7 +138,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="grid"><a class="header" href="#grid">Grid</a></h1>
-<p>Grids are one of several methods to position multiple widgets in relation to each other. A Grid Widget, as the name implies, is able to position children widgets into a grid of specifically sized rows and columns. </p>
+<p>Grids are one of several methods to position multiple widgets in relation to each other. A Grid Widget, as the name 
+implies, is able to position children widgets into a grid of specifically sized rows and columns. </p>
 <p>Here is a simple example that positions several text widgets into a 2 by 2 grid:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -195,15 +196,23 @@ fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled by the Grid should be added as a child of the GridBuilder's base widget.</p>
-<p>You then need to tell each child what row and column it belongs to via the on_column and on_row functions of their base widget. By default, all children will be placed into row 0, column 0. </p>
-<p>After that you need to provide sizing constraints for each row and column to the GridBuilder by using the add_row and add_column functions while providing a GridDimension instance to the call. GridDimension can be constructed with the following functions:</p>
+<p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled
+by the Grid should be added as a child of the GridBuilder's base widget.</p>
+<p>You then need to tell each child what row and column it belongs to via the on_column and on_row functions of their base
+widget. By default, all children will be placed into row 0, column 0. </p>
+<p>After that you need to provide sizing constraints for each row and column to the GridBuilder by using the add_row and 
+add_column functions while providing a GridDimension instance to the call. GridDimension can be constructed with the 
+following functions:</p>
 <ul>
 <li>GridDimension::auto() - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
-<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or columns have this option the size is evenly distributed between them.</li>
-<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only be the given number of pixels wide, while a column will be that many pixels tall.</li>
+<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or </li>
+<li>columns have this option the size is evenly distributed between them.</li>
+<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only </li>
+<li>be the given number of pixels wide, while a column will be that many pixels tall.</li>
 </ul>
-<p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between two other columns.</p>
+<p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget 
+in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between
+two other columns.</p>
 
                     </main>
 
