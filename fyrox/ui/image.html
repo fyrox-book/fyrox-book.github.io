@@ -141,7 +141,7 @@
 <p>Image widget is a rectangle with a texture, it is used draw custom bitmaps. The UI in the engine is vector-based, Image
 widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -172,7 +172,7 @@ width and height, then putting it to some container like Grid' cell will stretch
 <h2 id="equal-size-to-source"><a class="header" href="#equal-size-to-source">Equal Size to Source</a></h2>
 <p>Sometimes you need your image to have equal size with the texture it uses, in this case you should fetch texture 
 bounds first and then create an Image width these bounds:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust no_run edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -215,7 +215,7 @@ async fn create_image(
 marked as <code>async</code> because resource loading (texture is a resource) happens in separate thread and to get actual texture
 data we must wait it. If you don't want to use async, then use any executor to block current thread and execute the
 promise immediately:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust no_run edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -241,7 +241,7 @@ promise immediately:</p>
 </span></code></pre></pre>
 <h2 id="vertical-flip"><a class="header" href="#vertical-flip">Vertical Flip</a></h2>
 <p>In some rare cases you need to flip your source image before showing it, there is <code>.with_flip</code> option for that:</p>
-<pre><pre class="playground"><code class="language-rust">
+<pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;

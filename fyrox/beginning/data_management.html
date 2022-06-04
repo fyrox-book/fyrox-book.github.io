@@ -158,7 +158,7 @@ like graphs, where a node refers to other nodes. In this case scene nodes stores
 <p>Once an object was placed in a pool, you have to use respective handle to get a reference to it. This could 
 be done either with <code>.borrow[_mut](handle)</code> or by using <code>Index</code> trait: <code>pool[handle]</code>. These methods panic
 when handle is invalid, if you want to prevent that, use <code>try_borrow[_mut](handle)</code> method.</p>
-<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
 </span><span class="boring">fn main() {
@@ -175,7 +175,7 @@ assert_eq!(*obj, 11);
 <h2 id="freeing"><a class="header" href="#freeing">Freeing</a></h2>
 <p>You can extract an object from a pool by calling <code>pool.free(handle)</code>, it will give you the object back, making
 all handles to the object invalid.</p>
-<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
 </span><span class="boring">fn main() {
@@ -203,7 +203,7 @@ out of the pool, but for some reason you don't want to return it back in pool, i
 this method, otherwise the corresponding entry will be unusable.</li>
 </ol>
 <p>Reservation example:</p>
-<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
 </span><span class="boring">fn main() {
@@ -229,7 +229,7 @@ assert_eq!(obj, &amp;123);
 <span class="boring">}
 </span></code></pre></pre>
 <p>Forget example:</p>
-<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
 </span><span class="boring">fn main() {
@@ -253,7 +253,7 @@ object associated with an entry.</li>
 <li><code>pair_iter/pair_iter_mut</code> - creates an iterator that iterates over occupied pool entries returning tuples with
 two elements <code>(handle, reference)</code>. </li>
 </ol>
-<pre><pre class="playground"><code class="language-rust norun"><span class="boring">extern crate fyrox;
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
 </span><span class="boring">fn main() {

@@ -172,6 +172,27 @@ otherwise you won't see anything.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{
+</span><span class="boring">        inspect::{Inspect, PropertyInfo},
+</span><span class="boring">        uuid::{uuid, Uuid},
+</span><span class="boring">        visitor::prelude::*,
+</span><span class="boring">    },
+</span><span class="boring">    event::Event,
+</span><span class="boring">    gui::inspector::PropertyChanged,
+</span><span class="boring">    scene::node::TypeUuidProvider,
+</span><span class="boring">    script::{ScriptContext, ScriptTrait},
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">struct Game;
+</span><span class="boring">
+</span><span class="boring">impl Game {
+</span><span class="boring">    fn type_uuid() -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
 </span>#[derive(Visit, Inspect, Debug, Clone, Default)]
 struct MyScript;
 
@@ -184,7 +205,9 @@ impl TypeUuidProvider for MyScript {
 
 impl ScriptTrait for MyScript {
     // Accepts events from Inspector in the editor and modifies self state accordingly.
-    fn on_property_changed(&amp;mut self, args: &amp;PropertyChanged) -&gt; bool {}
+    fn on_property_changed(&amp;mut self, args: &amp;PropertyChanged) -&gt; bool {
+        false
+    }
 
     // Called once at initialization.
     fn on_init(&amp;mut self, context: ScriptContext) {}
@@ -193,7 +216,7 @@ impl ScriptTrait for MyScript {
     fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: ScriptContext) {}
 
     // Called every frame at fixed rate of 60 FPS. Put entity game logic here.
-    fn on_update(&amp;mut self, context: ScriptContext) { }
+    fn on_update(&amp;mut self, context: ScriptContext) {}
 
     // Returns unique script ID for serialization needs.
     fn id(&amp;self) -&gt; Uuid {
@@ -229,11 +252,56 @@ to register it in the list of script constructors like so: </p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{
+</span><span class="boring">        inspect::{Inspect, PropertyInfo},
+</span><span class="boring">        uuid::Uuid,
+</span><span class="boring">        visitor::prelude::*,
+</span><span class="boring">    },
+</span><span class="boring">    plugin::{Plugin, PluginRegistrationContext},
+</span><span class="boring">    scene::node::TypeUuidProvider,
+</span><span class="boring">    script::ScriptTrait,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">struct Game;
+</span><span class="boring">
+</span><span class="boring">impl TypeUuidProvider for Game {
+</span><span class="boring">    fn type_uuid() -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">#[derive(Visit, Inspect, Default, Debug, Clone)]
+</span><span class="boring">struct MyScript;
+</span><span class="boring">
+</span><span class="boring">impl TypeUuidProvider for MyScript {
+</span><span class="boring">    fn type_uuid() -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl ScriptTrait for MyScript {
+</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">
+</span><span class="boring">    fn plugin_uuid(&amp;self) -&gt; Uuid {
+</span><span class="boring">        Game::type_uuid()
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Plugin for Game {
+</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">
 </span>fn on_register(&amp;mut self, context: PluginRegistrationContext) {
     let script_constructors = &amp;context.serialization_context.script_constructors;
     script_constructors.add::&lt;Game, MyScript, _&gt;(&quot;MyScript&quot;);
 }
 <span class="boring">}
+</span><span class="boring">}
 </span></code></pre></pre>
 <h2 id="script-attachment"><a class="header" href="#script-attachment">Script Attachment</a></h2>
 <p>To assign a script and see it in action, run the editor, select an object and find <code>Script</code> property, select your script
