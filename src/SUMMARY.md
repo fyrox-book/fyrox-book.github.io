@@ -64,7 +64,7 @@
         - [Stack panel](./fyrox/ui/stack_panel.md)        
         - [Tab Control](./fyrox/ui/tab_control.md)        
         - [Text](./fyrox/ui/text.md)        
-        - [Text box (WIP)](./fyrox/ui/text_box.md)        
+        - [Text box](./fyrox/ui/text_box.md)        
         - [Tree (WIP)](./fyrox/ui/tree.md)        
         - [Vector image (WIP)](./fyrox/ui/vector_image.md)        
         - [Window](./fyrox/ui/window.md)        
