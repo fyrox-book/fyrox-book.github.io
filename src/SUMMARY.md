@@ -34,7 +34,7 @@
       - [Basic concepts](./fyrox/ui/basic_concepts/basic_concepts.md)
       - [Setting up a user interface](./fyrox/ui/setting_up.md)      
       - [General rules](./fyrox/ui/general_rules.md)
-      - [Fonts (WIP)](./fyrox/ui/font.md)
+      - [Fonts](./fyrox/ui/font.md)
       - [Theme](./fyrox/ui/theme.md)
       - [Widgets](./fyrox/ui/widgets.md)
         - [Button (WIP)](./fyrox/ui/creating_button.md)
