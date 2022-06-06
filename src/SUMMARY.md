@@ -68,7 +68,7 @@
         - [Tree (WIP)](./fyrox/ui/tree.md)        
         - [Vector image (WIP)](./fyrox/ui/vector_image.md)        
         - [Window](./fyrox/ui/window.md)        
-        - [Wrap panel (WIP)](./fyrox/ui/wrap_panel.md)        
+        - [Wrap panel](./fyrox/ui/wrap_panel.md)        
     - [Serialization (WIP)](./fyrox/serialization/serialization.md)
     - [Resource Management](./fyrox/resources/resources.md)
         - [3D Models](./fyrox/resources/model.md)
