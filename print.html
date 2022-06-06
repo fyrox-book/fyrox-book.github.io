@@ -3276,7 +3276,69 @@ BorderBuilder::new(
 .build(&amp;mut ui.build_ctx());
 <span class="boring">}
 </span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="canvas-wip"><a class="header" href="#canvas-wip">Canvas (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="canvas"><a class="header" href="#canvas">Canvas</a></h1>
+<p>Canvas is a panel widget that allows you to explicitly set coordinates for children widgets. It is useful when you 
+need to manually control position of children widgets. Root UI node is canvas, so any widgets that are not attached
+to any other widgets can have explicit position.</p>
+<h2 id="how-to-create-10"><a class="header" href="#how-to-create-10">How to create</a></h2>
+<p>Use <code>CanvasBuilder</code> to create Canvas instance:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    gui::{canvas::CanvasBuilder, widget::WidgetBuilder, BuildContext, UiNode},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Canvas does not have any specific options, so its creation is probably simplest of all widgets.</p>
+<h2 id="how-to-position-children-nodes"><a class="header" href="#how-to-position-children-nodes">How to position children nodes</a></h2>
+<p>Use <code>.with_desired_position</code> on children widgets to set specific position:</p>
+<pre><pre class="playground"><code class="language-rust no_run">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{algebra::Vector2, pool::Handle},
+</span><span class="boring">    gui::{
+</span><span class="boring">        button::ButtonBuilder, canvas::CanvasBuilder, text::TextBuilder, widget::WidgetBuilder,
+</span><span class="boring">        BuildContext, UiNode,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn create_canvas_with_children_widgets(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    CanvasBuilder::new(
+        WidgetBuilder::new()
+            .with_child(
+                TextBuilder::new(
+                    WidgetBuilder::new().with_desired_position(Vector2::new(100.0, 200.0)),
+                )
+                .with_text(&quot;Simple Text at (100.0, 200.0)&quot;)
+                .build(ctx),
+            )
+            .with_child(
+                ButtonBuilder::new(
+                    WidgetBuilder::new().with_desired_position(Vector2::new(200.0, 100.0)),
+                )
+                .with_text(&quot;Simple Button at (200.0, 100.0)&quot;)
+                .build(ctx),
+            ),
+    )
+    .build(ctx)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The code snippet will create a canvas with a text widget located at (100.0, 200.0) relative to top-left corner of the
+canvas and a button located at (200.0, 100.0).</p>
+<h2 id="tips"><a class="header" href="#tips">Tips</a></h2>
+<p>Canvas provides infinite bounds for children widgets, this means that children nodes <strong>will not</strong> be stretched, instead
+they'll shrink to fit their content. For example, a button with a text will take slightly bigger rectangle than the 
+text bounds.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="check-box"><a class="header" href="#check-box">Check box</a></h1>
 <p>Checkbox is a UI widget that have three states - <code>Checked</code>, <code>Unchecked</code> and <code>Undefined</code>. In most cases it is used
 only with two values which fits in <code>bool</code> type. Third, undefined, state is used for specific situations when your
@@ -3286,7 +3348,7 @@ data have such state. </p>
 <p><img src="fyrox/ui/checkbox/checked.PNG" alt="Checked" /></p>
 <p>Checkbox in <code>Unchecked</code> state:</p>
 <p><img src="fyrox/ui/checkbox/unchecked.PNG" alt="Unchecked" /></p>
-<h2 id="how-to-create-10"><a class="header" href="#how-to-create-10">How to create</a></h2>
+<h2 id="how-to-create-11"><a class="header" href="#how-to-create-11">How to create</a></h2>
 <p>To create a checkbox you should do something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -3789,7 +3851,7 @@ code example and you will get a decent look:</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text"><a class="header" href="#text">Text</a></h1>
 <p>Text is a simple widget that allows you to print text on screen. It has various options like word wrapping, text
 alignment, and so on.</p>
-<h2 id="how-to-create-11"><a class="header" href="#how-to-create-11">How to create</a></h2>
+<h2 id="how-to-create-12"><a class="header" href="#how-to-create-12">How to create</a></h2>
 <p>An instance of the Text widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -3943,7 +4005,7 @@ code (or will be done automatically if you're using scripts or Framework (obsole
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text-box"><a class="header" href="#text-box">Text Box</a></h1>
 <p>TextBox is a text widget that allows you to edit text and create specialized input fields. It has various options like 
 word wrapping, text alignment, and so on.</p>
-<h2 id="how-to-create-12"><a class="header" href="#how-to-create-12">How to create</a></h2>
+<h2 id="how-to-create-13"><a class="header" href="#how-to-create-13">How to create</a></h2>
 <p>An instance of the TextBox widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
