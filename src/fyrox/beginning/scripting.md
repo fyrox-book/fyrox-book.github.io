@@ -1,14 +1,15 @@
-# Plugins and Scripts
+# Editor, Plugins and Scripts
 
 Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game in the 
 editor and be able to edit game entities in it. Your game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. In this chapter you'll learn basics of plugins and scripting system. 
+to scene objects to run custom game logic on them. In this chapter you'll learn basics of plugins and scripting system,
+also you'll learn how to run the editor.
 
 ## Project Generator
 
 Fyrox plugins are static, this means that you must re-compile your game or editor if you change source code of your game,
 such architecture requires some boilerplate code that is generic for every game. Fyrox offers special tiny tool - 
-`fyrox-template` - it allows you to generate all boilerplate parts in a single call. Install it using the following 
+`fyrox-template` - it allows you to generate all boilerplate parts in a single command. Install it using the following 
 command:
 
 ```shell

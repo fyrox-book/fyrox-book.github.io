@@ -1,7 +1,8 @@
 # Getting started
 
 Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
-of the book will guide you the basics of the engine.
+of the book will guide you through the basics of the engine. Fyrox 0.25+ changed game development paradigm - you
+should use the editor (Fyroxed) to make your game, like in many other game engines.
 
 ## Engine vs Framework
 
@@ -21,5 +22,10 @@ Before 0.25, Fyrox was just a framework (yet it still had an editor), you can st
 initialization, do not use editor, etc.), but it is considered obsolete and eventually "framework mode" won't be 
 supported. The book has few chapters that are marked `Obsolete`, this means that they're not advised to be used.
 
-Read next chapter to learn how to use the engine in a "modern" way.
+Read next chapter to learn how to use the engine in a "modern" way. 
+
+## API Documentation
+
+The book is primarily focused on game development with Fyrox, not on its API. You can find API docs 
+[here](https://docs.rs/fyrox/latest/fyrox/). 
 

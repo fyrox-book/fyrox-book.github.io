@@ -4,6 +4,7 @@
 - [fyrox](./fyrox/introduction.md)
     - [Getting started](./fyrox/beginning/getting_started.md)
       - [Plugins and Scripts](./fyrox/beginning/scripting.md) 
+      - [Editor Overview](./fyrox/beginning/editor_overview.md)
       - [Scene and scene graph](./fyrox/beginning/scene_and_scene_graph.md)
       - [Data management](./fyrox/beginning/data_management.md)
       - [Installation (Obsolete)](./fyrox/beginning/installation.md)
@@ -82,8 +83,3 @@
       - [RPG Tutorial](./fyrox/tutorials/rpg/intro.md)
         - [Character controller](./fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.md)
       - [2D Platformer tutorial](./fyrox/tutorials/platformer/part1.md)
-
----
-
-- [Fyroxed](./fyroxed/introduction.md)
-  - [Overview](./fyroxed/overview.md)
