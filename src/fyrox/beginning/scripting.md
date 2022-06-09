@@ -182,3 +182,5 @@ fn on_register(&mut self, context: PluginRegistrationContext) {
 
 To assign a script and see it in action, run the editor, select an object and find `Script` property, select your script
 from the drop-down list. To see the script in action, click "Play/Stop" button.
+
+Read the next chapter to learn how to use the editor.
