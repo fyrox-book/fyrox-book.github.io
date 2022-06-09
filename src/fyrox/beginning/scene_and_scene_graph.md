@@ -58,7 +58,8 @@ This node is intended to be used for **2D games** only.
 a proportion between 2D and 3D.
 
 Each of the node could be created either from the editor (`Create` on main menu) or programmatically via respective
-node builder. These scene nodes allow you to build almost any kind of game.
+node builder. These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
+types of nodes, but this is advanced topic, and it will be covered in next chapters.
 
 ## Local and global coordinates
 
