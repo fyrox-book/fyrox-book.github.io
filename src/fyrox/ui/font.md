@@ -11,7 +11,7 @@ There are two ways to create font instance - either load font from file, or load
 
 The easiest way to create a font is load it from file:
 
-```rust,no_run
+```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::gui::ttf::Font;
 async fn load_font_from_file() -> Font {
@@ -93,6 +93,7 @@ set and how it can be extended? Character set is just a set of ranges from Unico
 set:
 
 ```rust,no_run
+# use std::ops::Range;
 pub fn korean_char_set() -> &'static [Range<u32>] {
     &[
         // Basic Latin + Latin Supplement
