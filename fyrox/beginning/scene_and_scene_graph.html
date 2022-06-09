@@ -151,16 +151,18 @@ arm. Such relations between the objects could be presented by a graph structure.
 graph is called <em>node</em>. In the example with the sword and the character, the sword is a <em>child</em> node of a character,
 which in its turn is a <em>parent</em> node of a character. (Here we intentionally omit the fact that usually character
 model contains complex skeleton with multiple bones and the sword is actually attached to one of hand's bones.)</p>
+<p>You can change hierarchy of the nodes in the editor using simple drag'n'drop functionality in <code>World Viewer</code> - drag a 
+node onto some other node, and it will be attached to it.</p>
 <h2 id="building-blocks-or-scene-nodes"><a class="header" href="#building-blocks-or-scene-nodes">Building blocks or scene nodes</a></h2>
 <p>The engine offers various types of &quot;building blocks&quot; for your scene, each such block is called <em>scene node</em>.</p>
 <ul>
-<li><strong>Base</strong> - a node that stores hierarchical information (a handle to the parent node and a set of handles
+<li><a href="../scene/base_node.html">Base</a> - a node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
 is used as a base node for every other scene node (via composition).</li>
-<li><strong>Mesh</strong> - a node that represents a 3D model. This one of the most commonly used nodes in almost every game.
+<li><a href="../scene/mesh_node.html">Mesh</a> - a node that represents a 3D model. This one of the most commonly used nodes in almost every game.
 Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
 and loaded in your scene.</li>
-<li><strong>Light</strong> - a node that represents a light source. There are three types of light sources:
+<li><a href="../scene/light_node.html">Light</a> - a node that represents a light source. There are three types of light sources:
 <ul>
 <li><strong>Directional</strong> - a light source that does not have position, only direction. The closest real-world example
 is our Sun.</li>
@@ -169,27 +171,30 @@ is our Sun.</li>
 flashlight.</li>
 </ul>
 </li>
-<li><strong>Camera</strong> - a node that allows you to see the world. You must have at least one camera in your scene to be
+<li><a href="../scene/camera_node.html">Camera</a> - a node that allows you to see the world. You must have at least one camera in your scene to be
 able to see anything.</li>
-<li><strong>Sprite</strong> - a node that represents a quad that always faced towards a camera. It can have a texture, size, it
+<li><a href="../scene/sprite_node.html">Sprite</a> - a node that represents a quad that always faced towards a camera. It can have a texture, size, it
 also can be rotated around the &quot;look&quot; axis.</li>
-<li><strong>Particle system</strong> - a node that allows you to build visual effects using a huge set of small particles, it
+<li><a href="../scene/particle_system_node.html">Particle system</a> - a node that allows you to build visual effects using a huge set of small particles, it
 can be used to create smoke, sparks, blood splatters, etc. effects.</li>
-<li><strong>Terrain</strong> - a node that allows you to create complex landscapes with minimal effort.</li>
-<li><strong>Decal</strong> - a node that paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
+<li><a href="../scene/terrain_node.html">Terrain</a> - a node that allows you to create complex landscapes with minimal effort.</li>
+<li><a href="../scene/decal_node.html">Decal</a> - a node that paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
 damaged parts of the road, blood splatters, bullet holes, etc.</li>
-<li><strong>Rigid Body (2D)</strong> - a physical entity that is responsible for dynamic of the rigid. There is a special variant
+<li><a href="../physics/rigid_body.html">Rigid Body</a> - a physical entity that is responsible for dynamic of the rigid. There is a special variant
 for 2D - <code>RigidBody2D</code>.</li>
-<li><strong>Collider (2D)</strong> - a physical shape for a rigid body, it is responsible for contact manifold generation, 
+<li><a href="../physics/collider.html">Collider</a> - a physical shape for a rigid body, it is responsible for contact manifold generation, 
 without it any rigid body will not participate in simulation correctly, so every rigid body must have at least
 one collider. There is a special variant for 2D - <code>Collider2D</code>.</li>
-<li><strong>Joint (2D)</strong> - a physical entity that restricts motion between two rigid bodies, it has various amounts
+<li><a href="../physics/joint.html">Joint</a> - a physical entity that restricts motion between two rigid bodies, it has various amounts
 of degrees of freedom depending on the type of the joint. There is a special variant for 2D - <code>Joint2D</code>.</li>
-<li><strong>Rectangle</strong> - a simple rectangle mesh that can have a texture and a color, it is a very simple version of 
+<li><a href="../scene/rectangle.html">Rectangle</a> - a simple rectangle mesh that can have a texture and a color, it is a very simple version of 
 a Mesh node, yet it uses very optimized renderer, that allows you to render dozens of rectangles simultaneously.
 This node is intended to be used for <strong>2D games</strong> only.</li>
+<li><a href="../sound/sound.html">Sound</a> - a sound source, it is universal for 2D and 3D. Spatial blend factor allows you to select
+a proportion between 2D and 3D.</li>
 </ul>
-<p>These scene nodes allow you to build almost any kind of game.</p>
+<p>Each of the node could be created either from the editor (<code>Create</code> on main menu) or programmatically via respective
+node builder. These scene nodes allow you to build almost any kind of game.</p>
 <h2 id="local-and-global-coordinates"><a class="header" href="#local-and-global-coordinates">Local and global coordinates</a></h2>
 <p>Graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
 when working with <em>scene nodes</em>.</p>
