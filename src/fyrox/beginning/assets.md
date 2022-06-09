@@ -36,3 +36,10 @@ what import options is for what.
 Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
 is done by simple drag'n'drop - find a model you want to instantiate and drag it `Scene Preview`. The instance should
 appear in the `Scene Preview` once you release left mouse button.
+
+## Loading Assets
+
+Usually there is no need to manually handle assets loading, since you have the editor that can help you with that - create
+a scene with all required assets. However, sometimes you need to instantiate an asset dynamically - for example a
+bot prefab. In this case you can use `ResourceManager` and respective set of methods (like `request_model`, 
+`request_texture`, etc.). See respective asset page for more info.
