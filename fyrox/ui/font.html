@@ -144,7 +144,7 @@ pretty much any font from the internet and use it as is.</p>
 <p>There are two ways to create font instance - either load font from file, or load it directly from memory.</p>
 <h3 id="loading-font-from-file"><a class="header" href="#loading-font-from-file">Loading Font From File</a></h3>
 <p>The easiest way to create a font is load it from file:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
+<pre><pre class="playground"><code class="language-rust no_run edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -226,6 +226,7 @@ set:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">use std::ops::Range;
 </span>pub fn korean_char_set() -&gt; &amp;'static [Range&lt;u32&gt;] {
     &amp;[
         // Basic Latin + Latin Supplement
