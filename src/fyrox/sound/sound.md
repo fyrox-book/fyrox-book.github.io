@@ -81,3 +81,13 @@ SoundBuilder::new(BaseBuilder::new())
     .build(&mut scene.graph);
 # }
 ```
+
+In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a corresponding `.options` file, with the following content:
+
+```ron
+(
+  streaming: true
+)
+```
+
+If the audio file is called, for example, `/path/to/background.ogg`, call this `/path/to/background.ogg.options`.
