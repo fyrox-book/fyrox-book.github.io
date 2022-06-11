@@ -2584,6 +2584,12 @@ if sound.status() == Status::Stopped {
 <span class="boring">}
 </span><span class="boring">}
 </span></code></pre></pre>
+<p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a corresponding <code>.options</code> file, with the following content:</p>
+<pre><code class="language-ron">(
+  streaming: true
+)
+</code></pre>
+<p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="physics"><a class="header" href="#physics">Physics</a></h1>
 <p>The engine have full-featured physics engine under the hood (Rapier), it helps you to simulate physics in your games.
 There is first-class support for both 2D and 3D physics. There are three main physics entities in the engine:</p>
