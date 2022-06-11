@@ -2854,6 +2854,30 @@ we call button. Graphically it will look like this:</p>
 structure. Such approach allows us to modify the look of the button as we wish, we can create a button with 
 image background, or with any vector image, or even other widgets. The foreground can be anything too, it can also
 contain its own complex hierarchy, like a pair of an icon with a text and so on.</p>
+<h2 id="composition"><a class="header" href="#composition">Composition</a></h2>
+<p>Every widget in the engine uses composition to build more complex widgets. All widgets (and respective builders) contains
+<code>Widget</code> instance inside, it provides basic functionality the widget such as layout information, hierarchy, default
+foreground and background brushes (their usage depends on derived widget), render and layout transform and so on. </p>
+<h2 id="component-querying"><a class="header" href="#component-querying">Component Querying</a></h2>
+<p>Many widgets provide component querying functionality - you can get an immutable reference to inner component by its type. It is 
+used instead of type casting in many places. Component querying is much more flexible compared to direct type casting. 
+For example, you may want to build a custom <a href="fyrox/ui/basic_concepts/../tree.html">Tree</a> widget, you want your CustomTree to inherit all the 
+functionality from the Tree, but add something new. The Tree widget can manage its children subtrees, but it needs to
+somehow get required data from subtree. Direct type casting would fail in this case, because now you have something
+like this:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::gui::tree::Tree;
+</span>struct CustomTree {
+    tree: Tree,
+    my_data: u32
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>On other hand, component querying will work fine, because you can query inner component (Tree in our case). Please note 
+that this has nothing similar with ECS and stuff, it is made to circumvent Rust's lack of inheritance.</p>
 <h2 id="message-passing"><a class="header" href="#message-passing">Message passing</a></h2>
 <p>The engine uses message passing mechanism for any UI logic. What does that mean? Let's see at the button from the
 previous section and imagine we want to change its text. To do that we need to explicitly &quot;tell&quot; the button's text
