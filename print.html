@@ -2812,9 +2812,36 @@ loading.</p>
 <h2 id="supported-formats"><a class="header" href="#supported-formats">Supported formats</a></h2>
 <p>Fyrox supports these file formats for 3D models:</p>
 <ul>
-<li>FBX</li>
+<li>FBX - standard game development industry 3D model exchange format</li>
 <li>RGS - native scenes format produced by Fyroxed</li>
 </ul>
+<p>The list could be extended in the future.</p>
+<h2 id="instantiation"><a class="header" href="#instantiation">Instantiation</a></h2>
+<p>Model must be instantiated to your scene, there is no other way of using it. To do this, you can either use drag'n'drop
+from Asset Browser in the editor or instantiate the model dynamically from code:</p>
+<pre><pre class="playground"><code class="language-rust no_run edition2018">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    scene::{node::Node, Scene},
+</span><span class="boring">};
+</span><span class="boring">use std::path::Path;
+</span>async fn instantiate_model(
+    path: &amp;Path,
+    resource_manager: ResourceManager,
+    scene: &amp;mut Scene,
+) -&gt; Handle&lt;Node&gt; {
+    // Load model first. Alternatively, you can store resource handle somewhere and use it for
+    // instantiation.
+    let model = resource_manager.request_model(path).await.unwrap();
+
+    model.instantiate(scene).root
+}
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="material-import-1"><a class="header" href="#material-import-1">Material import</a></h2>
 <p>The engine tries to import materials as close as possible to originals in the model, however it now always possible
 because some 3D modelling software could use different shading models. By default, the engine tries to convert
@@ -2823,8 +2850,11 @@ engine will still import is as PBR material (with lots of missing textures of co
 account when working with something other than PBR materials. </p>
 <p>In cases when your 3D model have some weird materials, you should create appropriate materials and shaders <em>manually</em>,
 the engine is not a magic tool, it has some defaults that do not cover all possible cases.</p>
-<p>It is also possible to specify how to resolve textures while loading a 3D model, to do that you need to create 
-import options file with the following content near your 3D model:</p>
+<p>It is also possible to specify how to resolve textures while loading a 3D model, select you model in the <code>Asset Browser</code>
+and there will be import options right below the model preview:</p>
+<p><img src="fyrox/resources/model_import.png" alt="model import" /></p>
+<p>It is also possible to specify such options manually to do that you need to create import options file with the 
+following content near your 3D model (this is what the editor does for you):</p>
 <pre><code class="language-text">(
     material_search_options: RecursiveUp
 )
