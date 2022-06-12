@@ -35,7 +35,32 @@ what import options is for what.
 
 Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
 is done by simple drag'n'drop - find a model you want to instantiate and drag it `Scene Preview`. The instance should
-appear in the `Scene Preview` once you release left mouse button.
+appear in the `Scene Preview` once you release left mouse button. The amount of asset instance is not limited, it 
+only depends on capabilities of your PC, each instance takes some memory (the engine tries to re-use data across
+instance as much as possible) and CPU resources.
+
+You can also instantiate assets dynamically from your code, here's an example for Model:
+
+```rust,no_run,edition2018
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     engine::resource_manager::ResourceManager,
+#     scene::{node::Node, Scene},
+# };
+# use std::path::Path;
+async fn instantiate_model(
+    path: &Path,
+    resource_manager: ResourceManager,
+    scene: &mut Scene,
+) -> Handle<Node> {
+    // Load model first. Alternatively, you can store resource handle somewhere and use it for
+    // instantiation.
+    let model = resource_manager.request_model(path).await.unwrap();
+
+    model.instantiate(scene).root
+}
+```
 
 ## Loading Assets
 
