@@ -166,7 +166,33 @@ what import options is for what.</p>
 <h2 id="asset-instantiation"><a class="header" href="#asset-instantiation">Asset Instantiation</a></h2>
 <p>Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
 is done by simple drag'n'drop - find a model you want to instantiate and drag it <code>Scene Preview</code>. The instance should
-appear in the <code>Scene Preview</code> once you release left mouse button.</p>
+appear in the <code>Scene Preview</code> once you release left mouse button. The amount of asset instance is not limited, it 
+only depends on capabilities of your PC, each instance takes some memory (the engine tries to re-use data across
+instance as much as possible) and CPU resources.</p>
+<p>You can also instantiate assets dynamically from your code, here's an example for Model:</p>
+<pre><pre class="playground"><code class="language-rust no_run edition2018">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    scene::{node::Node, Scene},
+</span><span class="boring">};
+</span><span class="boring">use std::path::Path;
+</span>async fn instantiate_model(
+    path: &amp;Path,
+    resource_manager: ResourceManager,
+    scene: &amp;mut Scene,
+) -&gt; Handle&lt;Node&gt; {
+    // Load model first. Alternatively, you can store resource handle somewhere and use it for
+    // instantiation.
+    let model = resource_manager.request_model(path).await.unwrap();
+
+    model.instantiate(scene).root
+}
+<span class="boring">}
+</span></code></pre></pre>
 <h2 id="loading-assets"><a class="header" href="#loading-assets">Loading Assets</a></h2>
 <p>Usually there is no need to manually handle assets loading, since you have the editor that can help you with that - create
 a scene with all required assets. However, sometimes you need to instantiate an asset dynamically - for example a
