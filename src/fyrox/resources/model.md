@@ -4,8 +4,36 @@
 
 Fyrox supports these file formats for 3D models:
 
-- FBX
+- FBX - standard game development industry 3D model exchange format
 - RGS - native scenes format produced by Fyroxed
+
+The list could be extended in the future.
+
+## Instantiation
+
+Model must be instantiated to your scene, there is no other way of using it. To do this, you can either use drag'n'drop
+from Asset Browser in the editor or instantiate the model dynamically from code:
+
+```rust,no_run,edition2018
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     engine::resource_manager::ResourceManager,
+#     scene::{node::Node, Scene},
+# };
+# use std::path::Path;
+async fn instantiate_model(
+    path: &Path,
+    resource_manager: ResourceManager,
+    scene: &mut Scene,
+) -> Handle<Node> {
+    // Load model first. Alternatively, you can store resource handle somewhere and use it for
+    // instantiation.
+    let model = resource_manager.request_model(path).await.unwrap();
+
+    model.instantiate(scene).root
+}
+```
 
 ## Material import
 
@@ -18,8 +46,13 @@ account when working with something other than PBR materials.
 In cases when your 3D model have some weird materials, you should create appropriate materials and shaders _manually_,
 the engine is not a magic tool, it has some defaults that do not cover all possible cases.
 
-It is also possible to specify how to resolve textures while loading a 3D model, to do that you need to create 
-import options file with the following content near your 3D model:
+It is also possible to specify how to resolve textures while loading a 3D model, select you model in the `Asset Browser`
+and there will be import options right below the model preview:
+
+![model import](model_import.png)
+
+It is also possible to specify such options manually to do that you need to create import options file with the 
+following content near your 3D model (this is what the editor does for you):
 
 ```text
 (
