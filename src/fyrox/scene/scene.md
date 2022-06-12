@@ -52,24 +52,9 @@ fn load_scene(resource_manager: ResourceManager) -> Scene {
 Please note that here we're creating an empty scene and only then instantiating another scene into it. Why is this
 needed? 
 
-**Short answer:** child scene is considered as prefab, and it is "instantiated" in the parent scene. Considering 
+Child scene is considered as [prefab](./prefab.md), and it is "instantiated" in the parent scene. Considering 
 it as prefab allows you modifying your scene separately and serialization/deserialization will be able to correctly
 apply any changes in the scene.
-
-**Long answer:** the engine has a prefab system which allows you to build hierarchical scenes which can include any
-number of other scenes as child scenes. Child scenes can have their own child scenes and so on. This is very 
-efficient decoupling mechanism that allows you to put pieces of the scene in separate scenes (prefabs) and modify
-them independently. The changes in child scenes will be automatically reflected to all parent scenes. Here is the
-very simple example of why this is important: imagine you need to populate a town with 3D models of cars. Each
-kind of car have its own 3D model and, for example, a collision body that won't allow the player to walk through
-cars. How would you do this? The simplest (and dumbest) solution is to copy dozens of car models in the scene, and
-you're done. Imagine that now you need to change something in your car, for example, add a trunk that can be opened.
-What will you do? Of course, you should "iterate" over each car model and do the required changes, you simply don't have
-any other option. This will eat huge amount of time and in general it is very non-productive.  
-
-This is where prefabs will save you hours of work. All you need to do is to create a car prefab and instantiate it
-multiple times in your scene. When you'll need to change something in the car, you simply go to the prefab and change
-it. After that every prefab instance will have your changes!
 
 ### Create scene manually
 
