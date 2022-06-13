@@ -1,7 +1,7 @@
 # Data management
 
 The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
-vector with entries that can be either vacant or occupied. Each entry, no matter occupied it or vacant, also
+vector with entries that can be either vacant or occupied. Each entry, no matter occupied or vacant, also
 stores a special number called _generation_. The generation number is used to understand whether an entry has
 been changed over time or not. When an entry is reused, its generation number is increased leaving all previously
 created handle leading to the entry invalid. This is a very simple and efficient algorithm for tracking the
@@ -10,7 +10,7 @@ created handle leading to the entry invalid. This is a very simple and efficient
 To access the data in entries, the engine uses _handles_. The handle is a pair of index of an entry and a
 _generation_ number. When you put an object in the pool, it gives you the handle that "leads" to the object.
 At this moment the generation of the handle matches the generation of the corresponding entry so the handle
-is valid. It will remain valid util you "free" the object, which will make the entry vacant again.
+is valid. It will remain valid until you "free" the object, which will make the entry vacant again.
 
 ## Advantages
 
@@ -69,7 +69,7 @@ Sometimes you may need to temporarily extract an object from a pool, do somethin
 while preserving handles to that object. There are three special methods for that:
 
 1) `take_reserve` + `try_take_reserve` - moves object out of the pool, but leaves the entry in "occupied" state. This function returns
-a tuple with two values `(Ticket<T>, T)`. The latter value is obviously is your object, but the first object is 
+a tuple with two values `(Ticket<T>, T)`. The latter value is obviously your object, but the former is 
 more interesting. It is a special wrapper over object index that allows you to return the object back. It is used
 in `put_back` method. **Caveat:** an attempt to borrow moved object in the pool will cause panic! 
 2) `put_back` - moves the object back in the pool using given ticket. Ticket says where to put the object in the 
@@ -129,7 +129,7 @@ assert_eq!(obj, None);
 
 ## Iterators
 
-There are few possible iterators, each one is useful for particular purpose:
+There are few possible iterators, each one is useful for a particular purpose:
 
 1) `iter/iter_mut` - creates an iterator that iterates over occupied pool entries returning references to an 
 object associated with an entry.
@@ -167,7 +167,7 @@ Sometimes you may need to check if a handle is valid, to do that use `is_valid_h
 ## Type-erased handles
 
 The pool module offers type-erased handles that could be useful for some situations. Try to avoid using type-erased
-handles, because they may introduce hardly-reproducible bugs and type safety is always good :)
+handles, because they may introduce hardly-reproducible bugs. Type safety is always good :)
 
 Type-erased handle is called `ErasedHandle` and it can be created either manually, or from strongly-typed handles.
 Both handle types are interchangeable, you can use `From` and `Into` traits to convert them one into another.
