@@ -165,7 +165,7 @@ design decisions made in the engine.</p>
 <h2 id="ecs-and-classic-oop"><a class="header" href="#ecs-and-classic-oop">ECS and classic OOP</a></h2>
 <p>The engine <strong>does not</strong> use ECS, instead it uses <strong>classic OOP</strong> with composition over inheritance. More specifically,
 complex objects in the engine can be constructed using simpler objects. As a very simple example of this, let's 
-check the scene node. The base object in for every scene node is a <code>Base</code> node, it contains a transform, a list
+check the scene node. The base object for every scene node is a <code>Base</code> node, it contains a transform, a list
 of children, etc. The more complex object, that <em>extends</em> functionality of the <code>Base</code> node stores an instance of
 <code>Base</code> inside of them. For example, a <code>Mesh</code> node is a <code>Base</code> node <em>plus</em> some specific info (a list of surfaces,
 material, etc.). The &quot;hierarchy&quot; depth is unlimited - a <code>Light</code> node in the engine is an enumeration of three 
@@ -207,7 +207,7 @@ mutable access to data, but interaction between systems can still be painful. St
 criticized by allowing you to create spaghetti-code for which borrow checker will yell at you (which is indeed 
 reasonable). We should consider borrow checker not as our enemy, that prevents us from writing code, but as 
 our friend that tells us - &quot;dude, this won't work without potential crashes, memory issues, etc.&quot;. What borrow
-checker tries to tell us, it that we need to re-think the architecture of our game. </p>
+checker tries to tell us is that we need to re-think the architecture of our game. </p>
 <p>So how the engine solves the problem of unique mutable access? It forces you to use a &quot;top-down&quot; flow in your game.
 What does that mean? In short, you have to change the data only by going from top to bottom on a call tree. But 
 isn't that too restrictive, what if I want to call some higher-level function while being in lower-level function?
@@ -637,7 +637,7 @@ bot prefab. In this case you can use <code>ResourceManager</code> and respective
 <code>request_texture</code>, etc.). See respective asset page for more info.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-management"><a class="header" href="#data-management">Data management</a></h1>
 <p>The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
-vector with entries that can be either vacant or occupied. Each entry, no matter occupied it or vacant, also
+vector with entries that can be either vacant or occupied. Each entry, no matter occupied or vacant, also
 stores a special number called <em>generation</em>. The generation number is used to understand whether an entry has
 been changed over time or not. When an entry is reused, its generation number is increased leaving all previously
 created handle leading to the entry invalid. This is a very simple and efficient algorithm for tracking the
@@ -645,7 +645,7 @@ created handle leading to the entry invalid. This is a very simple and efficient
 <p>To access the data in entries, the engine uses <em>handles</em>. The handle is a pair of index of an entry and a
 <em>generation</em> number. When you put an object in the pool, it gives you the handle that &quot;leads&quot; to the object.
 At this moment the generation of the handle matches the generation of the corresponding entry so the handle
-is valid. It will remain valid util you &quot;free&quot; the object, which will make the entry vacant again.</p>
+is valid. It will remain valid until you &quot;free&quot; the object, which will make the entry vacant again.</p>
 <h2 id="advantages"><a class="header" href="#advantages">Advantages</a></h2>
 <p>Since the pool is just a contiguous memory block, it is much more CPU cache-friendly. This means that in most
 cases the data portions will be loaded in CPU caches, making the access to the data blazing fast.</p>
@@ -691,7 +691,7 @@ assert_eq!(obj, None);
 while preserving handles to that object. There are three special methods for that:</p>
 <ol>
 <li><code>take_reserve</code> + <code>try_take_reserve</code> - moves object out of the pool, but leaves the entry in &quot;occupied&quot; state. This function returns
-a tuple with two values <code>(Ticket&lt;T&gt;, T)</code>. The latter value is obviously is your object, but the first object is 
+a tuple with two values <code>(Ticket&lt;T&gt;, T)</code>. The latter value is obviously your object, but the former is 
 more interesting. It is a special wrapper over object index that allows you to return the object back. It is used
 in <code>put_back</code> method. <strong>Caveat:</strong> an attempt to borrow moved object in the pool will cause panic! </li>
 <li><code>put_back</code> - moves the object back in the pool using given ticket. Ticket says where to put the object in the 
@@ -744,7 +744,7 @@ assert_eq!(obj, None);
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="iterators"><a class="header" href="#iterators">Iterators</a></h2>
-<p>There are few possible iterators, each one is useful for particular purpose:</p>
+<p>There are few possible iterators, each one is useful for a particular purpose:</p>
 <ol>
 <li><code>iter/iter_mut</code> - creates an iterator that iterates over occupied pool entries returning references to an 
 object associated with an entry.</li>
@@ -775,7 +775,7 @@ assert_eq!(next_obj, None);
 <p>Sometimes you may need to check if a handle is valid, to do that use <code>is_valid_handle</code> method.</p>
 <h2 id="type-erased-handles"><a class="header" href="#type-erased-handles">Type-erased handles</a></h2>
 <p>The pool module offers type-erased handles that could be useful for some situations. Try to avoid using type-erased
-handles, because they may introduce hardly-reproducible bugs and type safety is always good :)</p>
+handles, because they may introduce hardly-reproducible bugs. Type safety is always good :)</p>
 <p>Type-erased handle is called <code>ErasedHandle</code> and it can be created either manually, or from strongly-typed handles.
 Both handle types are interchangeable, you can use <code>From</code> and <code>Into</code> traits to convert them one into another.</p>
 <h2 id="special"><a class="header" href="#special">Special</a></h2>
@@ -1127,14 +1127,14 @@ line of code:</p>
 which is not available in the engine yet.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="graph"><a class="header" href="#graph">Graph</a></h1>
 <p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
-entities in the engine. Graph takes care of your scene objects and does a lot of job for you.</p>
+entities in the engine. Graph takes care of your scene objects and does many different things for you.</p>
 <h2 id="how-to-create-1"><a class="header" href="#how-to-create-1">How to create</a></h2>
-<p>You don't need to create graph manually, every scene has its own instance of the graph. It can be accessed pretty
+<p>You don't need to create a graph manually, every scene has its own instance of the graph. It can be accessed pretty
 easily: <code>scene_ref.graph</code></p>
 <h2 id="adding-nodes"><a class="header" href="#adding-nodes">Adding nodes</a></h2>
-<p>There are two ways of adding nodes to the graph, either using <em>node builders</em> or manually, by calling <code>graph.add_node</code>.</p>
+<p>There are two ways of adding nodes to the graph, either using <em>node builders</em> or manually by calling <code>graph.add_node</code>.</p>
 <h3 id="using-node-builders"><a class="header" href="#using-node-builders">Using node builders</a></h3>
-<p>Every node in the engine has its respective builder, which can be used to create an instance of the node. Using
+<p>Every node in the engine has its respective builder which can be used to create an instance of the node. Using
 builders is a preferable way to create scene nodes. There are following node builders:</p>
 <ol>
 <li><code>BaseBuilder</code> - creates an instance of base node. See <a href="fyrox/scene/./base_node.html">Base node</a> for more info.</li>
@@ -1152,7 +1152,7 @@ See <a href="fyrox/scene/./particle_system_node.html">Particle system node</a> f
 <li><code>Rectangle</code> - creates an instance of 2D rectangle node. See <a href="fyrox/scene/./rectangle.html">Rigid body</a> for more info.</li>
 </ol>
 <p>Every builder, other than <code>BaseBuilder</code>, accepts <code>BaseBuilder</code> as a parameter in <code>.new(..)</code> method. Why so?
-This is needed, because every node (other than Base) is &quot;derived&quot; from Base via composition and the derived
+Because every node (other than Base) is &quot;derived&quot; from Base via composition and the derived
 builder must know how to build Base node. While it may sound confusing, it is actually very useful and clear.
 Consider this example:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
@@ -1184,8 +1184,8 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <span class="boring">}
 </span></code></pre></pre>
 <p>As you can see, we're creating an instance of BaseBuilder and fill it with desired properties as well as filling
-the CameraBuilder's instance properties. This is very flexible mechanism, allowing you to build complex hierarchies
-in declarative manner:</p>
+the CameraBuilder's instance properties. This is a very flexible mechanism, allowing you to build complex hierarchies
+in a declarative manner:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -1237,13 +1237,13 @@ fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>This code snippet create a camera for first-person role-playing game's player, it will have a staff in &quot;right-hand&quot;
+<p>This code snippet creates a camera for first-person role-playing game's player, it will have a staff in &quot;right-hand&quot;
 and a spell in the left hand. Of course all of this is very simplified, but should give you the main idea. Note
-that staff and fireball will be children nodes of camera, and when setting their transform we're actually setting
+that staff and fireball will be children nodes of camera, and when setting their transform, we're actually setting
 <strong>local</strong> transform which means that the transform will be relative to camera's. The staff and the spell will move
 together with the camera.</p>
 <h3 id="adding-a-node-manually"><a class="header" href="#adding-a-node-manually">Adding a node manually</a></h3>
-<p>For some rare cases you may also want delay adding a node to the graph, specifically for that purpose, every node 
+<p>For some rare cases you may also want to delay adding a node to the graph, specifically for that purpose, every node 
 builder has <code>.build_node</code> method which creates an instance of <code>Node</code>  but does not add it to the graph.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -1297,7 +1297,7 @@ fn link_weapon_to_camera(
 <h2 id="how-to-remove-nodes"><a class="header" href="#how-to-remove-nodes">How to remove nodes</a></h2>
 <p>A node could be removed by simply calling <code>graph.remove_node(handle)</code>, this method removes the node from the 
 graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behaviour, and you want to preserve children
-nodes while deleting parent node. To do that you need to explicitly detach children nodes of the node you're about
+nodes while deleting parent node. To do that, you need to explicitly detach children nodes of the node you're about
 to delete:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -1322,14 +1322,14 @@ will be deleted. <code>remove_node</code> has some limitations: it cannot be use
 just drops nodes immediately. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="prefabs"><a class="header" href="#prefabs">Prefabs</a></h1>
 <p>Prefab is a separate scene that can be instantiated to some other scene, while preserving links between properties
-between instance and its parent prefab. Prefabs allow you to create a part of scene and create multiple instances of
+between instances and its parent prefab. Prefabs allow you to create a part of a scene and create multiple instances of
 it in some other scenes.</p>
-<p>Let's quickly check what does that mean on practice. The engine has a prefab system which allows you to build 
+<p>Let's quickly check what that means on practice. The engine has a prefab system which allows you to build 
 hierarchical scenes which can include any number of other scenes as child scenes. Child scenes can have their own child
 scenes and so on. This is very efficient decoupling mechanism that allows you to put pieces of the scene in separate 
 scenes (prefabs) and modify them independently. The changes in child scenes will be automatically reflected to all parent
 scenes. Here is the very simple example of why this is important: imagine you need to populate a town with 3D models of
-cars. Each kind of car have its own 3D model and, for example, a collision body that won't allow the player to walk through
+cars. Each kind of car has its own 3D model and for example, a collision body that won't allow the player to walk through
 cars. How would you do this? The simplest (and dumbest) solution is to copy dozens of car models in the scene, and
 you're done. Imagine that now you need to change something in your car, for example, add a trunk that can be opened.
 What will you do? Of course, you should &quot;iterate&quot; over each car model and do the required changes, you simply don't have
@@ -1338,19 +1338,19 @@ any other option. This will eat huge amount of time and in general it is very no
 multiple times in your scene. When you'll need to change something in the car, you simply go to the prefab and change
 it. After that every prefab instance will have your changes!</p>
 <h2 id="how-to-create-and-use-a-prefab"><a class="header" href="#how-to-create-and-use-a-prefab">How to create and use a prefab</a></h2>
-<p>All you need to do is to make a scene in the editor with all required objects and save it! After that you can use the
-scene in other scenes and just do its instantiation, like with usual 3D models. You can either instantiate it from
+<p>All you need to do is to make a scene in the editor with all required objects and save it! After that, you can use the
+scene in other scenes and just do its instantiation, as in usual 3D models. You can either instantiate it from the
 editor by drag'n'drop a prefab to scene previewer, or do standard <a href="fyrox/scene/../resources/model.html">model resource instantiation</a></p>
 <h2 id="property-inheritance"><a class="header" href="#property-inheritance">Property inheritance</a></h2>
-<p>As was already mentioned in the intro section, instances inherit properties from their parent prefabs. For example, you
+<p>As already mentioned in the intro section, instances inherit properties from their parent prefabs. For example, you
 can change position of an object in prefab and every instance will reflect that change - the object's instances will
-also move. This works until there's no manual change to a property in instance, if you do so, then your change is 
+also move. This works until there's no manual change to a property in instance, if you do so, your change is 
 considered with higher priority. Such feature allows you to tweak instances, add some unique details to them, but keep
 generic properties from parent prefabs.</p>
 <h2 id="hierarchical-prefabs"><a class="header" href="#hierarchical-prefabs">Hierarchical Prefabs</a></h2>
-<p>Prefabs can have other prefab instances inside, this means that you can, for example, create a room populated with
+<p>Prefabs can have other prefab instances inside of it. This means that you can, for example, create a room populated with
 instances of other prefabs (bookshelves, chairs, tables, etc) and then use the room prefab to build a bigger scene.
-The changes in base prefabs will be reflected in their instances, regardless how deep the hierarchy is.</p>
+The changes in the base prefabs will be reflected in their instances, regardless of how deep the hierarchy is.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="base-node"><a class="header" href="#base-node">Base node</a></h1>
 <p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
@@ -1457,14 +1457,14 @@ to move a node at specific location you could use this:</p>
 </span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mesh-node"><a class="header" href="#mesh-node">Mesh node</a></h1>
 <p>Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
-Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
+Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
 and loaded in your scene.</p>
 <h2 id="how-to-create-3"><a class="header" href="#how-to-create-3">How to create</a></h2>
-<p>There are basically two ways, how to pick one depends your needs. In general, using a 3D modelling software is
+<p>There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
 the way to go, especially with tons and tons of free 3D models available online.</p>
 <p><strong>Caveat:</strong> The engine supports <em>only</em> FBX file format for 3D models!</p>
 <h3 id="using-a-3d-modelling-software"><a class="header" href="#using-a-3d-modelling-software">Using a 3D modelling software</a></h3>
-<p>To create 3D model in you could use <a href="https://www.blender.org/">Blender</a> and then export it to <code>FBX</code> file format.
+<p>To create 3D model, you could use <a href="https://www.blender.org/">Blender</a> and then export it to <code>FBX</code> file format.
 To load your 3D model in the game, you should do few simple steps:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -1497,7 +1497,7 @@ fn load_model_to_scene(
 model is loading) and error handling. In the real game you should carefully handle all errors and use <code>async/await</code>
 properly.</p>
 <h3 id="creating-a-procedural-mesh"><a class="header" href="#creating-a-procedural-mesh">Creating a procedural mesh</a></h3>
-<p>A mesh instance could be created from code, such meshes called &quot;procedural&quot;. They're suitable for cases when you
+<p>A mesh instance could be created from code, such meshes are called &quot;procedural&quot;. They're suitable for cases when you
 cannot create a mesh in 3D modelling software.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -1569,7 +1569,7 @@ fn create_procedural_mesh(
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
 <p>Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
 it will play animation with no problems. One difference that should be noted is that you should use <code>instantiate</code>
-method instead of <code>instantiate_geometry</code> and then manually apply animation to the mesh in you game loop.</p>
+method instead of <code>instantiate_geometry</code> and then manually apply animation to the mesh in your game loop.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -1615,7 +1615,7 @@ scene.animations[animations[0]]
 <h3 id="retargetting"><a class="header" href="#retargetting">Retargetting</a></h3>
 <p>You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
 in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated
-3D model in separate file, and all animations in their own files.</p>
+3D model in a separate file and all animations in their own files.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="light-node"><a class="header" href="#light-node">Light node</a></h1>
 <p>The engine offers complex lighting system with various types of light sources. </p>
 <h2 id="light-types"><a class="header" href="#light-types">Light types</a></h2>
