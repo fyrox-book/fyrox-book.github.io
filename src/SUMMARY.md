@@ -23,6 +23,7 @@
       - [Camera node](./fyrox/scene/camera_node.md)
       - [Decal node](./fyrox/scene/decal_node.md)
       - [Rectangle node](./fyrox/scene/rectangle.md)
+      - [Custom node](./fyrox/scene/custom_node.md)
       - [Physics](./fyrox/physics/physics.md)
         - [Rigid body](./fyrox/physics/rigid_body.md)
         - [Collider](./fyrox/physics/collider.md)
