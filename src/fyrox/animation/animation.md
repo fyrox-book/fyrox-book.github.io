@@ -2,8 +2,8 @@
 
  Animation blending state machine.
 
- Machine is used to blend multiple animation as well as perform automatic "smooth transition
- between states. Let have a quick look at simple machine graph:
+ Machine is used to blend multiple animation as well as perform automatic "smooth" transition
+ between states. Let's have a quick look at a simple machine graph:
 
  ```text
                                                   +-------------+
@@ -33,12 +33,12 @@
                                          +-------------+
  ```
 
- Here we have Walk, Idle, Run states which uses different sources of poses:
- - Walk - is most complicated here - it uses result of blending between
+ Here we have Walk, Idle and Run states which use different sources of poses:
+ - Walk - is the most complicated here - it uses result of blending between
    Aim and Walk animations with different weights. This is useful if your
    character can only walk or can walk *and* aim at the same time. Desired pose
    determined by Walk Weight and Aim Weight parameters combination.
- - Run and idle both directly uses animation as pose source.
+ - Run and idle both directly use animation as pose source.
 
  There are four transitions between three states each with its own rule. Rule
  is just Rule parameter which can have boolean value that indicates that transition
@@ -85,6 +85,6 @@
 
  ```
 
- You can use multiple machines to animation single model - for example one machine can be for
- locomotion and other is for combat. This means that locomotion machine will take control over
+ You can use multiple machines to animate single model - for example one machine can be for
+ locomotion and other for combat. This means that locomotion machine will take control over
  lower body and combat machine will control upper body.
