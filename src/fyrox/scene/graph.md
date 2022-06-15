@@ -1,20 +1,20 @@
 # Graph
 
 Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
-entities in the engine. Graph takes care of your scene objects and does a lot of job for you.
+entities in the engine. Graph takes care of your scene objects and does many different things for you.
 
 ## How to create
 
-You don't need to create graph manually, every scene has its own instance of the graph. It can be accessed pretty
+You don't need to create a graph manually, every scene has its own instance of the graph. It can be accessed pretty
 easily: `scene_ref.graph`
 
 ## Adding nodes
 
-There are two ways of adding nodes to the graph, either using _node builders_ or manually, by calling `graph.add_node`.
+There are two ways of adding nodes to the graph, either using _node builders_ or manually by calling `graph.add_node`.
 
 ### Using node builders
 
-Every node in the engine has its respective builder, which can be used to create an instance of the node. Using
+Every node in the engine has its respective builder which can be used to create an instance of the node. Using
 builders is a preferable way to create scene nodes. There are following node builders:
 
 1) `BaseBuilder` - creates an instance of base node. See [Base node](./base_node.md) for more info.
@@ -32,7 +32,7 @@ See [Particle system node](./particle_system_node.md) for more info.
 12) `Rectangle` - creates an instance of 2D rectangle node. See [Rigid body](./rectangle.md) for more info.
 
 Every builder, other than `BaseBuilder`, accepts `BaseBuilder` as a parameter in `.new(..)` method. Why so?
-This is needed, because every node (other than Base) is "derived" from Base via composition and the derived
+Because every node (other than Base) is "derived" from Base via composition and the derived
 builder must know how to build Base node. While it may sound confusing, it is actually very useful and clear.
 Consider this example:
 
@@ -63,8 +63,8 @@ fn create_camera(scene: &mut Scene) -> Handle<Node> {
 ```
 
 As you can see, we're creating an instance of BaseBuilder and fill it with desired properties as well as filling
-the CameraBuilder's instance properties. This is very flexible mechanism, allowing you to build complex hierarchies
-in declarative manner:
+the CameraBuilder's instance properties. This is a very flexible mechanism, allowing you to build complex hierarchies
+in a declarative manner:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -115,15 +115,15 @@ fn create_node(scene: &mut Scene) -> Handle<Node> {
 }
 ```
 
-This code snippet create a camera for first-person role-playing game's player, it will have a staff in "right-hand"
+This code snippet creates a camera for first-person role-playing game's player, it will have a staff in "right-hand"
 and a spell in the left hand. Of course all of this is very simplified, but should give you the main idea. Note
-that staff and fireball will be children nodes of camera, and when setting their transform we're actually setting
+that staff and fireball will be children nodes of camera, and when setting their transform, we're actually setting
 **local** transform which means that the transform will be relative to camera's. The staff and the spell will move
 together with the camera.
 
 ### Adding a node manually
 
-For some rare cases you may also want delay adding a node to the graph, specifically for that purpose, every node 
+For some rare cases you may also want to delay adding a node to the graph, specifically for that purpose, every node 
 builder has `.build_node` method which creates an instance of `Node`  but does not add it to the graph.
 
 ```rust,no_run
@@ -178,7 +178,7 @@ Here we've loaded a weapon 3D model, instantiated it on scene and attached to _e
 
 A node could be removed by simply calling `graph.remove_node(handle)`, this method removes the node from the 
 graph **with all of its children nodes**. Sometimes this is unwanted behaviour, and you want to preserve children
-nodes while deleting parent node. To do that you need to explicitly detach children nodes of the node you're about
+nodes while deleting parent node. To do that, you need to explicitly detach children nodes of the node you're about
 to delete:
 
 ```rust,no_run

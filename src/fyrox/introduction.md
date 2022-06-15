@@ -11,7 +11,7 @@ design decisions made in the engine.
 
 The engine **does not** use ECS, instead it uses **classic OOP** with composition over inheritance. More specifically,
 complex objects in the engine can be constructed using simpler objects. As a very simple example of this, let's 
-check the scene node. The base object in for every scene node is a `Base` node, it contains a transform, a list
+check the scene node. The base object for every scene node is a `Base` node, it contains a transform, a list
 of children, etc. The more complex object, that _extends_ functionality of the `Base` node stores an instance of
 `Base` inside of them. For example, a `Mesh` node is a `Base` node _plus_ some specific info (a list of surfaces,
 material, etc.). The "hierarchy" depth is unlimited - a `Light` node in the engine is an enumeration of three 
@@ -61,7 +61,7 @@ mutable access to data, but interaction between systems can still be painful. St
 criticized by allowing you to create spaghetti-code for which borrow checker will yell at you (which is indeed 
 reasonable). We should consider borrow checker not as our enemy, that prevents us from writing code, but as 
 our friend that tells us - "dude, this won't work without potential crashes, memory issues, etc.". What borrow
-checker tries to tell us, it that we need to re-think the architecture of our game. 
+checker tries to tell us is that we need to re-think the architecture of our game. 
 
 So how the engine solves the problem of unique mutable access? It forces you to use a "top-down" flow in your game.
 What does that mean? In short, you have to change the data only by going from top to bottom on a call tree. But 
