@@ -1,7 +1,6 @@
 # Materials
 
-Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission,
-maps, etc.), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
+Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission and other maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
 textures. Each parameter can be changed in runtime giving you the ability to create animated materials. However,
 in practice, most materials are static, this means that once it's created, it won't be changed anymore.
 
@@ -56,7 +55,7 @@ object.
 - **texCoordScale** - a 2D vector that allows you to scale texture coordinates used to sample the textures 
 mentioned above (except lightmaps, they're using separate texture coordinates)
 - **layerIndex** - a natural number that is used for decals masking, a decal will only be applied to your mesh
-if the decal has matching index. 
+if and only if the decal has matching index. 
 - **emissionStrength** - a 3D vector that allows you to set the strength of emission per-channel (R, G, B) for 
 your `emissionTexture`
 

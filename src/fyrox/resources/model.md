@@ -5,7 +5,7 @@
 Fyrox supports these file formats for 3D models:
 
 - FBX - standard game development industry 3D model exchange format
-- RGS - native scenes format produced by Fyrox
+- RGS - native scenes format produced by Fyroxed (the editor)
 
 The list could be extended in the future.
 
@@ -37,7 +37,7 @@ async fn instantiate_model(
 
 ## Material import
 
-The engine tries to import materials as close as possible to originals in the model, however it is always possible
+The engine tries to import materials as close as possible to originals in the model, however it is not always possible
 because some 3D modelling software could use different shading models. By default, the engine tries to convert
 everything to PBR materials, so if you have a 3D model with a special material made for cartoon shading, the
 engine will still import it as PBR material (with lots of missing textures of course). You should take this into

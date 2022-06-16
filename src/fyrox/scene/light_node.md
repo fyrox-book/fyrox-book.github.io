@@ -169,7 +169,7 @@ Spot and point lights both support shadows, however directional light still lack
 Lights are not very cheap, every light source has some performance impact. As a general rule, try to keep the amount
 of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
 Keep in mind that the less area the light needs to "cover", the higher the performance. This means that you can have
-tons of small light sources almost freely.
+tons of small light sources for free.
 
 Shadows giving the most significant performance impact, you should keep the amount of light sources that can cast
 shadows at lowest possible amount to keep performance at good levels. You can also turn on/off shadows when you 

@@ -52,7 +52,7 @@ other scene node. Its final size and orientation are defined by the chain of tra
 ## Layers
 
 There are situations when you want to prevent some geometry from being covered with a decal, to do that the engine
-offers a concept of layers. A decal will be applied to a geometry if they're having matching layer index. This 
+offers a concept of layers. A decal will be applied to a geometry if and only if they have matching layer index. This 
 allows you to create environment damage decals and they won't affect dynamic objects since they're located on 
 different layers.
 
