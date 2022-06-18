@@ -18,7 +18,7 @@ manually.
 
 ### Using Fyroxed
 
-There is a [separate chapter](../../fyroxed/introduction.md) in the book that should help you to create a scene.
+There is a [separate chapter](../../fyrox/introduction.md) in the book that should help you to create a scene.
 
 After a scene is created, you can load it as any other 3D model using the resource manager:
 
