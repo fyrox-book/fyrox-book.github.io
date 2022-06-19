@@ -223,7 +223,7 @@ if sound.status() == Status::Stopped {
 </span></code></pre></pre>
 <p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a corresponding <code>.options</code> file, with the following content:</p>
 <pre><code class="language-ron">(
-  streaming: true
+  stream: true
 )
 </code></pre>
 <p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
