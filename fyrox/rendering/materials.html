@@ -138,10 +138,9 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="materials"><a class="header" href="#materials">Materials</a></h1>
-<p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission,
-etc. maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
+<p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission and other maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
 textures. Each parameter can be changed in runtime giving you the ability to create animated materials. However,
-in practice, most materials are static, this means that once it created, it won't be changed anymore.</p>
+in practice, most materials are static, this means that once it's created, it won't be changed anymore.</p>
 <p>Please keep in mind that the actual &quot;rules&quot; of drawing an entity are stored in the shader, 
 <strong>material is only a storage</strong> for specific uses of the shader. </p>
 <p>Multiple materials can share the same shader, for example standard shader covers 95% of most common use cases,
@@ -151,8 +150,8 @@ multiple cubes using the same shader, but with different textures.</p>
 multiple objects with the same material efficiently.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>It is very important re-use materials as much as possible, because the amount of materials used per frame
-significantly correlates with performance. The more unique materials you have per frame, the more work has
-to be done by the renderer and video driver to render a frame and the more time the frame will require for
+significantly correlates with performance. The more unique materials you have per frame, the more work
+the renderer and video driver need in order to render a frame and more time the frame will require for
 rendering, thus lowering your FPS.</p>
 <h2 id="standard-material"><a class="header" href="#standard-material">Standard material</a></h2>
 <p>The engine offers a standard PBR material, PBR stands for &quot;Physically-Based Rendering&quot; which gives you the quality
@@ -165,11 +164,11 @@ some cartoon-ish or stylized games. </p>
 (alpha) will be used only with <code>Forward</code> render path! This means that you will need to switch render path on your
 mesh (<a href="#transparency">see below</a>)</li>
 <li><strong>diffuseTexture</strong> - a 2D texture containing the unlit &quot;basic&quot; colors of your object, this is the most commonly
-used texture. For example, you can assign a brick wall texture to this property and your object will look a brick
+used texture. For example, you can assign a brick wall texture to this property and your object will look like a brick
 wall.</li>
 <li><strong>normalTexture</strong> - a 2D texture containing per-pixel normal vectors. </li>
 <li><strong>metallicTexture</strong> - a 2D texture containing per-pixel metallic factor, where 0 - dielectric, 1 - metal.
-In simple words it defines will your object reflect (1.0) the environment or not (0.0). </li>
+In simple words it defines whether your object reflects (1.0) the environment or not (0.0). </li>
 <li><strong>roughnessTexture</strong> - a 2D texture containing per-pixel roughness factor, where 0 - completely flat, 1 - 
 very rough.</li>
 <li><strong>heightTexture</strong> - a 2D texture containing per-pixel displacement value, it is used with parallax mapping to
@@ -179,19 +178,19 @@ surfaces like small lamps on wall of sci-fi ship, or to create glowing eyes for 
 the player.</li>
 <li><strong>lightmapTexture</strong> - a 2D texture containing per-pixel <strong>static</strong> lighting. It is used to apply precomputed
 light to your 3D models, and the most common use case is to lit a static object using a static light. Precomputed
-light is very cheap. The engine offers built-in lightmapper that can generated lightmaps for you.</li>
+light is very cheap. The engine offers built-in lightmapper that can generate lightmaps for you.</li>
 <li><strong>aoTexture</strong> - a 2D texture containing per-pixel shading values, allows you to &quot;bake&quot; shadows in for your 3D
 object.</li>
 <li><strong>texCoordScale</strong> - a 2D vector that allows you to scale texture coordinates used to sample the textures 
-mentioned above (expect lightmaps, they're using separate texture coordinates)</li>
+mentioned above (except lightmaps, they're using separate texture coordinates)</li>
 <li><strong>layerIndex</strong> - a natural number that is used for decals masking, a decal will only be applied to your mesh
-iff the decal has matching index. </li>
+if and only if the decal has matching index. </li>
 <li><strong>emissionStrength</strong> - a 3D vector that allows you to set the strength of emission per-channel (R, G, B) for 
 your <code>emissionTexture</code></li>
 </ul>
 <h2 id="transparency"><a class="header" href="#transparency">Transparency</a></h2>
 <p>The standard material offers very basic transparency support, to use it you have to explicitly switch render
-path on you mesh object. It could be done something like this:</p>
+path on your mesh object. It could be done in this way:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -208,17 +207,17 @@ path on you mesh object. It could be done something like this:</p>
 <span class="boring">}
 </span><span class="boring">}
 </span></code></pre></pre>
-<p>After this your mesh will be rendered using specialized render pass called Forward which supports alpha-blending
+<p>After this, your mesh will be rendered using a specialized render pass called Forward which supports alpha-blending
 and transparent objects. <strong>Caveat:</strong> Current forward renderer implementation does not support any kind of lighting,
 if you need lighting, you will need to use custom shader for that!</p>
 <h2 id="material-import"><a class="header" href="#material-import">Material import</a></h2>
 <p>When you're loading a 3D model in the engine, the engine tries to convert the materials stored inside to standard
 material. In most cases there is no way to create 100% matching material on the fly, instead the engine tries 
-to its best to make sure the material will be imported as closely as possible to the original. Various 3D modelling
-tools uses different material system, but all of them allowing you to export your 3D model in one of the commonly
+to do its best to make sure the material will be imported as closely as possible to the original one. Various 3D modelling
+tools use different material system, but all of them allow you to export your 3D model in one of the commonly
 used formats (such as FBX).</p>
 <h3 id="blender"><a class="header" href="#blender">Blender</a></h3>
-<p>When using Blender, make sure you using <strong>Principled BSDF</strong> material, it is the closest material that can be converted
+<p>When using Blender, make sure you are using <strong>Principled BSDF</strong> material, it is the closest material that can be converted
 to engine's standard material at almost 100% fidelity. </p>
 <h3 id="3ds-max"><a class="header" href="#3ds-max">3Ds max</a></h3>
 <p>It highly depends on the version of the 3Ds max, but in general the default material should work fine.</p>

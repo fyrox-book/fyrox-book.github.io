@@ -181,7 +181,7 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="general-rules"><a class="header" href="#general-rules">General rules</a></h2>
-<p>Sprites <strong>must not</strong> be used to create any visual effects, that involve many particles. You should use particle
+<p>Sprites <strong>must not</strong> be used to create any visual effects that involve many particles. You should use particle
 systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
 same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
 a lot of &quot;useless&quot; info that bloats its size up to 600 bytes. </p>

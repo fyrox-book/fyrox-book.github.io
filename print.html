@@ -1621,11 +1621,11 @@ in separate file and retarget it to your mesh instance when needed. This also al
 <h2 id="light-types"><a class="header" href="#light-types">Light types</a></h2>
 <p>There are three main types of light sources: directional, point, and spot lights.</p>
 <h3 id="directional-light"><a class="header" href="#directional-light">Directional light</a></h3>
-<p>Directional light does not have a position, its rays are always parallel,and it has a particular direction in space.
+<p>Directional light does not have a position, its rays are always parallel and it has a particular direction in space.
 An example of directional light in real-life could be our Sun. Even if it is a point light, it is so far away from
 the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor 
 scenes.</p>
-<p>A directional light source could be created something like this:</p>
+<p>A directional light source could be created like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -1733,11 +1733,11 @@ fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="light-scattering"><a class="header" href="#light-scattering">Light scattering</a></h2>
-<p>Spot and point lights supports light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
+<p>Spot and point lights support light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
 the fog will scatter the light from your flashlight making it, so you'll see the &quot;light volume&quot;. Light scattering is
 <strong>enabled by default</strong>, so you don't have to do anything to enable it. However, in some cases you might want to disable 
 it, you can do this either while building a light source or change light scattering options on existing light source.
-Here is the small example how to do that.</p>
+Here is the small example of how to do that.</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -1775,14 +1775,14 @@ fn use_rayleigh_scattering(scene: &amp;mut Scene, light_handle: Handle&lt;Node&g
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
-<p>Spot and point lights are both supports shadows, however directional light still lacks shadows. There is a
+<p>Spot and point lights both support shadows, however directional light still lacks shadows. There is a
 <a href="https://github.com/FyroxEngine/Fyrox/issues/220">tracking issue</a> for that.</p>
 <h2 id="performance-1"><a class="header" href="#performance-1">Performance</a></h2>
-<p>Lights are not very cheap, every light source has some performance impact. As a general rule, try to keep amount
+<p>Lights are not very cheap, every light source has some performance impact. As a general rule, try to keep the amount
 of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
-Keep in mind that the less area the light need to &quot;cover&quot;, the higher the performance. This means that you can have
-tons of small light sources almost free.</p>
-<p>Shadows giving the most significant performance impact, you should keep amount of light sources that can cast
+Keep in mind that the less area the light needs to &quot;cover&quot;, the higher the performance. This means that you can have
+tons of small light sources for free.</p>
+<p>Shadows giving the most significant performance impact, you should keep the amount of light sources that can cast
 shadows at lowest possible amount to keep performance at good levels. You can also turn on/off shadows when you 
 need:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
@@ -1803,8 +1803,8 @@ fn switch_shadows(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;, cast_
 <span class="boring">}
 </span></code></pre></pre>
 <p>Not every light should cast shadows, for example a small light that a player can see only in a distance can have
-shadows disabled. You should set the appropriate values depending on your scene, just remember - the fewer shadows
-the more performance you'll get. The most expensive shadows are from point lights, the less - from spot lights.</p>
+shadows disabled. You should set the appropriate values depending on your scene, just remember: the fewer the shadows
+the better the performance. The most expensive shadows are from point lights, the less, from spot lights.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sprite"><a class="header" href="#sprite">Sprite</a></h1>
 <p>Sprite is just a quad mesh that is always facing camera. It has size, color, rotation around &quot;look&quot; axis and a texture.
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.</p>
@@ -1849,7 +1849,7 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="general-rules"><a class="header" href="#general-rules">General rules</a></h2>
-<p>Sprites <strong>must not</strong> be used to create any visual effects, that involve many particles. You should use particle
+<p>Sprites <strong>must not</strong> be used to create any visual effects that involve many particles. You should use particle
 systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
 same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
 a lot of &quot;useless&quot; info that bloats its size up to 600 bytes. </p>
@@ -1866,7 +1866,7 @@ particle systems are used to create following visual effects: smoke, sparks, blo
 <p><strong>Important:</strong> Current particle system implementation is <strong>not deterministic</strong>, this means that the state of the
 particles will be different at each run of your game. Also you <strong>cannot</strong> rewind the particle system, nor set
 a particular position in time. This fact limits potential usages of the particle system, however it is still useful
-for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is known issue, and
+for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is a known issue, and
 it will eventually be fixed by adding a new kind of particle systems. Tracking issue could be found 
 <a href="https://github.com/FyroxEngine/Fyrox/issues/120">here</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="terrain-wip"><a class="header" href="#terrain-wip">Terrain (WIP)</a></h1>
@@ -1900,7 +1900,7 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <p>Projection mode defines how your scene will look like after rendering, there are two projection modes available.</p>
 <h3 id="perspective"><a class="header" href="#perspective">Perspective</a></h3>
 <p>Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
-common projection type for 3D games. By default, each camera uses perspective projection. It defined by three 
+common projection type for 3D games. By default, each camera uses perspective projection. It's defined by three 
 parameters that describes frustum volume:</p>
 <ul>
 <li>Field of view angle</li>
@@ -1935,12 +1935,12 @@ parameters that describes frustum volume:</p>
 </span></code></pre></pre>
 <h3 id="orthographic"><a class="header" href="#orthographic">Orthographic</a></h3>
 <p>Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
-If you're making 2D games or isometric 3D games this is the projection mode you're looking for. Orthographic
+If you're making 2D games or isometric 3D games, this is the projection mode you're looking for. Orthographic
 projection defined by three parameters:</p>
 <ul>
-<li>Vertical size</li>
-<li>Near clipping plane location</li>
-<li>Far clipping</li>
+<li>Vertical Size</li>
+<li>Near Clipping Plane</li>
+<li>Far Clipping Plane</li>
 </ul>
 <p>Vertical size defines how large the &quot;box&quot; will be in vertical axis, horizontal size is derived from vertical
 size by multiplying vertical size with aspect ratio.</p>
@@ -1970,16 +1970,16 @@ size by multiplying vertical size with aspect ratio.</p>
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="performance-2"><a class="header" href="#performance-2">Performance</a></h2>
-<p>Each camera forces engine to re-render scene one more time, which can be very resource intensive (both CPU and GPU)
+<p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
 operation. </p>
-<p>To reduce GPU load, try to keep far clipping plane at lowest possible values. For example, if you're making a game
-with closed environment (lots of corridors, small rooms, etc.) set far clipping plane to max possible distance that 
-can be &quot;seen&quot; in your game - if the largest thing is a corridor, then set far clipping plane to slightly exceed the 
+<p>To reduce GPU load, try to keep the Far Clipping Plane at lowest possible values. For example, if you're making a game
+with closed environment (lots of corridors, small rooms, etc.) set the Far clipping Plane to max possible distance that 
+can be &quot;seen&quot; in your game - if the largest thing is a corridor, then set the Far clipping Plane to slightly exceed the 
 length. This will force the engine to clip everything that is out of bounds and do not draw such objects.</p>
 <h2 id="skybox"><a class="header" href="#skybox">Skybox</a></h2>
 <p>Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
-such objects can be pre-rendered and then applied to a huge cube around camera, it always be rendered first and will
-be the background of your scene. To create a skybox and set it to a camera, you can use following code:</p>
+such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
+be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -2037,10 +2037,10 @@ fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="color-grading-look-up-tables"><a class="header" href="#color-grading-look-up-tables">Color grading look-up tables</a></h2>
-<p>Color grading look-up tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
+<p>Color grading Look-Up Tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
 famous &quot;mexican&quot; movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
 via color grading LUT effect. When used wisely, it can significantly improve perception of your scene.</p>
-<p>Here is the same scene with no color correction and with &quot;mexico&quot; color correction:</p>
+<p>Here is the same scene having no color correction along with another case that has &quot;mexico&quot; color correction:</p>
 <table><thead><tr><th>Scene</th><th>Look-up-table</th></tr></thead><tbody>
 <tr><td><img src="fyrox/scene/./no_color_correction.PNG" alt="No Color Correction" /></td><td><img src="fyrox/scene/./lut_neutral.jpg" alt="Neutral LUT" /></td></tr>
 <tr><td><img src="fyrox/scene/./with_color_correction.PNG" alt="With Color Correction" /></td><td><img src="fyrox/scene/./lut_mexico.jpg" alt="Neutral LUT" /></td></tr>
@@ -2080,7 +2080,7 @@ fn create_camera_with_lut(
 <h2 id="exposure-and-hdr"><a class="header" href="#exposure-and-hdr">Exposure and HDR</a></h2>
 <p>(WIP)</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="decal-node"><a class="header" href="#decal-node">Decal node</a></h1>
-<p>Decal nodes allows you to &quot;project&quot; a texture onto your scene within some specific bounds. It is widely used for
+<p>Decal nodes allow you to &quot;project&quot; a texture onto your scene within some specific bounds. It is widely used for
 bullet holes, blood splatter, dirt, cracks and so on. Here is the example of the decal applied to the scene:</p>
 <p><img src="fyrox/scene/./decal.PNG" alt="Decal" /></p>
 <p>The rust marks are applied on existing geometry of the scene by projecting a rust texture in specific direction.</p>
@@ -2111,22 +2111,22 @@ supported.</p>
 G-Buffer. This fact means that decals will be lit correctly with other geometry in the scene. However, if you 
 have some objects in your scene that uses forward rendering path, your decals won't be applied to them.</p>
 <h2 id="bounds"><a class="header" href="#bounds">Bounds</a></h2>
-<p>Decal uses object-oriented bounding box (OOB) to determine pixels on which decal's textures will be projected,
+<p>Decal uses Object-Oriented Bounding Box (OOB) to determine pixels on which decal's textures will be projected,
 everything that got into OOB will be covered. Exact bounds can be set by tweaking local transform of a decal.
 If you want your decal to be larger, set its scale to some large value. To position a decal - use local position,
 to rotate - local rotation.</p>
 <p>A decal defines a cube that projects a texture on every pixel of a scene that got into the cube. Exact cube size 
-is defines by decal's local scale. For example, if you have a decal with scale (1.0, 2.0, 0.1) then the size of 
-the cube (in local coordinates) will be width = 1.0, height = 2.0, depth = 0.1. The decal can be rotated as any 
-other scene node. Its final size and orientation is defined by the chain of transformations of parent nodes.</p>
+is defined by decal's local scale. For example, if you have a decal with scale of (1.0, 2.0, 0.1) then the size of 
+the cube (in local coordinates) will be width = 1.0, height = 2.0 and depth = 0.1. The decal can be rotated as any 
+other scene node. Its final size and orientation are defined by the chain of transformations of parent nodes.</p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
 <p>There are situations when you want to prevent some geometry from being covered with a decal, to do that the engine
-offers a concept of layers. A decal will be applied to a geometry iff they're having matching layer index. This 
+offers a concept of layers. A decal will be applied to a geometry if and only if they have matching layer index. This 
 allows you to create environment damage decals and they won't affect dynamic objects since they're located on 
 different layers.</p>
 <h2 id="performance-3"><a class="header" href="#performance-3">Performance</a></h2>
 <p>Current implementation of decals is relatively cheap, this allows you to create many decals on scene. However, you
-should keep the amount of decals at reasonable level. </p>
+should keep the amount of decals at a reasonable level. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rectangle-node"><a class="header" href="#rectangle-node">Rectangle node</a></h1>
 <p>Rectangle is the simplest &quot;2D&quot; node, it can be used to create &quot;2D&quot; graphics. 2D is in quotes here because the node
 is actually a 3D node, like everything else in the engine. Here is an example scene made with the rectangle nodes and 
@@ -2351,13 +2351,13 @@ rigid bodies in the world.</li>
 </ul>
 <h2 id="differences-between-3d-and-2d"><a class="header" href="#differences-between-3d-and-2d">Differences between 3D and 2D</a></h2>
 <p>There is a very few differences between 3D and 2D physics, the most obvious is that 2D physics does simulation only in 
-oXY plane (the plane of the screen). 2D physics has less collider shapes available since some 3D shapes degenerates in
+oXY plane (the plane of the screen). 2D physics has less collider shapes available since some 3D shapes degenerate in
 2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser amount of joints available in 2D, 
-there is no revolute joint for example. Unlike 3D physics entities, 2D physics entities exists in the separate
+there is no revolute joint for example. Unlike 3D physics entities, 2D physics entities exist in the separate
 <code>scene::dim2</code> module.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rigid-body-node"><a class="header" href="#rigid-body-node">Rigid body node</a></h1>
 <p>Rigid body node is the one of main physical entities in the engine. Rigid body nodes can be affected by gravity, 
-external forces, other rigid bodies, etc. Use rigid body node everywhere you need natural physical behaviour for
+external forces and other rigid bodies. Use rigid body node everywhere you need natural physical behaviour for
 your objects.</p>
 <h2 id="how-to-create-8"><a class="header" href="#how-to-create-8">How to create</a></h2>
 <p>Use RigidBodyBuilder to create a rigid body instance:</p>
@@ -2448,7 +2448,7 @@ to enable it use either <code>.with_ccd_enabled(state)</code> of <code>RigidBody
 <h2 id="2d-rigid-bodies"><a class="header" href="#2d-rigid-bodies">2D rigid bodies</a></h2>
 <p>2D rigid bodies have no difference with 3D, except the simulation happens in oXY plane and Z coordinate is ignored.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="collider-node"><a class="header" href="#collider-node">Collider node</a></h1>
-<p>Collider is a geometrical shape that is used for collision detection, contact manifold generation, etc. Colliders used
+<p>Collider is a geometrical shape that is used for collision detection, contact manifold generation, etc. Colliders are used
 in pair with rigid bodies, they make rigid body participate in collisions.</p>
 <h2 id="shapes"><a class="header" href="#shapes">Shapes</a></h2>
 <p>Collider can have almost any shape, the engine offers the following shapes for 3D:</p>
@@ -2465,7 +2465,7 @@ anything else)</li>
 <li>Height field - static height field shape, can be used together with terrains.</li>
 <li>Polyhedron - dynamic concave shape.</li>
 </ul>
-<p>Also, there is a similar, but smaller set for 2D (because some shapes degenerates in 2D):</p>
+<p>Also, there is a similar, but smaller set for 2D (because some shapes degenerate in 2D):</p>
 <ul>
 <li>Ball - dynamic circle shape.</li>
 <li>Cuboid - dynamic rectangle shape.</li>
@@ -2516,7 +2516,7 @@ rigid bodies.</p>
 <span class="boring">}
 </span><span class="boring">}
 </span></code></pre></pre>
-<p>then, the node is build using the standard builder pattern:</p>
+<p>Then, the node is built using the standard builder pattern:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -2543,7 +2543,7 @@ rigid bodies.</p>
 </span><span class="boring">}
 </span></code></pre></pre>
 <p>There are a few notable things in the example above.</p>
-<p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code></p>
+<p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
 <p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
@@ -2593,8 +2593,8 @@ if sound.status() == Status::Stopped {
 <p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="animation-wip"><a class="header" href="#animation-wip">Animation (WIP)</a></h1>
 <p>Animation blending state machine.</p>
-<p>Machine is used to blend multiple animation as well as perform automatic &quot;smooth transition
-between states. Let have a quick look at simple machine graph:</p>
+<p>Machine is used to blend multiple animation as well as perform automatic &quot;smooth&quot; transition
+between states. Let's have a quick look at a simple machine graph:</p>
 <pre><code class="language-text">                                                 +-------------+
                                                  |  Idle Anim  |
                                                  +------+------+
@@ -2621,13 +2621,13 @@ between states. Let have a quick look at simple machine graph:</p>
                                         |  Run Anim   |
                                         +-------------+
 </code></pre>
-<p>Here we have Walk, Idle, Run states which uses different sources of poses:</p>
+<p>Here we have Walk, Idle and Run states which use different sources of poses:</p>
 <ul>
-<li>Walk - is most complicated here - it uses result of blending between
+<li>Walk - is the most complicated here - it uses result of blending between
 Aim and Walk animations with different weights. This is useful if your
 character can only walk or can walk <em>and</em> aim at the same time. Desired pose
 determined by Walk Weight and Aim Weight parameters combination.</li>
-<li>Run and idle both directly uses animation as pose source.</li>
+<li>Run and idle both directly use animation as pose source.</li>
 </ul>
 <p>There are four transitions between three states each with its own rule. Rule
 is just Rule parameter which can have boolean value that indicates that transition
@@ -2674,18 +2674,18 @@ machine.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, wa
 
 <span class="boring">}
 </span></code></pre></pre>
-<p>You can use multiple machines to animation single model - for example one machine can be for
-locomotion and other is for combat. This means that locomotion machine will take control over
+<p>You can use multiple machines to animate single model - for example one machine can be for
+locomotion and other for combat. This means that locomotion machine will take control over
 lower body and combat machine will control upper body.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rendering-wip"><a class="header" href="#rendering-wip">Rendering (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="shaders"><a class="header" href="#shaders">Shaders</a></h1>
-<p>Shader is a set of programs that runs directly on graphics adapter. Each program from the set is called
-<em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines &quot;where&quot; to draw and an object.
+<p>Shader is a set of programs that run directly on graphics adapter. Each program from the set is called
+<em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines &quot;where&quot; to draw an object.
 &quot;where&quot; means that you can set up your own render pass and the renderer will use the sub-shader with 
-your render pass. For the ease of use there are number of <a href="fyrox/rendering/shaders.html#predefined-render-passes">predefined render passes</a>.</p>
+your render pass. For the ease of use there are a number of <a href="fyrox/rendering/shaders.html#predefined-render-passes">predefined render passes</a>.</p>
 <p>Shaders have properties of various types that can be used together with materials to draw an object. </p>
 <h2 id="shaders-language"><a class="header" href="#shaders-language">Shaders language</a></h2>
-<p>The engine uses GLSL shading language for every sub-shader. There are numerous of GLSL guides over the 
+<p>The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the 
 internet, so there is no need to &quot;re-post&quot; the well documented info again.</p>
 <p>There are very few differences:</p>
 <ol>
@@ -2698,7 +2698,7 @@ at preprocessing stage. The library source could be found
 is well documented, and you may find some functions useful for you job.</li>
 </ol>
 <h2 id="structure"><a class="header" href="#structure">Structure</a></h2>
-<p>Shader has rigid structure that could be described in this code snipped:</p>
+<p>Shader has rigid structure that could be described in this code snippet:</p>
 <pre><code class="language-ron">(
     // A set of properties, there could be any amount of properties.
     properties: [
@@ -2777,12 +2777,12 @@ is well documented, and you may find some functions useful for you job.</li>
 )
 </code></pre>
 <h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
-<p>Property is a named variable of some type. Properties directly tied with the uniforms in the sub-shaders,
+<p>Property is a named variable of some type. Properties are directly tied with the uniforms in the sub-shaders,
 for each you can have a property called <code>time</code>, and then you can define <code>uniform float time;</code> in your sub-shader
-and the engine will pass property value to that uniform for you before drawing an object. Properties placed in 
-a &quot;global namespace&quot;, which means that every sub-shader have &quot;access&quot; to the properties.</p>
+and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in 
+a &quot;global namespace&quot;, which means that every sub-shader has &quot;access&quot; to the properties.</p>
 <h2 id="built-in-properties"><a class="header" href="#built-in-properties">Built-in properties</a></h2>
-<p>There are number of built-in properties, the full list is available
+<p>There are a number of built-in properties, the full list is available
 <a href="https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#built-in-variables">here</a></p>
 <h2 id="predefined-render-passes"><a class="header" href="#predefined-render-passes">Predefined render passes</a></h2>
 <p>Predefined render passes helps you to create your own shader without a need to create your own render pass 
@@ -2800,8 +2800,8 @@ to render shadows.</li>
 <h2 id="drawing-parameters"><a class="header" href="#drawing-parameters">Drawing parameters</a></h2>
 <p>Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters comes in handy. There are relatively large list of drawing
-parameters, and it could confuse a person who didn't get used to work with graphics. Thankfully there is a good
+from both sides. This is when draw parameters come in handy. There is a relatively large list of drawing
+parameters, and it could confuse a person who isn't used to work with graphics. Thankfully there is a good
 documentation about this available <a href="https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#drawing-parameters">here</a></p>
 <h2 id="vertex-shader"><a class="header" href="#vertex-shader">Vertex shader</a></h2>
 <p>Vertex shader operates on single vertices, it must provide at least the position of the vertex
@@ -2829,10 +2829,9 @@ void main()
 </code></pre>
 <p>This is the simplest pixel shader, it just fills the render target with red color.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="materials"><a class="header" href="#materials">Materials</a></h1>
-<p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission,
-etc. maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
+<p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission and other maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
 textures. Each parameter can be changed in runtime giving you the ability to create animated materials. However,
-in practice, most materials are static, this means that once it created, it won't be changed anymore.</p>
+in practice, most materials are static, this means that once it's created, it won't be changed anymore.</p>
 <p>Please keep in mind that the actual &quot;rules&quot; of drawing an entity are stored in the shader, 
 <strong>material is only a storage</strong> for specific uses of the shader. </p>
 <p>Multiple materials can share the same shader, for example standard shader covers 95% of most common use cases,
@@ -2842,8 +2841,8 @@ multiple cubes using the same shader, but with different textures.</p>
 multiple objects with the same material efficiently.</p>
 <h2 id="performance-5"><a class="header" href="#performance-5">Performance</a></h2>
 <p>It is very important re-use materials as much as possible, because the amount of materials used per frame
-significantly correlates with performance. The more unique materials you have per frame, the more work has
-to be done by the renderer and video driver to render a frame and the more time the frame will require for
+significantly correlates with performance. The more unique materials you have per frame, the more work
+the renderer and video driver need in order to render a frame and more time the frame will require for
 rendering, thus lowering your FPS.</p>
 <h2 id="standard-material"><a class="header" href="#standard-material">Standard material</a></h2>
 <p>The engine offers a standard PBR material, PBR stands for &quot;Physically-Based Rendering&quot; which gives you the quality
@@ -2856,11 +2855,11 @@ some cartoon-ish or stylized games. </p>
 (alpha) will be used only with <code>Forward</code> render path! This means that you will need to switch render path on your
 mesh (<a href="fyrox/rendering/materials.html#transparency">see below</a>)</li>
 <li><strong>diffuseTexture</strong> - a 2D texture containing the unlit &quot;basic&quot; colors of your object, this is the most commonly
-used texture. For example, you can assign a brick wall texture to this property and your object will look a brick
+used texture. For example, you can assign a brick wall texture to this property and your object will look like a brick
 wall.</li>
 <li><strong>normalTexture</strong> - a 2D texture containing per-pixel normal vectors. </li>
 <li><strong>metallicTexture</strong> - a 2D texture containing per-pixel metallic factor, where 0 - dielectric, 1 - metal.
-In simple words it defines will your object reflect (1.0) the environment or not (0.0). </li>
+In simple words it defines whether your object reflects (1.0) the environment or not (0.0). </li>
 <li><strong>roughnessTexture</strong> - a 2D texture containing per-pixel roughness factor, where 0 - completely flat, 1 - 
 very rough.</li>
 <li><strong>heightTexture</strong> - a 2D texture containing per-pixel displacement value, it is used with parallax mapping to
@@ -2870,19 +2869,19 @@ surfaces like small lamps on wall of sci-fi ship, or to create glowing eyes for 
 the player.</li>
 <li><strong>lightmapTexture</strong> - a 2D texture containing per-pixel <strong>static</strong> lighting. It is used to apply precomputed
 light to your 3D models, and the most common use case is to lit a static object using a static light. Precomputed
-light is very cheap. The engine offers built-in lightmapper that can generated lightmaps for you.</li>
+light is very cheap. The engine offers built-in lightmapper that can generate lightmaps for you.</li>
 <li><strong>aoTexture</strong> - a 2D texture containing per-pixel shading values, allows you to &quot;bake&quot; shadows in for your 3D
 object.</li>
 <li><strong>texCoordScale</strong> - a 2D vector that allows you to scale texture coordinates used to sample the textures 
-mentioned above (expect lightmaps, they're using separate texture coordinates)</li>
+mentioned above (except lightmaps, they're using separate texture coordinates)</li>
 <li><strong>layerIndex</strong> - a natural number that is used for decals masking, a decal will only be applied to your mesh
-iff the decal has matching index. </li>
+if and only if the decal has matching index. </li>
 <li><strong>emissionStrength</strong> - a 3D vector that allows you to set the strength of emission per-channel (R, G, B) for 
 your <code>emissionTexture</code></li>
 </ul>
 <h2 id="transparency"><a class="header" href="#transparency">Transparency</a></h2>
 <p>The standard material offers very basic transparency support, to use it you have to explicitly switch render
-path on you mesh object. It could be done something like this:</p>
+path on your mesh object. It could be done in this way:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -2899,17 +2898,17 @@ path on you mesh object. It could be done something like this:</p>
 <span class="boring">}
 </span><span class="boring">}
 </span></code></pre></pre>
-<p>After this your mesh will be rendered using specialized render pass called Forward which supports alpha-blending
+<p>After this, your mesh will be rendered using a specialized render pass called Forward which supports alpha-blending
 and transparent objects. <strong>Caveat:</strong> Current forward renderer implementation does not support any kind of lighting,
 if you need lighting, you will need to use custom shader for that!</p>
 <h2 id="material-import"><a class="header" href="#material-import">Material import</a></h2>
 <p>When you're loading a 3D model in the engine, the engine tries to convert the materials stored inside to standard
 material. In most cases there is no way to create 100% matching material on the fly, instead the engine tries 
-to its best to make sure the material will be imported as closely as possible to the original. Various 3D modelling
-tools uses different material system, but all of them allowing you to export your 3D model in one of the commonly
+to do its best to make sure the material will be imported as closely as possible to the original one. Various 3D modelling
+tools use different material system, but all of them allow you to export your 3D model in one of the commonly
 used formats (such as FBX).</p>
 <h3 id="blender"><a class="header" href="#blender">Blender</a></h3>
-<p>When using Blender, make sure you using <strong>Principled BSDF</strong> material, it is the closest material that can be converted
+<p>When using Blender, make sure you are using <strong>Principled BSDF</strong> material, it is the closest material that can be converted
 to engine's standard material at almost 100% fidelity. </p>
 <h3 id="3ds-max"><a class="header" href="#3ds-max">3Ds max</a></h3>
 <p>It highly depends on the version of the 3Ds max, but in general the default material should work fine.</p>
@@ -2917,18 +2916,18 @@ to engine's standard material at almost 100% fidelity. </p>
 <p>This chapter covers asset management in the engine. Asset management is performed by <code>Asset Browser</code> in the editor 
 and by <code>ResourceManager</code> from API.</p>
 <h2 id="general-info"><a class="header" href="#general-info">General Info</a></h2>
-<p>Assets loading is asynchronous, it is possible load multiple assets in parallel or load until specific asset is 
-loading.</p>
+<p>Assets loading is asynchronous, it is possible to load multiple assets in parallel or load until a specific asset is 
+loaded.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="model-resources"><a class="header" href="#model-resources">Model resources</a></h1>
 <h2 id="supported-formats"><a class="header" href="#supported-formats">Supported formats</a></h2>
 <p>Fyrox supports these file formats for 3D models:</p>
 <ul>
 <li>FBX - standard game development industry 3D model exchange format</li>
-<li>RGS - native scenes format produced by Fyroxed</li>
+<li>RGS - native scenes format produced by Fyroxed (the editor)</li>
 </ul>
 <p>The list could be extended in the future.</p>
 <h2 id="instantiation"><a class="header" href="#instantiation">Instantiation</a></h2>
-<p>Model must be instantiated to your scene, there is no other way of using it. To do this, you can either use drag'n'drop
+<p>Model must be instantiated in your scene, there is no other way of using it. To do this, you can either use drag'n'drop
 from Asset Browser in the editor or instantiate the model dynamically from code:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018">
 <span class="boring">#![allow(unused)]
@@ -2954,25 +2953,25 @@ from Asset Browser in the editor or instantiate the model dynamically from code:
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="material-import-1"><a class="header" href="#material-import-1">Material import</a></h2>
-<p>The engine tries to import materials as close as possible to originals in the model, however it now always possible
+<p>The engine tries to import materials as close as possible to originals in the model, however it is not always possible
 because some 3D modelling software could use different shading models. By default, the engine tries to convert
 everything to PBR materials, so if you have a 3D model with a special material made for cartoon shading, the
-engine will still import is as PBR material (with lots of missing textures of course). You should take this into
+engine will still import it as PBR material (with lots of missing textures of course). You should take this into
 account when working with something other than PBR materials. </p>
 <p>In cases when your 3D model have some weird materials, you should create appropriate materials and shaders <em>manually</em>,
 the engine is not a magic tool, it has some defaults that do not cover all possible cases.</p>
-<p>It is also possible to specify how to resolve textures while loading a 3D model, select you model in the <code>Asset Browser</code>
+<p>It is also possible to specify how to resolve textures while loading a 3D model, select your model in the <code>Asset Browser</code>
 and there will be import options right below the model preview:</p>
 <p><img src="fyrox/resources/model_import.png" alt="model import" /></p>
-<p>It is also possible to specify such options manually to do that you need to create import options file with the 
+<p>It is also possible to specify such options manually. To do that, you need to create import options file with the 
 following content near your 3D model (this is what the editor does for you):</p>
 <pre><code class="language-text">(
     material_search_options: RecursiveUp
 )
 </code></pre>
 <p>The file must have the <code>.options</code> additional extension. For example, if you have a <code>foo.fbx</code> model, the options
-file should have <code>foo.fbx.options</code> name. Even if it is possible to modify it by hand, it strongly advised to use
-the editor to edit import options, because it reduces chances to mess up something.</p>
+file should have <code>foo.fbx.options</code> name. Even if it is possible to modify it by hand, it is strongly advised to use
+the editor to edit import options, because it reduces the chance of messing up.</p>
 <h2 id="tips-for-blender"><a class="header" href="#tips-for-blender">Tips for Blender</a></h2>
 <p>Blender's FBX exporter has exporting scale properties usually set to 100%, this may lead to incorrect scale
 of your model in the engine. It will have <code>(100.0, 100.0, 100.0)</code> scale which is very huge. To fix that, set
@@ -2982,7 +2981,7 @@ the scale in the exporter to <code>0.01</code>.</p>
 material import. To prevent any issues with that, you should clean all assignments to material slots to use
 maps directly.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="textures-1"><a class="header" href="#textures-1">Textures</a></h1>
-<p>Texture is an image that used to fill faces to add details to them. In most cases textures are just 2D images, however 
+<p>Texture is an image that is used to fill faces to add details to them. In most cases textures are just 2D images, however 
 there are some exclusions to that - for example cube maps, that may be used for environment mapping. Fyrox supports 1D,
 2D, 3D and Cube textures.</p>
 <h2 id="supported-formats-1"><a class="header" href="#supported-formats-1">Supported formats</a></h2>
@@ -2991,7 +2990,7 @@ tga, bmp, dds, jpg, gif, tiff, dds.</p>
 <h2 id="compressed-textures"><a class="header" href="#compressed-textures">Compressed textures</a></h2>
 <p>Fyrox supports most commonly used formats of compressed textures: DXT1, DXT3, DXT5. Such textures can be loaded
 only from <code>DDS</code> files. You can specify on-demand texture compression in import options (see below), it works for every
-texture format excepts DDS. It is meant to be used when you don't want to bother with DDS format, there are two
+texture format except DDS. It is meant to be used when you don't want to bother with DDS format, there are two
 compression methods:</p>
 <ul>
 <li><code>Quality</code> - has 4:1 compression ratio, supports full 8-bit alpha channel. Textures with gradients will most likely
@@ -3002,7 +3001,7 @@ enabled or not.</li>
 </ul>
 <p>Compressed textures usually does not support color gradient very well, if you have a texture with a lot of colors and
 gradients, then you'll most likely get compressed texture with lots of graphical artifacts such as banding.</p>
-<p>It is also worth mention, that you should <strong>never</strong> use compression with normal maps, it can significantly distort 
+<p>It is also worth mentioning, that you should <strong>never</strong> use compression with normal maps, it can significantly distort 
 normals because normal maps usually have lots of color gradients.</p>
 <h2 id="import-options"><a class="header" href="#import-options">Import options</a></h2>
 <p>It is possible to define custom import options. Using import options you could set desired compression quality,
@@ -3010,7 +3009,7 @@ filtering, wrapping, etc. Import options should be defined using Asset Browser i
 <p><img src="fyrox/resources/texture_import.png" alt="texture import" /></p>
 <p>It is also possible to define import options manually in a separate file with the same name as the source
 texture, but with additional extension <code>options</code>, this is what the editor does for you. For example, you have a 
-<code>foo.jpg</code> texture, a file with import options should be called <code>foo.jpg.options</code>. It's content may look something like
+<code>foo.jpg</code> texture, a file with import options should be called <code>foo.jpg.options</code>. Its content may look something like
 this:</p>
 <pre><code class="language-text">(
     minification_filter: Linear,
@@ -3021,10 +3020,10 @@ this:</p>
     compression: NoCompression,    
 )
 </code></pre>
-<p>Even if it is possible to modify it by hand, it strongly advised to use the editor to edit import options, because
-it reduces chances to mess up something.</p>
+<p>Even if it is possible to modify it by hand, it is strongly advised to use the editor to edit import options, because
+it reduces chances of messing up.</p>
 <h2 id="render-target"><a class="header" href="#render-target">Render target</a></h2>
-<p>Texture can be used as render target to render scene in it. To do this you should use new_render_target method and
+<p>Texture can be used as a render target to render a scene in it. To do this you should use <code>new_render_target</code> method and
 pass its result to scene's render target property. Renderer will automatically provide you info about metrics of
 texture, but it won't give you access to pixels of render target.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sound-wip"><a class="header" href="#sound-wip">Sound (WIP)</a></h1>

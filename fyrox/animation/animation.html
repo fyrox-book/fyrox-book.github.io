@@ -139,8 +139,8 @@
                     <main>
                         <h1 id="animation-wip"><a class="header" href="#animation-wip">Animation (WIP)</a></h1>
 <p>Animation blending state machine.</p>
-<p>Machine is used to blend multiple animation as well as perform automatic &quot;smooth transition
-between states. Let have a quick look at simple machine graph:</p>
+<p>Machine is used to blend multiple animation as well as perform automatic &quot;smooth&quot; transition
+between states. Let's have a quick look at a simple machine graph:</p>
 <pre><code class="language-text">                                                 +-------------+
                                                  |  Idle Anim  |
                                                  +------+------+
@@ -167,13 +167,13 @@ between states. Let have a quick look at simple machine graph:</p>
                                         |  Run Anim   |
                                         +-------------+
 </code></pre>
-<p>Here we have Walk, Idle, Run states which uses different sources of poses:</p>
+<p>Here we have Walk, Idle and Run states which use different sources of poses:</p>
 <ul>
-<li>Walk - is most complicated here - it uses result of blending between
+<li>Walk - is the most complicated here - it uses result of blending between
 Aim and Walk animations with different weights. This is useful if your
 character can only walk or can walk <em>and</em> aim at the same time. Desired pose
 determined by Walk Weight and Aim Weight parameters combination.</li>
-<li>Run and idle both directly uses animation as pose source.</li>
+<li>Run and idle both directly use animation as pose source.</li>
 </ul>
 <p>There are four transitions between three states each with its own rule. Rule
 is just Rule parameter which can have boolean value that indicates that transition
@@ -220,8 +220,8 @@ machine.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, wa
 
 <span class="boring">}
 </span></code></pre></pre>
-<p>You can use multiple machines to animation single model - for example one machine can be for
-locomotion and other is for combat. This means that locomotion machine will take control over
+<p>You can use multiple machines to animate single model - for example one machine can be for
+locomotion and other for combat. This means that locomotion machine will take control over
 lower body and combat machine will control upper body.</p>
 
                     </main>

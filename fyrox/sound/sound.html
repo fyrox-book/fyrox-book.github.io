@@ -152,7 +152,7 @@
 <span class="boring">}
 </span><span class="boring">}
 </span></code></pre></pre>
-<p>then, the node is build using the standard builder pattern:</p>
+<p>Then, the node is built using the standard builder pattern:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -179,7 +179,7 @@
 </span><span class="boring">}
 </span></code></pre></pre>
 <p>There are a few notable things in the example above.</p>
-<p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code></p>
+<p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
 <p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
 <pre><pre class="playground"><code class="language-rust no_run">
 <span class="boring">#![allow(unused)]

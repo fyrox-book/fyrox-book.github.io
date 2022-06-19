@@ -167,7 +167,7 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <p>Projection mode defines how your scene will look like after rendering, there are two projection modes available.</p>
 <h3 id="perspective"><a class="header" href="#perspective">Perspective</a></h3>
 <p>Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
-common projection type for 3D games. By default, each camera uses perspective projection. It defined by three 
+common projection type for 3D games. By default, each camera uses perspective projection. It's defined by three 
 parameters that describes frustum volume:</p>
 <ul>
 <li>Field of view angle</li>
@@ -202,12 +202,12 @@ parameters that describes frustum volume:</p>
 </span></code></pre></pre>
 <h3 id="orthographic"><a class="header" href="#orthographic">Orthographic</a></h3>
 <p>Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
-If you're making 2D games or isometric 3D games this is the projection mode you're looking for. Orthographic
+If you're making 2D games or isometric 3D games, this is the projection mode you're looking for. Orthographic
 projection defined by three parameters:</p>
 <ul>
-<li>Vertical size</li>
-<li>Near clipping plane location</li>
-<li>Far clipping</li>
+<li>Vertical Size</li>
+<li>Near Clipping Plane</li>
+<li>Far Clipping Plane</li>
 </ul>
 <p>Vertical size defines how large the &quot;box&quot; will be in vertical axis, horizontal size is derived from vertical
 size by multiplying vertical size with aspect ratio.</p>
@@ -237,16 +237,16 @@ size by multiplying vertical size with aspect ratio.</p>
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
-<p>Each camera forces engine to re-render scene one more time, which can be very resource intensive (both CPU and GPU)
+<p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
 operation. </p>
-<p>To reduce GPU load, try to keep far clipping plane at lowest possible values. For example, if you're making a game
-with closed environment (lots of corridors, small rooms, etc.) set far clipping plane to max possible distance that 
-can be &quot;seen&quot; in your game - if the largest thing is a corridor, then set far clipping plane to slightly exceed the 
+<p>To reduce GPU load, try to keep the Far Clipping Plane at lowest possible values. For example, if you're making a game
+with closed environment (lots of corridors, small rooms, etc.) set the Far clipping Plane to max possible distance that 
+can be &quot;seen&quot; in your game - if the largest thing is a corridor, then set the Far clipping Plane to slightly exceed the 
 length. This will force the engine to clip everything that is out of bounds and do not draw such objects.</p>
 <h2 id="skybox"><a class="header" href="#skybox">Skybox</a></h2>
 <p>Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
-such objects can be pre-rendered and then applied to a huge cube around camera, it always be rendered first and will
-be the background of your scene. To create a skybox and set it to a camera, you can use following code:</p>
+such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
+be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -304,10 +304,10 @@ fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 <span class="boring">}
 </span></code></pre></pre>
 <h2 id="color-grading-look-up-tables"><a class="header" href="#color-grading-look-up-tables">Color grading look-up tables</a></h2>
-<p>Color grading look-up tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
+<p>Color grading Look-Up Tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
 famous &quot;mexican&quot; movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
 via color grading LUT effect. When used wisely, it can significantly improve perception of your scene.</p>
-<p>Here is the same scene with no color correction and with &quot;mexico&quot; color correction:</p>
+<p>Here is the same scene having no color correction along with another case that has &quot;mexico&quot; color correction:</p>
 <table><thead><tr><th>Scene</th><th>Look-up-table</th></tr></thead><tbody>
 <tr><td><img src="./no_color_correction.PNG" alt="No Color Correction" /></td><td><img src="./lut_neutral.jpg" alt="Neutral LUT" /></td></tr>
 <tr><td><img src="./with_color_correction.PNG" alt="With Color Correction" /></td><td><img src="./lut_mexico.jpg" alt="Neutral LUT" /></td></tr>

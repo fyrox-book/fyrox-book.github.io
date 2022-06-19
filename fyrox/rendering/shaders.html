@@ -138,13 +138,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="shaders"><a class="header" href="#shaders">Shaders</a></h1>
-<p>Shader is a set of programs that runs directly on graphics adapter. Each program from the set is called
-<em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines &quot;where&quot; to draw and an object.
+<p>Shader is a set of programs that run directly on graphics adapter. Each program from the set is called
+<em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines &quot;where&quot; to draw an object.
 &quot;where&quot; means that you can set up your own render pass and the renderer will use the sub-shader with 
-your render pass. For the ease of use there are number of <a href="#predefined-render-passes">predefined render passes</a>.</p>
+your render pass. For the ease of use there are a number of <a href="#predefined-render-passes">predefined render passes</a>.</p>
 <p>Shaders have properties of various types that can be used together with materials to draw an object. </p>
 <h2 id="shaders-language"><a class="header" href="#shaders-language">Shaders language</a></h2>
-<p>The engine uses GLSL shading language for every sub-shader. There are numerous of GLSL guides over the 
+<p>The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the 
 internet, so there is no need to &quot;re-post&quot; the well documented info again.</p>
 <p>There are very few differences:</p>
 <ol>
@@ -157,7 +157,7 @@ at preprocessing stage. The library source could be found
 is well documented, and you may find some functions useful for you job.</li>
 </ol>
 <h2 id="structure"><a class="header" href="#structure">Structure</a></h2>
-<p>Shader has rigid structure that could be described in this code snipped:</p>
+<p>Shader has rigid structure that could be described in this code snippet:</p>
 <pre><code class="language-ron">(
     // A set of properties, there could be any amount of properties.
     properties: [
@@ -236,12 +236,12 @@ is well documented, and you may find some functions useful for you job.</li>
 )
 </code></pre>
 <h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
-<p>Property is a named variable of some type. Properties directly tied with the uniforms in the sub-shaders,
+<p>Property is a named variable of some type. Properties are directly tied with the uniforms in the sub-shaders,
 for each you can have a property called <code>time</code>, and then you can define <code>uniform float time;</code> in your sub-shader
-and the engine will pass property value to that uniform for you before drawing an object. Properties placed in 
-a &quot;global namespace&quot;, which means that every sub-shader have &quot;access&quot; to the properties.</p>
+and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in 
+a &quot;global namespace&quot;, which means that every sub-shader has &quot;access&quot; to the properties.</p>
 <h2 id="built-in-properties"><a class="header" href="#built-in-properties">Built-in properties</a></h2>
-<p>There are number of built-in properties, the full list is available
+<p>There are a number of built-in properties, the full list is available
 <a href="https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#built-in-variables">here</a></p>
 <h2 id="predefined-render-passes"><a class="header" href="#predefined-render-passes">Predefined render passes</a></h2>
 <p>Predefined render passes helps you to create your own shader without a need to create your own render pass 
@@ -259,8 +259,8 @@ to render shadows.</li>
 <h2 id="drawing-parameters"><a class="header" href="#drawing-parameters">Drawing parameters</a></h2>
 <p>Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters comes in handy. There are relatively large list of drawing
-parameters, and it could confuse a person who didn't get used to work with graphics. Thankfully there is a good
+from both sides. This is when draw parameters come in handy. There is a relatively large list of drawing
+parameters, and it could confuse a person who isn't used to work with graphics. Thankfully there is a good
 documentation about this available <a href="https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#drawing-parameters">here</a></p>
 <h2 id="vertex-shader"><a class="header" href="#vertex-shader">Vertex shader</a></h2>
 <p>Vertex shader operates on single vertices, it must provide at least the position of the vertex
