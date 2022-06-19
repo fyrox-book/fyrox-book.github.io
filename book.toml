@@ -10,3 +10,8 @@ default-theme = "light"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/fyrox-book/fyrox-book.github.io"
 git-repository-icon = "fa-github"
+
+[output.html.fold]
+enable = true
+level = 7
+
