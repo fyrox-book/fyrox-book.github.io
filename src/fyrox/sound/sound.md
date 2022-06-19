@@ -86,7 +86,7 @@ In order to stream large audio files, instead of loading them entirely in memory
 
 ```ron
 (
-  streaming: true
+  stream: true
 )
 ```
 
