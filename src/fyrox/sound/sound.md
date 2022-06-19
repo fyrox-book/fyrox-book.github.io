@@ -14,7 +14,7 @@ let sound = engine
 # }
 ```
 
-then, the node is build using the standard builder pattern:
+Then, the node is built using the standard builder pattern:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -41,7 +41,7 @@ let sound_handle = SoundBuilder::new(BaseBuilder::new())
 
 There are a few notable things in the example above.
 
-The first is that sounds don't play automatically; in order to do so, we need to invoke `.with_status(Status::Playing)`
+The first is that sounds don't play automatically; in order to do so, we need to invoke `.with_status(Status::Playing)`.
 
 The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. One way is to use the convenient builder API `.with_play_once(true)`; another is to use the graph APIs:
 

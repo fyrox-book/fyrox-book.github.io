@@ -1,6 +1,6 @@
 # Collider node
 
-Collider is a geometrical shape that is used for collision detection, contact manifold generation, etc. Colliders used
+Collider is a geometrical shape that is used for collision detection, contact manifold generation, etc. Colliders are used
 in pair with rigid bodies, they make rigid body participate in collisions.
 
 ## Shapes
@@ -19,7 +19,7 @@ anything else)
 - Height field - static height field shape, can be used together with terrains.
 - Polyhedron - dynamic concave shape.
 
-Also, there is a similar, but smaller set for 2D (because some shapes degenerates in 2D):
+Also, there is a similar, but smaller set for 2D (because some shapes degenerate in 2D):
 
 - Ball - dynamic circle shape.
 - Cuboid - dynamic rectangle shape.

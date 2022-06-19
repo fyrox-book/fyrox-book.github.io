@@ -5,5 +5,5 @@ and by `ResourceManager` from API.
 
 ## General Info
 
-Assets loading is asynchronous, it is possible load multiple assets in parallel or load until specific asset is 
-loading.
+Assets loading is asynchronous, it is possible to load multiple assets in parallel or load until a specific asset is 
+loaded.
