@@ -147,8 +147,7 @@ An example of directional light in real-life could be our Sun. Even if it is a p
 the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor 
 scenes.</p>
 <p>A directional light source could be created like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -170,8 +169,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <p>By default, the light source will be oriented to lit &quot;the ground&quot;. In other words its direction will be faced towards
 <code>(0.0, -1.0, 0.0)</code> vector. You can rotate it as you want by setting local transform of it while building. Something
 like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -206,8 +204,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <h3 id="point-light"><a class="header" href="#point-light">Point light</a></h3>
 <p>Point light is a light source that emits lights in all directions, it has a position, but does not have an orientation.
 An example of a point light source: light bulb. </p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -230,8 +227,7 @@ fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <h3 id="spotlight"><a class="header" href="#spotlight">Spotlight</a></h3>
 <p>Spot light is a light source that emits lights in cone shape, it has a position and orientation. An example of 
 a spot light source: flashlight.</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -259,8 +255,7 @@ the fog will scatter the light from your flashlight making it, so you'll see the
 <strong>enabled by default</strong>, so you don't have to do anything to enable it. However, in some cases you might want to disable 
 it, you can do this either while building a light source or change light scattering options on existing light source.
 Here is the small example of how to do that.</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -278,8 +273,7 @@ fn disable_light_scatter(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;
 </span></code></pre></pre>
 <p>You could also change the amount of scattering per each color channel, using this you could imitate the 
 <a href="https://en.wikipedia.org/wiki/Rayleigh_scattering">Rayleigh scattering</a>:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -306,8 +300,7 @@ tons of small light sources for free.</p>
 <p>Shadows giving the most significant performance impact, you should keep the amount of light sources that can cast
 shadows at lowest possible amount to keep performance at good levels. You can also turn on/off shadows when you 
 need:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

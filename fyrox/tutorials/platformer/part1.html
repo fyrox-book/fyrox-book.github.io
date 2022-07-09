@@ -230,8 +230,7 @@ If everything is done correctly, you should get something like this:</p>
 run the game using the <code>Play/Stop</code> button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
 for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts, but at first, let's make our life easier
 and force the editor to load the scene for us on startup. Go to <code>editor/src/main.rs</code> and replace this:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Some(StartupData {
     working_directory: Default::default(),
@@ -241,8 +240,7 @@ and force the editor to load the scene for us on startup. Go to <code>editor/src
 <span class="boring">}
 </span></code></pre></pre>
 <p>with this</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Some(StartupData {
     working_directory: Default::default(),
@@ -254,8 +252,7 @@ and force the editor to load the scene for us on startup. Go to <code>editor/src
 but if you multiply that by a number of restarts, this will give you a decent time save.</p>
 <p>As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
 at the beginning of the <code>game/src/lib.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span>use fyrox::{
@@ -286,8 +283,7 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
 <h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
 <p>Our scene has pretty much everything we need to start adding scripts, we'll start from the <code>Player</code> script and make our character
 move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -369,8 +365,7 @@ every method in <a href="https://docs.rs/fyrox/0.26.0/fyrox/script/trait.ScriptT
 <p>Before we can use the script in the editor, we must tell the engine that our script exists - we must register it. Remember that
 <code>on_register</code> method in the <code>Plugin</code> trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_register(&amp;mut self, context: PluginRegistrationContext) {
     let script_constructors = &amp;context.serialization_context.script_constructors;
@@ -385,8 +380,7 @@ drop-down list and that's pretty much it - now the script is assigned:</p>
 <p>Let's learn how to edit script properties from the editor. In the next section, we'll be adding keyframe animation for your character,
 it is a perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
 we need to get its sprite first. Let's start by adding the required field in the <code>Player</code> structure:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Inspect, Debug, Clone, Default)]
 struct Player {
@@ -398,16 +392,14 @@ struct Player {
 changes done in Inspector will not be applied to the script instance. We need to take care of this, it is a bit of manual work,
 future versions of the engine will most likely do this automatically. We're interested in the <code>on_property_changed</code> method, fill it
 the following code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>handle_object_property_changed!(self, args, Self::SPRITE =&gt; sprite)
 <span class="boring">}
 </span></code></pre></pre>
 <p>This single line of code applies changes to the <code>sprite</code> field if in the editor it's &quot;view&quot; was edited. The macro hides most of boilerplate
 code from you, when a macro is expanded the result code would look like:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if let FieldKind::Object(ref value) = args.value {
     match args.name.as_ref() {
@@ -431,8 +423,7 @@ the world viewer to the respective field in the player script. Release the mouse
 something different than &quot;Unassigned&quot;.</p>
 <p>Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player.
 Go to the <code>Player</code> structure and add the following fields:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>move_left: bool,
 move_right: bool,
@@ -440,8 +431,7 @@ jump: bool,
 <span class="boring">}
 </span></code></pre></pre>
 <p>These fields will store the state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add the following code there:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if let Event::WindowEvent { event, .. } = event {
     if let WindowEvent::KeyboardInput { input, .. } = event {
@@ -461,8 +451,7 @@ jump: bool,
 </span></code></pre></pre>
 <p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
 <code>on_update</code>. The method is called each frame and allows you to put game logic there:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Called every frame at fixed rate of 60 FPS.
 fn on_update(&amp;mut self, context: ScriptContext) {
@@ -493,8 +482,7 @@ horizontally and be able to jump. You can jump to the boxes on the right and pus
 <p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite the lack of animation),
 but if we'll move to the right - it looks like the player moves backward. Let's fix that by changing the horizontal scaling of the player's
 sprite. Add the following code at the end of the <code>if let ...</code> block of the code above:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// It is always a good practice to check whether the handles are valid, at this point we don't know
 // for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
@@ -524,8 +512,7 @@ using the opposite sign of <code>x_speed</code>.</p>
 the texture of the player's body sprite. The engine does not provide such functionality yet, simply because it was focused primarily on 3D games
 for quite a long period. It is easy to make such an animation &quot;system&quot; ourselves.</p>
 <p>Put this code snippet somewhere at the end of <code>lib.rs</code> of the <code>game</code> project and we'll start learning what it's doing:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Default, Inspect, Visit, Debug, Clone)]
 pub struct KeyFrameTexture {
@@ -618,8 +605,7 @@ the most interesting method is <code>update</code>. Inside it, we're updating th
 of the next frame's index, when it reaches <code>1.0</code> we're increasing the index of the current frame and wrapping it so it
 never exceeds the maximum amount of keyframes - instead, it will start counting from 0.</p>
 <p>It's time to start using the new animation system, just add the following fields to the <code>Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">struct Animation;
@@ -630,8 +616,7 @@ current_animation: u32,
 </span><span class="boring">}
 </span></code></pre></pre>
 <p>Currently, we just pass default values.</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>..Default::default()
 <span class="boring">}
@@ -639,8 +624,7 @@ current_animation: u32,
 <p>The Player will use multiple animations in future tutorials, but for now, it will use only two - idle and run.
 Now we need to somehow switch animations. Go to <code>on_update</code> in <code>Player</code> and add the following lines after
 the <code>x_speed</code> declaration:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">struct Player {
 </span><span class="boring">    current_animation: usize,
@@ -659,8 +643,7 @@ the <code>x_speed</code> declaration:</p>
 </span></code></pre></pre>
 <p>Here we assume that the run animation will be at index <code>0</code> and the idle animation at index <code>1</code>. We also need to
 apply the texture from the current animation to the player's sprite, and add the following lines at the end of <code>on_update</code></p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
     current_animation.update(context.dt);
@@ -690,8 +673,7 @@ working and playable.</p>
 <h2 id="final-steps"><a class="header" href="#final-steps">Final Steps</a></h2>
 <p>Three more steps before we can run the game, we need to call <code>restore_resources</code> for each animation. To do that,
 the script trait has the <code>on_restore_resources</code> method, add the following code to <code>impl ScriptTrait for Player</code></p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn restore_resources(&amp;mut self, resource_manager: ResourceManager) {
     for animation in self.animations.iter_mut() {
@@ -732,8 +714,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>The most interesting code here is this:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Register property editors here.
 let property_editors = &amp;editor.inspector.property_editors;
@@ -757,8 +738,7 @@ which was shown earlier.</li>
 <p>This is yet another place for manual work, but it must be done, the editor cannot use &quot;magic&quot; to understand which widget
 to use to visualize your data, there's no magic here.</p>
 <p>And a final step is to change how the script properties are handled:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_property_changed(&amp;mut self, args: &amp;PropertyChanged) -&gt; bool {
     handle_object_property_changed!(self, args, Self::SPRITE =&gt; sprite)
@@ -773,8 +753,7 @@ find the <code>Script</code> section in the <code>Inspector</code>. Add two anim
 <h2 id="standalone-game"><a class="header" href="#standalone-game">Standalone Game</a></h2>
 <p>As a final step, we'll add proper support for standalone mode (&quot;production builds&quot;), let's replace <code>on_standalone_init</code>
 with the following code:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn on_standalone_init(&amp;mut self, context: PluginContext) {
     let mut scene = block_on(

@@ -148,8 +148,7 @@ the way to go, especially with tons and tons of free 3D models available online.
 <h3 id="using-a-3d-modelling-software"><a class="header" href="#using-a-3d-modelling-software">Using a 3D modelling software</a></h3>
 <p>To create 3D model, you could use <a href="https://www.blender.org/">Blender</a> and then export it to <code>FBX</code> file format.
 To load your 3D model in the game, you should do few simple steps:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span>
@@ -181,8 +180,7 @@ properly.</p>
 <h3 id="creating-a-procedural-mesh"><a class="header" href="#creating-a-procedural-mesh">Creating a procedural mesh</a></h3>
 <p>A mesh instance could be created from code, such meshes are called &quot;procedural&quot;. They're suitable for cases when you
 cannot create a mesh in 3D modelling software.</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span>
@@ -252,8 +250,7 @@ fn create_procedural_mesh(
 <p>Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
 it will play animation with no problems. One difference that should be noted is that you should use <code>instantiate</code>
 method instead of <code>instantiate_geometry</code> and then manually apply animation to the mesh in your game loop.</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::resource::model::ModelInstance;

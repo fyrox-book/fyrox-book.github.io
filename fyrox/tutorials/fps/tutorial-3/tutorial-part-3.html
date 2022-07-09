@@ -155,8 +155,7 @@ result we're aiming in the tutorial:</p>
 <h2 id="bots"><a class="header" href="#bots">Bots</a></h2>
 <p>Previous tutorials were children's play in comparison to this, prepare for some advanced stuff. Let's begin by adding
 a separate module for bots - add <code>bot.rs</code> and fill it with following code:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use fyrox::engine::resource_manager::MaterialSearchOptions;
 use fyrox::{
@@ -240,8 +239,7 @@ bots in <code>Game</code>: <code>bots: Pool&lt;Bot&gt;,</code>. Next we need to 
 the game. Also, you can add more than one bot at different positions if you want. Do not forget to download bot model
 with textures from <a href="./zombie.zip">here</a> and unpack <code>fbx</code> file in <code>data/models</code> and other files
 (textures), in <code>data/textures</code>.</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Add some bots.
 let mut bots = Pool::new();
@@ -264,8 +262,7 @@ Self {
 <span class="boring">}
 </span></code></pre></pre>
 <p>As usual, let's disassemble the code line-by-line. Creation of bot begins from loading its 3D model in the scene:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let model = resource_manager
     .request_model(&quot;data/models/zombie.fbx&quot;)
@@ -276,8 +273,7 @@ Self {
 </span></code></pre></pre>
 <p>Nothing really new here, loading and instantiation of a 3D model of <em>any</em> complexity is the same as before. Next we have
 to slightly modify the model, shift it a bit down and shrink:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>scene.graph[model]
     .local_transform_mut()
@@ -289,8 +285,7 @@ to slightly modify the model, shift it a bit down and shrink:</p>
 </span></code></pre></pre>
 <p>Here we're borrow model in the scene graph, and modify its local transform. Next we're creating rigid body with a capsule
 collider, and attaching the model to the rigid body:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let collider;
 let rigid_body = RigidBodyBuilder::new(
@@ -319,8 +314,7 @@ let rigid_body = RigidBodyBuilder::new(
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, we're returning bot's instance:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
     pivot,
@@ -330,8 +324,7 @@ let rigid_body = RigidBodyBuilder::new(
 <span class="boring">}
 </span></code></pre></pre>
 <p>Ok, now for the bots instantiation, for simplicity we create a single bot in <code>Game::new</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut bots = Pool::new();
 
@@ -379,8 +372,7 @@ see in the picture, it uses two <code>PlayAnimation</code> nodes as source of po
 which will be yet another <code>BlendAnimations</code>. So everything depends on your needs and ABM just gives you enough flexibility.</p>
 <p>Ok, back to the game. Let's create a simple ABM for bots. For simplicity, it will contain only three states - Idle, Walk,
 Attack. Put this code somewhere at the end of <code>bot.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
@@ -536,8 +528,7 @@ impl BotAnimationMachine {
 </span></code></pre></pre>
 <p>Ok, this might be the biggest heap of code we've ever been dealing with at once. There is lots of stuff happening, 
 let's thoroughly &quot;scan&quot; this code. It starts from the simple helper method to create states:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
@@ -565,8 +556,7 @@ fn create_play_animation_state(
 in short, it creates an instance of animation, and binds animations tracks to nodes in given sub graph that starts from
 a node given as first parameter. Next we're adding a PlayAnimation node to machine and making a new state node. Now we're
 adding a structure with input parameter for ABM:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct BotAnimationMachineInput {
     // Whether a bot is walking or not.
@@ -578,8 +568,7 @@ adding a structure with input parameter for ABM:</p>
 </span></code></pre></pre>
 <p>This structure will contain more flags in the future, but now on to <code>BotAnimationMachine::new()</code>. At first, we're creating
 new ABM instance, nothing fancy here. Next we're loading animations in parallel: </p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut machine = Machine::new();
 
@@ -595,8 +584,7 @@ let (walk_animation_resource, idle_animation_resource, attack_animation_resource
 model can have animations. The animations we're loading, contain only bones and key frames for them, but not mesh of a bot.
 We simply don't need a mesh, because we've already created the mesh earlier. This separation of animations and mesh is 
 very handy, because it saves CPU cycles and disk space. Ok, next we're creating states for ABM:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Now create three states with different animations.
 let (_, idle_state) = create_play_animation_state(
@@ -626,8 +614,7 @@ let (attack_animation, attack_state) = create_play_animation_state(
 </span></code></pre></pre>
 <p>These states are those yellow-ish rectangles on diagram up above. As you can see we're creating three states: idle, walk,
 attack. Next we need to connect states between each other. </p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Next, define transitions between states.
 machine.add_transition(Transition::new(
@@ -650,8 +637,7 @@ machine.add_transition(Transition::new(
 transition is that black arrow on the diagram up above, and it is linked with a parameter. Parameter have a name, and as
 you'll see later the name will be used to modify parameters. Finally, we're setting entry state to idle and return 
 ABM instance:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Define entry state.
 machine.set_entry_state(idle_state);
@@ -660,8 +646,7 @@ Self { machine }
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now for another important part, we have to &quot;feed&quot; machine with actual parameters for each transition:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, input: BotAnimationMachineInput) {
     self.machine
@@ -686,8 +671,7 @@ multiple sources of poses into one and animation for same node blends into a fin
 for each node that was used in all tracks used in ABM. </p>
 <p>Next we need to use the machine we've made. Add a new field to <code>Bot</code>: <code>machine: BotAnimationMachine</code> and initialize it in
 &quot;constructor&quot;:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
     machine: BotAnimationMachine::new(scene, model, resource_manager).await,
@@ -696,8 +680,7 @@ for each node that was used in all tracks used in ABM. </p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next we need to update machine, add following method to <code>impl Bot</code>: </p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32) {
     // For now these are set to false which will force bot to be in idle state.
@@ -713,8 +696,7 @@ for each node that was used in all tracks used in ABM. </p>
 <p>This method will update machine and &quot;feed&quot; it with actual state, for now the state has flags combination that forces
 bot to be in idle state. This will be fixed when we'll add simple AI later in this tutorial. Finally, we need to update
 each bot we have, go to <code>Game::update</code> and add following lines there (somewhere after update of weapons):</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>for bot in self.bots.iter_mut() {
     bot.update(scene, dt);
@@ -726,8 +708,7 @@ each bot we have, go to <code>Game::update</code> and add following lines there 
 <h2 id="simple-ai"><a class="header" href="#simple-ai">Simple AI</a></h2>
 <p>Ok, now we have to use ABM we've made at full capacity, to do that we'll write simple AI - bot will just follow player
 in a straight line and attack if they're close enough. Let's start by modifying <code>Bot::update</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn update(&amp;mut self, scene: &amp;mut Scene, dt: f32, target: Vector3&lt;f32&gt;) {
     let attack_distance = 0.6;
@@ -777,8 +758,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
 <span class="boring">}
 </span></code></pre></pre>
 <p>Also add a new field to <code>Player</code>: <code>follow_target: bool</code> and initialize it in the constructor: </p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Self {
     follow_target: false,
@@ -790,8 +770,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
 <code>follow_target</code> flag to true and begin to follow the target. To do that, all we have to do is to find a vector between
 target and position of a bot, make sure bots is facing towards the target and move it if it is far enough. So let's 
 begin digging the code:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let attack_distance = 0.6;
 
@@ -810,8 +789,7 @@ if distance != 0.0 &amp;&amp; distance &lt; 1.5 {
 <p>At the beginning we define a melee attack distance, bot will attack target only if it close enough. Next, we're 
 building vector to from bot's position to target, calculate distance by taking length of the vector and check if 
 we should switch <code>follow_target</code> flag. Next goes the most interesting parts of the AI:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if self.follow_target &amp;&amp; distance != 0.0 {
     let rigid_body = scene.graph[self.rigid_body].as_rigid_body_mut();
@@ -829,8 +807,7 @@ we should switch <code>follow_target</code> flag. Next goes the most interesting
 </span></code></pre></pre>
 <p>Here we just borrow rigid body a bot, and make sure it rotated towards the target. Next we're moving bot if it is
 far enough from the target:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    ...
 
@@ -851,8 +828,7 @@ far enough from the target:</p>
 by movement speed and form new velocity vector using new XZ velocity + current Y velocity of a bot to preserve velocity
 added by gravity (otherwise bot would just fly, you can experiment with this part to make flying zombies). One last
 thing before we build and run the game, change lines of how we're updating bots to following lines:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let target = scene.graph[self.player.pivot].global_position();
 

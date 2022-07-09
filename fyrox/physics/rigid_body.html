@@ -143,8 +143,7 @@ external forces and other rigid bodies. Use rigid body node everywhere you need 
 your objects.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>Use RigidBodyBuilder to create a rigid body instance:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -176,8 +175,7 @@ create complex shapes from simple shapes, you can create concave objects this wa
 <h2 id="force-and-torque"><a class="header" href="#force-and-torque">Force and torque</a></h2>
 <p>You can apply forces and torque to any rigid body, but only dynamic bodies will be affected. There is two ways of
 applying force to a rigid body: at center of mass or at particular point at the body:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{core::algebra::Vector3, scene::rigidbody::RigidBody};
@@ -196,8 +194,7 @@ applying force to a rigid body: at center of mass or at particular point at the 
 <h2 id="kinematic-rigid-bodies"><a class="header" href="#kinematic-rigid-bodies">Kinematic rigid bodies</a></h2>
 <p>Sometimes you may want to have direct control over position/rotation of a rigid body and tell the physics engine to not
 do simulation for the body. This can be achieved by making the rigid body <em>kinematic</em>:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

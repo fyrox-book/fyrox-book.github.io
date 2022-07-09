@@ -142,8 +142,7 @@
 <h2 id="fluent-syntax"><a class="header" href="#fluent-syntax">Fluent syntax</a></h2>
 <p>Widget builders supports fluent syntax, this means that you can create your widget in series of nested 
 call of other widget builders. In code, it looks something like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -176,8 +175,7 @@ background image and a text. Background image is set explicitly by calling image
 texture. The text is created implicitly, the button builder creates <code>Text</code> widget for you and attaches it to 
 the button. The structure of the button can contain <em>any</em> amount of nodes, for example you can create a button
 that contains text with some icon. To do that, replace <code>.with_text(&quot;My Button&quot;)</code> with this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -228,8 +226,7 @@ that contains text with some icon. To do that, replace <code>.with_text(&quot;My
 </span></code></pre></pre>
 <p>Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

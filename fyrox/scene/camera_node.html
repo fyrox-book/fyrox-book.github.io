@@ -144,8 +144,7 @@ that &quot;intersects&quot; with the frustum will be rendered. </p>
 <p><img src="./frustum.svg" alt="Frustum" /></p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>An instance of camera node could be created using <code>CameraBuilder</code>: </p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -175,8 +174,7 @@ parameters that describes frustum volume:</p>
 <li>Far clipping plane location</li>
 </ul>
 <p>Here is a simple example of how to create a camera with perspective projection:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -212,8 +210,7 @@ projection defined by three parameters:</p>
 <p>Vertical size defines how large the &quot;box&quot; will be in vertical axis, horizontal size is derived from vertical
 size by multiplying vertical size with aspect ratio.</p>
 <p>Here is a simple example of how to create a camera with orthographic projection:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -247,8 +244,7 @@ length. This will force the engine to clip everything that is out of bounds and 
 <p>Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
 such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
 be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:</p>
-<pre><pre class="playground"><code class="language-rust no_run edition2018">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -308,13 +304,13 @@ fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 famous &quot;mexican&quot; movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
 via color grading LUT effect. When used wisely, it can significantly improve perception of your scene.</p>
 <p>Here is the same scene having no color correction along with another case that has &quot;mexico&quot; color correction:</p>
-<table><thead><tr><th>Scene</th><th>Look-up-table</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Scene</th><th>Look-up-table</th></tr></thead><tbody>
 <tr><td><img src="./no_color_correction.PNG" alt="No Color Correction" /></td><td><img src="./lut_neutral.jpg" alt="Neutral LUT" /></td></tr>
 <tr><td><img src="./with_color_correction.PNG" alt="With Color Correction" /></td><td><img src="./lut_mexico.jpg" alt="Neutral LUT" /></td></tr>
 </tbody></table>
+</div>
 <p>To use color grading LUT you could do something like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

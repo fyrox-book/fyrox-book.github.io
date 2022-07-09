@@ -171,8 +171,7 @@ For example, you may want to build a custom <a href="../tree.html">Tree</a> widg
 functionality from the Tree, but add something new. The Tree widget can manage its children subtrees, but it needs to
 somehow get required data from subtree. Direct type casting would fail in this case, because now you have something
 like this:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::tree::Tree;

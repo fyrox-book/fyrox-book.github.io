@@ -167,8 +167,7 @@ See <a href="./particle_system_node.html">Particle system node</a> for more info
 Because every node (other than Base) is &quot;derived&quot; from Base via composition and the derived
 builder must know how to build Base node. While it may sound confusing, it is actually very useful and clear.
 Consider this example:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -198,8 +197,7 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <p>As you can see, we're creating an instance of BaseBuilder and fill it with desired properties as well as filling
 the CameraBuilder's instance properties. This is a very flexible mechanism, allowing you to build complex hierarchies
 in a declarative manner:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -257,8 +255,7 @@ together with the camera.</p>
 <h3 id="adding-a-node-manually"><a class="header" href="#adding-a-node-manually">Adding a node manually</a></h3>
 <p>For some rare cases you may also want to delay adding a node to the graph, specifically for that purpose, every node 
 builder has <code>.build_node</code> method which creates an instance of <code>Node</code>  but does not add it to the graph.</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -278,8 +275,7 @@ fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <p>For many cases you can't use builders to create complex hierarchy, the simplest example of such situation when 
 you're creating an instance of some 3D model. If you want the instance to be a child object of some other object,
 you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -311,8 +307,7 @@ fn link_weapon_to_camera(
 graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behaviour, and you want to preserve children
 nodes while deleting parent node. To do that, you need to explicitly detach children nodes of the node you're about
 to delete:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

@@ -140,8 +140,7 @@
                         <h1 id="sound"><a class="header" href="#sound">Sound</a></h1>
 <p>In Fyrox, sounds are nodes of type Sound, with all the consequent properties and workflows.</p>
 <p>Audio files are loaded using the resource manager:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{engine::Engine, scene::Scene};
@@ -153,8 +152,7 @@
 </span><span class="boring">}
 </span></code></pre></pre>
 <p>Then, the node is built using the standard builder pattern:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -181,8 +179,7 @@
 <p>There are a few notable things in the example above.</p>
 <p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
 <p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -205,8 +202,7 @@ if sound.status() == Status::Stopped {
 </span><span class="boring">}
 </span></code></pre></pre>
 <p>If we want to play background music (or anyway a repeated sound), we just set the <code>looping</code> property when building the node:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

@@ -148,8 +148,7 @@ data have such state. </p>
 <p><img src="unchecked.PNG" alt="Unchecked" /></p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>To create a checkbox you should do something like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -169,8 +168,7 @@ near them. To create such checkbox, you could use <code>.with_content(..)</code>
 For checkbox with text, you could use <code>TextBuilder</code> to create textual content, for checkbox with text - use 
 <code>ImageBuilder</code>. As already said, you're free to use any widget handle there.</p>
 <p>Here's an example of checkbox with textual content.</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -198,8 +196,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
 <h2 id="message-handling"><a class="header" href="#message-handling">Message handling</a></h2>
 <p>Checkboxes are not static widget and have multiple states. To handle a message from a checkbox, you need to handle
 a <code>CheckBoxMessage::Check</code> message. To do so, you can do something like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{

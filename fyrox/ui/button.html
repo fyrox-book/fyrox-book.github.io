@@ -140,8 +140,7 @@
                         <h1 id="button"><a class="header" href="#button">Button</a></h1>
 <h2 id="simple-button-with-text"><a class="header" href="#simple-button-with-text">Simple button with text</a></h2>
 <p>To create a simple button with text you should do something like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -157,8 +156,7 @@
 </span></code></pre></pre>
 <p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal 
 right aligned):</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -184,8 +182,7 @@ right aligned):</p>
 </span></code></pre></pre>
 <h2 id="a-button-with-image"><a class="header" href="#a-button-with-image">A button with image</a></h2>
 <p>More fancy-looking button with an image as a background could be created using this code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -216,8 +213,7 @@ right aligned):</p>
 <h2 id="message-handling"><a class="header" href="#message-handling">Message handling</a></h2>
 <p>When clicked, a button sends a <code>ButtonMessage::Click</code> message, you can catch it in your code and do something
 useful:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -263,8 +259,7 @@ useful:</p>
 <h2 id="using-a-button-to-exit-the-game"><a class="header" href="#using-a-button-to-exit-the-game">Using a button to exit the game</a></h2>
 <p>Add a flag to your Game struct like <code>exit: bool</code> and set it in button handler to <code>true</code>, then check it in <code>on_tick</code> 
 and set <code>*control_flow = ControlFlow::Exit</code> if the flag is raised</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">

@@ -144,8 +144,7 @@ pretty much any font from the internet and use it as is.</p>
 <p>There are two ways to create font instance - either load font from file, or load it directly from memory.</p>
 <h3 id="loading-font-from-file"><a class="header" href="#loading-font-from-file">Loading Font From File</a></h3>
 <p>The easiest way to create a font is load it from file:</p>
-<pre><pre class="playground"><code class="language-rust no_run edition2018">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::ttf::Font;
@@ -163,8 +162,7 @@ use <code>async</code>, then the next section is for you.</p>
 <h3 id="creating-font-from-memory"><a class="header" href="#creating-font-from-memory">Creating Font From Memory</a></h3>
 <p>This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is very
 simple:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::ttf::Font;
@@ -176,8 +174,7 @@ simple:</p>
 </span></code></pre></pre>
 <p><code>data</code> input parameter could be a buffer that contains any valid TTF/OTF font. For example, you can load TTF file into
 a data buffer and create font using the data buffer:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::ttf::Font;
@@ -199,8 +196,7 @@ a data buffer and create font using the data buffer:</p>
 <p>User interface provides its own font of fixed size, it is enough to cover most of the use cases, but the default font
 includes only ASCII characters, if you need extended character set, you can replace default font using the following
 code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run edition2018">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{ttf::Font, UserInterface};
@@ -223,8 +219,7 @@ code snippet:</p>
 <p>Current font implementation requires you to define fixed character set while creating an instance. What is character
 set and how it can be extended? Character set is just a set of ranges from Unicode, for example here's korean character
 set:</p>
-<pre><pre class="playground"><code class="language-rust no_run">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">use std::ops::Range;
 </span>pub fn korean_char_set() -&gt; &amp;'static [Range&lt;u32&gt;] {
