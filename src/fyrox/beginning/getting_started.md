@@ -1,53 +1,31 @@
 # Getting started
 
 Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
-of the book will guide you the basics of the engine.
+of the book will guide you through the basics of the engine. Fyrox 0.25+ changed game development paradigm - you
+should use the editor (Fyroxed) to make your game, like in many other game engines.
 
-## Installation
+## Engine vs Framework
 
-Since the engine is distributed as a library, it has to be added to `[dependecies]` section of `Cargo.toml` of 
-your project to start using it, there is no pre-built executables or library files. If you don't know what is
-`Cargo.toml` or `cargo`, please [read this](https://doc.rust-lang.org/cargo/) before continue. 
+There are two distinct concepts in game development - engine and framework, but they're often "mixes" and people gets
+confused what is framework and what is engine. Fyrox is full-featured game **engine**, what does that mean and why it
+is not a framework? Key features that allow you to understand that you're looking at game engine are following:
 
-### Using stable version
+- Editor - true game engine provides integrated game development environment, that allows you to run your game inside
+it, tweak parameters of your game entities, etc.
+- Assets pipeline - engine has pretty rigid assets processing pipeline. 
+- Standard programming patterns - engine "forces" you to use it in almost single way, there is pretty much no space 
+for maneuver.
 
-To begin using the engine, just add following lines to your `Cargo.toml`:
+## Obsolete "Fyrox as Framework"
 
-```toml
-[dependencies]
-fyrox = "^0.25"
-```
+Before 0.25, Fyrox was just a framework (yet it still had an editor), you can still use it in old way (do manual
+initialization, do not use editor, etc.), but it is considered obsolete and eventually "framework mode" won't be 
+supported. The book has few chapters that are marked `Obsolete`, this means that they're not advised to be used.
 
-This will force Cargo to use latest **stable** version of the engine. 
+Read next chapter to learn how to use the engine in a "modern" way. 
 
-### Using latest unstable version
+## API Documentation
 
-Sometimes you want to use the latest features that are not yet released in a stable version, then you can use
-the engine directly from its repository, simply add the following line to your `Cargo.toml`:
+The book is primarily focused on game development with Fyrox, not on its API. You can find API docs 
+[here](https://docs.rs/fyrox/latest/fyrox/). 
 
-```toml
-[dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox" } 
-```
-
-This will update your build files fairly often. If you don't want game breaking changes to occur because of engine updates or want to not compile daily,
-change `fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }` to `fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "" }` with the commit
-hash in the quotes.
-
-## Editor installation
-
-The engine offers an editor, to install a standalone version it, use `cargo install`:
-
-```shell
-cargo install fyroxed
-```
-
-Standalone version does not allow you to run your game inside it, but only allows you to edit scenes. 
-
-After that you can run the editor with a single command:
-
-```shell
-fyroxed
-```
-
-Check the next chapter to create a simple application.

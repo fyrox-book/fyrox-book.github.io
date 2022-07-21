@@ -16,43 +16,50 @@ graph is called _node_. In the example with the sword and the character, the swo
 which in its turn is a _parent_ node of a character. (Here we intentionally omit the fact that usually character
 model contains complex skeleton with multiple bones and the sword is actually attached to one of hand's bones.)
 
+You can change hierarchy of the nodes in the editor using simple drag'n'drop functionality in `World Viewer` - drag a 
+node onto some other node, and it will be attached to it.
+
 ## Building blocks or scene nodes
 
 The engine offers various types of "building blocks" for your scene, each such block is called _scene node_.
 
-- **Base** - a node that stores hierarchical information (a handle to the parent node and a set of handles
+- [Base](../scene/base_node.md) - a node that stores hierarchical information (a handle to the parent node and a set of handles
   to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
   is used as a base node for every other scene node (via composition).
-- **Mesh** - a node that represents a 3D model. This one of the most commonly used nodes in almost every game.
+- [Mesh](../scene/mesh_node.md) - a node that represents a 3D model. This one of the most commonly used nodes in almost every game.
   Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
   and loaded in your scene.
-- **Light** - a node that represents a light source. There are three types of light sources:
+- [Light](../scene/light_node.md) - a node that represents a light source. There are three types of light sources:
     - **Directional** - a light source that does not have position, only direction. The closest real-world example
       is our Sun.
     - **Point** - a light source that emits light in every direction. Real-world example: light bulb.
     - **Spot** - a light source that emits light in a particular direction with a cone-like shape. Real-world example:
       flashlight.
-- **Camera** - a node that allows you to see the world. You must have at least one camera in your scene to be
+- [Camera](../scene/camera_node.md) - a node that allows you to see the world. You must have at least one camera in your scene to be
   able to see anything.
-- **Sprite** - a node that represents a quad that always faced towards a camera. It can have a texture, size, it
+- [Sprite](../scene/sprite_node.md) - a node that represents a quad that always faced towards a camera. It can have a texture, size, it
   also can be rotated around the "look" axis.
-- **Particle system** - a node that allows you to build visual effects using a huge set of small particles, it
+- [Particle system](../scene/particle_system_node.md) - a node that allows you to build visual effects using a huge set of small particles, it
   can be used to create smoke, sparks, blood splatters, etc. effects.
-- **Terrain** - a node that allows you to create complex landscapes with minimal effort.
-- **Decal** - a node that paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
+- [Terrain](../scene/terrain_node.md) - a node that allows you to create complex landscapes with minimal effort.
+- [Decal](../scene/decal_node.md) - a node that paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
   damaged parts of the road, blood splatters, bullet holes, etc.
-- **Rigid Body (2D)** - a physical entity that is responsible for dynamic of the rigid. There is a special variant
+- [Rigid Body](../physics/rigid_body.md) - a physical entity that is responsible for dynamic of the rigid. There is a special variant
 for 2D - `RigidBody2D`.
-- **Collider (2D)** - a physical shape for a rigid body, it is responsible for contact manifold generation, 
+- [Collider](../physics/collider.md) - a physical shape for a rigid body, it is responsible for contact manifold generation, 
 without it any rigid body will not participate in simulation correctly, so every rigid body must have at least
 one collider. There is a special variant for 2D - `Collider2D`.
-- **Joint (2D)** - a physical entity that restricts motion between two rigid bodies, it has various amounts
+- [Joint](../physics/joint.md) - a physical entity that restricts motion between two rigid bodies, it has various amounts
 of degrees of freedom depending on the type of the joint. There is a special variant for 2D - `Joint2D`.
-- **Rectangle** - a simple rectangle mesh that can have a texture and a color, it is a very simple version of 
+- [Rectangle](../scene/rectangle.md) - a simple rectangle mesh that can have a texture and a color, it is a very simple version of 
 a Mesh node, yet it uses very optimized renderer, that allows you to render dozens of rectangles simultaneously.
 This node is intended to be used for **2D games** only.
+- [Sound](../sound/sound.md) - a sound source, it is universal for 2D and 3D. Spatial blend factor allows you to select
+a proportion between 2D and 3D.
 
-These scene nodes allow you to build almost any kind of game.
+Each of the node could be created either from the editor (`Create` on main menu) or programmatically via respective
+node builder. These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
+types of nodes, but this is advanced topic, and it will be covered in [next chapters](../scene/custom_node.md).
 
 ## Local and global coordinates
 

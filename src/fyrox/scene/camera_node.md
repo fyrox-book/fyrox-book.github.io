@@ -35,7 +35,7 @@ Projection mode defines how your scene will look like after rendering, there are
 ### Perspective
 
 Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
-common projection type for 3D games. By default, each camera uses perspective projection. It defined by three 
+common projection type for 3D games. By default, each camera uses perspective projection. It's defined by three 
 parameters that describes frustum volume:
 
 - Field of view angle
@@ -70,12 +70,12 @@ fn create_perspective_camera(graph: &mut Graph) -> Handle<Node> {
 ### Orthographic
 
 Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
-If you're making 2D games or isometric 3D games this is the projection mode you're looking for. Orthographic
+If you're making 2D games or isometric 3D games, this is the projection mode you're looking for. Orthographic
 projection defined by three parameters:
 
-- Vertical size
-- Near clipping plane location
-- Far clipping
+- Vertical Size
+- Near Clipping Plane
+- Far Clipping Plane
 
 Vertical size defines how large the "box" will be in vertical axis, horizontal size is derived from vertical
 size by multiplying vertical size with aspect ratio.
@@ -106,19 +106,19 @@ fn create_perspective_camera(graph: &mut Graph) -> Handle<Node> {
 
 ## Performance
 
-Each camera forces engine to re-render scene one more time, which can be very resource intensive (both CPU and GPU)
+Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
 operation. 
 
-To reduce GPU load, try to keep far clipping plane at lowest possible values. For example, if you're making a game
-with closed environment (lots of corridors, small rooms, etc.) set far clipping plane to max possible distance that 
-can be "seen" in your game - if the largest thing is a corridor, then set far clipping plane to slightly exceed the 
+To reduce GPU load, try to keep the Far Clipping Plane at lowest possible values. For example, if you're making a game
+with closed environment (lots of corridors, small rooms, etc.) set the Far clipping Plane to max possible distance that 
+can be "seen" in your game - if the largest thing is a corridor, then set the Far clipping Plane to slightly exceed the 
 length. This will force the engine to clip everything that is out of bounds and do not draw such objects.
 
 ## Skybox
 
 Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
-such objects can be pre-rendered and then applied to a huge cube around camera, it always be rendered first and will
-be the background of your scene. To create a skybox and set it to a camera, you can use following code:
+such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
+be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:
 
 ```rust,no_run,edition2018
 # extern crate fyrox;
@@ -176,11 +176,11 @@ fn create_camera(scene: &mut Scene, resource_manager: ResourceManager) -> Handle
 
 ## Color grading look-up tables
 
-Color grading look-up tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
+Color grading Look-Up Tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
 famous "mexican" movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
 via color grading LUT effect. When used wisely, it can significantly improve perception of your scene.
 
-Here is the same scene with no color correction and with "mexico" color correction:
+Here is the same scene having no color correction along with another case that has "mexico" color correction:
 
 | Scene                                                  | Look-up-table
 |--------------------------------------------------------|-------------------

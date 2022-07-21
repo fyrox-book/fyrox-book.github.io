@@ -120,10 +120,13 @@ fn create_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 }
 ```
 
+Please refer to [Font](font.md) chapter to learn more about fonts.
+
 ### Font size
 
 There is no way to change font size without changing the entire font used by Text, it is known issue and there is
-[tracking issue](https://github.com/FyroxEngine/Fyrox/issues/74) for that.
+[tracking issue](https://github.com/FyroxEngine/Fyrox/issues/74) for that. Check [Font](font.md) chapter to learn how 
+to create fonts.
 
 ## Messages
 
@@ -151,4 +154,4 @@ fn request_change_text(ui: &UserInterface, text_widget_handle: Handle<UiNode>, t
 
 Please keep in mind, that like any other situation when you "changing" something via messages, you should remember
 that the change is **not** immediate. The change will be applied on `ui.poll_message(..)` call somewhere in your
-code (or will be done automatically if you're using Framework).
+code (or will be done automatically if you're using scripts or Framework (obsolete)).

@@ -31,6 +31,33 @@ structure. Such approach allows us to modify the look of the button as we wish, 
 image background, or with any vector image, or even other widgets. The foreground can be anything too, it can also
 contain its own complex hierarchy, like a pair of an icon with a text and so on.
 
+## Composition
+
+Every widget in the engine uses composition to build more complex widgets. All widgets (and respective builders) contains
+`Widget` instance inside, it provides basic functionality the widget such as layout information, hierarchy, default
+foreground and background brushes (their usage depends on derived widget), render and layout transform and so on. 
+
+## Component Querying
+
+Many widgets provide component querying functionality - you can get an immutable reference to inner component by its type. It is 
+used instead of type casting in many places. Component querying is much more flexible compared to direct type casting. 
+For example, you may want to build a custom [Tree](../tree.md) widget, you want your CustomTree to inherit all the 
+functionality from the Tree, but add something new. The Tree widget can manage its children subtrees, but it needs to
+somehow get required data from subtree. Direct type casting would fail in this case, because now you have something
+like this:
+
+```rust
+# extern crate fyrox;
+# use fyrox::gui::tree::Tree;
+struct CustomTree {
+    tree: Tree,
+    my_data: u32
+}
+```
+
+On other hand, component querying will work fine, because you can query inner component (Tree in our case). Please note 
+that this has nothing similar with ECS and stuff, it is made to circumvent Rust's lack of inheritance.
+
 ## Message passing
 
 The engine uses message passing mechanism for any UI logic. What does that mean? Let's see at the button from the

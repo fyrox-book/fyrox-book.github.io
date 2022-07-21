@@ -8,11 +8,11 @@ data have such state.
 
 Checkbox in `Checked` state:
 
-![Checked](./checked.png)
+![Checked](checked.PNG)
 
 Checkbox in `Unchecked` state:
 
-![Unchecked](./unchecked.png)
+![Unchecked](unchecked.PNG)
 
 ## How to create
 

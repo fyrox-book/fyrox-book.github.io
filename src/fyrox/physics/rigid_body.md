@@ -1,7 +1,7 @@
 # Rigid body node
 
 Rigid body node is the one of main physical entities in the engine. Rigid body nodes can be affected by gravity, 
-external forces, other rigid bodies, etc. Use rigid body node everywhere you need natural physical behaviour for
+external forces and other rigid bodies. Use rigid body node everywhere you need natural physical behaviour for
 your objects.
 
 ## How to create

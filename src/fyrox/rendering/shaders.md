@@ -1,15 +1,15 @@
 # Shaders
 
-Shader is a set of programs that runs directly on graphics adapter. Each program from the set is called
-_sub-shader_. Sub-shaders linked with render pass, each render pass defines "where" to draw and an object.
+Shader is a set of programs that run directly on graphics adapter. Each program from the set is called
+_sub-shader_. Sub-shaders linked with render pass, each render pass defines "where" to draw an object.
 "where" means that you can set up your own render pass and the renderer will use the sub-shader with 
-your render pass. For the ease of use there are number of [predefined render passes](#predefined-render-passes).
+your render pass. For the ease of use there are a number of [predefined render passes](#predefined-render-passes).
 
 Shaders have properties of various types that can be used together with materials to draw an object. 
 
 ## Shaders language
 
-The engine uses GLSL shading language for every sub-shader. There are numerous of GLSL guides over the 
+The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the 
 internet, so there is no need to "re-post" the well documented info again.
 
 There are very few differences:
@@ -24,7 +24,7 @@ is well documented, and you may find some functions useful for you job.
 
 ## Structure
 
-Shader has rigid structure that could be described in this code snipped:
+Shader has rigid structure that could be described in this code snippet:
 
 ```ron
 (
@@ -107,14 +107,14 @@ Shader has rigid structure that could be described in this code snipped:
 
 ## Properties
 
-Property is a named variable of some type. Properties directly tied with the uniforms in the sub-shaders,
+Property is a named variable of some type. Properties are directly tied with the uniforms in the sub-shaders,
 for each you can have a property called `time`, and then you can define `uniform float time;` in your sub-shader
-and the engine will pass property value to that uniform for you before drawing an object. Properties placed in 
-a "global namespace", which means that every sub-shader have "access" to the properties.
+and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in 
+a "global namespace", which means that every sub-shader has "access" to the properties.
 
 ## Built-in properties
 
-There are number of built-in properties, the full list is available
+There are a number of built-in properties, the full list is available
 [here](https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#built-in-variables)
 
 ## Predefined render passes
@@ -135,8 +135,8 @@ to render shadows.
 
 Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters comes in handy. There are relatively large list of drawing
-parameters, and it could confuse a person who didn't get used to work with graphics. Thankfully there is a good
+from both sides. This is when draw parameters come in handy. There is a relatively large list of drawing
+parameters, and it could confuse a person who isn't used to work with graphics. Thankfully there is a good
 documentation about this available [here](https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#drawing-parameters)
 
 ## Vertex shader

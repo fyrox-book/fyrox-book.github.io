@@ -1,19 +1,19 @@
 # Mesh node
 
 Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
-Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
+Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
 and loaded in your scene.
 
 ## How to create
 
-There are basically two ways, how to pick one depends your needs. In general, using a 3D modelling software is
+There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
 the way to go, especially with tons and tons of free 3D models available online.
 
 **Caveat:** The engine supports _only_ FBX file format for 3D models!
 
 ### Using a 3D modelling software
 
-To create 3D model in you could use [Blender](https://www.blender.org/) and then export it to `FBX` file format.
+To create 3D model, you could use [Blender](https://www.blender.org/) and then export it to `FBX` file format.
 To load your 3D model in the game, you should do few simple steps:
 
 ```rust,no_run
@@ -47,7 +47,7 @@ properly.
 
 ### Creating a procedural mesh
 
-A mesh instance could be created from code, such meshes called "procedural". They're suitable for cases when you
+A mesh instance could be created from code, such meshes are called "procedural". They're suitable for cases when you
 cannot create a mesh in 3D modelling software.
 
 ```rust,no_run
@@ -120,7 +120,7 @@ As you can see, creating a mesh procedurally requires lots of manual work and no
 
 Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
 it will play animation with no problems. One difference that should be noted is that you should use `instantiate`
-method instead of `instantiate_geometry` and then manually apply animation to the mesh in you game loop.
+method instead of `instantiate_geometry` and then manually apply animation to the mesh in your game loop.
 
 ```rust,no_run
 # extern crate fyrox;
@@ -166,4 +166,4 @@ scene.animations[animations[0]]
 
 You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
 in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated
-3D model in separate file, and all animations in their own files.
+3D model in a separate file and all animations in their own files.
