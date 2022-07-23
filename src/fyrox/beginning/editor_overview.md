@@ -1,9 +1,9 @@
-# Fyroxed Overview
+# FyroxEd Overview
 
-Fyroxed - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
+FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
 that allows you to build your game from start to finish with low effort.
 
-You'll be spending a lot of time in the editor (Fyroxed), so you should get familiar with it and learn how to use its 
+You'll be spending a lot of time in the editor (FyroxEd), so you should get familiar with it and learn how to use its 
 basic functionality. This chapter will guide you through basics, advanced topics will be covered in respective chapters.
 
 ## Windows
@@ -28,7 +28,7 @@ stuff). Allows you to select, move, rotate, scale, delete, etc. various entities
 
 ## Creating (Loading) a Scene
 
-Fyroxed works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
+FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
 must have a scene created (or loaded) to begin working with the editor. To create a scene click `File -> New Scene`.
 
 To load existing scene, go to `File -> Load` and select desired scene using file browser.
@@ -48,7 +48,7 @@ to the path it was loaded from.
 
 ## Undo/redo
 
-Fyroxed remembers your actions, and it is possible to undo (or redo undone) your changes to fix some stuff in the scene.
+FyroxEd remembers your actions, and it is possible to undo (or redo undone) your changes to fix some stuff in the scene.
 You can undo or redo your changes either by clicking `Edit -> Undo/Redo` or by standard shortcuts: `Ctrl+Z` - undo,
 `Ctrl+Y` - redo.
 
