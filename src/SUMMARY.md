@@ -14,7 +14,7 @@
     - [Scripting](./fyrox/scripting/scripting.md)
       - [Plugins](./fyrox/scripting/plugin.md)
       - [Executor](./fyrox/scripting/executor.md)
-      - [Scripts (WIP)](./fyrox/scripting/script.md)
+      - [Scripts](./fyrox/scripting/script.md)
     - [Scene](./fyrox/scene/scene.md)
       - [Graph](./fyrox/scene/graph.md) 
       - [Prefabs](./fyrox/scene/prefab.md) 

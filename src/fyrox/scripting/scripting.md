@@ -8,6 +8,3 @@ Fyrox uses scripts to create custom game logic, scripts can be written only in R
 be crash-free, fast and easy to refactor.
 
 Next chapters will cover all parts and will help you to learn how to use plugins + scripts correctly.
-
-**Important notes:** Read scripting introduction [here](../beginning/scripting.md) first, before continue reading next
-chapters.
