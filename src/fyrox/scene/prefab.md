@@ -35,6 +35,14 @@ generic properties from parent prefabs.
 
 ## Hierarchical Prefabs
 
-Prefabs can have other prefab instances inside of it. This means that you can, for example, create a room populated with
-instances of other prefabs (bookshelves, chairs, tables, etc) and then use the room prefab to build a bigger scene.
+Prefabs can have other prefab instances inside it. This means that you can, for example, create a room populated with
+instances of other prefabs (bookshelves, chairs, tables, etc.) and then use the room prefab to build a bigger scene.
 The changes in the base prefabs will be reflected in their instances, regardless of how deep the hierarchy is.
+
+## Prefabs and Scripts
+
+Prefab entities can have script assigned, the engine will create respective instances when you'll instantiate a prefab
+in a scene. The main difference here, is in property inheritance - current version of the engine (0.27) does not support
+inheritance for properties in scripts. This means, that making hierarchical prefabs with scripts could be problematic,
+there is no way to create a basic prefab with scripts and change properties of scripts in derived prefabs while keeping
+the inheritance.

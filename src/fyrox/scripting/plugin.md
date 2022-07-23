@@ -1,7 +1,7 @@
 # Plugins
 
-A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and can provide
-a set of scripts, that can be used to assign custom logic to scene nodes. Every script belongs only to one plugin.
+A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and provides
+a set of scripts, that can be used to assign custom logic to scene nodes. Every script belongs to only one plugin.
 
 Plugin is an "entry point" of your game, it has a fixed set of methods that can be used for initialization, update,
 OS event handling, etc. Every plugin is statically linked to the engine (editor), there is no support for hot-reloading
