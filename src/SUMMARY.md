@@ -31,7 +31,7 @@
       - [Physics](./fyrox/physics/physics.md)
         - [Rigid body](./fyrox/physics/rigid_body.md)
         - [Collider](./fyrox/physics/collider.md)
-        - [Joint (WIP)](./fyrox/physics/joint.md)
+        - [Joint](./fyrox/physics/joint.md)
       - [Sound](./fyrox/sound/sound.md)
         - [HRTF (WIP)](./fyrox/sound/hrtf.md)
       - [Animation (WIP)](./fyrox/animation/animation.md)
