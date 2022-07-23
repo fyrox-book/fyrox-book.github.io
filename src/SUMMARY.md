@@ -1,7 +1,7 @@
 # Summary
 
 - [Introduction](./introduction.md)
-- [fyrox](./fyrox/introduction.md)
+- [Fyrox](./fyrox/introduction.md)
     - [Getting started](./fyrox/beginning/getting_started.md)
       - [Editor, Plugins and Scripts](./fyrox/beginning/scripting.md) 
       - [Editor Overview](./fyrox/beginning/editor_overview.md)

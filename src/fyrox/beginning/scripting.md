@@ -9,7 +9,7 @@ also you'll learn how to run the editor.
 
 Fyrox plugins are static, this means that you must re-compile your game or editor if you change source code of your game,
 such architecture requires some boilerplate code that is generic for every game. Fyrox offers special tiny tool - 
-`fyrox-template` - it allows you to generate all boilerplate parts in a single command. Install it using the following 
+`fyrox-template` - it helps you to generate all boilerplate parts in a single command. Install it using the following 
 command:
 
 ```shell
@@ -40,9 +40,7 @@ editor:
 ![editor](editor.png)
 
 In the editor you can start making your game scene. **Important note:** your scene must have at least one camera,
-otherwise you won't see anything.
-
-Read the next chapter to learn how to use the editor.
+otherwise you won't see anything. Read the next chapter to learn how to use the editor.
 
 ## Adding Game Logic
 

@@ -1,7 +1,7 @@
 # FyroxEd Overview
 
 FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
-that allows you to build your game from start to finish with low effort.
+that allows you to build your game from start to finish with relatively low effort.
 
 You'll be spending a lot of time in the editor (FyroxEd), so you should get familiar with it and learn how to use its 
 basic functionality. This chapter will guide you through basics, advanced topics will be covered in respective chapters.
@@ -33,7 +33,7 @@ must have a scene created (or loaded) to begin working with the editor. To creat
 
 To load existing scene, go to `File -> Load` and select desired scene using file browser.
 
-## Populating Scene
+## Populating Your Scene
 
 Scene can be filled with various objects, there are two equivalent ways of creating game entities:
 
@@ -69,12 +69,18 @@ window:
 - `[4]` - Rotate interaction mode
 - `[Ctrl]+[Z]` - Undo
 - `[Ctrl]+[Y]` - Redo
+- `[Delete]` - deletes current selection.
 
 ## Play Mode
 
-One of the key features of the editor is that it allows you to run your game inside it. Use `Play/Stop` button at the
+One of the key features of the editor is that it allows you to run your game from it. Use `Play/Stop` button at the
 top of `Scene Preview` window to enter (or leave) Play Mode. Keep in mind, that editor UI will be locked while you're
-in the Play Mode.
+in the Play Mode. 
+
+Play Mode can be activated only for projects that made with `fyrox-template` (or have similar structure). The editor
+calls `cargo` commands to build and run your game in a separate process. Running the game in a separate process ensures
+that the editor won't crash if the game does, it also provides excellent isolation between the game and the editor, not
+giving a chance to break the editor by running the game.
 
 ## Additional Utilities
 
