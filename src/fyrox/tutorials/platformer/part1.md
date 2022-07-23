@@ -35,11 +35,11 @@ cargo install fyrox-template
 Navigate to a folder where you want the project to be created and do the following command:
 
 ```shell
-fyrox-template --name platformer
+fyrox-template init --name platformer --style 2d
 ```
 
-The tool accepts only one argument - project name (it could be extended in the future). After the project is generated, you
-should memorize two commands:
+The tool accepts two arguments - project name and a style, we're interested in 2D game so the style is set to 2D. After
+the project is generated, you should memorize two commands:
 
 - `cargo run --package editor --release` - launches the editor with your game attached, the editor allows you to run your game
 inside it and edit game entities. It is intended to be used only for development.
@@ -52,7 +52,7 @@ Navigate to the `platformer` directory and run `cargo run --package editor --rel
 
 Great! Now we can start making our game. Go to `game/src/lib.rs` - it is where your game logic is located, as you can see
 the `fyrox-template` generate quite some code for you. There are tiny comments about which place is for what. For more info
-about each method, please refer [to the docs](https://docs.rs/fyrox/0.26.0/fyrox/plugin/trait.Plugin.html).
+about each method, please refer [to the docs](https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html).
 
 ## Using the Editor
 
@@ -65,13 +65,13 @@ At first, we need some assets, I prepared all required (and some more) in a sepa
 assets all over the internet. Download assets from [here](assets.zip) and unpack them in a `data` folder in the root folder of
 your project.
 
-Let's start by creating a new scene. Run the editor and go to `File -> New Scene`. Since we're making a 2D game, switch the editor
+Let's start filling the scene. Run the editor and remove all content from the generated scene. Since we're making a 2D game, switch the editor's
 camera mode to `Orthographic` at the right top corner of the scene preview window. Now we need to populate the scene with some objects,
 we'll start by adding a simple ground block. Right-click on `__ROOT__` of the scene in `World Viewer` and select
 `Add Child -> Physics2D -> Rigid Body`. This will create a rigid body for the ground block, select the rigid body, and
 set `Body Type` to `Static` in `Inspector`, by doing this we're telling the physics engine that our ground block should not move
-and be rock-solid.
-Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions, right-click on the rigid body in `Inspector` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
+and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions, 
+right-click on the rigid body in `Inspector` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
 body, by default it has a `Cuboid` shape with a `1.0` meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click `Add Child -> 2D -> Rectangle`. This adds a simple 2D sprite, select it and set a texture
 to it by drag'n'dropping it from the asset browser on the white field of the `Texture` field in the `Inspector`. For my scene, I'm gonna
@@ -113,30 +113,9 @@ If everything is done correctly, you should get something like this:
 
 ![editor_step5](editor_step5.png)
 
-Save your scene to `data/scene.rgs` - go to `File -> Save Scene`, select `data` folder in the tree and set filename to `scene.rgs`. Now we can
-run the game using the `Play/Stop` button at the top of the scene previewer. You should see pretty much the same as in the scene preview, except
-for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts, but at first, let's make our life easier
-and force the editor to load the scene for us on startup. Go to `editor/src/main.rs` and replace this:
-
-```rust,no_run,compile_fail
-Some(StartupData {
-    working_directory: Default::default(),
-    // Set this to `"path/to/your/scene.rgs".into()` to force the editor to load the scene on startup.
-    scene: Default::default(),
-})
-```
-
-with this
-
-```rust,no_run,compile_fail
-Some(StartupData {
-    working_directory: Default::default(),
-    scene: "data/scene.rgs".into(),
-})
-```
-
-Now if you re-run the editor, it will automatically load the requested scene, this saves some extra clicks and only a few seconds,
-but if you multiply that by a number of restarts, this will give you a decent time save.
+Save your scene by goint to `File -> Save Scene`. Now we can run the game using the `Play/Stop` button at the top of the 
+scene previewer. You should see pretty much the same as in the scene preview, except
+for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts.
 
 As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
 at the beginning of the `game/src/lib.rs`:
@@ -147,7 +126,7 @@ use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
         futures::executor::block_on,
-        inspect::{Inspect, PropertyInfo},
+        inspect::prelude::*,
         pool::Handle,
         uuid::{uuid, Uuid},
         visitor::prelude::*,
@@ -250,16 +229,16 @@ not be able to save and load your scripts. To generate a new UUID, use [Online U
 any other tool that can generate UUIDs.
 
 Finally, we implement `ScriptTrait` for the `Player`. It has a bunch of methods, their names speak for themselves. Learn more about
-every method in [documentation](https://docs.rs/fyrox/0.26.0/fyrox/script/trait.ScriptTrait.html)
+every method in [documentation](https://docs.rs/fyrox/latest/fyrox/script/trait.ScriptTrait.html)
 
 Before we can use the script in the editor, we must tell the engine that our script exists - we must register it. Remember that
-`on_register` method in the `Plugin` trait implementation? It is exactly for script registration, replace its implementation with the following
+`register` method in the `PluginConstructor` trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:
 
 ```rust,no_run,compile_fail
-fn on_register(&mut self, context: PluginRegistrationContext) {
+fn register(&mut self, context: PluginRegistrationContext) {
     let script_constructors = &context.serialization_context.script_constructors;
-    script_constructors.add::<Game, Player, _>("Player");
+    script_constructors.add::<Player>("Player");
 }
 ```
 
@@ -491,7 +470,7 @@ impl Animation {
 }
 ```
 
-The code snippets are quite big, but this is pretty much everything we need for simple keyframe animation.
+The code snippet is quite big, but this is pretty much everything we need for simple keyframe animation.
 We start by defining the `KeyFrameTexture` structure - it is a simple new-type-ish structure that holds a single
 field - optional texture handle.
 
@@ -660,29 +639,6 @@ Now we need to go to the editor again and add the animations to the `Player`, se
 find the `Script` section in the `Inspector`. Add two animations there like so:
 
 ![editor_step6](editor_step6.png)
-
-## Standalone Game
-
-As a final step, we'll add proper support for standalone mode ("production builds"), let's replace `on_standalone_init`
-with the following code:
-
-```rust,no_run,compile_fail
-fn on_standalone_init(&mut self, context: PluginContext) {
-    let mut scene = block_on(
-        block_on(SceneLoader::from_file(
-            "data/scene.rgs",
-            context.serialization_context.clone(),
-        ))
-        .unwrap()
-        .finish(context.resource_manager.clone()),
-    );
-
-    self.set_scene(context.scenes.add(scene), context);
-}
-```
-
-The code just loads our scene and sets it as current, we need to do this manually when the game runs in standalone mode
-(without editor), because the editor does some work for us when we run the game inside it.
 
 ## Conclusion
 
