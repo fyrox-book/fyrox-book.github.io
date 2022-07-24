@@ -89,6 +89,8 @@
         - [Window](./fyrox/ui/window.md)        
         - [Wrap panel](./fyrox/ui/wrap_panel.md)        
     - [Serialization (WIP)](./fyrox/serialization/serialization.md)
+    - [Miscellaneous](./fyrox/misc/misc.md)
+      - [Log](./fyrox/misc/log.md)
     - [Tutorials](./fyrox/tutorials/tutorials.md)
       - [FPS Tutorial](./fyrox/tutorials/fps/intro.md)
         - [Character controller](./fyrox/tutorials/fps/tutorial-1/tutorial-part-1.md)
