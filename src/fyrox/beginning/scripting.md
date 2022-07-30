@@ -16,6 +16,14 @@ command:
 cargo install fyrox-template
 ```
 
+For Linux, you may need to specify installation directory explicitly, because `cargo` puts binaries into `/usr/.cargo/bin`
+which may not be in `PATH`. You can either register the previous path in `PATH` environment variable, or directly
+specify the location that is already in path:
+
+```shell
+cargo install fyrox-template --root /usr/bin
+```
+
 Navigate to a folder where you want the project to be created and do the following command:
 
 ```shell
