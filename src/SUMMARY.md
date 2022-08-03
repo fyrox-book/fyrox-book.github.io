@@ -29,6 +29,7 @@
         - [Rigid body](./fyrox/physics/rigid_body.md)
         - [Collider](./fyrox/physics/collider.md)
         - [Joint](./fyrox/physics/joint.md)
+        - [Ray Casting](./fyrox/physics/ray.md)
       - [Sound](./fyrox/sound/sound.md)
         - [HRTF (WIP)](./fyrox/sound/hrtf.md)
         - [Effects (WIP)](./fyrox/sound/effects.md)
