@@ -1,5 +1,7 @@
 # FPS Tutorial Part 1 - Character Controller.
 
+**WARNING: This tutorial is using obsolete engine features, which are subject to be removed in future versions!**
+
 **Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/tutorial1-character-controller)
 
 ## Table of contents

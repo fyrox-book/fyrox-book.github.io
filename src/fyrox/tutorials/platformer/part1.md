@@ -1,5 +1,7 @@
 # 2D Platformer Tutorial
 
+**WARNING: This tutorial is using obsolete engine features, which are subject to be removed in future versions!**
+
 ## Table of Contents
 
 - [2D Platformer Tutorial](#2d-platformer-tutorial)
