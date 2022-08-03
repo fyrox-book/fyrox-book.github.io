@@ -12,9 +12,7 @@ Typical script structure could be like this:
 # use fyrox::{
 #     core::{inspect::prelude::*, uuid::{Uuid, uuid}, visitor::prelude::*},
 #     engine::resource_manager::ResourceManager,
-#     event::Event,
-#     gui::inspector::PropertyChanged,
-#     handle_object_property_changed, impl_component_provider,
+#     event::Event, impl_component_provider,
 #     scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
 #     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 # };
@@ -36,12 +34,6 @@ impl TypeUuidProvider for MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
-        // Use `handle_object_property_changed!(self, args, Self::FOO => foo)` here to handle
-        // changing of object properties.
-        false
-    }
-
     fn on_init(&mut self, context: ScriptContext) {
         // Put initialization logic here.
     }
