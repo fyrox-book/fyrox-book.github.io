@@ -83,33 +83,22 @@ useful:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::{framework::GameState, Engine},
-#     gui::{
-#         button::{ButtonMessage, ButtonBuilder},
-#         message::{UiMessage},
-#         widget::WidgetBuilder,
-#         UiNode,
-#     },
+#     event_loop::ControlFlow,
+#     gui::{button::ButtonMessage, message::UiMessage, UiNode},
+#     plugin::PluginContext,
 # };
 # 
-# struct Game {
-#     button: Handle<UiNode>,
-# }
-# 
-impl GameState for Game {
-      // ...
-#     fn init(engine: &mut Engine) -> Self
-#         where
-#             Self: Sized,
-#     {
-#         Self {
-#             button: ButtonBuilder::new(WidgetBuilder::new())
-#                 .with_text("Click me!")
-#                 .build(&mut engine.user_interface.build_ctx()),
-#         }
-#     }
-# 
-    fn on_ui_message(&mut self, engine: &mut Engine, message: UiMessage) {
+struct Game {
+    button: Handle<UiNode>,
+}
+
+impl Game {
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        control_flow: &mut ControlFlow,
+    ) {
         if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 //
@@ -128,50 +117,23 @@ and set `*control_flow = ControlFlow::Exit` if the flag is raised
 
 ```rust,no_run
 # extern crate fyrox;
-#
 # use fyrox::{
-#    core::pool::Handle,
-#    engine::{framework::{GameState, Framework}, Engine},
-#    event_loop::ControlFlow,
-#    gui::{
-#        button::{ButtonBuilder, ButtonMessage},
-#        message::UiMessage,
-#        widget::WidgetBuilder,
-#        UiNode, UserInterface, text::TextBuilder,
-#    },
+#     core::pool::Handle,
+#     event_loop::ControlFlow,
+#     gui::{
+#         button::{ButtonBuilder, ButtonMessage},
+#         message::UiMessage,
+#         text::TextBuilder,
+#         widget::WidgetBuilder,
+#         UiNode, UserInterface,
+#     },
+#     plugin::PluginContext,
 # };
-
-# struct Game {
-#    quit_button_handle: Handle<UiNode>,
-    exit: bool,
-# }
-
-impl GameState for Game {
-    fn init(engine: &mut Engine) -> Self
-    where
-        Self: Sized,
-    {
-        let quit_button_handle = create_button(&mut engine.user_interface);
-        Self {
-            quit_button_handle,
-            exit: false,
-        }
-    }
-
-    fn on_tick(&mut self, engine: &mut Engine, dt: f32, control_flow: &mut ControlFlow) {
-        if self.exit {
-            *control_flow = ControlFlow::Exit;
-        }
-    }
-
-    fn on_ui_message(&mut self, _engine: &mut Engine, message: UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.quit_button_handle {
-                self.exit = true;
-            }
-        }
-    }
+# 
+struct Game {
+    quit_button_handle: Handle<UiNode>,
 }
+
 fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_content(
@@ -182,5 +144,25 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
         .build(&mut ui.build_ctx())
 }
 
+impl Game {
+    fn new(ctx: PluginContext) -> Self {
+        Self {
+            quit_button_handle: create_button(ctx.user_interface),
+        }
+    }
+
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        control_flow: &mut ControlFlow,
+    ) {
+        if let Some(ButtonMessage::Click) = message.data() {
+            if message.destination() == self.quit_button_handle {
+                *control_flow = ControlFlow::Exit;
+            }
+        }
+    }
+}
 ```
 
