@@ -18,7 +18,7 @@ also clear the log using `Clear` button.
 You can use one of `Log::info`, `Log::warn`, `Log::err` methods, or use `Log::writeln` with severity specified. It is also
 possible to select desired severity level:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::utils::log::{Log, MessageKind};
 // These lines will be printed.

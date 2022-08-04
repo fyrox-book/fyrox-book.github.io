@@ -4,7 +4,7 @@ Ray casting allows you to query intersections of a ray with rigid bodies in a sc
 hit-scan weapons (weapons that shoots high-speed projectiles), AI collision avoidance, etc. To query intersections,
 use physics world instance of a scene graph:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::algebra::{Point3, Vector3},
@@ -37,7 +37,15 @@ fn do_ray_cast(graph: &mut Graph, begin: Vector3<f32>, end: Vector3<f32>) -> Vec
 The function above will return a collection of intersections that are sorted by intersection distance (a distance from
 beginning of the ray to an intersection point). Each intersection is represented by the following structure:
 
-```rust
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{
+#         algebra::{Point3, Vector3},
+#         pool::Handle,
+#     },
+#     scene::{graph::physics::FeatureId, node::Node},
+# };
 pub struct Intersection {
     pub collider: Handle<Node>,
     pub normal: Vector3<f32>,
@@ -62,7 +70,7 @@ triangle mesh from the value.
 As you might've noticed, the function above return `Vec<Intersection>` which allocates intersections on heap. This is
 relatively slow and could be sped up a lot by using static array on stack:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{

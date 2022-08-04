@@ -203,7 +203,7 @@ This is **default** behavior. In case of multiline text box hitting Enter key wo
 It is possible specify custom input filter, it can be useful if you're creating special input fields like numerical or
 phone number. A filter can be specified at build stage like so:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

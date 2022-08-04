@@ -9,14 +9,36 @@ the editor passes `override_scene` parameter for the executor when entering the 
 
 Executor is meant to be a part of your project's workspace, its typical look could something like this:
 
-```rust,no_run,compile_fail
+```rust,no_run
 # extern crate fyrox;
-use fyrox::engine::executor::Executor;
-use your_game::Game;
-
+# use fyrox::{
+#     core::{pool::Handle, uuid::Uuid},
+#     engine::executor::Executor,
+#     plugin::{Plugin, PluginConstructor, PluginContext},
+#     scene::{node::TypeUuidProvider, Scene},
+# };
+# 
+# struct GameConstructor;
+# impl PluginConstructor for GameConstructor {
+#     fn create_instance(
+#         &self,
+#         _override_scene: Handle<Scene>,
+#         _context: PluginContext,
+#     ) -> Box<dyn Plugin> {
+#         todo!()
+#     }
+# }
+# 
+# impl TypeUuidProvider for GameConstructor {
+#     fn type_uuid() -> Uuid {
+#         todo!()
+#     }
+# }
+# 
 fn main() {
     let mut executor = Executor::new();
-    executor.add_plugin_constructor(Game::new());
+    // Register your game constructor here.
+    executor.add_plugin_constructor(GameConstructor);
     executor.run()
 }
 ```
@@ -36,7 +58,7 @@ This section covers typical use cases for the `Executor`.
 
 You can set window title by accessing window instance and calling `set_title`:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::engine::executor::Executor;
 # let mut executor = Executor::new();

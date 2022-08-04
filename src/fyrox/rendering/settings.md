@@ -3,7 +3,9 @@
 Renderer has a large set of settings, that allows you to tweak graphics quality to find optimal balance between
 rendering quality and performance. Quality settings are represented by the following structure:
 
-```rust
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::renderer::{CsmSettings, ShadowMapPrecision};
 struct QualitySettings {
     point_shadow_map_size: usize,
     point_soft_shadows: bool,
@@ -72,7 +74,7 @@ quality-performance balance.
 
 To apply the settings, use `renderer.set_quality_settings` method:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     renderer::{QualitySettings, Renderer},

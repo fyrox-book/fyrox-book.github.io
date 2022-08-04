@@ -10,7 +10,7 @@ Typical script structure could be like this:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{inspect::prelude::*, uuid::{Uuid, uuid}, visitor::prelude::*},
+#     core::{inspect::prelude::*, uuid::{Uuid, uuid}, visitor::prelude::*, reflect::Reflect},
 #     engine::resource_manager::ResourceManager,
 #     event::Event, impl_component_provider,
 #     scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
@@ -20,7 +20,7 @@ Typical script structure could be like this:
 # impl GameConstructor {
 #     fn type_uuid() -> Uuid { todo!() } 
 # }
-#[derive(Visit, Inspect, Default, Debug, Clone)]
+#[derive(Visit, Reflect, Inspect, Default, Debug, Clone)]
 struct MyScript {
     // Add fields here.
 }
@@ -110,6 +110,7 @@ you need to register it in the list of script constructors like so:
 #         core::{
 #             visitor::prelude::*,
 #             inspect::prelude::*,
+#             reflect::Reflect,  
 #             pool::Handle,
 #             uuid::Uuid
 #         },
@@ -118,7 +119,7 @@ you need to register it in the list of script constructors like so:
 #         script::ScriptTrait,
 #     };
 # 
-#     #[derive(Inspect, Visit, Default, Copy, Clone, Debug)]
+#     #[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
 #     struct MyScript;
 # 
 #     impl TypeUuidProvider for MyScript {
@@ -163,13 +164,13 @@ The script can be attached to a scene node from code:
 ```rust, no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{inspect::prelude::*, uuid::Uuid, visitor::prelude::*},
+#     core::{inspect::prelude::*, uuid::Uuid, visitor::prelude::*, reflect::Reflect},
 #     impl_component_provider,
 #     scene::node::{Node, TypeUuidProvider},
 #     script::{Script, ScriptTrait},
 # };
 # 
-# #[derive(Inspect, Visit, Default, Copy, Clone, Debug)]
+# #[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
 # struct MyScript;
 # 
 # impl TypeUuidProvider for MyScript {
@@ -202,7 +203,14 @@ Initialization as well as update of newly assigned script will happen on next up
 Script context provides access to the environment that can be used to modify engine and game state from scripts. Typical
 content of the context is something like this:
 
-```rust
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     engine::resource_manager::ResourceManager,
+#     plugin::Plugin,
+#     scene::{node::Node, Scene},
+# };
 pub struct ScriptContext<'a, 'b> {
     pub dt: f32,
     pub plugin: &'a mut dyn Plugin,

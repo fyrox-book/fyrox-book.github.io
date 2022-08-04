@@ -87,7 +87,7 @@ impl NodeTrait for CustomNode {
 
 Once the node is defined, you can create is as usual and put in the graph:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,

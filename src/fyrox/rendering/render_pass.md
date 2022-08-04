@@ -10,7 +10,7 @@ effects.
 Render pass is a complex thing, that requires relatively deep knowledge in computer graphics. It is intended to be used
 by experienced graphics programmers. Here's the simplest render pass that renders unit quad without any textures.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Matrix4, pool::Handle, sstorage::ImmutableString},
@@ -113,7 +113,14 @@ target frame buffer.
 Every render pass must be registered in the renderer, otherwise it won't be used. You can register a render pass using
 `add_render_pass` method of the `Renderer`:
 
-```rust,compile_fail
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::renderer::{Renderer, SceneRenderPass};
+# use std::{cell::RefCell, rc::Rc};
+# 
+# struct MyRenderPass;
+# impl SceneRenderPass for MyRenderPass {}
+# 
 fn usage_example(renderer: &mut Renderer, render_pass: MyRenderPass) {
     let shared_pass = Rc::new(RefCell::new(render_pass));
     // You can share the pass across multiple places to be able to control it.

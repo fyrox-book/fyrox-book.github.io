@@ -44,7 +44,7 @@ you may want to use sprite sheets to animate your 2D entities. In this case you 
 of an image. It is possible to do by using `set_uv_rect` method of the Rectangle node. Here's an example of setting
 right-top quarter of an image to be used by a Rectangle node:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{core::math::Rect, scene::dim2::rectangle::Rectangle};
 # 
