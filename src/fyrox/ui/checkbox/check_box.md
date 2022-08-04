@@ -72,41 +72,32 @@ a `CheckBoxMessage::Check` message. To do so, you can do something like this:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::{framework::GameState, Engine},
-#     gui::{
-#         check_box::{CheckBoxBuilder, CheckBoxMessage},
-#         message::{UiMessage},
-#         widget::WidgetBuilder,
-#         UiNode,
-#     },
+#     engine::Engine,
+#     event_loop::ControlFlow,
+#     gui::{check_box::CheckBoxMessage, message::UiMessage, UiNode},
+#     plugin::PluginContext,
 # };
-
-struct Game {
-    checkbox: Handle<UiNode>,
-}
-
-impl GameState for Game {
-      // ...
-    fn init(engine: &mut Engine) -> Self
-        where
-            Self: Sized,
-    {
-        Self {
-            checkbox: CheckBoxBuilder::new(WidgetBuilder::new())
-                .build(&mut engine.user_interface.build_ctx()),
-        }
-    }
-
-    fn on_ui_message(&mut self, engine: &mut Engine, message: UiMessage) {
-        if let Some(CheckBoxMessage::Check(value)) = message.data() {
-            if message.destination() == self.checkbox {
-                //
-                // Insert your clicking handling code here.
-                //
-            }
+# 
+# struct Foo {
+#     checkbox: Handle<UiNode>,
+# }
+# 
+# impl Foo {
+fn on_ui_message(
+    &mut self,
+    context: &mut PluginContext,
+    message: &UiMessage,
+    control_flow: &mut ControlFlow,
+) {
+    if let Some(CheckBoxMessage::Check(value)) = message.data() {
+        if message.destination() == self.checkbox {
+            //
+            // Insert your clicking handling code here.
+            //
         }
     }
 }
+# }
 ```
 
 Keep in mind that checkbox (as any other widget) generates `WidgetMessage` instances. You can catch them too and
