@@ -52,7 +52,6 @@
       - [Animation Machines (WIP)](./fyrox/resources/absm.md)
     - [User Interface](./fyrox/ui/ui.md)
       - [Basic concepts](./fyrox/ui/basic_concepts/basic_concepts.md)
-      - [Setting up a user interface](./fyrox/ui/setting_up.md)      
       - [General rules](./fyrox/ui/general_rules.md)
       - [Fonts](./fyrox/ui/font.md)
       - [Theme](./fyrox/ui/theme.md)

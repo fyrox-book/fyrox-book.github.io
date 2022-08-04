@@ -122,23 +122,23 @@ at the beginning of the `game/src/lib.rs`:
 
 ```rust,no_run
 # extern crate fyrox;
+use fyrox::plugin::PluginConstructor;
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
         futures::executor::block_on,
-        inspect::prelude::*,
+        inspect::{Inspect, PropertyInfo},
         pool::Handle,
+        reflect::Reflect,
         uuid::{uuid, Uuid},
         visitor::prelude::*,
     },
     engine::resource_manager::ResourceManager,
     event::{ElementState, Event, VirtualKeyCode, WindowEvent},
-    gui::inspector::{CollectionChanged, FieldKind, PropertyChanged},
-    handle_collection_property_changed, handle_object_property_changed,
+    impl_component_provider,
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     resource::texture::Texture,
     scene::{
-        camera::Camera,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
         node::{Node, TypeUuidProvider},
         Scene, SceneLoader,
@@ -158,9 +158,11 @@ move. Navigate to `game/src/lib.rs` and at the end of the file add the following
 #     core::{
 #         inspect::{Inspect, PropertyInfo},
 #         uuid::{uuid, Uuid},
+#         reflect::Reflect,
 #         visitor::prelude::*,
 #     },
 #     event::Event,
+#     impl_component_provider,
 #     gui::inspector::PropertyChanged,
 #     scene::node::TypeUuidProvider,
 #     script::{ScriptContext, ScriptTrait},
@@ -174,8 +176,10 @@ move. Navigate to `game/src/lib.rs` and at the end of the file add the following
 #     }
 # }
 # 
-#[derive(Visit, Inspect, Debug, Clone, Default)]
+#[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
 struct Player;
+
+impl_component_provider!(Player,);
 
 impl TypeUuidProvider for Player {
     // Returns unique script id for serialization needs.
@@ -185,11 +189,6 @@ impl TypeUuidProvider for Player {
 }
 
 impl ScriptTrait for Player {
-    // Accepts events from Inspector in the editor and modifies self state accordingly.
-    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
-        false
-    }
-
     // Called once at initialization.
     fn on_init(&mut self, context: ScriptContext) {}
 
@@ -215,9 +214,10 @@ This is a typical "skeleton" of any script, for now, its methods are pretty much
 Let's go over the most important parts. The snippet starts from the `Player` structure definition which has `#[derive(Visit, Inspect, Debug, Clone, Default)]`
 attributes:
 
-- `Visit` implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.
-- `Inspect` implements read-only static reflection that provides introspection for your type - in other words, it allows the editor
-to "see" what's inside your structure.
+- `Visit` - implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.
+- `Inspect` - generates metadata for the fields of your type - in other words, it allows the editor to "see" what's inside
+your structure and show additional information attached to the fields via proc-macro attributes.
+- `Reflect` - implements compile-time reflection that allows the editor to mutate your objects.
 - `Debug` - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.
 - `Clone` - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be
 copied.
@@ -253,54 +253,26 @@ it is a perfect opportunity to learn how the engine and the editor operate with 
 we need to get its sprite first. Let's start by adding the required field in the `Player` structure:
 
 ```rust,no_run,compile_fail
-#[derive(Visit, Inspect, Debug, Clone, Default)]
+#[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
 struct Player {
     sprite: Handle<Node>,
 }
 ```
 
-After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector, but for now, any
-changes done in Inspector will not be applied to the script instance. We need to take care of this, it is a bit of manual work,
-future versions of the engine will most likely do this automatically. We're interested in the `on_property_changed` method, fill it
-the following code snippet:
-
-```rust,no_run,compile_fail
-handle_object_property_changed!(self, args, Self::SPRITE => sprite)
-```
-
-This single line of code applies changes to the `sprite` field if in the editor it's "view" was edited. The macro hides most of boilerplate
-code from you, when a macro is expanded the result code would look like:
-
-```rust,no_run,compile_fail
-if let FieldKind::Object(ref value) = args.value {
-    match args.name.as_ref() {
-        Self::SPRITE => {
-            self.sprite = value.cast_clone().unwrap();
-            true
-        }
-        _ => false,
-    }
-} else {
-    false
-}
-```
-
-It is good to know what it is doing, before using macros. At first, the code checks value kind, if it is a simple object, then we're
-checking the name of the property, and if it is our `sprite`, setting the value. The method expects `true` or `false` as a return value,
-what does each mean? `true` means that the property was handled, and `false` - the opposite. If the editor sees `false` it prints a warning
-message informing you that the property handler is missing.
-
-To assign the correct handle of the sprite to the respective field in script properties, hold `Alt` and start dragging the sprite node from
-the world viewer to the respective field in the player script. Release the mouse button and if everything is ok, the field should "say"
-something different than "Unassigned".
+After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector. 
+To assign the correct handle of the sprite to the respective field in script properties, hold `Alt` and start dragging
+the sprite node from the world viewer to the respective field in the player script. Release the mouse button and if 
+everything is ok, the field should "say" something different than "Unassigned".
 
 Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player.
 Go to the `Player` structure and add the following fields:
 
-```rust,no_run,compile_fail
+```rust,no_run
+# struct Foo {
 move_left: bool,
 move_right: bool,
 jump: bool,
+# }
 ```
 
 These fields will store the state of keyboard keys responsible for player movement. Now for `on_os_event`, add the following code there:
@@ -325,15 +297,25 @@ if let Event::WindowEvent { event, .. } = event {
 The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
 `on_update`. The method is called each frame and allows you to put game logic there:
 
-```rust,no_run,compile_fail
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{core::algebra::Vector2, scene::dim2::rigidbody::RigidBody, script::ScriptContext};
+# 
+# struct Foo {
+#     move_left: bool,
+#     move_right: bool,
+#     jump: bool,
+# }
+# 
+# impl Foo {
 // Called every frame at fixed rate of 60 FPS.
 fn on_update(&mut self, context: ScriptContext) {
     // The script can be assigned to any scene node, but we assert that it will work only with
     // 2d rigid body nodes.
-    if let Some(rigid_body) = context.node.cast_mut::<RigidBody>() {
+    if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::<RigidBody>() {
         let x_speed = match (self.move_left, self.move_right) {
             (true, false) => 3.0,
-            (false, true) -> -3.0,
+            (false, true) => -3.0,
             _ => 0.0,
         };
 
@@ -344,6 +326,7 @@ fn on_update(&mut self, context: ScriptContext) {
         }
     }
 }
+# }
 ```
 
 Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
@@ -393,16 +376,12 @@ for quite a long period. It is easy to make such an animation "system" ourselves
 Put this code snippet somewhere at the end of `lib.rs` of the `game` project and we'll start learning what it's doing:
 
 ```rust,no_run,compile_fail
-#[derive(Default, Inspect, Visit, Debug, Clone)]
+#[derive(Default, Reflect, Inspect, Visit, Debug, Clone)]
 pub struct KeyFrameTexture {
     texture: Option<Texture>,
 }
 
 impl KeyFrameTexture {
-    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
-        handle_object_property_changed!(self, args, Self::TEXTURE => texture)
-    }
-
     fn restore_resources(&mut self, resource_manager: ResourceManager) {
         // It is very important to restore texture handle after loading, otherwise the handle will
         // remain in "shallow" state when it just has path to data, but not the actual resource handle.
@@ -414,7 +393,7 @@ impl KeyFrameTexture {
     }
 }
 
-#[derive(Inspect, Visit, Debug, Clone)]
+#[derive(Inspect, Reflect, Visit, Debug, Clone)]
 pub struct Animation {
     name: String,
     keyframes: Vec<KeyFrameTexture>,
@@ -437,16 +416,6 @@ impl Default for Animation {
 }
 
 impl Animation {
-    // Once again, we must implement support for property editing, it is a bit tedious
-    // but must be done once.
-    fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
-        handle_object_property_changed!(self, args,
-            Self::CURRENT_FRAME => current_frame,
-            Self::NAME => name,
-            Self::SPEED => speed
-        ) || handle_collection_property_changed!(self, args, Self::KEYFRAMES => keyframes)
-    }
-
     pub fn current_frame(&self) -> Option<&KeyFrameTexture> {
         self.keyframes.get(self.current_frame as usize)
     }
@@ -474,11 +443,9 @@ The code snippet is quite big, but this is pretty much everything we need for si
 We start by defining the `KeyFrameTexture` structure - it is a simple new-type-ish structure that holds a single
 field - optional texture handle.
 
-Next goes the implementation of the structure, in the `on_property_changed` we're handing editor's messages
-and syncing the state of the keyframe. The next method is more interesting - `restore_resources` restores texture
-handle on deserialization. Sounds complicated, why do we need to do anything after deserialization? Well,
-the answer is simple - we don't store texture data in the texture, instead, we just save the path to an external
-resource and request the resource manager to load the texture.
+`restore_resources` restores texture handle on deserialization. Sounds complicated, why do we need to do anything after
+deserialization? Well, the answer is simple - we don't store texture data in the texture, instead, we just save the path
+to an external resource and request the resource manager to load the texture.
 
 Finally, we're at the `Animation` structure, nothing unusual there, it just stores a list of keyframes, an index
 of a current keyframe, speed, and some service fields. The implementation of it is very straightforward too,
@@ -570,13 +537,15 @@ As a second step, replace the contents of the `editor/src/main.rs` with the foll
 
 ```rust,no_run,compile_fail
 //! Editor with your game connected to it as a plugin.
-use fyrox::gui::inspector::editors::collection::VecCollectionPropertyEditorDefinition;
 use fyrox::{
     event_loop::EventLoop,
-    gui::inspector::editors::inspectable::InspectablePropertyEditorDefinition,
+    gui::inspector::editors::{
+        collection::VecCollectionPropertyEditorDefinition,
+        inspectable::InspectablePropertyEditorDefinition,
+    },
 };
 use fyroxed_base::{Editor, StartupData};
-use platformer::{Animation, Game, KeyFrameTexture};
+use platformer::{Animation, GameConstructor, KeyFrameTexture};
 
 fn main() {
     let event_loop = EventLoop::new();
@@ -587,7 +556,7 @@ fn main() {
             scene: "data/scene.rgs".into(),
         }),
     );
-    editor.add_game_plugin(Game::new());
+    editor.add_game_plugin(GameConstructor);
 
     // Register property editors here.
     let property_editors = &editor.inspector.property_editors;
@@ -624,16 +593,6 @@ which was shown earlier.
 
 This is yet another place for manual work, but it must be done, the editor cannot use "magic" to understand which widget
 to use to visualize your data, there's no magic here.
-
-And a final step is to change how the script properties are handled:
-
-```rust,no_run,compile_fail
-fn on_property_changed(&mut self, args: &PropertyChanged) -> bool {
-    handle_object_property_changed!(self, args, Self::SPRITE => sprite)
-        // The following line handles collection modification.
-        || handle_collection_property_changed!(self, args, Self::ANIMATIONS => animations)
-}
-```
 
 Now we need to go to the editor again and add the animations to the `Player`, select the player's rigid body, and
 find the `Script` section in the `Inspector`. Add two animations there like so:
