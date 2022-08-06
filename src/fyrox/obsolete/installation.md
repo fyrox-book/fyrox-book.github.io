@@ -13,7 +13,7 @@ To begin using the engine, just add following lines to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fyrox = "^0.26"
+fyrox = "^0.27"
 ```
 
 This will force Cargo to use the latest **stable** version of the engine.

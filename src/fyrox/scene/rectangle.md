@@ -37,6 +37,31 @@ fn create_rect(graph: &mut Graph, resource_manager: ResourceManager) -> Handle<N
 }
 ```
 
+## Specifying image portion for rendering
+
+By default, Rectangle node uses entire image for rendering, but for some applications it is not enough. For example,
+you may want to use sprite sheets to animate your 2D entities. In this case you need to be able to use only portion
+of an image. It is possible to do by using `set_uv_rect` method of the Rectangle node. Here's an example of setting
+right-top quarter of an image to be used by a Rectangle node:
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{core::math::Rect, scene::dim2::rectangle::Rectangle};
+# 
+fn set_2nd_quarter_image_portion(rectangle: &mut Rectangle) {
+    rectangle.set_uv_rect(Rect::new(
+        0.5, // Offset by 50% to the right
+        0.0, // No need to offset to bottom.
+        0.5, // Use half (50%) of width and height
+        0.5,
+    ));
+}
+```
+
+Keep in mind that every part of uv rectangle is proportional. For example 0.5 means 50%, 1.5 = 150% and so on. If width
+or height is exceeding 1.0 and the texture being used is set to Wrapping mode at respective axis, the image will tile
+across axes.
+
 ## Performance
 
 Rectangles use specialized renderer that is heavily optimized to render tons of rectangles at once, so you can use 

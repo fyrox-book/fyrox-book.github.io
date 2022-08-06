@@ -46,7 +46,7 @@ functionality from the Tree, but add something new. The Tree widget can manage i
 somehow get required data from subtree. Direct type casting would fail in this case, because now you have something
 like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::gui::tree::Tree;
 struct CustomTree {

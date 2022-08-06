@@ -2,7 +2,7 @@
 
 Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
 of the book will guide you through the basics of the engine. Fyrox 0.25+ changed game development paradigm - you
-should use the editor (Fyroxed) to make your game, like in many other game engines.
+should use the editor (FyroxEd) to make your game, like in many other game engines.
 
 ## Engine vs Framework
 
@@ -10,7 +10,7 @@ There are two distinct concepts in game development - engine and framework, but 
 confused what is framework and what is engine. Fyrox is full-featured game **engine**, what does that mean and why it
 is not a framework? Key features that allow you to understand that you're looking at game engine are following:
 
-- Editor - true game engine provides integrated game development environment, that allows you to run your game inside
+- Editor - true game engine provides integrated game development environment, that allows you to run your game from
 it, tweak parameters of your game entities, etc.
 - Assets pipeline - engine has pretty rigid assets processing pipeline. 
 - Standard programming patterns - engine "forces" you to use it in almost single way, there is pretty much no space 

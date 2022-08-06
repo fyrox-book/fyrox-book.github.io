@@ -155,7 +155,7 @@ fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
     scene.graph[light_handle]
         .query_component_mut::<BaseLight>()
         .unwrap()
-        .set_scatter(Vector3::new(0.03, 0.035, 0.055))
+        .set_scatter(Vector3::new(0.03, 0.035, 0.055));
 }
 ```
 
@@ -186,7 +186,7 @@ fn switch_shadows(scene: &mut Scene, light_handle: Handle<Node>, cast_shadows: b
     scene.graph[light_handle]
         .query_component_mut::<BaseLight>()
         .unwrap()
-        .set_cast_shadows(cast_shadows)
+        .set_cast_shadows(cast_shadows);
 }
 ```
 

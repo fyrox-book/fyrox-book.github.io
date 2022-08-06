@@ -35,7 +35,7 @@ rigid bodies.
 
 ## How to create
 
-Use ColliderBuilder to create an instance of collider with any shape you want.
+Use ColliderBuilder to create an instance of collider from code with any shape you want.
 
 ```rust,no_run
 # extern crate fyrox;
@@ -55,3 +55,7 @@ fn create_capsule_collider(graph: &mut Graph) -> Handle<Node> {
         .build(graph)
 }
 ```
+
+In the editor you can use `MainMenu -> Create -> Physics -> Collider`, or right-click on a node in `World Viewer` and
+select `Add Child -> Physics -> Collider`. Collider must be direct child of a rigid body, colliders do nothing on
+their own!

@@ -2,7 +2,7 @@
 
 **WARNING: Manual engine initialization considered obsolete, use plugins and scripts instead.**
 
-The framework might be limiting for some cases, in such situations the engine could be initialized manually. It
+The plugin might be limiting for some cases, in such situations the engine could be initialized manually. It
 requires some decent amount of code and could error-prone for beginners. You should use custom game loop only if
 you're experienced game developer!
 
@@ -67,7 +67,7 @@ fn main() {
                     // ************************
 
                     // It is very important to update the engine every frame!
-                    engine.update(fixed_timestep);
+                    engine.update(fixed_timestep, control_flow);
                 }
 
                 // It is very important to "pump" messages from UI. Even if don't need to
@@ -121,6 +121,3 @@ fn main() {
     });
 }
 ```
-
-As you can see it is tremendously bigger, compared to [Framework](framework.md), but it provides greater
-flexibility compared to `Framework` which may lack a particular feature.
