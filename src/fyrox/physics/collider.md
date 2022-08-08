@@ -59,3 +59,19 @@ fn create_capsule_collider(graph: &mut Graph) -> Handle<Node> {
 In the editor you can use `MainMenu -> Create -> Physics -> Collider`, or right-click on a node in `World Viewer` and
 select `Add Child -> Physics -> Collider`. Collider must be direct child of a rigid body, colliders do nothing on
 their own!
+
+## Using colliders for hit boxes
+
+You can use colliders to simulate hit boxes for your game characters. It can be done by creating a rigid body with
+`KinematicPositionBased` type and an appropriate collider as a child node. As the last step you need to attach the body
+to a bone in your character's model. Here's a quick example from the editor:
+
+![hitbox](./hitbox.png)
+
+As you can see, the rigid body has a capsule collider as a child and the body is attached to the neck bone. The body
+has `KinematicPositionBased` type, which will ensure that the body won't be simulated, instead its position will be 
+synchronized with the position of the parent bone.
+
+To actually use the hit boxes in your game, you can either use a ray-casting to perform a hit scan or you can use 
+contacts information to fetch the stuff with which a hit box was contacted. See [Ray casting](./ray.md) chapter of the
+section.
