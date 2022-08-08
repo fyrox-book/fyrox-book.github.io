@@ -1,90 +1,33 @@
-# Animation (WIP)
+# Animation
 
- Animation blending state machine.
+The engine offers a quite powerful animation system that will help you to animate your game characters. It built around
+skeletal animation and pose blending. Next chapters will help you to understand what this means.
 
- Machine is used to blend multiple animation as well as perform automatic "smooth" transition
- between states. Let's have a quick look at a simple machine graph:
+## What is animation?
 
- ```text
-                                                  +-------------+
-                                                  |  Idle Anim  |
-                                                  +------+------+
-                                                         |
-           Walk Weight                                   |
- +-----------+      +-------+           Walk->Idle Rule  |
- | Walk Anim +------+       |                            |
- +-----------+      |       |      +-------+         +---+---+
-                    | Blend |      |       +-------->+       |
-                    |       +------+ Walk  |         |  Idle |
- +-----------+      |       |      |       +<--------+       |
- | Aim Anim  +------+       |      +--+----+         +---+---+
- +-----------+      +-------+         |                  ^
-           Aim Weight                 | Idle->Walk Rule  |
-                                      |                  |
-                       Walk->Run Rule |    +---------+   | Run->Idle Rule
-                                      |    |         |   |
-                                      +--->+   Run   +---+
-                                           |         |
-                                           +----+----+
-                                                |
-                                                |
-                                         +------+------+
-                                         |  Run Anim   |
-                                         +-------------+
- ```
+Animation is a timeline with tracks, which in their turn have key frames, each key frame holds information about how a 
+parameter should change at a moment in time. When playback time changes, the animation calculates intermediate values
+between key frames using various sorts of interpolation:
 
- Here we have Walk, Idle and Run states which use different sources of poses:
- - Walk - is the most complicated here - it uses result of blending between
-   Aim and Walk animations with different weights. This is useful if your
-   character can only walk or can walk *and* aim at the same time. Desired pose
-   determined by Walk Weight and Aim Weight parameters combination.
- - Run and idle both directly use animation as pose source.
+- Step - value changes from keyframe to keyframe immediately.
+- Linear - value changes linearly from keyframe to keyframe.
+- Cubic - value changes from keyframe to keyframe using cubic interpolation.
 
- There are four transitions between three states each with its own rule. Rule
- is just Rule parameter which can have boolean value that indicates that transition
- should be activated.
+Animation can have multiple tracks, where each track is responsible for animation of a single node (see `Limitations`
+section). 
 
- Example:
+Animations usually prepared in special 3D or 2D modelling software, and then loaded in the engine. Animation loading 
+have no difference to a model resource loading. Model resource can hold any number of animations which will be 
+instantiated to a scene either by calling `Model::instantiate` or by `Model::retarget_animations`.
 
- ```rust,no_run
- # extern crate fyrox;
- use fyrox::{
-     animation::machine::{
-         Machine, State, Transition, PoseNode, node::blend::BlendPose,
-         Parameter, PlayAnimation, PoseWeight, node::blend::BlendAnimations
-     },
-     core::pool::Handle
- };
+## Limitations
 
- // Assume that these are correct handles.
- let idle_animation = Handle::default();
- let walk_animation = Handle::default();
- let aim_animation = Handle::default();
- let model_root = Handle::default();
+Current version of the engine does **not** support animation of arbitrary object properties. At the moment, you can 
+animate only position, scaling, rotation part of a node's transform. While this may seem too limiting, it covers 90%
+of animation use cases. 
 
- let mut machine = Machine::new(model_root);
+Arbitrary property animation however, allows you to animate any property of an object. For example, you may have an 
+animation that animates color of an object. Such functionality is planned for the future versions along with the
+animation editor.
 
- let aim = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
- let walk = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
-
- // Blend two animations together
- let blend_aim_walk = machine.add_node(PoseNode::BlendAnimations(
-     BlendAnimations::new(vec![
-         BlendPose::new(PoseWeight::Constant(0.75), aim),
-         BlendPose::new(PoseWeight::Constant(0.25), walk)
-     ])
- ));
-
- let walk_state = machine.add_state(State::new("Walk", blend_aim_walk));
-
- let idle = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
- let idle_state = machine.add_state(State::new("Idle", idle));
-
- machine.add_transition(Transition::new("Walk->Idle", walk_state, idle_state, 1.0, "WalkToIdle"));
- machine.add_transition(Transition::new("Idle->Walk", idle_state, walk_state, 1.0, "IdleToWalk"));
-
- ```
-
- You can use multiple machines to animate single model - for example one machine can be for
- locomotion and other for combat. This means that locomotion machine will take control over
- lower body and combat machine will control upper body.
+Morphing animation is not supported too, but can be done manually by transforming vertices in a model's vertex buffer. 
