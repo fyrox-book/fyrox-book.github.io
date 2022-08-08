@@ -193,6 +193,17 @@ rigid bodies.</p>
 <p>In the editor you can use <code>MainMenu -&gt; Create -&gt; Physics -&gt; Collider</code>, or right-click on a node in <code>World Viewer</code> and
 select <code>Add Child -&gt; Physics -&gt; Collider</code>. Collider must be direct child of a rigid body, colliders do nothing on
 their own!</p>
+<h2 id="using-colliders-for-hit-boxes"><a class="header" href="#using-colliders-for-hit-boxes">Using colliders for hit boxes</a></h2>
+<p>You can use colliders to simulate hit boxes for your game characters. It can be done by creating a rigid body with
+<code>KinematicPositionBased</code> type and an appropriate collider as a child node. As the last step you need to attach the body
+to a bone in your character's model. Here's a quick example from the editor:</p>
+<p><img src="./hitbox.png" alt="hitbox" /></p>
+<p>As you can see, the rigid body has a capsule collider as a child and the body is attached to the neck bone. The body
+has <code>KinematicPositionBased</code> type, which will ensure that the body won't be simulated, instead its position will be 
+synchronized with the position of the parent bone.</p>
+<p>To actually use the hit boxes in your game, you can either use a ray-casting to perform a hit scan or you can use 
+contacts information to fetch the stuff with which a hit box was contacted. See <a href="./ray.html">Ray casting</a> chapter of the
+section.</p>
 
                     </main>
 
