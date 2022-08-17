@@ -50,6 +50,42 @@ editor:
 In the editor you can start making your game scene. **Important note:** your scene must have at least one camera,
 otherwise you won't see anything. Read the next chapter to learn how to use the editor.
 
+## Using Latest Engine Version
+
+Due to the nature of the software development, some bugs are inevitably sneak in the major releases. Due to this fact, 
+you may want to use the latest engine version from its repository on GitHub, because it most likely has some bugs fixed
+(you can also help fixing any bugs you find or at least [file an issue](https://github.com/FyroxEngine/Fyrox/issues)).
+To do this, you need to specify paths for `fyrox` and `fyroxed_base` dependencies to point them on remote repository.
+There are three places where you need to do this: `game`, `executor`, `editor` projects. At first open `game/Cargo.toml` 
+and change `fyrox` dependency to this:
+
+```toml
+[dependencies]
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
+```
+
+Do the same for `executor/Cargo.toml`. The `editor` has two dependencies we need to change `fyrox` and `fyroxed_base`.
+Open the `editor/Cargo.toml` and set both `fyrox` and `fyroxed_base` dependencies to the following:
+
+```toml
+[dependencies]
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
+fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox/editor" }
+```
+
+Now your game will use the latest engine and editor, but beware - there could be some API breaks and frequent rebuilds
+because of new commits in the remote repository. You can avoid this by specifying a particular commit, just add
+`rev = "desired_commit_hash"` to every dependency like so:
+
+```toml
+[dependencies]
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox/editor", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+```
+
+Learn more about dependency paths in the official `cargo` documentation 
+[here](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories).
+
 ## Adding Game Logic
 
 Any object-specific game logic should be added using scripts. Script is a "container" for data and code, that will be
