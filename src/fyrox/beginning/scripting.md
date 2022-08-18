@@ -70,7 +70,7 @@ Open the `editor/Cargo.toml` and set both `fyrox` and `fyroxed_base` dependencie
 ```toml
 [dependencies]
 fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox/editor" }
+fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox" }
 ```
 
 Now your game will use the latest engine and editor, but beware - there could be some API breaks and frequent rebuilds
@@ -80,7 +80,7 @@ because of new commits in the remote repository. You can avoid this by specifyin
 ```toml
 [dependencies]
 fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox/editor", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
 ```
 
 Learn more about dependency paths in the official `cargo` documentation 
