@@ -187,14 +187,14 @@ fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 Open the <code>editor/Cargo.toml</code> and set both <code>fyrox</code> and <code>fyroxed_base</code> dependencies to the following:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
-fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox/editor&quot; }
+fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
 <p>Now your game will use the latest engine and editor, but beware - there could be some API breaks and frequent rebuilds
 because of new commits in the remote repository. You can avoid this by specifying a particular commit, just add
 <code>rev = &quot;desired_commit_hash&quot;</code> to every dependency like so:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
-fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox/editor&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
+fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 </code></pre>
 <p>Learn more about dependency paths in the official <code>cargo</code> documentation 
 <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
