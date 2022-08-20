@@ -15,23 +15,27 @@ development is quite rapid and image can become outdated pretty easily):
 
 ![Windows](./overview.png)
 
-1) **World viewer** - shows every object in the scene and their relations. It allows you to inspect and edit the 
+- **World viewer** - shows every object in the scene and their relations. It allows you to inspect and edit the 
 contents of the scene in hierarchical form.
-2) **Scene preview** - renders your scene with debug info and various editor-specific objects (like gizmos and
-stuff). Allows you to select, move, rotate, scale, delete, etc. various entities.
-3) **Toolbar** - shows available context-dependent tools.
-4) **Inspector** - allows you to modify various properties of selected object.
-5) **Message log** - shows the important messages from the editor.
-6) **Navmesh panel** - allows you to create/delete and edit navigational meshes.
-7) **Command stack** - shows the most recent actions you've done, allows you to undo and redo the changes on demand.
-8) **Asset browser** - inspects the assets of your game, allows you to instantiate resources in the scene and so on.
+- **Scene preview** - renders your scene with debug info and various editor-specific objects (like gizmos and
+stuff). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a **Toolbar**,
+it shows available context-dependent tools.
+- **Inspector** - allows you to modify various properties of selected object.
+- **Message Log** - shows the important messages from the editor.
+- **Navmesh Panel** - allows you to create/delete and edit navigational meshes.
+- **Command Stack** - shows the most recent actions you've done, allows you to undo and redo the changes on demand.
+- **Asset Browser** - inspects the assets of your game, allows you to instantiate resources in the scene and so on.
+- **Audio Context** - allows you to edit settings of scene's sound context, such as global volume, available sound 
+effects, etc.
 
 ## Creating (Loading) a Scene
 
 FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
 must have a scene created (or loaded) to begin working with the editor. To create a scene click `File -> New Scene`.
 
-To load existing scene, go to `File -> Load` and select desired scene using file browser.
+To load existing scene, go to `File -> Load` and select desired scene using file browser. It is may be very useful
+to use list of recently opened scenes, to load them quickly without a need to go `File -> Load`, search a scene, etc.
+Just go to `File -> Recent Scenes` and click one to load.
 
 ## Populating Your Scene
 
@@ -39,6 +43,14 @@ Scene can be filled with various objects, there are two equivalent ways of creat
 
 - By clicking `Create` main menu item and selecting desired entity.
 - By right-clicking on a game entity in `World Viewer` and selecting desired entity from `Add Child` sub-menu.
+
+Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) and saved in various formats, Fyrox
+supports FBX format, which is supported by pretty much any 3D modelling software. You can add such object to your scene
+by drag'n'dropping a desired asset for Asset Browser. Find one in the browser, click on it, hold the button and drag it
+to the Scene Viewer and then release the button. 
+
+You can do the same with other scenes made in the editor (`rgs` files), for example you can create a scene with a few 
+objects in it with some scripts and re-use it across any other scenes. Such scene is called [prefab](../scene/prefab.md).
 
 ## Saving Scene
 
