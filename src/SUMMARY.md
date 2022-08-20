@@ -19,7 +19,7 @@
       - [Mesh node](./fyrox/scene/mesh_node.md)
       - [Light node](./fyrox/scene/light_node.md)
       - [Sprite node](./fyrox/scene/sprite_node.md)
-      - [Particle system node (WIP)](./fyrox/scene/particle_system_node.md)
+      - [Particle system node](./fyrox/scene/particle_system_node.md)
       - [Terrain node (WIP)](./fyrox/scene/terrain_node.md)
       - [Camera node](./fyrox/scene/camera_node.md)
       - [Decal node](./fyrox/scene/decal_node.md)

@@ -23,7 +23,7 @@ it. After that every prefab instance will have your changes!
 
 All you need to do is to make a scene in the editor with all required objects and save it! After that, you can use the
 scene in other scenes and just do its instantiation, as in usual 3D models. You can either instantiate it from the
-editor by drag'n'drop a prefab to scene previewer, or do standard [model resource instantiation](../resources/model.md)
+editor by drag'n'drop a prefab to scene previewer, or do standard [model resource instantiation](../resources/model.md#instantiation)
 
 ## Property inheritance
 
