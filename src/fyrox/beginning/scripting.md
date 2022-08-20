@@ -73,15 +73,17 @@ fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
 fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox" }
 ```
 
-Now your game will use the latest engine and editor, but beware - there could be some API breaks and frequent rebuilds
-because of new commits in the remote repository. You can avoid this by specifying a particular commit, just add
-`rev = "desired_commit_hash"` to every dependency like so:
+Now your game will use the latest engine and editor, but beware - there could be some API breaks. You can avoid this by 
+specifying a particular commit, just add `rev = "desired_commit_hash"` to every dependency like so:
 
 ```toml
 [dependencies]
 fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
 fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
 ```
+
+To keep local git repository of the engine up-to-date, you just need to call `cargo update` in the root of project's
+workspace. This will pull the latest changes from remote (unless there is no `rev` specified).
 
 Learn more about dependency paths in the official `cargo` documentation 
 [here](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories).
@@ -90,4 +92,4 @@ Learn more about dependency paths in the official `cargo` documentation
 
 Any object-specific game logic should be added using scripts. Script is a "container" for data and code, that will be
 executed by the engine. Read [Scripts](../scripting/script.md) chapter to learn how to create, edit, and use scripts in
-your game
+your game.
