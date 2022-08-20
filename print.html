@@ -337,28 +337,38 @@ serves for different purpose, but all of them works together to help you make yo
 screenshot and learn what parts of it responsible for what (please note that it can change over time, because the 
 development is quite rapid and image can become outdated pretty easily):</p>
 <p><img src="fyrox/beginning/./overview.png" alt="Windows" /></p>
-<ol>
+<ul>
 <li><strong>World viewer</strong> - shows every object in the scene and their relations. It allows you to inspect and edit the 
 contents of the scene in hierarchical form.</li>
 <li><strong>Scene preview</strong> - renders your scene with debug info and various editor-specific objects (like gizmos and
-stuff). Allows you to select, move, rotate, scale, delete, etc. various entities.</li>
-<li><strong>Toolbar</strong> - shows available context-dependent tools.</li>
+stuff). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a <strong>Toolbar</strong>,
+it shows available context-dependent tools.</li>
 <li><strong>Inspector</strong> - allows you to modify various properties of selected object.</li>
-<li><strong>Message log</strong> - shows the important messages from the editor.</li>
-<li><strong>Navmesh panel</strong> - allows you to create/delete and edit navigational meshes.</li>
-<li><strong>Command stack</strong> - shows the most recent actions you've done, allows you to undo and redo the changes on demand.</li>
-<li><strong>Asset browser</strong> - inspects the assets of your game, allows you to instantiate resources in the scene and so on.</li>
-</ol>
+<li><strong>Message Log</strong> - shows the important messages from the editor.</li>
+<li><strong>Navmesh Panel</strong> - allows you to create/delete and edit navigational meshes.</li>
+<li><strong>Command Stack</strong> - shows the most recent actions you've done, allows you to undo and redo the changes on demand.</li>
+<li><strong>Asset Browser</strong> - inspects the assets of your game, allows you to instantiate resources in the scene and so on.</li>
+<li><strong>Audio Context</strong> - allows you to edit settings of scene's sound context, such as global volume, available sound 
+effects, etc.</li>
+</ul>
 <h2 id="creating-loading-a-scene"><a class="header" href="#creating-loading-a-scene">Creating (Loading) a Scene</a></h2>
 <p>FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
 must have a scene created (or loaded) to begin working with the editor. To create a scene click <code>File -&gt; New Scene</code>.</p>
-<p>To load existing scene, go to <code>File -&gt; Load</code> and select desired scene using file browser.</p>
+<p>To load existing scene, go to <code>File -&gt; Load</code> and select desired scene using file browser. It is may be very useful
+to use list of recently opened scenes, to load them quickly without a need to go <code>File -&gt; Load</code>, search a scene, etc.
+Just go to <code>File -&gt; Recent Scenes</code> and click one to load.</p>
 <h2 id="populating-your-scene"><a class="header" href="#populating-your-scene">Populating Your Scene</a></h2>
 <p>Scene can be filled with various objects, there are two equivalent ways of creating game entities:</p>
 <ul>
 <li>By clicking <code>Create</code> main menu item and selecting desired entity.</li>
 <li>By right-clicking on a game entity in <code>World Viewer</code> and selecting desired entity from <code>Add Child</code> sub-menu.</li>
 </ul>
+<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) and saved in various formats, Fyrox
+supports FBX format, which is supported by pretty much any 3D modelling software. You can add such object to your scene
+by drag'n'dropping a desired asset for Asset Browser. Find one in the browser, click on it, hold the button and drag it
+to the Scene Viewer and then release the button. </p>
+<p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example you can create a scene with a few 
+objects in it with some scripts and re-use it across any other scenes. Such scene is called <a href="fyrox/beginning/../scene/prefab.html">prefab</a>.</p>
 <h2 id="saving-scene"><a class="header" href="#saving-scene">Saving Scene</a></h2>
 <p>To save your work, go to <code>File -&gt; Save</code>. For the first time (for unsaved scene), the editor will ask you to specify 
 file name and path to a folder where the scene will be saved. A scene loaded from a file will be automatically saved 
