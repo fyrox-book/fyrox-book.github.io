@@ -312,19 +312,20 @@ Open the <code>editor/Cargo.toml</code> and set both <code>fyrox</code> and <cod
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
-<p>Now your game will use the latest engine and editor, but beware - there could be some API breaks and frequent rebuilds
-because of new commits in the remote repository. You can avoid this by specifying a particular commit, just add
-<code>rev = &quot;desired_commit_hash&quot;</code> to every dependency like so:</p>
+<p>Now your game will use the latest engine and editor, but beware - there could be some API breaks. You can avoid this by 
+specifying a particular commit, just add <code>rev = &quot;desired_commit_hash&quot;</code> to every dependency like so:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 </code></pre>
+<p>To keep local git repository of the engine up-to-date, you just need to call <code>cargo update</code> in the root of project's
+workspace. This will pull the latest changes from remote (unless there is no <code>rev</code> specified).</p>
 <p>Learn more about dependency paths in the official <code>cargo</code> documentation 
 <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
 <p>Any object-specific game logic should be added using scripts. Script is a &quot;container&quot; for data and code, that will be
 executed by the engine. Read <a href="fyrox/beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
-your game</p>
+your game.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fyroxed-overview"><a class="header" href="#fyroxed-overview">FyroxEd Overview</a></h1>
 <p>FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
 that allows you to build your game from start to finish with relatively low effort.</p>
