@@ -111,7 +111,7 @@ fn setup_layer_material(
         .unwrap();
 }
 
-fn create_random_two_layer_terrain(graph: &mut Graph) -> Handle<Node> {
+fn create_random_two_layer_terrain(graph: &mut Graph, resource_manager: &ResourceManager) -> Handle<Node> {
     let terrain = TerrainBuilder::new(BaseBuilder::new())
         .with_layers(vec![
             LayerDefinition {
