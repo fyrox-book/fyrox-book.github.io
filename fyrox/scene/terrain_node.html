@@ -228,7 +228,7 @@ content.</p>
         .unwrap();
 }
 
-fn create_random_two_layer_terrain(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp;ResourceManager) -&gt; Handle&lt;Node&gt; {
     let terrain = TerrainBuilder::new(BaseBuilder::new())
         .with_layers(vec![
             LayerDefinition {
