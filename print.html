@@ -2887,7 +2887,18 @@ your objects.</p>
 </span></code></pre></pre>
 <h2 id="colliders"><a class="header" href="#colliders">Colliders</a></h2>
 <p>Rigid body must have at least one collider to participate in simulation properly, multiple colliders can be used to
-create complex shapes from simple shapes, you can create concave objects this way.</p>
+create complex shapes from simple shapes, you can create concave objects this way. Every collider <strong>must</strong> be a direct
+child node of a rigid body. In the editor it could look like this:</p>
+<p><img src="fyrox/physics/./colliders.png" alt="colliders" /></p>
+<p>Note that, <code>Box</code> node here is an instance of <code>Rigid Body 2D</code>, and it has <code>Collider 2D</code> as a child and some sprite. This 
+structure (when a rigid body has a collider as a child) is mandatory for physics engine to work correctly! Collider
+won't work (participate in physical simulation) without a rigid body and a rigid body won't work without a collider.
+This applied to both 2D and 3D.</p>
+<p>Keep in mind, that your graphical representation of an object (some node like <code>Mesh</code>, <code>Sprite</code>, etc.) must be attached
+to a rigid body. Otherwise, the rigid body will move, but the graphical representation won't. You can also arrange
+it other way around: a graphical node can have rigid body with a collider, but that requires the rigid body to be 
+kinematic. This is used to create <a href="fyrox/physics/./collider.html#using-colliders-for-hit-boxes">hit boxes</a>, or any other things 
+that should have physical representation, but move together with graphical node.</p>
 <h2 id="force-and-torque"><a class="header" href="#force-and-torque">Force and torque</a></h2>
 <p>You can apply forces and torque to any rigid body, but only dynamic bodies will be affected. There is two ways of
 applying force to a rigid body: at center of mass or at particular point at the body:</p>
@@ -2945,6 +2956,8 @@ to enable it use either <code>.with_ccd_enabled(state)</code> of <code>RigidBody
 <div style="break-before: page; page-break-before: always;"></div><h1 id="collider-node"><a class="header" href="#collider-node">Collider node</a></h1>
 <p>Collider is a geometrical shape that is used for collision detection, contact manifold generation, etc. Colliders are used
 in pair with rigid bodies, they make rigid body participate in collisions.</p>
+<p><strong>Important:</strong> Colliders only works in pair with rigid bodies! Colliders won't be used by the engine, unless they're
+direct children of a rigid body. Read <a href="fyrox/physics/./rigid_body.html#colliders">this chapter</a> for more info. </p>
 <h2 id="shapes"><a class="header" href="#shapes">Shapes</a></h2>
 <p>Collider can have almost any shape, the engine offers the following shapes for 3D:</p>
 <ul>
