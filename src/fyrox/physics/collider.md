@@ -3,6 +3,9 @@
 Collider is a geometrical shape that is used for collision detection, contact manifold generation, etc. Colliders are used
 in pair with rigid bodies, they make rigid body participate in collisions.
 
+**Important:** Colliders only works in pair with rigid bodies! Colliders won't be used by the engine, unless they're
+direct children of a rigid body. Read [this chapter](./rigid_body.md#colliders) for more info. 
+
 ## Shapes
 
 Collider can have almost any shape, the engine offers the following shapes for 3D:

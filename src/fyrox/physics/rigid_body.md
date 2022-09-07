@@ -36,7 +36,21 @@ fn create_cube_rigid_body(graph: &mut Graph) -> Handle<Node> {
 ## Colliders
 
 Rigid body must have at least one collider to participate in simulation properly, multiple colliders can be used to
-create complex shapes from simple shapes, you can create concave objects this way.
+create complex shapes from simple shapes, you can create concave objects this way. Every collider **must** be a direct
+child node of a rigid body. In the editor it could look like this:
+
+![colliders](./colliders.png)
+
+Note that, `Box` node here is an instance of `Rigid Body 2D`, and it has `Collider 2D` as a child and some sprite. This 
+structure (when a rigid body has a collider as a child) is mandatory for physics engine to work correctly! Collider
+won't work (participate in physical simulation) without a rigid body and a rigid body won't work without a collider.
+This applied to both 2D and 3D.
+
+Keep in mind, that your graphical representation of an object (some node like `Mesh`, `Sprite`, etc.) must be attached
+to a rigid body. Otherwise, the rigid body will move, but the graphical representation won't. You can also arrange
+it other way around: a graphical node can have rigid body with a collider, but that requires the rigid body to be 
+kinematic. This is used to create [hit boxes](./collider.md#using-colliders-for-hit-boxes), or any other things 
+that should have physical representation, but move together with graphical node.
 
 ## Force and torque
 
