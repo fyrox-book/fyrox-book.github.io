@@ -15,6 +15,7 @@
     - [Scene](./fyrox/scene/scene.md)
       - [Graph](./fyrox/scene/graph.md) 
       - [Prefabs](./fyrox/scene/prefab.md) 
+      - [Property Inheritance](./fyrox/scene/inheritance.md)
       - [Base node](./fyrox/scene/base_node.md)
       - [Mesh node](./fyrox/scene/mesh_node.md)
       - [Light node](./fyrox/scene/light_node.md)
