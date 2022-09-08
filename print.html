@@ -1497,9 +1497,9 @@ fn remove_preserve_children(scene: &amp;mut Scene, node_to_remove: Handle&lt;Nod
 will be deleted. <code>remove_node</code> has some limitations: it cannot be used to extract &quot;sub-graph&quot; from the graph, it
 just drops nodes immediately. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="prefabs"><a class="header" href="#prefabs">Prefabs</a></h1>
-<p>Prefab is a separate scene that can be instantiated to some other scene, while preserving links between properties
-between instances and its parent prefab. Prefabs allow you to create a part of a scene and create multiple instances of
-it in some other scenes.</p>
+<p>A prefab is a separate scene that can be instantiated in some other scene, while preserving links between properties
+of its instances and of its parent prefab. Prefabs allow you to create a part of a scene and have multiple instances of
+it in other scenes.</p>
 <p>Let's quickly check what that means on practice. The engine has a prefab system which allows you to build 
 hierarchical scenes which can include any number of other scenes as child scenes. Child scenes can have their own child
 scenes and so on. This is very efficient decoupling mechanism that allows you to put pieces of the scene in separate 
@@ -1536,12 +1536,12 @@ the inheritance.</p>
 <p><strong>Important:</strong> This functionality is available on <a href="fyrox/scene/../beginning/scripting.html#using-latest-engine-version">latest engine</a>
 from <code>master</code> branch only. It will be available in next major release (0.28).</p>
 <p>Property inheritance is used to propagate changes of unmodified properties from a prefab to its instances. For example,
-you can change scale of a node in a prefab and their instances will have the same scale too, unless the scale is not 
+you can change scale of a node in a prefab and its instances will have the same scale too, unless the scale is
 set explicitly in an instance. Such feature allows you to tweak instances, add some unique details to them, but take
 generic properties from parent prefabs.</p>
-<p>Property inheritance works for prefabs hierarchy of any depth, this means that you can create something like this:
+<p>Property inheritance works for prefab hierarchies of any depth, this means that you can create something like this:
 a room prefab can have multiple instances of various furniture prefabs in it, while the furniture prefabs can also be
-constructed from other prefabs and so on. In this case if you'll modify a property in one of prefabs in the chain, 
+constructed from other prefabs and so on. In this case if you modify a property in one of the prefabs in the chain, 
 all instance will immediately sync their unmodified properties. </p>
 <h2 id="how-to-create-inheritable-properties"><a class="header" href="#how-to-create-inheritable-properties">How To Create Inheritable Properties</a></h2>
 <p>It is possible to use property inheritance for script variables. To make a property of your script inheritable, all you
@@ -1559,20 +1559,20 @@ struct MyScript {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>The engine will automatically resolve correct value for the property when a scene with the script is loaded. If your
+<p>The engine will automatically resolve the correct value for the property when a scene with the script is loaded. If your
 property was modified, then its value will remain the same, it won't be overwritten by parent's value. Keep in mind,
-that the type of inheritable variable must be cloneable and support reflection.</p>
-<p><code>InheritableVariable</code> implements <code>Deref&lt;Target = T&gt; + DerefMut</code> traits, this means that any access via <code>DerefMut</code> trait
-will mark property as modified. This could be undesired in some cases, <code>InheritableVariable</code> supports special <code>xxx_silent</code> 
-methods that don't touch internal modifiers storage and allows you to substitute the value with some other &quot;silently&quot; -
+that the type of the inheritable variable must be cloneable and support reflection.</p>
+<p><code>InheritableVariable</code> implements the <code>Deref&lt;Target = T&gt; + DerefMut</code> traits, this means that any access via the <code>DerefMut</code> trait
+will mark the property as modified. This could be undesired in some cases so <code>InheritableVariable</code> supports special <code>xxx_silent</code> 
+methods that don't touch the internal modifiers and allows you to substitute the value with some other &quot;silently&quot; -
 without marking the variable as modified.</p>
 <h2 id="editor"><a class="header" href="#editor">Editor</a></h2>
 <p>The editor wraps all inheritable properties in a special widget that supports property reversion. Reversion allows you
-to drop current changes and take parent's property value. This is useful if you want a property to inherit parent's 
+to drop current changes and take the parent's property value. This is useful if you want a property to inherit its parent's 
 value. In the Inspector it looks like this:</p>
 <p><img src="fyrox/scene/./revert.png" alt="revert" /></p>
-<p>Clicking on <code>&lt;</code> button will take value from parent prefab and the property won't be marked as modified anymore. In case
-if there is no parent prefab, the button will just drop <code>modified</code> flag.</p>
+<p>Clicking on the <code>&lt;</code> button will take the value from the parent prefab and the property won't be marked as modified anymore. In case
+there is no parent prefab, the button will just drop <code>modified</code> flag.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="base-node"><a class="header" href="#base-node">Base node</a></h1>
 <p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
