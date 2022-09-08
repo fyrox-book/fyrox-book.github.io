@@ -156,7 +156,7 @@ need is to wrap its value using <code>InheritableVariable</code> wrapper.</p>
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::variable::InheritableVariable;
 </span><span class="boring">use fyrox::core::reflect::Reflect;
-</span><span class="boring">use fyrox::core::visit::prelude::*;
+</span><span class="boring">use fyrox::core::visitor::prelude::*;
 </span><span class="boring">use fyrox::core::inspect::prelude::*;
 </span>#[derive(Reflect, Visit, Inspect, Default, Clone, Debug)]
 struct MyScript {
