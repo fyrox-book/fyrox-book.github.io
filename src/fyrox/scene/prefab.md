@@ -1,8 +1,8 @@
 # Prefabs
 
-Prefab is a separate scene that can be instantiated to some other scene, while preserving links between properties
-between instances and its parent prefab. Prefabs allow you to create a part of a scene and create multiple instances of
-it in some other scenes.
+A prefab is a separate scene that can be instantiated in some other scene, while preserving links between properties
+of its instances and of its parent prefab. Prefabs allow you to create a part of a scene and have multiple instances of
+it in other scenes.
 
 Let's quickly check what that means on practice. The engine has a prefab system which allows you to build 
 hierarchical scenes which can include any number of other scenes as child scenes. Child scenes can have their own child
