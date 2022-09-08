@@ -22,7 +22,7 @@ need is to wrap its value using `InheritableVariable` wrapper.
 # extern crate fyrox;
 # use fyrox::core::variable::InheritableVariable;
 # use fyrox::core::reflect::Reflect;
-# use fyrox::core::visit::prelude::*;
+# use fyrox::core::visitor::prelude::*;
 # use fyrox::core::inspect::prelude::*;
 #[derive(Reflect, Visit, Inspect, Default, Clone, Debug)]
 struct MyScript {
