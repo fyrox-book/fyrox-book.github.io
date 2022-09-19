@@ -171,6 +171,41 @@ that the type of the inheritable variable must be cloneable and support reflecti
 will mark the property as modified. This could be undesired in some cases so <code>InheritableVariable</code> supports special <code>xxx_silent</code> 
 methods that don't touch the internal modifiers and allows you to substitute the value with some other &quot;silently&quot; -
 without marking the variable as modified.</p>
+<h2 id="which-fields-should-be-inheritable"><a class="header" href="#which-fields-should-be-inheritable">Which Fields Should Be Inheritable?</a></h2>
+<p>Inheritable variables intended to be &quot;atomic&quot; - it means that the variable stores some simple variable (<code>f32</code>, <code>String</code>,
+<code>Handle&lt;Node&gt;</code>, etc.). While it is possible to store &quot;compound&quot; variables (<code>InheritableVariable&lt;YourStruct&gt;</code>), it is
+not advised because of inheritance mechanism. When the engine sees inheritable variable, it searches the same variable
+in a parent entity and copies its value to the child, thus completely replacing its content. In this case, even if you
+have inheritable variables inside compound field, they won't be inherited correctly. Let's demonstrate this in the
+following code snippet:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::core::reflect::Reflect;
+</span><span class="boring">use fyrox::core::variable::InheritableVariable;
+</span><span class="boring">
+</span>#[derive(Reflect)]
+struct SomeComplexData {
+    foo: InheritableVariable&lt;u32&gt;,
+    bar: InheritableVariable&lt;String&gt;,
+}
+
+#[derive(Reflect)]
+struct MyEntity {
+    some_field: InheritableVariable&lt;f32&gt;,
+
+    // This field won't be inherited correctly - at first it will take parent's value and then
+    // will try to inherit inner fields, but its is useless step, because inner data is already
+    // a full copy of parent's field value.
+    incorrectly_inheritable_data: InheritableVariable&lt;SomeComplexData&gt;,
+
+    // Subfields of this field will be correctly inherited, because the field itself is not inheritable.
+    inheritable_data: SomeComplexData,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This code snippet should clarify, that inheritable fields should contain some &quot;simple&quot; data, and almost never - complex
+structs.</p>
 <h2 id="editor"><a class="header" href="#editor">Editor</a></h2>
 <p>The editor wraps all inheritable properties in a special widget that supports property reversion. Reversion allows you
 to drop current changes and take the parent's property value. This is useful if you want a property to inherit its parent's 
