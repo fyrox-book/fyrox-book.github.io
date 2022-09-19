@@ -39,6 +39,43 @@ will mark the property as modified. This could be undesired in some cases so `In
 methods that don't touch the internal modifiers and allows you to substitute the value with some other "silently" -
 without marking the variable as modified.
 
+## Which Fields Should Be Inheritable?
+
+Inheritable variables intended to be "atomic" - it means that the variable stores some simple variable (`f32`, `String`,
+`Handle<Node>`, etc.). While it is possible to store "compound" variables (`InheritableVariable<YourStruct>`), it is
+not advised because of inheritance mechanism. When the engine sees inheritable variable, it searches the same variable
+in a parent entity and copies its value to the child, thus completely replacing its content. In this case, even if you
+have inheritable variables inside compound field, they won't be inherited correctly. Let's demonstrate this in the
+following code snippet:
+
+```rust
+# extern crate fyrox;
+# use fyrox::core::reflect::Reflect;
+# use fyrox::core::variable::InheritableVariable;
+# 
+#[derive(Reflect)]
+struct SomeComplexData {
+    foo: InheritableVariable<u32>,
+    bar: InheritableVariable<String>,
+}
+
+#[derive(Reflect)]
+struct MyEntity {
+    some_field: InheritableVariable<f32>,
+
+    // This field won't be inherited correctly - at first it will take parent's value and then
+    // will try to inherit inner fields, but its is useless step, because inner data is already
+    // a full copy of parent's field value.
+    incorrectly_inheritable_data: InheritableVariable<SomeComplexData>,
+
+    // Subfields of this field will be correctly inherited, because the field itself is not inheritable.
+    inheritable_data: SomeComplexData,
+}
+```
+
+This code snippet should clarify, that inheritable fields should contain some "simple" data, and almost never - complex
+structs.
+
 ## Editor
 
 The editor wraps all inheritable properties in a special widget that supports property reversion. Reversion allows you
