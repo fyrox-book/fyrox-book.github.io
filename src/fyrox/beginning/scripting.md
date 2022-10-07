@@ -16,6 +16,8 @@ command:
 cargo install fyrox-template
 ```
 
+Note for Linux: This installs it in `$user/.cargo/bin`. If you get errors about the `fyrox-template` command not found then you need to add this folder to your $PATH still.
+
 Navigate to a folder where you want the project to be created and do the following command:
 
 ```shell
