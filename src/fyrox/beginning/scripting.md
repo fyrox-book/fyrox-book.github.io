@@ -16,19 +16,15 @@ command:
 cargo install fyrox-template
 ```
 
-For Linux, you may need to specify installation directory explicitly, because `cargo` puts binaries into `/usr/.cargo/bin`
-which may not be in `PATH`. You can either register the previous path in `PATH` environment variable, or directly
-specify the location that is already in path:
-
-```shell
-cargo install fyrox-template --root /usr/bin
-```
+Note for Linux: This installs it in `$user/.cargo/bin`. If you get errors about the `fyrox-template` command not found then you need to add this folder to your $PATH still.
 
 Navigate to a folder where you want the project to be created and do the following command:
 
 ```shell
 fyrox-template init --name my_game --style 3d
 ```
+
+Note that unlike `cargo init` this will create a new folder with the given name.
 
 The tool accepts two arguments - a project name (`--name`) and a style (`--style`) which defines the contents of default
 scene. Once you initialized your project, go to `game/src/lib.rs` - it is where your game logic is located, as you can 
