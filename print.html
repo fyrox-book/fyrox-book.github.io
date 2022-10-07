@@ -272,14 +272,11 @@ such architecture requires some boilerplate code that is generic for every game.
 command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
-<p>For Linux, you may need to specify installation directory explicitly, because <code>cargo</code> puts binaries into <code>/usr/.cargo/bin</code>
-which may not be in <code>PATH</code>. You can either register the previous path in <code>PATH</code> environment variable, or directly
-specify the location that is already in path:</p>
-<pre><code class="language-shell">cargo install fyrox-template --root /usr/bin
-</code></pre>
+<p>Note for Linux: This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found then you need to add this folder to your $PATH still.</p>
 <p>Navigate to a folder where you want the project to be created and do the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name my_game --style 3d
 </code></pre>
+<p>Note that unlike <code>cargo init</code> this will create a new folder with the given name.</p>
 <p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>) which defines the contents of default
 scene. Once you initialized your project, go to <code>game/src/lib.rs</code> - it is where your game logic is located, as you can 
 see the <code>fyrox-template</code> generated quite some code for you. There are tiny comments about which place is for what. For 
