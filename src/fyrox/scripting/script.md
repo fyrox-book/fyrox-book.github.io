@@ -16,10 +16,6 @@ Typical script structure could be like this:
 #     scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
 #     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 # };
-# struct GameConstructor;
-# impl GameConstructor {
-#     fn type_uuid() -> Uuid { todo!() } 
-# }
 #[derive(Visit, Reflect, Inspect, Default, Debug, Clone)]
 struct MyScript {
     // Add fields here.
@@ -34,24 +30,24 @@ impl TypeUuidProvider for MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_init(&mut self, context: ScriptContext) {
+    fn on_init(&mut self, context: &mut ScriptContext) {
         // Put initialization logic here.
     }
+    
+    fn on_start(&mut self, context: &mut ScriptContext) {
+        // Put start logic - it is called when every other script is already initialized.
+    }
 
-    fn on_deinit(&mut self, context: ScriptDeinitContext) {
+    fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
         // Put de-initialization logic here.
     }
 
-    fn on_os_event(&mut self, event: &Event<()>, context: ScriptContext) {
+    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {
         // Respond to OS events here.
     }
 
-    fn on_update(&mut self, context: ScriptContext) {
+    fn on_update(&mut self, context: &mut ScriptContext) {
         // Put object logic here.
-    }
-
-    fn remap_handles(&mut self, old_new_mapping: &NodeHandleMap) {
-        // Remap handles to other scene nodes here.
     }
 
     fn restore_resources(&mut self, resource_manager: ResourceManager) {
@@ -61,10 +57,6 @@ impl ScriptTrait for MyScript {
     fn id(&self) -> Uuid {
         Self::type_uuid()
     }
-
-    fn plugin_uuid(&self) -> Uuid {
-        GameConstructor::type_uuid()
-    }
 }
 ```
 
@@ -72,8 +64,10 @@ Each script must implement following traits:
 
 - `Visit` implements serialization/deserialization functionality, it is used by the editor to save your object to a 
 scene file.
-- `Inspect` implements read-only static reflection that provides introspection for your type - in other words, it allows
-the editor to "see" what's inside your structures.
+- `Reflect` implements compile-time reflection that provides a way to iterate over script fields, set their values, 
+find fields by their paths, etc.
+- `Inspect` provides meta-data for fields in your script, it allows the editor to "see" what's inside your structures,
+"print" this information in the Inspector.
 - `Debug` - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.
 - `Clone` - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
 cloned.
@@ -134,10 +128,6 @@ you need to register it in the list of script constructors like so:
 #         fn id(&self) -> Uuid {
 #             todo!()
 #         }
-# 
-#         fn plugin_uuid(&self) -> Uuid {
-#             todo!()
-#         }
 #     }
 # 
 #     struct Constructor;
@@ -185,10 +175,6 @@ The script can be attached to a scene node from code:
 #     fn id(&self) -> Uuid {
 #         todo!()
 #     }
-# 
-#     fn plugin_uuid(&self) -> Uuid {
-#         todo!()
-#     }
 # }
 # 
 fn set_script<T: ScriptTrait>(node: &mut Node, script: T) {
@@ -213,7 +199,8 @@ content of the context is something like this:
 # };
 pub struct ScriptContext<'a, 'b> {
     pub dt: f32,
-    pub plugin: &'a mut dyn Plugin,
+    pub elapsed_time: f32,
+    pub plugins: &'a mut [Box<dyn Plugin>],
     pub handle: Handle<Node>,
     pub scene: &'b mut Scene,
     pub resource_manager: &'a ResourceManager,
@@ -222,9 +209,11 @@ pub struct ScriptContext<'a, 'b> {
 
 - `dt` - amount of time passed since last frame. The value of the variable is implementation-defined, usually it is
 something like 1/60 (0.016) of a second.
-- `plugin` - a reference to parent plugin, it allows you to access some "global" game data that does not belong to any
-object. For example, the plugin could store key mapping used for player controls, you can access it using `plugin` field.
-You just need to cast the reference to a particular type using `context.plugin.cast::<MyPlugin>().unwrap()` call.
+- `elapsed_time` - amount of time that passed since start of your game (in seconds).
+- `plugins` - a mutable reference to all registered plugins, it allows you to access some "global" game data that does 
+not belong to any object. For example, a plugin could store key mapping used for player controls, you can access it 
+using `plugins` field and find desired plugin. In case of a single plugin, you just need to cast the reference to a 
+particular type using `context.plugins[0].cast::<MyPlugin>().unwrap()` call.
 - `handle` - a handle of the node to which the script is assigned to (parent node). You can borrow the node using
 `context.scene.graph[handle]` call. Typecasting can be used to obtain a reference to a particular node type.
 - `scene` - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
