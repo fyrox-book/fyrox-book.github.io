@@ -16,7 +16,8 @@ command:
 cargo install fyrox-template
 ```
 
-Note for Linux: This installs it in `$user/.cargo/bin`. If you get errors about the `fyrox-template` command not found then you need to add this folder to your $PATH still.
+Note for Linux: This installs it in `$user/.cargo/bin`. If you get errors about the `fyrox-template` command not found 
+then you need to add this folder to your $PATH still.
 
 Navigate to a folder where you want the project to be created and do the following command:
 
@@ -51,9 +52,19 @@ otherwise you won't see anything. Read the next chapter to learn how to use the 
 Due to the nature of the software development, some bugs are inevitably sneak in the major releases. Due to this fact, 
 you may want to use the latest engine version from its repository on GitHub, because it most likely has some bugs fixed
 (you can also help fixing any bugs you find or at least [file an issue](https://github.com/FyroxEngine/Fyrox/issues)).
-To do this, you need to specify paths for `fyrox` and `fyroxed_base` dependencies to point them on remote repository.
-There are three places where you need to do this: `game`, `executor`, `editor` projects. At first open `game/Cargo.toml` 
-and change `fyrox` dependency to this:
+
+The first step you need to do is to install the latest `fyrox-template`, it can be done in a single `cargo` command:
+
+```shell
+cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
+```
+
+This will ensure that you are using the latest project/script template generator. It is important, because old versions
+of template generator will most likely generate outdated code, that is no longer compatible with the engine.
+
+To switch to the latest version of the engine on existing project, you need to specify paths for `fyrox` and 
+`fyroxed_base` dependencies to point them on remote repository. There are three places where you need to do this: 
+`game`, `executor`, `editor` projects. At first open `game/Cargo.toml` and change `fyrox` dependency to this:
 
 ```toml
 [dependencies]
