@@ -31,7 +31,7 @@ Open Cargo.toml and add `fyrox` dependency:
 
 ```toml
 [dependencies]
-fyrox = "0.26.0"
+fyrox = "0.28.0"
 ```
 
 ### Creating a window
@@ -103,25 +103,25 @@ fn main() {
     // Run the event loop of the main window. which will respond to OS and window events and update
     // engine's state accordingly. Engine lets you to decide which event should be handled,
     // this is a minimal working example of how it should be.
-    let clock = time::Instant::now();
-
-    let mut elapsed_time = 0.0;
+    let mut previous = time::Instant::now();
+    let mut lag = 0.0;
     event_loop.run(move |event, _, control_flow| {
         match event {
             Event::MainEventsCleared => {
                 // This main game loop - it has fixed time step which means that game
                 // code will run at fixed speed even if renderer can't give you desired
                 // 60 fps.
-                let mut dt = clock.elapsed().as_secs_f32() - elapsed_time;
-                while dt >= TIMESTEP {
-                    dt -= TIMESTEP;
-                    elapsed_time += TIMESTEP;
+                let elapsed = previous.elapsed();
+                previous = time::Instant::now();
+                lag += elapsed.as_secs_f32();
+                while lag >= TIMESTEP {
+                    lag -= TIMESTEP;
 
                     // Run our game's logic.
                     game.update();
 
                     // Update engine each frame.
-                    engine.update(TIMESTEP, control_flow);
+                    engine.update(TIMESTEP, control_flow, &mut lag);
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.

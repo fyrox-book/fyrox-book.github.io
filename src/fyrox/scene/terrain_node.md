@@ -60,7 +60,7 @@ content.
 
 Terrain can always be created from code, here's comprehensive example of how to create and modify terrain from code:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{

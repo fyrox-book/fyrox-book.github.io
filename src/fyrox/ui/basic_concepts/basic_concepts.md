@@ -72,10 +72,10 @@ UI, it would force you to wrap it in `Rc<RefCell<..>>`/`Arc<Mutex<..>>`.
 
 Message dispatcher is very easy to write, all you need to do is to handle UI messages in `Plugin::on_ui_message` method:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{pool::Handle, uuid::Uuid},
+#     core::{pool::Handle},
 #     event_loop::ControlFlow,
 #     gui::{button::ButtonMessage, message::UiMessage, UiNode},
 #     plugin::{Plugin, PluginContext},
@@ -86,10 +86,6 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-#     fn id(&self) -> Uuid {
-#         todo!()
-#     }
-# 
     fn on_ui_message(
         &mut self,
         _context: &mut PluginContext,

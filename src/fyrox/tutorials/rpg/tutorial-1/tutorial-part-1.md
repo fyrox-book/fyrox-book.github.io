@@ -35,7 +35,7 @@ Add `fyrox` as dependency:
 
 ```toml
 [dependencies]
-fyrox = "0.26.0"
+fyrox = "0.28.0"
 ```
 
 ## Framework
@@ -48,12 +48,12 @@ variant with manual engine initialization and "opened" main loop.
 ```rust,no_run
 # extern crate fyrox;
 use fyrox::{
-    core::{color::Color, futures::executor::block_on, pool::Handle, uuid::Uuid},
+    core::{color::Color, futures::executor::block_on, pool::Handle},
     engine::executor::Executor,
     event::{Event, WindowEvent},
     event_loop::ControlFlow,
     plugin::{Plugin, PluginConstructor, PluginContext},
-    scene::{node::TypeUuidProvider, Scene},
+    scene::{Scene},
 };
 
 struct Game {
@@ -65,12 +65,6 @@ struct GameConstructor;
 impl PluginConstructor for GameConstructor {
     fn create_instance(&self, _: Handle<Scene>, context: PluginContext) -> Box<dyn Plugin> {
         Box::new(Game::new(context))
-    }
-}
-
-impl TypeUuidProvider for GameConstructor {
-    fn type_uuid() -> Uuid {
-        todo!()
     }
 }
 
@@ -89,10 +83,6 @@ impl Game {
 impl Plugin for Game {
     fn update(&mut self, context: &mut PluginContext, _: &mut ControlFlow) {
         
-    }
-
-    fn id(&self) -> Uuid {
-        GameConstructor::type_uuid()
     }
 
     fn on_os_event(
@@ -360,12 +350,12 @@ the following code:
 # #[cfg(test)]
 use crate::{level::Level, player::Player};
 use fyrox::{
-    core::{color::Color, futures::executor::block_on, pool::Handle, uuid::Uuid},
+    core::{color::Color, futures::executor::block_on, pool::Handle},
     engine::{resource_manager::ResourceManager, executor::Executor},
     event::{Event, WindowEvent},
     event_loop::ControlFlow,
     plugin::{Plugin, PluginConstructor, PluginContext},
-    scene::{node::TypeUuidProvider, Scene},
+    scene::{Scene},
 };
 
 # #[cfg(test)]
@@ -397,12 +387,6 @@ impl PluginConstructor for GameConstructor {
     }
 }
 
-impl TypeUuidProvider for GameConstructor {
-    fn type_uuid() -> Uuid {
-        todo!()
-    }
-}
-
 impl Game {
     fn new(context: PluginContext) -> Self {
         let mut scene = Scene::new();
@@ -422,10 +406,6 @@ impl Game {
 impl Plugin for Game {
     fn update(&mut self, context: &mut PluginContext, _: &mut ControlFlow) {
 
-    }
-
-    fn id(&self) -> Uuid {
-        GameConstructor::type_uuid()
     }
 
     fn on_os_event(

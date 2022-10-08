@@ -18,7 +18,7 @@ all instance will immediately sync their unmodified properties.
 It is possible to use property inheritance for script variables. To make a property of your script inheritable, all you
 need is to wrap its value using `InheritableVariable` wrapper.
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::variable::InheritableVariable;
 # use fyrox::core::reflect::Reflect;
@@ -48,12 +48,12 @@ in a parent entity and copies its value to the child, thus completely replacing 
 have inheritable variables inside compound field, they won't be inherited correctly. Let's demonstrate this in the
 following code snippet:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::reflect::Reflect;
 # use fyrox::core::variable::InheritableVariable;
 # 
-#[derive(Reflect)]
+#[derive(Reflect, Clone, PartialEq, Eq, Debug)]
 struct SomeComplexData {
     foo: InheritableVariable<u32>,
     bar: InheritableVariable<String>,

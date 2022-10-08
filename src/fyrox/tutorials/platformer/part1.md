@@ -106,7 +106,7 @@ clone it. Switch body type of the copy to `Dynamic`. Now change its sprite textu
 Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to a texture from
 `data/characters/adventurer/Individual Sprites`. We also need a camera, otherwise, we won't see anything. Add it as a child to a player's
-rigid body. By default our camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
+rigid body. By default, our camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
 and set the `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to the `Front` field of the
 `Skybox` property. Don't forget to adjust the far plane distance to something like `20.0`, otherwise, you'll see just a portion of the background image.
 If everything is done correctly, you should get something like this:
@@ -167,15 +167,6 @@ move. Navigate to `game/src/lib.rs` and at the end of the file add the following
 #     scene::node::TypeUuidProvider,
 #     script::{ScriptContext, ScriptTrait},
 # };
-# 
-# struct Game;
-# 
-# impl Game {
-#     fn type_uuid() -> Uuid {
-#         todo!()
-#     }
-# }
-# 
 #[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
 struct Player;
 
@@ -190,22 +181,20 @@ impl TypeUuidProvider for Player {
 
 impl ScriptTrait for Player {
     // Called once at initialization.
-    fn on_init(&mut self, context: ScriptContext) {}
+    fn on_init(&mut self, context: &mut ScriptContext) {}
+    
+    // Put start logic - it is called when every other script is already initialized.
+    fn on_start(&mut self, context: &mut ScriptContext) { }
 
     // Called whenever there is an event from OS (mouse click, keypress, etc.)
-    fn on_os_event(&mut self, event: &Event<()>, context: ScriptContext) {}
+    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {}
 
     // Called every frame at fixed rate of 60 FPS.
-    fn on_update(&mut self, context: ScriptContext) {}
+    fn on_update(&mut self, context: &mut ScriptContext) {}
 
     // Returns unique script ID for serialization needs.
     fn id(&self) -> Uuid {
         Self::type_uuid()
-    }
-
-    // Returns unique id of parent plugin.
-    fn plugin_uuid(&self) -> Uuid {
-        Game::type_uuid()
     }
 }
 ```
@@ -219,7 +208,7 @@ attributes:
 your structure and show additional information attached to the fields via proc-macro attributes.
 - `Reflect` - implements compile-time reflection that allows the editor to mutate your objects.
 - `Debug` - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.
-- `Clone` - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be
+- `Clone` - makes your structure clone-able, why do we need this? We can clone objects, and we also want the script instance to be
 copied.
 - `Default` implementation is very important - the scripting system uses it to create your scripts in the default state.
 This is necessary to set some data to it and so on. If it's a special case, you can always implement your own `Default`'s
@@ -309,7 +298,7 @@ The code responds to OS events and modifies internal movement flags accordingly.
 # 
 # impl Foo {
 // Called every frame at fixed rate of 60 FPS.
-fn on_update(&mut self, context: ScriptContext) {
+fn on_update(&mut self, context: &mut ScriptContext) {
     // The script can be assigned to any scene node, but we assert that it will work only with
     // 2d rigid body nodes.
     if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::<RigidBody>() {
