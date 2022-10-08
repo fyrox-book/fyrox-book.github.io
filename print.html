@@ -149,6 +149,9 @@ through <a href="fyrox/tutorials/platformer/part1.html">Platformer Tutorial (2D)
 interest you from the other chapters. </p>
 <p>There is also a <a href="fyrox/tutorials/fps/intro.html">First-Person Shooter Tutorial (3D)</a>, but it is based on framework which
 considered obsolete, yet it is still very helpful. </p>
+<h2 id="api-documentation"><a class="header" href="#api-documentation">API Documentation</a></h2>
+<p>The book is primarily focused on game development with Fyrox, not on its API. You can find API docs
+<a href="https://docs.rs/fyrox/latest/fyrox/">here</a>.</p>
 <h2 id="required-knowledge"><a class="header" href="#required-knowledge">Required knowledge</a></h2>
 <p>We're expecting that you know basics of Rust programming language, its package manager Cargo. It is also necessary
 to know the <em>basics</em> of the game development, linear algebra, principles of software development and patterns, 
@@ -237,29 +240,13 @@ code that will provide the engine with required information. Please check exampl
 to understand how to do that.</p>
 <h3 id="afterword"><a class="header" href="#afterword">Afterword</a></h3>
 <p>ECS and classic OOP are <em>just tools</em>, pick one which suits you the most, don't be a blind zealot, choose wisely!</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
-<p>Despite the look of it, the engine is quite friendly to newcomers, especially with some good guides. This section
-of the book will guide you through the basics of the engine. Fyrox 0.25+ changed game development paradigm - you
-should use the editor (FyroxEd) to make your game, like in many other game engines.</p>
-<h2 id="engine-vs-framework"><a class="header" href="#engine-vs-framework">Engine vs Framework</a></h2>
-<p>There are two distinct concepts in game development - engine and framework, but they're often &quot;mixes&quot; and people gets
-confused what is framework and what is engine. Fyrox is full-featured game <strong>engine</strong>, what does that mean and why it
-is not a framework? Key features that allow you to understand that you're looking at game engine are following:</p>
-<ul>
-<li>Editor - true game engine provides integrated game development environment, that allows you to run your game from
-it, tweak parameters of your game entities, etc.</li>
-<li>Assets pipeline - engine has pretty rigid assets processing pipeline. </li>
-<li>Standard programming patterns - engine &quot;forces&quot; you to use it in almost single way, there is pretty much no space 
-for maneuver.</li>
-</ul>
-<h2 id="obsolete-fyrox-as-framework"><a class="header" href="#obsolete-fyrox-as-framework">Obsolete &quot;Fyrox as Framework&quot;</a></h2>
-<p>Before 0.25, Fyrox was just a framework (yet it still had an editor), you can still use it in old way (do manual
-initialization, do not use editor, etc.), but it is considered obsolete and eventually &quot;framework mode&quot; won't be 
-supported. The book has few chapters that are marked <code>Obsolete</code>, this means that they're not advised to be used.</p>
-<p>Read next chapter to learn how to use the engine in a &quot;modern&quot; way. </p>
-<h2 id="api-documentation"><a class="header" href="#api-documentation">API Documentation</a></h2>
-<p>The book is primarily focused on game development with Fyrox, not on its API. You can find API docs 
-<a href="https://docs.rs/fyrox/latest/fyrox/">here</a>. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<p>This section of the book will guide you through the basics of the engine. You will learn how to create a project, use
+plugins, scripts, assets, and the editor. Fyrox is a modern game engine with its own scene editor, that helps you to edit 
+game worlds, manage assets, and many more. At the end of reading this section, you'll also learn how to manage game and 
+engine entities, how they're structured and what are the basics of data management in the engine. </p>
+<p>Next chapter will guide you through major setup of the engine - creating a game project using special project generator
+tool.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="editor-plugins-and-scripts"><a class="header" href="#editor-plugins-and-scripts">Editor, Plugins and Scripts</a></h1>
 <p>Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game from the 
 editor and be able to edit game entities in it. Your game can define any number of scripts, which can be assigned 
