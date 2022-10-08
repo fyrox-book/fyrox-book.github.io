@@ -4,6 +4,7 @@
 - [Introduction](./fyrox/introduction/index.md)
   - [Introduction to Fyrox](./fyrox/introduction/introduction.md)
   - [Basic concepts](./fyrox/introduction/basic_concepts.md)
+  - [Design Philosophy and Goals](./fyrox/introduction/philosophy_and_goals.md)
 - [Getting started](./fyrox/beginning/getting_started.md)
   - [Editor, Plugins and Scripts](./fyrox/beginning/scripting.md) 
   - [Editor Overview](./fyrox/beginning/editor_overview.md)
