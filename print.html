@@ -259,7 +259,8 @@ such architecture requires some boilerplate code that is generic for every game.
 command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
-<p>Note for Linux: This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found then you need to add this folder to your $PATH still.</p>
+<p>Note for Linux: This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
+then you need to add this folder to your $PATH still.</p>
 <p>Navigate to a folder where you want the project to be created and do the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name my_game --style 3d
 </code></pre>
@@ -283,10 +284,15 @@ otherwise you won't see anything. Read the next chapter to learn how to use the 
 <h2 id="using-latest-engine-version"><a class="header" href="#using-latest-engine-version">Using Latest Engine Version</a></h2>
 <p>Due to the nature of the software development, some bugs are inevitably sneak in the major releases. Due to this fact, 
 you may want to use the latest engine version from its repository on GitHub, because it most likely has some bugs fixed
-(you can also help fixing any bugs you find or at least <a href="https://github.com/FyroxEngine/Fyrox/issues">file an issue</a>).
-To do this, you need to specify paths for <code>fyrox</code> and <code>fyroxed_base</code> dependencies to point them on remote repository.
-There are three places where you need to do this: <code>game</code>, <code>executor</code>, <code>editor</code> projects. At first open <code>game/Cargo.toml</code> 
-and change <code>fyrox</code> dependency to this:</p>
+(you can also help fixing any bugs you find or at least <a href="https://github.com/FyroxEngine/Fyrox/issues">file an issue</a>).</p>
+<p>The first step you need to do is to install the latest <code>fyrox-template</code>, it can be done in a single <code>cargo</code> command:</p>
+<pre><code class="language-shell">cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
+</code></pre>
+<p>This will ensure that you are using the latest project/script template generator. It is important, because old versions
+of template generator will most likely generate outdated code, that is no longer compatible with the engine.</p>
+<p>To switch to the latest version of the engine on existing project, you need to specify paths for <code>fyrox</code> and 
+<code>fyroxed_base</code> dependencies to point them on remote repository. There are three places where you need to do this: 
+<code>game</code>, <code>executor</code>, <code>editor</code> projects. At first open <code>game/Cargo.toml</code> and change <code>fyrox</code> dependency to this:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
