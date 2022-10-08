@@ -4,7 +4,8 @@ Sprite is just a quad mesh that is always facing camera. It has size, color, rot
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.
 
 **Important:** It should be noted that **sprites are not meant to be used for 2D games**, they're only for 3D. 
-There is a separate 2D scenes with their own nodes, which are very well optimized for 2D games.
+Use [Rectangle node](./rectangle.md) if you need 2D sprites, they have optimized renderer which can handle tons
+of sprites at once.
 
 ## How to create
 

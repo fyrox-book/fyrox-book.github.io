@@ -64,6 +64,50 @@ The engine uses message passing mechanism for any UI logic. What does that mean?
 previous section and imagine we want to change its text. To do that we need to explicitly "tell" the button's text
 widget to change its content to something new. This is done by sending a message to the widget.
 
+There is no classic callbacks to handle various types of messages, which may come from widgets. Instead, you should write
+your own message dispatcher where you'll handle all messages. Why so? At first - decoupling, in this case business logic
+is decoupled from the UI. You just receive messages one-by-one and do specific logic. The next reason is that any 
+callback would require context capturing which could be somewhat restrictive - since you need to share context with the 
+UI, it would force you to wrap it in `Rc<RefCell<..>>`/`Arc<Mutex<..>>`.
+
+Message dispatcher is very easy to write, all you need to do is to handle UI messages in `Plugin::on_ui_message` method:
+
+```rust
+# extern crate fyrox;
+# use fyrox::{
+#     core::{pool::Handle, uuid::Uuid},
+#     event_loop::ControlFlow,
+#     gui::{button::ButtonMessage, message::UiMessage, UiNode},
+#     plugin::{Plugin, PluginContext},
+# };
+# 
+struct MyPlugin {
+    button: Handle<UiNode>,
+}
+
+impl Plugin for MyPlugin {
+#     fn id(&self) -> Uuid {
+#         todo!()
+#     }
+# 
+    fn on_ui_message(
+        &mut self,
+        _context: &mut PluginContext,
+        message: &UiMessage,
+        _control_flow: &mut ControlFlow,
+    ) {
+        if let Some(ButtonMessage::Click) = message.data() {
+            if message.destination() == self.button {
+                println!("The button was clicked!");
+            }
+        }
+    }
+}
+```
+
+As you can see, all you need to do is to check type of incoming message and message destination, which is a node handle
+from which a message was come from. Then you do any actions you want.
+
 ### Message routing strategies
 
 Message passing mechanism works in pair with various routing strategies that allows you to define how the message 

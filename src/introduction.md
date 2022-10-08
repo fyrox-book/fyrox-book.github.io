@@ -15,6 +15,11 @@ interest you from the other chapters.
 There is also a [First-Person Shooter Tutorial (3D)](fyrox/tutorials/fps/intro.md), but it is based on framework which
 considered obsolete, yet it is still very helpful. 
 
+## API Documentation
+
+The book is primarily focused on game development with Fyrox, not on its API. You can find API docs
+[here](https://docs.rs/fyrox/latest/fyrox/).
+
 ## Required knowledge
 
 We're expecting that you know basics of Rust programming language, its package manager Cargo. It is also necessary

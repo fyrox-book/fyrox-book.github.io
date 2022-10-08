@@ -1,8 +1,8 @@
 # Prefabs
 
-Prefab is a separate scene that can be instantiated to some other scene, while preserving links between properties
-between instances and its parent prefab. Prefabs allow you to create a part of a scene and create multiple instances of
-it in some other scenes.
+A prefab is a separate scene that can be instantiated in some other scene, while preserving links between properties
+of its instances and of its parent prefab. Prefabs allow you to create a part of a scene and have multiple instances of
+it in other scenes.
 
 Let's quickly check what that means on practice. The engine has a prefab system which allows you to build 
 hierarchical scenes which can include any number of other scenes as child scenes. Child scenes can have their own child
@@ -23,15 +23,14 @@ it. After that every prefab instance will have your changes!
 
 All you need to do is to make a scene in the editor with all required objects and save it! After that, you can use the
 scene in other scenes and just do its instantiation, as in usual 3D models. You can either instantiate it from the
-editor by drag'n'drop a prefab to scene previewer, or do standard [model resource instantiation](../resources/model.md)
+editor by drag'n'drop a prefab to scene previewer, or do standard [model resource instantiation](../resources/model.md#instantiation)
 
 ## Property inheritance
 
 As already mentioned in the intro section, instances inherit properties from their parent prefabs. For example, you
 can change position of an object in prefab and every instance will reflect that change - the object's instances will
 also move. This works until there's no manual change to a property in instance, if you do so, your change is 
-considered with higher priority. Such feature allows you to tweak instances, add some unique details to them, but keep
-generic properties from parent prefabs.
+considered with higher priority. See [this chapter](./inheritance.md) for more info.
 
 ## Hierarchical Prefabs
 
