@@ -24,7 +24,8 @@ and quickly tell you that you're doing it wrong.
 ## Performance
 
 Game engine usually built using system-level programming languages, that provides peak performance levels. Fyrox is not
-an exception. One if its design 
+an exception. One if its design goals is to provide high levels of performance by default, leaving an opportunity for
+adding custom solutions for performance-critical places.
 
 ## Ease of use
 
