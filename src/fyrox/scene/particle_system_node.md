@@ -83,7 +83,7 @@ only practice matters here.
 
 You can also create particle systems from code (in case if you need some procedurally-generated effects):
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::scene::particle_system::{
 #     emitter::sphere::SphereEmitter, ParticleSystemBuilder, emitter::Emitter,

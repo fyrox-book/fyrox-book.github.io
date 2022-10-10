@@ -130,8 +130,9 @@ to create fonts.
 
 ## Messages
 
-There are few message types that Text widget can produce, most common are `Text`, `Wrap`, `Font`, `VerticalAlignment`,
-and `HorizontalAlignment`. An example of changing text at runtime could be something like this:
+There are few message types that TextBox widget can accept, most common are `Text`, `Wrap`, `Font`, `VerticalAlignment`,
+and `HorizontalAlignment`. Please keep in mind, that TextBox widget also accepts Text widget messages. An example of 
+changing text at runtime could be something like this:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -140,11 +141,11 @@ and `HorizontalAlignment`. An example of changing text at runtime could be somet
 #     gui::{
 #         message::{MessageDirection},
 #         UiNode, UserInterface,
-#         text_box::TextBoxMessage
+#         text::TextMessage
 #     },
 # };
 fn request_change_text(ui: &UserInterface, text_box_widget_handle: Handle<UiNode>, text: &str) {
-    ui.send_message(TextBoxMessage::text(
+    ui.send_message(TextMessage::text(
         text_box_widget_handle,
         MessageDirection::ToWidget,
         text.to_owned(),

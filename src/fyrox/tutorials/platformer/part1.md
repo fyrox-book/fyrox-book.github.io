@@ -104,12 +104,13 @@ clone it. Switch body type of the copy to `Dynamic`. Now change its sprite textu
 ![editor_step4](editor_step4.png)
 
 Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
-parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to a texture from
-`data/characters/adventurer/Individual Sprites`. We also need a camera, otherwise, we won't see anything. Add it as a child to a player's
-rigid body. By default our camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
-and set the `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to the `Front` field of the
-`Skybox` property. Don't forget to adjust the far plane distance to something like `20.0`, otherwise, you'll see just a portion of the background image.
-If everything is done correctly, you should get something like this:
+parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to
+`data/characters/adventurer/adventurer-Sheet.png`. Set its uv rect to `(0.0, 0.0, 0.143, 0.091)` to see only one frame.
+We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our 
+camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
+and set the `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to 
+the `Front` field of the `Skybox` property. Don't forget to adjust the far plane distance to something like `20.0`, 
+otherwise, you'll see just a portion of the background image. If everything is done correctly, you should get something like this:
 
 ![editor_step5](editor_step5.png)
 
@@ -167,15 +168,6 @@ move. Navigate to `game/src/lib.rs` and at the end of the file add the following
 #     scene::node::TypeUuidProvider,
 #     script::{ScriptContext, ScriptTrait},
 # };
-# 
-# struct Game;
-# 
-# impl Game {
-#     fn type_uuid() -> Uuid {
-#         todo!()
-#     }
-# }
-# 
 #[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
 struct Player;
 
@@ -190,22 +182,20 @@ impl TypeUuidProvider for Player {
 
 impl ScriptTrait for Player {
     // Called once at initialization.
-    fn on_init(&mut self, context: ScriptContext) {}
+    fn on_init(&mut self, context: &mut ScriptContext) {}
+    
+    // Put start logic - it is called when every other script is already initialized.
+    fn on_start(&mut self, context: &mut ScriptContext) { }
 
     // Called whenever there is an event from OS (mouse click, keypress, etc.)
-    fn on_os_event(&mut self, event: &Event<()>, context: ScriptContext) {}
+    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {}
 
     // Called every frame at fixed rate of 60 FPS.
-    fn on_update(&mut self, context: ScriptContext) {}
+    fn on_update(&mut self, context: &mut ScriptContext) {}
 
     // Returns unique script ID for serialization needs.
     fn id(&self) -> Uuid {
         Self::type_uuid()
-    }
-
-    // Returns unique id of parent plugin.
-    fn plugin_uuid(&self) -> Uuid {
-        Game::type_uuid()
     }
 }
 ```
@@ -219,7 +209,7 @@ attributes:
 your structure and show additional information attached to the fields via proc-macro attributes.
 - `Reflect` - implements compile-time reflection that allows the editor to mutate your objects.
 - `Debug` - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.
-- `Clone` - makes your structure clone-able, why do we need this? We can clone objects and we also want the script instance to be
+- `Clone` - makes your structure clone-able, why do we need this? We can clone objects, and we also want the script instance to be
 copied.
 - `Default` implementation is very important - the scripting system uses it to create your scripts in the default state.
 This is necessary to set some data to it and so on. If it's a special case, you can always implement your own `Default`'s
@@ -309,7 +299,7 @@ The code responds to OS events and modifies internal movement flags accordingly.
 # 
 # impl Foo {
 // Called every frame at fixed rate of 60 FPS.
-fn on_update(&mut self, context: ScriptContext) {
+fn on_update(&mut self, context: &mut ScriptContext) {
     // The script can be assigned to any scene node, but we assert that it will work only with
     // 2d rigid body nodes.
     if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::<RigidBody>() {
@@ -370,96 +360,14 @@ Now if you run the game, the player will "look" in correct direction depending o
 ## Animation
 
 Since we're making a 2D game, we'll be using simple animations based on the continuous change of keyframes. In other words, we'll be changing
-the texture of the player's body sprite. The engine does not provide such functionality yet, simply because it was focused primarily on 3D games
-for quite a long period. It is easy to make such an animation "system" ourselves.
-
-Put this code snippet somewhere at the end of `lib.rs` of the `game` project and we'll start learning what it's doing:
-
-```rust,no_run,compile_fail
-#[derive(Default, Reflect, Inspect, Visit, Debug, Clone)]
-pub struct KeyFrameTexture {
-    texture: Option<Texture>,
-}
-
-impl KeyFrameTexture {
-    fn restore_resources(&mut self, resource_manager: ResourceManager) {
-        // It is very important to restore texture handle after loading, otherwise the handle will
-        // remain in "shallow" state when it just has path to data, but not the actual resource handle.
-        resource_manager
-            .state()
-            .containers_mut()
-            .textures
-            .try_restore_optional_resource(&mut self.texture);
-    }
-}
-
-#[derive(Inspect, Reflect, Visit, Debug, Clone)]
-pub struct Animation {
-    name: String,
-    keyframes: Vec<KeyFrameTexture>,
-    current_frame: u32,
-    speed: f32,
-
-    // We don't want this field to be visible from the editor, because this is internal parameter.
-    #[inspect(skip)]
-    t: f32,
-}
-
-impl Default for Animation {
-    fn default() -> Self {
-        Self {
-            name: "Unnamed".to_string(),
-            speed: 10.0,
-            ..Default::default()
-        }
-    }
-}
-
-impl Animation {
-    pub fn current_frame(&self) -> Option<&KeyFrameTexture> {
-        self.keyframes.get(self.current_frame as usize)
-    }
-
-    fn restore_resources(&mut self, resource_manager: ResourceManager) {
-        for key_frame in self.keyframes.iter_mut() {
-            key_frame.restore_resources(resource_manager.clone());
-        }
-    }
-
-    pub fn update(&mut self, dt: f32) {
-        self.t += self.speed * dt;
-
-        if self.t >= 1.0 {
-            self.t = 0.0;
-
-            // Increase frame index and make sure it will be clamped in available bounds.
-            self.current_frame = (self.current_frame + 1) % self.keyframes.len() as u32;
-        }
-    }
-}
-```
-
-The code snippet is quite big, but this is pretty much everything we need for simple keyframe animation.
-We start by defining the `KeyFrameTexture` structure - it is a simple new-type-ish structure that holds a single
-field - optional texture handle.
-
-`restore_resources` restores texture handle on deserialization. Sounds complicated, why do we need to do anything after
-deserialization? Well, the answer is simple - we don't store texture data in the texture, instead, we just save the path
-to an external resource and request the resource manager to load the texture.
-
-Finally, we're at the `Animation` structure, nothing unusual there, it just stores a list of keyframes, an index
-of a current keyframe, speed, and some service fields. The implementation of it is very straightforward too,
-the most interesting method is `update`. Inside it, we're updating the internal `t` parameter which holds the "fraction"
-of the next frame's index, when it reaches `1.0` we're increasing the index of the current frame and wrapping it so it
-never exceeds the maximum amount of keyframes - instead, it will start counting from 0.
-
-It's time to start using the new animation system, just add the following fields to the `Player`:
+the texture of the player's body sprite. Luckily for us, the engine has built-in sprite sheet animations. Just add the 
+following fields to the `Player`:
 
 ```rust,no_run
 # extern crate fyrox;
 # struct Animation;
 # struct Player {
-animations: Vec<Animation>,
+animations: Vec<SpriteSheetAnimation>,
 current_animation: u32,
 # }
 ```
@@ -482,15 +390,15 @@ the `x_speed` declaration:
 #     pub fn on_update(&mut self) {
 #       let x_speed = 0.0;
 if x_speed != 0.0 {
-    self.current_animation = 0;
-} else {
     self.current_animation = 1;
+} else {
+    self.current_animation = 0;
 }
 #    }
 # }
 ```
 
-Here we assume that the run animation will be at index `0` and the idle animation at index `1`. We also need to
+Here we assume that the run animation will be at index `1` and the idle animation at index `0`. We also need to
 apply the texture from the current animation to the player's sprite, and add the following lines at the end of `on_update`
 
 ```rust,no_run,compile_fail
@@ -504,103 +412,30 @@ if let Some(current_animation) = self.animations.get_mut(self.current_animation 
         .and_then(|n| n.cast_mut::<Rectangle>())
     {
         // Set new frame to the sprite.
-        sprite.set_texture(
+        sprite.set_uv_rect(
             current_animation
-                .current_frame()
-                .and_then(|k| k.texture.clone()),
-        )
+                .current_frame_uv_rect()
+                .cloned()
+                .unwrap_or_default()
+                .0,
+        );
     }
 }
 ```
 
 The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,
 and if we're succeeded, we update it. At the next step, we're getting sprite and assigning a current frame of
-the current animation. Experienced game developers could immediately ask - why not use sprite sheets and get
-better performance and stuff. Well, the main purpose of this tutorial is to teach how to use the engine to
-achieve some goal, such as *making a game*. You can always optimize your game later when you'll have something
-working and playable.
-
-## Final Steps
-
-Three more steps before we can run the game, we need to call `restore_resources` for each animation. To do that,
-the script trait has the `on_restore_resources` method, add the following code to `impl ScriptTrait for Player`
-
-```rust,no_run,compile_fail
-fn restore_resources(&mut self, resource_manager: ResourceManager) {
-    for animation in self.animations.iter_mut() {
-        animation.restore_resources(resource_manager.clone());
-    }
-}
-```
-
-As a second step, replace the contents of the `editor/src/main.rs` with the following code snippet:
-
-```rust,no_run,compile_fail
-//! Editor with your game connected to it as a plugin.
-use fyrox::{
-    event_loop::EventLoop,
-    gui::inspector::editors::{
-        collection::VecCollectionPropertyEditorDefinition,
-        inspectable::InspectablePropertyEditorDefinition,
-    },
-};
-use fyroxed_base::{Editor, StartupData};
-use platformer::{Animation, GameConstructor, KeyFrameTexture};
-
-fn main() {
-    let event_loop = EventLoop::new();
-    let mut editor = Editor::new(
-        &event_loop,
-        Some(StartupData {
-            working_directory: Default::default(),
-            scene: "data/scene.rgs".into(),
-        }),
-    );
-    editor.add_game_plugin(GameConstructor);
-
-    // Register property editors here.
-    let property_editors = &editor.inspector.property_editors;
-    property_editors.insert(InspectablePropertyEditorDefinition::<KeyFrameTexture>::new());
-    property_editors.insert(InspectablePropertyEditorDefinition::<Animation>::new());
-    property_editors.insert(VecCollectionPropertyEditorDefinition::<KeyFrameTexture>::new());
-    property_editors.insert(VecCollectionPropertyEditorDefinition::<Animation>::new());
-
-    editor.run(event_loop)
-}
-```
-
-The most interesting code here is this:
-
-```rust,no_run,compile_fail
-// Register property editors here.
-let property_editors = &editor.inspector.property_editors;
-property_editors.insert(InspectablePropertyEditorDefinition::<KeyFrameTexture>::new());
-property_editors.insert(InspectablePropertyEditorDefinition::<Animation>::new());
-property_editors.insert(VecCollectionPropertyEditorDefinition::<KeyFrameTexture>::new());
-property_editors.insert(VecCollectionPropertyEditorDefinition::<Animation>::new());
-```
-
-Here we're registering *property editors* for our game types. This very important step, tells the editor how to
-visualize your data. In most cases, you'll be using those two generic types - `InspectablePropertyEditorDefinition`
-and `VecCollectionPropertyEditorDefinition`. Which is responsible for what?
-
-- `InspectablePropertyEditorDefinition` - is responsible for showing properties of any object that implements
-`Inspect` trait. All of your game entities must implement such traits.
-- `VecCollectionPropertyEditorDefinition` - it is responsible for showing `Vec<T: Inspect>` collection, every
-collection item **must** implement `Inspect` trait. This is a bit tedious, especially in the case of simple collections
-like `Vec<f32>`, but that's a limitation of the current implementation. It can be mitigated by using a new-type technique,
-which was shown earlier.
-
-This is yet another place for manual work, but it must be done, the editor cannot use "magic" to understand which widget
-to use to visualize your data, there's no magic here.
+the current animation.
 
 Now we need to go to the editor again and add the animations to the `Player`, select the player's rigid body, and
 find the `Script` section in the `Inspector`. Add two animations there like so:
 
 ![editor_step6](editor_step6.png)
 
+After filling in the animations and turning them on, you can run the game and your character should play animations
+correctly.
+
 ## Conclusion
 
-In this tutorial, we've learned the basics of the new scripting system of the engine that was added in Fyrox 0.25. The game
-we've built it very simple, but it is just the beginning.
-It is easy to add more scripts for enemies, weapons, collectible items, and so on.
+In this tutorial, we've learned the basics of the new scripting system of the engine. The game we've built it very 
+simple, but it is just the beginning. It is easy to add more scripts for enemies, weapons, collectible items, and so on.

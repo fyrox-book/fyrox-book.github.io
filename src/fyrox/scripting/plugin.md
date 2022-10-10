@@ -1,14 +1,17 @@
 # Plugins
 
 A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and provides
-a set of scripts, that can be used to assign custom logic to scene nodes. Every script belongs to only one plugin.
+a set of scripts, that can be used to assign custom logic to scene nodes.
 
 Plugin is an "entry point" of your game, it has a fixed set of methods that can be used for initialization, update,
 OS event handling, etc. Every plugin is statically linked to the engine (editor), there is no support for hot-reloading
-due to lack of stable ABI in Rust.
+due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytim - if you don't change 
+data layout in your structures the editor will be able to compile your game and run it with the currently loaded scene,
+thus reducing amount of iterations. You can freely modify application logic and this won't affect running editor.
 
 The main purpose of the plugins is to hold and operate on some global application data, that can be used in scripts and
-provide a set of scripts to the engine.
+provide a set of scripts to the engine. Plugins also have much wider access to engine internals, than scripts. For example,
+it is possible to change scenes, add render passes, change resolution, etc. which is not possible from scripts.
 
 ## Structure
 
@@ -21,22 +24,15 @@ use fyrox::{
     core::{
         futures::executor::block_on,
         pool::Handle,
-        uuid::{uuid, Uuid},
     },
     event::Event,
     event_loop::ControlFlow,
     gui::message::UiMessage,
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
-    scene::{node::TypeUuidProvider, Scene, SceneLoader},
+    scene::{Scene, SceneLoader},
 };
 
 pub struct GameConstructor;
-
-impl TypeUuidProvider for GameConstructor {
-    fn type_uuid() -> Uuid {
-        uuid!("f615ac42-b259-4a23-bb44-407d753ac178")
-    }
-}
 
 impl PluginConstructor for GameConstructor {
     fn register(&self, _context: PluginRegistrationContext) {
@@ -87,10 +83,6 @@ impl Plugin for Game {
         // Add your global update code here.
     }
 
-    fn id(&self) -> Uuid {
-        GameConstructor::type_uuid()
-    }
-
     fn on_os_event(
         &mut self,
         _event: &Event<()>,
@@ -115,7 +107,7 @@ There are two major parts - `GameConstructor` and `Game` itself. `GameConstructo
 is responsible for script registration (`fn register`) and creating the actual game instance (`fn create_instance`).
 
 - `register` - called once on start allowing you to register your scripts. Please note that you must register all your
-scripts here, otherwise the engine will know nothing about them.
+scripts here, otherwise the engine (and the editor) will know nothing about them.
 - `create_instance` - called once, allowing you to create actual game instance. It is guaranteed to be called once, but 
 _where_ it is called is implementation-defined. For example, the editor will **not** call this method, it does not 
 create any game instance. The method has `override_scene` parameter, in short it is a handle to a scene that must be 
@@ -132,7 +124,6 @@ any event such as keyboard, mouse, game pad events or any other events. Please n
 should put here only _object-independent_ logic. Scripts can catch window events too.
 - `on_ui_message` - it is called when there is a message from the user interface, it should be used to react to user
 actions (like pressed buttons, etc.)
-- `id` - utility method that should return stable id of the plugin.
 
 ## Control Flow
 
@@ -162,16 +153,19 @@ context is something like this:
 #     renderer::Renderer,
 #     scene::SceneContainer,
 #     window::Window,
+#     plugin::SoundEngineHelper,
 # };
 # use std::sync::Arc;
-pub struct PluginContext<'a> {
+pub struct PluginContext<'a, 'b> {
     pub scenes: &'a mut SceneContainer,
     pub resource_manager: &'a ResourceManager,
     pub user_interface: &'a mut UserInterface,
     pub renderer: &'a mut Renderer,
     pub dt: f32,
+    pub lag: &'b mut f32,
     pub serialization_context: &'a Arc<SerializationContext>,
     pub window: &'a Window,
+    pub sound_engine: SoundEngineHelper<'a>,
 }
 ```
 
@@ -184,8 +178,13 @@ the same even if there are multiple scenes created.
 - `renderer` - can be used to add custom rendering techniques, change quality settings, etc.
 - `dt` - a time passed since last frame. The actual value is implementation-defined, but on current implementation it
 is equal to 1/60 of second and does not change event if the frame rate is changing.
+- `lag` - a reference to the time accumulator, that holds remaining amount of time that should be used to update a plugin. 
+A caller splits `lag` into multiple sub-steps using `dt` and thus stabilizes update rate. The main use of this variable, 
+is to be able to reset `lag` when you're doing some heavy calculations in a game loop (i.e. loading a new level) so the
+engine won't try to "catch up" with all the time that was spent in heavy calculation.
 - `serialization_context` - it can be used to register script and custom scene nodes constructors and at runtime.
 - `window` - main application window, you can use it to change title, resolution, etc.
+- `sound_engine` - sound engine allows you to change global sound parameters, such as master gain, etc.
 
 ## Editor and Plugins
 
