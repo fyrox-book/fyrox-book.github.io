@@ -37,6 +37,7 @@ To use the macro, you must import all types related to `Visit` trait by `use fyr
 an example:
 
 ```rust,no_run
+# extern crate fyrox;
 use fyrox::core::visitor::prelude::*;
 
 #[derive(Visit)]
@@ -60,6 +61,7 @@ Manual implementation of the trait gives you an opportunity to fix compatibility
 during serialization (logging, for instance). Typical manual implementation could look like this:
 
 ```rust,no_run
+# extern crate fyrox;
 use fyrox::core::visitor::prelude::*;
 
 struct MyStruct {
@@ -102,6 +104,7 @@ To serialize an object all you need to do is to create an instance of a Visitor 
 like so:
 
 ```rust,no_run
+# extern crate fyrox;
 use fyrox::core::visitor::prelude::*;
 use std::path::Path;
 
@@ -152,7 +155,8 @@ then "filling" it with values from the visitor.
 Sometimes there is a need to pass custom data to `visit` methods, one of the ways to do this is to use `environment` field
 of the visitor:
 
-```rust
+```rust,no_run
+# extern crate fyrox;
 use fyrox::core::visitor::prelude::*;
 use std::sync::Arc;
 

@@ -365,6 +365,7 @@ following fields to the `Player`:
 
 ```rust,no_run
 # extern crate fyrox;
+# use fyrox::animation::spritesheet::SpriteSheetAnimation;
 # struct Animation;
 # struct Player {
 animations: Vec<SpriteSheetAnimation>,
