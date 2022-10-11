@@ -94,7 +94,7 @@
     - [Vector image (WIP)](./fyrox/ui/vector_image.md)        
     - [Window](./fyrox/ui/window.md)        
     - [Wrap panel](./fyrox/ui/wrap_panel.md)        
-- [Serialization (WIP)](./fyrox/serialization/serialization.md)
+- [Serialization](./fyrox/serialization/index.md)
 - [Editor](./fyrox/editor/index.md)
   - [Settings](./fyrox/editor/settings.md)
 - [Miscellaneous](./fyrox/misc/misc.md)
