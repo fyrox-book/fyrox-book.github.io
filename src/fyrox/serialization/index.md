@@ -103,7 +103,7 @@ the following section for more info.
 To serialize an object all you need to do is to create an instance of a Visitor in either read or write mode and use it
 like so:
 
-```rust,no_run
+```rust,no_run,edition2021
 # extern crate fyrox;
 use fyrox::core::visitor::prelude::*;
 use std::path::Path;
