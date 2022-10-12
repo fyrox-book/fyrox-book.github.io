@@ -95,6 +95,7 @@
     - [Window](./fyrox/ui/window.md)        
     - [Wrap panel](./fyrox/ui/wrap_panel.md)        
 - [Serialization](./fyrox/serialization/index.md)
+  - [Saved Games (WIP)](./fyrox/serialization/save.md)
 - [Editor](./fyrox/editor/index.md)
   - [Settings](./fyrox/editor/settings.md)
 - [Miscellaneous](./fyrox/misc/misc.md)
