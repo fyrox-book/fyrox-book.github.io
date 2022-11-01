@@ -2619,6 +2619,117 @@ fn create_camera_with_lut(
 }
 <span class="boring">}
 </span></code></pre></pre>
+<h2 id="picking"><a class="header" href="#picking">Picking</a></h2>
+<p>In some games you may need to do mouse picking of objects in your scene. To do that, at first you need to somehow convert
+a point on the screen to ray in the world. <code>Camera</code> has <code>make_ray</code> method exactly for that purpose:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{algebra::Vector2, math::ray::Ray},
+</span><span class="boring">    renderer::Renderer,
+</span><span class="boring">    scene::camera::Camera,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn make_picking_ray(camera: &amp;Camera, point: Vector2&lt;f32&gt;, renderer: &amp;Renderer) -&gt; Ray {
+    camera.make_ray(point, renderer.get_frame_bounds())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The ray then can be used to <a href="fyrox/scene/../physics/ray.html">perform a ray cast over physics entities</a>. This is the simplest way
+of camera picking, and you should prefer it most of the time.</p>
+<h3 id="advanced-picking"><a class="header" href="#advanced-picking">Advanced picking</a></h3>
+<p><strong>Important</strong>: The following picking method is for advanced engine users only, if you don't know the math you should not
+use it.</p>
+<p>If you know the math and don't want to create physical entities, you can use this ray to perform manual 
+ray intersection check:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{
+</span><span class="boring">        algebra::Vector3,
+</span><span class="boring">        algebra::{Matrix4, Point3},
+</span><span class="boring">        math::TriangleDefinition,
+</span><span class="boring">        math::{ray::Ray, Vector3Ext},
+</span><span class="boring">        visitor::Node,
+</span><span class="boring">    },
+</span><span class="boring">    scene::mesh::{
+</span><span class="boring">        buffer::{VertexAttributeUsage, VertexReadTrait},
+</span><span class="boring">        surface::SurfaceData,
+</span><span class="boring">        Mesh,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn read_vertex_position(data: &amp;SurfaceData, i: u32) -&gt; Option&lt;Vector3&lt;f32&gt;&gt; {
+    data.vertex_buffer
+        .get(i as usize)
+        .and_then(|v| v.read_3_f32(VertexAttributeUsage::Position).ok())
+}
+
+fn transform_vertex(vertex: Vector3&lt;f32&gt;, transform: &amp;Matrix4&lt;f32&gt;) -&gt; Vector3&lt;f32&gt; {
+    transform.transform_point(&amp;Point3::from(vertex)).coords
+}
+
+fn read_triangle(
+    data: &amp;SurfaceData,
+    triangle: &amp;TriangleDefinition,
+    transform: &amp;Matrix4&lt;f32&gt;,
+) -&gt; Option&lt;[Vector3&lt;f32&gt;; 3]&gt; {
+    let a = transform_vertex(read_vertex_position(data, triangle[0])?, transform);
+    let b = transform_vertex(read_vertex_position(data, triangle[1])?, transform);
+    let c = transform_vertex(read_vertex_position(data, triangle[2])?, transform);
+    Some([a, b, c])
+}
+
+pub fn precise_ray_test(
+    node: &amp;Node,
+    ray: &amp;Ray,
+    ignore_back_faces: bool,
+) -&gt; Option&lt;(f32, Vector3&lt;f32&gt;)&gt; {
+    let mut closest_distance = f32::MAX;
+    let mut closest_point = None;
+
+    if let Some(mesh) = node.query_component_ref::&lt;Mesh&gt;() {
+        let transform = mesh.global_transform();
+
+        for surface in mesh.surfaces().iter() {
+            let data = surface.data();
+            let data = data.lock();
+
+            for triangle in data
+                .geometry_buffer
+                .iter()
+                .filter_map(|t| read_triangle(&amp;data, t, &amp;transform))
+            {
+                if ignore_back_faces {
+                    // If normal of the triangle is facing in the same direction as ray's direction,
+                    // then we skip such triangle.
+                    let normal =
+                        (triangle[1] - triangle[0]).cross(&amp;(triangle[2] - triangle[0]));
+                    if normal.dot(&amp;ray.dir) &gt;= 0.0 {
+                        continue;
+                    }
+                }
+
+                if let Some(pt) = ray.triangle_intersection_point(&amp;triangle) {
+                    let distance = ray.origin.sqr_distance(&amp;pt);
+
+                    if distance &lt; closest_distance {
+                        closest_distance = distance;
+                        closest_point = Some(pt);
+                    }
+                }
+            }
+        }
+    }
+
+    closest_point.map(|pt| (closest_distance, pt))
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>precise_ray_test</code> is what you need, it performs precise intersection check with geometry of a mesh node. It returns a
+tuple of the closest distance and the closest intersection point. </p>
 <h2 id="exposure-and-hdr"><a class="header" href="#exposure-and-hdr">Exposure and HDR</a></h2>
 <p>(WIP)</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="decal-node"><a class="header" href="#decal-node">Decal node</a></h1>
