@@ -69,11 +69,14 @@ You can undo or redo your changes either by clicking `Edit -> Undo/Redo` or by s
 There are number of control keys that you'll be using most of the time, pretty much all of them works in `Scene Preview`
 window:
 
+### Editor camera movement
+Click and hold `[Right Mouse Button]` within `Scene Preview` window to use movement controls:
+  - `[W][S][A][D]` - Move camera forward/backward/left/right
+  - `[Space][Q]/[E]` - Raise/Lower Camera
+  - `[Ctrl]` - speed up
+  - `[Shift]`- slowdown
+### Others
 - `[Left Mouse Button]` - Select
-- `[W][S][A][D]` - Move camera forward/backward/left/right
-- `[Space][Q]/[E]` - Raise/Lower Camera
-- `[Ctrl]` - speed up
-- `[Shift]`- slowdown
 - `[Middle Mouse Button]` to pan camera in viewing plane
 - `[1]` - Select interaction mode
 - `[2]` - Move interaction mode
