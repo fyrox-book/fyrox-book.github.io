@@ -4,8 +4,10 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Weapons - Fyrox Book</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -16,25 +18,28 @@
         <link rel="stylesheet" href="../../../../css/general.css">
         <link rel="stylesheet" href="../../../../css/chrome.css">
         <link rel="stylesheet" href="../../../../css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="../../../../FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="../../../../fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="../../../../highlight.css">
         <link rel="stylesheet" href="../../../../tomorrow-night.css">
         <link rel="stylesheet" href="../../../../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../../../../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +55,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,7 +67,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -75,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../../../../introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/basic_concepts.html"><strong aria-hidden="true">2.2.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.3.</strong> Design Philosophy and Goals</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/editor_overview.html"><strong aria-hidden="true">3.2.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/assets.html"><strong aria-hidden="true">3.4.</strong> Assets</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/data_management.html"><strong aria-hidden="true">3.5.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/prefab.html"><strong aria-hidden="true">5.2.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/inheritance.html"><strong aria-hidden="true">5.3.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/base_node.html"><strong aria-hidden="true">5.4.</strong> Base node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/mesh_node.html"><strong aria-hidden="true">5.5.</strong> Mesh node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/light_node.html"><strong aria-hidden="true">5.6.</strong> Light node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/sprite_node.html"><strong aria-hidden="true">5.7.</strong> Sprite node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/particle_system_node.html"><strong aria-hidden="true">5.8.</strong> Particle system node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/terrain_node.html"><strong aria-hidden="true">5.9.</strong> Terrain node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/camera_node.html"><strong aria-hidden="true">5.10.</strong> Camera node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/decal_node.html"><strong aria-hidden="true">5.11.</strong> Decal node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/rectangle.html"><strong aria-hidden="true">5.12.</strong> Rectangle node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/custom_node.html"><strong aria-hidden="true">5.13.</strong> Custom node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/physics.html"><strong aria-hidden="true">5.14.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/physics/rigid_body.html"><strong aria-hidden="true">5.14.1.</strong> Rigid body</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/collider.html"><strong aria-hidden="true">5.14.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/joint.html"><strong aria-hidden="true">5.14.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/ray.html"><strong aria-hidden="true">5.14.4.</strong> Ray Casting</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/sound/sound.html"><strong aria-hidden="true">5.15.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/sound/hrtf.html"><strong aria-hidden="true">5.15.1.</strong> HRTF (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/sound/effects.html"><strong aria-hidden="true">5.15.2.</strong> Effects (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/animation/animation.html"><strong aria-hidden="true">5.16.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/animation/blending.html"><strong aria-hidden="true">5.16.1.</strong> Blending</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/animation/editor.html"><strong aria-hidden="true">5.16.2.</strong> ABSM Editor</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/ai/ai.html"><strong aria-hidden="true">6.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/ai/beh_tree.html"><strong aria-hidden="true">6.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ai/pathfinding.html"><strong aria-hidden="true">6.2.</strong> Path Finding (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ai/navmesh.html"><strong aria-hidden="true">6.3.</strong> Navigational Meshes (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/rendering.html"><strong aria-hidden="true">7.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/shaders.html"><strong aria-hidden="true">7.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/materials.html"><strong aria-hidden="true">7.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/lightmaps.html"><strong aria-hidden="true">7.3.</strong> Light Maps (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/settings.html"><strong aria-hidden="true">7.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/render_pass.html"><strong aria-hidden="true">7.5.</strong> Render Pass</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/resources.html"><strong aria-hidden="true">8.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/resources/model.html"><strong aria-hidden="true">8.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/texture.html"><strong aria-hidden="true">8.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/sound.html"><strong aria-hidden="true">8.3.</strong> Sound Buffers (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/curve.html"><strong aria-hidden="true">8.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/absm.html"><strong aria-hidden="true">8.5.</strong> Animation Machines (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/ui.html"><strong aria-hidden="true">9.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">9.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/general_rules.html"><strong aria-hidden="true">9.2.</strong> General rules</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/font.html"><strong aria-hidden="true">9.3.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/theme.html"><strong aria-hidden="true">9.4.</strong> Theme</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/widgets.html"><strong aria-hidden="true">9.5.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/ui/button.html"><strong aria-hidden="true">9.5.1.</strong> Button</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/border.html"><strong aria-hidden="true">9.5.2.</strong> Border</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/canvas.html"><strong aria-hidden="true">9.5.3.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/checkbox/check_box.html"><strong aria-hidden="true">9.5.4.</strong> Check box</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/curve_editor.html"><strong aria-hidden="true">9.5.5.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/decorator.html"><strong aria-hidden="true">9.5.6.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/dock.html"><strong aria-hidden="true">9.5.7.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/dropdown_list.html"><strong aria-hidden="true">9.5.8.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/expander.html"><strong aria-hidden="true">9.5.9.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/file_browser.html"><strong aria-hidden="true">9.5.10.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/grid.html"><strong aria-hidden="true">9.5.11.</strong> Grid</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/image.html"><strong aria-hidden="true">9.5.12.</strong> Image</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/inspector.html"><strong aria-hidden="true">9.5.13.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/list_view.html"><strong aria-hidden="true">9.5.14.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/menu.html"><strong aria-hidden="true">9.5.15.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/message_box.html"><strong aria-hidden="true">9.5.16.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/numeric.html"><strong aria-hidden="true">9.5.17.</strong> Numeric field (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/popup.html"><strong aria-hidden="true">9.5.18.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/progress_bar.html"><strong aria-hidden="true">9.5.19.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/range.html"><strong aria-hidden="true">9.5.20.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/rect.html"><strong aria-hidden="true">9.5.21.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/scroll_bar.html"><strong aria-hidden="true">9.5.22.</strong> Scroll bar (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/scroll_panel.html"><strong aria-hidden="true">9.5.23.</strong> Scroll panel (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/scroll_viewer.html"><strong aria-hidden="true">9.5.24.</strong> Scroll viewer (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/stack_panel.html"><strong aria-hidden="true">9.5.25.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/tab_control.html"><strong aria-hidden="true">9.5.26.</strong> Tab Control</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/text.html"><strong aria-hidden="true">9.5.27.</strong> Text</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/text_box.html"><strong aria-hidden="true">9.5.28.</strong> Text box</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/tree.html"><strong aria-hidden="true">9.5.29.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/vector_image.html"><strong aria-hidden="true">9.5.30.</strong> Vector image (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/window.html"><strong aria-hidden="true">9.5.31.</strong> Window</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/wrap_panel.html"><strong aria-hidden="true">9.5.32.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/serialization/index.html"><strong aria-hidden="true">10.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/serialization/save.html"><strong aria-hidden="true">10.1.</strong> Saved Games (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/editor/index.html"><strong aria-hidden="true">11.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/editor/settings.html"><strong aria-hidden="true">11.1.</strong> Settings</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/misc/misc.html"><strong aria-hidden="true">12.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/misc/log.html"><strong aria-hidden="true">12.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/tutorials.html"><strong aria-hidden="true">13.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/intro.html"><strong aria-hidden="true">13.1.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/tutorial-2/tutorial-part-2.html" class="active"><strong aria-hidden="true">13.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">13.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/rpg/intro.html"><strong aria-hidden="true">13.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.2.1.</strong> Character controller</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/platformer/part1.html"><strong aria-hidden="true">13.3.</strong> 2D Platformer tutorial</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/performance/index.html"><strong aria-hidden="true">14.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/obsolete/obsolete.html"><strong aria-hidden="true">15.</strong> Obsolete</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/obsolete/installation.html"><strong aria-hidden="true">15.1.</strong> Installation (Obsolete)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/obsolete/custom_game_loop.html"><strong aria-hidden="true">15.2.</strong> Custom game loop (Obsolete)</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../../../introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/basic_concepts.html"><strong aria-hidden="true">2.2.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.3.</strong> Design Philosophy and Goals</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/editor_overview.html"><strong aria-hidden="true">3.2.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/assets.html"><strong aria-hidden="true">3.4.</strong> Assets</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/beginning/data_management.html"><strong aria-hidden="true">3.5.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/prefab.html"><strong aria-hidden="true">5.2.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/inheritance.html"><strong aria-hidden="true">5.3.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/base_node.html"><strong aria-hidden="true">5.4.</strong> Base node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/mesh_node.html"><strong aria-hidden="true">5.5.</strong> Mesh node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/light_node.html"><strong aria-hidden="true">5.6.</strong> Light node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/sprite_node.html"><strong aria-hidden="true">5.7.</strong> Sprite node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/particle_system_node.html"><strong aria-hidden="true">5.8.</strong> Particle system node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/terrain_node.html"><strong aria-hidden="true">5.9.</strong> Terrain node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/camera_node.html"><strong aria-hidden="true">5.10.</strong> Camera node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/decal_node.html"><strong aria-hidden="true">5.11.</strong> Decal node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/rectangle.html"><strong aria-hidden="true">5.12.</strong> Rectangle node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/scene/custom_node.html"><strong aria-hidden="true">5.13.</strong> Custom node</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/physics.html"><strong aria-hidden="true">5.14.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/physics/rigid_body.html"><strong aria-hidden="true">5.14.1.</strong> Rigid body</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/collider.html"><strong aria-hidden="true">5.14.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/joint.html"><strong aria-hidden="true">5.14.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/physics/ray.html"><strong aria-hidden="true">5.14.4.</strong> Ray Casting</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/sound/sound.html"><strong aria-hidden="true">5.15.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/sound/hrtf.html"><strong aria-hidden="true">5.15.1.</strong> HRTF (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/sound/effects.html"><strong aria-hidden="true">5.15.2.</strong> Effects (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/animation/animation.html"><strong aria-hidden="true">5.16.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/animation/anim_editor.html"><strong aria-hidden="true">5.16.1.</strong> Animation Editor</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/animation/blending.html"><strong aria-hidden="true">5.16.2.</strong> Animation Blending</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/animation/absm_editor.html"><strong aria-hidden="true">5.16.3.</strong> ABSM Editor</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/ai/ai.html"><strong aria-hidden="true">6.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/ai/beh_tree.html"><strong aria-hidden="true">6.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ai/pathfinding.html"><strong aria-hidden="true">6.2.</strong> Path Finding (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ai/navmesh.html"><strong aria-hidden="true">6.3.</strong> Navigational Meshes (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/rendering.html"><strong aria-hidden="true">7.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/shaders.html"><strong aria-hidden="true">7.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/materials.html"><strong aria-hidden="true">7.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/lightmaps.html"><strong aria-hidden="true">7.3.</strong> Light Maps (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/settings.html"><strong aria-hidden="true">7.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/rendering/render_pass.html"><strong aria-hidden="true">7.5.</strong> Render Pass</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/resources.html"><strong aria-hidden="true">8.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/resources/model.html"><strong aria-hidden="true">8.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/texture.html"><strong aria-hidden="true">8.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/sound.html"><strong aria-hidden="true">8.3.</strong> Sound Buffers (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/curve.html"><strong aria-hidden="true">8.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/resources/absm.html"><strong aria-hidden="true">8.5.</strong> Animation Machines (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/ui.html"><strong aria-hidden="true">9.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">9.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/general_rules.html"><strong aria-hidden="true">9.2.</strong> General rules</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/font.html"><strong aria-hidden="true">9.3.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/theme.html"><strong aria-hidden="true">9.4.</strong> Theme</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/widgets.html"><strong aria-hidden="true">9.5.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/ui/button.html"><strong aria-hidden="true">9.5.1.</strong> Button</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/border.html"><strong aria-hidden="true">9.5.2.</strong> Border</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/canvas.html"><strong aria-hidden="true">9.5.3.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/checkbox/check_box.html"><strong aria-hidden="true">9.5.4.</strong> Check box</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/curve_editor.html"><strong aria-hidden="true">9.5.5.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/decorator.html"><strong aria-hidden="true">9.5.6.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/dock.html"><strong aria-hidden="true">9.5.7.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/dropdown_list.html"><strong aria-hidden="true">9.5.8.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/expander.html"><strong aria-hidden="true">9.5.9.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/file_browser.html"><strong aria-hidden="true">9.5.10.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/grid.html"><strong aria-hidden="true">9.5.11.</strong> Grid</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/image.html"><strong aria-hidden="true">9.5.12.</strong> Image</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/inspector.html"><strong aria-hidden="true">9.5.13.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/list_view.html"><strong aria-hidden="true">9.5.14.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/menu.html"><strong aria-hidden="true">9.5.15.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/message_box.html"><strong aria-hidden="true">9.5.16.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/numeric.html"><strong aria-hidden="true">9.5.17.</strong> Numeric field (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/popup.html"><strong aria-hidden="true">9.5.18.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/progress_bar.html"><strong aria-hidden="true">9.5.19.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/range.html"><strong aria-hidden="true">9.5.20.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/rect.html"><strong aria-hidden="true">9.5.21.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/scroll_bar.html"><strong aria-hidden="true">9.5.22.</strong> Scroll bar (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/scroll_panel.html"><strong aria-hidden="true">9.5.23.</strong> Scroll panel (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/scroll_viewer.html"><strong aria-hidden="true">9.5.24.</strong> Scroll viewer (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/stack_panel.html"><strong aria-hidden="true">9.5.25.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/tab_control.html"><strong aria-hidden="true">9.5.26.</strong> Tab Control</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/text.html"><strong aria-hidden="true">9.5.27.</strong> Text</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/text_box.html"><strong aria-hidden="true">9.5.28.</strong> Text box</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/tree.html"><strong aria-hidden="true">9.5.29.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/vector_image.html"><strong aria-hidden="true">9.5.30.</strong> Vector image (WIP)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/window.html"><strong aria-hidden="true">9.5.31.</strong> Window</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/ui/wrap_panel.html"><strong aria-hidden="true">9.5.32.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/serialization/index.html"><strong aria-hidden="true">10.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/serialization/save.html"><strong aria-hidden="true">10.1.</strong> Saved Games (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/editor/index.html"><strong aria-hidden="true">11.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/editor/settings.html"><strong aria-hidden="true">11.1.</strong> Settings</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/misc/misc.html"><strong aria-hidden="true">12.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/misc/log.html"><strong aria-hidden="true">12.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/tutorials.html"><strong aria-hidden="true">13.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/intro.html"><strong aria-hidden="true">13.1.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/tutorial-2/tutorial-part-2.html" class="active"><strong aria-hidden="true">13.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">13.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/rpg/intro.html"><strong aria-hidden="true">13.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.2.1.</strong> Character controller</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/tutorials/platformer/part1.html"><strong aria-hidden="true">13.3.</strong> 2D Platformer tutorial</a></li></ol></li><li class="chapter-item expanded "><a href="../../../../fyrox/performance/index.html"><strong aria-hidden="true">14.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/obsolete/obsolete.html"><strong aria-hidden="true">15.</strong> Obsolete</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../../fyrox/obsolete/installation.html"><strong aria-hidden="true">15.1.</strong> Installation (Obsolete)</a></li><li class="chapter-item expanded "><a href="../../../../fyrox/obsolete/custom_game_loop.html"><strong aria-hidden="true">15.2.</strong> Custom game loop (Obsolete)</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -83,7 +88,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -93,7 +98,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -113,6 +118,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -126,8 +132,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -161,8 +168,7 @@ is the result we're aiming in the tutorial:</p>
 </span>pub mod weapon;
 ...
 use weapon::Weapon;
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Switch to <code>weapon.rs</code> and paste this code into it:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -219,8 +225,7 @@ impl Weapon {
     }
 }
 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This piece of code just loads a <a href="./m4.zip">weapon model</a> and saves an instance handle for 
 further use. Also, each weapon should contain a helper node that tells from where it will &quot;emit&quot; bullets, the node 
 was added in a 3D editor and has name <code>Weapon:ShotPoint</code>. Weapon implementation has helper methods that provide read-only
@@ -244,8 +249,7 @@ the <code>BaseBuilder</code> of the <code>CameraBuilder</code> instance (you als
     .build(&amp;mut scene.graph);
     weapon_pivot
 }]),
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>What is going on here? We're just adding new child node to the camera and offset it by some vector. Every weapon will
 be attached to this pivot. Please keep in mind that the offset given in <strong>local</strong> coordinates, which means that weapon
 pivot will move with the camera, but with some offset relative to it. Also, do not forget to add this line after 
@@ -253,8 +257,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let weapon_pivot;
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, add the weapon pivot to <code>Self { ... }</code> (and also add <code>weapon_pivot: Handle&lt;Node&gt;</code> to the <code>Player</code> struct):</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -264,8 +267,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
     rigid_body: rigid_body_handle.into(),
     controller: Default::default(),
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next we need a container for weapons, let's add it to the <code>Game</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -274,16 +276,14 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
     player: Player,
     weapons: Pool&lt;Weapon&gt; // Weapons will live in a pool
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Also do not forget to import <code>Pool</code> from <code>fyrox::core::pool</code> in <code>main.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...
 use fyrox::core::pool::{Handle, Pool};
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need to change <code>Game::new()</code> a bit to add a weapon to the player:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -319,8 +319,7 @@ use fyrox::core::pool::{Handle, Pool};
         weapons,
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At first, we're loading the scene, next we're creating player as usual. Next we're creating a weapon and attach it to 
 the weapon pivot we've made earlier. Finally, we're creating a container for the weapons: we'll use Pool to be able 
 to borrow weapon later on when we need. So, let's run the game, and you should see something like this:</p>
@@ -345,8 +344,7 @@ message that will be put in a common queue and executed later on one by one at t
     receiver: Receiver&lt;Message&gt;, // Single receiver, it cannot be cloned.
     sender: Sender&lt;Message&gt;, // Sender can be cloned and used from various places.
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need a <code>Message</code> enumeration, add <code>message.rs</code> module, import it in <code>main.rs</code> (<code>pub mod message;</code>) and fill it
 with the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -359,8 +357,7 @@ pub enum Message {
         weapons: Handle&lt;Weapon&gt;
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>For now, we have only one message kind - <code>ShootWeapon</code> with a single parameter, a handle of a weapon to shoot. We need
 a place to handle messages, <code>Game::update</code> seems to be the most suitable - it is on top of &quot;call hierarchy&quot; and has 
 most wide context. Let's change <code>Game::update</code> to this code:</p>
@@ -385,8 +382,7 @@ most wide context. Let's change <code>Game::update</code> to this code:</p>
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>So, these first three new lines updating every weapon in the game, for now update of a weapon just updates shooting timer.
 As you can see we've added new parameter to the function <code>dt: f32</code>, this is the time span from last frame. Do not forget
 to pass this parameter in <code>fn main()</code>: <code>game.update(&amp;mut engine, TIMESTEP);</code>. Finally, at the end of the function we're
@@ -453,14 +449,12 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
         create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Wow! Why is there so much code to shoot a weapon!? Actually, this is not all the code - check the last line</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This is yet another function we must add, it is a standalone helper function that creates a shot trail:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -536,8 +530,7 @@ fn create_shot_trail(
     .with_render_path(RenderPath::Forward)
     .build(graph);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Okay... Let's disassemble this heap of code line by line. At first, we're borrowing the weapon by its handle and 
 check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (reset the timer) if so:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -547,8 +540,7 @@ check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (re
     if weapon.can_shoot() {
         weapon.shoot();
     ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next we're using ray casting to find the target we're shooting at:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -579,8 +571,7 @@ scene.graph.physics.cast_ray(
 );
 
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>To determine the &quot;target&quot;, we're have to make a ray first. It starts from the &quot;shot point&quot; we've attached to the weapon.
 Direction of the ray is the &quot;look&quot; vector of the weapon model scaled by some large value which defines a &quot;length&quot; of the
 ray. Finally, we're casting the ray. Next we have to check each intersection and find the target:</p>
@@ -610,8 +601,7 @@ let trail_length = if let Some(intersection) = intersections
     // Otherwise trail length will be just the ray length.
     ray.dir.norm()
 };
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>First intersection most likely will be player's capsule, because shot point may be inside player's capsule. We're 
 filtering such intersection in the first three lines. To do that, we have to remember the handle of player's capsule
 in <code>Player</code>: <code>collider: Handle&lt;Node&gt;</code> and fill the field in <code>Player::new</code> like this:</p>
@@ -635,8 +625,7 @@ Self {
     ...
 }
 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next goes <code>TODO</code> comment, remember this line, it will be replaced when we'll add bots in future tutorial.
 Until we have no bots, we should somehow emulate shot impact, to do that we'll just apply some force at the point of
 impact. Finally, we're calculating desired shot trail length - it is just distance between point of impact and ray's 
@@ -644,8 +633,7 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now let's dive into this function. It starts from the definition of local transform of the trail:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -657,8 +645,7 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
     // Rotate the trail along given `direction`
     .with_local_rotation(UnitQuaternion::face_towards(&amp;direction, &amp;Vector3::y()))
     .build();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to the length of the trail. Next we're making
 geometry for the cylinder:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -671,8 +658,7 @@ geometry for the cylinder:</p>
     // Rotate vertical cylinder around X axis to make it face towards Z axis
     &amp;UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
 )));
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -702,8 +688,7 @@ MeshBuilder::new(
 // transparent.
 .with_render_path(RenderPath::Forward)
 .build(graph);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The trail will live just 0.25 seconds, Fyrox has built-in functionality for short-living objects, you have to just set 
 desired lifetime, and an object will be removed at the time. Also, we don't want the trail to cast shadows, and we want 
 the trail to be transparent yellow, to do that we have to change render path of the mesh to <code>Forward</code>. In short, every
@@ -719,8 +704,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
         self.controller.shoot = state == ElementState::Pressed;
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need a way to send messages to the game from the player. We need a new field in <code>Player</code> struct 
 <code>sender: Sender&lt;Message&gt;</code>. Also, we must change signature of <code>Player::new()</code> to this:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -730,8 +714,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
     resource_manager: ResourceManager,
     sender: Sender&lt;Message&gt;,
 ) -&gt; Self 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Just pass the <code>sender</code> in the <code>Self { .. }</code> like this: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -740,8 +723,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
     sender, // &lt;- Pass sender 
     ...
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Player must know about its weapons, let's fix this by adding new field to the <code>Player</code>: <code>weapon: Handle&lt;Weapon&gt;</code>, we'll
 fill this field in the <code>Game::new()</code>, not in <code>Player::new()</code> because at the moment of creation of the player there are
 no weapons:</p>
@@ -756,8 +738,7 @@ let weapon = weapons.spawn(weapon);
 player.weapon = weapon;
 
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, at the end of <code>Player::update</code> we will handle the state of the input controller:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -768,8 +749,7 @@ player.weapon = weapon;
         })
         .unwrap();
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, at this momemt you should be able to compile the game and as you run it, you should see something like this when
 you'll press left mouse button:</p>
 <p><img src="./shooting.jpg" alt="Weapon" /></p>
@@ -781,15 +761,13 @@ start by adding these fields in the <code>Weapon</code> struct:</p>
 </span><span class="boring">fn main() {
 </span>recoil_offset: Vector3&lt;f32&gt;,
 recoil_target_offset: Vector3&lt;f32&gt;,
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Initialize these fields with default values (zero vector):</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>recoil_offset: Default::default(),
 recoil_target_offset: Default::default(),
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>First vector is the actual recoil offset that will be applied to the weapon model, second - target recoil value which
 first vector will follow. Why do we need two vectors instead just one? The answer is very simple, we need to smoothly
 change offset over time, and to do that offset will just &quot;follow&quot; target offset which will give us desired smooth 
@@ -823,8 +801,7 @@ pub fn update(&amp;mut self, dt: f32, graph: &amp;mut Graph) {
         self.recoil_target_offset = Default::default();
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At first, in the first line we force the <code>recoil_offset</code> to follow <code>recoil_target_offset</code> with given speed. Next we're 
 applying offset to weapon's model. Finally, we're checking if we've reached target offset and if so, just reset target
 offset to return a weapon to its default position. Also we have to slightly modify <code>Weapon::shoot</code> to modify target
@@ -837,8 +814,7 @@ offset:</p>
     // Set new offset after each shot.
     self.recoil_target_offset = Vector3::new(0.0, 0.0, -0.025); 
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The last thing we need to do is to slightly modify code at the <code>Game::update</code> to pass new parameter to <code>Weapon::update</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -852,8 +828,7 @@ offset:</p>
     }
         
     ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, run the game, and the weapon should feel more natural now. </p>
 <h2 id="impact-effects"><a class="header" href="#impact-effects">Impact effects</a></h2>
 <p>Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
@@ -932,8 +907,7 @@ that! This is the first time when we'll use particle systems. Let's add this fun
     .with_texture(resource_manager.request_texture(Path::new(&quot;data/textures/spark.png&quot;)))
     .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, again a heap of code... As usual, everything here is pretty straightforward. At first, we're creating spherical
 emitter - it is a spherical volume that responsible for spawning particles. It has a radius, and a bunch of basic properties
 such as spawn rate, maximum amount of particles, initial velocity range, etc. Next we're creating color gradient to make
@@ -953,8 +927,7 @@ create_bullet_impact(
     intersection.position.coords,
     effect_orientation,
 );
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, now run the game, and you should see something like this:</p>
 <p><img src="./impact.jpg" alt="Weapon" /></p>
 <p>One more thing that could be added is bullet shells that should come from a weapon when we're shooting, but I think the
@@ -978,9 +951,11 @@ special (let it be a surprise).</p>
                             <a rel="prev" href="../../../../fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
+
                             <a rel="next" href="../../../../fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -990,6 +965,7 @@ special (let it be a surprise).</p>
                     <a rel="prev" href="../../../../fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
+
                     <a rel="next" href="../../../../fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
@@ -997,16 +973,24 @@ special (let it be a surprise).</p>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="../../../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../../searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../../../book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="../../../../elasticlunr.min.js"></script>
+        <script src="../../../../mark.min.js"></script>
+        <script src="../../../../searcher.js"></script>
+
+        <script src="../../../../clipboard.min.js"></script>
+        <script src="../../../../highlight.js"></script>
+        <script src="../../../../book.js"></script>
 
         <!-- Custom JS scripts -->
+
+
     </body>
 </html>

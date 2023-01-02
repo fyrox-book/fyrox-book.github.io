@@ -5,8 +5,10 @@
         <meta charset="UTF-8">
         <title>Fyrox Book</title>
         <meta name="robots" content="noindex" />
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -17,25 +19,28 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -51,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -63,7 +68,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -76,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="fyrox/introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="fyrox/introduction/basic_concepts.html"><strong aria-hidden="true">2.2.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="fyrox/introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.3.</strong> Design Philosophy and Goals</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/editor_overview.html"><strong aria-hidden="true">3.2.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/assets.html"><strong aria-hidden="true">3.4.</strong> Assets</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/data_management.html"><strong aria-hidden="true">3.5.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="fyrox/scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="fyrox/scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="fyrox/scene/prefab.html"><strong aria-hidden="true">5.2.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="fyrox/scene/inheritance.html"><strong aria-hidden="true">5.3.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="fyrox/scene/base_node.html"><strong aria-hidden="true">5.4.</strong> Base node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/mesh_node.html"><strong aria-hidden="true">5.5.</strong> Mesh node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/light_node.html"><strong aria-hidden="true">5.6.</strong> Light node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/sprite_node.html"><strong aria-hidden="true">5.7.</strong> Sprite node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/particle_system_node.html"><strong aria-hidden="true">5.8.</strong> Particle system node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/terrain_node.html"><strong aria-hidden="true">5.9.</strong> Terrain node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/camera_node.html"><strong aria-hidden="true">5.10.</strong> Camera node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/decal_node.html"><strong aria-hidden="true">5.11.</strong> Decal node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/rectangle.html"><strong aria-hidden="true">5.12.</strong> Rectangle node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/custom_node.html"><strong aria-hidden="true">5.13.</strong> Custom node</a></li><li class="chapter-item expanded "><a href="fyrox/physics/physics.html"><strong aria-hidden="true">5.14.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/physics/rigid_body.html"><strong aria-hidden="true">5.14.1.</strong> Rigid body</a></li><li class="chapter-item expanded "><a href="fyrox/physics/collider.html"><strong aria-hidden="true">5.14.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="fyrox/physics/joint.html"><strong aria-hidden="true">5.14.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="fyrox/physics/ray.html"><strong aria-hidden="true">5.14.4.</strong> Ray Casting</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/sound/sound.html"><strong aria-hidden="true">5.15.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/sound/hrtf.html"><strong aria-hidden="true">5.15.1.</strong> HRTF (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/sound/effects.html"><strong aria-hidden="true">5.15.2.</strong> Effects (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/animation/animation.html"><strong aria-hidden="true">5.16.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/animation/blending.html"><strong aria-hidden="true">5.16.1.</strong> Blending</a></li><li class="chapter-item expanded "><a href="fyrox/animation/editor.html"><strong aria-hidden="true">5.16.2.</strong> ABSM Editor</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="fyrox/ai/ai.html"><strong aria-hidden="true">6.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/ai/beh_tree.html"><strong aria-hidden="true">6.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ai/pathfinding.html"><strong aria-hidden="true">6.2.</strong> Path Finding (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ai/navmesh.html"><strong aria-hidden="true">6.3.</strong> Navigational Meshes (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/rendering/rendering.html"><strong aria-hidden="true">7.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/rendering/shaders.html"><strong aria-hidden="true">7.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/materials.html"><strong aria-hidden="true">7.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/lightmaps.html"><strong aria-hidden="true">7.3.</strong> Light Maps (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/settings.html"><strong aria-hidden="true">7.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/render_pass.html"><strong aria-hidden="true">7.5.</strong> Render Pass</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/resources/resources.html"><strong aria-hidden="true">8.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/resources/model.html"><strong aria-hidden="true">8.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="fyrox/resources/texture.html"><strong aria-hidden="true">8.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="fyrox/resources/sound.html"><strong aria-hidden="true">8.3.</strong> Sound Buffers (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/resources/curve.html"><strong aria-hidden="true">8.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/resources/absm.html"><strong aria-hidden="true">8.5.</strong> Animation Machines (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/ui/ui.html"><strong aria-hidden="true">9.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">9.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="fyrox/ui/general_rules.html"><strong aria-hidden="true">9.2.</strong> General rules</a></li><li class="chapter-item expanded "><a href="fyrox/ui/font.html"><strong aria-hidden="true">9.3.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="fyrox/ui/theme.html"><strong aria-hidden="true">9.4.</strong> Theme</a></li><li class="chapter-item expanded "><a href="fyrox/ui/widgets.html"><strong aria-hidden="true">9.5.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/ui/button.html"><strong aria-hidden="true">9.5.1.</strong> Button</a></li><li class="chapter-item expanded "><a href="fyrox/ui/border.html"><strong aria-hidden="true">9.5.2.</strong> Border</a></li><li class="chapter-item expanded "><a href="fyrox/ui/canvas.html"><strong aria-hidden="true">9.5.3.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="fyrox/ui/checkbox/check_box.html"><strong aria-hidden="true">9.5.4.</strong> Check box</a></li><li class="chapter-item expanded "><a href="fyrox/ui/curve_editor.html"><strong aria-hidden="true">9.5.5.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/decorator.html"><strong aria-hidden="true">9.5.6.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/dock.html"><strong aria-hidden="true">9.5.7.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/dropdown_list.html"><strong aria-hidden="true">9.5.8.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/expander.html"><strong aria-hidden="true">9.5.9.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/file_browser.html"><strong aria-hidden="true">9.5.10.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/grid.html"><strong aria-hidden="true">9.5.11.</strong> Grid</a></li><li class="chapter-item expanded "><a href="fyrox/ui/image.html"><strong aria-hidden="true">9.5.12.</strong> Image</a></li><li class="chapter-item expanded "><a href="fyrox/ui/inspector.html"><strong aria-hidden="true">9.5.13.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/list_view.html"><strong aria-hidden="true">9.5.14.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/menu.html"><strong aria-hidden="true">9.5.15.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/message_box.html"><strong aria-hidden="true">9.5.16.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/numeric.html"><strong aria-hidden="true">9.5.17.</strong> Numeric field (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/popup.html"><strong aria-hidden="true">9.5.18.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/progress_bar.html"><strong aria-hidden="true">9.5.19.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/range.html"><strong aria-hidden="true">9.5.20.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/rect.html"><strong aria-hidden="true">9.5.21.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/scroll_bar.html"><strong aria-hidden="true">9.5.22.</strong> Scroll bar (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/scroll_panel.html"><strong aria-hidden="true">9.5.23.</strong> Scroll panel (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/scroll_viewer.html"><strong aria-hidden="true">9.5.24.</strong> Scroll viewer (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/stack_panel.html"><strong aria-hidden="true">9.5.25.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="fyrox/ui/tab_control.html"><strong aria-hidden="true">9.5.26.</strong> Tab Control</a></li><li class="chapter-item expanded "><a href="fyrox/ui/text.html"><strong aria-hidden="true">9.5.27.</strong> Text</a></li><li class="chapter-item expanded "><a href="fyrox/ui/text_box.html"><strong aria-hidden="true">9.5.28.</strong> Text box</a></li><li class="chapter-item expanded "><a href="fyrox/ui/tree.html"><strong aria-hidden="true">9.5.29.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/vector_image.html"><strong aria-hidden="true">9.5.30.</strong> Vector image (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/window.html"><strong aria-hidden="true">9.5.31.</strong> Window</a></li><li class="chapter-item expanded "><a href="fyrox/ui/wrap_panel.html"><strong aria-hidden="true">9.5.32.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="fyrox/serialization/index.html"><strong aria-hidden="true">10.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/serialization/save.html"><strong aria-hidden="true">10.1.</strong> Saved Games (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/editor/index.html"><strong aria-hidden="true">11.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/editor/settings.html"><strong aria-hidden="true">11.1.</strong> Settings</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/misc/misc.html"><strong aria-hidden="true">12.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/misc/log.html"><strong aria-hidden="true">12.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/tutorials/tutorials.html"><strong aria-hidden="true">13.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/intro.html"><strong aria-hidden="true">13.1.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">13.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">13.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/tutorials/rpg/intro.html"><strong aria-hidden="true">13.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.2.1.</strong> Character controller</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/tutorials/platformer/part1.html"><strong aria-hidden="true">13.3.</strong> 2D Platformer tutorial</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/performance/index.html"><strong aria-hidden="true">14.</strong> Performance</a></li><li class="chapter-item expanded "><a href="fyrox/obsolete/obsolete.html"><strong aria-hidden="true">15.</strong> Obsolete</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/obsolete/installation.html"><strong aria-hidden="true">15.1.</strong> Installation (Obsolete)</a></li><li class="chapter-item expanded "><a href="fyrox/obsolete/custom_game_loop.html"><strong aria-hidden="true">15.2.</strong> Custom game loop (Obsolete)</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="fyrox/introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="fyrox/introduction/basic_concepts.html"><strong aria-hidden="true">2.2.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="fyrox/introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.3.</strong> Design Philosophy and Goals</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/editor_overview.html"><strong aria-hidden="true">3.2.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/assets.html"><strong aria-hidden="true">3.4.</strong> Assets</a></li><li class="chapter-item expanded "><a href="fyrox/beginning/data_management.html"><strong aria-hidden="true">3.5.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="fyrox/scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="fyrox/scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="fyrox/scene/prefab.html"><strong aria-hidden="true">5.2.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="fyrox/scene/inheritance.html"><strong aria-hidden="true">5.3.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="fyrox/scene/base_node.html"><strong aria-hidden="true">5.4.</strong> Base node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/mesh_node.html"><strong aria-hidden="true">5.5.</strong> Mesh node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/light_node.html"><strong aria-hidden="true">5.6.</strong> Light node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/sprite_node.html"><strong aria-hidden="true">5.7.</strong> Sprite node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/particle_system_node.html"><strong aria-hidden="true">5.8.</strong> Particle system node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/terrain_node.html"><strong aria-hidden="true">5.9.</strong> Terrain node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/camera_node.html"><strong aria-hidden="true">5.10.</strong> Camera node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/decal_node.html"><strong aria-hidden="true">5.11.</strong> Decal node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/rectangle.html"><strong aria-hidden="true">5.12.</strong> Rectangle node</a></li><li class="chapter-item expanded "><a href="fyrox/scene/custom_node.html"><strong aria-hidden="true">5.13.</strong> Custom node</a></li><li class="chapter-item expanded "><a href="fyrox/physics/physics.html"><strong aria-hidden="true">5.14.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/physics/rigid_body.html"><strong aria-hidden="true">5.14.1.</strong> Rigid body</a></li><li class="chapter-item expanded "><a href="fyrox/physics/collider.html"><strong aria-hidden="true">5.14.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="fyrox/physics/joint.html"><strong aria-hidden="true">5.14.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="fyrox/physics/ray.html"><strong aria-hidden="true">5.14.4.</strong> Ray Casting</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/sound/sound.html"><strong aria-hidden="true">5.15.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/sound/hrtf.html"><strong aria-hidden="true">5.15.1.</strong> HRTF (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/sound/effects.html"><strong aria-hidden="true">5.15.2.</strong> Effects (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/animation/animation.html"><strong aria-hidden="true">5.16.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/animation/anim_editor.html"><strong aria-hidden="true">5.16.1.</strong> Animation Editor</a></li><li class="chapter-item expanded "><a href="fyrox/animation/blending.html"><strong aria-hidden="true">5.16.2.</strong> Animation Blending</a></li><li class="chapter-item expanded "><a href="fyrox/animation/absm_editor.html"><strong aria-hidden="true">5.16.3.</strong> ABSM Editor</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="fyrox/ai/ai.html"><strong aria-hidden="true">6.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/ai/beh_tree.html"><strong aria-hidden="true">6.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ai/pathfinding.html"><strong aria-hidden="true">6.2.</strong> Path Finding (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ai/navmesh.html"><strong aria-hidden="true">6.3.</strong> Navigational Meshes (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/rendering/rendering.html"><strong aria-hidden="true">7.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/rendering/shaders.html"><strong aria-hidden="true">7.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/materials.html"><strong aria-hidden="true">7.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/lightmaps.html"><strong aria-hidden="true">7.3.</strong> Light Maps (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/settings.html"><strong aria-hidden="true">7.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="fyrox/rendering/render_pass.html"><strong aria-hidden="true">7.5.</strong> Render Pass</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/resources/resources.html"><strong aria-hidden="true">8.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/resources/model.html"><strong aria-hidden="true">8.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="fyrox/resources/texture.html"><strong aria-hidden="true">8.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="fyrox/resources/sound.html"><strong aria-hidden="true">8.3.</strong> Sound Buffers (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/resources/curve.html"><strong aria-hidden="true">8.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/resources/absm.html"><strong aria-hidden="true">8.5.</strong> Animation Machines (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/ui/ui.html"><strong aria-hidden="true">9.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">9.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="fyrox/ui/general_rules.html"><strong aria-hidden="true">9.2.</strong> General rules</a></li><li class="chapter-item expanded "><a href="fyrox/ui/font.html"><strong aria-hidden="true">9.3.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="fyrox/ui/theme.html"><strong aria-hidden="true">9.4.</strong> Theme</a></li><li class="chapter-item expanded "><a href="fyrox/ui/widgets.html"><strong aria-hidden="true">9.5.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/ui/button.html"><strong aria-hidden="true">9.5.1.</strong> Button</a></li><li class="chapter-item expanded "><a href="fyrox/ui/border.html"><strong aria-hidden="true">9.5.2.</strong> Border</a></li><li class="chapter-item expanded "><a href="fyrox/ui/canvas.html"><strong aria-hidden="true">9.5.3.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="fyrox/ui/checkbox/check_box.html"><strong aria-hidden="true">9.5.4.</strong> Check box</a></li><li class="chapter-item expanded "><a href="fyrox/ui/curve_editor.html"><strong aria-hidden="true">9.5.5.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/decorator.html"><strong aria-hidden="true">9.5.6.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/dock.html"><strong aria-hidden="true">9.5.7.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/dropdown_list.html"><strong aria-hidden="true">9.5.8.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/expander.html"><strong aria-hidden="true">9.5.9.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/file_browser.html"><strong aria-hidden="true">9.5.10.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/grid.html"><strong aria-hidden="true">9.5.11.</strong> Grid</a></li><li class="chapter-item expanded "><a href="fyrox/ui/image.html"><strong aria-hidden="true">9.5.12.</strong> Image</a></li><li class="chapter-item expanded "><a href="fyrox/ui/inspector.html"><strong aria-hidden="true">9.5.13.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/list_view.html"><strong aria-hidden="true">9.5.14.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/menu.html"><strong aria-hidden="true">9.5.15.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/message_box.html"><strong aria-hidden="true">9.5.16.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/numeric.html"><strong aria-hidden="true">9.5.17.</strong> Numeric field (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/popup.html"><strong aria-hidden="true">9.5.18.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/progress_bar.html"><strong aria-hidden="true">9.5.19.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/range.html"><strong aria-hidden="true">9.5.20.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/rect.html"><strong aria-hidden="true">9.5.21.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/scroll_bar.html"><strong aria-hidden="true">9.5.22.</strong> Scroll bar (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/scroll_panel.html"><strong aria-hidden="true">9.5.23.</strong> Scroll panel (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/scroll_viewer.html"><strong aria-hidden="true">9.5.24.</strong> Scroll viewer (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/stack_panel.html"><strong aria-hidden="true">9.5.25.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="fyrox/ui/tab_control.html"><strong aria-hidden="true">9.5.26.</strong> Tab Control</a></li><li class="chapter-item expanded "><a href="fyrox/ui/text.html"><strong aria-hidden="true">9.5.27.</strong> Text</a></li><li class="chapter-item expanded "><a href="fyrox/ui/text_box.html"><strong aria-hidden="true">9.5.28.</strong> Text box</a></li><li class="chapter-item expanded "><a href="fyrox/ui/tree.html"><strong aria-hidden="true">9.5.29.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/vector_image.html"><strong aria-hidden="true">9.5.30.</strong> Vector image (WIP)</a></li><li class="chapter-item expanded "><a href="fyrox/ui/window.html"><strong aria-hidden="true">9.5.31.</strong> Window</a></li><li class="chapter-item expanded "><a href="fyrox/ui/wrap_panel.html"><strong aria-hidden="true">9.5.32.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="fyrox/serialization/index.html"><strong aria-hidden="true">10.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/serialization/save.html"><strong aria-hidden="true">10.1.</strong> Saved Games (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/editor/index.html"><strong aria-hidden="true">11.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/editor/settings.html"><strong aria-hidden="true">11.1.</strong> Settings</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/misc/misc.html"><strong aria-hidden="true">12.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/misc/log.html"><strong aria-hidden="true">12.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/tutorials/tutorials.html"><strong aria-hidden="true">13.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/intro.html"><strong aria-hidden="true">13.1.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">13.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="fyrox/tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">13.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/tutorials/rpg/intro.html"><strong aria-hidden="true">13.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">13.2.1.</strong> Character controller</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/tutorials/platformer/part1.html"><strong aria-hidden="true">13.3.</strong> 2D Platformer tutorial</a></li></ol></li><li class="chapter-item expanded "><a href="fyrox/performance/index.html"><strong aria-hidden="true">14.</strong> Performance</a></li><li class="chapter-item expanded "><a href="fyrox/obsolete/obsolete.html"><strong aria-hidden="true">15.</strong> Obsolete</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="fyrox/obsolete/installation.html"><strong aria-hidden="true">15.1.</strong> Installation (Obsolete)</a></li><li class="chapter-item expanded "><a href="fyrox/obsolete/custom_game_loop.html"><strong aria-hidden="true">15.2.</strong> Custom game loop (Obsolete)</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -84,7 +89,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -94,7 +99,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -114,6 +119,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -127,8 +133,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -540,8 +547,7 @@ instance as much as possible) and CPU resources.</p>
 
     model.instantiate(scene).root
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="loading-assets"><a class="header" href="#loading-assets">Loading Assets</a></h2>
 <p>Usually there is no need to manually handle assets loading, since you have the editor that can help you with that - create
 a scene with all required assets. However, sometimes you need to instantiate an asset dynamically - for example a
@@ -580,8 +586,7 @@ let obj = pool.borrow_mut(handle);
 
 let obj = pool.borrow(handle);
 assert_eq!(*obj, 11);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="freeing"><a class="header" href="#freeing">Freeing</a></h2>
 <p>You can extract an object from a pool by calling <code>pool.free(handle)</code>, it will give you the object back, making
 all handles to the object invalid.</p>
@@ -596,8 +601,7 @@ pool.free(handle);
 
 let obj = pool.try_borrow(handle);
 assert_eq!(obj, None);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="take--reserve"><a class="header" href="#take--reserve">Take &amp; reserve</a></h2>
 <p>Sometimes you may need to temporarily extract an object from a pool, do something with it and then put it back
 while preserving handles to that object. There are three special methods for that:</p>
@@ -636,8 +640,7 @@ pool.put_back(ticket, *obj);
 let obj = pool.borrow(handle);
 
 assert_eq!(obj, &amp;123);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Forget example:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
@@ -653,8 +656,7 @@ pool.forget_ticket(ticket);
 let obj = pool.try_borrow(handle);
 
 assert_eq!(obj, None);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="iterators"><a class="header" href="#iterators">Iterators</a></h2>
 <p>There are few possible iterators, each one is useful for a particular purpose:</p>
 <ol>
@@ -679,8 +681,7 @@ assert_eq!(next_obj, &amp;1);
 let next_obj = iter.next();
 
 assert_eq!(next_obj, None);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="direct-access"><a class="header" href="#direct-access">Direct access</a></h2>
 <p>There is ability to get an object from a pool using only indices, there are two methods for that <code>at</code> and <code>at_mut</code>.</p>
 <h2 id="validation"><a class="header" href="#validation">Validation</a></h2>
@@ -803,8 +804,7 @@ impl Plugin for Game {
         // Handle UI events here.
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>There are two major parts - <code>GameConstructor</code> and <code>Game</code> itself. <code>GameConstructor</code> implements <code>PluginConstructor</code> and it
 is responsible for script registration (<code>fn register</code>) and creating the actual game instance (<code>fn create_instance</code>).</p>
 <ul>
@@ -838,8 +838,7 @@ It also has other variants, but they don't have any particular usage in the plug
         control_flow = ControlFlow::Exit;
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="plugin-context"><a class="header" href="#plugin-context">Plugin Context</a></h2>
 <p>Vast majority of methods accept <code>PluginContext</code> - it provides almost full access to engine entities, it has access
 to the renderer, scenes container, resource manager, user interface, main application window. Typical content of the
@@ -867,8 +866,7 @@ context is something like this:</p>
     pub window: &amp;'a Window,
     pub sound_engine: SoundEngineHelper&lt;'a&gt;,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <ul>
 <li><code>scenes</code> - should be used to manage game scenes, an example of scene loading is given in the previous code snipped in
 <code>Game::new()</code> method.</li>
@@ -924,8 +922,7 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
     Self { scene }
 }
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>The <code>override_scene</code> parameter is a handle to another scene instances that is currently opened in the editor, your game
 plugin must handle this parameter and use provided scene, otherwise the run from the editor will not have the edited
 scene. If the parameter is undefined (equals to <code>Handle::NONE</code>), then there is no scene loaded in the editor or the
@@ -967,8 +964,7 @@ the editor passes <code>override_scene</code> parameter for the executor when en
     // Register your game constructor here.
     executor.add_plugin_constructor(GameConstructor);
     executor.run()
-}
-</code></pre></pre>
+}</code></pre></pre>
 <p>Executor has full access to the engine, and through it to the main application window. You can freely change desired
 parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an &quot;alias&quot;
 to engine instance. </p>
@@ -984,8 +980,7 @@ to engine instance. </p>
 </span><span class="boring">use fyrox::engine::executor::Executor;
 </span><span class="boring">let mut executor = Executor::new();
 </span>executor.get_window().set_title(&quot;My Game&quot;);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripts-1"><a class="header" href="#scripts-1">Scripts</a></h1>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
 so scripts are as fast as native code. </p>
@@ -1043,8 +1038,7 @@ impl ScriptTrait for MyScript {
         Self::type_uuid()
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Each script must implement following traits:</p>
 <ul>
 <li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a 
@@ -1120,8 +1114,7 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">            todo!()
 </span><span class="boring">        }
 </span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <h2 id="script-attachment"><a class="header" href="#script-attachment">Script Attachment</a></h2>
 <p>To assign a script and see it in action, run the editor, select an object and find <code>Script</code> property in the Inspector.
 Select your script from the drop-down list. To see the script in action, click &quot;Play/Stop&quot; button. The editor will run
@@ -1157,8 +1150,7 @@ your game in separate process with the scene active in the editor.</p>
 </span>fn set_script&lt;T: ScriptTrait&gt;(node: &amp;mut Node, script: T) {
     node.set_script(Some(Script::new(script)))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Initialization as well as update of newly assigned script will happen on next update tick of the engine.</p>
 <h2 id="script-context"><a class="header" href="#script-context">Script Context</a></h2>
 <p>Script context provides access to the environment that can be used to modify engine and game state from scripts. Typical
@@ -1180,8 +1172,7 @@ content of the context is something like this:</p>
     pub scene: &amp;'b mut Scene,
     pub resource_manager: &amp;'a ResourceManager,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <ul>
 <li><code>dt</code> - amount of time passed since last frame. The value of the variable is implementation-defined, usually it is
 something like 1/60 (0.016) of a second.</li>
@@ -1239,8 +1230,7 @@ fn load_scene(resource_manager: ResourceManager) -&gt; Scene {
 
     scene
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please note that here we're creating an empty scene and only then instantiating another scene into it. Why is this
 needed? </p>
 <p>Child scene is considered as <a href="fyrox/scene/./prefab.html">prefab</a>, and it is &quot;instantiated&quot; in the parent scene. Considering 
@@ -1260,8 +1250,7 @@ fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
 
     engine.scenes.add(scene)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
 <p>All scenes &quot;lives&quot; in the engine, the engine has single ownership over your scene after you've added it in the engine.
 You can borrow a scene at any time using its handle and do some changes.</p>
@@ -1293,8 +1282,7 @@ line of code:</p>
 </span><span class="boring">let mut scene = Scene::default();
 </span><span class="boring">
 </span>scene.ambient_lighting_color = Color::opaque(30, 30, 30); 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
 which is not available in the engine yet.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="graph"><a class="header" href="#graph">Graph</a></h1>
@@ -1352,8 +1340,7 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     .with_fov(60.0f32.to_radians())
     .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, we're creating an instance of BaseBuilder and fill it with desired properties as well as filling
 the CameraBuilder's instance properties. This is a very flexible mechanism, allowing you to build complex hierarchies
 in a declarative manner:</p>
@@ -1405,8 +1392,7 @@ fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     .with_fov(60.0f32.to_radians())
     .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This code snippet creates a camera for first-person role-playing game's player, it will have a staff in &quot;right-hand&quot;
 and a spell in the left hand. Of course all of this is very simplified, but should give you the main idea. Note
 that staff and fireball will be children nodes of camera, and when setting their transform, we're actually setting
@@ -1429,8 +1415,7 @@ fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     // We must explicitly add the node to the graph.
     scene.graph.add_node(node)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-modify-the-hierarchy"><a class="header" href="#how-to-modify-the-hierarchy">How to modify the hierarchy</a></h2>
 <p>For many cases you can't use builders to create complex hierarchy, the simplest example of such situation when 
 you're creating an instance of some 3D model. If you want the instance to be a child object of some other object,
@@ -1459,8 +1444,7 @@ fn link_weapon_to_camera(
     // Link weapon to the camera.
     scene.graph.link_nodes(weapon, camera);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we've loaded a weapon 3D model, instantiated it on scene and attached to <em>existing</em> camera. </p>
 <h2 id="how-to-remove-nodes"><a class="header" href="#how-to-remove-nodes">How to remove nodes</a></h2>
 <p>A node could be removed by simply calling <code>graph.remove_node(handle)</code>, this method removes the node from the 
@@ -1482,8 +1466,7 @@ fn remove_preserve_children(scene: &amp;mut Scene, node_to_remove: Handle&lt;Nod
 
     scene.graph.remove_node(node_to_remove);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>After calling this function, every child node of <code>node_to_remove</code> will be detached from it and the <code>node_to_remove</code>
 will be deleted. <code>remove_node</code> has some limitations: it cannot be used to extract &quot;sub-graph&quot; from the graph, it
 just drops nodes immediately. </p>
@@ -1548,8 +1531,7 @@ need is to wrap its value using <code>InheritableVariable</code> wrapper.</p>
 struct MyScript {
     foo: InheritableVariable&lt;f32&gt;
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The engine will automatically resolve the correct value for the property when a scene with the script is loaded. If your
 property was modified, then its value will remain the same, it won't be overwritten by parent's value. Keep in mind,
 that the type of the inheritable variable must be cloneable and support reflection.</p>
@@ -1588,8 +1570,7 @@ struct MyEntity {
     // Subfields of this field will be correctly inherited, because the field itself is not inheritable.
     inheritable_data: SomeComplexData,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This code snippet should clarify, that inheritable fields should contain some &quot;simple&quot; data, and almost never - complex
 structs.</p>
 <h2 id="editor"><a class="header" href="#editor">Editor</a></h2>
@@ -1615,8 +1596,7 @@ node types):</p>
 </span><span class="boring">fn build_node(scene: &amp;mut Scene) {
 </span>let handle = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <h2 id="building-a-complex-hierarchy"><a class="header" href="#building-a-complex-hierarchy">Building a complex hierarchy</a></h2>
 <p>To build a complex hierarchy of some nodes, use <code>.with_children()</code> method of the <code>BaseBuilder</code>, it allows you
 to build a hierarchy of any complexity:</p>
@@ -1635,8 +1615,7 @@ to build a hierarchy of any complexity:</p>
     ]))
     .build(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Note that when we're building a <code>Camera</code> instance, we're passing a new instance of <code>BaseBuilder</code> to it, this
 instance can also be used to set some properties and a set of children nodes.</p>
 <p>The &quot;fluent syntax&quot; is not mandatory to use, the above code snipped could be rewritten like this:</p>
@@ -1658,8 +1637,7 @@ let handle = PivotBuilder::new(BaseBuilder::new()
     .with_children(&amp;[camera, base]))
     .build(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>However, it looks less informative, because it loses the hierarchical view and it is harder to tell the relations
 between objects.</p>
 <h2 id="transform"><a class="header" href="#transform">Transform</a></h2>
@@ -1678,8 +1656,7 @@ to move a node at specific location you could use this:</p>
     .local_transform_mut()
     .set_position(Vector3::new(1.0, 0.0, 2.0));
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>You could also chain multiple <code>set_x</code> calls, like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -1696,8 +1673,7 @@ to move a node at specific location you could use this:</p>
     .set_scale(Vector3::new(2.0, 2.0, 2.0))
     .set_rotation_offset(Vector3::new(1.0, 1.0, 0.0));
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mesh-node"><a class="header" href="#mesh-node">Mesh node</a></h1>
 <p>Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
 Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
@@ -1733,8 +1709,7 @@ fn load_model_to_scene(
     // Create an instance of the resource in the scene. 
     model_resource.instantiate_geometry(scene)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This code snippet intentionally omits proper <code>async/await</code> usage (instead it just blocks current thread until
 model is loading) and error handling. In the real game you should carefully handle all errors and use <code>async/await</code>
 properly.</p>
@@ -1804,8 +1779,7 @@ fn create_procedural_mesh(
         .build()])
     .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, creating a mesh procedurally requires lots of manual work and not so easy.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
 <p>Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
@@ -1850,8 +1824,7 @@ scene.animations[animations[0]]
     .get_pose()
     .apply(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <h3 id="retargetting"><a class="header" href="#retargetting">Retargetting</a></h3>
 <p>You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
 in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated
@@ -1883,8 +1856,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>By default, the light source will be oriented to lit &quot;the ground&quot;. In other words its direction will be faced towards
 <code>(0.0, -1.0, 0.0)</code> vector. You can rotate it as you want by setting local transform of it while building. Something
 like this:</p>
@@ -1918,8 +1890,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     ))
     .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h3 id="point-light"><a class="header" href="#point-light">Point light</a></h3>
 <p>Point light is a light source that emits lights in all directions, it has a position, but does not have an orientation.
 An example of a point light source: light bulb. </p>
@@ -1941,8 +1912,7 @@ fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
         .with_radius(5.0)
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h3 id="spotlight"><a class="header" href="#spotlight">Spotlight</a></h3>
 <p>Spot light is a light source that emits lights in cone shape, it has a position and orientation. An example of 
 a spot light source: flashlight.</p>
@@ -1966,8 +1936,7 @@ fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
         .with_falloff_angle_delta(10.0f32.to_radians())
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="light-scattering"><a class="header" href="#light-scattering">Light scattering</a></h2>
 <p>Spot and point lights support light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
 the fog will scatter the light from your flashlight making it, so you'll see the &quot;light volume&quot;. Light scattering is
@@ -1988,8 +1957,7 @@ fn disable_light_scatter(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;
         .unwrap()
         .enable_scatter(false);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>You could also change the amount of scattering per each color channel, using this you could imitate the 
 <a href="https://en.wikipedia.org/wiki/Rayleigh_scattering">Rayleigh scattering</a>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -2006,8 +1974,7 @@ fn use_rayleigh_scattering(scene: &amp;mut Scene, light_handle: Handle&lt;Node&g
         .unwrap()
         .set_scatter(Vector3::new(0.03, 0.035, 0.055));
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
 <p>Spot and point lights both support shadows, however directional light still lacks shadows. There is a
 <a href="https://github.com/FyroxEngine/Fyrox/issues/220">tracking issue</a> for that.</p>
@@ -2033,8 +2000,7 @@ fn switch_shadows(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;, cast_
         .unwrap()
         .set_cast_shadows(cast_shadows);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Not every light should cast shadows, for example a small light that a player can see only in a distance can have
 shadows disabled. You should set the appropriate values depending on your scene, just remember: the fewer the shadows
 the better the performance. The most expensive shadows are from point lights, the less, from spot lights.</p>
@@ -2061,8 +2027,7 @@ fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
         .with_color(Color::RED)
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>A sprite with a texture could be created by using <code>.with_texture</code> method of the builder:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -2078,8 +2043,7 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
         .with_texture(resource_manager.request_texture(&quot;path/to/your/texture.png&quot;))
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="general-rules"><a class="header" href="#general-rules">General rules</a></h2>
 <p>Sprites <strong>must not</strong> be used to create any visual effects that involve many particles. You should use particle
 systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
@@ -2203,8 +2167,7 @@ only practice matters here.</p>
         .with_texture(resource_manager.request_texture(Path::new(&quot;data/particles/smoke_04.tga&quot;)))
         .build(graph);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This code creates smoke effect with smooth dissolving (by using color-over-lifetime gradient). Please refer to
 <a href="https://docs.rs/fyrox/latest/fyrox/scene/particle_system/index.html">API docs</a> for particle system for more information. </p>
 <h3 id="using-prefabs"><a class="header" href="#using-prefabs">Using prefabs</a></h3>
@@ -2391,8 +2354,7 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
 
     terrain
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see there is quite a lot of code, ideally you should use editor all the times, because handling everything
 from code could be very tedious. The result of its execution (if all textures are set correctly) could be something 
 like this (keep in mind that terrain will be random everytime you run the code):</p>
@@ -2443,8 +2405,7 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
         .with_z_far(256.0)
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Orientation and position should be set in <code>BaseBuilder</code> as usual.</p>
 <h2 id="projection-modes"><a class="header" href="#projection-modes">Projection modes</a></h2>
 <p>Projection mode defines how your scene will look like after rendering, there are two projection modes available.</p>
@@ -2480,8 +2441,7 @@ parameters that describes frustum volume:</p>
         }))
         .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h3 id="orthographic"><a class="header" href="#orthographic">Orthographic</a></h3>
 <p>Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
 If you're making 2D games or isometric 3D games, this is the projection mode you're looking for. Orthographic
@@ -2515,8 +2475,7 @@ size by multiplying vertical size with aspect ratio.</p>
         }))
         .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="performance-4"><a class="header" href="#performance-4">Performance</a></h2>
 <p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
 operation. </p>
@@ -2581,8 +2540,7 @@ fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
         .with_skybox(block_on(create_skybox(resource_manager)))
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="color-grading-look-up-tables"><a class="header" href="#color-grading-look-up-tables">Color grading look-up tables</a></h2>
 <p>Color grading Look-Up Tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
 famous &quot;mexican&quot; movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
@@ -2622,8 +2580,7 @@ fn create_camera_with_lut(
         )
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="picking"><a class="header" href="#picking">Picking</a></h2>
 <p>In some games you may need to do mouse picking of objects in your scene. To do that, at first you need to somehow convert
 a point on the screen to ray in the world. <code>Camera</code> has <code>make_ray</code> method exactly for that purpose:</p>
@@ -2639,8 +2596,7 @@ a point on the screen to ray in the world. <code>Camera</code> has <code>make_ra
 </span>fn make_picking_ray(camera: &amp;Camera, point: Vector2&lt;f32&gt;, renderer: &amp;Renderer) -&gt; Ray {
     camera.make_ray(point, renderer.get_frame_bounds())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The ray then can be used to <a href="fyrox/scene/../physics/ray.html">perform a ray cast over physics entities</a>. This is the simplest way
 of camera picking, and you should prefer it most of the time.</p>
 <h3 id="advanced-picking"><a class="header" href="#advanced-picking">Advanced picking</a></h3>
@@ -2731,8 +2687,7 @@ pub fn precise_ray_test(
 
     closest_point.map(|pt| (closest_distance, pt))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p><code>precise_ray_test</code> is what you need, it performs precise intersection check with geometry of a mesh node. It returns a
 tuple of the closest distance and the closest intersection point. </p>
 <h2 id="exposure-and-hdr"><a class="header" href="#exposure-and-hdr">Exposure and HDR</a></h2>
@@ -2758,8 +2713,7 @@ fn create_decal(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; 
         .with_diffuse_texture(resource_manager.request_texture(&quot;path/to/your/decal.png&quot;))
         .build(&amp;mut scene.graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="textures"><a class="header" href="#textures">Textures</a></h2>
 <p>You can specify which textures the decal will be projecting, currently there is only diffuse and normal maps
 supported.</p>
@@ -2816,8 +2770,7 @@ an orthographic camera:</p>
     .with_texture(resource_manager.request_texture(&quot;path/to/your_texture.jpg&quot;))
     .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="specifying-image-portion-for-rendering"><a class="header" href="#specifying-image-portion-for-rendering">Specifying image portion for rendering</a></h2>
 <p>By default, Rectangle node uses entire image for rendering, but for some applications it is not enough. For example,
 you may want to use sprite sheets to animate your 2D entities. In this case you need to be able to use only portion
@@ -2836,8 +2789,7 @@ right-top quarter of an image to be used by a Rectangle node:</p>
         0.5,
     ));
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Keep in mind that every part of uv rectangle is proportional. For example 0.5 means 50%, 1.5 = 150% and so on. If width
 or height is exceeding 1.0 and the texture being used is set to Wrapping mode at respective axis, the image will tile
 across axes.</p>
@@ -2891,8 +2843,7 @@ fn create_rect_with_custom_material(
     .with_render_path(RenderPath::Forward)
     .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This will effectively &quot;mimic&quot; the Rectangle node, but will allow you to use the full power of custom shaders. Keep in
 mind that Mesh nodes will be rendered via Deferred Renderer, while Rectangle nodes rendered with specialized renderer,
 that might result in some graphical artifacts.</p>
@@ -2984,8 +2935,7 @@ impl NodeTrait for CustomNode {
         uuid!(&quot;f592e7f7-5e34-4043-9226-407c7457bb48&quot;)
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Once the node is defined, you can create is as usual and put in the graph:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -2999,8 +2949,7 @@ impl NodeTrait for CustomNode {
 </span>fn add_custom_node(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     graph.add_node(Node::new(CustomNode::default()))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="limitations-3"><a class="header" href="#limitations-3">Limitations</a></h2>
 <p>Scene nodes have no access to outer context, this means that you cannot reference any data that is located outside 
 graph easily. You still can define a global variable that <strong>will</strong> be accessible, but it is considered as a hack and
@@ -3061,8 +3010,7 @@ your objects.</p>
     .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
     .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="colliders"><a class="header" href="#colliders">Colliders</a></h2>
 <p>Rigid body must have at least one collider to participate in simulation properly, multiple colliders can be used to
 create complex shapes from simple shapes, you can create concave objects this way. Every collider <strong>must</strong> be a direct
@@ -3094,8 +3042,7 @@ applying force to a rigid body: at center of mass or at particular point at the 
     // Turn rigid body around center of mass.
     rigid_body.apply_torque(Vector3::new(0.0, 3.0, 0.0));
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="kinematic-rigid-bodies"><a class="header" href="#kinematic-rigid-bodies">Kinematic rigid bodies</a></h2>
 <p>Sometimes you may want to have direct control over position/rotation of a rigid body and tell the physics engine to not
 do simulation for the body. This can be achieved by making the rigid body <em>kinematic</em>:</p>
@@ -3123,8 +3070,7 @@ fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     .with_body_type(RigidBodyType::KinematicPositionBased)
     .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="continuous-collision-detection"><a class="header" href="#continuous-collision-detection">Continuous collision detection</a></h2>
 <p>Fast-moving rigid bodies can &quot;fly through&quot; other objects (for example a bullet can completely ignore walls if it is 
 moving too fast), this happens because of discrete calculation. This can be fixed by using continuous collision detection,
@@ -3184,8 +3130,7 @@ rigid bodies.</p>
         .with_friction(1.0)
         .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>In the editor you can use <code>MainMenu -&gt; Create -&gt; Physics -&gt; Collider</code>, or right-click on a node in <code>World Viewer</code> and
 select <code>Add Child -&gt; Physics -&gt; Collider</code>. Collider must be direct child of a rigid body, colliders do nothing on
 their own!</p>
@@ -3247,8 +3192,7 @@ can be initiated by moving the joint to some other position by changing local tr
         }))
         .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Once the joint is created, it will bind given bodies, using the process describe in the above section.</p>
 <p>To create a joint from editor, use  <code>MainMenu -&gt; Create -&gt; Physics -&gt; Joint</code>, select the new joint and find <code>Body1</code> and
 <code>Body2</code> properties. Assign the fields by holding <code>Alt</code> key and drag'n'drop a rigid body to a field. Move the joint to 
@@ -3299,8 +3243,7 @@ use physics world instance of a scene graph:</p>
 
     buffer
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The function above will return a collection of intersections that are sorted by intersection distance (a distance from
 beginning of the ray to an intersection point). Each intersection is represented by the following structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -3320,8 +3263,7 @@ beginning of the ray to an intersection point). Each intersection is represented
     pub feature: FeatureId,
     pub toi: f32,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <ul>
 <li><code>collider</code> - a handle of the collider with which intersection was detected. To obtain a handle to rigid body, borrow
 the <code>collider</code> and fetch its <code>parent</code> field: <code>graph[collider].parent()</code>.</li>
@@ -3377,8 +3319,7 @@ fn usage_example(graph: &amp;mut Graph, begin: Vector3&lt;f32&gt;, end: Vector3&
     // Fetch first 32 intersections.
     dbg!(do_static_ray_cast::&lt;32&gt;(graph, begin, end));
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p><code>usage_example</code> shows how to use the <code>do_static_ray_cast</code> function - all you need to do is to specify maximum amount of
 intersections you're interested in as a generic parameter.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sound"><a class="header" href="#sound">Sound</a></h1>
@@ -3393,8 +3334,7 @@ intersections you're interested in as a generic parameter.</p>
     .resource_manager
     .request_sound_buffer(&quot;/path/to/resource.ogg&quot;);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Then, the node is built using the standard builder pattern:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3418,8 +3358,7 @@ intersections you're interested in as a generic parameter.</p>
     .with_play_once(true)
     .build(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>There are a few notable things in the example above.</p>
 <p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
 <p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
@@ -3443,8 +3382,7 @@ if sound.status() == Status::Stopped {
     scene.remove_node(sound_handle);
 }
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>If we want to play background music (or anyway a repeated sound), we just set the <code>looping</code> property when building the node:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3459,8 +3397,7 @@ if sound.status() == Status::Stopped {
     // etc.
     .build(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a corresponding <code>.options</code> file, with the following content:</p>
 <pre><code class="language-ron">(
   stream: true
@@ -3468,31 +3405,135 @@ if sound.status() == Status::Stopped {
 </code></pre>
 <p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="effects-wip"><a class="header" href="#effects-wip">Effects (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="animation-1"><a class="header" href="#animation-1">Animation</a></h1>
-<p>The engine offers a quite powerful animation system that will help you to animate your game characters. It built around
-skeletal animation and pose blending. Next chapters will help you to understand what this means.</p>
-<h2 id="what-is-animation"><a class="header" href="#what-is-animation">What is animation?</a></h2>
-<p>Animation is a timeline with tracks, which in their turn have key frames, each key frame holds information about how a 
-parameter should change at a moment in time. When playback time changes, the animation calculates intermediate values
-between key frames using various sorts of interpolation:</p>
+<div style="break-before: page; page-break-before: always;"></div><p><strong>WARNING:</strong> This and following chapters covers new functionality available only in the latest version of the engine
+available on GitHub</p>
+<h1 id="animation-1"><a class="header" href="#animation-1">Animation</a></h1>
+<p>Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
+consists of multiple tracks, where each track is bound to a property of a scene node. A track can animate
+any numeric properties, starting from numbers (including <code>bool</code>) end ending by 2/3/4 dimensional vectors.
+Each component (number, x/y/z/w vector components) is stored in a <em>parametric curve</em> (see
+[<code>crate::core::curve::Curve</code>] docs for more info). Every parametric curve contains zero or more <em>key frames</em>.
+Graphically this could be represented like so:</p>
+<pre><code class="language-text">                                         Timeline
+                                            v
+  Time   &gt; |---------------|------------------------------------&gt;
+           |               |
+  Track1 &gt; | node.position |                                     
+           |   X curve     |..1..........5...........10..........
+           |   Y curve     |..2.........-2..................1....  &lt; Curve key frames
+           |   Z curve     |..1..........9......................4
+           |_______________|  
+  Track2   | node.property |                                  
+           | ............  |.....................................
+           | ............  |.....................................
+           | ............  |.....................................
+</code></pre>
+<p>Each key frame is just a real number with interpolation mode. Interpolation mode tells the engine how to
+calculate intermediate values between key frames. There are three kinds of interpolation used in animations
+(you can skip &quot;boring math&quot; if you want):</p>
 <ul>
-<li>Step - value changes from keyframe to keyframe immediately.</li>
-<li>Linear - value changes linearly from keyframe to keyframe.</li>
-<li>Cubic - value changes from keyframe to keyframe using cubic interpolation.</li>
+<li><strong>Constant</strong> - intermediate value will be calculated using leftmost value of two. Constant &quot;interpolation&quot; is
+usually used to create step-like behaviour, the most common case is to &quot;interpolate&quot; two boolean values.</li>
+<li><strong>Linear</strong> - intermediate value will be calculated using linear interpolation <code>i = left + (right - left) / t</code>,
+where <code>t = (time_position - left) / (right - left)</code>. <code>t</code> is always in <code>0..1</code> range. Linear interpolation is usually
+used to create &quot;straight&quot; transitions between two values.</li>
+<li><strong>Cubic</strong> - intermediate value will be calculated using Hermite cubic spline:
+<code>i = (2t^3 - 3t^2 + 1) * left + (t^3 - 2t^2 + t) * left_tangent + (-2t^3 + 3t^2) * right + (t^3 - t^2) * right_tangent</code>,
+where <code>t = (time_position - left) / (right - left)</code> (<code>t</code> is always in <code>0..1</code> range), <code>left_tangent</code> and <code>right_tangent</code>
+is usually a <code>tan(angle)</code>. Cubic interpolation is usually used to create &quot;smooth&quot; transitions between two values.</li>
 </ul>
-<p>Animation can have multiple tracks, where each track is responsible for animation of a single node (see <code>Limitations</code>
-section). </p>
-<p>Animations usually prepared in special 3D or 2D modelling software, and then loaded in the engine. Animation loading 
-have no difference to a model resource loading. Model resource can hold any number of animations which will be 
-instantiated to a scene either by calling <code>Model::instantiate</code> or by <code>Model::retarget_animations</code>.</p>
+<h2 id="track-binding"><a class="header" href="#track-binding">Track binding</a></h2>
+<p>Each track is always bound to a property in a node, either by its name or by a special binding. The name is used to fetch the
+property using reflection, the special binding is a faster way of fetching built-in properties. It is usually used to animate
+position, scale and rotation (these are the most common properties available in every scene node).</p>
+<h2 id="time-slice-and-looping"><a class="header" href="#time-slice-and-looping">Time slice and looping</a></h2>
+<p>While key frames on the curves can be located at arbitrary position in time, animations usually plays a specific time slice.
+By default, each animation will play on a given time slice infinitely - it is called <em>animation looping</em>, it works in both
+playback directions.</p>
+<h2 id="speed"><a class="header" href="#speed">Speed</a></h2>
+<p>You can vary playback speed in wide range, by default every animation has playback speed multiplier set to 1.0. The multiplier
+tells how faster (&gt;1) or slower (&lt;1) the animation needs to be played. Negative speed multiplier values will reverse playback.</p>
+<h2 id="enabling-or-disabling-animations"><a class="header" href="#enabling-or-disabling-animations">Enabling or disabling animations</a></h2>
+<p>Sometimes there's a need to disable/enable an animation or check if it is enabled or not, you can do this by using the pair
+of respective methods - [<code>Animation::set_enabled</code>] and [<code>Animation::is_enabled</code>].</p>
+<h2 id="signals"><a class="header" href="#signals">Signals</a></h2>
+<p>Signal is a named marker on specific time position on the animation timeline. Signal will emit an event if the animation playback
+time passes signal's position from left-to-right (or vice versa depending on playback direction). Signals are usually used to
+attach some specific actions to a position in time. For example, you can have a walking animation and you want to emit sounds
+when character's feet touch ground. In this case you need to add a few signals at times when each foot touches the ground.
+After that all you need to do is to fetch animation events one-by-one and emit respective sounds. See [<code>AnimationSignal</code>] docs
+for more info and examples.</p>
+<h2 id="creating-from-code"><a class="header" href="#creating-from-code">Creating From Code</a></h2>
+<p>Usually, animations are created from the editor or some external tool and then imported in the engine. Before trying the example
+below, please read the docs for [<code>crate::scene::animation::AnimationPlayer</code>] node, it is much more convenient way of animating
+other nodes. The node can be created from the editor and you don't even need to write any code.
+Use the following example code as a guide <strong>only</strong> if you need to create procedural animations:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use fyrox::{
+    animation::{
+        container::{TrackDataContainer, TrackValueKind},
+        track::Track,
+        value::ValueBinding,
+        Animation,
+    },
+    core::{
+        curve::{Curve, CurveKey, CurveKeyKind},
+        pool::Handle,
+    },
+    scene::{
+        node::Node,
+        base::BaseBuilder,
+        graph::Graph,
+        pivot::PivotBuilder
+    }
+};
+fn create_animation(node: Handle&lt;Node&gt;) -&gt; Animation {
+    let mut frames_container = TrackDataContainer::new(TrackValueKind::Vector3);
+    // We'll animate only X coordinate (at index 0).
+    frames_container.curves_mut()[0] = Curve::from(vec![
+        CurveKey::new(0.5, 2.0, CurveKeyKind::Linear),
+        CurveKey::new(0.75, 1.0, CurveKeyKind::Linear),
+        CurveKey::new(1.0, 3.0, CurveKeyKind::Linear),
+    ]);
+    // Create a track that will animated the node using the curve above.
+    let mut track = Track::new(frames_container, ValueBinding::Position);
+    track.set_target(node);
+    // Finally create an animation and set its time slice and turn it on.
+    let mut animation = Animation::default();
+    animation.add_track(track);
+    animation.set_time_slice(0.0..1.0);
+    animation.set_enabled(true);
+    animation
+}
+// Create a graph with a node.
+let mut graph = Graph::new();
+let some_node = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut graph);
+// Create the animation.
+let mut animation = create_animation(some_node);
+// Emulate some ticks (like it was updated from the main loop of your game).
+for _ in 0..10 {
+    animation.tick(1.0 / 60.0);
+    animation.pose().apply(&amp;mut graph);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The code above creates a simple animation that moves a node along X axis in various ways. The usage of the animation
+is only for the sake of completeness of the example. In the real games you need to add the animation to an animation
+player scene node and it will do the job for you.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="animation-editor"><a class="header" href="#animation-editor">Animation Editor</a></h1>
+<p><img src="fyrox/animation/./anim_editor.png" alt="anim editor" /></p>
+<p>Animation Editor is a tool that helps you to create and preview animations. This is a powerful tool that can be used
+to animated pretty much any numeric property.</p>
+<p>It has three main parts:</p>
+<ol>
+<li><code>Toolbar</code> - contains a set of tools that changes a particular part of an animation (name, length, speed, etc.)</li>
+<li><code>Track List</code> - contains a list of tracks of nodes that will be animated.</li>
+<li><code>Curve Editor</code> - curve editor allows you to edit behaviour of a numeric parameter over the time. </li>
+</ol>
 <h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
-<p>Current version of the engine does <strong>not</strong> support animation of arbitrary object properties. At the moment, you can 
-animate only position, scaling, rotation part of a node's transform. While this may seem too limiting, it covers 90%
-of animation use cases. </p>
-<p>Arbitrary property animation however, allows you to animate any property of an object. For example, you may have an 
-animation that animates color of an object. Such functionality is planned for the future versions along with the
-animation editor.</p>
-<p>Morphing animation is not supported too, but can be done manually by transforming vertices in a model's vertex buffer. </p>
+<p>For now there's no dopesheet mode in the editor, you can edit only one numeric parameter at a time. Also, there's no 
+capture mode - this is a special mode in which the editor automatically adds your changes in the scene to the animation.
+These limitations will be removed in the future versions.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="animation-blending"><a class="header" href="#animation-blending">Animation Blending</a></h1>
 <p>Animation blending is a powerful feature that allows you to mix multiple animations into one. Each animation
 is mixed with a various weights which in sum gives 1.0 (100%). By having opposite coefficients (k1 = 0 -&gt; 1, k2 = 1 -&gt; 0)
@@ -3579,8 +3620,7 @@ let idle_state = machine.add_state(State::new(&quot;Idle&quot;, idle));
 
 machine.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
 machine.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, everything is quite straightforward. Even such simple state machine requires quite a lot of code, which
 can be removed by using ABSM editor. Read the next chapter to learn about it.</p>
 <h2 id="multiple-absm-per-model"><a class="header" href="#multiple-absm-per-model">Multiple ABSM per model</a></h2>
@@ -3591,17 +3631,16 @@ combat. This means that locomotion machine will take control over lower body and
 annoying and hardly manageable. To help you create and manage blending machines in easy way, the engine offers 
 a ABSM Editor tool.</p>
 <p><img src="fyrox/animation/./absm.png" alt="absm editor" /></p>
-<p>The editor has five main parts (windows):</p>
-<ul>
-<li><code>Previewer</code> - it allows you to see the result of the animation blending. </li>
+<p>The editor has four main parts (windows):</p>
+<ol>
+<li><code>Toolbar</code> </li>
 <li><code>Parameters</code> - allows you to edit various variables that are responsible for transitions, weight parameters for 
 blending, etc.</li>
 <li><code>State Graph</code> - allows you to create, delete, edit states and transition between them.</li>
 <li><code>State Viewer</code> - allows you to edit pose source for a state. Pose source can be represented either by a single 
 node that plays an animation, or a series of play animation nodes connected to blending nodes (which can be connected
 to other blending nodes, etc.)</li>
-<li><code>Inspector</code> - allows you to tweak properties of current selection (states, transitions, nodes, etc.).</li>
-</ul>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="artificial-intelligence-wip"><a class="header" href="#artificial-intelligence-wip">Artificial Intelligence (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="behaviour-trees-wip"><a class="header" href="#behaviour-trees-wip">Behaviour Trees (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="path-finding-wip"><a class="header" href="#path-finding-wip">Path Finding (WIP)</a></h1>
@@ -3824,8 +3863,7 @@ path on your mesh object. It could be done in this way:</p>
         .as_mesh_mut()
         .set_render_path(RenderPath::Forward);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>After this, your mesh will be rendered using a specialized render pass called Forward which supports alpha-blending
 and transparent objects. <strong>Caveat:</strong> Current forward renderer implementation does not support any kind of lighting,
 if you need lighting, you will need to use custom shader for that!</p>
@@ -3867,8 +3905,7 @@ rendering quality and performance. Quality settings are represented by the follo
     use_parallax_mapping: bool,
     use_bloom: bool,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <ul>
 <li><code>point_shadow_map_size</code> - size of a cube map face of shadow map texture (in pixels). The higher, the better quality,
 but lower performance. Typical values for medium GPU (GTX 1050) is 1024 pixels.</li>
@@ -3934,8 +3971,7 @@ quality-performance balance.</p>
     // Apply.
     Log::verify(renderer.set_quality_settings(&amp;settings))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="render-pass"><a class="header" href="#render-pass">Render Pass</a></h1>
 <p>You can define your own render passes that extends the renderer, currently there are render passes only for scenes,
 so no custom post-effects (this is planned to be improved in Fyrox 0.28). Render pass has full access to graphics 
@@ -4038,8 +4074,7 @@ impl SceneRenderPass for MyRenderPass {
         Ok(stats)
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The code snippet shows how to create a shader, find its uniforms, and finally how to actually render something in 
 target frame buffer.</p>
 <h2 id="registering-a-render-pass"><a class="header" href="#registering-a-render-pass">Registering a render pass</a></h2>
@@ -4059,8 +4094,7 @@ target frame buffer.</p>
     // You can share the pass across multiple places to be able to control it.
     renderer.add_render_pass(shared_pass);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please notice that we've wrapped render pass in <code>Rc&lt;RefCell&lt;..&gt;&gt;</code>, this means that you can share it across multiple places
 and modify its data from the code of your game.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="asset-management-1"><a class="header" href="#asset-management-1">Asset Management</a></h1>
@@ -4122,8 +4156,7 @@ from Asset Browser in the editor or instantiate the model dynamically from code:
 
     model.instantiate(scene).root
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="material-import-1"><a class="header" href="#material-import-1">Material import</a></h2>
 <p>The engine tries to import materials as close as possible to originals in the model, however it is not always possible
 because some 3D modelling software could use different shading models. By default, the engine tries to convert
@@ -4247,8 +4280,7 @@ like this:</p>
     tree: Tree,
     my_data: u32
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>On other hand, component querying will work fine, because you can query inner component (Tree in our case). Please note 
 that this has nothing similar with ECS and stuff, it is made to circumvent Rust's lack of inheritance.</p>
 <h2 id="message-passing"><a class="header" href="#message-passing">Message passing</a></h2>
@@ -4289,8 +4321,7 @@ impl Plugin for MyPlugin {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, all you need to do is to check type of incoming message and message destination, which is a node handle
 from which a message was come from. Then you do any actions you want.</p>
 <h3 id="message-routing-strategies"><a class="header" href="#message-routing-strategies">Message routing strategies</a></h3>
@@ -4342,8 +4373,7 @@ call of other widget builders. In code, it looks something like this:</p>
     .with_text(&quot;Click me!&quot;)
     .build(ctx)
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>This code snippet creates a button with an image and a text. Actually it creates <strong>three</strong> widgets, that forms 
 complex hierarchy. The topmost widget in hierarchy is the <code>Button</code> widget itself, it has two children widgets:
 background image and a text. Background image is set explicitly by calling image widget builder with specific 
@@ -4397,8 +4427,7 @@ that contains text with some icon. To do that, replace <code>.with_text(&quot;My
         )
 <span class="boring">      .build(ctx)
 </span><span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -4429,8 +4458,7 @@ ButtonBuilder::new(WidgetBuilder::new())
     .build(ctx)
 <span class="boring">}
 </span>// image now contains a handle of the Image widget 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="should-i-create-a-custom-widget-or-use-composition-of-other-widgets"><a class="header" href="#should-i-create-a-custom-widget-or-use-composition-of-other-widgets">Should I create a custom widget or use composition of other widgets?</a></h2>
 <p>The answer depends on the use case, but the general rules here is quite simple: </p>
 <ul>
@@ -4458,8 +4486,7 @@ pretty much any font from the internet and use it as is.</p>
         .await
         .unwrap()
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please note, that this function is <code>async</code> due to the fact that it supports <code>fetch</code> API on WebAssembly, which does
 remote file fetching which is asynchronous by its nature. If you don't plan to support WebAssembly and don't want to
 use <code>async</code>, then the next section is for you.</p>
@@ -4474,8 +4501,7 @@ simple:</p>
     let character_set = Font::default_char_set(); // ASCII character set.
     Font::from_memory(data, 20.0, character_set).unwrap()
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p><code>data</code> input parameter could be a buffer that contains any valid TTF/OTF font. For example, you can load TTF file into
 a data buffer and create font using the data buffer:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -4494,8 +4520,7 @@ a data buffer and create font using the data buffer:</p>
 
     Font::from_memory(data, 20.0, character_set).unwrap()
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="default-font"><a class="header" href="#default-font">Default Font</a></h2>
 <p>User interface provides its own font of fixed size, it is enough to cover most of the use cases, but the default font
 includes only ASCII characters, if you need extended character set, you can replace default font using the following
@@ -4514,8 +4539,7 @@ code snippet:</p>
     // Set as default font.
     ui.default_font.set(new_font)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-change-font-size"><a class="header" href="#how-to-change-font-size">How to Change Font Size</a></h2>
 <p>Unfortunately, you need to create new font instance for that, there is a 
 <a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Use any method from above paragraphs.</p>
@@ -4538,8 +4562,7 @@ set:</p>
         0xFFFD..0xFFFD,
     ]
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>You can create custom character set yourself by defining desired ranges from Unicode.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="theme"><a class="header" href="#theme">Theme</a></h1>
 <p>The engine has an ability to customize the look of widgets, however it is not centralized, and has to be done 
@@ -4614,8 +4637,7 @@ per widget. Check <code>Theme</code> section of each widget.</p>
         .with_text(&quot;Click me!&quot;)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal 
 right aligned):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -4640,8 +4662,7 @@ right aligned):</p>
     )
     .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="a-button-with-image"><a class="header" href="#a-button-with-image">A button with image</a></h2>
 <p>More fancy-looking button with an image as a background could be created using this code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -4670,8 +4691,7 @@ right aligned):</p>
         .with_text(&quot;Click me!&quot;)
         .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="message-handling"><a class="header" href="#message-handling">Message handling</a></h2>
 <p>When clicked, a button sends a <code>ButtonMessage::Click</code> message, you can catch it in your code and do something
 useful:</p>
@@ -4705,8 +4725,7 @@ impl Game {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="using-a-button-to-exit-the-game"><a class="header" href="#using-a-button-to-exit-the-game">Using a button to exit the game</a></h2>
 <p>Add a flag to your Game struct like <code>exit: bool</code> and set it in button handler to <code>true</code>, then check it in <code>on_tick</code> 
 and set <code>*control_flow = ControlFlow::Exit</code> if the flag is raised</p>
@@ -4760,8 +4779,7 @@ impl Game {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="border"><a class="header" href="#border">Border</a></h1>
 <p>The Border widget provides a stylized, static border around it's child widget. Below is an example of creating a 1 pixel
 thick border around a button widget:</p>
@@ -4789,8 +4807,7 @@ fn create_border_with_button(ui: &amp;mut UserInterface) {
     .with_stroke_thickness(Thickness {left: 1.0, right: 1.0, top: 1.0, bottom: 1.0})
     .build(&amp;mut ui.build_ctx());
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As with other UI elements, we create the border using the BorderBuilder helper struct. The widget that should have a
 border around it is added as a child of the base WidgetBuilder, and the border thickness can be set by providing a 
 Thickness struct to the BorderBuilder's <em>with_stroke_thickness</em> function. This means you can set different thicknesses 
@@ -4825,8 +4842,7 @@ BorderBuilder::new(
 )
 .with_stroke_thickness(Thickness {left: 2.0, right: 2.0, top: 2.0, bottom: 2.0})
 .build(&amp;mut ui.build_ctx());
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="canvas"><a class="header" href="#canvas">Canvas</a></h1>
 <p>Canvas is a panel widget that allows you to explicitly set coordinates for children widgets. It is useful when you 
 need to manually control position of children widgets. Root UI node is canvas, so any widgets that are not attached
@@ -4844,8 +4860,7 @@ to any other widgets can have explicit position.</p>
 </span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Canvas does not have any specific options, so its creation is probably simplest of all widgets.</p>
 <h2 id="how-to-position-children-nodes"><a class="header" href="#how-to-position-children-nodes">How to position children nodes</a></h2>
 <p>Use <code>.with_desired_position</code> on children widgets to set specific position:</p>
@@ -4880,8 +4895,7 @@ to any other widgets can have explicit position.</p>
     )
     .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The code snippet will create a canvas with a text widget located at (100.0, 200.0) relative to top-left corner of the
 canvas and a button located at (200.0, 100.0).</p>
 <h2 id="tips"><a class="header" href="#tips">Tips</a></h2>
@@ -4912,8 +4926,7 @@ data have such state. </p>
         .checked(Some(true))
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The above code will create a checkbox without any textual info, but usually checkboxes have some useful info
 near them. To create such checkbox, you could use <code>.with_content(..)</code> method which accepts any widget handle.
 For checkbox with text, you could use <code>TextBuilder</code> to create textual content, for checkbox with text - use 
@@ -4942,8 +4955,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
         )
         .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="message-handling-1"><a class="header" href="#message-handling-1">Message handling</a></h2>
 <p>Checkboxes are not static widget and have multiple states. To handle a message from a checkbox, you need to handle
 a <code>CheckBoxMessage::Check</code> message. To do so, you can do something like this:</p>
@@ -4978,8 +4990,7 @@ a <code>CheckBoxMessage::Check</code> message. To do so, you can do something li
     }
 }
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Keep in mind that checkbox (as any other widget) generates <code>WidgetMessage</code> instances. You can catch them too and
 do a custom handling if you need.</p>
 <h2 id="theme-1"><a class="header" href="#theme-1">Theme</a></h2>
@@ -5068,8 +5079,7 @@ fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&
             .add_column(GridDimension::auto())
             .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled
 by the Grid should be added as a child of the GridBuilder's base widget.</p>
 <p>You then need to tell each child what row and column it belongs to via the on_column and on_row functions of their base
@@ -5113,8 +5123,7 @@ fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -
         ))
         .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>There are one common pitfall when using Image widget - you must explicitly set width and height of the image if it is
 not placed to some panel, that will stretch it automatically. In other words if you created an image with undefined
 width and height, then putting it to some container like Grid' cell will stretch the image to fit cell bounds.</p>
@@ -5157,8 +5166,7 @@ async fn create_image(
     // Image wasn't created.
     Handle::NONE
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This function can be used as-is whenever you need to create an Image that have same size as the source file. It is
 marked as <code>async</code> because resource loading (texture is a resource) happens in separate thread and to get actual texture
 data we must wait it. If you don't want to use async, then use any executor to block current thread and execute the
@@ -5184,8 +5192,7 @@ promise immediately:</p>
 ) -&gt; Handle&lt;UiNode&gt; {
     fyrox::core::futures::executor::block_on(create_image(ctx, resource_manager))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="vertical-flip"><a class="header" href="#vertical-flip">Vertical Flip</a></h2>
 <p>In some rare cases you need to flip your source image before showing it, there is <code>.with_flip</code> option for that:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -5206,8 +5213,7 @@ fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -
         ))
         .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>There are few places where it can be helpful:</p>
 <ul>
 <li>You're using render target as a source texture for your Image instance, render targets are vertically flipped due
@@ -5265,8 +5271,7 @@ fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handl
         .build(ctx)
     
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see from the example, creating a Stack Panel uses the standard method for creating widgets. Create a new 
 StackPanelBuilder and provide it with a new WidgetBuilder. Adding widgets to the stack is done by adding childeren to 
 the StackBuilder's WidgetBuilder.</p>
@@ -5291,8 +5296,7 @@ with a gui::Orientation enum value. <strong>By default</strong> all Stack Panel'
     .with_orientation(Orientation::Horizontal)
     .build(ctx);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tab-control"><a class="header" href="#tab-control">Tab Control</a></h1>
 <p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the 
 tab header buttons. Each tab is defined via a Tab Definition struct which takes two widgets, one representing the tab
@@ -5335,8 +5339,7 @@ fn create_tab_control(ctx: &amp;mut BuildContext) {
         )
         .build(ctx);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As usual, we create the widget via the builder TabControlBuilder. Tabs are added via the <em>with_tab</em> function in the 
 order you want them to appear, passing each call to the function a directly constructed TabDefinition struct. Tab 
 headers will appear from left to right at the top with tab contents shown directly below the tabs. As usual, if no 
@@ -5374,8 +5377,7 @@ code example and you will get a decent look:</p>
 </span><span class="boring">};
 </span><span class="boring">}
 </span>
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text"><a class="header" href="#text">Text</a></h1>
 <p>Text is a simple widget that allows you to print text on screen. It has various options like word wrapping, text
 alignment, and so on.</p>
@@ -5393,8 +5395,7 @@ alignment, and so on.</p>
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="text-alignment-and-word-wrapping"><a class="header" href="#text-alignment-and-word-wrapping">Text alignment and word wrapping</a></h2>
 <p>There are various text alignment options for both vertical and horizontal axes. Typical alignment values are:
 <code>Left</code>, <code>Center</code>, <code>Right</code> for horizontal axis, and <code>Top</code>, <code>Center</code>, <code>Bottom</code> for vertical axis. An instance of 
@@ -5416,8 +5417,7 @@ centered text could be created like so:</p>
     .with_text(text)
     .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Long text is usually needs to wrap on available bounds, there are three possible options for word wrapping:
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -5436,8 +5436,7 @@ centered text could be created like so:</p>
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="fonts-and-colors"><a class="header" href="#fonts-and-colors">Fonts and colors</a></h2>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -5453,8 +5452,7 @@ centered text could be created like so:</p>
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>By default, text is created with default font, however it is possible to set any custom font:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -5491,8 +5489,7 @@ fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNod
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please refer to <a href="fyrox/ui/font.html">Font</a> chapter to learn more about fonts.</p>
 <h3 id="font-size"><a class="header" href="#font-size">Font size</a></h3>
 <p>There is no way to change font size without changing the entire font used by Text, it is known issue and there is
@@ -5519,8 +5516,7 @@ and <code>HorizontalAlignment</code>. An example of changing text at runtime cou
         text.to_owned(),
     ))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please keep in mind, that like any other situation when you &quot;changing&quot; something via messages, you should remember
 that the change is <strong>not</strong> immediate. The change will be applied on <code>ui.poll_message(..)</code> call somewhere in your
 code (or will be done automatically if you're using scripts or Framework (obsolete)).</p>
@@ -5541,8 +5537,7 @@ word wrapping, text alignment, and so on.</p>
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="text-alignment-and-word-wrapping-1"><a class="header" href="#text-alignment-and-word-wrapping-1">Text alignment and word wrapping</a></h2>
 <p>There are various text alignment options for both vertical and horizontal axes. Typical alignment values are:
 <code>Left</code>, <code>Center</code>, <code>Right</code> for horizontal axis, and <code>Top</code>, <code>Center</code>, <code>Bottom</code> for vertical axis. An instance of
@@ -5564,8 +5559,7 @@ centered text could be created like so:</p>
     .with_text(text)
     .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Long text is usually needs to wrap on available bounds, there are three possible options for word wrapping:
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -5584,8 +5578,7 @@ centered text could be created like so:</p>
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="fonts-and-colors-1"><a class="header" href="#fonts-and-colors-1">Fonts and colors</a></h2>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -5601,8 +5594,7 @@ centered text could be created like so:</p>
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>By default, text is created with default font, however it is possible to set any custom font:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -5639,8 +5631,7 @@ fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNod
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please refer to <a href="fyrox/ui/font.html">Font</a> chapter to learn more about fonts.</p>
 <h3 id="font-size-1"><a class="header" href="#font-size-1">Font size</a></h3>
 <p>There is no way to change font size without changing the entire font used by Text, it is known issue and there is
@@ -5668,8 +5659,7 @@ changing text at runtime could be something like this:</p>
         text.to_owned(),
     ))
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please keep in mind, that like any other situation when you &quot;changing&quot; something via messages, you should remember
 that the change is <strong>not</strong> immediate. The change will be applied on <code>ui.poll_message(..)</code> call somewhere in your
 code (or will be done automatically if you're using scripts or Framework (obsolete)).</p>
@@ -5724,8 +5714,7 @@ phone number. A filter can be specified at build stage like so:</p>
         .with_filter(Rc::new(RefCell::new(|c: char| c.is_ascii_digit())))
         .build(&amp;mut ui.build_ctx())
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="style"><a class="header" href="#style">Style</a></h2>
 <p>You can change brush of caret by using <code>.with_caret_brush</code> and also selection brush by using <code>.with_selection_brush</code>,
 it could be useful if you don't like default colors.</p>
@@ -5774,8 +5763,7 @@ fn create_window(ui: &amp;mut UserInterface) {
     .can_resize(false)
     .build(&amp;mut ui.build_ctx());
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>You will likely want to constrain the initial size of the window to somethig as shown in the example by providing a set
 width and/or height to the base WidgetBuilder. Otherwise it will expand to fit it's content.</p>
 <p>You may also want to set an inital position with the <em>with_desired_position</em> function called on the base WidgetBuilder 
@@ -5818,8 +5806,7 @@ that does not have enough space on current line, will automatically be placed on
         .with_orientation(Orientation::Horizontal)
         .build(ctx)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
 <p>Wrap panel can stack your widgets either in vertical or horizontal direction. Use <code>.with_orientation</code> while building 
 the panel to switch orientation to desired.</p>
@@ -5873,8 +5860,7 @@ struct MyStruct {
     #[visit(skip)]
     ignored: usize,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h3 id="manual-implementation"><a class="header" href="#manual-implementation">Manual implementation</a></h3>
 <p>Manual implementation of the trait gives you an opportunity to fix compatibility issues, do some specific actions
 during serialization (logging, for instance). Typical manual implementation could look like this:</p>
@@ -5909,8 +5895,7 @@ impl Visit for MyStruct {
         Ok(())
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This code pretty much shows the result of macro expansion from the previous section. As you can see, proc-macro saves
 you from writing tons of boilerplate code.</p>
 <p>Implementing <code>Visit</code> trait is a first step, the next step is to either serialize an object or deserialize it. See
@@ -5955,8 +5940,7 @@ async fn visit_my_structure(path: &amp;Path, object: &amp;mut MyStruct, write: b
         my_object.visit(&quot;MyObject&quot;, &amp;mut visitor)
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The key function here is <code>visit_my_structure</code> which works in both serialization and deserialization modes depending on
 <code>write</code> flag value. </p>
 <p>When <code>write</code> is true (serialization), we're creating a new empty visitor and filling it with values from our <code>object</code> 
@@ -6005,8 +5989,7 @@ fn serialize_with_environment() {
 
     my_object.visit(&quot;MyObject&quot;, &amp;mut visitor).unwrap();
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="limitations-5"><a class="header" href="#limitations-5">Limitations</a></h2>
 <p>All fields of your structure must implement <code>Default</code> trait, this is essential limitation because deserialization must
 have a way to create an instance of an object for you. </p>
@@ -6120,8 +6103,7 @@ Log::set_verbosity(MessageKind::Warning);
 Log::info(&quot;This is some info&quot;); // This won't be printed.
 Log::warn(&quot;This is some warning&quot;);
 Log::err(&quot;This is some error&quot;);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tutorials"><a class="header" href="#tutorials">Tutorials</a></h1>
 <p>The book offers a set of tutorials of how to write a game of specific genre using the engine. Every tutorial starts
 from mild difficulty and keep increasing the difficulty until the end. All tutorials are very well structured and
@@ -6273,15 +6255,13 @@ fn main() {
             _ =&gt; *control_flow = ControlFlow::Poll,
         }
     });
-}
-</code></pre></pre>
+}</code></pre></pre>
 <p>Wow! There is lots of code for such a simple task. Fear not, everything here is pretty straightforward, let's dive into
 this code and disassemble it line by line. Just skip imports, it's too boring. Let's look at this line:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>const TIMESTEP: f32 = 1.0 / 60.0;
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we define a rate of update for logic of our future game, just sticking to common 60 FPS. Next goes the skeleton of
 the game, just a struct with two methods. It will be filled later in this tutorial.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -6299,24 +6279,21 @@ impl Game {
         // Game logic will be placed here.
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, we at the point where the interesting stuff happens - <code>fn main()</code>. We're starting by creating a window builder:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::window::WindowBuilder;
 </span>let window_builder = WindowBuilder::new().with_title(&quot;3D Shooter Tutorial&quot;);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The builder will be used later by the engine to create a window. Next we're creating our event loop: </p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::event_loop::EventLoop;
 </span>let event_loop = EventLoop::new();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The event loop is a &quot;magic&quot; thing that receives events from the operating system and feeds your application, this is a very 
 important part which makes the application work. Finally, we're creating an instance of the engine:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -6330,8 +6307,7 @@ let mut engine = Engine::new(EngineInitParams {
     vsync: false,
 })
 .unwrap();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At first, we're creating an instance of <code>SerializationContext</code> - it is used to store type constructors used for 
 serialization needs. Next, we're filling <code>EngineInitParams</code> structure, there is nothing interesting there, except maybe
 a flag that is responsible for vertical synchronization (VSync). In this tutorial we'll have VSync disabled, because
@@ -6340,15 +6316,13 @@ in panic on some platforms. Next we're creating an instance of the game, remembe
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut game = Game::new();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next we define two variables for the game loop: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let clock = time::Instant::now();
 let mut elapsed_time = 0.0;
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At first, we &quot;remember&quot; the starting point of the game in time. The next variable is used to control the game loop. Finally, we run the
 event loop and start checking for events coming from the OS:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -6358,8 +6332,7 @@ event loop and start checking for events coming from the OS:</p>
         ...
     }
 });
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Let's look at each event separately starting from <code>Event::MainEventsCleared</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -6382,8 +6355,7 @@ event loop and start checking for events coming from the OS:</p>
     // Rendering must be explicitly requested and handled after RedrawRequested event is received.
     engine.get_window().request_redraw();
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This is the heart of game loop - it stabilizes update rate of game logic by measuring time from last update call
 and performs a various amount of iterations based on an amount of time since last update. This makes the game logic update
 rate independent of FPS - it will be always 60 Hz for game logic even if FPS is 10. The <code>while</code> loop contains 
@@ -6395,8 +6367,7 @@ loop we're asking the engine to render the next frame. In the next match arm <co
     // Render at max speed - it is not tied to the game code.
     engine.render().unwrap();
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see rendering happens in a single line of code. Next we need to handle window events:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -6416,16 +6387,14 @@ loop we're asking the engine to render the next frame. In the next match arm <co
 	}
     _ =&gt; (),
 },
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're just checking if the player has hit Escape button and exit game if so. Also, when <code>WindowEvent::Resized</code> is 
 received, we're notifying renderer about that, so it's render targets will be resized too. The final match arm is for 
 every other event, nothing fancy here - just asking engine to continue listening for new events.</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>_ =&gt; *control_flow = ControlFlow::Poll,
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>So far so good. This small piece of code just creates a new window and fills it with black color, now we can start 
 writing the game. </p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-window.jpg" alt="Window" /></p>
@@ -6528,8 +6497,7 @@ scene as resource and create its instance. Change <code>fn new()</code> body to:
     }
 }
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>You may have noticed that the <code>Game</code> structure now has two new fields: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -6537,14 +6505,12 @@ scene as resource and create its instance. Change <code>fn new()</code> body to:
     scene: Handle&lt;Scene&gt;, // A handle to the scene
     camera: Handle&lt;Node&gt;, // A handle to the camera
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>These fields are just handles to the &quot;entities&quot; we've created in the <code>Game::new()</code>. Also, change <code>let mut game = Game::new();</code> to this:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut game = fyrox::core::futures::executor::block_on(Game::new(&amp;mut engine));
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we execute async function <code>Game::new()</code> and it creates game's instance with the scene we've made previously.
 Run the game and you should see this:</p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-scene.jpg" alt="Barrel" /></p>
@@ -6552,8 +6518,7 @@ Run the game and you should see this:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut scene = Scene::new();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The next few lines are the most interesting:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -6563,8 +6528,7 @@ Run the game and you should see this:</p>
     .await
     .unwrap()
     .instantiate_geometry(&amp;mut scene);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're asking the resource manager to load the scene we've made previously, awaiting while it loads and then instantiating
 it on the <code>scene</code>. What does &quot;instantiation&quot; mean? In short, it means that we're creating a copy of a scene and adding the copy
 to some other scene, the engine remembers connections between clones and original entities and is capable of restoring data
@@ -6580,8 +6544,7 @@ yet - we need a camera:</p>
     ),
 )
 .build(&amp;mut scene.graph);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Camera is our &quot;eyes&quot; in the world, here we're just creating a camera and moving it a bit up and back to be able to see the 
 scene. Finally, we're adding the scene to the engine's container for scenes, and it gives us a handle to the scene. Later
 we'll use the handle to borrow scene and modify it.</p>
@@ -6591,8 +6554,7 @@ we'll use the handle to borrow scene and modify it.</p>
     camera,
     scene: engine.scenes.add(scene),
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="character-controller"><a class="header" href="#character-controller">Character controller</a></h2>
 <p>We've made a lot of things already, but still can't move in the scene. Let's fix this! We'll start writing the character
 controller which will allow us to walk in our scene. Let's start with a chunk of code as usual:</p>
@@ -6758,8 +6720,7 @@ impl Player {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This is all the code we need for character controller, quite a lot actually, but as usual everything here is pretty
 straightforward.</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
@@ -6803,15 +6764,13 @@ impl Game {
         self.player.update(&amp;mut engine.scenes[self.scene]); // New
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>We've moved camera creation to <code>Player</code>, because now the camera is attached to the player's body. Also, we must add this line
 in the beginning of <code>event_loop.run(...)</code> to let <code>player</code> handle input events:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>game.player.process_input_event(&amp;event);        
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>So, let's try to understand what happens in this huge chunk of code. Let's start from the <code>InputController</code> struct,
 it holds the state of the input for a single frame and rotations of player &quot;parts&quot;. </p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -6825,8 +6784,7 @@ struct InputController {
     pitch: f32,
     yaw: f32,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next goes the <code>Player::new()</code> function. First, we're creating a simple chain of nodes of different kinds in the
 <a href="https://en.wikipedia.org/wiki/Scene_graph">scene graph</a>. </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -6863,8 +6821,7 @@ let rigid_body_handle = RigidBodyBuilder::new(
     // We don't want the rigid body to sleep (be excluded from simulation)
     .with_can_sleep(false)
     .build(&amp;mut scene.graph);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Basically we're making something like this:</p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-graph-example.png" alt="Graph" /></p>
 <p>As you can see, the camera is attached to the rigid body and has a <strong>relative</strong> position of <code>(0.0, 0.25, 0.0)</code>. So when we'll
@@ -6876,8 +6833,7 @@ move rigid body, the camera will move too (and rotate of course). </p>
     rigid_body: rigid_body_handle,
     controller: Default::default(),
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next goes the <code>fn update(...)</code> function, it is responsible for movement of the player. It starts from these lines:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -6885,8 +6841,7 @@ move rigid body, the camera will move too (and rotate of course). </p>
 scene.graph[self.camera].local_transform_mut().set_rotation(
     UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), self.controller.pitch.to_radians()),
 );
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>We're borrowing the camera from the graph (<code>scene.graph[self.camera]</code>) and modifying its <strong>local</strong> rotation, using a 
 <a href="https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation">quaternion</a> built from an axis, and an angle.
 This rotates camera in vertical direction. Let's talk about borrowing in the engine. Almost every object in the 
@@ -6897,8 +6852,7 @@ so to mutate or read data from an entity your have to borrow it first, like this
 </span><span class="boring">fn main() {
 </span>// Borrow rigid body node.
 let body = scene.graph[self.rigid_body].as_rigid_body_mut();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This piece of code <code>scene.graph[self.rigid_body]</code> borrows <code>rigid_body</code> as either mutable or shared, depending on the context (basically
 it is just an implementation of Index + IndexMut traits). Once we've borrowed objects, we can modify them. As the next
 step we calculate new horizontal speed for the player:</p>
@@ -6927,8 +6881,7 @@ if self.controller.move_right {
 
 // Finally new linear velocity.
 body.set_lin_vel(velocity);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>We don't need to modify vertical speed, because it should be controlled by the physics engine. Finally, we're setting
 rotation of the rigid body:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -6940,8 +6893,7 @@ body.local_transform_mut()
         &amp;Vector3::y_axis(),
         self.controller.yaw.to_radians(),
     ));
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The next piece of code is a bit boring, but still should be addressed - it is input handling. In the <code>process_input_event</code>
 we check input events and configure input controller accordingly. Basically we're just checking if W, S, A, D keys were 
 pressed or released. In the <code>MouseMotion</code> arm, we're modifying yaw and pitch of the controller according to mouse 
@@ -6949,8 +6901,7 @@ velocity. Nothing fancy, except this line:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>self.controller.pitch = (self.controller.pitch + delta.1 as f32).clamp(-90.0, 90.0);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're just restricting pitch to [-90; 90] degree range to not let flipping camera upside-down. Now let's run the 
 game, you should see something like this and be able to walk and turn the camera.</p>
 <p><img src="fyrox/tutorials/fps/tutorial-1/./tutorial1-controller.jpg" alt="Controller" /></p>
@@ -7002,27 +6953,23 @@ somewhere before <code>impl Player</code>:</p>
 
     skybox
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Then modify signature of <code>Player::new</code> to </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn new(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Self
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>We just added resource manager parameter here, and made the function async, because we'll load a bunch of textures 
 in the <code>create_skybox</code> function. Add following line at camera builder (before <code>.build</code>):</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>.with_skybox(create_skybox(resource_manager).await)
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Also modify player creation in <code>Game::new</code> to this</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>player: Player::new(&amp;mut scene, engine.resource_manager.clone()).await,
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next, download skybox textures from <a href="fyrox/tutorials/fps/tutorial-1/./skybox.zip">here</a> and extract the archive in 
 <code>data/textures</code> (all textures from  the archive must be in <code>data/textures/skybox</code>). Now you can run the game, and you
 should see something like this:</p>
@@ -7059,8 +7006,7 @@ is the result we're aiming in the tutorial:</p>
 </span>pub mod weapon;
 ...
 use weapon::Weapon;
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Switch to <code>weapon.rs</code> and paste this code into it:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7117,8 +7063,7 @@ impl Weapon {
     }
 }
 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This piece of code just loads a <a href="fyrox/tutorials/fps/tutorial-2/./m4.zip">weapon model</a> and saves an instance handle for 
 further use. Also, each weapon should contain a helper node that tells from where it will &quot;emit&quot; bullets, the node 
 was added in a 3D editor and has name <code>Weapon:ShotPoint</code>. Weapon implementation has helper methods that provide read-only
@@ -7142,8 +7087,7 @@ the <code>BaseBuilder</code> of the <code>CameraBuilder</code> instance (you als
     .build(&amp;mut scene.graph);
     weapon_pivot
 }]),
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>What is going on here? We're just adding new child node to the camera and offset it by some vector. Every weapon will
 be attached to this pivot. Please keep in mind that the offset given in <strong>local</strong> coordinates, which means that weapon
 pivot will move with the camera, but with some offset relative to it. Also, do not forget to add this line after 
@@ -7151,8 +7095,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let weapon_pivot;
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, add the weapon pivot to <code>Self { ... }</code> (and also add <code>weapon_pivot: Handle&lt;Node&gt;</code> to the <code>Player</code> struct):</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7162,8 +7105,7 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
     rigid_body: rigid_body_handle.into(),
     controller: Default::default(),
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next we need a container for weapons, let's add it to the <code>Game</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7172,16 +7114,14 @@ pivot will move with the camera, but with some offset relative to it. Also, do n
     player: Player,
     weapons: Pool&lt;Weapon&gt; // Weapons will live in a pool
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Also do not forget to import <code>Pool</code> from <code>fyrox::core::pool</code> in <code>main.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...
 use fyrox::core::pool::{Handle, Pool};
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need to change <code>Game::new()</code> a bit to add a weapon to the player:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7217,8 +7157,7 @@ use fyrox::core::pool::{Handle, Pool};
         weapons,
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At first, we're loading the scene, next we're creating player as usual. Next we're creating a weapon and attach it to 
 the weapon pivot we've made earlier. Finally, we're creating a container for the weapons: we'll use Pool to be able 
 to borrow weapon later on when we need. So, let's run the game, and you should see something like this:</p>
@@ -7243,8 +7182,7 @@ message that will be put in a common queue and executed later on one by one at t
     receiver: Receiver&lt;Message&gt;, // Single receiver, it cannot be cloned.
     sender: Sender&lt;Message&gt;, // Sender can be cloned and used from various places.
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need a <code>Message</code> enumeration, add <code>message.rs</code> module, import it in <code>main.rs</code> (<code>pub mod message;</code>) and fill it
 with the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -7257,8 +7195,7 @@ pub enum Message {
         weapons: Handle&lt;Weapon&gt;
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>For now, we have only one message kind - <code>ShootWeapon</code> with a single parameter, a handle of a weapon to shoot. We need
 a place to handle messages, <code>Game::update</code> seems to be the most suitable - it is on top of &quot;call hierarchy&quot; and has 
 most wide context. Let's change <code>Game::update</code> to this code:</p>
@@ -7283,8 +7220,7 @@ most wide context. Let's change <code>Game::update</code> to this code:</p>
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>So, these first three new lines updating every weapon in the game, for now update of a weapon just updates shooting timer.
 As you can see we've added new parameter to the function <code>dt: f32</code>, this is the time span from last frame. Do not forget
 to pass this parameter in <code>fn main()</code>: <code>game.update(&amp;mut engine, TIMESTEP);</code>. Finally, at the end of the function we're
@@ -7351,14 +7287,12 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
         create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Wow! Why is there so much code to shoot a weapon!? Actually, this is not all the code - check the last line</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This is yet another function we must add, it is a standalone helper function that creates a shot trail:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7434,8 +7368,7 @@ fn create_shot_trail(
     .with_render_path(RenderPath::Forward)
     .build(graph);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Okay... Let's disassemble this heap of code line by line. At first, we're borrowing the weapon by its handle and 
 check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (reset the timer) if so:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -7445,8 +7378,7 @@ check if it can shoot (if the timer has reached zero), and &quot;shoot&quot; (re
     if weapon.can_shoot() {
         weapon.shoot();
     ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next we're using ray casting to find the target we're shooting at:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7477,8 +7409,7 @@ scene.graph.physics.cast_ray(
 );
 
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>To determine the &quot;target&quot;, we're have to make a ray first. It starts from the &quot;shot point&quot; we've attached to the weapon.
 Direction of the ray is the &quot;look&quot; vector of the weapon model scaled by some large value which defines a &quot;length&quot; of the
 ray. Finally, we're casting the ray. Next we have to check each intersection and find the target:</p>
@@ -7508,8 +7439,7 @@ let trail_length = if let Some(intersection) = intersections
     // Otherwise trail length will be just the ray length.
     ray.dir.norm()
 };
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>First intersection most likely will be player's capsule, because shot point may be inside player's capsule. We're 
 filtering such intersection in the first three lines. To do that, we have to remember the handle of player's capsule
 in <code>Player</code>: <code>collider: Handle&lt;Node&gt;</code> and fill the field in <code>Player::new</code> like this:</p>
@@ -7533,8 +7463,7 @@ Self {
     ...
 }
 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next goes <code>TODO</code> comment, remember this line, it will be replaced when we'll add bots in future tutorial.
 Until we have no bots, we should somehow emulate shot impact, to do that we'll just apply some force at the point of
 impact. Finally, we're calculating desired shot trail length - it is just distance between point of impact and ray's 
@@ -7542,8 +7471,7 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>create_shot_trail(&amp;mut scene.graph, ray.origin, ray.dir, trail_length);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now let's dive into this function. It starts from the definition of local transform of the trail:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7555,8 +7483,7 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
     // Rotate the trail along given `direction`
     .with_local_rotation(UnitQuaternion::face_towards(&amp;direction, &amp;Vector3::y()))
     .build();
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to the length of the trail. Next we're making
 geometry for the cylinder:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -7569,8 +7496,7 @@ geometry for the cylinder:</p>
     // Rotate vertical cylinder around X axis to make it face towards Z axis
     &amp;UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
 )));
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7600,8 +7526,7 @@ MeshBuilder::new(
 // transparent.
 .with_render_path(RenderPath::Forward)
 .build(graph);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The trail will live just 0.25 seconds, Fyrox has built-in functionality for short-living objects, you have to just set 
 desired lifetime, and an object will be removed at the time. Also, we don't want the trail to cast shadows, and we want 
 the trail to be transparent yellow, to do that we have to change render path of the mesh to <code>Forward</code>. In short, every
@@ -7617,8 +7542,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
         self.controller.shoot = state == ElementState::Pressed;
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need a way to send messages to the game from the player. We need a new field in <code>Player</code> struct 
 <code>sender: Sender&lt;Message&gt;</code>. Also, we must change signature of <code>Player::new()</code> to this:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -7628,8 +7552,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
     resource_manager: ResourceManager,
     sender: Sender&lt;Message&gt;,
 ) -&gt; Self 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Just pass the <code>sender</code> in the <code>Self { .. }</code> like this: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7638,8 +7561,7 @@ at the end of <code>Event::WindowEvent</code> match arm before <code>_ =&gt; {}<
     sender, // &lt;- Pass sender 
     ...
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Player must know about its weapons, let's fix this by adding new field to the <code>Player</code>: <code>weapon: Handle&lt;Weapon&gt;</code>, we'll
 fill this field in the <code>Game::new()</code>, not in <code>Player::new()</code> because at the moment of creation of the player there are
 no weapons:</p>
@@ -7654,8 +7576,7 @@ let weapon = weapons.spawn(weapon);
 player.weapon = weapon;
 
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, at the end of <code>Player::update</code> we will handle the state of the input controller:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7666,8 +7587,7 @@ player.weapon = weapon;
         })
         .unwrap();
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, at this momemt you should be able to compile the game and as you run it, you should see something like this when
 you'll press left mouse button:</p>
 <p><img src="fyrox/tutorials/fps/tutorial-2/./shooting.jpg" alt="Weapon" /></p>
@@ -7679,15 +7599,13 @@ start by adding these fields in the <code>Weapon</code> struct:</p>
 </span><span class="boring">fn main() {
 </span>recoil_offset: Vector3&lt;f32&gt;,
 recoil_target_offset: Vector3&lt;f32&gt;,
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Initialize these fields with default values (zero vector):</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>recoil_offset: Default::default(),
 recoil_target_offset: Default::default(),
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>First vector is the actual recoil offset that will be applied to the weapon model, second - target recoil value which
 first vector will follow. Why do we need two vectors instead just one? The answer is very simple, we need to smoothly
 change offset over time, and to do that offset will just &quot;follow&quot; target offset which will give us desired smooth 
@@ -7721,8 +7639,7 @@ pub fn update(&amp;mut self, dt: f32, graph: &amp;mut Graph) {
         self.recoil_target_offset = Default::default();
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At first, in the first line we force the <code>recoil_offset</code> to follow <code>recoil_target_offset</code> with given speed. Next we're 
 applying offset to weapon's model. Finally, we're checking if we've reached target offset and if so, just reset target
 offset to return a weapon to its default position. Also we have to slightly modify <code>Weapon::shoot</code> to modify target
@@ -7735,8 +7652,7 @@ offset:</p>
     // Set new offset after each shot.
     self.recoil_target_offset = Vector3::new(0.0, 0.0, -0.025); 
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The last thing we need to do is to slightly modify code at the <code>Game::update</code> to pass new parameter to <code>Weapon::update</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -7750,8 +7666,7 @@ offset:</p>
     }
         
     ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, run the game, and the weapon should feel more natural now. </p>
 <h2 id="impact-effects"><a class="header" href="#impact-effects">Impact effects</a></h2>
 <p>Shooting have become much better after we've added a recoil, but there is still no impact effects like sparks. Let's fix
@@ -7830,8 +7745,7 @@ that! This is the first time when we'll use particle systems. Let's add this fun
     .with_texture(resource_manager.request_texture(Path::new(&quot;data/textures/spark.png&quot;)))
     .build(graph)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, again a heap of code... As usual, everything here is pretty straightforward. At first, we're creating spherical
 emitter - it is a spherical volume that responsible for spawning particles. It has a radius, and a bunch of basic properties
 such as spawn rate, maximum amount of particles, initial velocity range, etc. Next we're creating color gradient to make
@@ -7851,8 +7765,7 @@ create_bullet_impact(
     intersection.position.coords,
     effect_orientation,
 );
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, now run the game, and you should see something like this:</p>
 <p><img src="fyrox/tutorials/fps/tutorial-2/./impact.jpg" alt="Weapon" /></p>
 <p>One more thing that could be added is bullet shells that should come from a weapon when we're shooting, but I think the
@@ -7964,8 +7877,7 @@ impl Bot {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, before we dive into the code, we need to add some more code in <code>main.rs</code>, let's begin by adding a container for
 bots in <code>Game</code>: <code>bots: Pool&lt;Bot&gt;,</code>. Next we need to add some more code to <code>Game::new</code> where we'll add a bot instance in
 the game. Also, you can add more than one bot at different positions if you want. Do not forget to download bot model
@@ -7991,8 +7903,7 @@ Self {
     ...
     bots
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As usual, let's disassemble the code line-by-line. Creation of bot begins from loading its 3D model in the scene:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8001,8 +7912,7 @@ Self {
     .await
     .unwrap()
     .instantiate_geometry(scene);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Nothing really new here, loading and instantiation of a 3D model of <em>any</em> complexity is the same as before. Next we have
 to slightly modify the model, shift it a bit down and shrink:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -8013,8 +7923,7 @@ to slightly modify the model, shift it a bit down and shrink:</p>
     .set_position(Vector3::new(0.0, -0.45, 0.0))
     // Scale the model because it is too big.
     .set_scale(Vector3::new(0.0047, 0.0047, 0.0047));
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're borrow model in the scene graph, and modify its local transform. Next we're creating rigid body with a capsule
 collider, and attaching the model to the rigid body:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -8043,8 +7952,7 @@ let rigid_body = RigidBodyBuilder::new(
 .with_locked_rotations(true)
 .with_can_sleep(false)
 .build(&amp;mut scene.graph);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, we're returning bot's instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8053,8 +7961,7 @@ let rigid_body = RigidBodyBuilder::new(
     rigid_body,
     collider,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, now for the bots instantiation, for simplicity we create a single bot in <code>Game::new</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8068,8 +7975,7 @@ bots.spawn(
     )
     .await,
 );
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, we'll store bots in a pool as many other game entities, this will allow us to borrow bots later on when 
 we'll be adding AI. Ok, now run the game, and you should see something like this:</p>
 <p><img src="fyrox/tutorials/fps/tutorial-3/./bot.jpg" alt="Weapon" /></p>
@@ -8256,8 +8162,7 @@ impl BotAnimationMachine {
             .apply(&amp;mut scene.graph);
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, this might be the biggest heap of code we've ever been dealing with at once. There is lots of stuff happening, 
 let's thoroughly &quot;scan&quot; this code. It starts from the simple helper method to create states:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -8282,8 +8187,7 @@ fn create_play_animation_state(
     let state = machine.add_state(State::new(name, node));
     (animation, state)
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're using new method of Model resource - <a href="https://github.com/FyroxEngine/Fyrox/blob/master/src/resource/model.rs#L110">retarget_animations</a>,
 in short, it creates an instance of animation, and binds animations tracks to nodes in given sub graph that starts from
 a node given as first parameter. Next we're adding a PlayAnimation node to machine and making a new state node. Now we're
@@ -8296,8 +8200,7 @@ adding a structure with input parameter for ABM:</p>
     // Whether a bot is attacking or not.
     pub attack: bool,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This structure will contain more flags in the future, but now on to <code>BotAnimationMachine::new()</code>. At first, we're creating
 new ABM instance, nothing fancy here. Next we're loading animations in parallel: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -8310,8 +8213,7 @@ let (walk_animation_resource, idle_animation_resource, attack_animation_resource
     resource_manager.request_model(&quot;data/animations/zombie_idle.fbx&quot;),
     resource_manager.request_model(&quot;data/animations/zombie_attack.fbx&quot;),
 );
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you may have noticed, there is no difference between animation resource and model resource, this is because any 3D
 model can have animations. The animations we're loading, contain only bones and key frames for them, but not mesh of a bot.
 We simply don't need a mesh, because we've already created the mesh earlier. This separation of animations and mesh is 
@@ -8342,8 +8244,7 @@ let (attack_animation, attack_state) = create_play_animation_state(
     scene,
     model,
 );
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>These states are those yellow-ish rectangles on diagram up above. As you can see we're creating three states: idle, walk,
 attack. Next we need to connect states between each other. </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -8363,8 +8264,7 @@ machine.add_transition(Transition::new(
 ));
 
 ... // Rest are intentionally omitted 
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, comments should clarify what is going on here, but one thing I want to mention specifically. As you may have noticed,
 transition is that black arrow on the diagram up above, and it is linked with a parameter. Parameter have a name, and as
 you'll see later the name will be used to modify parameters. Finally, we're setting entry state to idle and return 
@@ -8375,8 +8275,7 @@ ABM instance:</p>
 machine.set_entry_state(idle_state);
 
 Self { machine }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now for another important part, we have to &quot;feed&quot; machine with actual parameters for each transition:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8394,8 +8293,7 @@ Self { machine }
         // Apply the pose to the graph.
         .apply(&amp;mut scene.graph);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we're setting each transition rule one by one, then forcing machine to evaluate animation pose and apply it to 
 the graph. You may ask how machine knows which nodes (bones) should be affected? Remember what was the definition of 
 animation and its tracks? Right, each track knows about the node it affects, animation blending machine just combines
@@ -8409,8 +8307,7 @@ for each node that was used in all tracks used in ABM. </p>
     machine: BotAnimationMachine::new(scene, model, resource_manager).await,
     ...
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Next we need to update machine, add following method to <code>impl Bot</code>: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8423,8 +8320,7 @@ for each node that was used in all tracks used in ABM. </p>
 
     self.machine.update(scene, dt, input);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This method will update machine and &quot;feed&quot; it with actual state, for now the state has flags combination that forces
 bot to be in idle state. This will be fixed when we'll add simple AI later in this tutorial. Finally, we need to update
 each bot we have, go to <code>Game::update</code> and add following lines there (somewhere after update of weapons):</p>
@@ -8433,8 +8329,7 @@ each bot we have, go to <code>Game::update</code> and add following lines there 
 </span>for bot in self.bots.iter_mut() {
     bot.update(scene, dt);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now run the game, and you should see that bots now is in idle state and animation is playing, it should look like this:</p>
 <p><img src="fyrox/tutorials/fps/tutorial-3/./animation.jpg" alt="Weapon" /></p>
 <h2 id="simple-ai"><a class="header" href="#simple-ai">Simple AI</a></h2>
@@ -8487,8 +8382,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
 
     self.machine.update(scene, dt, input);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Also add a new field to <code>Player</code>: <code>follow_target: bool</code> and initialize it in the constructor: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8496,8 +8390,7 @@ in a straight line and attack if they're close enough. Let's start by modifying 
     follow_target: false,
     ...
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>So, the AI algorithm is very simple - stand still until a target (player) come closer, once it's close enough, switch
 <code>follow_target</code> flag to true and begin to follow the target. To do that, all we have to do is to find a vector between
 target and position of a bot, make sure bots is facing towards the target and move it if it is far enough. So let's 
@@ -8516,8 +8409,7 @@ let distance = direction.norm();
 if distance != 0.0 &amp;&amp; distance &lt; 1.5 {
     self.follow_target = true;
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>At the beginning we define a melee attack distance, bot will attack target only if it close enough. Next, we're 
 building vector to from bot's position to target, calculate distance by taking length of the vector and check if 
 we should switch <code>follow_target</code> flag. Next goes the most interesting parts of the AI:</p>
@@ -8535,8 +8427,7 @@ we should switch <code>follow_target</code> flag. Next goes the most interesting
         ));
 
     ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Here we just borrow rigid body a bot, and make sure it rotated towards the target. Next we're moving bot if it is
 far enough from the target:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -8554,8 +8445,7 @@ far enough from the target:</p>
         rigid_body.set_lin_vel(new_velocity);
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This part is pretty simple too, all we have to do is to check how far the bot is, normalize direction vector, scale it
 by movement speed and form new velocity vector using new XZ velocity + current Y velocity of a bot to preserve velocity
 added by gravity (otherwise bot would just fly, you can experiment with this part to make flying zombies). One last
@@ -8567,8 +8457,7 @@ thing before we build and run the game, change lines of how we're updating bots 
 for bot in self.bots.iter_mut() {
     bot.update(scene, dt, target);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, here we're using player's position as target. In future tutorials we'll improve AI to be able to 
 automatically select targets to attack. Also, we'll &quot;teach&quot; bots to use weapons. Now it's the time to build and run 
 the game and you should see something like this (something like in the video at the beginning of the tutorial):</p>
@@ -8678,8 +8567,7 @@ fn main() {
     executor.add_plugin_constructor(GameConstructor);
     executor.get_window().set_title(&quot;RPG&quot;);
     executor.run();
-}
-</code></pre></pre>
+}</code></pre></pre>
 <p>It is much easier to initialize the engine now compared to the initialization described in the series of tutorials about
 writing a 3D shooter. If you run it, you'll see a window with black background with an &quot;RPG&quot; title.</p>
 <h2 id="assets-1"><a class="header" href="#assets-1">Assets</a></h2>
@@ -8754,8 +8642,7 @@ impl Player {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Let's disassemble this heap of code line by line. At first, we're creating pivot for our character, we'll use it as a
 &quot;mounting point&quot; for character's 3D model, also it will have a physical body, but that will be added later in this
 tutorial. Next, we're loading paladin 3D model and creating its instance in the scene, we need only geometry without
@@ -8863,8 +8750,7 @@ impl CameraController {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>To understand what this code does let's look closely at this picture:</p>
 <p><img src="fyrox/tutorials/rpg/tutorial-1/./camera-layout.png" alt="Camera Layout" /></p>
 <p>The pivot is marked yellow here, the hinge - green, and finally the camera is just a trapeze. Lines with arrows shows
@@ -8904,8 +8790,7 @@ impl Level {
         Self { root }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This small piece of code just loads the scene I made for this tutorial. It has a terrain and some decorations, including
 houses, trees, bushes, barrels, etc. The scene was made in the Fyroxed and can be freely edited without any
 problems. Just open the scene and modify it as you need.</p>
@@ -8989,7 +8874,6 @@ fn main() {
     executor.get_window().set_title(&quot;RPG&quot;);
     executor.run();
 }
-
 </code></pre></pre>
 <p>As you can see, everything is pretty straightforward: at first we're creating a new scene, set its ambient lighting to
 &quot;daylight&quot;, next we're creating the player and the level. Finally, we're adding the scene to the engine and now if you
@@ -9006,8 +8890,7 @@ yaw: f32,
 // An angle around local X axis of the hinge.
 pitch: f32,
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Do not forget to initialize them with zeros:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9016,8 +8899,7 @@ pitch: f32,
     yaw: 0.0,
     pitch: 0.0,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need to handle device events coming from the OS to rotate the camera. Add following method to the <code>impl CameraController</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9032,8 +8914,7 @@ pitch: f32,
             .min(90.0f32.to_radians());
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>In this method we use only <code>MouseMotion</code> events, because CameraController does not move - it can only rotate. The method
 is pretty straightforward. We're changing yaw and pitch using mouse offsets in two axes. X axis changes yaw, Y axis changes
 pitch. Pitch should be limited in specific range to prevent camera to rotate 360 degrees around object, we need angle
@@ -9059,8 +8940,7 @@ a new method to the <code>impl CameraController</code>:</p>
             self.pitch,
         ));
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>It is a very simple method, it borrows nodes, and applies rotations around specific axes. Now we need to call those two
 methods from somewhere. The most suitable place is <code>impl Player</code>, because <code>Player</code> owns an instance of <code>CameraController</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -9072,8 +8952,7 @@ methods from somewhere. The most suitable place is <code>impl Player</code>, bec
 pub fn update(&amp;mut self, scene: &amp;mut Scene) {
     self.camera_controller.update(&amp;mut scene.graph);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>For now both methods are just proxies, but it will be changed pretty soon. Now we need to call the proxies, but from where?
 The most suitable place is <code>on_tick</code> and <code>on_device_event</code> of the <code>GameState</code> trait implementation for our <code>Game</code> structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -9092,8 +8971,7 @@ fn on_device_event(
 ) {
     self.player.handle_device_event(&amp;event);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now you can run the game, and the camera should rotate when you're moving your mouse. Now it's the time to add an ability
 to walk for our character.</p>
 <h2 id="player-locomotion"><a class="header" href="#player-locomotion">Player locomotion</a></h2>
@@ -9109,14 +8987,12 @@ struct InputController {
     walk_left: bool,
     walk_right: bool,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Add new field to the <code>Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>input_controller: InputController,
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>And initialize it with <code>Default::default</code> in the <code>Player::new</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9124,8 +9000,7 @@ struct InputController {
     ...,
     input_controller: Default::default(),
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need to change the state of the input controller, to do that we'll use keyboard events. Add following method to
 the <code>impl Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -9149,8 +9024,7 @@ the <code>impl Player</code>:</p>
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now we need to call this method, we'll do it from <code>on_window_event</code> in the <code>GameState</code> trait implementation for our
 <code>Game</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -9163,8 +9037,7 @@ the <code>impl Player</code>:</p>
         _ =&gt; (),
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Ok, now we have input controller functioning. Now we can start adding movement logic to the player. Let's start by adding
 a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
 in <code>Player::new</code>:</p>
@@ -9215,8 +9088,7 @@ let body = RigidBodyBuilder::new(
 .with_can_sleep(false)
 .build(&amp;mut scene.graph);
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Now, once our character has physical body, we can move it. Add these lines to the end of <code>Player::update</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9304,8 +9176,7 @@ if is_moving {
 scene.graph[self.camera_controller.pivot]
     .local_transform_mut()
     .set_position(position + velocity);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>There is lots of code, let's thoroughly go through. At first, we're getting two vectors from the pivot: X and Z axes of
 the global transform of the pivot. We'll use them to move the character. Next we're using the state of the input
 controller to form a new velocity vector. Then we're normalizing velocity vector and multiply it with desired speed of
@@ -9442,8 +9313,7 @@ impl AnimationMachine {
             .apply(&amp;mut scene.graph);
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This is a simple animation blending machine, for more info check
 <a href="https://fyrox.rs/tutorials/2021/03/11/tutorial3.html#animations">&quot;Animations&quot; section of &quot;Writing a 3D shooter using Fyrox #3&quot;</a>
 tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
@@ -9453,24 +9323,21 @@ and create two transitions between them and then applying final pose to the char
 </span><span class="boring">fn main() {
 </span>...,
 animation_machine: AnimationMachine,
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>And initialize it in the <code>Player::new</code>, before <code>camera_controller</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>...,
 animation_machine: AnimationMachine::new(scene, model, resource_manager.clone()).await,
 ...
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The last thing we need to do is to update animation machine each frame, we'll do this in <code>Player::update</code>, at the end
 of the method:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>self.animation_machine
         .update(scene, dt, AnimationMachineInput { walk: is_moving });
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now if you run the game, you should see the character idling if not moving, and it should play &quot;walking&quot; animation if
 moving. That's it for this tutorial, in the next tutorial we'll &quot;teach&quot; the character to use swords.</p>
 <h2 id="conclusion-3"><a class="header" href="#conclusion-3">Conclusion</a></h2>
@@ -9601,8 +9468,7 @@ use fyrox::{
     },
     script::{ScriptContext, ScriptTrait},
 };
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
 <p>Our scene has pretty much everything we need to start adding scripts, we'll start from the <code>Player</code> script and make our character
 move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
@@ -9652,8 +9518,7 @@ impl ScriptTrait for Player {
         Self::type_uuid()
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This is a typical &quot;skeleton&quot; of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
 Let's go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone, Default)]</code>
 attributes:</p>
@@ -9683,8 +9548,7 @@ code snippet:</p>
     let script_constructors = &amp;context.serialization_context.script_constructors;
     script_constructors.add::&lt;Player&gt;(&quot;Player&quot;);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now the engine knows about our script and will be able to use it. It is pretty much useless in the current state, but we can already
 assign it to the player. Select the player's rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from the respective
 drop-down list and that's pretty much it - now the script is assigned:</p>
@@ -9698,8 +9562,7 @@ we need to get its sprite first. Let's start by adding the required field in the
 struct Player {
     sprite: Handle&lt;Node&gt;,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector. 
 To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging
 the sprite node from the world viewer to the respective field in the player script. Release the mouse button and if 
@@ -9713,8 +9576,7 @@ Go to the <code>Player</code> structure and add the following fields:</p>
 move_right: bool,
 jump: bool,
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>These fields will store the state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add the following code there:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9732,8 +9594,7 @@ jump: bool,
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
 <code>on_update</code>. The method is called each frame and allows you to put game logic there:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -9767,8 +9628,7 @@ fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
     }
 }
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
 we're checking movement flags and form horizontal speed, and applying velocity to the body. Velocity is applied in two ways: if
 the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If the jump button wasn't pressed -
@@ -9797,8 +9657,7 @@ if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
         ));
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The comments should clarify what's going on here, but in short, we're changing the horizontal scaling of the player's sprite if the player is
 moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces the sign of current horizontal scaling
 using the opposite sign of <code>x_speed</code>.</p>
@@ -9816,14 +9675,12 @@ following fields to the <code>Player</code>:</p>
 </span>animations: Vec&lt;SpriteSheetAnimation&gt;,
 current_animation: u32,
 <span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Currently, we just pass default values.</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>..Default::default()
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The Player will use multiple animations in future tutorials, but for now, it will use only two - idle and run.
 Now we need to somehow switch animations. Go to <code>on_update</code> in <code>Player</code> and add the following lines after
 the <code>x_speed</code> declaration:</p>
@@ -9842,8 +9699,7 @@ the <code>x_speed</code> declaration:</p>
 }
 <span class="boring">   }
 </span><span class="boring">}
-</span><span class="boring">}
-</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre></pre>
 <p>Here we assume that the run animation will be at index <code>1</code> and the idle animation at index <code>0</code>. We also need to
 apply the texture from the current animation to the player's sprite, and add the following lines at the end of <code>on_update</code></p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -9867,8 +9723,7 @@ apply the texture from the current animation to the player's sprite, and add the
         );
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,
 and if we're succeeded, we update it. At the next step, we're getting sprite and assigning a current frame of
 the current animation.</p>
@@ -10081,38 +9936,48 @@ fn main() {
             _ =&gt; *control_flow = ControlFlow::Poll,
         }
     });
-}
-</code></pre></pre>
+}</code></pre></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
+
     </body>
 </html>
