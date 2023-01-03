@@ -3523,13 +3523,107 @@ player scene node and it will do the job for you.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="animation-editor"><a class="header" href="#animation-editor">Animation Editor</a></h1>
 <p><img src="fyrox/animation/./anim_editor.png" alt="anim editor" /></p>
 <p>Animation Editor is a tool that helps you to create and preview animations. This is a powerful tool that can be used
-to animated pretty much any numeric property.</p>
-<p>It has three main parts:</p>
+to animated pretty much any numeric property. It has three main parts:</p>
 <ol>
 <li><code>Toolbar</code> - contains a set of tools that changes a particular part of an animation (name, length, speed, etc.)</li>
 <li><code>Track List</code> - contains a list of tracks of nodes that will be animated.</li>
 <li><code>Curve Editor</code> - curve editor allows you to edit behaviour of a numeric parameter over the time. </li>
 </ol>
+<h2 id="toolbar"><a class="header" href="#toolbar">Toolbar</a></h2>
+<p>The toolbar contains a set of tools that changes a particular part of an animation (name, length, speed, etc.). It looks
+like this:</p>
+<p><img src="fyrox/animation/./ae_toolbar.png" alt="toolbar" /></p>
+<ol>
+<li><code>Animation Name</code> - name of a currently selected animation.</li>
+<li><code>Add Animation</code> - adds a new empty animation with the name from the text box at the left to the animation player. </li>
+<li><code>Import Animation</code> - starts animation importing process. See <a href="fyrox/animation/anim_editor.html#animation-importing">Animation Importing</a> section
+for more info.</li>
+<li><code>Rename Animation</code> - renames a currently selected animation using the name from the text box at the left.</li>
+<li><code>Animation Selector</code> - allows you to switch currently edited animation.</li>
+<li><code>Delete Animation</code> - deletes a currently selected animation, tries to select last animation from the list if possible.</li>
+<li><code>Duplicate Animation</code> - clones a currently selected animation.</li>
+<li><code>Loop Animation</code> - enables or disables looping of a currently selected animation.</li>
+<li><code>Enable Animation</code> - enables or disables a currently selected animation.</li>
+<li><code>Animation Speed</code> - sets a new playback speed of a currently selected animation.</li>
+<li><code>Time Slice</code> - a time range (in seconds) which defines start and end time of a currently selected animation.</li>
+<li><code>Preview Switch</code> - enables or disables animation preview. See <a href="fyrox/animation/anim_editor.html#preview-mode"><code>Preview Mode</code></a> section for more info.</li>
+<li><code>Play/Pause</code> - plays or pauses a currently selected animation (allowed only in the preview mode).</li>
+<li><code>Stop</code> - stops a currently selected animation (allowed only in the preview mode).</li>
+</ol>
+<h2 id="track-list"><a class="header" href="#track-list">Track List</a></h2>
+<p>The track list contains a list of tracks of nodes that will be animated. It looks like this:</p>
+<p><img src="fyrox/animation/./ae_track_list.png" alt="track list" /></p>
+<ol>
+<li><code>Filter Bar</code> - filters the track list by finding tracks whose names matching the filter. You can use this to find
+tracks that belong to a particular scene node.</li>
+<li><code>Clear Filter</code> - clears the filter, the track list will show all the tracks after this.</li>
+<li><code>Collapse All</code> - collapses all the tracks in the list.</li>
+<li><code>Expand All</code> - expands all the tracks in the list.</li>
+<li><code>Track</code> - a track with some number of children parametric curves.</li>
+<li><code>Track Component Curve</code> - parametric curve that serves a data source for the animation for a particular track.</li>
+<li><code>Track Switch</code> - enables or disables a track; disabled tracks won't &quot;touch&quot; their properties.</li>
+<li><code>Add Track</code> - starts property binding process, see <a href="fyrox/animation/anim_editor.html#property-binding">Property Binding</a> section for more info.</li>
+</ol>
+<h3 id="track-context-menu"><a class="header" href="#track-context-menu">Track Context Menu</a></h3>
+<p><img src="fyrox/animation/./ae_track_context_menu.png" alt="context menu" /></p>
+<ul>
+<li><code>Remove Selected Tracks</code> - removes selected tracks; you can remove multiple tracks at a time by selecting them while
+holding <code>Ctrl</code>.</li>
+</ul>
+<h2 id="curve-editor"><a class="header" href="#curve-editor">Curve Editor</a></h2>
+<p>Curve editor allows you to edit parametric curves (one at a time). A curve consists of zero or more key frames with 
+various transition rules between current and the next. The editor looks like this:</p>
+<p><img src="fyrox/animation/./ae_curve_editor.png" alt="curve editor" /></p>
+<ol>
+<li><code>Time Ruler</code> - shows time values and every signal of a currently selected animation. A click on the time ruler will
+move the playback cursor at the click position. You can move it by clicking at the cursor and moving the mouse while 
+holding the left mouse button. Animation signals can be moved in the same fashion.</li>
+<li><code>Parametric Curve</code> - a curve that defines how a value changes over time.</li>
+<li><code>Time Thumb</code> - animation playback cursor, useful only for preview.</li>
+<li><code>Animation Signal</code> - some animation signal that will produce animation events when the playback cursor passes it. </li>
+</ol>
+<h3 id="time-ruler-context-menu"><a class="header" href="#time-ruler-context-menu">Time Ruler Context Menu</a></h3>
+<p><img src="fyrox/animation/./ae_time_ruler_context_menu.png" alt="time ruler context menu" /></p>
+<ul>
+<li><code>Remove Signal</code> - removes an animation signal under the mouse cursor.</li>
+<li><code>Add Signal</code> - adds a new animation signal at the mouse cursor position.</li>
+</ul>
+<h3 id="key-frame-context-menu"><a class="header" href="#key-frame-context-menu">Key Frame Context Menu</a></h3>
+<p><img src="fyrox/animation/./ae_key_frame_context_menu.png" alt="key frame context menu" /></p>
+<ul>
+<li><code>Location</code> - shows a key location and allows you to change it. Useful for setting precise values. </li>
+<li><code>Value</code> - shows a key value and allows you to change it. Useful for setting precise values.</li>
+<li><code>Add Key</code> - adds a new key to the curve.</li>
+<li><code>Remove</code> - removes all selected keys. You can select multiple keys either by box selection (click and drag the mouse
+to active box selection) or by clicking on separate keys while holding <code>Ctrl</code>.</li>
+<li><code>Key...</code> - allows you to change the interpolation type of key. It could be one of the following values: Constant, Linear,
+Cubic.</li>
+<li><code>Zoom To Fit</code> - tries to find zooming values (for both axes) and the view position with which the entire curve fits in
+the viewport.</li>
+</ul>
+<h2 id="property-binding"><a class="header" href="#property-binding">Property Binding</a></h2>
+<p>To animate a property all you need to do is to click on <code>Add Track...</code> button at the bottom of the track list, select
+a node to animate and then select a property that will be animated. There are two windows that will be shown one after
+another:</p>
+<p><img src="fyrox/animation/./ae_add_track_select_node.png" alt="step1" /></p>
+<p><img src="fyrox/animation/./ae_add_track_select_property.png" alt="step2" /></p>
+<p>You can cancel property binding at any time by clicking <code>Cancel</code> in any of the windows. Keep in mind that you can animate
+only numeric properties, so not every property is shown in the window.</p>
+<h2 id="animation-importing"><a class="header" href="#animation-importing">Animation Importing</a></h2>
+<p>Animations can be stored in separate files, but the engine requires all of them to be in a single Animation Player. To
+put an animation from an external resource (an FBX, for instance) in the animation player you can use animation 
+importing. To do that, click on animation import icon and then select a root node of the hierarchy that is animated in
+the external animation file, then select the animation file and click <code>Ok</code>. The engine will try to import the animation
+and map it to the given hierarchy, mapping is done using node names, so animated node names must match in both your 
+scene and your external animation file. </p>
+<p><img src="fyrox/animation/./ae_import_select_target_node.png" alt="step1" /></p>
+<p><img src="fyrox/animation/./ae_import_select_animation.png" alt="step2" /></p>
+<h2 id="preview-mode"><a class="header" href="#preview-mode">Preview Mode</a></h2>
+<p>Preview mode helps you to see and debug your animation. After activating the mode, you need to play the animation by
+clicking the <code>Play/Pause</code> button:</p>
+<p><img src="fyrox/animation/./anim_editor.gif" alt="anim editor" /></p>
+<p>Any significant change made in the scene will automatically deactivate the preview mode reverting all the changes made
+by playing animation.</p>
 <h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
 <p>For now there's no dopesheet mode in the editor, you can edit only one numeric parameter at a time. Also, there's no 
 capture mode - this is a special mode in which the editor automatically adds your changes in the scene to the animation.
@@ -3629,7 +3723,7 @@ combat. This means that locomotion machine will take control over lower body and
 <div style="break-before: page; page-break-before: always;"></div><h1 id="animation-blending-state-machine-absm-editor"><a class="header" href="#animation-blending-state-machine-absm-editor">Animation Blending State Machine (ABSM) Editor</a></h1>
 <p>While it is possible to create and manage animation blending and state manually from code, it quickly becomes too 
 annoying and hardly manageable. To help you create and manage blending machines in easy way, the engine offers 
-a ABSM Editor tool. This chapter will introduce the editor for your, it is quite complex, but the guide should help you
+an ABSM Editor tool. This chapter is an overview of the editor, it is quite complex, but the guide should help you
 to figure out which part is made for what. Next chapter will help you to create your first animation blending state
 machine.</p>
 <p><img src="fyrox/animation/./absm.png" alt="absm editor" /></p>
@@ -3645,12 +3739,13 @@ section for more info.</li>
 node that plays an animation, or a series of play animation nodes connected to blending nodes (which can be connected
 to other blending nodes, etc.). See <a href="fyrox/animation/absm_editor.html#state-viewer">State Viewer</a> section for more info.</li>
 </ol>
-<h2 id="toolbar"><a class="header" href="#toolbar">Toolbar</a></h2>
+<h2 id="toolbar-1"><a class="header" href="#toolbar-1">Toolbar</a></h2>
 <p><img src="fyrox/animation/./absm_toolbar.png" alt="toolbar" /></p>
 <ol>
 <li><code>Preview Switch</code> - enables or disables preview mode for the ABSM. See <a href="fyrox/animation/absm_editor.html#preview-mode">Preview Mode</a> section for more
 info.</li>
-<li><code>Layer Name</code> - name of the selected layer. Type a new name here to rename currently selected layer.</li>
+<li><code>Layer Name</code> - name of the selected layer. Type a new name here to rename currently selected layer (hit enter or just
+click elsewhere to rename).</li>
 <li><code>Add Layer</code> - adds a new layer with the name in the <code>Layer Name</code> text box to the ABSM. ABSM can have multiple layers
 with the same name, but it strongly advised to set unique names here.</li>
 <li><code>Remove Current Layer</code> - removes currently selected layer. You can delete all layers, but in this case your ABSM won't
@@ -3786,7 +3881,7 @@ connect some nodes to the new input poses.
 <p>Layer mask editor allows you to select which nodes <strong>won't</strong> be animated by the current animation layer. Selected nodes
 are marked with dark color. To select multiple nodes at once, hold <code>Ctrl</code> and click on items. The text box at the top
 of the window allows you to search for a particular scene node. To save edited layer mask click <code>OK</code>.</p>
-<h2 id="preview-mode"><a class="header" href="#preview-mode">Preview Mode</a></h2>
+<h2 id="preview-mode-1"><a class="header" href="#preview-mode-1">Preview Mode</a></h2>
 <p>Preview mode turns on the animation blending state machine and its animation player and allows you to see the result
 of the work of the machine. Any significant changes in the scene automatically disables the preview mode and any
 changes done by the machine is discarded. While the preview mode is active, you can freely change the values of the 
