@@ -147,18 +147,170 @@
                         <h1 id="animation-blending-state-machine-absm-editor"><a class="header" href="#animation-blending-state-machine-absm-editor">Animation Blending State Machine (ABSM) Editor</a></h1>
 <p>While it is possible to create and manage animation blending and state manually from code, it quickly becomes too 
 annoying and hardly manageable. To help you create and manage blending machines in easy way, the engine offers 
-a ABSM Editor tool.</p>
+a ABSM Editor tool. This chapter will introduce the editor for your, it is quite complex, but the guide should help you
+to figure out which part is made for what. Next chapter will help you to create your first animation blending state
+machine.</p>
 <p><img src="./absm.png" alt="absm editor" /></p>
-<p>The editor has four main parts (windows):</p>
+<p>The editor has four main parts (panels):</p>
 <ol>
-<li><code>Toolbar</code> </li>
+<li><code>Toolbar</code> - contains a set of tools to edit animation layers and enable/disable preview mode. See <a href="#toolbar">Toolbar</a>
+section for more info.</li>
 <li><code>Parameters</code> - allows you to edit various variables that are responsible for transitions, weight parameters for 
-blending, etc.</li>
-<li><code>State Graph</code> - allows you to create, delete, edit states and transition between them.</li>
+blending, etc. See <a href="./absm_parameters.png">Parameters</a> section for more info.</li>
+<li><code>State Graph</code> - allows you to create, delete, edit states and transition between them. See <a href="#state-graph">State Graph</a>
+section for more info.</li>
 <li><code>State Viewer</code> - allows you to edit pose source for a state. Pose source can be represented either by a single 
 node that plays an animation, or a series of play animation nodes connected to blending nodes (which can be connected
-to other blending nodes, etc.)</li>
+to other blending nodes, etc.). See <a href="#state-viewer">State Viewer</a> section for more info.</li>
 </ol>
+<h2 id="toolbar"><a class="header" href="#toolbar">Toolbar</a></h2>
+<p><img src="./absm_toolbar.png" alt="toolbar" /></p>
+<ol>
+<li><code>Preview Switch</code> - enables or disables preview mode for the ABSM. See <a href="#preview-mode">Preview Mode</a> section for more
+info.</li>
+<li><code>Layer Name</code> - name of the selected layer. Type a new name here to rename currently selected layer.</li>
+<li><code>Add Layer</code> - adds a new layer with the name in the <code>Layer Name</code> text box to the ABSM. ABSM can have multiple layers
+with the same name, but it strongly advised to set unique names here.</li>
+<li><code>Remove Current Layer</code> - removes currently selected layer. You can delete all layers, but in this case your ABSM won't
+have any effect.</li>
+<li><code>Layer Selector</code> - allows you to select a layer for editing, default selection is none.</li>
+<li><code>Layer Mask</code> - opens a <code>Layer Mask Editor</code> and helps you to edit the layer mask of the current layer. See 
+<a href="#layer-mask">Layer Mask</a> section for more info.</li>
+</ol>
+<h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
+<p>Parameter is a named and typed variable that provides the animation system with some data required for it to work. There
+are only three type of parameters:</p>
+<ul>
+<li><code>Rule</code> - boolean value that used as a trigger for transitions. When transition is using some rule, it checks the value
+of the parameter and if it is <code>true</code> transition starts.</li>
+<li><code>Weight</code> - real number (<code>f32</code>) that is used a weight when you're blending multiple animations into one.</li>
+<li><code>Index</code> - natural number (<code>i32</code>) that is used as an animation selector.</li>
+</ul>
+<p><img src="./absm_parameters.png" alt="parameters" /></p>
+<ol>
+<li><code>Add Parameters</code> - adds a new parameter to the parameters' container.</li>
+<li><code>Remove a Parameter</code> - removes selected parameter from the parameters' container.</li>
+<li><code>Parameter Name</code> - allows you to set a parameter name.</li>
+<li><code>Parameter Type</code> - allows you to select the type of the parameter.</li>
+<li><code>Parameter Value</code> - allows you to set parameter value.</li>
+</ol>
+<h2 id="state-graph"><a class="header" href="#state-graph">State Graph</a></h2>
+<p>State Graph allows you to create states and transitions between them. </p>
+<p><img src="./absm_state_graph.png" alt="state graph" /></p>
+<ol>
+<li><code>State</code> - state is final animation for a set of scene nodes, only one state can be active at a time.</li>
+<li><code>Transition</code> - is an <em>ordered</em> connection between two states, it defines how much time it needed to perform 
+blending of two states.</li>
+<li><code>Root State</code> - is an entry state of the current layer.</li>
+</ol>
+<h3 id="state-context-menu"><a class="header" href="#state-context-menu">State Context Menu</a></h3>
+<p><img src="./absm_state_context_menu.png" alt="state context menu" /></p>
+<ul>
+<li><code>Create Transition</code> - starts transition creation from the current state to some other.</li>
+<li><code>Remove</code> - removes the state.</li>
+<li><code>Set As Entry State</code> - marks the state as an entry state (this state will be active at beginning).</li>
+</ul>
+<h3 id="transition-context-menu"><a class="header" href="#transition-context-menu">Transition Context Menu</a></h3>
+<p><img src="./absm_transition_context_menu.png" alt="transition context menu" /></p>
+<ul>
+<li><code>Remove Transition</code> - removes selected transition.</li>
+</ul>
+<h3 id="state-properties"><a class="header" href="#state-properties">State Properties</a></h3>
+<p>Select a <code>State</code> node to edit the following properties:</p>
+<p><img src="./absm_state_properties.png" alt="state properties" /></p>
+<ul>
+<li><code>Position</code> - is a location of the state on the canvas.</li>
+<li><code>Name</code> - name of the state.</li>
+<li><code>Root</code> - handle of the backing animation node inside the state.</li>
+</ul>
+<h3 id="transition-properties"><a class="header" href="#transition-properties">Transition Properties</a></h3>
+<p>Select a <code>Transition</code> node to edit the following properties:</p>
+<p><img src="./absm_transition_properties.png" alt="transition properties" /></p>
+<ul>
+<li><code>Name</code> - name of the state.</li>
+<li><code>Transition Time</code> - amount of time for blending between two states (in seconds).</li>
+<li><code>Elapsed Time</code> - starting amount of blending time.</li>
+<li><code>Source</code> - handle of a source state.</li>
+<li><code>Desc</code> - handle of a destination state.</li>
+<li><code>Rule</code> - a name of <code>Rule</code> type parameter that defines whether the transition can be activated or not.</li>
+<li><code>Invert Rule</code> - defines whether to invert the value of <code>Rule</code> or not.</li>
+<li><code>Blend Factor</code> - defines a percentage (in <code>0..1</code> range) of how much transition was active. </li>
+</ul>
+<h2 id="state-viewer"><a class="header" href="#state-viewer">State Viewer</a></h2>
+<p>State Viewer allows you to edit contents of states. You can create animation blending chains of any complexity, the
+simplest content of a state is just a single <code>Play Animation</code> node. Currently, the engine supports just three animation
+blending nodes:</p>
+<ul>
+<li><code>Play Animation</code> - takes animation pose directly from specified animation, does nothing to it.</li>
+<li><code>Blend Animations</code> - takes multiple animation poses from respective animations and blends them together with 
+respective blend weights.</li>
+<li><code>Blend Animations By Index</code> - takes multiple animation poses from respective animations and switches between them 
+with &quot;smooth&quot; transition using an index parameter.</li>
+</ul>
+<p><img src="./absm_state_viewer.png" alt="state viewer" /></p>
+<ol>
+<li><code>Node</code> - is a source of animation for blending.</li>
+<li><code>Connection</code> - defines how nodes are connected to each other. To create a new connection, click on a small dot on a
+node, hold the button and start dragging to a dot on some other node. </li>
+<li><code>Root Node</code> - root node is marked green; root node is a final source of animation for the parent state. </li>
+</ol>
+<h3 id="play-animation-properties"><a class="header" href="#play-animation-properties"><code>Play Animation</code> Properties</a></h3>
+<p>Select a <code>Play Animation</code> node to edit the following properties:</p>
+<p><img src="./absm_play_animation_properties.png" alt="play animation properties" /></p>
+<ul>
+<li><code>Position</code> - is a location of the node on the canvas.</li>
+<li><code>Animation</code> - an animation to fetch the pose from.</li>
+</ul>
+<h3 id="blend-animations-properties"><a class="header" href="#blend-animations-properties"><code>Blend Animations</code> Properties</a></h3>
+<p>Select a <code>Blend Animations</code> node to edit the following properties:</p>
+<p><img src="./absm_blend_animations_properties.png" alt="blend animations properties" /></p>
+<ul>
+<li><code>Position</code> - is a location of the node on the canvas.</li>
+<li><code>Pose Sources</code> - a set of input poses. To add a pose either click on <code>+</code> or <code>+Input</code> on the node itself. Don't forget
+to connect some nodes to the new input poses.
+<ul>
+<li><code>Weight</code> - a weight of the pose; could be either a constant value or some parameter.</li>
+</ul>
+</li>
+</ul>
+<h3 id="blend-animations-by-index-properties"><a class="header" href="#blend-animations-by-index-properties"><code>Blend Animations By Index</code> Properties</a></h3>
+<p>Select a <code>Blend Animations By Index</code> node to edit the following properties:</p>
+<p><img src="./absm_blend_animations_by_index_properties.png" alt="blend animations by index properties" /> </p>
+<ul>
+<li><code>Position</code> - is a location of the node on the canvas.</li>
+<li><code>Index Parameter</code> - a name of an indexing parameter (must be <code>Index</code> type).</li>
+<li><code>Inputs</code> - a set of input poses. To add a pose either click on <code>+</code> or <code>+Input</code> on the node itself. Don't forget to
+connect some nodes to the new input poses.
+<ul>
+<li><code>Blend Time</code> - defines how much time is needed to transition to the pose.</li>
+</ul>
+</li>
+</ul>
+<h3 id="connection-context-menu"><a class="header" href="#connection-context-menu">Connection Context Menu</a></h3>
+<p>Every connection has a context menu that can be shown by a right-click on a connection.</p>
+<p><img src="./absm_connection_context_menu.png" alt="connection context menu" /></p>
+<ul>
+<li><code>Remove Connection</code> - removes the connection between parent nodes.</li>
+</ul>
+<h3 id="node-context-menu"><a class="header" href="#node-context-menu">Node Context Menu</a></h3>
+<p>Every node has a context menu that can be shown by a right-click on a connection.</p>
+<p><img src="./absm_node_context_menu.png" alt="node context menu" /></p>
+<ul>
+<li><code>Set As Root</code> - sets the node as the final pose source of the parent state. </li>
+<li><code>Remove</code> - removes the node from the state.</li>
+</ul>
+<h2 id="layer-mask"><a class="header" href="#layer-mask">Layer Mask</a></h2>
+<p><img src="./absm_layer_mask.png" alt="layer mask" /></p>
+<p>Layer mask editor allows you to select which nodes <strong>won't</strong> be animated by the current animation layer. Selected nodes
+are marked with dark color. To select multiple nodes at once, hold <code>Ctrl</code> and click on items. The text box at the top
+of the window allows you to search for a particular scene node. To save edited layer mask click <code>OK</code>.</p>
+<h2 id="preview-mode"><a class="header" href="#preview-mode">Preview Mode</a></h2>
+<p>Preview mode turns on the animation blending state machine and its animation player and allows you to see the result
+of the work of the machine. Any significant changes in the scene automatically disables the preview mode and any
+changes done by the machine is discarded. While the preview mode is active, you can freely change the values of the 
+parameters to see how the machine will react to this. This helps you to debug your state machine, it is especially 
+useful for complex state machines with lots of layers. Here's how the preview mode works:</p>
+<p><img src="./absm.gif" alt="absm" /></p>
 
                     </main>
 
