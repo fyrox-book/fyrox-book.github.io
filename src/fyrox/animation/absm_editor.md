@@ -2,7 +2,7 @@
 
 While it is possible to create and manage animation blending and state manually from code, it quickly becomes too 
 annoying and hardly manageable. To help you create and manage blending machines in easy way, the engine offers 
-a ABSM Editor tool. This chapter will introduce the editor for your, it is quite complex, but the guide should help you
+an ABSM Editor tool. This chapter is an overview of the editor, it is quite complex, but the guide should help you
 to figure out which part is made for what. Next chapter will help you to create your first animation blending state
 machine.
 
@@ -26,7 +26,8 @@ to other blending nodes, etc.). See [State Viewer](#state-viewer) section for mo
 
 1. `Preview Switch` - enables or disables preview mode for the ABSM. See [Preview Mode](#preview-mode) section for more
 info.
-2. `Layer Name` - name of the selected layer. Type a new name here to rename currently selected layer.
+2. `Layer Name` - name of the selected layer. Type a new name here to rename currently selected layer (hit enter or just
+click elsewhere to rename).
 3. `Add Layer` - adds a new layer with the name in the `Layer Name` text box to the ABSM. ABSM can have multiple layers
 with the same name, but it strongly advised to set unique names here.
 4. `Remove Current Layer` - removes currently selected layer. You can delete all layers, but in this case your ABSM won't
