@@ -20,6 +20,15 @@ section for more info.
 node that plays an animation, or a series of play animation nodes connected to blending nodes (which can be connected
 to other blending nodes, etc.). See [State Viewer](#state-viewer) section for more info.
 
+The editor can be opened in two ways - using `Utils -> ABSM Editor` or by selecting an animation blending state machine
+node and clicking `Open ABSM Editor...` button:
+
+![open1](./absm_open1.png)
+
+![open1](./absm_open2.png)
+
+In both ways you still need to select an an animation blending state machine node for editing.
+
 ## Toolbar
 
 ![toolbar](./absm_toolbar.png)
