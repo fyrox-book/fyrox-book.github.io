@@ -9,6 +9,15 @@ to animated pretty much any numeric property. It has three main parts:
 2. `Track List` - contains a list of tracks of nodes that will be animated.
 3. `Curve Editor` - curve editor allows you to edit behaviour of a numeric parameter over the time. 
 
+The editor can be opened in two ways - using `Utils -> Animation Editor` or by selecting an animation player node and
+clicking `Open Animation Editor` button in the inspector.
+
+![open1](./ae_open1.png)
+
+![open2](./ae_open2.png)
+
+In both ways you still need to select an animation player for editing.
+
 ## Toolbar
 
 The toolbar contains a set of tools that changes a particular part of an animation (name, length, speed, etc.). It looks
