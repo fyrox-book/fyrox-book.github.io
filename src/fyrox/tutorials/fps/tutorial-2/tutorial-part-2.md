@@ -55,7 +55,7 @@ impl Weapon {
             .request_model("data/models/m4.fbx")
             .await
             .unwrap()
-            .instantiate_geometry(scene);
+            .instantiate(scene);
 
         let shot_point = scene.graph.find_by_name(model, "Weapon:ShotPoint");
 
@@ -164,7 +164,7 @@ pub async fn new(engine: &mut Engine) -> Self {
         .request_model("data/models/scene.rgs")
         .await
         .unwrap()
-        .instantiate_geometry(&mut scene);
+        .instantiate(&mut scene);
 
     // Create player first.
     let player = Player::new(&mut scene, engine.resource_manager.clone()).await;
@@ -344,12 +344,12 @@ This is yet another function we must add, it is a standalone helper function tha
 #         parking_lot::Mutex,
 #         sstorage::ImmutableString,
 #     },
-#     material::{Material, PropertyValue},
+#     material::{Material, PropertyValue, SharedMaterial},
 #     scene::{
 #         base::BaseBuilder,
 #         graph::Graph,
 #         mesh::{
-#             surface::{SurfaceBuilder, SurfaceData},
+#             surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
 #             MeshBuilder, RenderPath,
 #         },
 #         transform::TransformBuilder,
@@ -372,14 +372,14 @@ fn create_shot_trail(
         .build();
 
     // Create unit cylinder with caps that faces toward Z axis.
-    let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
+    let shape = SurfaceSharedData::new(SurfaceData::make_cylinder(
         6,     // Count of sides
         1.0,   // Radius
         1.0,   // Height
         false, // No caps are needed.
         // Rotate vertical cylinder around X axis to make it face towards Z axis
         &UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
-    )));
+    ));
 
     // Create an instance of standard material for the shot trail.
     let mut material = Material::standard();
@@ -401,7 +401,7 @@ fn create_shot_trail(
             .with_lifetime(0.25),
     )
     .with_surfaces(vec![SurfaceBuilder::new(shape)
-        .with_material(Arc::new(Mutex::new(material)))
+        .with_material(SharedMaterial::new(material))
         .build()])
     // Make sure to set Forward render path, otherwise the object won't be
     // transparent.
@@ -535,14 +535,14 @@ Its purpose is to shrink cylinder in XZ plane and stretch it out on Y axis to th
 geometry for the cylinder:
 
 ```rust,no_run,compile_fail
- let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
+let shape = SurfaceSharedData::new(SurfaceData::make_cylinder(
     6,     // Count of sides
     1.0,   // Radius
     1.0,   // Height
     false, // No caps are needed.
     // Rotate vertical cylinder around X axis to make it face towards Z axis
     &UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
-)));
+));
 ```
 
 Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:
@@ -566,7 +566,7 @@ MeshBuilder::new(
         .with_lifetime(0.25),
 )
 .with_surfaces(vec![SurfaceBuilder::new(shape)
-    .with_material(Arc::new(Mutex::new(material)))
+    .with_material(SharedMaterial::new(material))
     .build()])
 // Do not cast shadows.
 .with_cast_shadows(false)
