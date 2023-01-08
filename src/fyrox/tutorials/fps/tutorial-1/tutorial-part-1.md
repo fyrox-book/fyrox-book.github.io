@@ -94,6 +94,7 @@ fn main() {
         serialization_context,
         events_loop: &event_loop,
         vsync: false,
+        headless: false
     })
     .unwrap();
 
@@ -121,7 +122,7 @@ fn main() {
                     game.update();
 
                     // Update engine each frame.
-                    engine.update(TIMESTEP, control_flow, &mut lag);
+                    engine.update(TIMESTEP, control_flow, &mut lag, Defaut::default());
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
@@ -411,7 +412,7 @@ pub async fn new(engine: &mut Engine) -> Self {
         .request_model("data/models/scene.rgs")
         .await
         .unwrap()
-        .instantiate_geometry(&mut scene);
+        .instantiate(&mut scene);
 
     // Next create a camera, it is our "eyes" in the world.
     // This can also be made in editor, but for educational purpose we'll made it by hand.
