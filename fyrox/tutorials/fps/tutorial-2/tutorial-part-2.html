@@ -193,7 +193,7 @@ impl Weapon {
             .request_model(&quot;data/models/m4.fbx&quot;)
             .await
             .unwrap()
-            .instantiate_geometry(scene);
+            .instantiate(scene);
 
         let shot_point = scene.graph.find_by_name(model, &quot;Weapon:ShotPoint&quot;);
 
@@ -296,7 +296,7 @@ use fyrox::core::pool::{Handle, Pool};
         .request_model(&quot;data/models/scene.rgs&quot;)
         .await
         .unwrap()
-        .instantiate_geometry(&amp;mut scene);
+        .instantiate(&amp;mut scene);
 
     // Create player first.
     let player = Player::new(&amp;mut scene, engine.resource_manager.clone()).await;
@@ -466,12 +466,12 @@ mysterious line <code>self.shoot_weapon(weapon, engine)</code> which is not yet 
 </span><span class="boring">        parking_lot::Mutex,
 </span><span class="boring">        sstorage::ImmutableString,
 </span><span class="boring">    },
-</span><span class="boring">    material::{Material, PropertyValue},
+</span><span class="boring">    material::{Material, PropertyValue, SharedMaterial},
 </span><span class="boring">    scene::{
 </span><span class="boring">        base::BaseBuilder,
 </span><span class="boring">        graph::Graph,
 </span><span class="boring">        mesh::{
-</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData},
+</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
 </span><span class="boring">            MeshBuilder, RenderPath,
 </span><span class="boring">        },
 </span><span class="boring">        transform::TransformBuilder,
@@ -494,14 +494,14 @@ fn create_shot_trail(
         .build();
 
     // Create unit cylinder with caps that faces toward Z axis.
-    let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
+    let shape = SurfaceSharedData::new(SurfaceData::make_cylinder(
         6,     // Count of sides
         1.0,   // Radius
         1.0,   // Height
         false, // No caps are needed.
         // Rotate vertical cylinder around X axis to make it face towards Z axis
         &amp;UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
-    )));
+    ));
 
     // Create an instance of standard material for the shot trail.
     let mut material = Material::standard();
@@ -523,7 +523,7 @@ fn create_shot_trail(
             .with_lifetime(0.25),
     )
     .with_surfaces(vec![SurfaceBuilder::new(shape)
-        .with_material(Arc::new(Mutex::new(material)))
+        .with_material(SharedMaterial::new(material))
         .build()])
     // Make sure to set Forward render path, otherwise the object won't be
     // transparent.
@@ -650,14 +650,14 @@ origin. In the <code>else</code> branch we're setting the length to be the lengt
 geometry for the cylinder:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span> let shape = Arc::new(Mutex::new(SurfaceData::make_cylinder(
+</span>let shape = SurfaceSharedData::new(SurfaceData::make_cylinder(
     6,     // Count of sides
     1.0,   // Radius
     1.0,   // Height
     false, // No caps are needed.
     // Rotate vertical cylinder around X axis to make it face towards Z axis
     &amp;UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), 90.0f32.to_radians()).to_homogeneous(),
-)));
+));
 <span class="boring">}</span></code></pre></pre>
 <p>Here we're creating unit vertical cylinder, rotate it to make it face towards Z axis. Finally, we're creating mesh node:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
@@ -680,7 +680,7 @@ MeshBuilder::new(
         .with_lifetime(0.25),
 )
 .with_surfaces(vec![SurfaceBuilder::new(shape)
-    .with_material(Arc::new(Mutex::new(material)))
+    .with_material(SharedMaterial::new(material))
     .build()])
 // Do not cast shadows.
 .with_cast_shadows(false)
