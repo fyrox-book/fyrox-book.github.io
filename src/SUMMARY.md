@@ -56,7 +56,6 @@
   - [Textures](./fyrox/resources/texture.md)
   - [Sound Buffers (WIP)](./fyrox/resources/sound.md)
   - [Curves (WIP)](./fyrox/resources/curve.md)
-  - [Animation Machines (WIP)](./fyrox/resources/absm.md)
 - [User Interface](./fyrox/ui/ui.md)
   - [Basic concepts](./fyrox/ui/basic_concepts/basic_concepts.md)
   - [General rules](./fyrox/ui/general_rules.md)
