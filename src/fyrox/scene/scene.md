@@ -43,7 +43,7 @@ fn load_scene(resource_manager: ResourceManager) -> Scene {
         .unwrap();
 
     // Create an instance of the scene in the parent scene.
-    let child_scene = scene_resource.instantiate_geometry(&mut scene);
+    let child_scene = scene_resource.instantiate(&mut scene);
 
     scene
 }

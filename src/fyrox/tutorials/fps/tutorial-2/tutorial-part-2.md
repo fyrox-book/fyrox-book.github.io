@@ -57,7 +57,7 @@ impl Weapon {
             .unwrap()
             .instantiate(scene);
 
-        let shot_point = scene.graph.find_by_name(model, "Weapon:ShotPoint");
+        let shot_point = scene.graph.find_by_name(model, "Weapon:ShotPoint").unwrap().0;
 
         Self {
             model,

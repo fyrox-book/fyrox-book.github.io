@@ -61,7 +61,7 @@ let sound_handle = SoundBuilder::new(BaseBuilder::new()).build(&mut scene.graph)
 let sound = scene.graph[sound_handle].as_sound();
 
 if sound.status() == Status::Stopped {
-    scene.remove_node(sound_handle);
+    scene.graph.remove_node(sound_handle);
 }
 # }
 ```

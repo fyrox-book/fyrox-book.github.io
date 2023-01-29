@@ -1,6 +1,3 @@
-**WARNING:** This and following chapters covers new functionality available only in the latest version of the engine
-available on GitHub
-
 # Animation
 
 Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
@@ -74,25 +71,26 @@ below, please read the docs for [`crate::scene::animation::AnimationPlayer`] nod
 other nodes. The node can be created from the editor and you don't even need to write any code.
 Use the following example code as a guide **only** if you need to create procedural animations:
 
-```rust
-use fyrox::{
-    animation::{
-        container::{TrackDataContainer, TrackValueKind},
-        track::Track,
-        value::ValueBinding,
-        Animation,
-    },
-    core::{
-        curve::{Curve, CurveKey, CurveKeyKind},
-        pool::Handle,
-    },
-    scene::{
-        node::Node,
-        base::BaseBuilder,
-        graph::Graph,
-        pivot::PivotBuilder
-    }
-};
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     animation::{
+#         container::{TrackDataContainer, TrackValueKind},
+#         track::Track,
+#         value::ValueBinding,
+#         Animation,
+#     },
+#     core::{
+#         curve::{Curve, CurveKey, CurveKeyKind},
+#         pool::Handle,
+#     },
+#     scene::{
+#         node::Node,
+#         base::BaseBuilder,
+#         graph::Graph,
+#         pivot::PivotBuilder
+#     }
+# };
 fn create_animation(node: Handle<Node>) -> Animation {
     let mut frames_container = TrackDataContainer::new(TrackValueKind::Vector3);
     // We'll animate only X coordinate (at index 0).

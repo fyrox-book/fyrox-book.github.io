@@ -68,7 +68,7 @@ Terrain can always be created from code, here's comprehensive example of how to 
 #         sstorage::ImmutableString,
 #     },
 #     engine::resource_manager::ResourceManager,
-#     material::{shader::SamplerFallback, Material, PropertyValue},
+#     material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
 #     rand::{thread_rng, Rng},
 #     scene::{
 #         base::BaseBuilder,
@@ -123,7 +123,7 @@ fn create_random_two_layer_terrain(graph: &mut Graph, resource_manager: &Resourc
                         "examples/data/Grass_DiffuseColor.jpg",
                         "examples/data/Grass_NormalColor.jpg",
                     );
-                    Arc::new(Mutex::new(material))
+                    SharedMaterial::new(material)
                 },
                 mask_property_name: "maskTexture".to_string(),
             },
@@ -136,7 +136,7 @@ fn create_random_two_layer_terrain(graph: &mut Graph, resource_manager: &Resourc
                         "examples/data/Rock_DiffuseColor.jpg",
                         "examples/data/Rock_Normal.jpg",
                     );
-                    Arc::new(Mutex::new(material))
+                    SharedMaterial::new(material)
                 },
                 mask_property_name: "maskTexture".to_string(),
             },

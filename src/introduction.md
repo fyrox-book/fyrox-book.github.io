@@ -1,10 +1,16 @@
 # Fyrox Game Engine Book
 
 Practical reference and user guides for [Fyrox Game Engine](https://github.com/FyroxEngine/Fyrox) and its 
-editor [Fyroxed](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
+editor [FyroxEd](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
 
 **Warning:** The book is in early development stage, you can help to improve it by making a contribution in its
 [repository](https://github.com/fyrox-book/fyrox-book.github.io). Don't be shy, every tip is helpful!
+
+## Engine Version
+
+Fyrox Team is trying to keep the book up-to-date with the latest version from `master` branch. If something does not 
+compile with the latest release from crates.io, then you need to 
+[use the latest engine from GitHub repo](./fyrox/beginning/scripting.md#using-latest-engine-version).
 
 ## How to read the book
 

@@ -58,7 +58,7 @@ async fn instantiate_model(
     // instantiation.
     let model = resource_manager.request_model(path).await.unwrap();
 
-    model.instantiate(scene).root
+    model.instantiate(scene)
 }
 ```
 

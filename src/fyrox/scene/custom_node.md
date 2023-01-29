@@ -3,13 +3,11 @@
 Sometimes there is a need to have custom scene nodes, it is possible to do, but it requires quite a lot of boilerplate
 code.
 
-```rust,no_run,compile_fail
+```rust,no_run
 # extern crate fyrox;
-# // TODO: remove `compile_fail` when 0.27 is released.
-use fxhash::FxHashMap;
 use fyrox::{
     core::{
-        inspect::prelude::*,
+        reflect::prelude::*,
         math::aabb::AxisAlignedBoundingBox,
         pool::Handle,
         uuid::{uuid, Uuid},
@@ -17,16 +15,14 @@ use fyrox::{
         visitor::prelude::*,
     },
     engine::resource_manager::ResourceManager,
-    impl_directly_inheritable_entity_trait,
     scene::{
         base::Base,
         node::{Node, NodeTrait},
-        DirectlyInheritableEntity,
     },
 };
 use std::ops::{Deref, DerefMut};
 
-#[derive(Clone, Inspect, Visit, Debug)]
+#[derive(Clone, Reflect, Visit, Debug)]
 pub struct CustomNode {
     base: Base,
 }
@@ -45,8 +41,6 @@ impl DerefMut for CustomNode {
     }
 }
 
-impl_directly_inheritable_entity_trait!(CustomNode;);
-
 impl NodeTrait for CustomNode {
     fyrox::impl_query_component!();
 
@@ -56,25 +50,6 @@ impl NodeTrait for CustomNode {
 
     fn world_bounding_box(&self) -> AxisAlignedBoundingBox {
         self.base.world_bounding_box()
-    }
-
-    fn inherit(&mut self, parent: &Node) -> Result<(), InheritError> {
-        if let Some(parent) = parent.cast::<CustomNode>() {
-            self.base.try_inherit_self_properties(parent)?;
-        }
-        Ok(())
-    }
-
-    fn reset_inheritable_properties(&mut self) {
-        self.base.reset_self_inheritable_properties()
-    }
-
-    fn restore_resources(&mut self, _resource_manager: ResourceManager) {
-        // Use this method to remap resource handles to valid handles after deserialization.
-    }
-
-    fn remap_handles(&mut self, _old_new_mapping: &FxHashMap<Handle<Node>, Handle<Node>>) {
-        // Use this method to remap handle to other nodes. It is used when the node is copied.
     }
 
     fn id(&self) -> Uuid {

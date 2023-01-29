@@ -37,7 +37,7 @@ fn load_model_to_scene(
             .unwrap();
 
     // Create an instance of the resource in the scene. 
-    model_resource.instantiate_geometry(scene)
+    model_resource.instantiate(scene)
 }
 ```
 
@@ -61,11 +61,11 @@ use fyrox::{
         sstorage::ImmutableString,
     },
     engine::resource_manager::ResourceManager,
-    material::{shader::SamplerFallback, Material, PropertyValue},
+    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
     scene::{
         base::BaseBuilder,
         mesh::{
-            surface::{SurfaceBuilder, SurfaceData},
+            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
             MeshBuilder,
         },
         node::Node,
@@ -101,14 +101,14 @@ fn create_procedural_mesh(
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(Arc::new(Mutex::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited amount of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&Vector3::new(
             25.0, 0.25, 25.0,
         ))),
-    )))
-        .with_material(Arc::new(Mutex::new(material)))
+    ))
+        .with_material(SharedMaterial::new(material))
         .build()])
     .build(&mut scene.graph)
 }
@@ -118,49 +118,7 @@ As you can see, creating a mesh procedurally requires lots of manual work and no
 
 ## Animation
 
-Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
-it will play animation with no problems. One difference that should be noted is that you should use `instantiate`
-method instead of `instantiate_geometry` and then manually apply animation to the mesh in your game loop.
-
-```rust,no_run
-# extern crate fyrox;
-# use fyrox::resource::model::ModelInstance;
-# use fyrox::{
-#     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::{ResourceManager},
-#     scene::{node::Node, Scene},
-# };
-# use std::path::Path;
-
-fn load_model_to_scene(
-    scene: &mut Scene,
-    path: &Path,
-    resource_manager: ResourceManager,
-) -> ModelInstance {
-    // Request model resource and block until it loading.
-    let model_resource =
-        block_on(resource_manager.request_model(path))
-            .unwrap();
-
-    // Create an instance of the resource in the scene.
-    model_resource.instantiate(scene)
-}
-
-# fn animate(scene: &mut Scene, resource_manager: ResourceManager) {
-// At initialization.
-let ModelInstance { root, animations } = load_model_to_scene(
-    scene,
-    &Path::new("path/to/your/model.fbx"),
-    resource_manager,
-);
-
-// .. Somewhere in the game loop ..
-
-scene.animations[animations[0]]
-    .get_pose()
-    .apply(&mut scene.graph);
-# }
-```
+See [Animation chapter](./../animation/animation.md) for more info.
 
 ### Retargetting
 

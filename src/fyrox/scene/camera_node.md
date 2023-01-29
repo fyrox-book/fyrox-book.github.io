@@ -255,8 +255,8 @@ ray intersection check:
 #         algebra::{Matrix4, Point3},
 #         math::TriangleDefinition,
 #         math::{ray::Ray, Vector3Ext},
-#         visitor::Node,
 #     },
+#     scene::node::Node,
 #     scene::mesh::{
 #         buffer::{VertexAttributeUsage, VertexReadTrait},
 #         surface::SurfaceData,

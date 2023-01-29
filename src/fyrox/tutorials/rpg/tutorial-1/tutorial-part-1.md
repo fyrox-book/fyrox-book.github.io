@@ -140,7 +140,7 @@ use fyrox::{
         animation::AnimationPlayer,
         base::BaseBuilder,
         collider::{ColliderBuilder, ColliderShape},
-        graph::physics::CoefficientCombineRule,
+        graph::{Graph, physics::CoefficientCombineRule},
         node::Node,
         rigidbody::RigidBodyBuilder,
         transform::TransformBuilder,
@@ -834,7 +834,7 @@ impl AnimationMachine {
     ) -> Self {
         let animation_player = scene.graph.find(model, &mut |n| {
             n.query_component_ref::<AnimationPlayer>().is_some()
-        });
+        }).unwrap().0;
 
         let mut machine = Machine::new();
 

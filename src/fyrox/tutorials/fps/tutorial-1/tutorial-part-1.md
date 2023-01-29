@@ -122,7 +122,7 @@ fn main() {
                     game.update();
 
                     // Update engine each frame.
-                    engine.update(TIMESTEP, control_flow, &mut lag, Defaut::default());
+                    engine.update(TIMESTEP, control_flow, &mut lag, Default::default());
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
@@ -467,7 +467,7 @@ engine
     .request_model("data/models/scene.rgs")
     .await
     .unwrap()
-    .instantiate_geometry(&mut scene);
+    .instantiate(&mut scene);
 ```
 
 Here we're asking the resource manager to load the scene we've made previously, awaiting while it loads and then instantiating
@@ -697,7 +697,7 @@ impl Game {
             .request_model("data/models/scene.rgs")
             .await
             .unwrap()
-            .instantiate_geometry(&mut scene);
+            .instantiate(&mut scene);
 
         Self {
             player: Player::new(&mut scene), // New

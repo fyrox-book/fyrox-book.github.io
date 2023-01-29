@@ -10,13 +10,12 @@ Typical script structure could be like this:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{inspect::prelude::*, uuid::{Uuid, uuid}, visitor::prelude::*, reflect::Reflect},
-#     engine::resource_manager::ResourceManager,
+#     core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*},
 #     event::Event, impl_component_provider,
 #     scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
 #     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 # };
-#[derive(Visit, Reflect, Inspect, Default, Debug, Clone)]
+#[derive(Visit, Reflect, Default, Debug, Clone)]
 struct MyScript {
     // Add fields here.
 }
@@ -50,10 +49,6 @@ impl ScriptTrait for MyScript {
         // Put object logic here.
     }
 
-    fn restore_resources(&mut self, resource_manager: ResourceManager) {
-        // Restore resource handles here.
-    }
-
     fn id(&self) -> Uuid {
         Self::type_uuid()
     }
@@ -66,8 +61,6 @@ Each script must implement following traits:
 scene file.
 - `Reflect` implements compile-time reflection that provides a way to iterate over script fields, set their values, 
 find fields by their paths, etc.
-- `Inspect` provides meta-data for fields in your script, it allows the editor to "see" what's inside your structures,
-"print" this information in the Inspector.
 - `Debug` - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.
 - `Clone` - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
 cloned.
@@ -103,8 +96,7 @@ you need to register it in the list of script constructors like so:
 #         plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
 #         core::{
 #             visitor::prelude::*,
-#             inspect::prelude::*,
-#             reflect::Reflect,  
+#             reflect::prelude::*,
 #             pool::Handle,
 #             uuid::Uuid
 #         },
@@ -113,7 +105,7 @@ you need to register it in the list of script constructors like so:
 #         script::ScriptTrait,
 #     };
 # 
-#     #[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
+#     #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
 #     struct MyScript;
 # 
 #     impl TypeUuidProvider for MyScript {
@@ -154,13 +146,13 @@ The script can be attached to a scene node from code:
 ```rust, no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{inspect::prelude::*, uuid::Uuid, visitor::prelude::*, reflect::Reflect},
+#     core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
 #     impl_component_provider,
 #     scene::node::{Node, TypeUuidProvider},
 #     script::{Script, ScriptTrait},
 # };
 # 
-# #[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
+# #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
 # struct MyScript;
 # 
 # impl TypeUuidProvider for MyScript {
@@ -193,17 +185,20 @@ content of the context is something like this:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     engine::{resource_manager::ResourceManager, ScriptMessageDispatcher},
 #     plugin::Plugin,
 #     scene::{node::Node, Scene},
+#     script::ScriptMessageSender
 # };
-pub struct ScriptContext<'a, 'b> {
+pub struct ScriptContext<'a, 'b, 'c> {
     pub dt: f32,
     pub elapsed_time: f32,
     pub plugins: &'a mut [Box<dyn Plugin>],
     pub handle: Handle<Node>,
     pub scene: &'b mut Scene,
     pub resource_manager: &'a ResourceManager,
+    pub message_sender: &'c ScriptMessageSender,
+    pub message_dispatcher: &'c mut ScriptMessageDispatcher,
 }
 ```
 
@@ -219,3 +214,7 @@ particular type using `context.plugins[0].cast::<MyPlugin>().unwrap()` call.
 - `scene` - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
 add/modify/remove scene nodes.
 - `resource_manager` - a reference to resource manager, you can use it to load and instantiate assets. 
+- `message_sender` - a message sender. Every message sent via this sender will be then passed to every 
+`ScriptTrait::on_message` method of every script.
+- `message_dispatcher` - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
+to a type explicitly.

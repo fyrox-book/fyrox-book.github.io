@@ -82,12 +82,12 @@ Mesh node with single rectangle surface:
 #         parking_lot::Mutex,
 #         pool::Handle,
 #     },
-#     material::Material,
+#     material::{Material, SharedMaterial},
 #     scene::{
 #         base::BaseBuilder,
 #         graph::Graph,
 #         mesh::{
-#             surface::{SurfaceBuilder, SurfaceData},
+#             surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
 #             MeshBuilder, RenderPath,
 #         },
 #         node::Node,
@@ -98,7 +98,7 @@ Mesh node with single rectangle surface:
 
 fn create_rect_with_custom_material(
     graph: &mut Graph,
-    material: Arc<Mutex<Material>>,
+    material: SharedMaterial,
 ) -> Handle<Node> {
     MeshBuilder::new(
         BaseBuilder::new().with_local_transform(
@@ -107,9 +107,9 @@ fn create_rect_with_custom_material(
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(Arc::new(Mutex::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
         SurfaceData::make_quad(&Matrix4::identity()),
-    )))
+    ))
     .with_material(material)
     .build()])
     .with_render_path(RenderPath::Forward)

@@ -165,7 +165,7 @@ fn link_weapon_to_camera(
             .request_model("path/to/weapon.fbx"),
     )
     .unwrap()
-    .instantiate_geometry(scene);
+    .instantiate(scene);
 
     // Link weapon to the camera.
     scene.graph.link_nodes(weapon, camera);

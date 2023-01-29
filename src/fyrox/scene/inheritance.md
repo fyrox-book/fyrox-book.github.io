@@ -21,10 +21,9 @@ need is to wrap its value using `InheritableVariable` wrapper.
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::core::variable::InheritableVariable;
-# use fyrox::core::reflect::Reflect;
 # use fyrox::core::visitor::prelude::*;
-# use fyrox::core::inspect::prelude::*;
-#[derive(Reflect, Visit, Inspect, Default, Clone, Debug)]
+# use fyrox::core::reflect::prelude::*;
+#[derive(Reflect, Visit, Default, Clone, Debug)]
 struct MyScript {
     foo: InheritableVariable<f32>
 }
@@ -50,7 +49,7 @@ following code snippet:
 
 ```rust,no_run
 # extern crate fyrox;
-# use fyrox::core::reflect::Reflect;
+# use fyrox::core::reflect::prelude::*;
 # use fyrox::core::variable::InheritableVariable;
 # 
 #[derive(Reflect, Clone, PartialEq, Eq, Debug)]
@@ -59,7 +58,7 @@ struct SomeComplexData {
     bar: InheritableVariable<String>,
 }
 
-#[derive(Reflect)]
+#[derive(Reflect, Debug)]
 struct MyEntity {
     some_field: InheritableVariable<f32>,
 
