@@ -1,6 +1,6 @@
 # Border
 
-The Border widget provides a stylized, static border around it's child widget. Below is an example of creating a 1 pixel
+The Border widget provides a stylized, static border around its child widget. Below is an example of creating a 1 pixel
 thick border around a button widget:
 
 ```rust,no_run

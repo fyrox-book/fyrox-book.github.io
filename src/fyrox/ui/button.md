@@ -112,8 +112,7 @@ impl Game {
 
 ## Using a button to exit the game
 
-Add a flag to your Game struct like `exit: bool` and set it in button handler to `true`, then check it in `on_tick` 
-and set `*control_flow = ControlFlow::Exit` if the flag is raised
+This example shows how to create a button that will close your game.
 
 ```rust,no_run
 # extern crate fyrox;
