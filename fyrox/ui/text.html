@@ -203,6 +203,35 @@ centered text could be created like so:</p>
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
+<h2 id="background"><a class="header" href="#background">Background</a></h2>
+<p>If you need to have a text with some background, you should use <a href="./border.html">Border</a> widget as a parent widget of your 
+text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <code>Text</code> widget!</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{color::Color, pool::Handle},
+</span><span class="boring">    gui::{
+</span><span class="boring">        border::BorderBuilder, brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode,
+</span><span class="boring">        UserInterface,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+    let text_widget =
+        TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+            .with_text(text)
+            .build(&amp;mut ui.build_ctx());
+    BorderBuilder::new(
+        WidgetBuilder::new()
+            .with_child(text_widget) // &lt;-- Text is now a child of the border
+            .with_background(Brush::Solid(Color::opaque(50, 50, 50))),
+    )
+    .build(&amp;mut ui.build_ctx())
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind that now the text widget is a child widget of the border, so if you need to position the text, you should
+position the border, not the text.</p>
 <h2 id="fonts-and-colors"><a class="header" href="#fonts-and-colors">Fonts and colors</a></h2>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
