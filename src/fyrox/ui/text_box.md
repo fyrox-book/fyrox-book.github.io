@@ -130,9 +130,16 @@ to create fonts.
 
 ## Messages
 
-There are few message types that TextBox widget can accept, most common are `Text`, `Wrap`, `Font`, `VerticalAlignment`,
-and `HorizontalAlignment`. Please keep in mind, that TextBox widget also accepts Text widget messages. An example of 
-changing text at runtime could be something like this:
+TextBox widget accepts the following list of messages:
+
+- `TextBoxMessage::SelectionBrush` - change the brush that is used to highlight selection.
+- `TextBoxMessage::CaretBrush` - changes the brush of the caret (small blinking vertical line).
+- `TextBoxMessage::TextCommitMode` - changes the [text commit mode](text_box.md#text-commit-mode).
+- `TextBoxMessage::Multiline` - makes the TextBox either multiline (`true`) or single line (`false`)
+- `TextBoxMessage::Editable` - enables or disables editing of the text. 
+
+**Important:** Please keep in mind, that TextBox widget also accepts `Text` [widget messages](text.md#messages). An 
+example of changing text at runtime could be something like this:
 
 ```rust,no_run
 # extern crate fyrox;
