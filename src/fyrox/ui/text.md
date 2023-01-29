@@ -69,7 +69,7 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 If you need to have a text with some background, you should use [Border](./border.md) widget as a parent widget of your 
 text. **Caveat:** `Widget::background` is ignored for `Text` widget!
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::{color::Color, pool::Handle},
@@ -160,10 +160,50 @@ There is no way to change font size without changing the entire font used by Tex
 [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/74) for that. Check [Font](font.md) chapter to learn how 
 to create fonts.
 
+## Shadows
+
+Text widget supports shadows effect to add contrast to your text, which could be useful to make text readable independent
+on the background colors. This effect could be used for subtitles. Shadows are pretty easy to add, all you need to do
+is to enable them, setup desired thickness, offset and brush (solid color or gradient).
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{algebra::Vector2, color::Color, pool::Handle},
+#     gui::{brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
+# };
+# 
+fn create_red_text_with_black_shadows(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+        .with_text(text)
+        // Enable shadows.
+        .with_shadow(true)
+        // Black shadows.
+        .with_shadow_brush(Brush::Solid(Color::BLACK))
+        // 1px thick.
+        .with_shadow_dilation(1.0)
+        // Offset the shadow slightly to the right-bottom.
+        .with_shadow_offset(Vector2::new(1.0, 1.0))
+        .build(&mut ui.build_ctx())
+}
+```
+
 ## Messages
 
-There are few message types that Text widget can produce, most common are `Text`, `Wrap`, `Font`, `VerticalAlignment`,
-and `HorizontalAlignment`. An example of changing text at runtime could be something like this:
+Text widget can accept the following list of messages at runtime (respective constructors are name with small letter - 
+`TextMessage::Text -> TextMessage::text(widget_handle, direction, text)`):
+
+- `TextMessage::Text` - sets new text for a `Text` widget.
+- `TextMessage::Wrap` - sets new [wrapping mode](text.md#text-alignment-and-word-wrapping). 
+- `TextMessage::Font` - sets new [font](text.md#fonts-and-colors) 
+- `TextMessage::VerticalAlignment` and `TextMessage::HorizontalAlignment` sets 
+[vertical and horizontal](text.md#text-alignment-and-word-wrapping) text alignment respectively.
+- `TextMessage::Shadow` - enables or disables [shadow casting](text.md#shadows)
+- `TextMessage::ShadowDilation` - sets "thickness" of the shadows under the tex.
+- `TextMessage::ShadowBrush` - sets shadow brush (allows you to change color and even make shadow with color gradients).
+- `TextMessage::ShadowOffset` - sets offset of the shadows.
+
+An example of changing text at runtime could be something like this:
 
 ```rust,no_run
 # extern crate fyrox;
