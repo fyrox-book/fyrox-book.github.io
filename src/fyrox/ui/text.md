@@ -64,6 +64,38 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 }
 ```
 
+## Background
+
+If you need to have a text with some background, you should use [Border](./border.md) widget as a parent widget of your 
+text. **Caveat:** `Widget::background` is ignored for `Text` widget!
+
+```rust
+# extern crate fyrox;
+# use fyrox::{
+#     core::{color::Color, pool::Handle},
+#     gui::{
+#         border::BorderBuilder, brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode,
+#         UserInterface,
+#     },
+# };
+# 
+fn create_text_with_background(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+    let text_widget =
+        TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+            .with_text(text)
+            .build(&mut ui.build_ctx());
+    BorderBuilder::new(
+        WidgetBuilder::new()
+            .with_child(text_widget) // <-- Text is now a child of the border
+            .with_background(Brush::Solid(Color::opaque(50, 50, 50))),
+    )
+    .build(&mut ui.build_ctx())
+}
+```
+
+Keep in mind that now the text widget is a child widget of the border, so if you need to position the text, you should
+position the border, not the text.
+
 ## Fonts and colors
 
 To set a color of the text just use `.with_foreground(..)` of the `WidgetBuilder` while building the text instance:
