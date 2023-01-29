@@ -206,7 +206,7 @@ centered text could be created like so:</p>
 <h2 id="background"><a class="header" href="#background">Background</a></h2>
 <p>If you need to have a text with some background, you should use <a href="./border.html">Border</a> widget as a parent widget of your 
 text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <code>Text</code> widget!</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -290,9 +290,47 @@ fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNod
 <p>There is no way to change font size without changing the entire font used by Text, it is known issue and there is
 <a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Check <a href="font.html">Font</a> chapter to learn how 
 to create fonts.</p>
+<h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
+<p>Text widget supports shadows effect to add contrast to your text, which could be useful to make text readable independent
+on the background colors. This effect could be used for subtitles. Shadows are pretty easy to add, all you need to do
+is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{algebra::Vector2, color::Color, pool::Handle},
+</span><span class="boring">    gui::{brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+        .with_text(text)
+        // Enable shadows.
+        .with_shadow(true)
+        // Black shadows.
+        .with_shadow_brush(Brush::Solid(Color::BLACK))
+        // 1px thick.
+        .with_shadow_dilation(1.0)
+        // Offset the shadow slightly to the right-bottom.
+        .with_shadow_offset(Vector2::new(1.0, 1.0))
+        .build(&amp;mut ui.build_ctx())
+}
+<span class="boring">}</span></code></pre></pre>
 <h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
-<p>There are few message types that Text widget can produce, most common are <code>Text</code>, <code>Wrap</code>, <code>Font</code>, <code>VerticalAlignment</code>,
-and <code>HorizontalAlignment</code>. An example of changing text at runtime could be something like this:</p>
+<p>Text widget can accept the following list of messages at runtime (respective constructors are name with small letter - 
+<code>TextMessage::Text -&gt; TextMessage::text(widget_handle, direction, text)</code>):</p>
+<ul>
+<li><code>TextMessage::Text</code> - sets new text for a <code>Text</code> widget.</li>
+<li><code>TextMessage::Wrap</code> - sets new <a href="text.html#text-alignment-and-word-wrapping">wrapping mode</a>. </li>
+<li><code>TextMessage::Font</code> - sets new <a href="text.html#fonts-and-colors">font</a> </li>
+<li><code>TextMessage::VerticalAlignment</code> and <code>TextMessage::HorizontalAlignment</code> sets 
+<a href="text.html#text-alignment-and-word-wrapping">vertical and horizontal</a> text alignment respectively.</li>
+<li><code>TextMessage::Shadow</code> - enables or disables <a href="text.html#shadows">shadow casting</a></li>
+<li><code>TextMessage::ShadowDilation</code> - sets &quot;thickness&quot; of the shadows under the tex.</li>
+<li><code>TextMessage::ShadowBrush</code> - sets shadow brush (allows you to change color and even make shadow with color gradients).</li>
+<li><code>TextMessage::ShadowOffset</code> - sets offset of the shadows.</li>
+</ul>
+<p>An example of changing text at runtime could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
