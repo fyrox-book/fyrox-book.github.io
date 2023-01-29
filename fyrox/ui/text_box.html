@@ -262,9 +262,16 @@ fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNod
 <a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Check <a href="font.html">Font</a> chapter to learn how
 to create fonts.</p>
 <h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
-<p>There are few message types that TextBox widget can accept, most common are <code>Text</code>, <code>Wrap</code>, <code>Font</code>, <code>VerticalAlignment</code>,
-and <code>HorizontalAlignment</code>. Please keep in mind, that TextBox widget also accepts Text widget messages. An example of 
-changing text at runtime could be something like this:</p>
+<p>TextBox widget accepts the following list of messages:</p>
+<ul>
+<li><code>TextBoxMessage::SelectionBrush</code> - change the brush that is used to highlight selection.</li>
+<li><code>TextBoxMessage::CaretBrush</code> - changes the brush of the caret (small blinking vertical line).</li>
+<li><code>TextBoxMessage::TextCommitMode</code> - changes the <a href="text_box.html#text-commit-mode">text commit mode</a>.</li>
+<li><code>TextBoxMessage::Multiline</code> - makes the TextBox either multiline (<code>true</code>) or single line (<code>false</code>)</li>
+<li><code>TextBoxMessage::Editable</code> - enables or disables editing of the text. </li>
+</ul>
+<p><strong>Important:</strong> Please keep in mind, that TextBox widget also accepts <code>Text</code> <a href="text.html#messages">widget messages</a>. An 
+example of changing text at runtime could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
