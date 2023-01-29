@@ -147,14 +147,12 @@
                         <h1 id="custom-scene-node"><a class="header" href="#custom-scene-node">Custom Scene Node</a></h1>
 <p>Sometimes there is a need to have custom scene nodes, it is possible to do, but it requires quite a lot of boilerplate
 code.</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">// TODO: remove `compile_fail` when 0.27 is released.
-</span>use fxhash::FxHashMap;
-use fyrox::{
+</span>use fyrox::{
     core::{
-        inspect::prelude::*,
+        reflect::prelude::*,
         math::aabb::AxisAlignedBoundingBox,
         pool::Handle,
         uuid::{uuid, Uuid},
@@ -162,16 +160,14 @@ use fyrox::{
         visitor::prelude::*,
     },
     engine::resource_manager::ResourceManager,
-    impl_directly_inheritable_entity_trait,
     scene::{
         base::Base,
         node::{Node, NodeTrait},
-        DirectlyInheritableEntity,
     },
 };
 use std::ops::{Deref, DerefMut};
 
-#[derive(Clone, Inspect, Visit, Debug)]
+#[derive(Clone, Reflect, Visit, Debug)]
 pub struct CustomNode {
     base: Base,
 }
@@ -190,8 +186,6 @@ impl DerefMut for CustomNode {
     }
 }
 
-impl_directly_inheritable_entity_trait!(CustomNode;);
-
 impl NodeTrait for CustomNode {
     fyrox::impl_query_component!();
 
@@ -201,25 +195,6 @@ impl NodeTrait for CustomNode {
 
     fn world_bounding_box(&amp;self) -&gt; AxisAlignedBoundingBox {
         self.base.world_bounding_box()
-    }
-
-    fn inherit(&amp;mut self, parent: &amp;Node) -&gt; Result&lt;(), InheritError&gt; {
-        if let Some(parent) = parent.cast::&lt;CustomNode&gt;() {
-            self.base.try_inherit_self_properties(parent)?;
-        }
-        Ok(())
-    }
-
-    fn reset_inheritable_properties(&amp;mut self) {
-        self.base.reset_self_inheritable_properties()
-    }
-
-    fn restore_resources(&amp;mut self, _resource_manager: ResourceManager) {
-        // Use this method to remap resource handles to valid handles after deserialization.
-    }
-
-    fn remap_handles(&amp;mut self, _old_new_mapping: &amp;FxHashMap&lt;Handle&lt;Node&gt;, Handle&lt;Node&gt;&gt;) {
-        // Use this method to remap handle to other nodes. It is used when the node is copied.
     }
 
     fn id(&amp;self) -&gt; Uuid {

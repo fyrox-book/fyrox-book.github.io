@@ -153,13 +153,12 @@ so scripts are as fast as native code. </p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{inspect::prelude::*, uuid::{Uuid, uuid}, visitor::prelude::*, reflect::Reflect},
-</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*},
 </span><span class="boring">    event::Event, impl_component_provider,
 </span><span class="boring">    scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
 </span><span class="boring">    script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 </span><span class="boring">};
-</span>#[derive(Visit, Reflect, Inspect, Default, Debug, Clone)]
+</span>#[derive(Visit, Reflect, Default, Debug, Clone)]
 struct MyScript {
     // Add fields here.
 }
@@ -193,10 +192,6 @@ impl ScriptTrait for MyScript {
         // Put object logic here.
     }
 
-    fn restore_resources(&amp;mut self, resource_manager: ResourceManager) {
-        // Restore resource handles here.
-    }
-
     fn id(&amp;self) -&gt; Uuid {
         Self::type_uuid()
     }
@@ -208,8 +203,6 @@ impl ScriptTrait for MyScript {
 scene file.</li>
 <li><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values, 
 find fields by their paths, etc.</li>
-<li><code>Inspect</code> provides meta-data for fields in your script, it allows the editor to &quot;see&quot; what's inside your structures,
-&quot;print&quot; this information in the Inspector.</li>
 <li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.</li>
 <li><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
 cloned.</li>
@@ -239,8 +232,7 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">        plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
 </span><span class="boring">        core::{
 </span><span class="boring">            visitor::prelude::*,
-</span><span class="boring">            inspect::prelude::*,
-</span><span class="boring">            reflect::Reflect,  
+</span><span class="boring">            reflect::prelude::*,
 </span><span class="boring">            pool::Handle,
 </span><span class="boring">            uuid::Uuid
 </span><span class="boring">        },
@@ -249,7 +241,7 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">        script::ScriptTrait,
 </span><span class="boring">    };
 </span><span class="boring">
-</span><span class="boring">    #[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
+</span><span class="boring">    #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
 </span><span class="boring">    struct MyScript;
 </span><span class="boring">
 </span><span class="boring">    impl TypeUuidProvider for MyScript {
@@ -287,13 +279,13 @@ your game in separate process with the scene active in the editor.</p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{inspect::prelude::*, uuid::Uuid, visitor::prelude::*, reflect::Reflect},
+</span><span class="boring">    core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
 </span><span class="boring">    impl_component_provider,
 </span><span class="boring">    scene::node::{Node, TypeUuidProvider},
 </span><span class="boring">    script::{Script, ScriptTrait},
 </span><span class="boring">};
 </span><span class="boring">
-</span><span class="boring">#[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
+</span><span class="boring">#[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
 </span><span class="boring">struct MyScript;
 </span><span class="boring">
 </span><span class="boring">impl TypeUuidProvider for MyScript {
@@ -323,17 +315,20 @@ content of the context is something like this:</p>
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
 </span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    engine::{resource_manager::ResourceManager, ScriptMessageDispatcher},
 </span><span class="boring">    plugin::Plugin,
 </span><span class="boring">    scene::{node::Node, Scene},
+</span><span class="boring">    script::ScriptMessageSender
 </span><span class="boring">};
-</span>pub struct ScriptContext&lt;'a, 'b&gt; {
+</span>pub struct ScriptContext&lt;'a, 'b, 'c&gt; {
     pub dt: f32,
     pub elapsed_time: f32,
     pub plugins: &amp;'a mut [Box&lt;dyn Plugin&gt;],
     pub handle: Handle&lt;Node&gt;,
     pub scene: &amp;'b mut Scene,
     pub resource_manager: &amp;'a ResourceManager,
+    pub message_sender: &amp;'c ScriptMessageSender,
+    pub message_dispatcher: &amp;'c mut ScriptMessageDispatcher,
 }
 <span class="boring">}</span></code></pre></pre>
 <ul>
@@ -349,6 +344,10 @@ particular type using <code>context.plugins[0].cast::&lt;MyPlugin&gt;().unwrap()
 <li><code>scene</code> - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
 add/modify/remove scene nodes.</li>
 <li><code>resource_manager</code> - a reference to resource manager, you can use it to load and instantiate assets. </li>
+<li><code>message_sender</code> - a message sender. Every message sent via this sender will be then passed to every 
+<code>ScriptTrait::on_message</code> method of every script.</li>
+<li><code>message_dispatcher</code> - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
+to a type explicitly.</li>
 </ul>
 
                     </main>

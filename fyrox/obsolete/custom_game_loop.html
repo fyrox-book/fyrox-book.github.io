@@ -179,6 +179,7 @@ fn main() {
         serialization_context,
         events_loop: &amp;event_loop,
         vsync: false,
+        headless: false
     })
     .unwrap();
 
@@ -209,7 +210,7 @@ fn main() {
                     // ************************
 
                     // It is very important to update the engine every frame!
-                    engine.update(fixed_timestep, control_flow, &amp;mut lag);
+                    engine.update(fixed_timestep, control_flow, &amp;mut lag, Default::default());
                 }
 
                 // It is very important to &quot;pump&quot; messages from UI. Even if don't need to

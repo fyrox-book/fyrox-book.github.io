@@ -177,7 +177,7 @@ fn load_model_to_scene(
             .unwrap();
 
     // Create an instance of the resource in the scene. 
-    model_resource.instantiate_geometry(scene)
+    model_resource.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code snippet intentionally omits proper <code>async/await</code> usage (instead it just blocks current thread until
@@ -198,11 +198,11 @@ use fyrox::{
         sstorage::ImmutableString,
     },
     engine::resource_manager::ResourceManager,
-    material::{shader::SamplerFallback, Material, PropertyValue},
+    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
     scene::{
         base::BaseBuilder,
         mesh::{
-            surface::{SurfaceBuilder, SurfaceData},
+            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
             MeshBuilder,
         },
         node::Node,
@@ -238,63 +238,21 @@ fn create_procedural_mesh(
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(Arc::new(Mutex::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited amount of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&amp;Vector3::new(
             25.0, 0.25, 25.0,
         ))),
-    )))
-        .with_material(Arc::new(Mutex::new(material)))
+    ))
+        .with_material(SharedMaterial::new(material))
         .build()])
     .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, creating a mesh procedurally requires lots of manual work and not so easy.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
-<p>Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
-it will play animation with no problems. One difference that should be noted is that you should use <code>instantiate</code>
-method instead of <code>instantiate_geometry</code> and then manually apply animation to the mesh in your game loop.</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::resource::model::ModelInstance;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    engine::resource_manager::{ResourceManager},
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
-</span>
-fn load_model_to_scene(
-    scene: &amp;mut Scene,
-    path: &amp;Path,
-    resource_manager: ResourceManager,
-) -&gt; ModelInstance {
-    // Request model resource and block until it loading.
-    let model_resource =
-        block_on(resource_manager.request_model(path))
-            .unwrap();
-
-    // Create an instance of the resource in the scene.
-    model_resource.instantiate(scene)
-}
-
-<span class="boring">fn animate(scene: &amp;mut Scene, resource_manager: ResourceManager) {
-</span>// At initialization.
-let ModelInstance { root, animations } = load_model_to_scene(
-    scene,
-    &amp;Path::new(&quot;path/to/your/model.fbx&quot;),
-    resource_manager,
-);
-
-// .. Somewhere in the game loop ..
-
-scene.animations[animations[0]]
-    .get_pose()
-    .apply(&amp;mut scene.graph);
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<p>See <a href="./../animation/animation.html">Animation chapter</a> for more info.</p>
 <h3 id="retargetting"><a class="header" href="#retargetting">Retargetting</a></h3>
 <p>You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
 in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated

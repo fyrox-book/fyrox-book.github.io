@@ -247,9 +247,8 @@ use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
         futures::executor::block_on,
-        inspect::{Inspect, PropertyInfo},
         pool::Handle,
-        reflect::Reflect,
+        reflect::prelude::*,
         uuid::{uuid, Uuid},
         visitor::prelude::*,
     },
@@ -274,9 +273,8 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
 </span><span class="boring">    core::{
-</span><span class="boring">        inspect::{Inspect, PropertyInfo},
 </span><span class="boring">        uuid::{uuid, Uuid},
-</span><span class="boring">        reflect::Reflect,
+</span><span class="boring">        reflect::prelude::*,
 </span><span class="boring">        visitor::prelude::*,
 </span><span class="boring">    },
 </span><span class="boring">    event::Event,
@@ -285,7 +283,7 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 </span><span class="boring">    scene::node::TypeUuidProvider,
 </span><span class="boring">    script::{ScriptContext, ScriptTrait},
 </span><span class="boring">};
-</span>#[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
+</span>#[derive(Visit, Reflect, Debug, Clone, Default)]
 struct Player;
 
 impl_component_provider!(Player,);

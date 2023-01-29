@@ -216,12 +216,12 @@ Mesh node with single rectangle surface:</p>
 </span><span class="boring">        parking_lot::Mutex,
 </span><span class="boring">        pool::Handle,
 </span><span class="boring">    },
-</span><span class="boring">    material::Material,
+</span><span class="boring">    material::{Material, SharedMaterial},
 </span><span class="boring">    scene::{
 </span><span class="boring">        base::BaseBuilder,
 </span><span class="boring">        graph::Graph,
 </span><span class="boring">        mesh::{
-</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData},
+</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
 </span><span class="boring">            MeshBuilder, RenderPath,
 </span><span class="boring">        },
 </span><span class="boring">        node::Node,
@@ -232,7 +232,7 @@ Mesh node with single rectangle surface:</p>
 </span>
 fn create_rect_with_custom_material(
     graph: &amp;mut Graph,
-    material: Arc&lt;Mutex&lt;Material&gt;&gt;,
+    material: SharedMaterial,
 ) -&gt; Handle&lt;Node&gt; {
     MeshBuilder::new(
         BaseBuilder::new().with_local_transform(
@@ -241,9 +241,9 @@ fn create_rect_with_custom_material(
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(Arc::new(Mutex::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
         SurfaceData::make_quad(&amp;Matrix4::identity()),
-    )))
+    ))
     .with_material(material)
     .build()])
     .with_render_path(RenderPath::Forward)

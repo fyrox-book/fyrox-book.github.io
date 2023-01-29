@@ -192,7 +192,7 @@ content.</p>
 </span><span class="boring">        sstorage::ImmutableString,
 </span><span class="boring">    },
 </span><span class="boring">    engine::resource_manager::ResourceManager,
-</span><span class="boring">    material::{shader::SamplerFallback, Material, PropertyValue},
+</span><span class="boring">    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
 </span><span class="boring">    rand::{thread_rng, Rng},
 </span><span class="boring">    scene::{
 </span><span class="boring">        base::BaseBuilder,
@@ -247,7 +247,7 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                         &quot;examples/data/Grass_DiffuseColor.jpg&quot;,
                         &quot;examples/data/Grass_NormalColor.jpg&quot;,
                     );
-                    Arc::new(Mutex::new(material))
+                    SharedMaterial::new(material)
                 },
                 mask_property_name: &quot;maskTexture&quot;.to_string(),
             },
@@ -260,7 +260,7 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                         &quot;examples/data/Rock_DiffuseColor.jpg&quot;,
                         &quot;examples/data/Rock_Normal.jpg&quot;,
                     );
-                    Arc::new(Mutex::new(material))
+                    SharedMaterial::new(material)
                 },
                 mask_property_name: &quot;maskTexture&quot;.to_string(),
             },

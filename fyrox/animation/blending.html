@@ -208,28 +208,29 @@ that transition should be activated. Let's look at the code example of the above
 let idle_animation = Handle::default();
 let walk_animation = Handle::default();
 let aim_animation = Handle::default();
-let model_root = Handle::default();
 
-let mut machine = Machine::new(model_root);
+let mut machine = Machine::new();
 
-let aim = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
-let walk = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
+let root_layer = machine.layers_mut().first_mut().unwrap();
+
+let aim = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
+let walk = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
 
 // Blend two animations together
-let blend_aim_walk = machine.add_node(PoseNode::BlendAnimations(
+let blend_aim_walk = root_layer.add_node(PoseNode::BlendAnimations(
   BlendAnimations::new(vec![
       BlendPose::new(PoseWeight::Constant(0.75), aim),
       BlendPose::new(PoseWeight::Constant(0.25), walk)
   ])
 ));
 
-let walk_state = machine.add_state(State::new(&quot;Walk&quot;, blend_aim_walk));
+let walk_state = root_layer.add_state(State::new(&quot;Walk&quot;, blend_aim_walk));
 
-let idle = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
-let idle_state = machine.add_state(State::new(&quot;Idle&quot;, idle));
+let idle = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
+let idle_state = root_layer.add_state(State::new(&quot;Idle&quot;, idle));
 
-machine.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
-machine.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
+root_layer.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
+root_layer.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, everything is quite straightforward. Even such simple state machine requires quite a lot of code, which
 can be removed by using ABSM editor. Read the next chapter to learn about it.</p>

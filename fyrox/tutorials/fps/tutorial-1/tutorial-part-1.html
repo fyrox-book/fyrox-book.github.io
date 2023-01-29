@@ -253,7 +253,7 @@ fn main() {
                     game.update();
 
                     // Update engine each frame.
-                    engine.update(TIMESTEP, control_flow, &amp;mut lag, Defaut::default());
+                    engine.update(TIMESTEP, control_flow, &amp;mut lag, Default::default());
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
@@ -554,7 +554,7 @@ Run the game and you should see this:</p>
     .request_model(&quot;data/models/scene.rgs&quot;)
     .await
     .unwrap()
-    .instantiate_geometry(&amp;mut scene);
+    .instantiate(&amp;mut scene);
 <span class="boring">}</span></code></pre></pre>
 <p>Here we're asking the resource manager to load the scene we've made previously, awaiting while it loads and then instantiating
 it on the <code>scene</code>. What does &quot;instantiation&quot; mean? In short, it means that we're creating a copy of a scene and adding the copy
@@ -779,7 +779,7 @@ impl Game {
             .request_model(&quot;data/models/scene.rgs&quot;)
             .await
             .unwrap()
-            .instantiate_geometry(&amp;mut scene);
+            .instantiate(&amp;mut scene);
 
         Self {
             player: Player::new(&amp;mut scene), // New

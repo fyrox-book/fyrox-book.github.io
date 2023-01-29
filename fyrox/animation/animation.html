@@ -144,9 +144,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p><strong>WARNING:</strong> This and following chapters covers new functionality available only in the latest version of the engine
-available on GitHub</p>
-<h1 id="animation"><a class="header" href="#animation">Animation</a></h1>
+                        <h1 id="animation"><a class="header" href="#animation">Animation</a></h1>
 <p>Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
 consists of multiple tracks, where each track is bound to a property of a scene node. A track can animate
 any numeric properties, starting from numbers (including <code>bool</code>) end ending by 2/3/4 dimensional vectors.
@@ -207,27 +205,28 @@ for more info and examples.</p>
 below, please read the docs for [<code>crate::scene::animation::AnimationPlayer</code>] node, it is much more convenient way of animating
 other nodes. The node can be created from the editor and you don't even need to write any code.
 Use the following example code as a guide <strong>only</strong> if you need to create procedural animations:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use fyrox::{
-    animation::{
-        container::{TrackDataContainer, TrackValueKind},
-        track::Track,
-        value::ValueBinding,
-        Animation,
-    },
-    core::{
-        curve::{Curve, CurveKey, CurveKeyKind},
-        pool::Handle,
-    },
-    scene::{
-        node::Node,
-        base::BaseBuilder,
-        graph::Graph,
-        pivot::PivotBuilder
-    }
-};
-fn create_animation(node: Handle&lt;Node&gt;) -&gt; Animation {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    animation::{
+</span><span class="boring">        container::{TrackDataContainer, TrackValueKind},
+</span><span class="boring">        track::Track,
+</span><span class="boring">        value::ValueBinding,
+</span><span class="boring">        Animation,
+</span><span class="boring">    },
+</span><span class="boring">    core::{
+</span><span class="boring">        curve::{Curve, CurveKey, CurveKeyKind},
+</span><span class="boring">        pool::Handle,
+</span><span class="boring">    },
+</span><span class="boring">    scene::{
+</span><span class="boring">        node::Node,
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        pivot::PivotBuilder
+</span><span class="boring">    }
+</span><span class="boring">};
+</span>fn create_animation(node: Handle&lt;Node&gt;) -&gt; Animation {
     let mut frames_container = TrackDataContainer::new(TrackValueKind::Vector3);
     // We'll animate only X coordinate (at index 0).
     frames_container.curves_mut()[0] = Curve::from(vec![

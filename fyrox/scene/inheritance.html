@@ -162,10 +162,9 @@ need is to wrap its value using <code>InheritableVariable</code> wrapper.</p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::variable::InheritableVariable;
-</span><span class="boring">use fyrox::core::reflect::Reflect;
 </span><span class="boring">use fyrox::core::visitor::prelude::*;
-</span><span class="boring">use fyrox::core::inspect::prelude::*;
-</span>#[derive(Reflect, Visit, Inspect, Default, Clone, Debug)]
+</span><span class="boring">use fyrox::core::reflect::prelude::*;
+</span>#[derive(Reflect, Visit, Default, Clone, Debug)]
 struct MyScript {
     foo: InheritableVariable&lt;f32&gt;
 }
@@ -187,7 +186,7 @@ following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::core::reflect::Reflect;
+</span><span class="boring">use fyrox::core::reflect::prelude::*;
 </span><span class="boring">use fyrox::core::variable::InheritableVariable;
 </span><span class="boring">
 </span>#[derive(Reflect, Clone, PartialEq, Eq, Debug)]
@@ -196,7 +195,7 @@ struct SomeComplexData {
     bar: InheritableVariable&lt;String&gt;,
 }
 
-#[derive(Reflect)]
+#[derive(Reflect, Debug)]
 struct MyEntity {
     some_field: InheritableVariable&lt;f32&gt;,
 

@@ -147,9 +147,13 @@
                     <main>
                         <h1 id="fyrox-game-engine-book"><a class="header" href="#fyrox-game-engine-book">Fyrox Game Engine Book</a></h1>
 <p>Practical reference and user guides for <a href="https://github.com/FyroxEngine/Fyrox">Fyrox Game Engine</a> and its 
-editor <a href="https://github.com/FyroxEngine/Fyrox/tree/master/editor">Fyroxed</a>.</p>
+editor <a href="https://github.com/FyroxEngine/Fyrox/tree/master/editor">FyroxEd</a>.</p>
 <p><strong>Warning:</strong> The book is in early development stage, you can help to improve it by making a contribution in its
 <a href="https://github.com/fyrox-book/fyrox-book.github.io">repository</a>. Don't be shy, every tip is helpful!</p>
+<h2 id="engine-version"><a class="header" href="#engine-version">Engine Version</a></h2>
+<p>Fyrox Team is trying to keep the book up-to-date with the latest version from <code>master</code> branch. If something does not 
+compile with the latest release from crates.io, then you need to 
+<a href="./fyrox/beginning/scripting.html#using-latest-engine-version">use the latest engine from GitHub repo</a>.</p>
 <h2 id="how-to-read-the-book"><a class="header" href="#how-to-read-the-book">How to read the book</a></h2>
 <p>Almost every chapter in this book can be read in any order, but we recommend reading Chapter 1 and then going
 through <a href="fyrox/tutorials/platformer/part1.html">Platformer Tutorial (2D)</a> while learning more about specific areas that
@@ -545,7 +549,7 @@ instance as much as possible) and CPU resources.</p>
     // instantiation.
     let model = resource_manager.request_model(path).await.unwrap();
 
-    model.instantiate(scene).root
+    model.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="loading-assets"><a class="header" href="#loading-assets">Loading Assets</a></h2>
@@ -990,13 +994,12 @@ so scripts are as fast as native code. </p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{inspect::prelude::*, uuid::{Uuid, uuid}, visitor::prelude::*, reflect::Reflect},
-</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*},
 </span><span class="boring">    event::Event, impl_component_provider,
 </span><span class="boring">    scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
 </span><span class="boring">    script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 </span><span class="boring">};
-</span>#[derive(Visit, Reflect, Inspect, Default, Debug, Clone)]
+</span>#[derive(Visit, Reflect, Default, Debug, Clone)]
 struct MyScript {
     // Add fields here.
 }
@@ -1030,10 +1033,6 @@ impl ScriptTrait for MyScript {
         // Put object logic here.
     }
 
-    fn restore_resources(&amp;mut self, resource_manager: ResourceManager) {
-        // Restore resource handles here.
-    }
-
     fn id(&amp;self) -&gt; Uuid {
         Self::type_uuid()
     }
@@ -1045,8 +1044,6 @@ impl ScriptTrait for MyScript {
 scene file.</li>
 <li><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values, 
 find fields by their paths, etc.</li>
-<li><code>Inspect</code> provides meta-data for fields in your script, it allows the editor to &quot;see&quot; what's inside your structures,
-&quot;print&quot; this information in the Inspector.</li>
 <li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.</li>
 <li><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
 cloned.</li>
@@ -1076,8 +1073,7 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">        plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
 </span><span class="boring">        core::{
 </span><span class="boring">            visitor::prelude::*,
-</span><span class="boring">            inspect::prelude::*,
-</span><span class="boring">            reflect::Reflect,  
+</span><span class="boring">            reflect::prelude::*,
 </span><span class="boring">            pool::Handle,
 </span><span class="boring">            uuid::Uuid
 </span><span class="boring">        },
@@ -1086,7 +1082,7 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">        script::ScriptTrait,
 </span><span class="boring">    };
 </span><span class="boring">
-</span><span class="boring">    #[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
+</span><span class="boring">    #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
 </span><span class="boring">    struct MyScript;
 </span><span class="boring">
 </span><span class="boring">    impl TypeUuidProvider for MyScript {
@@ -1124,13 +1120,13 @@ your game in separate process with the scene active in the editor.</p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{inspect::prelude::*, uuid::Uuid, visitor::prelude::*, reflect::Reflect},
+</span><span class="boring">    core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
 </span><span class="boring">    impl_component_provider,
 </span><span class="boring">    scene::node::{Node, TypeUuidProvider},
 </span><span class="boring">    script::{Script, ScriptTrait},
 </span><span class="boring">};
 </span><span class="boring">
-</span><span class="boring">#[derive(Inspect, Reflect, Visit, Default, Copy, Clone, Debug)]
+</span><span class="boring">#[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
 </span><span class="boring">struct MyScript;
 </span><span class="boring">
 </span><span class="boring">impl TypeUuidProvider for MyScript {
@@ -1160,17 +1156,20 @@ content of the context is something like this:</p>
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
 </span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    engine::resource_manager::ResourceManager,
+</span><span class="boring">    engine::{resource_manager::ResourceManager, ScriptMessageDispatcher},
 </span><span class="boring">    plugin::Plugin,
 </span><span class="boring">    scene::{node::Node, Scene},
+</span><span class="boring">    script::ScriptMessageSender
 </span><span class="boring">};
-</span>pub struct ScriptContext&lt;'a, 'b&gt; {
+</span>pub struct ScriptContext&lt;'a, 'b, 'c&gt; {
     pub dt: f32,
     pub elapsed_time: f32,
     pub plugins: &amp;'a mut [Box&lt;dyn Plugin&gt;],
     pub handle: Handle&lt;Node&gt;,
     pub scene: &amp;'b mut Scene,
     pub resource_manager: &amp;'a ResourceManager,
+    pub message_sender: &amp;'c ScriptMessageSender,
+    pub message_dispatcher: &amp;'c mut ScriptMessageDispatcher,
 }
 <span class="boring">}</span></code></pre></pre>
 <ul>
@@ -1186,6 +1185,10 @@ particular type using <code>context.plugins[0].cast::&lt;MyPlugin&gt;().unwrap()
 <li><code>scene</code> - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
 add/modify/remove scene nodes.</li>
 <li><code>resource_manager</code> - a reference to resource manager, you can use it to load and instantiate assets. </li>
+<li><code>message_sender</code> - a message sender. Every message sent via this sender will be then passed to every 
+<code>ScriptTrait::on_message</code> method of every script.</li>
+<li><code>message_dispatcher</code> - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
+to a type explicitly.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
 <p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
@@ -1226,7 +1229,7 @@ fn load_scene(resource_manager: ResourceManager) -&gt; Scene {
         .unwrap();
 
     // Create an instance of the scene in the parent scene.
-    let child_scene = scene_resource.instantiate_geometry(&amp;mut scene);
+    let child_scene = scene_resource.instantiate(&amp;mut scene);
 
     scene
 }
@@ -1439,7 +1442,7 @@ fn link_weapon_to_camera(
             .request_model(&quot;path/to/weapon.fbx&quot;),
     )
     .unwrap()
-    .instantiate_geometry(scene);
+    .instantiate(scene);
 
     // Link weapon to the camera.
     scene.graph.link_nodes(weapon, camera);
@@ -1524,10 +1527,9 @@ need is to wrap its value using <code>InheritableVariable</code> wrapper.</p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::variable::InheritableVariable;
-</span><span class="boring">use fyrox::core::reflect::Reflect;
 </span><span class="boring">use fyrox::core::visitor::prelude::*;
-</span><span class="boring">use fyrox::core::inspect::prelude::*;
-</span>#[derive(Reflect, Visit, Inspect, Default, Clone, Debug)]
+</span><span class="boring">use fyrox::core::reflect::prelude::*;
+</span>#[derive(Reflect, Visit, Default, Clone, Debug)]
 struct MyScript {
     foo: InheritableVariable&lt;f32&gt;
 }
@@ -1549,7 +1551,7 @@ following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::core::reflect::Reflect;
+</span><span class="boring">use fyrox::core::reflect::prelude::*;
 </span><span class="boring">use fyrox::core::variable::InheritableVariable;
 </span><span class="boring">
 </span>#[derive(Reflect, Clone, PartialEq, Eq, Debug)]
@@ -1558,7 +1560,7 @@ struct SomeComplexData {
     bar: InheritableVariable&lt;String&gt;,
 }
 
-#[derive(Reflect)]
+#[derive(Reflect, Debug)]
 struct MyEntity {
     some_field: InheritableVariable&lt;f32&gt;,
 
@@ -1707,7 +1709,7 @@ fn load_model_to_scene(
             .unwrap();
 
     // Create an instance of the resource in the scene. 
-    model_resource.instantiate_geometry(scene)
+    model_resource.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code snippet intentionally omits proper <code>async/await</code> usage (instead it just blocks current thread until
@@ -1728,11 +1730,11 @@ use fyrox::{
         sstorage::ImmutableString,
     },
     engine::resource_manager::ResourceManager,
-    material::{shader::SamplerFallback, Material, PropertyValue},
+    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
     scene::{
         base::BaseBuilder,
         mesh::{
-            surface::{SurfaceBuilder, SurfaceData},
+            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
             MeshBuilder,
         },
         node::Node,
@@ -1768,63 +1770,21 @@ fn create_procedural_mesh(
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(Arc::new(Mutex::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited amount of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&amp;Vector3::new(
             25.0, 0.25, 25.0,
         ))),
-    )))
-        .with_material(Arc::new(Mutex::new(material)))
+    ))
+        .with_material(SharedMaterial::new(material))
         .build()])
     .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, creating a mesh procedurally requires lots of manual work and not so easy.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
-<p>Meshes have full support of bone animation, it means that you can load pretty much any model in your game, and 
-it will play animation with no problems. One difference that should be noted is that you should use <code>instantiate</code>
-method instead of <code>instantiate_geometry</code> and then manually apply animation to the mesh in your game loop.</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::resource::model::ModelInstance;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    engine::resource_manager::{ResourceManager},
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
-</span>
-fn load_model_to_scene(
-    scene: &amp;mut Scene,
-    path: &amp;Path,
-    resource_manager: ResourceManager,
-) -&gt; ModelInstance {
-    // Request model resource and block until it loading.
-    let model_resource =
-        block_on(resource_manager.request_model(path))
-            .unwrap();
-
-    // Create an instance of the resource in the scene.
-    model_resource.instantiate(scene)
-}
-
-<span class="boring">fn animate(scene: &amp;mut Scene, resource_manager: ResourceManager) {
-</span>// At initialization.
-let ModelInstance { root, animations } = load_model_to_scene(
-    scene,
-    &amp;Path::new(&quot;path/to/your/model.fbx&quot;),
-    resource_manager,
-);
-
-// .. Somewhere in the game loop ..
-
-scene.animations[animations[0]]
-    .get_pose()
-    .apply(&amp;mut scene.graph);
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<p>See <a href="fyrox/scene/./../animation/animation.html">Animation chapter</a> for more info.</p>
 <h3 id="retargetting"><a class="header" href="#retargetting">Retargetting</a></h3>
 <p>You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
 in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated
@@ -2250,7 +2210,7 @@ content.</p>
 </span><span class="boring">        sstorage::ImmutableString,
 </span><span class="boring">    },
 </span><span class="boring">    engine::resource_manager::ResourceManager,
-</span><span class="boring">    material::{shader::SamplerFallback, Material, PropertyValue},
+</span><span class="boring">    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
 </span><span class="boring">    rand::{thread_rng, Rng},
 </span><span class="boring">    scene::{
 </span><span class="boring">        base::BaseBuilder,
@@ -2305,7 +2265,7 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                         &quot;examples/data/Grass_DiffuseColor.jpg&quot;,
                         &quot;examples/data/Grass_NormalColor.jpg&quot;,
                     );
-                    Arc::new(Mutex::new(material))
+                    SharedMaterial::new(material)
                 },
                 mask_property_name: &quot;maskTexture&quot;.to_string(),
             },
@@ -2318,7 +2278,7 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                         &quot;examples/data/Rock_DiffuseColor.jpg&quot;,
                         &quot;examples/data/Rock_Normal.jpg&quot;,
                     );
-                    Arc::new(Mutex::new(material))
+                    SharedMaterial::new(material)
                 },
                 mask_property_name: &quot;maskTexture&quot;.to_string(),
             },
@@ -2613,8 +2573,8 @@ ray intersection check:</p>
 </span><span class="boring">        algebra::{Matrix4, Point3},
 </span><span class="boring">        math::TriangleDefinition,
 </span><span class="boring">        math::{ray::Ray, Vector3Ext},
-</span><span class="boring">        visitor::Node,
 </span><span class="boring">    },
+</span><span class="boring">    scene::node::Node,
 </span><span class="boring">    scene::mesh::{
 </span><span class="boring">        buffer::{VertexAttributeUsage, VertexReadTrait},
 </span><span class="boring">        surface::SurfaceData,
@@ -2810,12 +2770,12 @@ Mesh node with single rectangle surface:</p>
 </span><span class="boring">        parking_lot::Mutex,
 </span><span class="boring">        pool::Handle,
 </span><span class="boring">    },
-</span><span class="boring">    material::Material,
+</span><span class="boring">    material::{Material, SharedMaterial},
 </span><span class="boring">    scene::{
 </span><span class="boring">        base::BaseBuilder,
 </span><span class="boring">        graph::Graph,
 </span><span class="boring">        mesh::{
-</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData},
+</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
 </span><span class="boring">            MeshBuilder, RenderPath,
 </span><span class="boring">        },
 </span><span class="boring">        node::Node,
@@ -2826,7 +2786,7 @@ Mesh node with single rectangle surface:</p>
 </span>
 fn create_rect_with_custom_material(
     graph: &amp;mut Graph,
-    material: Arc&lt;Mutex&lt;Material&gt;&gt;,
+    material: SharedMaterial,
 ) -&gt; Handle&lt;Node&gt; {
     MeshBuilder::new(
         BaseBuilder::new().with_local_transform(
@@ -2835,9 +2795,9 @@ fn create_rect_with_custom_material(
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(Arc::new(Mutex::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
         SurfaceData::make_quad(&amp;Matrix4::identity()),
-    )))
+    ))
     .with_material(material)
     .build()])
     .with_render_path(RenderPath::Forward)
@@ -2854,14 +2814,12 @@ if you want to add custom lighting then you should use custom shader.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-scene-node"><a class="header" href="#custom-scene-node">Custom Scene Node</a></h1>
 <p>Sometimes there is a need to have custom scene nodes, it is possible to do, but it requires quite a lot of boilerplate
 code.</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">// TODO: remove `compile_fail` when 0.27 is released.
-</span>use fxhash::FxHashMap;
-use fyrox::{
+</span>use fyrox::{
     core::{
-        inspect::prelude::*,
+        reflect::prelude::*,
         math::aabb::AxisAlignedBoundingBox,
         pool::Handle,
         uuid::{uuid, Uuid},
@@ -2869,16 +2827,14 @@ use fyrox::{
         visitor::prelude::*,
     },
     engine::resource_manager::ResourceManager,
-    impl_directly_inheritable_entity_trait,
     scene::{
         base::Base,
         node::{Node, NodeTrait},
-        DirectlyInheritableEntity,
     },
 };
 use std::ops::{Deref, DerefMut};
 
-#[derive(Clone, Inspect, Visit, Debug)]
+#[derive(Clone, Reflect, Visit, Debug)]
 pub struct CustomNode {
     base: Base,
 }
@@ -2897,8 +2853,6 @@ impl DerefMut for CustomNode {
     }
 }
 
-impl_directly_inheritable_entity_trait!(CustomNode;);
-
 impl NodeTrait for CustomNode {
     fyrox::impl_query_component!();
 
@@ -2908,25 +2862,6 @@ impl NodeTrait for CustomNode {
 
     fn world_bounding_box(&amp;self) -&gt; AxisAlignedBoundingBox {
         self.base.world_bounding_box()
-    }
-
-    fn inherit(&amp;mut self, parent: &amp;Node) -&gt; Result&lt;(), InheritError&gt; {
-        if let Some(parent) = parent.cast::&lt;CustomNode&gt;() {
-            self.base.try_inherit_self_properties(parent)?;
-        }
-        Ok(())
-    }
-
-    fn reset_inheritable_properties(&amp;mut self) {
-        self.base.reset_self_inheritable_properties()
-    }
-
-    fn restore_resources(&amp;mut self, _resource_manager: ResourceManager) {
-        // Use this method to remap resource handles to valid handles after deserialization.
-    }
-
-    fn remap_handles(&amp;mut self, _old_new_mapping: &amp;FxHashMap&lt;Handle&lt;Node&gt;, Handle&lt;Node&gt;&gt;) {
-        // Use this method to remap handle to other nodes. It is used when the node is copied.
     }
 
     fn id(&amp;self) -&gt; Uuid {
@@ -3379,7 +3314,7 @@ intersections you're interested in as a generic parameter.</p>
 let sound = scene.graph[sound_handle].as_sound();
 
 if sound.status() == Status::Stopped {
-    scene.remove_node(sound_handle);
+    scene.graph.remove_node(sound_handle);
 }
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
@@ -3405,9 +3340,7 @@ if sound.status() == Status::Stopped {
 </code></pre>
 <p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="effects-wip"><a class="header" href="#effects-wip">Effects (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><p><strong>WARNING:</strong> This and following chapters covers new functionality available only in the latest version of the engine
-available on GitHub</p>
-<h1 id="animation-1"><a class="header" href="#animation-1">Animation</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="animation-1"><a class="header" href="#animation-1">Animation</a></h1>
 <p>Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
 consists of multiple tracks, where each track is bound to a property of a scene node. A track can animate
 any numeric properties, starting from numbers (including <code>bool</code>) end ending by 2/3/4 dimensional vectors.
@@ -3468,27 +3401,28 @@ for more info and examples.</p>
 below, please read the docs for [<code>crate::scene::animation::AnimationPlayer</code>] node, it is much more convenient way of animating
 other nodes. The node can be created from the editor and you don't even need to write any code.
 Use the following example code as a guide <strong>only</strong> if you need to create procedural animations:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use fyrox::{
-    animation::{
-        container::{TrackDataContainer, TrackValueKind},
-        track::Track,
-        value::ValueBinding,
-        Animation,
-    },
-    core::{
-        curve::{Curve, CurveKey, CurveKeyKind},
-        pool::Handle,
-    },
-    scene::{
-        node::Node,
-        base::BaseBuilder,
-        graph::Graph,
-        pivot::PivotBuilder
-    }
-};
-fn create_animation(node: Handle&lt;Node&gt;) -&gt; Animation {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    animation::{
+</span><span class="boring">        container::{TrackDataContainer, TrackValueKind},
+</span><span class="boring">        track::Track,
+</span><span class="boring">        value::ValueBinding,
+</span><span class="boring">        Animation,
+</span><span class="boring">    },
+</span><span class="boring">    core::{
+</span><span class="boring">        curve::{Curve, CurveKey, CurveKeyKind},
+</span><span class="boring">        pool::Handle,
+</span><span class="boring">    },
+</span><span class="boring">    scene::{
+</span><span class="boring">        node::Node,
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        pivot::PivotBuilder
+</span><span class="boring">    }
+</span><span class="boring">};
+</span>fn create_animation(node: Handle&lt;Node&gt;) -&gt; Animation {
     let mut frames_container = TrackDataContainer::new(TrackValueKind::Vector3);
     // We'll animate only X coordinate (at index 0).
     frames_container.curves_mut()[0] = Curve::from(vec![
@@ -3697,28 +3631,29 @@ that transition should be activated. Let's look at the code example of the above
 let idle_animation = Handle::default();
 let walk_animation = Handle::default();
 let aim_animation = Handle::default();
-let model_root = Handle::default();
 
-let mut machine = Machine::new(model_root);
+let mut machine = Machine::new();
 
-let aim = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
-let walk = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
+let root_layer = machine.layers_mut().first_mut().unwrap();
+
+let aim = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
+let walk = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
 
 // Blend two animations together
-let blend_aim_walk = machine.add_node(PoseNode::BlendAnimations(
+let blend_aim_walk = root_layer.add_node(PoseNode::BlendAnimations(
   BlendAnimations::new(vec![
       BlendPose::new(PoseWeight::Constant(0.75), aim),
       BlendPose::new(PoseWeight::Constant(0.25), walk)
   ])
 ));
 
-let walk_state = machine.add_state(State::new(&quot;Walk&quot;, blend_aim_walk));
+let walk_state = root_layer.add_state(State::new(&quot;Walk&quot;, blend_aim_walk));
 
-let idle = machine.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
-let idle_state = machine.add_state(State::new(&quot;Idle&quot;, idle));
+let idle = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
+let idle_state = root_layer.add_state(State::new(&quot;Idle&quot;, idle));
 
-machine.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
-machine.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
+root_layer.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
+root_layer.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, everything is quite straightforward. Even such simple state machine requires quite a lot of code, which
 can be removed by using ABSM editor. Read the next chapter to learn about it.</p>
@@ -4411,7 +4346,7 @@ from Asset Browser in the editor or instantiate the model dynamically from code:
     // instantiation.
     let model = resource_manager.request_model(path).await.unwrap();
 
-    model.instantiate(scene).root
+    model.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="material-import-1"><a class="header" href="#material-import-1">Material import</a></h2>
@@ -6560,7 +6495,7 @@ fn main() {
                     game.update();
 
                     // Update engine each frame.
-                    engine.update(TIMESTEP, control_flow, &amp;mut lag, Defaut::default());
+                    engine.update(TIMESTEP, control_flow, &amp;mut lag, Default::default());
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
@@ -6861,7 +6796,7 @@ Run the game and you should see this:</p>
     .request_model(&quot;data/models/scene.rgs&quot;)
     .await
     .unwrap()
-    .instantiate_geometry(&amp;mut scene);
+    .instantiate(&amp;mut scene);
 <span class="boring">}</span></code></pre></pre>
 <p>Here we're asking the resource manager to load the scene we've made previously, awaiting while it loads and then instantiating
 it on the <code>scene</code>. What does &quot;instantiation&quot; mean? In short, it means that we're creating a copy of a scene and adding the copy
@@ -7086,7 +7021,7 @@ impl Game {
             .request_model(&quot;data/models/scene.rgs&quot;)
             .await
             .unwrap()
-            .instantiate_geometry(&amp;mut scene);
+            .instantiate(&amp;mut scene);
 
         Self {
             player: Player::new(&amp;mut scene), // New
@@ -7367,7 +7302,7 @@ impl Weapon {
             .unwrap()
             .instantiate(scene);
 
-        let shot_point = scene.graph.find_by_name(model, &quot;Weapon:ShotPoint&quot;);
+        let shot_point = scene.graph.find_by_name(model, &quot;Weapon:ShotPoint&quot;).unwrap().0;
 
         Self {
             model,
@@ -8953,7 +8888,7 @@ use fyrox::{
         animation::AnimationPlayer,
         base::BaseBuilder,
         collider::{ColliderBuilder, ColliderShape},
-        graph::physics::CoefficientCombineRule,
+        graph::{Graph, physics::CoefficientCombineRule},
         node::Node,
         rigidbody::RigidBodyBuilder,
         transform::TransformBuilder,
@@ -9610,7 +9545,7 @@ impl AnimationMachine {
     ) -&gt; Self {
         let animation_player = scene.graph.find(model, &amp;mut |n| {
             n.query_component_ref::&lt;AnimationPlayer&gt;().is_some()
-        });
+        }).unwrap().0;
 
         let mut machine = Machine::new();
 
@@ -9821,9 +9756,8 @@ use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
         futures::executor::block_on,
-        inspect::{Inspect, PropertyInfo},
         pool::Handle,
-        reflect::Reflect,
+        reflect::prelude::*,
         uuid::{uuid, Uuid},
         visitor::prelude::*,
     },
@@ -9848,9 +9782,8 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
 </span><span class="boring">    core::{
-</span><span class="boring">        inspect::{Inspect, PropertyInfo},
 </span><span class="boring">        uuid::{uuid, Uuid},
-</span><span class="boring">        reflect::Reflect,
+</span><span class="boring">        reflect::prelude::*,
 </span><span class="boring">        visitor::prelude::*,
 </span><span class="boring">    },
 </span><span class="boring">    event::Event,
@@ -9859,7 +9792,7 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 </span><span class="boring">    scene::node::TypeUuidProvider,
 </span><span class="boring">    script::{ScriptContext, ScriptTrait},
 </span><span class="boring">};
-</span>#[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
+</span>#[derive(Visit, Reflect, Debug, Clone, Default)]
 struct Player;
 
 impl_component_provider!(Player,);
@@ -10225,6 +10158,7 @@ fn main() {
         serialization_context,
         events_loop: &amp;event_loop,
         vsync: false,
+        headless: false
     })
     .unwrap();
 
@@ -10255,7 +10189,7 @@ fn main() {
                     // ************************
 
                     // It is very important to update the engine every frame!
-                    engine.update(fixed_timestep, control_flow, &amp;mut lag);
+                    engine.update(fixed_timestep, control_flow, &amp;mut lag, Default::default());
                 }
 
                 // It is very important to &quot;pump&quot; messages from UI. Even if don't need to
