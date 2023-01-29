@@ -34,7 +34,7 @@ reasonable). We should consider borrow checker not as our enemy, that prevents u
 our friend that tells us - "dude, this won't work without potential crashes, memory issues, etc.". What borrow
 checker tries to tell us is that we need to re-think the architecture of our game.
 
-So how the engine solves the problem of unique mutable access? It forces you to use a "top-down" flow in your game.
+So how does Fyrox solve the problem of unique mutable access? It forces you to use a "top-down" flow in your game.
 What does that mean? In short, you have to change the data only by going from top to bottom on a call tree. But
 isn't that too restrictive, what if I want to call some higher-level function while being in lower-level function?
 This is a very good question, and a short answer for it: _no_. It isn't restrictive at all, because you can always
