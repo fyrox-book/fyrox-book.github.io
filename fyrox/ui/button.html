@@ -249,8 +249,7 @@ impl Game {
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="using-a-button-to-exit-the-game"><a class="header" href="#using-a-button-to-exit-the-game">Using a button to exit the game</a></h2>
-<p>Add a flag to your Game struct like <code>exit: bool</code> and set it in button handler to <code>true</code>, then check it in <code>on_tick</code> 
-and set <code>*control_flow = ControlFlow::Exit</code> if the flag is raised</p>
+<p>This example shows how to create a button that will close your game.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
