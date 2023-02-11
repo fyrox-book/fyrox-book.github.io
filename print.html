@@ -33,6 +33,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -231,24 +232,24 @@ manage global game state.</p>
 way of adding custom game logic.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="design-philosophy-and-goals"><a class="header" href="#design-philosophy-and-goals">Design Philosophy and Goals</a></h1>
 <p>Let's talk a bit about design philosophy and goals of the engine. Development of the engine started in the beginning
-of 2019 as a hobby project to learn Rust, and it quickly showed that Rust can be a game changer in the game industry.
-Initially, the engine was just a port of <a href="https://github.com/mrDIMAS/DmitrysEngine">an engine</a> that is written in C.
-At the beginning, it was very interesting to build such complex thing as game engine in such low level language without
-any safety guarantees. After a year of development it became annoying to fix memory related issues (memory corruption
-leaks, etc.), luckily at that time Rust's popularity grew, and it showed on my radar. I was able to port the engine
-to it in less than a year. Stability has improved dramatically, no more random crashes, performance was at the same or
-better levels - time invested in learning new language was paid off. Development speed does not degrade over time as it
-was in C, it is very easy to manage growing project.</p>
+of 2019 as a hobby project to learn Rust, and it quickly showed that Rust can be a game changer in the game development
+industry. Initially, the engine was just a port of <a href="https://github.com/mrDIMAS/DmitrysEngine">an engine</a> that is written 
+in C. At the beginning, it was very interesting to build such complex thing as game engine in such low level language without
+any safety guarantees. After a year of development it became annoying to fix memory related issues (memory corruption,
+leaks, etc.), luckily at that time Rust's popularity grew, and it showed on my radar. I ([@mrDIMAS(https://github.com/mrDIMAS)]) 
+was able to port the engine to it in less than a year. Stability has improved dramatically, no more random crashes, 
+performance was at the same or better levels - time invested in learning new language was paid off. Development speed 
+does not degrade over time as it was in C, it is very easy to manage growing project.</p>
 <h2 id="safety"><a class="header" href="#safety">Safety</a></h2>
 <p>One of the main goals of in the development of the engine is to provide high level of safety. What does this mean? 
 In short: protect from memory-unsafety bugs. This does not include any logic errors, but when your game is free 
 of random crashes due to memory unsafety it is much easier to fix logic bugs, because you don't have to think about
 potentially corrupted memory.</p>
-<p>Safety is also dictates architecture design decisions of your game, typical callback hell that is possible to do in
-many other languages is very tedious to implement in Rust. It is possible, but it requires quite a lot of manual work
+<p>Safety is also dictates architecture design decisions of your game, typical callback hell, that is possible to do in
+many other languages, is very tedious to implement in Rust. It is possible, but it requires quite a lot of manual work
 and quickly tell you that you're doing it wrong.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
-<p>Game engine usually built using system-level programming languages, that provides peak performance levels. Fyrox is not
+<p>Game engines usually built using system-level programming languages, that provides peak performance levels. Fyrox is not
 an exception. One if its design goals is to provide high levels of performance by default, leaving an opportunity for
 adding custom solutions for performance-critical places.</p>
 <h2 id="ease-of-use"><a class="header" href="#ease-of-use">Ease of use</a></h2>
@@ -278,8 +279,8 @@ such architecture requires some boilerplate code that is generic for every game.
 command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
-<p>Note for Linux: This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
-then you need to add this folder to your $PATH still.</p>
+<p><em>Note for Linux:</em> This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
+then you need to add this folder to your <code>$PATH</code> still.</p>
 <p>Navigate to a folder where you want the project to be created and do the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name my_game --style 3d
 </code></pre>
@@ -337,9 +338,10 @@ executed by the engine. Read <a href="fyrox/beginning/../scripting/script.html">
 your game.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fyroxed-overview"><a class="header" href="#fyroxed-overview">FyroxEd Overview</a></h1>
 <p>FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
-that allows you to build your game from start to finish with relatively low effort.</p>
-<p>You'll be spending a lot of time in the editor (FyroxEd), so you should get familiar with it and learn how to use its 
-basic functionality. This chapter will guide you through basics, advanced topics will be covered in respective chapters.</p>
+that helps you to build your game from start to finish with relatively low effort.</p>
+<p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its 
+basic functionality. This chapter will guide you through the basics, advanced topics will be covered in respective 
+chapters.</p>
 <h2 id="windows"><a class="header" href="#windows">Windows</a></h2>
 <p>Once the editor is open for the first time, it will confuse you by amount of windows, buttons, lists, etc. Each window
 serves for different purpose, but all of them works together to help you make your game. Let's look at the editor's
@@ -349,33 +351,33 @@ development is quite rapid and image can become outdated pretty easily):</p>
 <ul>
 <li><strong>World viewer</strong> - shows every object in the scene and their relations. It allows you to inspect and edit the 
 contents of the scene in hierarchical form.</li>
-<li><strong>Scene preview</strong> - renders your scene with debug info and various editor-specific objects (like gizmos and
-stuff). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a <strong>Toolbar</strong>,
+<li><strong>Scene preview</strong> - renders your scene with debug info and various editor-specific objects (like gizmos, entity icons,
+etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a <strong>Toolbar</strong>,
 it shows available context-dependent tools.</li>
-<li><strong>Inspector</strong> - allows you to modify various properties of selected object.</li>
+<li><strong>Inspector</strong> - allows you to modify various properties of a selected object.</li>
 <li><strong>Message Log</strong> - shows the important messages from the editor.</li>
 <li><strong>Navmesh Panel</strong> - allows you to create/delete and edit navigational meshes.</li>
 <li><strong>Command Stack</strong> - shows the most recent actions you've done, allows you to undo and redo the changes on demand.</li>
 <li><strong>Asset Browser</strong> - inspects the assets of your game, allows you to instantiate resources in the scene and so on.</li>
-<li><strong>Audio Context</strong> - allows you to edit settings of scene's sound context, such as global volume, available sound 
-effects, etc.</li>
+<li><strong>Audio Context</strong> - allows you to edit settings of scene's sound context, such as global volume, available audio
+buses, effects, etc.</li>
 </ul>
 <h2 id="creating-loading-a-scene"><a class="header" href="#creating-loading-a-scene">Creating (Loading) a Scene</a></h2>
 <p>FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
 must have a scene created (or loaded) to begin working with the editor. To create a scene click <code>File -&gt; New Scene</code>.</p>
-<p>To load existing scene, go to <code>File -&gt; Load</code> and select desired scene using file browser. It is may be very useful
+<p>To load an existing scene, go to <code>File -&gt; Load</code> and select desired scene using file browser. It may be very useful
 to use list of recently opened scenes, to load them quickly without a need to go <code>File -&gt; Load</code>, search a scene, etc.
 Just go to <code>File -&gt; Recent Scenes</code> and click one to load.</p>
 <h2 id="populating-your-scene"><a class="header" href="#populating-your-scene">Populating Your Scene</a></h2>
-<p>Scene can be filled with various objects, there are two equivalent ways of creating game entities:</p>
+<p>The scene can be filled with various objects, there are two equivalent ways of creating game entities:</p>
 <ul>
-<li>By clicking <code>Create</code> main menu item and selecting desired entity.</li>
-<li>By right-clicking on a game entity in <code>World Viewer</code> and selecting desired entity from <code>Add Child</code> sub-menu.</li>
+<li>By clicking <code>Create</code> item in the main menu and selecting desired entity from the list.</li>
+<li>By right-clicking on a game entity in the <code>World Viewer</code> and selecting desired entity from <code>Add Child</code> sub-menu.</li>
 </ul>
 <p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) and saved in various formats, Fyrox
 supports FBX format, which is supported by pretty much any 3D modelling software. You can add such object to your scene
-by drag'n'dropping a desired asset for Asset Browser. Find one in the browser, click on it, hold the button and drag it
-to the Scene Viewer and then release the button. </p>
+by drag'n'dropping a desired asset from the Asset Browser. Find one in the browser, click on it, hold the button and drag it
+to the Scene Viewer and then release the button. You'll see a preview of your object while the mouse button is held.</p>
 <p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example you can create a scene with a few 
 objects in it with some scripts and re-use it across any other scenes. Such scene is called <a href="fyrox/beginning/../scene/prefab.html">prefab</a>.</p>
 <h2 id="saving-scene"><a class="header" href="#saving-scene">Saving Scene</a></h2>
@@ -390,7 +392,7 @@ You can undo or redo your changes either by clicking <code>Edit -&gt; Undo/Redo<
 <p>There are number of control keys that you'll be using most of the time, pretty much all of them works in <code>Scene Preview</code>
 window:</p>
 <h3 id="editor-camera-movement"><a class="header" href="#editor-camera-movement">Editor camera movement</a></h3>
-<p>Click and hold <code>[Right Mouse Button]</code> within <code>Scene Preview</code> window to use movement controls:</p>
+<p>Click and hold <code>[Right Mouse Button]</code> within the <code>Scene Preview</code> window to use movement controls:</p>
 <ul>
 <li><code>[W][S][A][D]</code> - Move camera forward/backward/left/right</li>
 <li><code>[Space][Q]/[E]</code> - Raise/Lower Camera</li>
@@ -405,21 +407,23 @@ window:</p>
 <li><code>[2]</code> - Move interaction mode</li>
 <li><code>[3]</code> - Scale interaction mode</li>
 <li><code>[4]</code> - Rotate interaction mode</li>
+<li><code>[5]</code> - Navigational mesh editing mode</li>
+<li><code>[6]</code> - Terrain editing interaction mode</li>
 <li><code>[Ctrl]+[Z]</code> - Undo</li>
 <li><code>[Ctrl]+[Y]</code> - Redo</li>
 <li><code>[Delete]</code> - deletes current selection.</li>
 </ul>
 <h2 id="play-mode"><a class="header" href="#play-mode">Play Mode</a></h2>
-<p>One of the key features of the editor is that it allows you to run your game from it. Use <code>Play/Stop</code> button at the
-top of <code>Scene Preview</code> window to enter (or leave) Play Mode. Keep in mind, that editor UI will be locked while you're
-in the Play Mode. </p>
+<p>One of the key features of the editor is that it allows you to run your game from it in a separate process. Use 
+<code>Play/Stop</code> button at the top of <code>Scene Preview</code> window to enter (or leave) Play Mode. Keep in mind, that editor UI 
+will be locked while you're in the Play Mode. </p>
 <p>Play Mode can be activated only for projects that made with <code>fyrox-template</code> (or have similar structure). The editor
 calls <code>cargo</code> commands to build and run your game in a separate process. Running the game in a separate process ensures
 that the editor won't crash if the game does, it also provides excellent isolation between the game and the editor, not
 giving a chance to break the editor by running the game.</p>
 <h2 id="additional-utilities"><a class="header" href="#additional-utilities">Additional Utilities</a></h2>
-<p>There are also number of powerful utilities that will make your life easier, which works without any scene, they can be
-found under <code>Utils</code> section of main menu: </p>
+<p>There are also number of powerful utilities that will make your life easier, they can be found under <code>Utils</code> section of 
+main menu: </p>
 <ul>
 <li>Animation Editor - allows you to create and editor animation blending state machines which are responsible for 
 animation mixing.</li>
@@ -437,8 +441,8 @@ can create interactive screens that showing some other places.</p>
 your character in a role-playing game could carry a sword. While the character holds the sword, it is linked to his
 arm. Such relations between the objects could be presented by a graph structure.</p>
 <p>Simply speaking, graph is a set of objects with hierarchical relationships between each object. Each object in the
-graph is called <em>node</em>. In the example with the sword and the character, the sword is a <em>child</em> node of a character,
-which in its turn is a <em>parent</em> node of a character. (Here we intentionally omit the fact that usually character
+graph is called <em>node</em>. In the example with the sword and the character, the sword is a <em>child</em> node of the character,
+which in its turn is a <em>parent</em> node of the character. (Here we intentionally omit the fact that usually character
 model contains complex skeleton with multiple bones and the sword is actually attached to one of hand's bones.)</p>
 <p>You can change hierarchy of the nodes in the editor using simple drag'n'drop functionality in <code>World Viewer</code> - drag a 
 node onto some other node, and it will be attached to it.</p>
@@ -481,10 +485,18 @@ a Mesh node, yet it uses very optimized renderer, that allows you to render doze
 This node is intended to be used for <strong>2D games</strong> only.</li>
 <li><a href="fyrox/beginning/../sound/sound.html">Sound</a> - a sound source, it is universal for 2D and 3D. Spatial blend factor allows you to select
 a proportion between 2D and 3D.</li>
+<li>Listener - an audio receiver that captures the sound in a particular point in your scene and sends it to an audio
+context for processing and output to an audio playback device.</li>
+<li>Animation Player - a container for multiple animations, it can play animations made in the 
+<a href="fyrox/beginning/../animation/anim_editor.html">animation editor</a> and apply animation poses to respective scene nodes.</li>
+<li>Animation Blending State Machine - a state machine that mixes multiple animations from multiple states into one; each
+state is backed by one or more animation playing or blending nodes. See the <a href="fyrox/beginning/../animation/absm_editor.html">respective chapter</a> 
+for more info.</li>
 </ul>
 <p>Each of the node could be created either from the editor (<code>Create</code> on main menu) or programmatically via respective
-node builder. These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
-types of nodes, but this is advanced topic, and it will be covered in <a href="fyrox/beginning/../scene/custom_node.html">next chapters</a>.</p>
+node builder (see <a href="https://docs.rs/fyrox/latest/fyrox/scene/index.html">API docs</a> for more info). These scene nodes 
+allow you to build almost any kind of game. It is also possible to create your own types of nodes, but this is advanced 
+topic, and it will be covered in <a href="fyrox/beginning/../scene/custom_node.html">next chapters</a>.</p>
 <h2 id="local-and-global-coordinates"><a class="header" href="#local-and-global-coordinates">Local and global coordinates</a></h2>
 <p>Graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
 when working with <em>scene nodes</em>.</p>
@@ -514,8 +526,6 @@ DDS format.</li>
 <li><a href="fyrox/beginning/../resources/sound.html">Sound buffers</a> - a data buffer for sound sources. The engine supports WAV and OGG formats. </li>
 <li><a href="fyrox/beginning/../resources/curve.html">Curves</a> - parametric curve. It is used to create complex functions for numeric parameters.
 Curves can be made in <code>Curve Editor</code> (<code>Utils -&gt; Curve Editor</code>)</li>
-<li><a href="fyrox/beginning/../resources/absm.html">Animation Machines</a> - animation blending state machines (ABSM) - allows you to blend multiple 
-animations into one to create complex animations. ABSM can be made in <code>Animation Editor</code> (<code>Utils -&gt; Animation Editor</code>)</li>
 </ul>
 <h2 id="asset-management"><a class="header" href="#asset-management">Asset Management</a></h2>
 <p>Asset management is performed from <code>Asset Browser</code> window in the editor, you can select an asset, preview it and edit
@@ -526,10 +536,11 @@ and apply it. Every asset has its own set of import options. Check respective as
 what import options is for what.</p>
 <h2 id="asset-instantiation"><a class="header" href="#asset-instantiation">Asset Instantiation</a></h2>
 <p>Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
-is done by simple drag'n'drop - find a model you want to instantiate and drag it <code>Scene Preview</code>. The instance should
-appear in the <code>Scene Preview</code> once you release left mouse button. The amount of asset instance is not limited, it 
-only depends on capabilities of your PC, each instance takes some memory (the engine tries to re-use data across
-instance as much as possible) and CPU resources.</p>
+is done by simple drag'n'drop - find a model you want to instantiate and drag it <code>Scene Preview</code>, hold left mouse button,
+drag the object and release the button when you're happy with what you see.</p>
+<p><img src="fyrox/beginning/preview.gif" alt="preview" /></p>
+<p>The amount of asset instances is not limited, it only depends on capabilities of your PC, each instance takes some 
+memory (the engine tries to re-use data across instance as much as possible) and CPU resources.</p>
 <p>You can also instantiate assets dynamically from your code, here's an example for Model:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -552,6 +563,7 @@ instance as much as possible) and CPU resources.</p>
     model.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
+<p>This is very useful in situations when you have a prefab, and you want to add it to your scene at runtime. </p>
 <h2 id="loading-assets"><a class="header" href="#loading-assets">Loading Assets</a></h2>
 <p>Usually there is no need to manually handle assets loading, since you have the editor that can help you with that - create
 a scene with all required assets. However, sometimes you need to instantiate an asset dynamically - for example a
@@ -10283,5 +10295,6 @@ fn main() {
         });
         </script>
 
+    </div>
     </body>
 </html>

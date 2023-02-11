@@ -32,6 +32,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "../../";
@@ -156,8 +157,8 @@ such architecture requires some boilerplate code that is generic for every game.
 command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
-<p>Note for Linux: This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
-then you need to add this folder to your $PATH still.</p>
+<p><em>Note for Linux:</em> This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
+then you need to add this folder to your <code>$PATH</code> still.</p>
 <p>Navigate to a folder where you want the project to be created and do the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name my_game --style 3d
 </code></pre>
@@ -262,5 +263,6 @@ your game.</p>
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>
