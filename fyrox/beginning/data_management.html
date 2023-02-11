@@ -146,22 +146,71 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="data-management"><a class="header" href="#data-management">Data management</a></h1>
-<p>The engine uses generation arenas (pools in engine's terminology) for efficient data management. Pool is a
-vector with entries that can be either vacant or occupied. Each entry, no matter occupied or vacant, also
-stores a special number called <em>generation</em>. The generation number is used to understand whether an entry has
-been changed over time or not. When an entry is reused, its generation number is increased leaving all previously
-created handle leading to the entry invalid. This is a very simple and efficient algorithm for tracking the
-&quot;lifetime&quot; of the objects.</p>
+<p>The engine uses generational arenas (pools in engine's terminology) to store most of the objects (scene nodes in a 
+graph, animations in an animation player, sound sources in an audio context, etc.). You'll use them quite often, so it 
+read this chapter thoroughly. </p>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<p>Rust ownership system and borrow checker in particular, dictates the rules of data management. In game development you
+often have a need to have some sort of reference to an object in some other object. In languages like C you usually 
+store a raw pointer and consider it done. This works, but it is very unsafe - an object could die (its memory can become
+deallocated), and you'll know about this only when try to access that object. In more advanced languages like C++, you
+could store <code>shared_ptr&lt;Foo&gt;</code> which ensures that the pointer will be valid until at least one <code>shared_ptr&lt;Foo&gt;</code> instance
+is held alive. In Rust, however, it is possible too, but with some limitations and quirks. At first, we won't consider 
+raw pointers and leave this to C or C++. As for smart pointers such as <code>Rc/Arc</code> - they will work, but they do not allow
+to mutate the content, only share it with multiple readers. To mutate the inner data, we can use either <code>RefCell</code> (for
+single-threaded environment) or <code>Mutex</code> (for multithreaded env) to wrap the data. This is where the &quot;fun&quot; begins: for 
+such types (<code>Rc&lt;RefCell&lt;Foo&gt;&gt;</code>, <code>Arc&lt;Mutex&lt;Foo&gt;&gt;</code>) Rust enforces borrowing rules (multiple readers, one writer) at runtime
+which will stab you in the back with panic in unexpected time - any attempt to borrow the inner data mutably twice will
+raise panic. </p>
+<p>The next problem with such shared references is the fact that it is very easy to accidentally create cyclical references
+which will prevent objects from dying (deallocating). While this is more or less ok, the next problem is much more 
+critical for games - overhead for runtime checks. In case of <code>Rc&lt;RefCell&lt;Foo&gt;&gt;</code> it is a single reference counter for
+given references to the data, and in case of <code>Arc&lt;Mutex&lt;Foo&gt;&gt;</code> it is a mutex lock. </p>
+<p>The solution to these problems is not ideal, it has its own pros and cons. Instead of storing objects in random places
+of memory and having to manage their lifetime by reference counting, we can put all objects in a single storage with 
+a contiguous memory block and use indices to access the objects. Such structure is called - pool. </p>
+<h2 id="technical-details"><a class="header" href="#technical-details">Technical details</a></h2>
+<p>Pool is an efficient way data management. Pool is a vector with entries that can be either vacant or occupied. Each 
+entry, no matter occupied or vacant, also stores a special number called <em>generation</em>. The generation number is used 
+to understand whether an entry has been changed over time or not. When an entry is reused, its generation number is 
+increased leaving all previously created handle leading to the entry invalid. This is a very simple and efficient 
+algorithm for tracking the &quot;lifetime&quot; of the objects.</p>
 <p>To access the data in entries, the engine uses <em>handles</em>. The handle is a pair of index of an entry and a
 <em>generation</em> number. When you put an object in the pool, it gives you the handle that &quot;leads&quot; to the object.
 At this moment the generation of the handle matches the generation of the corresponding entry so the handle
 is valid. It will remain valid until you &quot;free&quot; the object, which will make the entry vacant again.</p>
 <h2 id="advantages"><a class="header" href="#advantages">Advantages</a></h2>
-<p>Since the pool is just a contiguous memory block, it is much more CPU cache-friendly. This means that in most
-cases the data portions will be loaded in CPU caches, making the access to the data blazing fast.</p>
-<p>Almost every entity in the engine &quot;lives&quot; in its own pool, this make it easy to create such data structures
+<ul>
+<li>Since the pool is just a contiguous memory block, it is much more CPU cache-friendly. This means that in most
+cases the data portions will be loaded in CPU caches, making the access to the data blazing fast.</li>
+<li>Almost every entity in the engine &quot;lives&quot; in its own pool, this make it easy to create such data structures
 like graphs, where a node refers to other nodes. In this case scene nodes stores just handles (which is just
-8 bytes of memory) to other nodes.</p>
+8 bytes of memory) to other nodes.</li>
+<li>Easy lifetime management; no way to create memory leaks since cross-references could be done only via handles.</li>
+<li>Fast random access with constant complexity.</li>
+<li>Handles are the same size as pointer on 64-bit arch (8 bytes).</li>
+</ul>
+<h2 id="disadvantages"><a class="header" href="#disadvantages">Disadvantages</a></h2>
+<ul>
+<li>Pool could be considered as a sparse array, which could contains a lot of gaps. This may lead to less efficient memory
+usage. </li>
+<li>Handles is a sort of weak references, but worse. Since they do not own any data (or even pointer to data), you will
+need a pool instance to borrow a data a handle &quot;points&quot; to. </li>
+<li>Handles introduce a level of indirection, that could hurt performance in places with high load that requires random
+access (as a counterargument it is worth to mention, that random access is usually relatively slow because of potential 
+CPU cache misses).</li>
+</ul>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<p>You'll use <code>Handle&lt;Something&gt;</code> <em>a lot</em> while developing a game using Fyrox. So where are the main usages of Pool and 
+handles? The largest is indeed a <a href="../scene/graph.html">scene graph</a>; it stores all the nodes in a pool and gives handles
+to nodes. Each scene node stores a handle to a parent node and a set of handle to children nodes. Scene graph
+auto-magically ensures that such handles are valid. In <a href="../scripting/script.html">scripts</a>, you can also store handles
+to scene nodes and assign them in the editor.</p>
+<p><a href="../animation/animation.html">Animation</a> is another place which stores handles to animated scene nodes. 
+<a href="../animation/blending.html">Animation Blending State Machine</a> stores its own state graph using pool; it also takes
+handles to animations from an animation player in a scene. </p>
+<p>This list can be extended for long; this is why you need to understand basic concepts of data management to efficiently
+and fearlessly use the engine.</p>
 <h2 id="borrowing"><a class="header" href="#borrowing">Borrowing</a></h2>
 <p>Once an object was placed in a pool, you have to use respective handle to get a reference to it. This could 
 be done either with <code>.borrow[_mut](handle)</code> or by using <code>Index</code> trait: <code>pool[handle]</code>. These methods panic
