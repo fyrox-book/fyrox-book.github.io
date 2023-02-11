@@ -12,8 +12,8 @@ your character in a role-playing game could carry a sword. While the character h
 arm. Such relations between the objects could be presented by a graph structure.
 
 Simply speaking, graph is a set of objects with hierarchical relationships between each object. Each object in the
-graph is called _node_. In the example with the sword and the character, the sword is a _child_ node of a character,
-which in its turn is a _parent_ node of a character. (Here we intentionally omit the fact that usually character
+graph is called _node_. In the example with the sword and the character, the sword is a _child_ node of the character,
+which in its turn is a _parent_ node of the character. (Here we intentionally omit the fact that usually character
 model contains complex skeleton with multiple bones and the sword is actually attached to one of hand's bones.)
 
 You can change hierarchy of the nodes in the editor using simple drag'n'drop functionality in `World Viewer` - drag a 
@@ -56,10 +56,18 @@ a Mesh node, yet it uses very optimized renderer, that allows you to render doze
 This node is intended to be used for **2D games** only.
 - [Sound](../sound/sound.md) - a sound source, it is universal for 2D and 3D. Spatial blend factor allows you to select
 a proportion between 2D and 3D.
+- Listener - an audio receiver that captures the sound in a particular point in your scene and sends it to an audio
+context for processing and output to an audio playback device.
+- Animation Player - a container for multiple animations, it can play animations made in the 
+[animation editor](../animation/anim_editor.md) and apply animation poses to respective scene nodes.
+- Animation Blending State Machine - a state machine that mixes multiple animations from multiple states into one; each
+state is backed by one or more animation playing or blending nodes. See the [respective chapter](../animation/absm_editor.md) 
+for more info.
 
 Each of the node could be created either from the editor (`Create` on main menu) or programmatically via respective
-node builder. These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
-types of nodes, but this is advanced topic, and it will be covered in [next chapters](../scene/custom_node.md).
+node builder (see [API docs](https://docs.rs/fyrox/latest/fyrox/scene/index.html) for more info). These scene nodes 
+allow you to build almost any kind of game. It is also possible to create your own types of nodes, but this is advanced 
+topic, and it will be covered in [next chapters](../scene/custom_node.md).
 
 ## Local and global coordinates
 

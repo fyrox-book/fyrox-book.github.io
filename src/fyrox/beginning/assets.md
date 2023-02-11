@@ -17,8 +17,6 @@ DDS format.
 - [Sound buffers](../resources/sound.md) - a data buffer for sound sources. The engine supports WAV and OGG formats. 
 - [Curves](../resources/curve.md) - parametric curve. It is used to create complex functions for numeric parameters.
 Curves can be made in `Curve Editor` (`Utils -> Curve Editor`)
-- [Animation Machines](../resources/absm.md) - animation blending state machines (ABSM) - allows you to blend multiple 
-animations into one to create complex animations. ABSM can be made in `Animation Editor` (`Utils -> Animation Editor`)
 
 ## Asset Management
 
@@ -34,10 +32,13 @@ what import options is for what.
 ## Asset Instantiation
 
 Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
-is done by simple drag'n'drop - find a model you want to instantiate and drag it `Scene Preview`. The instance should
-appear in the `Scene Preview` once you release left mouse button. The amount of asset instance is not limited, it 
-only depends on capabilities of your PC, each instance takes some memory (the engine tries to re-use data across
-instance as much as possible) and CPU resources.
+is done by simple drag'n'drop - find a model you want to instantiate and drag it `Scene Preview`, hold left mouse button,
+drag the object and release the button when you're happy with what you see.
+
+![preview](preview.gif)
+
+The amount of asset instances is not limited, it only depends on capabilities of your PC, each instance takes some 
+memory (the engine tries to re-use data across instance as much as possible) and CPU resources.
 
 You can also instantiate assets dynamically from your code, here's an example for Model:
 
@@ -61,6 +62,8 @@ async fn instantiate_model(
     model.instantiate(scene)
 }
 ```
+
+This is very useful in situations when you have a prefab, and you want to add it to your scene at runtime. 
 
 ## Loading Assets
 

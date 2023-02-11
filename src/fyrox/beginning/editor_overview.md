@@ -1,10 +1,11 @@
 # FyroxEd Overview
 
 FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
-that allows you to build your game from start to finish with relatively low effort.
+that helps you to build your game from start to finish with relatively low effort.
 
-You'll be spending a lot of time in the editor (FyroxEd), so you should get familiar with it and learn how to use its 
-basic functionality. This chapter will guide you through basics, advanced topics will be covered in respective chapters.
+You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its 
+basic functionality. This chapter will guide you through the basics, advanced topics will be covered in respective 
+chapters.
 
 ## Windows
 
@@ -17,37 +18,37 @@ development is quite rapid and image can become outdated pretty easily):
 
 - **World viewer** - shows every object in the scene and their relations. It allows you to inspect and edit the 
 contents of the scene in hierarchical form.
-- **Scene preview** - renders your scene with debug info and various editor-specific objects (like gizmos and
-stuff). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a **Toolbar**,
+- **Scene preview** - renders your scene with debug info and various editor-specific objects (like gizmos, entity icons,
+etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a **Toolbar**,
 it shows available context-dependent tools.
-- **Inspector** - allows you to modify various properties of selected object.
+- **Inspector** - allows you to modify various properties of a selected object.
 - **Message Log** - shows the important messages from the editor.
 - **Navmesh Panel** - allows you to create/delete and edit navigational meshes.
 - **Command Stack** - shows the most recent actions you've done, allows you to undo and redo the changes on demand.
 - **Asset Browser** - inspects the assets of your game, allows you to instantiate resources in the scene and so on.
-- **Audio Context** - allows you to edit settings of scene's sound context, such as global volume, available sound 
-effects, etc.
+- **Audio Context** - allows you to edit settings of scene's sound context, such as global volume, available audio
+buses, effects, etc.
 
 ## Creating (Loading) a Scene
 
 FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
 must have a scene created (or loaded) to begin working with the editor. To create a scene click `File -> New Scene`.
 
-To load existing scene, go to `File -> Load` and select desired scene using file browser. It is may be very useful
+To load an existing scene, go to `File -> Load` and select desired scene using file browser. It may be very useful
 to use list of recently opened scenes, to load them quickly without a need to go `File -> Load`, search a scene, etc.
 Just go to `File -> Recent Scenes` and click one to load.
 
 ## Populating Your Scene
 
-Scene can be filled with various objects, there are two equivalent ways of creating game entities:
+The scene can be filled with various objects, there are two equivalent ways of creating game entities:
 
-- By clicking `Create` main menu item and selecting desired entity.
-- By right-clicking on a game entity in `World Viewer` and selecting desired entity from `Add Child` sub-menu.
+- By clicking `Create` item in the main menu and selecting desired entity from the list.
+- By right-clicking on a game entity in the `World Viewer` and selecting desired entity from `Add Child` sub-menu.
 
 Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) and saved in various formats, Fyrox
 supports FBX format, which is supported by pretty much any 3D modelling software. You can add such object to your scene
-by drag'n'dropping a desired asset for Asset Browser. Find one in the browser, click on it, hold the button and drag it
-to the Scene Viewer and then release the button. 
+by drag'n'dropping a desired asset from the Asset Browser. Find one in the browser, click on it, hold the button and drag it
+to the Scene Viewer and then release the button. You'll see a preview of your object while the mouse button is held.
 
 You can do the same with other scenes made in the editor (`rgs` files), for example you can create a scene with a few 
 objects in it with some scripts and re-use it across any other scenes. Such scene is called [prefab](../scene/prefab.md).
@@ -70,7 +71,7 @@ There are number of control keys that you'll be using most of the time, pretty m
 window:
 
 ### Editor camera movement
-Click and hold `[Right Mouse Button]` within `Scene Preview` window to use movement controls:
+Click and hold `[Right Mouse Button]` within the `Scene Preview` window to use movement controls:
   - `[W][S][A][D]` - Move camera forward/backward/left/right
   - `[Space][Q]/[E]` - Raise/Lower Camera
   - `[Ctrl]` - speed up
@@ -82,15 +83,17 @@ Click and hold `[Right Mouse Button]` within `Scene Preview` window to use movem
 - `[2]` - Move interaction mode
 - `[3]` - Scale interaction mode
 - `[4]` - Rotate interaction mode
+- `[5]` - Navigational mesh editing mode
+- `[6]` - Terrain editing interaction mode
 - `[Ctrl]+[Z]` - Undo
 - `[Ctrl]+[Y]` - Redo
 - `[Delete]` - deletes current selection.
 
 ## Play Mode
 
-One of the key features of the editor is that it allows you to run your game from it. Use `Play/Stop` button at the
-top of `Scene Preview` window to enter (or leave) Play Mode. Keep in mind, that editor UI will be locked while you're
-in the Play Mode. 
+One of the key features of the editor is that it allows you to run your game from it in a separate process. Use 
+`Play/Stop` button at the top of `Scene Preview` window to enter (or leave) Play Mode. Keep in mind, that editor UI 
+will be locked while you're in the Play Mode. 
 
 Play Mode can be activated only for projects that made with `fyrox-template` (or have similar structure). The editor
 calls `cargo` commands to build and run your game in a separate process. Running the game in a separate process ensures
@@ -99,8 +102,8 @@ giving a chance to break the editor by running the game.
 
 ## Additional Utilities
 
-There are also number of powerful utilities that will make your life easier, which works without any scene, they can be
-found under `Utils` section of main menu: 
+There are also number of powerful utilities that will make your life easier, they can be found under `Utils` section of 
+main menu: 
 
 - Animation Editor - allows you to create and editor animation blending state machines which are responsible for 
 animation mixing.
