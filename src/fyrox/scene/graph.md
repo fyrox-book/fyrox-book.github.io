@@ -1,7 +1,7 @@
 # Graph
 
 Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
-entities in the engine. Graph takes care of your scene objects and does many different things for you.
+entities in the engine. Graph takes care of your scene objects and does all the hard work for you.
 
 ## How to create
 
@@ -18,18 +18,19 @@ Every node in the engine has its respective builder which can be used to create 
 builders is a preferable way to create scene nodes. There are following node builders:
 
 1) `BaseBuilder` - creates an instance of base node. See [Base node](./base_node.md) for more info.
-2) `CameraBuilder` - creates an instance of camera node. See [Camera node](./camera_node.md) for more info.
-3) `MeshBuilder` - creates an instance of mesh node. See [Mesh node](./mesh_node.md) for more info.
-4) `LightBuilder` - creates an instance of light node. See [Light node](./light_node.md) for more info.
-5) `SpriteBuilder` - creates an instance of sprite node. See [Sprite node](./sprite_node.md) for more info.
-6) `ParticleSystemBuilder` - creates an instance of particle system node. 
+2) `PivotBuilder` - creates an instance of pivot node. See [Base node](./base_node.md) for more info.
+3) `CameraBuilder` - creates an instance of camera node. See [Camera node](./camera_node.md) for more info.
+4) `MeshBuilder` - creates an instance of mesh node. See [Mesh node](./mesh_node.md) for more info.
+5) `LightBuilder` - creates an instance of light node. See [Light node](./light_node.md) for more info.
+6) `SpriteBuilder` - creates an instance of sprite node. See [Sprite node](./sprite_node.md) for more info.
+7) `ParticleSystemBuilder` - creates an instance of particle system node. 
 See [Particle system node](./particle_system_node.md) for more info.
-7) `TerrainBuilder` - creates an instance of terrain node. See [Terrain node](./terrain_node.md) for more info.
-8) `DecalBuilder` - creates an instance of decal node. See [Decal node](./decal_node.md) for more info.
-9) `RigidBody` - creates an instance of rigid body node. See [Rigid body](../physics/rigid_body.md) for more info.
-10) `Collider` - creates an instance of collider node. See [Rigid body](../physics/collider.md) for more info.
-11) `Joint` - creates an instance of joint node. See [Rigid body](../physics/joint.md) for more info.
-12) `Rectangle` - creates an instance of 2D rectangle node. See [Rigid body](./rectangle.md) for more info.
+8) `TerrainBuilder` - creates an instance of terrain node. See [Terrain node](./terrain_node.md) for more info.
+9) `DecalBuilder` - creates an instance of decal node. See [Decal node](./decal_node.md) for more info.
+10) `RigidBody` - creates an instance of rigid body node. See [Rigid body](../physics/rigid_body.md) for more info.
+11) `Collider` - creates an instance of collider node. See [Collider](../physics/collider.md) for more info.
+12) `Joint` - creates an instance of joint node. See [Joint](../physics/joint.md) for more info.
+13) `Rectangle` - creates an instance of 2D rectangle node. See [Rectangle](./rectangle.md) for more info.
 
 Every builder, other than `BaseBuilder`, accepts `BaseBuilder` as a parameter in `.new(..)` method. Why so?
 Because every node (other than Base) is "derived" from Base via composition and the derived
