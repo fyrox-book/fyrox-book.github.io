@@ -147,7 +147,7 @@
                     <main>
                         <h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
 <p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you entering play mode. Basically, there is no significant 
+The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
 difference between running the game from the editor, or running it as a separate application. The main difference is that
 the editor passes <code>override_scene</code> parameter for the executor when entering the play mode.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
@@ -157,9 +157,8 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 </span><span class="boring">    core::{pool::Handle, uuid::Uuid},
 </span><span class="boring">    engine::executor::Executor,
 </span><span class="boring">    plugin::{Plugin, PluginConstructor, PluginContext},
-</span><span class="boring">    scene::{node::TypeUuidProvider, Scene},
+</span><span class="boring">    scene::{Scene},
 </span><span class="boring">};
-</span><span class="boring">
 </span><span class="boring">struct GameConstructor;
 </span><span class="boring">impl PluginConstructor for GameConstructor {
 </span><span class="boring">    fn create_instance(
@@ -170,13 +169,6 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 </span><span class="boring">        todo!()
 </span><span class="boring">    }
 </span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl TypeUuidProvider for GameConstructor {
-</span><span class="boring">    fn type_uuid() -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
 </span>fn main() {
     let mut executor = Executor::new();
     // Register your game constructor here.
@@ -187,7 +179,7 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an &quot;alias&quot;
 to engine instance. </p>
 <p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
-<code>PluginConstructor</code> + <code>TypeUuidProvider</code> traits.</p>
+<code>PluginConstructor</code> traits.</p>
 <h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
 <p>This section covers typical use cases for the <code>Executor</code>.</p>
 <h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>

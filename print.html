@@ -993,7 +993,7 @@ scene. If the parameter is undefined (equals to <code>Handle::NONE</code>), then
 game was run outside the editor.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
 <p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you entering play mode. Basically, there is no significant 
+The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
 difference between running the game from the editor, or running it as a separate application. The main difference is that
 the editor passes <code>override_scene</code> parameter for the executor when entering the play mode.</p>
 <h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
@@ -1003,9 +1003,8 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 </span><span class="boring">    core::{pool::Handle, uuid::Uuid},
 </span><span class="boring">    engine::executor::Executor,
 </span><span class="boring">    plugin::{Plugin, PluginConstructor, PluginContext},
-</span><span class="boring">    scene::{node::TypeUuidProvider, Scene},
+</span><span class="boring">    scene::{Scene},
 </span><span class="boring">};
-</span><span class="boring">
 </span><span class="boring">struct GameConstructor;
 </span><span class="boring">impl PluginConstructor for GameConstructor {
 </span><span class="boring">    fn create_instance(
@@ -1016,13 +1015,6 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 </span><span class="boring">        todo!()
 </span><span class="boring">    }
 </span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl TypeUuidProvider for GameConstructor {
-</span><span class="boring">    fn type_uuid() -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
 </span>fn main() {
     let mut executor = Executor::new();
     // Register your game constructor here.
@@ -1033,7 +1025,7 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an &quot;alias&quot;
 to engine instance. </p>
 <p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
-<code>PluginConstructor</code> + <code>TypeUuidProvider</code> traits.</p>
+<code>PluginConstructor</code> traits.</p>
 <h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
 <p>This section covers typical use cases for the <code>Executor</code>.</p>
 <h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
@@ -1049,7 +1041,7 @@ to engine instance. </p>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
 so scripts are as fast as native code. </p>
 <h2 id="script-structure"><a class="header" href="#script-structure">Script Structure</a></h2>
-<p>Typical script structure could be like this:</p>
+<p>Typical script structure is something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -1104,26 +1096,38 @@ impl ScriptTrait for MyScript {
 scene file.</li>
 <li><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values, 
 find fields by their paths, etc.</li>
-<li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.</li>
+<li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it turn the structure and its fields 
+into string.</li>
 <li><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
 cloned.</li>
 <li><code>Default</code> implementation is very important - the scripting system uses it to create your scripts in the default state.
 This is necessary to set some data to it and so on. If it's a special case, you can always implement your own <code>Default</code>'s
 implementation if it's necessary for your script.</li>
-<li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script *<em>must</em> have a unique ID, otherwise, the engine will
-not be able to save and load your scripts. To generate a new UUID, use <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or
-any other tool that can generate UUIDs.</li>
+<li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script <strong>must</strong> have a unique ID, otherwise, 
+the engine will not be able to save and load your scripts. To generate a new UUID, use 
+<a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or any other tool that can generate UUIDs.</li>
 </ul>
 <h2 id="script-template-generator"><a class="header" href="#script-template-generator">Script Template Generator</a></h2>
 <p>You can use <code>fyrox-template</code> tool to generate all required boilerplate code for a new script, it makes adding new scripts
-much less frustrating. To generate a new script use <code>script</code> command:</p>
+much less tedious. To generate a new script use <code>script</code> command:</p>
 <pre><code class="language-shell">fyrox-template script --name MyScript
 </code></pre>
-<p>It will create a new file in <code>game/src</code> directory with <code>my_script.rs</code> name and fill with required code. Comments should
-help you to figure out which code should be placed where.</p>
+<p>It will create a new file in <code>game/src</code> directory with <code>my_script.rs</code> name and fill with required code. Do not forget
+to add the module with the new script to <code>lib.rs</code> like this: </p>
+<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Use your script name instead of `my_script` here.
+pub use my_script;
+<span class="boring">}</span></code></pre></pre>
+<p>Comments in each generated method should help you to figure out which code should be placed where and what is the purpose
+of every method.</p>
+<blockquote>
+<p>⚠️ Keep in mind that every new script must be registered in <code>PluginConstructor::register</code>, otherwise you won't be able
+to assign the script in the editor to a node. See the next section for more info. </p>
+</blockquote>
 <h2 id="script-registration"><a class="header" href="#script-registration">Script Registration</a></h2>
 <p>Every script must be registered before use, otherwise the engine won't &quot;see&quot; your script and won't let you assign it
-to an object. <code>PluginConstructor</code> trait has <code>register</code> method exactly for script registration, to register a script
+to an object. <code>PluginConstructor</code> trait has <code>register</code> method exactly for script registration. To register a script
 you need to register it in the list of script constructors like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -1249,6 +1253,18 @@ add/modify/remove scene nodes.</li>
 <code>ScriptTrait::on_message</code> method of every script.</li>
 <li><code>message_dispatcher</code> - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
 to a type explicitly.</li>
+</ul>
+<h2 id="execution-order"><a class="header" href="#execution-order">Execution order</a></h2>
+<p>Scripts have strictly defined execution order for their methods (the order if execution is linear and <strong>do not</strong> depend 
+on actual tree structure of the graph where the script is located):</p>
+<ul>
+<li><code>on_init</code> - called first for every script instance</li>
+<li><code>on_start</code> - called after every <code>on_init</code> is called</li>
+<li><code>on_update</code> - called one or more times per one render frame (the engine stabilizes update rate of the logic, so if
+your game runs at 15 FPS, the logic will still run at 60 FPS thus the <code>on_update</code> will be called 4 times per frame).</li>
+<li><code>on_message</code> - called once per incoming message.</li>
+<li><code>on_os_event</code> - called once per incoming OS event.</li>
+<li><code>on_deinit</code> - called at the end of the update cycle once when the script (or parent node) is about to be deleted.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
 <p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
