@@ -775,10 +775,10 @@ be crash-free, fast and easy to refactor.</p>
 <p>A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and provides
 a set of scripts, that can be used to assign custom logic to scene nodes.</p>
 <p>Plugin is an &quot;entry point&quot; of your game, it has a fixed set of methods that can be used for initialization, update,
-OS event handling, etc. Every plugin is statically linked to the engine (editor), there is no support for hot-reloading
-due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytim - if you don't change 
+OS event handling, etc. Every plugin is statically linked to the engine (and the editor), there is no support for hot-reloading
+due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytime - if you don't change 
 data layout in your structures the editor will be able to compile your game and run it with the currently loaded scene,
-thus reducing amount of iterations. You can freely modify application logic and this won't affect running editor.</p>
+thus reducing amount of iterations. You can freely modify application logic and this won't affect the running editor.</p>
 <p>The main purpose of the plugins is to hold and operate on some global application data, that can be used in scripts and
 provide a set of scripts to the engine. Plugins also have much wider access to engine internals, than scripts. For example,
 it is possible to change scenes, add render passes, change resolution, etc. which is not possible from scripts.</p>
@@ -873,20 +873,21 @@ impl Plugin for Game {
 <p>There are two major parts - <code>GameConstructor</code> and <code>Game</code> itself. <code>GameConstructor</code> implements <code>PluginConstructor</code> and it
 is responsible for script registration (<code>fn register</code>) and creating the actual game instance (<code>fn create_instance</code>).</p>
 <ul>
-<li><code>register</code> - called once on start allowing you to register your scripts. Please note that you must register all your
+<li><code>register</code> - called once on start allowing you to register your scripts. <strong>Important:</strong> You must register all your
 scripts here, otherwise the engine (and the editor) will know nothing about them.</li>
 <li><code>create_instance</code> - called once, allowing you to create actual game instance. It is guaranteed to be called once, but 
 <em>where</em> it is called is implementation-defined. For example, the editor will <strong>not</strong> call this method, it does not 
 create any game instance. The method has <code>override_scene</code> parameter, in short it is a handle to a scene that must be 
-used by your game instead of any other scenes. It is described in <code>Editor and Plugins</code> section down below.</li>
+used by your game instead of any other scenes. It is described in <a href="fyrox/scripting/plugin.html#editor-and-plugins">Editor and Plugins</a> section down
+below.</li>
 </ul>
-<p>The game instance (<code>struct Game</code>) implements a <code>Plugin</code> trait which can execute actual game logic in one of its methods:</p>
+<p>The game structure (<code>struct Game</code>) implements a <code>Plugin</code> trait which can execute actual game logic in one of its methods:</p>
 <ul>
 <li><code>on_deinit</code> - it is called when the game is about to shut down. Can be used for any clean up, for example logging that
 the game has closed.</li>
 <li><code>update</code> - it is called each frame at a stable rate (usually 60 Hz) after the plugin is created and fully initialized.
 It is the main place where you should put <em>object-independent</em> game logic, any other logic should be added via scripts.</li>
-<li><code>on_os_event</code> - it is called when the main application window receives an event from operating system, it can be 
+<li><code>on_os_event</code> - it is called when the main application window receives an event from the operating system, it can be 
 any event such as keyboard, mouse, game pad events or any other events. Please note that as for <code>update</code> method, you
 should put here only <em>object-independent</em> logic. Scripts can catch window events too.</li>
 <li><code>on_ui_message</code> - it is called when there is a message from the user interface, it should be used to react to user
@@ -917,7 +918,6 @@ context is something like this:</p>
 </span><span class="boring">    renderer::Renderer,
 </span><span class="boring">    scene::SceneContainer,
 </span><span class="boring">    window::Window,
-</span><span class="boring">    plugin::SoundEngineHelper,
 </span><span class="boring">};
 </span><span class="boring">use std::sync::Arc;
 </span>pub struct PluginContext&lt;'a, 'b&gt; {
@@ -929,26 +929,25 @@ context is something like this:</p>
     pub lag: &amp;'b mut f32,
     pub serialization_context: &amp;'a Arc&lt;SerializationContext&gt;,
     pub window: &amp;'a Window,
-    pub sound_engine: SoundEngineHelper&lt;'a&gt;,
 }
 <span class="boring">}</span></code></pre></pre>
 <ul>
-<li><code>scenes</code> - should be used to manage game scenes, an example of scene loading is given in the previous code snipped in
-<code>Game::new()</code> method.</li>
-<li><code>resource_manager</code> - is used to load external resources (scenes, models, textures, animations, source, etc.) from
-different sources (disk, network storage, etc.)</li>
+<li><code>scenes</code> - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading 
+is given in the previous code snippet in <code>Game::new()</code> method.</li>
+<li><code>resource_manager</code> - is used to load external resources (scenes, models, textures, animations, sound buffers, etc.) from
+different sources (disk, network storage on WebAssembly, etc.)</li>
 <li><code>user_interface</code> - use it to create user interface for your game, the interface is scene-independent and will remain
 the same even if there are multiple scenes created.</li>
 <li><code>renderer</code> - can be used to add custom rendering techniques, change quality settings, etc.</li>
-<li><code>dt</code> - a time passed since last frame. The actual value is implementation-defined, but on current implementation it
-is equal to 1/60 of second and does not change event if the frame rate is changing.</li>
+<li><code>dt</code> - a time passed since the last frame. The actual value is implementation-defined, but on current implementation it
+is equal to 1/60 of a second and does not change event if the frame rate is changing (the engine stabilizes update rate
+for the logic).</li>
 <li><code>lag</code> - a reference to the time accumulator, that holds remaining amount of time that should be used to update a plugin. 
 A caller splits <code>lag</code> into multiple sub-steps using <code>dt</code> and thus stabilizes update rate. The main use of this variable, 
 is to be able to reset <code>lag</code> when you're doing some heavy calculations in a game loop (i.e. loading a new level) so the
 engine won't try to &quot;catch up&quot; with all the time that was spent in heavy calculation.</li>
-<li><code>serialization_context</code> - it can be used to register script and custom scene nodes constructors and at runtime.</li>
-<li><code>window</code> - main application window, you can use it to change title, resolution, etc.</li>
-<li><code>sound_engine</code> - sound engine allows you to change global sound parameters, such as master gain, etc.</li>
+<li><code>serialization_context</code> - it can be used to register scripts and custom scene nodes constructors at runtime.</li>
+<li><code>window</code> - main application window, you can use it to change title, screen resolution, etc.</li>
 </ul>
 <h2 id="editor-and-plugins"><a class="header" href="#editor-and-plugins">Editor and Plugins</a></h2>
 <p>When you're running your game from the editor, it starts the game as a separate process and if there's a scene opened
@@ -988,7 +987,7 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
 }
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
-<p>The <code>override_scene</code> parameter is a handle to another scene instances that is currently opened in the editor, your game
+<p>The <code>override_scene</code> parameter is a handle to a scene instance that is currently opened in the editor, your game
 plugin must handle this parameter and use provided scene, otherwise the run from the editor will not have the edited
 scene. If the parameter is undefined (equals to <code>Handle::NONE</code>), then there is no scene loaded in the editor or the
 game was run outside the editor.</p>
