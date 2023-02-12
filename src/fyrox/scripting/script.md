@@ -238,8 +238,102 @@ on actual tree structure of the graph where the script is located):
 
 - `on_init` - called first for every script instance
 - `on_start` - called after every `on_init` is called
-- `on_update` - called one or more times per one render frame (the engine stabilizes update rate of the logic, so if
-your game runs at 15 FPS, the logic will still run at 60 FPS thus the `on_update` will be called 4 times per frame).
+- `on_update` - called zero or more times per one render frame. The engine stabilizes update rate of the logic, so if
+your game runs at 15 FPS, the logic will still run at 60 FPS thus the `on_update` will be called 4 times per frame. The
+method can also be not called at all, if the FPS is very high. For example, if your game runs at 240 FPS, then `on_update`
+will be called once per 4 frames.
 - `on_message` - called once per incoming message.
 - `on_os_event` - called once per incoming OS event.
 - `on_deinit` - called at the end of the update cycle once when the script (or parent node) is about to be deleted.
+
+## Message passing
+
+Script system of Fyrox supports message passing for scripts. Message passing is a mechanism that allows you to send some 
+data (message) to a node, hierarchy of nodes or the entire graph. Each script can subscribe for a specific message type. 
+It is an efficient way for decoupling scripts from each other. For instance, you may want to detect and respond to some 
+event in your game. In this case when the event has happened, you send a message of a type and every "subscriber" will 
+react to it. This way subscribers will not know anything about sender(s); they'll only use message data to do some actions.
+
+A simple example where the message passing can be useful is when you need to react to some event in your game. Imagine,
+that you have weapons in your game, and they can have a laser sight that flashes with a different color when some target
+was hit. In very naive approach you can handle all laser sights where you handle all intersection for projectiles, but
+this adds a very tight coupling between laser sight and projectiles. This is totally unnecessary coupling can be made
+loose by using message passing. Instead of handling laser sights directly, all you need to do is to broadcast an
+`ActorDamaged { actor: Handle<Node>, attacker: Handle<Node> }` message. Laser sight in its turn can subscribe for such
+message and handle all incoming messages and compare `attacker` with owner of the laser sight and if the hit was made
+by `attacker` flash with some different color. In code this would like so:
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{pool::Handle, reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
+#     impl_component_provider,
+#     scene::node::Node,
+#     script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
+#     utils::log::Log,
+# };
+# 
+enum Message {
+    Damage {
+        actor: Handle<Node>,
+        attacker: Handle<Node>,
+    },
+}
+
+#[derive(Default, Clone, Reflect, Visit, Debug)]
+struct Projectile;
+# 
+# impl_component_provider!(Projectile);
+
+impl ScriptTrait for Projectile {
+    fn on_update(&mut self, ctx: &mut ScriptContext) {
+        // Broadcast the message globally.
+        ctx.message_sender.send_global(Message::Damage {
+            actor: Default::default(),
+            attacker: ctx.handle,
+        });
+    }
+# 
+#     fn id(&self) -> Uuid {
+#         todo!()
+#     }
+}
+
+#[derive(Default, Clone, Reflect, Visit, Debug)]
+struct LaserSight;
+# 
+# impl_component_provider!(LaserSight);
+
+impl ScriptTrait for LaserSight {
+    fn on_start(&mut self, ctx: &mut ScriptContext) {
+        // Subscript to messages.
+        ctx.message_dispatcher.subscribe_to::<Message>(ctx.handle);
+    }
+
+    fn on_message(
+        &mut self,
+        message: &mut dyn ScriptMessagePayload,
+        _ctx: &mut ScriptMessageContext,
+    ) {
+        // React to message.
+        if let Some(Message::Damage { actor, attacker }) = message.downcast_ref::<Message>() {
+            Log::info(format!("{actor} damaged {attacker}",))
+        }
+    }
+# 
+#     fn id(&self) -> Uuid {
+#         todo!()
+#     }
+}
+```
+
+There are few key parts:
+
+- You should explicitly subscribe script instance to a message type, otherwise messages of the type won't be delivered
+to your script. This is done using the message dispatcher: `ctx.message_dispatcher.subscribe_to::<Message>(ctx.handle);`.
+This should be done in `on_start` method, however it is possible to subscribe/unsubscribe at runime.
+- You can react to messages only in special method `on_message` - here you just need to check for message type using
+pattern matching and do something useful.
+
+Try to use message passing in all cases, loose coupling significantly improves code quality and readability, however
+in simple projects it can be ignored completely.
