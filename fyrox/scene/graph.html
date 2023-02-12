@@ -147,7 +147,7 @@
                     <main>
                         <h1 id="graph"><a class="header" href="#graph">Graph</a></h1>
 <p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important 
-entities in the engine. Graph takes care of your scene objects and does many different things for you.</p>
+entities in the engine. Graph takes care of your scene objects and does all the hard work for you.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>You don't need to create a graph manually, every scene has its own instance of the graph. It can be accessed pretty
 easily: <code>scene_ref.graph</code></p>
@@ -158,6 +158,7 @@ easily: <code>scene_ref.graph</code></p>
 builders is a preferable way to create scene nodes. There are following node builders:</p>
 <ol>
 <li><code>BaseBuilder</code> - creates an instance of base node. See <a href="./base_node.html">Base node</a> for more info.</li>
+<li><code>PivotBuilder</code> - creates an instance of pivot node. See <a href="./base_node.html">Base node</a> for more info.</li>
 <li><code>CameraBuilder</code> - creates an instance of camera node. See <a href="./camera_node.html">Camera node</a> for more info.</li>
 <li><code>MeshBuilder</code> - creates an instance of mesh node. See <a href="./mesh_node.html">Mesh node</a> for more info.</li>
 <li><code>LightBuilder</code> - creates an instance of light node. See <a href="./light_node.html">Light node</a> for more info.</li>
@@ -167,9 +168,9 @@ See <a href="./particle_system_node.html">Particle system node</a> for more info
 <li><code>TerrainBuilder</code> - creates an instance of terrain node. See <a href="./terrain_node.html">Terrain node</a> for more info.</li>
 <li><code>DecalBuilder</code> - creates an instance of decal node. See <a href="./decal_node.html">Decal node</a> for more info.</li>
 <li><code>RigidBody</code> - creates an instance of rigid body node. See <a href="../physics/rigid_body.html">Rigid body</a> for more info.</li>
-<li><code>Collider</code> - creates an instance of collider node. See <a href="../physics/collider.html">Rigid body</a> for more info.</li>
-<li><code>Joint</code> - creates an instance of joint node. See <a href="../physics/joint.html">Rigid body</a> for more info.</li>
-<li><code>Rectangle</code> - creates an instance of 2D rectangle node. See <a href="./rectangle.html">Rigid body</a> for more info.</li>
+<li><code>Collider</code> - creates an instance of collider node. See <a href="../physics/collider.html">Collider</a> for more info.</li>
+<li><code>Joint</code> - creates an instance of joint node. See <a href="../physics/joint.html">Joint</a> for more info.</li>
+<li><code>Rectangle</code> - creates an instance of 2D rectangle node. See <a href="./rectangle.html">Rectangle</a> for more info.</li>
 </ol>
 <p>Every builder, other than <code>BaseBuilder</code>, accepts <code>BaseBuilder</code> as a parameter in <code>.new(..)</code> method. Why so?
 Because every node (other than Base) is &quot;derived&quot; from Base via composition and the derived
