@@ -1,7 +1,7 @@
 # Executor 
 
 Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you entering play mode. Basically, there is no significant 
+The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
 difference between running the game from the editor, or running it as a separate application. The main difference is that
 the editor passes `override_scene` parameter for the executor when entering the play mode.
 
@@ -15,9 +15,8 @@ Executor is meant to be a part of your project's workspace, its typical look cou
 #     core::{pool::Handle, uuid::Uuid},
 #     engine::executor::Executor,
 #     plugin::{Plugin, PluginConstructor, PluginContext},
-#     scene::{node::TypeUuidProvider, Scene},
+#     scene::{Scene},
 # };
-# 
 # struct GameConstructor;
 # impl PluginConstructor for GameConstructor {
 #     fn create_instance(
@@ -28,13 +27,6 @@ Executor is meant to be a part of your project's workspace, its typical look cou
 #         todo!()
 #     }
 # }
-# 
-# impl TypeUuidProvider for GameConstructor {
-#     fn type_uuid() -> Uuid {
-#         todo!()
-#     }
-# }
-# 
 fn main() {
     let mut executor = Executor::new();
     // Register your game constructor here.
@@ -48,7 +40,7 @@ parts, `Executor` implements `Deref<Target = Engine> + DerefMut` traits, so you 
 to engine instance. 
 
 To add a plugin to the executor, just use `add_plugin_constructor` method, it accepts any entity that implements
-`PluginConstructor` + `TypeUuidProvider` traits.
+`PluginConstructor` traits.
 
 ## Typical Use Cases
 

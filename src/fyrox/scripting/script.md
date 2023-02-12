@@ -5,7 +5,7 @@ so scripts are as fast as native code.
 
 ## Script Structure
 
-Typical script structure could be like this:
+Typical script structure is something like this:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -61,32 +61,44 @@ Each script must implement following traits:
 scene file.
 - `Reflect` implements compile-time reflection that provides a way to iterate over script fields, set their values, 
 find fields by their paths, etc.
-- `Debug` - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.
+- `Debug` - provides debugging functionality, it is mostly for the editor to let it turn the structure and its fields 
+into string.
 - `Clone` - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
 cloned.
 - `Default` implementation is very important - the scripting system uses it to create your scripts in the default state.
 This is necessary to set some data to it and so on. If it's a special case, you can always implement your own `Default`'s
 implementation if it's necessary for your script.
-- `TypeUuidProvider` is used to attach some unique id for your type, every script **must* have a unique ID, otherwise, the engine will
-not be able to save and load your scripts. To generate a new UUID, use [Online UUID Generator](https://www.uuidgenerator.net/) or
-any other tool that can generate UUIDs.
+- `TypeUuidProvider` is used to attach some unique id for your type, every script **must** have a unique ID, otherwise, 
+the engine will not be able to save and load your scripts. To generate a new UUID, use 
+[Online UUID Generator](https://www.uuidgenerator.net/) or any other tool that can generate UUIDs.
 
 ## Script Template Generator
 
 You can use `fyrox-template` tool to generate all required boilerplate code for a new script, it makes adding new scripts
-much less frustrating. To generate a new script use `script` command:
+much less tedious. To generate a new script use `script` command:
 
 ```shell
 fyrox-template script --name MyScript
 ```
 
-It will create a new file in `game/src` directory with `my_script.rs` name and fill with required code. Comments should
-help you to figure out which code should be placed where.
+It will create a new file in `game/src` directory with `my_script.rs` name and fill with required code. Do not forget
+to add the module with the new script to `lib.rs` like this: 
+
+```rust,no_run,compile_fail
+// Use your script name instead of `my_script` here.
+pub use my_script;
+```
+
+Comments in each generated method should help you to figure out which code should be placed where and what is the purpose
+of every method.
+
+> ⚠️ Keep in mind that every new script must be registered in `PluginConstructor::register`, otherwise you won't be able
+> to assign the script in the editor to a node. See the next section for more info. 
 
 ## Script Registration
 
 Every script must be registered before use, otherwise the engine won't "see" your script and won't let you assign it
-to an object. `PluginConstructor` trait has `register` method exactly for script registration, to register a script
+to an object. `PluginConstructor` trait has `register` method exactly for script registration. To register a script
 you need to register it in the list of script constructors like so:
 
 ```rust,no_run
@@ -218,3 +230,16 @@ add/modify/remove scene nodes.
 `ScriptTrait::on_message` method of every script.
 - `message_dispatcher` - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
 to a type explicitly.
+
+## Execution order
+
+Scripts have strictly defined execution order for their methods (the order if execution is linear and **do not** depend 
+on actual tree structure of the graph where the script is located):
+
+- `on_init` - called first for every script instance
+- `on_start` - called after every `on_init` is called
+- `on_update` - called one or more times per one render frame (the engine stabilizes update rate of the logic, so if
+your game runs at 15 FPS, the logic will still run at 60 FPS thus the `on_update` will be called 4 times per frame).
+- `on_message` - called once per incoming message.
+- `on_os_event` - called once per incoming OS event.
+- `on_deinit` - called at the end of the update cycle once when the script (or parent node) is about to be deleted.
