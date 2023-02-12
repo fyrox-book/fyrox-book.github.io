@@ -1260,12 +1260,102 @@ on actual tree structure of the graph where the script is located):</p>
 <ul>
 <li><code>on_init</code> - called first for every script instance</li>
 <li><code>on_start</code> - called after every <code>on_init</code> is called</li>
-<li><code>on_update</code> - called one or more times per one render frame (the engine stabilizes update rate of the logic, so if
-your game runs at 15 FPS, the logic will still run at 60 FPS thus the <code>on_update</code> will be called 4 times per frame).</li>
+<li><code>on_update</code> - called zero or more times per one render frame. The engine stabilizes update rate of the logic, so if
+your game runs at 15 FPS, the logic will still run at 60 FPS thus the <code>on_update</code> will be called 4 times per frame. The
+method can also be not called at all, if the FPS is very high. For example, if your game runs at 240 FPS, then <code>on_update</code>
+will be called once per 4 frames.</li>
 <li><code>on_message</code> - called once per incoming message.</li>
 <li><code>on_os_event</code> - called once per incoming OS event.</li>
 <li><code>on_deinit</code> - called at the end of the update cycle once when the script (or parent node) is about to be deleted.</li>
 </ul>
+<h2 id="message-passing"><a class="header" href="#message-passing">Message passing</a></h2>
+<p>Script system of Fyrox supports message passing for scripts. Message passing is a mechanism that allows you to send some 
+data (message) to a node, hierarchy of nodes or the entire graph. Each script can subscribe for a specific message type. 
+It is an efficient way for decoupling scripts from each other. For instance, you may want to detect and respond to some 
+event in your game. In this case when the event has happened, you send a message of a type and every &quot;subscriber&quot; will 
+react to it. This way subscribers will not know anything about sender(s); they'll only use message data to do some actions.</p>
+<p>A simple example where the message passing can be useful is when you need to react to some event in your game. Imagine,
+that you have weapons in your game, and they can have a laser sight that flashes with a different color when some target
+was hit. In very naive approach you can handle all laser sights where you handle all intersection for projectiles, but
+this adds a very tight coupling between laser sight and projectiles. This is totally unnecessary coupling can be made
+loose by using message passing. Instead of handling laser sights directly, all you need to do is to broadcast an
+<code>ActorDamaged { actor: Handle&lt;Node&gt;, attacker: Handle&lt;Node&gt; }</code> message. Laser sight in its turn can subscribe for such
+message and handle all incoming messages and compare <code>attacker</code> with owner of the laser sight and if the hit was made
+by <code>attacker</code> flash with some different color. In code this would like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{pool::Handle, reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
+</span><span class="boring">    impl_component_provider,
+</span><span class="boring">    scene::node::Node,
+</span><span class="boring">    script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
+</span><span class="boring">    utils::log::Log,
+</span><span class="boring">};
+</span><span class="boring">
+</span>enum Message {
+    Damage {
+        actor: Handle&lt;Node&gt;,
+        attacker: Handle&lt;Node&gt;,
+    },
+}
+
+#[derive(Default, Clone, Reflect, Visit, Debug)]
+struct Projectile;
+<span class="boring">
+</span><span class="boring">impl_component_provider!(Projectile);
+</span>
+impl ScriptTrait for Projectile {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        // Broadcast the message globally.
+        ctx.message_sender.send_global(Message::Damage {
+            actor: Default::default(),
+            attacker: ctx.handle,
+        });
+    }
+<span class="boring">
+</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span>}
+
+#[derive(Default, Clone, Reflect, Visit, Debug)]
+struct LaserSight;
+<span class="boring">
+</span><span class="boring">impl_component_provider!(LaserSight);
+</span>
+impl ScriptTrait for LaserSight {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        // Subscript to messages.
+        ctx.message_dispatcher.subscribe_to::&lt;Message&gt;(ctx.handle);
+    }
+
+    fn on_message(
+        &amp;mut self,
+        message: &amp;mut dyn ScriptMessagePayload,
+        _ctx: &amp;mut ScriptMessageContext,
+    ) {
+        // React to message.
+        if let Some(Message::Damage { actor, attacker }) = message.downcast_ref::&lt;Message&gt;() {
+            Log::info(format!(&quot;{actor} damaged {attacker}&quot;,))
+        }
+    }
+<span class="boring">
+</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span>}
+<span class="boring">}</span></code></pre></pre>
+<p>There are few key parts:</p>
+<ul>
+<li>You should explicitly subscribe script instance to a message type, otherwise messages of the type won't be delivered
+to your script. This is done using the message dispatcher: <code>ctx.message_dispatcher.subscribe_to::&lt;Message&gt;(ctx.handle);</code>.
+This should be done in <code>on_start</code> method, however it is possible to subscribe/unsubscribe at runime.</li>
+<li>You can react to messages only in special method <code>on_message</code> - here you just need to check for message type using
+pattern matching and do something useful.</li>
+</ul>
+<p>Try to use message passing in all cases, loose coupling significantly improves code quality and readability, however
+in simple projects it can be ignored completely.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
 <p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
 <ol>
@@ -4550,7 +4640,7 @@ like this:</p>
 <span class="boring">}</span></code></pre></pre>
 <p>On other hand, component querying will work fine, because you can query inner component (Tree in our case). Please note 
 that this has nothing similar with ECS and stuff, it is made to circumvent Rust's lack of inheritance.</p>
-<h2 id="message-passing"><a class="header" href="#message-passing">Message passing</a></h2>
+<h2 id="message-passing-1"><a class="header" href="#message-passing-1">Message passing</a></h2>
 <p>The engine uses message passing mechanism for any UI logic. What does that mean? Let's see at the button from the
 previous section and imagine we want to change its text. To do that we need to explicitly &quot;tell&quot; the button's text
 widget to change its content to something new. This is done by sending a message to the widget.</p>
