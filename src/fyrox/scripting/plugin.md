@@ -4,10 +4,10 @@ A game based on Fyrox is a plugin to the engine and the editor. Plugin defines g
 a set of scripts, that can be used to assign custom logic to scene nodes.
 
 Plugin is an "entry point" of your game, it has a fixed set of methods that can be used for initialization, update,
-OS event handling, etc. Every plugin is statically linked to the engine (editor), there is no support for hot-reloading
-due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytim - if you don't change 
+OS event handling, etc. Every plugin is statically linked to the engine (and the editor), there is no support for hot-reloading
+due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytime - if you don't change 
 data layout in your structures the editor will be able to compile your game and run it with the currently loaded scene,
-thus reducing amount of iterations. You can freely modify application logic and this won't affect running editor.
+thus reducing amount of iterations. You can freely modify application logic and this won't affect the running editor.
 
 The main purpose of the plugins is to hold and operate on some global application data, that can be used in scripts and
 provide a set of scripts to the engine. Plugins also have much wider access to engine internals, than scripts. For example,
@@ -106,20 +106,21 @@ impl Plugin for Game {
 There are two major parts - `GameConstructor` and `Game` itself. `GameConstructor` implements `PluginConstructor` and it
 is responsible for script registration (`fn register`) and creating the actual game instance (`fn create_instance`).
 
-- `register` - called once on start allowing you to register your scripts. Please note that you must register all your
+- `register` - called once on start allowing you to register your scripts. **Important:** You must register all your
 scripts here, otherwise the engine (and the editor) will know nothing about them.
 - `create_instance` - called once, allowing you to create actual game instance. It is guaranteed to be called once, but 
 _where_ it is called is implementation-defined. For example, the editor will **not** call this method, it does not 
 create any game instance. The method has `override_scene` parameter, in short it is a handle to a scene that must be 
-used by your game instead of any other scenes. It is described in `Editor and Plugins` section down below.
+used by your game instead of any other scenes. It is described in [Editor and Plugins](#editor-and-plugins) section down
+below.
 
-The game instance (`struct Game`) implements a `Plugin` trait which can execute actual game logic in one of its methods:
+The game structure (`struct Game`) implements a `Plugin` trait which can execute actual game logic in one of its methods:
 
 - `on_deinit` - it is called when the game is about to shut down. Can be used for any clean up, for example logging that
 the game has closed.
 - `update` - it is called each frame at a stable rate (usually 60 Hz) after the plugin is created and fully initialized.
 It is the main place where you should put _object-independent_ game logic, any other logic should be added via scripts.
-- `on_os_event` - it is called when the main application window receives an event from operating system, it can be 
+- `on_os_event` - it is called when the main application window receives an event from the operating system, it can be 
 any event such as keyboard, mouse, game pad events or any other events. Please note that as for `update` method, you
 should put here only _object-independent_ logic. Scripts can catch window events too.
 - `on_ui_message` - it is called when there is a message from the user interface, it should be used to react to user
@@ -153,7 +154,6 @@ context is something like this:
 #     renderer::Renderer,
 #     scene::SceneContainer,
 #     window::Window,
-#     plugin::SoundEngineHelper,
 # };
 # use std::sync::Arc;
 pub struct PluginContext<'a, 'b> {
@@ -165,26 +165,25 @@ pub struct PluginContext<'a, 'b> {
     pub lag: &'b mut f32,
     pub serialization_context: &'a Arc<SerializationContext>,
     pub window: &'a Window,
-    pub sound_engine: SoundEngineHelper<'a>,
 }
 ```
 
-- `scenes` - should be used to manage game scenes, an example of scene loading is given in the previous code snipped in
-`Game::new()` method.
-- `resource_manager` - is used to load external resources (scenes, models, textures, animations, source, etc.) from
-different sources (disk, network storage, etc.)
+- `scenes` - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading 
+is given in the previous code snippet in `Game::new()` method.
+- `resource_manager` - is used to load external resources (scenes, models, textures, animations, sound buffers, etc.) from
+different sources (disk, network storage on WebAssembly, etc.)
 - `user_interface` - use it to create user interface for your game, the interface is scene-independent and will remain
 the same even if there are multiple scenes created.
 - `renderer` - can be used to add custom rendering techniques, change quality settings, etc.
-- `dt` - a time passed since last frame. The actual value is implementation-defined, but on current implementation it
-is equal to 1/60 of second and does not change event if the frame rate is changing.
+- `dt` - a time passed since the last frame. The actual value is implementation-defined, but on current implementation it
+is equal to 1/60 of a second and does not change event if the frame rate is changing (the engine stabilizes update rate
+for the logic).
 - `lag` - a reference to the time accumulator, that holds remaining amount of time that should be used to update a plugin. 
 A caller splits `lag` into multiple sub-steps using `dt` and thus stabilizes update rate. The main use of this variable, 
 is to be able to reset `lag` when you're doing some heavy calculations in a game loop (i.e. loading a new level) so the
 engine won't try to "catch up" with all the time that was spent in heavy calculation.
-- `serialization_context` - it can be used to register script and custom scene nodes constructors and at runtime.
-- `window` - main application window, you can use it to change title, resolution, etc.
-- `sound_engine` - sound engine allows you to change global sound parameters, such as master gain, etc.
+- `serialization_context` - it can be used to register scripts and custom scene nodes constructors at runtime.
+- `window` - main application window, you can use it to change title, screen resolution, etc.
 
 ## Editor and Plugins
 
@@ -226,7 +225,7 @@ pub fn new(override_scene: Handle<Scene>, context: PluginContext) -> Self {
 # }
 ```
 
-The `override_scene` parameter is a handle to another scene instances that is currently opened in the editor, your game
+The `override_scene` parameter is a handle to a scene instance that is currently opened in the editor, your game
 plugin must handle this parameter and use provided scene, otherwise the run from the editor will not have the edited
 scene. If the parameter is undefined (equals to `Handle::NONE`), then there is no scene loaded in the editor or the
 game was run outside the editor.
