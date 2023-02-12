@@ -12,15 +12,14 @@ more or less complex games.
 
 ## How to create
 
-A scene could be created either in Fyroxed or programmatically. You can also combine both approaches, where
+A scene could be created either in FyroxEd or programmatically. You can also combine both approaches, where
 you build all "static" content in the editor and adding rest of the entities (bots, interactive objects, etc.)
-manually.
+manually by instantiating respective prefabs at runtime.
 
-### Using Fyroxed
+### Using FyroxEd
 
-There is a [separate chapter](../../fyrox/introduction.md) in the book that should help you to create a scene.
-
-After a scene is created, you can load it as any other 3D model using the resource manager:
+There is a [separate chapter](../../fyrox/beginning/editor_overview.md) in the book that should help you to create a 
+scene. After a scene is created, you can load it as any other 3D model (or prefab) using the resource manager:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -50,9 +49,7 @@ fn load_scene(resource_manager: ResourceManager) -> Scene {
 ```
 
 Please note that here we're creating an empty scene and only then instantiating another scene into it. Why is this
-needed? 
-
-Child scene is considered as [prefab](./prefab.md), and it is "instantiated" in the parent scene. Considering 
+needed? Child scene is considered as [prefab](./prefab.md), and it is "instantiated" in the parent scene. Considering 
 it as prefab allows you modifying your scene separately and serialization/deserialization will be able to correctly
 apply any changes in the scene.
 
@@ -73,9 +70,11 @@ fn create_scene(engine: &mut Engine) -> Handle<Scene> {
 }
 ```
 
+See respective node builders [docs](../scene/graph.md#using-node-builders) to populate the scene.
+
 ## Where all my scenes located?
 
-All scenes "lives" in the engine, the engine has single ownership over your scene after you've added it in the engine.
+All scenes "lives" in the engine, the engine has ownership over your scene after you've added it in the engine.
 You can borrow a scene at any time using its handle and do some changes.
 
 ## Building scene asynchronously 
@@ -85,9 +84,7 @@ is needed? Remember the last time you've played a relatively large game, you've 
 loading screens and loading screen has some fancy interactive stuff with progress bar. Loading screen is fully 
 responsive while the game doing hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking main thread, thus leaving the game 
-fully responsive. 
-
-There is comprehensive example of asynchronous scene loading, it can be found 
+fully responsive. There is comprehensive example of asynchronous scene loading, it can be found 
 [here](https://github.com/FyroxEngine/Fyrox/blob/master/examples/async.rs)  
 
 ## Managing multiple scenes
