@@ -162,6 +162,9 @@ any other option. This will eat huge amount of time and in general it is very no
 <p>This is where prefabs will save you hours of work. All you need to do is to create a car prefab and instantiate it
 multiple times in your scene. When you'll need to change something in the car, you simply go to the prefab and change
 it. After that every prefab instance will have your changes!</p>
+<p>Prefabs can be used to create self-contained entities in your game, examples of this includes: visual effects, 
+any scripted game entities (bots, turrets, player, doors, etc.). Such prefabs can be either directly instantiated in
+a scene in the editor, or instantiated at runtime when needed.</p>
 <h2 id="how-to-create-and-use-a-prefab"><a class="header" href="#how-to-create-and-use-a-prefab">How to create and use a prefab</a></h2>
 <p>All you need to do is to make a scene in the editor with all required objects and save it! After that, you can use the
 scene in other scenes and just do its instantiation, as in usual 3D models. You can either instantiate it from the
@@ -175,12 +178,6 @@ considered with higher priority. See <a href="./inheritance.html">this chapter</
 <p>Prefabs can have other prefab instances inside it. This means that you can, for example, create a room populated with
 instances of other prefabs (bookshelves, chairs, tables, etc.) and then use the room prefab to build a bigger scene.
 The changes in the base prefabs will be reflected in their instances, regardless of how deep the hierarchy is.</p>
-<h2 id="prefabs-and-scripts"><a class="header" href="#prefabs-and-scripts">Prefabs and Scripts</a></h2>
-<p>Prefab entities can have script assigned, the engine will create respective instances when you'll instantiate a prefab
-in a scene. The main difference here, is in property inheritance - current version of the engine (0.27) does not support
-inheritance for properties in scripts. This means, that making hierarchical prefabs with scripts could be problematic,
-there is no way to create a basic prefab with scripts and change properties of scripts in derived prefabs while keeping
-the inheritance.</p>
 
                     </main>
 
