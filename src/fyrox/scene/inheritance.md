@@ -1,12 +1,9 @@
 # Property Inheritance
 
-**Important:** This functionality is available on [latest engine](../beginning/scripting.md#using-latest-engine-version)
-from `master` branch only. It will be available in next major release (0.28).
-
 Property inheritance is used to propagate changes of unmodified properties from a prefab to its instances. For example,
 you can change scale of a node in a prefab and its instances will have the same scale too, unless the scale is
 set explicitly in an instance. Such feature allows you to tweak instances, add some unique details to them, but take
-generic properties from parent prefabs.
+general properties from parent prefabs.
 
 Property inheritance works for prefab hierarchies of any depth, this means that you can create something like this:
 a room prefab can have multiple instances of various furniture prefabs in it, while the furniture prefabs can also be
