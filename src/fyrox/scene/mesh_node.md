@@ -1,20 +1,27 @@
 # Mesh node
 
-Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
+Mesh is a scene node that represents a 3D model. This one of the most commonly used nodes in almost every game.
 Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
 and loaded in your scene.
+
+## Surfaces
+
+Surface is a set of triangles that uses the same [material](../rendering/materials.md). Mesh node could contain zero of 
+more surfaces; each surface contains a set of vertices and indices that binds vertices with triangles. Mesh nodes split 
+into surfaces to be rendered effectively by modern GPUs.
 
 ## How to create
 
 There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
 the way to go, especially with tons and tons of free 3D models available online.
 
-**Caveat:** The engine supports _only_ FBX file format for 3D models!
+> ⚠️ The engine supports _only_ FBX file format for 3D models!
 
 ### Using a 3D modelling software
 
-To create 3D model, you could use [Blender](https://www.blender.org/) and then export it to `FBX` file format.
-To load your 3D model in the game, you should do few simple steps:
+To create a 3D model, you could use [Blender](https://www.blender.org/) and then export it to `FBX` file format.
+To load your 3D model in the game, you should do few simple steps (loading a 3D model does not differ from a prefab 
+instantiation):
 
 ```rust,no_run
 # extern crate fyrox;
@@ -118,10 +125,4 @@ As you can see, creating a mesh procedurally requires lots of manual work and no
 
 ## Animation
 
-See [Animation chapter](./../animation/animation.md) for more info.
-
-### Retargetting
-
-You don't have to store all possible animations inside a single 3D model file, instead you can store each animation
-in separate file and retarget it to your mesh instance when needed. This also allows you to store non-animated
-3D model in a separate file and all animations in their own files.
+Mesh node supports bone-based animation (skinning). See [Animation chapter](./../animation/animation.md) for more info.
