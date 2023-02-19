@@ -3,9 +3,9 @@
 Sprite is just a quad mesh that is always facing camera. It has size, color, rotation around "look" axis and a texture.
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.
 
-**Important:** It should be noted that **sprites are not meant to be used for 2D games**, they're only for 3D. 
-Use [Rectangle node](./rectangle.md) if you need 2D sprites, they have optimized renderer which can handle tons
-of sprites at once.
+> ⚠️ It should be noted that **sprites are not meant to be used for 2D games**, they're only for 3D. 
+> Use [Rectangle node](./rectangle.md) if you need 2D sprites, they have optimized renderer which can handle tons
+> of sprites at once (sprite batching).
 
 ## How to create
 
@@ -46,13 +46,13 @@ fn create_sprite(scene: &mut Scene, resource_manager: ResourceManager) -> Handle
 
 ## General rules
 
-Sprites **must not** be used to create any visual effects that involve many particles. You should use particle
-systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
-same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
-a lot of "useless" info that bloats its size up to 600 bytes. 
+Sprites **must not** be used to create any visual effects that involve many particles. You should use 
+[particle systems](particle_system_node.md) for that. Why so? Particles systems are very well optimized for managing
+huge amounts of particles at the same time, but sprites are not. Each sprite is quite heavy to be used as a particle in 
+particle systems, it has a lot of "useless" info that will eat a lot of memory.
 
-Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
-avoid creating lots of sprites.
+> ⚠️ Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
+> avoid creating lots of sprites.
 
 ## Limitations
 
