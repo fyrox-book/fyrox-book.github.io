@@ -2152,9 +2152,11 @@ tons of small light sources for free.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sprite"><a class="header" href="#sprite">Sprite</a></h1>
 <p>Sprite is just a quad mesh that is always facing camera. It has size, color, rotation around &quot;look&quot; axis and a texture.
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.</p>
-<p><strong>Important:</strong> It should be noted that <strong>sprites are not meant to be used for 2D games</strong>, they're only for 3D. 
+<blockquote>
+<p>⚠️ It should be noted that <strong>sprites are not meant to be used for 2D games</strong>, they're only for 3D. 
 Use <a href="fyrox/scene/./rectangle.html">Rectangle node</a> if you need 2D sprites, they have optimized renderer which can handle tons
-of sprites at once.</p>
+of sprites at once (sprite batching).</p>
+</blockquote>
 <h2 id="how-to-create-4"><a class="header" href="#how-to-create-4">How to create</a></h2>
 <p>A sprite instance could be created using <code>SpriteBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -2190,12 +2192,14 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="general-rules"><a class="header" href="#general-rules">General rules</a></h2>
-<p>Sprites <strong>must not</strong> be used to create any visual effects that involve many particles. You should use particle
-systems for that. Why so? Particles systems are very well optimized for managing huge amounts of particles at the
-same time, but sprites are not. Each sprite is very heavy to be used as a particle in particle systems, it has
-a lot of &quot;useless&quot; info that bloats its size up to 600 bytes. </p>
-<p>Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
+<p>Sprites <strong>must not</strong> be used to create any visual effects that involve many particles. You should use 
+<a href="fyrox/scene/particle_system_node.html">particle systems</a> for that. Why so? Particles systems are very well optimized for managing
+huge amounts of particles at the same time, but sprites are not. Each sprite is quite heavy to be used as a particle in 
+particle systems, it has a lot of &quot;useless&quot; info that will eat a lot of memory.</p>
+<blockquote>
+<p>⚠️ Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
 avoid creating lots of sprites.</p>
+</blockquote>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
 <p>Sprites are not supporting any sort of lighting, if you need lighted sprites, you need to create your own render
 pass and use <code>Mesh</code> node with custom shader that will orient all faces towards camera and will do lighting 
