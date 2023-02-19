@@ -8,7 +8,7 @@ There are three main types of light sources: directional, point, and spot lights
 
 ### Directional light
 
-Directional light does not have a position, its rays are always parallel and it has a particular direction in space.
+Directional light does not have a position, its rays are always parallel, and it has a particular direction in space.
 An example of directional light in real-life could be our Sun. Even if it is a point light, it is so far away from
 the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor 
 scenes.
@@ -94,8 +94,8 @@ fn create_point_light(scene: &mut Scene) -> Handle<Node> {
 
 ### Spotlight
 
-Spot light is a light source that emits lights in cone shape, it has a position and orientation. An example of 
-a spot light source: flashlight.
+Spotlight is a light source that emits lights in cone shape, it has a position and orientation. An example of 
+a spotlight source: flashlight.
 
 ```rust,no_run
 # extern crate fyrox;
@@ -119,6 +119,8 @@ fn create_spot_light(scene: &mut Scene) -> Handle<Node> {
 ```
 
 ## Light scattering
+
+![scattering](scattering.png)
 
 Spot and point lights support light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
 the fog will scatter the light from your flashlight making it, so you'll see the "light volume". Light scattering is
@@ -161,19 +163,10 @@ fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
 
 ## Shadows
 
-Spot and point lights both support shadows, however directional light still lacks shadows. There is a
-[tracking issue](https://github.com/FyroxEngine/Fyrox/issues/220) for that.
-
-## Performance
-
-Lights are not very cheap, every light source has some performance impact. As a general rule, try to keep the amount
-of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
-Keep in mind that the less area the light needs to "cover", the higher the performance. This means that you can have
-tons of small light sources for free.
-
-Shadows giving the most significant performance impact, you should keep the amount of light sources that can cast
-shadows at lowest possible amount to keep performance at good levels. You can also turn on/off shadows when you 
-need:
+By default, light sources cast shadows. You can change this by using `set_cast_shadows` method of a light source. You
+should carefully manage shadows: shadows giving the most significant performance impact, you should keep the amount of 
+light sources that can cast shadows at lowest possible amount to keep performance at good levels. You can also turn 
+on/off shadows when you need:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -192,4 +185,12 @@ fn switch_shadows(scene: &mut Scene, light_handle: Handle<Node>, cast_shadows: b
 
 Not every light should cast shadows, for example a small light that a player can see only in a distance can have
 shadows disabled. You should set the appropriate values depending on your scene, just remember: the fewer the shadows
-the better the performance. The most expensive shadows are from point lights, the less, from spot lights.
+the better the performance. The most expensive shadows are from point lights, the less, from spotlights and directional
+lights. 
+
+## Performance
+
+Lights are not cheap, every light source has some performance impact. As a general rule, try to keep the amount
+of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
+Keep in mind that the less area the light needs to "cover", the higher the performance. This means that you can have
+tons of small light sources for free.
