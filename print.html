@@ -1837,6 +1837,26 @@ to move a node at specific location you could use this:</p>
     .set_rotation_offset(Vector3::new(1.0, 1.0, 0.0));
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
+<h2 id="visibility"><a class="header" href="#visibility">Visibility</a></h2>
+<p><code>Base</code> node stores all info about local visibility and global visibility (with parent's chain visibility included).
+Changing node's visibility could be useful if you want to improve performance by hiding distant objects (however it 
+strongly advised to use level-of-detail for this) or to hide some objects in your scene. There are three main methods
+to set or fetch visibility:</p>
+<ul>
+<li><code>set_visibility</code> - sets local visibility for a node.</li>
+<li><code>visibility</code> - returns current local visibility of a node.</li>
+<li><code>global_visibility</code> - returns combined visibility of a node. It includes visibility of every parent node in the 
+hierarchy, so if you have a parent node with some children nodes and set parent's visibility to <code>false</code>, global visibility
+of children nodes will be <code>false</code> too, even if local visibility is <code>true</code>. This is useful technique for hiding complex
+objects with lots of children nodes.</li>
+</ul>
+<h2 id="enablingdisabling-scene-nodes"><a class="header" href="#enablingdisabling-scene-nodes">Enabling/disabling scene nodes</a></h2>
+<p>A scene node could be enabled or disabled. Disabled nodes are excluded from a game loop and has almost zero CPU consumption
+(their global transform/visibility/enabled state is still updated due to limitations of the engine). Disabling a node
+could be useful if you need to completely freeze some hierarchy and do keep it in this state until it is enabled again.
+It could be useful to disable parts of a scene with which a player cannot interact to improve performance. Keep in mind,
+that enabled state is hierarchical like visibility. When you're disabling a parent node with some children nodes, the
+children nodes will be disabled too.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mesh-node"><a class="header" href="#mesh-node">Mesh node</a></h1>
 <p>Mesh is a scane node that represents a 3D model. This one of the most commonly used nodes in almost every game.
 Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
