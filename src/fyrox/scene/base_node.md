@@ -104,3 +104,26 @@ scene.graph[node_handle]
     .set_rotation_offset(Vector3::new(1.0, 1.0, 0.0));
 # }
 ```
+
+## Visibility
+
+`Base` node stores all info about local visibility and global visibility (with parent's chain visibility included).
+Changing node's visibility could be useful if you want to improve performance by hiding distant objects (however it 
+strongly advised to use level-of-detail for this) or to hide some objects in your scene. There are three main methods
+to set or fetch visibility:
+
+- `set_visibility` - sets local visibility for a node.
+- `visibility` - returns current local visibility of a node.
+- `global_visibility` - returns combined visibility of a node. It includes visibility of every parent node in the 
+hierarchy, so if you have a parent node with some children nodes and set parent's visibility to `false`, global visibility
+of children nodes will be `false` too, even if local visibility is `true`. This is useful technique for hiding complex
+objects with lots of children nodes.
+
+## Enabling/disabling scene nodes
+
+A scene node could be enabled or disabled. Disabled nodes are excluded from a game loop and has almost zero CPU consumption
+(their global transform/visibility/enabled state is still updated due to limitations of the engine). Disabling a node
+could be useful if you need to completely freeze some hierarchy and do keep it in this state until it is enabled again.
+It could be useful to disable parts of a scene with which a player cannot interact to improve performance. Keep in mind,
+that enabled state is hierarchical like visibility. When you're disabling a parent node with some children nodes, the
+children nodes will be disabled too.
