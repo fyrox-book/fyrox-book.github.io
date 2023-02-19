@@ -1978,7 +1978,7 @@ fn create_procedural_mesh(
 <h2 id="light-types"><a class="header" href="#light-types">Light types</a></h2>
 <p>There are three main types of light sources: directional, point, and spot lights.</p>
 <h3 id="directional-light"><a class="header" href="#directional-light">Directional light</a></h3>
-<p>Directional light does not have a position, its rays are always parallel and it has a particular direction in space.
+<p>Directional light does not have a position, its rays are always parallel, and it has a particular direction in space.
 An example of directional light in real-life could be our Sun. Even if it is a point light, it is so far away from
 the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor 
 scenes.</p>
@@ -2058,8 +2058,8 @@ fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <h3 id="spotlight"><a class="header" href="#spotlight">Spotlight</a></h3>
-<p>Spot light is a light source that emits lights in cone shape, it has a position and orientation. An example of 
-a spot light source: flashlight.</p>
+<p>Spotlight is a light source that emits lights in cone shape, it has a position and orientation. An example of 
+a spotlight source: flashlight.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -2082,6 +2082,7 @@ fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="light-scattering"><a class="header" href="#light-scattering">Light scattering</a></h2>
+<p><img src="fyrox/scene/scattering.png" alt="scattering" /></p>
 <p>Spot and point lights support light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
 the fog will scatter the light from your flashlight making it, so you'll see the &quot;light volume&quot;. Light scattering is
 <strong>enabled by default</strong>, so you don't have to do anything to enable it. However, in some cases you might want to disable 
@@ -2120,16 +2121,10 @@ fn use_rayleigh_scattering(scene: &amp;mut Scene, light_handle: Handle&lt;Node&g
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
-<p>Spot and point lights both support shadows, however directional light still lacks shadows. There is a
-<a href="https://github.com/FyroxEngine/Fyrox/issues/220">tracking issue</a> for that.</p>
-<h2 id="performance-1"><a class="header" href="#performance-1">Performance</a></h2>
-<p>Lights are not very cheap, every light source has some performance impact. As a general rule, try to keep the amount
-of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
-Keep in mind that the less area the light needs to &quot;cover&quot;, the higher the performance. This means that you can have
-tons of small light sources for free.</p>
-<p>Shadows giving the most significant performance impact, you should keep the amount of light sources that can cast
-shadows at lowest possible amount to keep performance at good levels. You can also turn on/off shadows when you 
-need:</p>
+<p>By default, light sources cast shadows. You can change this by using <code>set_cast_shadows</code> method of a light source. You
+should carefully manage shadows: shadows giving the most significant performance impact, you should keep the amount of 
+light sources that can cast shadows at lowest possible amount to keep performance at good levels. You can also turn 
+on/off shadows when you need:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -2147,7 +2142,13 @@ fn switch_shadows(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;, cast_
 <span class="boring">}</span></code></pre></pre>
 <p>Not every light should cast shadows, for example a small light that a player can see only in a distance can have
 shadows disabled. You should set the appropriate values depending on your scene, just remember: the fewer the shadows
-the better the performance. The most expensive shadows are from point lights, the less, from spot lights.</p>
+the better the performance. The most expensive shadows are from point lights, the less, from spotlights and directional
+lights. </p>
+<h2 id="performance-1"><a class="header" href="#performance-1">Performance</a></h2>
+<p>Lights are not cheap, every light source has some performance impact. As a general rule, try to keep the amount
+of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
+Keep in mind that the less area the light needs to &quot;cover&quot;, the higher the performance. This means that you can have
+tons of small light sources for free.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sprite"><a class="header" href="#sprite">Sprite</a></h1>
 <p>Sprite is just a quad mesh that is always facing camera. It has size, color, rotation around &quot;look&quot; axis and a texture.
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.</p>
