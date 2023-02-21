@@ -145,8 +145,45 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="head-related-transfer-function-hrtf"><a class="header" href="#head-related-transfer-function-hrtf">Head Related Transfer Function (HRTF)</a></h1>
-<p>(WIP)</p>
+                        <h1 id="head-related-transfer-function"><a class="header" href="#head-related-transfer-function">Head Related Transfer Function</a></h1>
+<p>Head Related Transfer Function (HRTF for short) is special audio processing technique that improves audio spatialization.
+By default, sound spatialization is very simple - volume of each audio channel (left and right) changes accordingly to
+orientation of the listener. While this simple and fast, it does not provide good audio spatialization - sometimes
+it is hard to tell from which direction the actual sound is coming from. To solve this issue, we can use head-related
+transfer function. Despite its scary, mathematical name, it is easy to understand what it's doing. Instead of uniformly
+changing volume of all frequencies of the signal (as the naive spatialization does), it changes them separately for 
+each channel. The exact &quot;gains&quot; of each frequency of each channel is depends on the contents of head-related transfer
+function. This is done for each azimuth and elevation angles, which gives full picture of how audio signal from each
+direction travels to each ear.</p>
+<p>HRTF is usually recorded using a head model with ears with a microphone inside each ear. To capture head-related impulse
+response (time domain) at a fixed distance and angle pair (azimuth and elevation), a very short impulse of sound is produced. 
+Microphones inside each ear records the signal, and then HRIR (time domain) can be converted in HRTF (frequency domain).</p>
+<h2 id="hrtf-on-practice"><a class="header" href="#hrtf-on-practice">HRTF on practice</a></h2>
+<p>The theory above could be boring, however it is very simple to use HRTF on practice. Pick a HRIR sphere from the 
+<a href="https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM">database</a> (any of *.bin files) and load
+it in the Audio Context panel:</p>
+<p><a href="hrtf.png">hrtf</a></p>
+<p>Once it is loaded, all sounds in the scene will use the HRTF for rendering. The same can be achieved by code:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::scene::{
+</span><span class="boring">    graph::Graph,
+</span><span class="boring">    sound::{self, HrirSphere, HrtfRenderer, Renderer},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn use_hrtf(graph: &amp;mut Graph) {
+    let hrir_sphere = HrirSphere::from_file(&quot;path/to/hrir.bin&quot;, sound::SAMPLE_RATE).unwrap();
+    graph
+        .sound_context
+        .state()
+        .set_renderer(Renderer::HrtfRenderer(HrtfRenderer::new(hrir_sphere)));
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
+<p>HRTF is heavy. It is 5-6 times slower than the simple spatialization, so use it only on middle-end or high-end hardware.
+HRTF performance is linearly dependent on the amount of sound sources: the more sound sources use HRTF, the worse performance
+will be and vice versa.</p>
 
                     </main>
 
