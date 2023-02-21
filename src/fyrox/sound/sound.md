@@ -1,6 +1,8 @@
 # Sound
 
-In Fyrox, sounds are nodes of type Sound, with all the consequent properties and workflows.
+In Fyrox, sounds are nodes of type `Sound`, with all the consequent properties and workflows.
+
+## How to create
 
 Audio files are loaded using the resource manager:
 
@@ -43,7 +45,8 @@ There are a few notable things in the example above.
 
 The first is that sounds don't play automatically; in order to do so, we need to invoke `.with_status(Status::Playing)`.
 
-The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. One way is to use the convenient builder API `.with_play_once(true)`; another is to use the graph APIs:
+The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. 
+One way is to use the convenient builder API `.with_play_once(true)`; another is to use the graph APIs:
 
 ```rust,no_run
 # extern crate fyrox;
@@ -82,7 +85,8 @@ SoundBuilder::new(BaseBuilder::new())
 # }
 ```
 
-In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a corresponding `.options` file, with the following content:
+In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a 
+corresponding `.options` file, with the following content:
 
 ```ron
 (
@@ -91,3 +95,9 @@ In order to stream large audio files, instead of loading them entirely in memory
 ```
 
 If the audio file is called, for example, `/path/to/background.ogg`, call this `/path/to/background.ogg.options`.
+
+## Audio bus
+
+It is possible to specify target audio bus to which the sound will output its audio samples. Audio bus is responsible
+for various audio processing, such as filtering, reverb, etc. To specify output audio bus, just use the `set_audio_bus`
+method and set the name of an audio bus.
