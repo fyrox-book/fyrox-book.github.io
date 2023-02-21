@@ -84,5 +84,5 @@ are intended for very specific use cases, such as adding "data sources" for rend
 
 ## Editor support
 
-Current `NodeTrait` implementation clearly states that you cannot edit properties of your objects from the editor. 
-This is a bug and will be fixed in future versions.
+For now, you cannot create custom nodes from the editor. This will be available in future versions of the engine; when 
+editor plugins will be supported.

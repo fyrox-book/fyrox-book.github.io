@@ -14,9 +14,9 @@ compile with the latest release from crates.io, then you need to
 
 ## How to read the book
 
-Almost every chapter in this book can be read in any order, but we recommend reading Chapter 1 and then going
-through [Platformer Tutorial (2D)](fyrox/tutorials/platformer/part1.md) while learning more about specific areas that
-interest you from the other chapters. 
+Almost every chapter in this book can be read in any order, but we recommend reading Chapters 1, 2, 3 (they're quite small)
+and then going through [Platformer Tutorial (2D)](fyrox/tutorials/platformer/part1.md) while learning more about specific 
+areas that interest you from the other chapters. 
 
 There is also a [First-Person Shooter Tutorial (3D)](fyrox/tutorials/fps/intro.md), but it is based on framework which
 considered obsolete, yet it is still very helpful. 
