@@ -156,9 +156,9 @@ editor <a href="https://github.com/FyroxEngine/Fyrox/tree/master/editor">FyroxEd
 compile with the latest release from crates.io, then you need to 
 <a href="./fyrox/beginning/scripting.html#using-latest-engine-version">use the latest engine from GitHub repo</a>.</p>
 <h2 id="how-to-read-the-book"><a class="header" href="#how-to-read-the-book">How to read the book</a></h2>
-<p>Almost every chapter in this book can be read in any order, but we recommend reading Chapter 1 and then going
-through <a href="fyrox/tutorials/platformer/part1.html">Platformer Tutorial (2D)</a> while learning more about specific areas that
-interest you from the other chapters. </p>
+<p>Almost every chapter in this book can be read in any order, but we recommend reading Chapters 1, 2, 3 (they're quite small)
+and then going through <a href="fyrox/tutorials/platformer/part1.html">Platformer Tutorial (2D)</a> while learning more about specific 
+areas that interest you from the other chapters. </p>
 <p>There is also a <a href="fyrox/tutorials/fps/intro.html">First-Person Shooter Tutorial (3D)</a>, but it is based on framework which
 considered obsolete, yet it is still very helpful. </p>
 <h2 id="api-documentation"><a class="header" href="#api-documentation">API Documentation</a></h2>
@@ -3080,8 +3080,8 @@ graph easily. You still can define a global variable that <strong>will</strong> 
 should be avoided. If you want to add custom logic to scene nodes, then you should use scripts instead. Custom nodes
 are intended for very specific use cases, such as adding &quot;data sources&quot; for renderer, etc.</p>
 <h2 id="editor-support"><a class="header" href="#editor-support">Editor support</a></h2>
-<p>Current <code>NodeTrait</code> implementation clearly states that you cannot edit properties of your objects from the editor. 
-This is a bug and will be fixed in future versions.</p>
+<p>For now, you cannot create custom nodes from the editor. This will be available in future versions of the engine; when 
+editor plugins will be supported.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="physics-1"><a class="header" href="#physics-1">Physics</a></h1>
 <p>The engine have full-featured physics engine under the hood (Rapier), it helps you to simulate physics in your games.
 There is first-class support for both 2D and 3D physics. There are three main physics entities in the engine:</p>
