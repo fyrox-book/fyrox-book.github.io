@@ -20,7 +20,7 @@ The theory above could be boring, however it is very simple to use HRTF on pract
 [database](https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM) (any of *.bin files) and load
 it in the Audio Context panel:
 
-[hrtf](hrtf.png)
+![hrtf](hrtf.png)
 
 Once it is loaded, all sounds in the scene will use the HRTF for rendering. The same can be achieved by code:
 
