@@ -48,7 +48,7 @@ FBX format, which is supported by pretty much any 3D modelling software. You can
 dropping the desired asset from the `Asset Browser`. You'll see a preview of the object while dragging it.
 
 You can do the same with other scenes made in the editor (`rgs` files), for example, you can create a scene with a few objects in it
-with some scripts and re-use to create other scenes. Such scenes are called [prefabs](../scene/prefab.md).
+with some scripts and re-use them within other scenes. Such scenes are called [prefabs](../scene/prefab.md).
 
 ## Saving a Scene
 
