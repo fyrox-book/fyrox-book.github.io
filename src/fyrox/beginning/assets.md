@@ -1,46 +1,44 @@
 # Assets
 
-Pretty much every game depends on various assets such as 3D models, textures, sounds, etc. The engine has its own 
-assets pipeline that is made to make your life easier. 
+Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own 
+assets pipeline made to make your life easier.
 
 ## Asset Types
 
-The engine offers a fixed set of assets that should cover all your needs:
+The engine offers a set of assets that should cover all of your needs:
 
-- [Models](../resources/model.md) - model is a set of objects, it can be a simple 3D model (like barrel, bush, weapon, 
-etc.) or complex scene with lots of object and possibly other model instances. There are two main formats supported:
-FBX - could be used to import 3D models, RGS - a scene that is made in Fyroxed. RGS models are special, they can be 
+- [Models](../resources/model.md) - are a set of objects. They can be a simple 3D model (barrels, bushes, weapons, 
+etc.) or complex scenes with lots of object and possibly other model instances. Fyrox supports two main formats:
+FBX - which can be used to import 3D models, RGS - which are scenes made in Fyroxed. RGS models are special, as they can be 
 used as _hierarchical prefabs_.
-- [Textures](../resources/texture.md) - texture is an image that is used to add graphical details to objects. The
-engine supports various texture formats such as PNG, JPG, BMP, etc. There is also support for compressed textures in
-DDS format.
-- [Sound buffers](../resources/sound.md) - a data buffer for sound sources. The engine supports WAV and OGG formats. 
-- [Curves](../resources/curve.md) - parametric curve. It is used to create complex functions for numeric parameters.
-Curves can be made in `Curve Editor` (`Utils -> Curve Editor`)
+- [Textures](../resources/texture.md) - are images used to add graphical details to objects. The
+engine supports multiple texture formats, such as PNG, JPG, BMP, etc. Compressed textures in DDS format are also supported.
+- [Sound buffers](../resources/sound.md) - are data buffers for sound sources. Fyrox supports WAV and OGG formats. 
+- [Curves](../resources/curve.md) - are parametric curves. They're used to create complex functions for numeric parameters.
+They can be made in the `Curve Editor` (`Utils -> Curve Editor`)
 
 ## Asset Management
 
-Asset management is performed from `Asset Browser` window in the editor, you can select an asset, preview it and edit
-its import options. Here's the asset browser with a texture selected:
+Asset management is performed from the `Asset Browser` window in the editor, you can select an asset, preview it, and edit
+its import options. Here's a screenshot of the asset browser with a texture selected:
 
 ![asset browser](assets.png)
 
-The most interesting part here is import options section under previewer, it allows to set asset-specific import options
-and apply it. Every asset has its own set of import options. Check respective asset page from above section to learn
-what import options is for what.
+The most interesting part here is the import options section under the previewer. It allows to set asset-specific import options
+and apply them. Every asset has its own set of import options. Check the respective asset page from the above section to learn
+what each import option is for.
 
 ## Asset Instantiation
 
-Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
-is done by simple drag'n'drop - find a model you want to instantiate and drag it `Scene Preview`, hold left mouse button,
-drag the object and release the button when you're happy with what you see.
+Some asset types can be instantiated in scenes, for now, you can only create direct instances from models. This
+is done by simply dragging the model you want to instantiate and dropping it on the `Scene Preview`. While dragging it, you'll also see a preview of the model.
 
 ![preview](preview.gif)
 
-The amount of asset instances is not limited, it only depends on capabilities of your PC, each instance takes some 
-memory (the engine tries to re-use data across instance as much as possible) and CPU resources.
+The maximum amount of asset instances is not limited by the engine, but it is by the memory and CPU resources of your PC. 
+Note that the engine does try to re-use data across instances as much as possible.
 
-You can also instantiate assets dynamically from your code, here's an example for Model:
+You can also instantiate assets dynamically from your code. Here's an example of that for a Model:
 
 ```rust,no_run,edition2018
 # extern crate fyrox;
@@ -55,19 +53,18 @@ async fn instantiate_model(
     resource_manager: ResourceManager,
     scene: &mut Scene,
 ) -> Handle<Node> {
-    // Load model first. Alternatively, you can store resource handle somewhere and use it for
-    // instantiation.
+    // Load the model first. Alternatively, you can store the resource handle somewhere and use it for instantiation.
     let model = resource_manager.request_model(path).await.unwrap();
 
     model.instantiate(scene)
 }
 ```
 
-This is very useful in situations when you have a prefab, and you want to add it to your scene at runtime. 
+This is very useful with prefabs that you may want to instantiate in the scene at runtime. 
 
 ## Loading Assets
 
-Usually there is no need to manually handle assets loading, since you have the editor that can help you with that - create
-a scene with all required assets. However, sometimes you need to instantiate an asset dynamically - for example a
-bot prefab. In this case you can use `ResourceManager` and respective set of methods (like `request_model`, 
-`request_texture`, etc.). See respective asset page for more info.
+Usually, there is no need to manually handle the loading of assets, since you have the editor to help with that - just create
+a scene with all the required assets. However, there are times where you may need to instantiate some asset dynamically, for 
+example, a bot prefab. For this cases you can use the `ResourceManager` and its respective methods, such as `request_model`, 
+`request_texture`, etc.

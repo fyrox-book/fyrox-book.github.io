@@ -36,7 +36,7 @@ The engine offers various types of "building blocks" for your scene, each such b
 - [Camera](../scene/camera_node.md) - allows you to see the world. You must have at least one camera in your scene to be able to see anything.
 - [Sprite](../scene/sprite_node.md) - represents a quad that always faces towards a camera. It can have a texture and size and can also can be rotated around the "look" axis.
 - [Particle system](../scene/particle_system_node.md) - allows you to create visual effects using a huge set of small particles. It
-  can be used to create smoke, sparks, blood splatters, etc..
+  can be used to create smoke, sparks, blood splatters, etc.
 - [Terrain](../scene/terrain_node.md) - allows you to create complex landscapes with minimal effort.
 - [Decal](../scene/decal_node.md) - paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
   damaged parts of the road, blood splatters, bullet holes, etc.
