@@ -53,14 +53,14 @@ This node is intended for use in **2D games** only.
 - [Sound](../sound/sound.md) - a sound source universal for 2D and 3D. Spatial blend factor allows you to select
 a proportion between 2D and 3D.
 - Listener - an audio receiver that captures the sound at a particular point in your scene and sends it to an audio
-context for processing and outputing to an audio playback device.
+context for processing and outputting to an audio playback device.
 - Animation Player - a container for multiple animations. It can play animations made in the 
 [animation editor](../animation/anim_editor.md) and apply animation poses to respective scene nodes.
 - Animation Blending State Machine - a state machine that mixes multiple animations from multiple states into one; each
 state is backed by one or more animation playing or blending nodes. See its [respective chapter](../animation/absm_editor.md) 
 for more info.
 
-Every node can be created either from the editor (through `Create` on the main menu, or through `Add Child` after right-clicking on 
+Every node can be created either in the editor (through `Create` on the main menu, or through `Add Child` after right-clicking on 
 a game entitiy) or programmatically via their respective node builder (see [API docs](https://docs.rs/fyrox/latest/fyrox/scene/
 index.html) for more info). These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
 types of nodes, but that is an advanced topic, which is covered in a [future chapter](../scene/custom_node.md).
