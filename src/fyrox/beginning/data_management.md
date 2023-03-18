@@ -1,87 +1,81 @@
-# Data management
+# Data Management
 
-The engine uses generational arenas (pools in engine's terminology) to store most of the objects (scene nodes in a 
-graph, animations in an animation player, sound sources in an audio context, etc.). You'll use them quite often, so it 
-read this chapter thoroughly. 
+The engine uses pools to store most objects (scene nodes in a 
+graph, animations in an animation player, sound sources in an audio context, etc.). Since you'll use them quite often, reading and understanding this chapter is recommended. 
 
 ## Motivation
 
-Rust ownership system and borrow checker in particular, dictates the rules of data management. In game development you
-often have a need to have some sort of reference to an object in some other object. In languages like C you usually 
-store a raw pointer and consider it done. This works, but it is very unsafe - an object could die (its memory can become
-deallocated), and you'll know about this only when try to access that object. In more advanced languages like C++, you
-could store `shared_ptr<Foo>` which ensures that the pointer will be valid until at least one `shared_ptr<Foo>` instance
-is held alive. In Rust, however, it is possible too, but with some limitations and quirks. At first, we won't consider 
-raw pointers and leave this to C or C++. As for smart pointers such as `Rc/Arc` - they will work, but they do not allow
-to mutate the content, only share it with multiple readers. To mutate the inner data, we can use either `RefCell` (for
-single-threaded environment) or `Mutex` (for multithreaded env) to wrap the data. This is where the "fun" begins: for 
-such types (`Rc<RefCell<Foo>>`, `Arc<Mutex<Foo>>`) Rust enforces borrowing rules (multiple readers, one writer) at runtime
-which will stab you in the back with panic in unexpected time - any attempt to borrow the inner data mutably twice will
-raise panic. 
+Rust ownership system and borrow checker, in particular, dictate the rules of data management. In game development, you
+often have the need to reference objects from other objects. In languages like C, this is usually achieved by simply storing a raw 
+pointer and calling it a day. That works, yet it's remarkably unsafe - you risk either forgetting to destroy an object and leaking 
+memory or destroying an object still being referenced and then trying to access deallocated memory. Other languages, like C++, allow 
+you to store _shared pointers_ to your data, which by keeping a reference count, ensures the previous doesn't happen at the cost of 
+a, most often, negligible overhead. Rust counts with smart pointers similar to this, though not without their limitations. There is the `Rc/Arc` - they function like _shared pointers_, except they don't allow mutating their content, only 
+reading it. If you want mutability, you use either a `RefCell` for a
+single-threaded environment, or a `Mutex` for a multithreaded environment. That is where the problems begin. For 
+types such as `Rc<RefCell>` or `Arc<Mutex>`, Rust enforces its borrowing rules at runtime, which are unlimited readers but 
+a single writer. Any attempt to borrow mutably more than once at a time will lead to a runtime error.
 
-The next problem with such shared references is the fact that it is very easy to accidentally create cyclical references
-which will prevent objects from dying (deallocating). While this is more or less ok, the next problem is much more 
-critical for games - overhead for runtime checks. In case of `Rc<RefCell<Foo>>` it is a single reference counter for
-given references to the data, and in case of `Arc<Mutex<Foo>>` it is a mutex lock. 
+Another problem with these shared references is that is very easy to accidentally create cyclical references
+that prevent objects from ever being destroyed. While the previous could be lived with, the last problem is especially
+severe in the case of games: the overhead of runtime checks. In the case of a `Rc<RefCell>`, it is a single 
+reference counter for given accesses to the data, but in the case of a `Arc<Mutex>`, it is a mutex lock. 
 
-The solution to these problems is not ideal, it has its own pros and cons. Instead of storing objects in random places
-of memory and having to manage their lifetime by reference counting, we can put all objects in a single storage with 
-a contiguous memory block and use indices to access the objects. Such structure is called - pool. 
+The solution to these problems is far from ideal; it certainly has its own downfalls. Instead of scattering objects across memory 
+and then having to manage the lifetime of each of them through reference counting, we can store all of the objects in a single
+and contiguous memory block and then use indices to access each object. Such a structure is called a pool. 
 
-## Technical details
+## Technical Details
 
-Pool is an efficient way data management. Pool is a vector with entries that can be either vacant or occupied. Each 
-entry, no matter occupied or vacant, also stores a special number called _generation_. The generation number is used 
-to understand whether an entry has been changed over time or not. When an entry is reused, its generation number is 
-increased leaving all previously created handle leading to the entry invalid. This is a very simple and efficient 
-algorithm for tracking the "lifetime" of the objects.
+A pool is an efficient method of data management. A pool is a vector with entries that can be either vacant or occupied. Each 
+entry, regardless of its status, also stores a number called a _generation_ number. This is used 
+to understand whether an entry has changed over time or not. When an entry is reused, its generation number is 
+increased, rendering all previously created handles leading to the entry invalid. This is a simple and efficient 
+algorithm for tracking the lifetime of objects.
 
-To access the data in entries, the engine uses _handles_. The handle is a pair of index of an entry and a
-_generation_ number. When you put an object in the pool, it gives you the handle that "leads" to the object.
-At this moment the generation of the handle matches the generation of the corresponding entry so the handle
-is valid. It will remain valid until you "free" the object, which will make the entry vacant again.
+To access the data in the entries, the engine uses the previously mentioned _handles_. A handle is a pair of the index of an entry
+and a generation number. When you put an object in the pool, this gives you the handle that leads to the object, as well as the 
+entry's current generation number. The number remains valid until you "free" the object, which makes the entry vacant again.
 
 ## Advantages
 
-- Since the pool is just a contiguous memory block, it is much more CPU cache-friendly. This means that in most
-cases the data portions will be loaded in CPU caches, making the access to the data blazing fast.
-- Almost every entity in the engine "lives" in its own pool, this make it easy to create such data structures
-like graphs, where a node refers to other nodes. In this case scene nodes stores just handles (which is just
-8 bytes of memory) to other nodes.
-- Easy lifetime management; no way to create memory leaks since cross-references could be done only via handles.
-- Fast random access with constant complexity.
-- Handles are the same size as pointer on 64-bit arch (8 bytes).
+- Since a pool is a contiguous memory block, it is far more CPU cache-friendly. This reduces the occurrences of CPU cache misses, which makes accesses to data blazingly fast.
+- Almost every entity in Fyrox lives on its own pool, which makes it easy to create data structures
+like graphs, where nodes refer to other nodes. In this case, nodes simply need to store a handle to refer to other nodes.
+- Simple lifetime management. There is no way to leak memory since cross-references can only be done via handles.
+- Fast random access with a constant complexity.
+- Handles are the same size as a pointer on a 64-bit architecture, just 8 bytes.
 
 ## Disadvantages
 
-- Pool could be considered as a sparse array, which could contains a lot of gaps. This may lead to less efficient memory
-usage. 
-- Handles is a sort of weak references, but worse. Since they do not own any data (or even pointer to data), you will
-need a pool instance to borrow a data a handle "points" to. 
-- Handles introduce a level of indirection, that could hurt performance in places with high load that requires random
-access (as a counterargument it is worth to mention, that random access is usually relatively slow because of potential 
-CPU cache misses).
+- Pools can contain lots of gaps between currently used memory, which may lead to less efficient memory usage. 
+- Handles are sort of weak references, but worse. Since they do not own any data nor even point to their data, you
+need a reference to its pool instance in order to borrow the data a handle leads to.
+- Handles introduce a level of indirection that can hurt performance in places with high loads that require random
+access, though this is not too significant as random access is already somewhat slow because of potential 
+CPU cache misses.
 
 ## Usage
 
-You'll use `Handle<Something>` _a lot_ while developing a game using Fyrox. So where are the main usages of Pool and 
-handles? The largest is indeed a [scene graph](../scene/graph.md); it stores all the nodes in a pool and gives handles
-to nodes. Each scene node stores a handle to a parent node and a set of handle to children nodes. Scene graph
-auto-magically ensures that such handles are valid. In [scripts](../scripting/script.md), you can also store handles
+You'll use `Handle` _a lot_ while working with Fyrox. So where are the main usages of pools and 
+handles? The largest is in a [scene graph](../scene/graph.md). This stores all the nodes in a pool and gives handles
+to each node. Each scene node stores a handle to their parent node and a set of handles to their children nodes. A scene graph
+automatically ensures that such handles are valid. In [scripts](../scripting/script.md), you can also store handles
 to scene nodes and assign them in the editor.
 
-[Animation](../animation/animation.md) is another place which stores handles to animated scene nodes. 
-[Animation Blending State Machine](../animation/blending.md) stores its own state graph using pool; it also takes
+[Animation](../animation/animation.md) is another place that stores handles to animated scene nodes. 
+[Animation Blending State Machine](../animation/blending.md) stores its own state graph using a pool; it also takes
 handles to animations from an animation player in a scene. 
 
-This list can be extended for long; this is why you need to understand basic concepts of data management to efficiently
-and fearlessly use the engine.
+And the list could keep going for a long time. This is why you need to understand the basic concepts of data management, as to 
+efficiently and fearlessly use Fyrox.
 
 ## Borrowing
 
-Once an object was placed in a pool, you have to use respective handle to get a reference to it. This could 
-be done either with `.borrow[_mut](handle)` or by using `Index` trait: `pool[handle]`. These methods panic
-when handle is invalid, if you want to prevent that, use `try_borrow[_mut](handle)` method.
+Once an object is placed in a pool, you have to use its respective handle to get a reference to it. This can
+be done with either `pool.borrow(handle)` or `pool.borrow_mute(handle)`, or by using the `Index` trait: `pool[handle]`. Note that 
+these methods panic when the handle given is invalid. If you want to be safe, use the `try_borrow(handle)` or 
+`try_borrow_mut(handle)` method.
 
 ```rust,no_run
 # extern crate fyrox;
@@ -101,8 +95,8 @@ assert_eq!(*obj, 11);
 
 ## Freeing 
 
-You can extract an object from a pool by calling `pool.free(handle)`, it will give you the object back, making
-all handles to the object invalid.
+You can extract an object from a pool by calling `pool.free(handle)`. This will give you the object back and make all current 
+handles to it invalid.
 
 ```rust,no_run
 # extern crate fyrox;
@@ -119,20 +113,16 @@ assert_eq!(obj, None);
 # }
 ```
 
-## Take & reserve
+## Take and Reserve
 
-Sometimes you may need to temporarily extract an object from a pool, do something with it and then put it back
-while preserving handles to that object. There are three special methods for that:
+Sometimes you may want to temporarily extract an object from a pool, do something with it, and then put it back, yet not want 
+to break every handle to the object in the process. There are three methods for this:
 
-1) `take_reserve` + `try_take_reserve` - moves object out of the pool, but leaves the entry in "occupied" state. This function returns
-a tuple with two values `(Ticket<T>, T)`. The latter value is obviously your object, but the former is 
-more interesting. It is a special wrapper over object index that allows you to return the object back. It is used
-in `put_back` method. **Caveat:** an attempt to borrow moved object in the pool will cause panic! 
-2) `put_back` - moves the object back in the pool using given ticket. Ticket says where to put the object in the 
-pool. 
-3) `forget_ticket` - makes the entry of the pool vacant again. It is useful in situations when you've moved object
-out of the pool, but for some reason you don't want to return it back in pool, in this case you **must** call
-this method, otherwise the corresponding entry will be unusable.
+1) `take_reserve` + `try_take_reserve` - moves an object out of the pool but leaves the entry in an occupied state. This function returns a tuple with two values `(Ticket<T>, T)`. The latter one being your object, and the former one being a wrapper over its index that allows you to return the object once you're done with it. This is called a ticket. Note that attempting to borrow a moved object will cause a panic! 
+2) `put_back` - moves the object back using the given ticket. The ticket contains information about where in the pool to return the object to. 
+3) `forget_ticket` - makes the pool entry vacant again. Useful in cases where you move an object
+out of the pool, and then decide you won't return it. If this is the case, you **must** call
+this method, otherwise, the corresponding entry will remain unusable.
 
 Reservation example:
 
@@ -153,7 +143,7 @@ let (ticket, ref mut obj) = pool.take_reserve(handle);
 let attempt_obj = pool.try_borrow(handle);
 assert_eq!(attempt_obj, None);
 
-// Put back, allowing borrowing again.
+// Put the object back, allowing borrowing again.
 
 pool.put_back(ticket, *obj);
 
@@ -185,12 +175,11 @@ assert_eq!(obj, None);
 
 ## Iterators
 
-There are few possible iterators, each one is useful for a particular purpose:
+There are a few possible iterators, each one serving its own purpose:
 
-1) `iter/iter_mut` - creates an iterator that iterates over occupied pool entries returning references to an 
-object associated with an entry.
-2) `pair_iter/pair_iter_mut` - creates an iterator that iterates over occupied pool entries returning tuples with
-two elements `(handle, reference)`. 
+1) `iter/iter_mut` - creates an iterator over occupied pool entries, returning references to each object.
+2) `pair_iter/pair_iter_mut` - creates an iterator over occupied pool entries, returning tuples of a handle and reference
+to each object. 
 
 ```rust,no_run
 # extern crate fyrox;
@@ -212,32 +201,25 @@ assert_eq!(next_obj, None);
 # }
 ```
 
-## Direct access
+## Direct Access
 
-There is ability to get an object from a pool using only indices, there are two methods for that `at` and `at_mut`.
+You have the ability to get an object from a pool using only an index. The methods for that are `at` and `at_mut`.
 
 ## Validation
+ 
+To check if a handle is valid, you can use the `is_valid_handle` method.
 
-Sometimes you may need to check if a handle is valid, to do that use `is_valid_handle` method.
+## Type-erased Handles
 
-## Type-erased handles
+The pool module also offers type-erased handles that can be of use in some situations. Still, try to avoid using these, as they may introduce hard-to-reproduce bugs. Type safety is always good :3
 
-The pool module offers type-erased handles that could be useful for some situations. Try to avoid using type-erased
-handles, because they may introduce hardly-reproducible bugs. Type safety is always good :)
+A type-erased handle is called an `ErasedHandle` and can be created either manually or from a strongly-typed handle.
+Both handle types are interchangeable; you can use the `From` and `Into` traits to convert from one to the other.
 
-Type-erased handle is called `ErasedHandle` and it can be created either manually, or from strongly-typed handles.
-Both handle types are interchangeable, you can use `From` and `Into` traits to convert them one into another.
+### Getting a Handle to an Object by its Reference
 
-## Special 
+If you need to get a handle to an object from only having a reference to it, you can use the `handle_of` method.
 
-Uncategorized stuff.
+### Iterate Over and Filter Out Objects
 
-### Getting a handle of an object by its reference
-
-Sometimes you may need to get a handle of an object having only a reference to it, there is a `handle_of` method
-exactly for that.
-
-### Iterate over and discard unnecessary objects
-
-There is a `retain` method for that, it allows you to "filter" your pool using a closure with custom filtering
-logic.
+The `retain` method allows you to filter your pool's content using a closure provided by you.
