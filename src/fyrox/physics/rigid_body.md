@@ -108,6 +108,14 @@ Fast-moving rigid bodies can "fly through" other objects (for example a bullet c
 moving too fast), this happens because of discrete calculation. This can be fixed by using continuous collision detection,
 to enable it use either `.with_ccd_enabled(state)` of `RigidBodyBuilder` or `.set_ccd_enabled(state)` of `RigidBody`.
 
+## Dominance
+
+Dominance allows you to set a priority of forces applied to rigid bodies. It defines which rigid body can affect what rigid
+body, for example you can set the highest dominance for actors and leave dominance of  everything else at zero, this way
+actors will be able to push any other dynamic bodies, but dynamic bodies won't affect actors. This is useful when you don't
+want your actors be pushed by surrounding objects (like if someone throws a box at an actor, it will stay still if it has
+higher dominance)
+
 ## 2D rigid bodies
 
 2D rigid bodies have no difference with 3D, except the simulation happens in oXY plane and Z coordinate is ignored.
