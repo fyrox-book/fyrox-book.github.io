@@ -242,6 +242,12 @@ fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
 <p>Fast-moving rigid bodies can &quot;fly through&quot; other objects (for example a bullet can completely ignore walls if it is 
 moving too fast), this happens because of discrete calculation. This can be fixed by using continuous collision detection,
 to enable it use either <code>.with_ccd_enabled(state)</code> of <code>RigidBodyBuilder</code> or <code>.set_ccd_enabled(state)</code> of <code>RigidBody</code>.</p>
+<h2 id="dominance"><a class="header" href="#dominance">Dominance</a></h2>
+<p>Dominance allows you to set a priority of forces applied to rigid bodies. It defines which rigid body can affect what rigid
+body, for example you can set the highest dominance for actors and leave dominance of  everything else at zero, this way
+actors will be able to push any other dynamic bodies, but dynamic bodies won't affect actors. This is useful when you don't
+want your actors be pushed by surrounding objects (like if someone throws a box at an actor, it will stay still if it has
+higher dominance)</p>
 <h2 id="2d-rigid-bodies"><a class="header" href="#2d-rigid-bodies">2D rigid bodies</a></h2>
 <p>2D rigid bodies have no difference with 3D, except the simulation happens in oXY plane and Z coordinate is ignored.</p>
 
