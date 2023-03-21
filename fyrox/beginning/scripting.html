@@ -70,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -147,72 +149,72 @@
                     <main>
                         <h1 id="editor-plugins-and-scripts"><a class="header" href="#editor-plugins-and-scripts">Editor, Plugins and Scripts</a></h1>
 <p>Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game from the 
-editor and be able to edit game entities in it. Your game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. In this chapter you'll learn basics of plugins and scripting system,
-also you'll learn how to run the editor.</p>
+editor and to be able to edit the game entities in it. Your game can define any number of scripts, which can be assigned 
+to scene objects to run custom game logic on them. In this chapter you'll learn the basics of the plugins and scripting system,
+as well as how to run the editor.</p>
 <h2 id="project-generator"><a class="header" href="#project-generator">Project Generator</a></h2>
-<p>Fyrox plugins are static, this means that you must re-compile your game or editor if you change source code of your game,
-such architecture requires some boilerplate code that is generic for every game. Fyrox offers special tiny tool - 
-<code>fyrox-template</code> - it helps you to generate all boilerplate parts in a single command. Install it using the following 
+<p>Fyrox plugins are static, this means that you must re-compile your game or editor if the source code of your game changes,
+such architecture requires some boilerplate code for any game. Fyrox offers a special tiny tool - 
+<code>fyrox-template</code> - that helps you generate all this boilerplate with a single command. Install it by running the following 
 command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
 <p><em>Note for Linux:</em> This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
 then you need to add this folder to your <code>$PATH</code> still.</p>
-<p>Navigate to a folder where you want the project to be created and do the following command:</p>
+<p>Navigate to the folder where you want the project to be created and run the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name my_game --style 3d
 </code></pre>
-<p>Note that unlike <code>cargo init</code> this will create a new folder with the given name.</p>
-<p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>) which defines the contents of default
-scene. Once you initialized your project, go to <code>game/src/lib.rs</code> - it is where your game logic is located, as you can 
-see the <code>fyrox-template</code> generated quite some code for you. There are tiny comments about which place is for what. For 
+<p>Note that unlike <code>cargo init</code>, this will create a new folder with the given name.</p>
+<p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>), which defines the contents of the default
+scene. Once you initialize your project, go to <code>game/src/lib.rs</code> - this is where your game logic is located, as you can 
+see, the <code>fyrox-template</code> generated quite a bit of code for you. There are comments explaining what each place is for. For 
 more info about each method, please refer <a href="https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
-<p>After the project is generated, you should memorize two commands that will help you to run your game in different modes:</p>
+<p>Once the project is generated, you should memorize the two commands that will help you to run your game in different modes:</p>
 <ul>
-<li><code>cargo run --package editor --release</code> - launches the editor with your game attached, the editor allows you to run your game
-from it and edit game entities. It is intended to be used only for development.</li>
-<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game that can be shipped (for
+<li><code>cargo run --package editor --release</code> - launches the editor with your game attached. The editor allows you to run your game
+from it and edit its game entities. It is intended to be used only for development.</li>
+<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game, which can be shipped (for
 example - to a store).</li>
 </ul>
 <p>Navigate to your project's directory and run <code>cargo run --package editor --release</code>, after some time you should see the 
 editor:</p>
 <p><img src="editor.png" alt="editor" /></p>
-<p>In the editor you can start making your game scene. <strong>Important note:</strong> your scene must have at least one camera,
-otherwise you won't see anything. Read the next chapter to learn how to use the editor.</p>
-<h2 id="using-latest-engine-version"><a class="header" href="#using-latest-engine-version">Using Latest Engine Version</a></h2>
-<p>Due to the nature of the software development, some bugs are inevitably sneak in the major releases. Due to this fact, 
-you may want to use the latest engine version from its repository on GitHub, because it most likely has some bugs fixed
-(you can also help fixing any bugs you find or at least <a href="https://github.com/FyroxEngine/Fyrox/issues">file an issue</a>).</p>
-<p>The first step you need to do is to install the latest <code>fyrox-template</code>, it can be done in a single <code>cargo</code> command:</p>
+<p>In the editor you can start building your game scene. <strong>Important note:</strong> your scene must have at least one camera,
+otherwise you won't see a thing. Read the next chapter to learn how to use the editor.</p>
+<h2 id="using-the-latest-engine-version"><a class="header" href="#using-the-latest-engine-version">Using the Latest Engine Version</a></h2>
+<p>Due to the nature of the software development, some bugs will inevitably sneak into the major releases, due to this, 
+you may want to use the latest engine version from the repository on GitHub, since it is the most likely to have bugs fixed
+(you can also contribute by fixing any bugs you find or at least, by <a href="https://github.com/FyroxEngine/Fyrox/issues">filing an issue</a>).</p>
+<p>The first step you need to take is to install the latest <code>fyrox-template</code>, this can be done with a single <code>cargo</code> command:</p>
 <pre><code class="language-shell">cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
 </code></pre>
-<p>This will ensure that you are using the latest project/script template generator. It is important, because old versions
-of template generator will most likely generate outdated code, that is no longer compatible with the engine.</p>
-<p>To switch to the latest version of the engine on existing project, you need to specify paths for <code>fyrox</code> and 
-<code>fyroxed_base</code> dependencies to point them on remote repository. There are three places where you need to do this: 
-<code>game</code>, <code>executor</code>, <code>editor</code> projects. At first open <code>game/Cargo.toml</code> and change <code>fyrox</code> dependency to this:</p>
+<p>This will ensure you're using the latest project/script template generator, which is important, since old versions
+of the template generator will most likely generate outdated code, no longer be compatible with the engine.</p>
+<p>To switch existing projects to the latest version of the engine, you need to specify paths pointing to the remote repository 
+for the <code>fyrox</code> and <code>fyroxed_base</code> dependencies. You need to do this in the <code>game</code>, <code>executor</code>, and <code>editor</code> projects. First,
+open <code>game/Cargo.toml</code> and change the <code>fyrox</code> dependency to the following:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
-<p>Do the same for <code>executor/Cargo.toml</code>. The <code>editor</code> has two dependencies we need to change <code>fyrox</code> and <code>fyroxed_base</code>.
-Open the <code>editor/Cargo.toml</code> and set both <code>fyrox</code> and <code>fyroxed_base</code> dependencies to the following:</p>
+<p>Do the same for <code>executor/Cargo.toml</code>. The <code>editor</code> has two dependencies we need to change: <code>fyrox</code> and <code>fyroxed_base</code>.
+Open the <code>editor/Cargo.toml</code> and set both dependencies to the following:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
-<p>Now your game will use the latest engine and editor, but beware - there could be some API breaks. You can avoid this by 
+<p>Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid these by 
 specifying a particular commit, just add <code>rev = &quot;desired_commit_hash&quot;</code> to every dependency like so:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 </code></pre>
-<p>To keep local git repository of the engine up-to-date, you just need to call <code>cargo update</code> in the root of project's
-workspace. This will pull the latest changes from remote (unless there is no <code>rev</code> specified).</p>
-<p>Learn more about dependency paths in the official <code>cargo</code> documentation 
+<p>To bring a local git repository of the engine to being up-to-date, just call <code>cargo update</code> at the root of the project's
+workspace. This will pull the latest changes from the remote, unless there is no <code>rev</code> specified.</p>
+<p>Learn more about dependency paths on the official <code>cargo</code> documentation, 
 <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
-<p>Any object-specific game logic should be added using scripts. Script is a &quot;container&quot; for data and code, that will be
-executed by the engine. Read <a href="../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
+<p>Any object-specific game logic should be added using scripts. A script is a &quot;container&quot; for data and code, that will be
+executed by the engine. Read the <a href="../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
 your game.</p>
 
                     </main>

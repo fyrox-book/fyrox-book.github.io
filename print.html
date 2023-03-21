@@ -71,10 +71,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -269,140 +271,134 @@ engine entities, how they're structured and what are the basics of data manageme
 tool.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="editor-plugins-and-scripts"><a class="header" href="#editor-plugins-and-scripts">Editor, Plugins and Scripts</a></h1>
 <p>Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game from the 
-editor and be able to edit game entities in it. Your game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. In this chapter you'll learn basics of plugins and scripting system,
-also you'll learn how to run the editor.</p>
+editor and to be able to edit the game entities in it. Your game can define any number of scripts, which can be assigned 
+to scene objects to run custom game logic on them. In this chapter you'll learn the basics of the plugins and scripting system,
+as well as how to run the editor.</p>
 <h2 id="project-generator"><a class="header" href="#project-generator">Project Generator</a></h2>
-<p>Fyrox plugins are static, this means that you must re-compile your game or editor if you change source code of your game,
-such architecture requires some boilerplate code that is generic for every game. Fyrox offers special tiny tool - 
-<code>fyrox-template</code> - it helps you to generate all boilerplate parts in a single command. Install it using the following 
+<p>Fyrox plugins are static, this means that you must re-compile your game or editor if the source code of your game changes,
+such architecture requires some boilerplate code for any game. Fyrox offers a special tiny tool - 
+<code>fyrox-template</code> - that helps you generate all this boilerplate with a single command. Install it by running the following 
 command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
 <p><em>Note for Linux:</em> This installs it in <code>$user/.cargo/bin</code>. If you get errors about the <code>fyrox-template</code> command not found 
 then you need to add this folder to your <code>$PATH</code> still.</p>
-<p>Navigate to a folder where you want the project to be created and do the following command:</p>
+<p>Navigate to the folder where you want the project to be created and run the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name my_game --style 3d
 </code></pre>
-<p>Note that unlike <code>cargo init</code> this will create a new folder with the given name.</p>
-<p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>) which defines the contents of default
-scene. Once you initialized your project, go to <code>game/src/lib.rs</code> - it is where your game logic is located, as you can 
-see the <code>fyrox-template</code> generated quite some code for you. There are tiny comments about which place is for what. For 
+<p>Note that unlike <code>cargo init</code>, this will create a new folder with the given name.</p>
+<p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>), which defines the contents of the default
+scene. Once you initialize your project, go to <code>game/src/lib.rs</code> - this is where your game logic is located, as you can 
+see, the <code>fyrox-template</code> generated quite a bit of code for you. There are comments explaining what each place is for. For 
 more info about each method, please refer <a href="https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
-<p>After the project is generated, you should memorize two commands that will help you to run your game in different modes:</p>
+<p>Once the project is generated, you should memorize the two commands that will help you to run your game in different modes:</p>
 <ul>
-<li><code>cargo run --package editor --release</code> - launches the editor with your game attached, the editor allows you to run your game
-from it and edit game entities. It is intended to be used only for development.</li>
-<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game that can be shipped (for
+<li><code>cargo run --package editor --release</code> - launches the editor with your game attached. The editor allows you to run your game
+from it and edit its game entities. It is intended to be used only for development.</li>
+<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game, which can be shipped (for
 example - to a store).</li>
 </ul>
 <p>Navigate to your project's directory and run <code>cargo run --package editor --release</code>, after some time you should see the 
 editor:</p>
 <p><img src="fyrox/beginning/editor.png" alt="editor" /></p>
-<p>In the editor you can start making your game scene. <strong>Important note:</strong> your scene must have at least one camera,
-otherwise you won't see anything. Read the next chapter to learn how to use the editor.</p>
-<h2 id="using-latest-engine-version"><a class="header" href="#using-latest-engine-version">Using Latest Engine Version</a></h2>
-<p>Due to the nature of the software development, some bugs are inevitably sneak in the major releases. Due to this fact, 
-you may want to use the latest engine version from its repository on GitHub, because it most likely has some bugs fixed
-(you can also help fixing any bugs you find or at least <a href="https://github.com/FyroxEngine/Fyrox/issues">file an issue</a>).</p>
-<p>The first step you need to do is to install the latest <code>fyrox-template</code>, it can be done in a single <code>cargo</code> command:</p>
+<p>In the editor you can start building your game scene. <strong>Important note:</strong> your scene must have at least one camera,
+otherwise you won't see a thing. Read the next chapter to learn how to use the editor.</p>
+<h2 id="using-the-latest-engine-version"><a class="header" href="#using-the-latest-engine-version">Using the Latest Engine Version</a></h2>
+<p>Due to the nature of the software development, some bugs will inevitably sneak into the major releases, due to this, 
+you may want to use the latest engine version from the repository on GitHub, since it is the most likely to have bugs fixed
+(you can also contribute by fixing any bugs you find or at least, by <a href="https://github.com/FyroxEngine/Fyrox/issues">filing an issue</a>).</p>
+<p>The first step you need to take is to install the latest <code>fyrox-template</code>, this can be done with a single <code>cargo</code> command:</p>
 <pre><code class="language-shell">cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
 </code></pre>
-<p>This will ensure that you are using the latest project/script template generator. It is important, because old versions
-of template generator will most likely generate outdated code, that is no longer compatible with the engine.</p>
-<p>To switch to the latest version of the engine on existing project, you need to specify paths for <code>fyrox</code> and 
-<code>fyroxed_base</code> dependencies to point them on remote repository. There are three places where you need to do this: 
-<code>game</code>, <code>executor</code>, <code>editor</code> projects. At first open <code>game/Cargo.toml</code> and change <code>fyrox</code> dependency to this:</p>
+<p>This will ensure you're using the latest project/script template generator, which is important, since old versions
+of the template generator will most likely generate outdated code, no longer be compatible with the engine.</p>
+<p>To switch existing projects to the latest version of the engine, you need to specify paths pointing to the remote repository 
+for the <code>fyrox</code> and <code>fyroxed_base</code> dependencies. You need to do this in the <code>game</code>, <code>executor</code>, and <code>editor</code> projects. First,
+open <code>game/Cargo.toml</code> and change the <code>fyrox</code> dependency to the following:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
-<p>Do the same for <code>executor/Cargo.toml</code>. The <code>editor</code> has two dependencies we need to change <code>fyrox</code> and <code>fyroxed_base</code>.
-Open the <code>editor/Cargo.toml</code> and set both <code>fyrox</code> and <code>fyroxed_base</code> dependencies to the following:</p>
+<p>Do the same for <code>executor/Cargo.toml</code>. The <code>editor</code> has two dependencies we need to change: <code>fyrox</code> and <code>fyroxed_base</code>.
+Open the <code>editor/Cargo.toml</code> and set both dependencies to the following:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot; }
 </code></pre>
-<p>Now your game will use the latest engine and editor, but beware - there could be some API breaks. You can avoid this by 
+<p>Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid these by 
 specifying a particular commit, just add <code>rev = &quot;desired_commit_hash&quot;</code> to every dependency like so:</p>
 <pre><code class="language-toml">[dependencies]
 fyrox = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 fyroxed_base = { git = &quot;https://github.com/FyroxEngine/Fyrox&quot;, rev = &quot;0195666b30562c1961a9808be38b5e5715da43af&quot; }
 </code></pre>
-<p>To keep local git repository of the engine up-to-date, you just need to call <code>cargo update</code> in the root of project's
-workspace. This will pull the latest changes from remote (unless there is no <code>rev</code> specified).</p>
-<p>Learn more about dependency paths in the official <code>cargo</code> documentation 
+<p>To bring a local git repository of the engine to being up-to-date, just call <code>cargo update</code> at the root of the project's
+workspace. This will pull the latest changes from the remote, unless there is no <code>rev</code> specified.</p>
+<p>Learn more about dependency paths on the official <code>cargo</code> documentation, 
 <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
-<p>Any object-specific game logic should be added using scripts. Script is a &quot;container&quot; for data and code, that will be
-executed by the engine. Read <a href="fyrox/beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
+<p>Any object-specific game logic should be added using scripts. A script is a &quot;container&quot; for data and code, that will be
+executed by the engine. Read the <a href="fyrox/beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
 your game.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fyroxed-overview"><a class="header" href="#fyroxed-overview">FyroxEd Overview</a></h1>
-<p>FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
-that helps you to build your game from start to finish with relatively low effort.</p>
-<p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its 
-basic functionality. This chapter will guide you through the basics, advanced topics will be covered in respective 
-chapters.</p>
+<p>FyroxEd - is the native editor of Fyrox, it is made with one purpose - to be an integrated game development environment
+that helps you build your game from start to finish with relatively low effort.</p>
+<p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its basic functionalities.
+This chapter will guide you through the basics, advanced topics will be covered in their respective chapters.</p>
 <h2 id="windows"><a class="header" href="#windows">Windows</a></h2>
-<p>Once the editor is open for the first time, it will confuse you by amount of windows, buttons, lists, etc. Each window
-serves for different purpose, but all of them works together to help you make your game. Let's look at the editor's
-screenshot and learn what parts of it responsible for what (please note that it can change over time, because the 
-development is quite rapid and image can become outdated pretty easily):</p>
+<p>When you open the editor for the first time you may be confused by the amount of windows, buttons, lists, etc. you'll be presented 
+with. Each window serves a different purpose, but all of them work together to help you make your game. Let's take a look at a 
+screenshot of the editor and learn what each part of it is responsible for (please note that this can change over time, because
+development is quite fast and images can easily become outdated):</p>
 <p><img src="fyrox/beginning/./overview.png" alt="Windows" /></p>
 <ul>
-<li><strong>World viewer</strong> - shows every object in the scene and their relations. It allows you to inspect and edit the 
-contents of the scene in hierarchical form.</li>
-<li><strong>Scene preview</strong> - renders your scene with debug info and various editor-specific objects (like gizmos, entity icons,
-etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a <strong>Toolbar</strong>,
-it shows available context-dependent tools.</li>
-<li><strong>Inspector</strong> - allows you to modify various properties of a selected object.</li>
-<li><strong>Message Log</strong> - shows the important messages from the editor.</li>
-<li><strong>Navmesh Panel</strong> - allows you to create/delete and edit navigational meshes.</li>
-<li><strong>Command Stack</strong> - shows the most recent actions you've done, allows you to undo and redo the changes on demand.</li>
-<li><strong>Asset Browser</strong> - inspects the assets of your game, allows you to instantiate resources in the scene and so on.</li>
-<li><strong>Audio Context</strong> - allows you to edit settings of scene's sound context, such as global volume, available audio
-buses, effects, etc.</li>
+<li><strong>World viewer</strong> - shows every object in the scene and their relationships. Allows inspecting and editing the 
+contents of the scene in a hierarchical form.</li>
+<li><strong>Scene preview</strong> - renders the scene with debug info and various editor-specific objects (gizmos, entity icons,
+etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. The <strong>Toolbar</strong> on its left side
+shows available context-dependent tools.</li>
+<li><strong>Inspector</strong> - allows you to modify various properties of the selected object.</li>
+<li><strong>Message Log</strong> - displays important messages from the editor.</li>
+<li><strong>Navmesh Panel</strong> - allows you to create, delete, and edit navigational meshes.</li>
+<li><strong>Command Stack</strong> - displays your most recent actions and allows you to undo or redo their changes.</li>
+<li><strong>Asset Browser</strong> - allows you to inspect the assets of your game and to instantiate resources in the scene, among other things.</li>
+<li><strong>Audio Context</strong> - allows you to edit the settings of the scene's sound context (global volume, available audio buses, effects,
+etc.)</li>
 </ul>
-<h2 id="creating-loading-a-scene"><a class="header" href="#creating-loading-a-scene">Creating (Loading) a Scene</a></h2>
-<p>FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
-must have a scene created (or loaded) to begin working with the editor. To create a scene click <code>File -&gt; New Scene</code>.</p>
-<p>To load an existing scene, go to <code>File -&gt; Load</code> and select desired scene using file browser. It may be very useful
-to use list of recently opened scenes, to load them quickly without a need to go <code>File -&gt; Load</code>, search a scene, etc.
-Just go to <code>File -&gt; Recent Scenes</code> and click one to load.</p>
-<h2 id="populating-your-scene"><a class="header" href="#populating-your-scene">Populating Your Scene</a></h2>
-<p>The scene can be filled with various objects, there are two equivalent ways of creating game entities:</p>
+<h2 id="creating-or-loading-a-scene"><a class="header" href="#creating-or-loading-a-scene">Creating or loading a Scene</a></h2>
+<p>FyroxEd works with scenes - a scene is a container for game entities, you can create and edit one scene at a time. You must have a
+scene loaded to begin working with the editor. To create a scene go to <code>File -&gt; New Scene</code>.</p>
+<p>To load an existing scene, go to <code>File -&gt; Load</code> and select the desired scene through the file browser. Recently opened
+scenes can be loaded more quickly by going to <code>File -&gt; Recent Scenes</code> and selecting the desired one.</p>
+<h2 id="populating-a-scene"><a class="header" href="#populating-a-scene">Populating a Scene</a></h2>
+<p>A scene can contain various game entities. There are two equivalent ways of creating these:</p>
 <ul>
-<li>By clicking <code>Create</code> item in the main menu and selecting desired entity from the list.</li>
-<li>By right-clicking on a game entity in the <code>World Viewer</code> and selecting desired entity from <code>Add Child</code> sub-menu.</li>
+<li>By going to <code>Create</code> in the main menu and selecting the desired entity from the drop down.</li>
+<li>By right-clicking on a game entity in the <code>World Viewer</code> and selecting the desired entity from the <code>Add Child</code> sub-menu.</li>
 </ul>
-<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) and saved in various formats, Fyrox
-supports FBX format, which is supported by pretty much any 3D modelling software. You can add such object to your scene
-by drag'n'dropping a desired asset from the Asset Browser. Find one in the browser, click on it, hold the button and drag it
-to the Scene Viewer and then release the button. You'll see a preview of your object while the mouse button is held.</p>
-<p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example you can create a scene with a few 
-objects in it with some scripts and re-use it across any other scenes. Such scene is called <a href="fyrox/beginning/../scene/prefab.html">prefab</a>.</p>
-<h2 id="saving-scene"><a class="header" href="#saving-scene">Saving Scene</a></h2>
-<p>To save your work, go to <code>File -&gt; Save</code>. For the first time (for unsaved scene), the editor will ask you to specify 
-file name and path to a folder where the scene will be saved. A scene loaded from a file will be automatically saved 
-to the path it was loaded from.</p>
-<h2 id="undoredo"><a class="header" href="#undoredo">Undo/redo</a></h2>
-<p>FyroxEd remembers your actions, and it is possible to undo (or redo undone) your changes to fix some stuff in the scene.
-You can undo or redo your changes either by clicking <code>Edit -&gt; Undo/Redo</code> or by standard shortcuts: <code>Ctrl+Z</code> - undo,
-<code>Ctrl+Y</code> - redo.</p>
+<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats. Fyrox supports
+FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects by simply dragging the one you want and dropping it on the <code>Scene Preview</code>. While dragging it, you'll also see a preview of the object.</p>
+<p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example, you can create a scene with a few objects in it
+with some scripts and re-use them within other scenes. Such scenes are called <a href="fyrox/beginning/../scene/prefab.html">prefabs</a>.</p>
+<h2 id="saving-a-scene"><a class="header" href="#saving-a-scene">Saving a Scene</a></h2>
+<p>To save your work, go to <code>File -&gt; Save</code>. If you're saving a new scene, the editor will ask you to specify a file name and a
+path to where the scene will be saved. Scenes loaded from a file will automatically be saved to the path they were loaded
+from.</p>
+<h2 id="undoing-and-redoing"><a class="header" href="#undoing-and-redoing">Undoing and redoing</a></h2>
+<p>FyroxEd remembers your actions and allows you to undo and redo the changes done by these. You can undo or redo changes by either
+going to <code>Edit -&gt; Undo/Redo</code> or through the usual shortcuts: <code>Ctrl+Z</code> - to undo, <code>Ctrl+Y</code> - to redo.</p>
 <h2 id="controls"><a class="header" href="#controls">Controls</a></h2>
-<p>There are number of control keys that you'll be using most of the time, pretty much all of them works in <code>Scene Preview</code>
-window:</p>
+<p>There are number of control keys that you'll be using most of the time, pretty much all of them work in the <code>Scene Preview</code> window:</p>
 <h3 id="editor-camera-movement"><a class="header" href="#editor-camera-movement">Editor camera movement</a></h3>
-<p>Click and hold <code>[Right Mouse Button]</code> within the <code>Scene Preview</code> window to use movement controls:</p>
+<p>Click and hold <code>[Right Mouse Button]</code> within the <code>Scene Preview</code> window to enable the movement controls:</p>
 <ul>
 <li><code>[W][S][A][D]</code> - Move camera forward/backward/left/right</li>
 <li><code>[Space][Q]/[E]</code> - Raise/Lower Camera</li>
-<li><code>[Ctrl]</code> - speed up</li>
-<li><code>[Shift]</code>- slowdown</li>
+<li><code>[Ctrl]</code> - Speed up</li>
+<li><code>[Shift]</code>- Slowdown</li>
 </ul>
 <h3 id="others"><a class="header" href="#others">Others</a></h3>
 <ul>
 <li><code>[Left Mouse Button]</code> - Select</li>
-<li><code>[Middle Mouse Button]</code> to pan camera in viewing plane</li>
+<li><code>[Middle Mouse Button]</code> - Pan camera in viewing plane</li>
 <li><code>[1]</code> - Select interaction mode</li>
 <li><code>[2]</code> - Move interaction mode</li>
 <li><code>[3]</code> - Scale interaction mode</li>
@@ -411,137 +407,127 @@ window:</p>
 <li><code>[6]</code> - Terrain editing interaction mode</li>
 <li><code>[Ctrl]+[Z]</code> - Undo</li>
 <li><code>[Ctrl]+[Y]</code> - Redo</li>
-<li><code>[Delete]</code> - deletes current selection.</li>
+<li><code>[Delete]</code> - Delete current selection.</li>
 </ul>
 <h2 id="play-mode"><a class="header" href="#play-mode">Play Mode</a></h2>
-<p>One of the key features of the editor is that it allows you to run your game from it in a separate process. Use 
-<code>Play/Stop</code> button at the top of <code>Scene Preview</code> window to enter (or leave) Play Mode. Keep in mind, that editor UI 
-will be locked while you're in the Play Mode. </p>
-<p>Play Mode can be activated only for projects that made with <code>fyrox-template</code> (or have similar structure). The editor
+<p>One of the key features of the editor is that it allows you to run your game from it in a separate process. Use the <code>Play/Stop</code>
+button at the top of the <code>Scene Preview</code> window to enter or leave Play Mode. Keep in mind, that the editor UI will be locked while
+you're in Play Mode. </p>
+<p>Play Mode can be activated only for projects made with the <code>fyrox-template</code> (or for projects with a similar structure). The editor
 calls <code>cargo</code> commands to build and run your game in a separate process. Running the game in a separate process ensures
-that the editor won't crash if the game does, it also provides excellent isolation between the game and the editor, not
+that the editor won't crash if your game does, it also provides excellent isolation between the game and the editor, not
 giving a chance to break the editor by running the game.</p>
 <h2 id="additional-utilities"><a class="header" href="#additional-utilities">Additional Utilities</a></h2>
-<p>There are also number of powerful utilities that will make your life easier, they can be found under <code>Utils</code> section of 
-main menu: </p>
+<p>There are also number of powerful utilities that will make your life easier, they can be found under the <code>Utils</code> section of the
+main menu:</p>
 <ul>
-<li>Animation Editor - allows you to create and editor animation blending state machines which are responsible for 
+<li>Animation Editor - allows you to create and edit animation blending state machines which are responsible for 
 animation mixing.</li>
-<li>Curve Editor - create and edit curve resources to make complex laws for game parameters.</li>
+<li>Curve Editor - allows you to create and edit curve resources to make complex laws for game parameters.</li>
 <li>Path Fixer - helps you fix incorrect resource references in your scenes.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="scene-and-scene-graph"><a class="header" href="#scene-and-scene-graph">Scene and scene graph</a></h1>
-<p>When you're playing a game, you often see various objects scattered around on screen, all of them forming a
-<em>scene</em>. Scene is just a set of various objects, as in many other game engines, Fyrox allows you to create multiple
-scenes for various purposes. For example, one scene could be used for menu, a bunch could be used for game levels,
-and one for ending screen. Scenes also could be used to create a source of data for other scenes, such scenes called
-<em>prefabs</em>. A scene could also be rendered in a texture, and the texture can be used in other scene - this way you
-can create interactive screens that showing some other places.</p>
-<p>While playing games, you could've noticed that some objects behaves like they're linked to other objects, for example
-your character in a role-playing game could carry a sword. While the character holds the sword, it is linked to his
-arm. Such relations between the objects could be presented by a graph structure.</p>
-<p>Simply speaking, graph is a set of objects with hierarchical relationships between each object. Each object in the
-graph is called <em>node</em>. In the example with the sword and the character, the sword is a <em>child</em> node of the character,
-which in its turn is a <em>parent</em> node of the character. (Here we intentionally omit the fact that usually character
-model contains complex skeleton with multiple bones and the sword is actually attached to one of hand's bones.)</p>
-<p>You can change hierarchy of the nodes in the editor using simple drag'n'drop functionality in <code>World Viewer</code> - drag a 
-node onto some other node, and it will be attached to it.</p>
-<h2 id="building-blocks-or-scene-nodes"><a class="header" href="#building-blocks-or-scene-nodes">Building blocks or scene nodes</a></h2>
-<p>The engine offers various types of &quot;building blocks&quot; for your scene, each such block is called <em>scene node</em>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scene-and-scene-graph"><a class="header" href="#scene-and-scene-graph">Scene and Scene Graph</a></h1>
+<p>When you're playing a game, you often see various objects scattered around the screen, all of them are forming a
+<em>scene</em>. A scene is just a set of a variety objects, as in many other game engines, Fyrox allows you to create multiple
+scenes for multiple purposes, for example, one scene could be used for a menu, a bunch of others for game levels,
+and another one for an ending screen. Scenes can also be used to create a source of data for other scenes, such scenes are called
+<em>prefabs</em>. Scenes can also be rendered in a texture, which can be used in other scenes - this way you
+can create interactive screens that show other places.</p>
+<p>While playing games, you may have noticed that some objects behaves as if they were linked to other objects, for example,
+a character in a role-playing game could carry a sword. While the character holds the sword, it is linked to his
+arm. Such relations between the objects can be presented by a graph structure.</p>
+<p>Simply speaking, a graph is a set of objects with hierarchical relationships between each object. Each object in the
+graph is called a <em>node</em>. In the example with the sword and the character, the sword is a <em>child</em> node of the character,
+and the character is a <em>parent</em> node of the sword (here we ignore the fact that in reality, character
+models usually contain complex skeletons, with the sword actually being attached to one of the hands' bones, not to the character).</p>
+<p>You can change the hierarchy of nodes in the editor using a simple drag'n'drop functionality in the <code>World Viewer</code> - drag a 
+node onto some other node, and it will attach itself to it.</p>
+<h2 id="building-blocks-or-scene-nodes"><a class="header" href="#building-blocks-or-scene-nodes">Building Blocks or Scene Nodes</a></h2>
+<p>The engine offers various types of &quot;building blocks&quot; for your scene, each such block is called a <em>scene node</em>.</p>
 <ul>
-<li><a href="fyrox/beginning/../scene/base_node.html">Base</a> - a node that stores hierarchical information (a handle to the parent node and a set of handles
-to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
-is used as a base node for every other scene node (via composition).</li>
-<li><a href="fyrox/beginning/../scene/mesh_node.html">Mesh</a> - a node that represents a 3D model. This one of the most commonly used nodes in almost every game.
-Meshes could be easily created either programmatically, or be made in some 3D modelling software (like Blender)
-and loaded in your scene.</li>
-<li><a href="fyrox/beginning/../scene/light_node.html">Light</a> - a node that represents a light source. There are three types of light sources:
+<li><a href="fyrox/beginning/../scene/base_node.html">Base</a> - stores hierarchical information (a handle to the parent node and handles
+to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it's used as a base node 
+for every other scene node via composition.</li>
+<li><a href="fyrox/beginning/../scene/mesh_node.html">Mesh</a> - represents a 3D model. This one of the most commonly used nodes in almost every game.
+Meshes can be easily created either programmatically, or be made in some 3D modelling software, such as Blender, 
+and then loaded into the scene.</li>
+<li><a href="fyrox/beginning/../scene/light_node.html">Light</a> - represents a light source. There are three types of light sources:
 <ul>
-<li><strong>Directional</strong> - a light source that does not have position, only direction. The closest real-world example
-is our Sun.</li>
-<li><strong>Point</strong> - a light source that emits light in every direction. Real-world example: light bulb.</li>
-<li><strong>Spot</strong> - a light source that emits light in a particular direction with a cone-like shape. Real-world example:
-flashlight.</li>
+<li><strong>Point</strong> - emits light in every direction. A real-world example would be a light bulb.</li>
+<li><strong>Spot</strong> - emits light in a particular direction, with a cone-like shape. A real-world example would be a flashlight.</li>
+<li><strong>Directional</strong> - emits light in a particular direction, but does not have position. The closest real-world example would be the Sun.</li>
 </ul>
 </li>
-<li><a href="fyrox/beginning/../scene/camera_node.html">Camera</a> - a node that allows you to see the world. You must have at least one camera in your scene to be
-able to see anything.</li>
-<li><a href="fyrox/beginning/../scene/sprite_node.html">Sprite</a> - a node that represents a quad that always faced towards a camera. It can have a texture, size, it
-also can be rotated around the &quot;look&quot; axis.</li>
-<li><a href="fyrox/beginning/../scene/particle_system_node.html">Particle system</a> - a node that allows you to build visual effects using a huge set of small particles, it
-can be used to create smoke, sparks, blood splatters, etc. effects.</li>
-<li><a href="fyrox/beginning/../scene/terrain_node.html">Terrain</a> - a node that allows you to create complex landscapes with minimal effort.</li>
-<li><a href="fyrox/beginning/../scene/decal_node.html">Decal</a> - a node that paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
+<li><a href="fyrox/beginning/../scene/camera_node.html">Camera</a> - allows you to see the world. You must have at least one camera in your scene to be able to see anything.</li>
+<li><a href="fyrox/beginning/../scene/sprite_node.html">Sprite</a> - represents a quad that always faces towards a camera. It can have a texture and size and can also can be rotated around the &quot;look&quot; axis.</li>
+<li><a href="fyrox/beginning/../scene/particle_system_node.html">Particle system</a> - allows you to create visual effects using a huge set of small particles. It
+can be used to create smoke, sparks, blood splatters, etc.</li>
+<li><a href="fyrox/beginning/../scene/terrain_node.html">Terrain</a> - allows you to create complex landscapes with minimal effort.</li>
+<li><a href="fyrox/beginning/../scene/decal_node.html">Decal</a> - paints on other nodes using a texture. It is used to simulate cracks in concrete walls,
 damaged parts of the road, blood splatters, bullet holes, etc.</li>
-<li><a href="fyrox/beginning/../physics/rigid_body.html">Rigid Body</a> - a physical entity that is responsible for dynamic of the rigid. There is a special variant
-for 2D - <code>RigidBody2D</code>.</li>
-<li><a href="fyrox/beginning/../physics/collider.html">Collider</a> - a physical shape for a rigid body, it is responsible for contact manifold generation, 
-without it any rigid body will not participate in simulation correctly, so every rigid body must have at least
+<li><a href="fyrox/beginning/../physics/rigid_body.html">Rigid Body</a> - a physical entity that is responsible for the dynamic of the rigid. There is a special 
+variant for 2D - <code>RigidBody2D</code>.</li>
+<li><a href="fyrox/beginning/../physics/collider.html">Collider</a> - a physical shape for a rigid body. It is responsible for contact manifold generation, 
+without it, any rigid body will not participate in simulation correctly, so every rigid body must have at least
 one collider. There is a special variant for 2D - <code>Collider2D</code>.</li>
-<li><a href="fyrox/beginning/../physics/joint.html">Joint</a> - a physical entity that restricts motion between two rigid bodies, it has various amounts
+<li><a href="fyrox/beginning/../physics/joint.html">Joint</a> - a physical entity that restricts motion between two rigid bodies. It has various amounts
 of degrees of freedom depending on the type of the joint. There is a special variant for 2D - <code>Joint2D</code>.</li>
-<li><a href="fyrox/beginning/../scene/rectangle.html">Rectangle</a> - a simple rectangle mesh that can have a texture and a color, it is a very simple version of 
+<li><a href="fyrox/beginning/../scene/rectangle.html">Rectangle</a> - a simple rectangle mesh that can have a texture and a color. It is a very simple version of 
 a Mesh node, yet it uses very optimized renderer, that allows you to render dozens of rectangles simultaneously.
-This node is intended to be used for <strong>2D games</strong> only.</li>
-<li><a href="fyrox/beginning/../sound/sound.html">Sound</a> - a sound source, it is universal for 2D and 3D. Spatial blend factor allows you to select
+This node is intended for use in <strong>2D games</strong> only.</li>
+<li><a href="fyrox/beginning/../sound/sound.html">Sound</a> - a sound source universal for 2D and 3D. Spatial blend factor allows you to select
 a proportion between 2D and 3D.</li>
-<li>Listener - an audio receiver that captures the sound in a particular point in your scene and sends it to an audio
-context for processing and output to an audio playback device.</li>
-<li>Animation Player - a container for multiple animations, it can play animations made in the 
+<li>Listener - an audio receiver that captures the sound at a particular point in your scene and sends it to an audio
+context for processing and outputting to an audio playback device.</li>
+<li>Animation Player - a container for multiple animations. It can play animations made in the 
 <a href="fyrox/beginning/../animation/anim_editor.html">animation editor</a> and apply animation poses to respective scene nodes.</li>
 <li>Animation Blending State Machine - a state machine that mixes multiple animations from multiple states into one; each
-state is backed by one or more animation playing or blending nodes. See the <a href="fyrox/beginning/../animation/absm_editor.html">respective chapter</a> 
+state is backed by one or more animation playing or blending nodes. See its <a href="fyrox/beginning/../animation/absm_editor.html">respective chapter</a> 
 for more info.</li>
 </ul>
-<p>Each of the node could be created either from the editor (<code>Create</code> on main menu) or programmatically via respective
-node builder (see <a href="https://docs.rs/fyrox/latest/fyrox/scene/index.html">API docs</a> for more info). These scene nodes 
-allow you to build almost any kind of game. It is also possible to create your own types of nodes, but this is advanced 
-topic, and it will be covered in <a href="fyrox/beginning/../scene/custom_node.html">next chapters</a>.</p>
-<h2 id="local-and-global-coordinates"><a class="header" href="#local-and-global-coordinates">Local and global coordinates</a></h2>
-<p>Graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
+<p>Every node can be created either in the editor (through <code>Create</code> on the main menu, or through <code>Add Child</code> after right-clicking on 
+a game entitiy) or programmatically via their respective node builder (see [API docs](https://docs.rs/fyrox/latest/fyrox/scene/
+index.html) for more info). These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
+types of nodes, but that is an advanced topic, which is covered in a <a href="fyrox/beginning/../scene/custom_node.html">future chapter</a>.</p>
+<h2 id="local-and-global-coordinates"><a class="header" href="#local-and-global-coordinates">Local and Global Coordinates</a></h2>
+<p>A graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
 when working with <em>scene nodes</em>.</p>
-<p>Scene node has two kinds of transform - local and global. Local transform defines where the node is located
-(translation) relative to origin, how much it is scaled (in percent) and rotated (around any arbitrary axis).
-Global transform is almost the same, but it also includes the whole chain of transforms of parent nodes. In the
-previous example with the character, the sword has its own local transform which tells how much it should be
-moved from origin to be exactly on a hand of the character. But global transform of the swords includes transform
-of the entire character. So if you move the character, the local transform of the sword will remain the same, but
-global transform will include the transform of the character.</p>
+<p>A scene node has two kinds of transform - a local and global. The local transform defines where the node is located
+relative to its origin, its scale as a percentage, and its rotation around any arbitrary axis.
+The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going back to the example of the character and the sword, if the character moves, and by extension the sword, the global transform of the sword will reflect the changes made to the character position, yet its local transform will not, since that represents the sword's position's relative to the character's, which didn't change.</p>
 <p>This mechanism is very simple, yet powerful. The full grace of it unfolds when you're working with 3D models with
-skeleton, each bone in the skeleton has its parent and a set of children. You can rotate/translate/scale bones to
-animate your character.</p>
+skeletons. Each bone in a skeleton has its parent and a set of children, which allows you to rotate, translate, or scale them to
+animate your entire character.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="assets"><a class="header" href="#assets">Assets</a></h1>
-<p>Pretty much every game depends on various assets such as 3D models, textures, sounds, etc. The engine has its own 
-assets pipeline that is made to make your life easier. </p>
+<p>Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own 
+assets pipeline made to make your life easier.</p>
 <h2 id="asset-types"><a class="header" href="#asset-types">Asset Types</a></h2>
-<p>The engine offers a fixed set of assets that should cover all your needs:</p>
+<p>The engine offers a set of assets that should cover all of your needs:</p>
 <ul>
-<li><a href="fyrox/beginning/../resources/model.html">Models</a> - model is a set of objects, it can be a simple 3D model (like barrel, bush, weapon, 
-etc.) or complex scene with lots of object and possibly other model instances. There are two main formats supported:
-FBX - could be used to import 3D models, RGS - a scene that is made in Fyroxed. RGS models are special, they can be 
+<li><a href="fyrox/beginning/../resources/model.html">Models</a> - are a set of objects. They can be a simple 3D model (barrels, bushes, weapons, 
+etc.) or complex scenes with lots of objects and possibly other model instances. Fyrox supports two main formats:
+FBX - which can be used to import 3D models, RGS - which are scenes made in Fyroxed. RGS models are special, as they can be 
 used as <em>hierarchical prefabs</em>.</li>
-<li><a href="fyrox/beginning/../resources/texture.html">Textures</a> - texture is an image that is used to add graphical details to objects. The
-engine supports various texture formats such as PNG, JPG, BMP, etc. There is also support for compressed textures in
-DDS format.</li>
-<li><a href="fyrox/beginning/../resources/sound.html">Sound buffers</a> - a data buffer for sound sources. The engine supports WAV and OGG formats. </li>
-<li><a href="fyrox/beginning/../resources/curve.html">Curves</a> - parametric curve. It is used to create complex functions for numeric parameters.
-Curves can be made in <code>Curve Editor</code> (<code>Utils -&gt; Curve Editor</code>)</li>
+<li><a href="fyrox/beginning/../resources/texture.html">Textures</a> - are images used to add graphical details to objects. The
+engine supports multiple texture formats, such as PNG, JPG, BMP, etc. Compressed textures in DDS format are also supported.</li>
+<li><a href="fyrox/beginning/../resources/sound.html">Sound buffers</a> - are data buffers for sound sources. Fyrox supports WAV and OGG formats. </li>
+<li><a href="fyrox/beginning/../resources/curve.html">Curves</a> - are parametric curves. They're used to create complex functions for numeric parameters.
+They can be made in the <code>Curve Editor</code> (<code>Utils -&gt; Curve Editor</code>)</li>
 </ul>
 <h2 id="asset-management"><a class="header" href="#asset-management">Asset Management</a></h2>
-<p>Asset management is performed from <code>Asset Browser</code> window in the editor, you can select an asset, preview it and edit
-its import options. Here's the asset browser with a texture selected:</p>
+<p>Asset management is performed from the <code>Asset Browser</code> window in the editor, you can select an asset, preview it, and edit
+its import options. Here's a screenshot of the asset browser with a texture selected:</p>
 <p><img src="fyrox/beginning/assets.png" alt="asset browser" /></p>
-<p>The most interesting part here is import options section under previewer, it allows to set asset-specific import options
-and apply it. Every asset has its own set of import options. Check respective asset page from above section to learn
-what import options is for what.</p>
+<p>The most interesting part here is the import options section under the previewer. It allows you to set asset-specific import options
+and apply them. Every asset has its own set of import options. See their respective asset page from the section above to learn
+what each import option is for.</p>
 <h2 id="asset-instantiation"><a class="header" href="#asset-instantiation">Asset Instantiation</a></h2>
-<p>Some asset types can be instantiated in scene, for now you can create direct instance only from models. This
-is done by simple drag'n'drop - find a model you want to instantiate and drag it <code>Scene Preview</code>, hold left mouse button,
-drag the object and release the button when you're happy with what you see.</p>
+<p>Some asset types can be instantiated in scenes; for now, you can only create direct instances from models. This
+is done by simply dragging the model you want to instantiate and dropping it on the <code>Scene Preview</code>. While dragging it, you'll also see a preview of the model.</p>
 <p><img src="fyrox/beginning/preview.gif" alt="preview" /></p>
-<p>The amount of asset instances is not limited, it only depends on capabilities of your PC, each instance takes some 
-memory (the engine tries to re-use data across instance as much as possible) and CPU resources.</p>
-<p>You can also instantiate assets dynamically from your code, here's an example for Model:</p>
+<p>The maximum amount of asset instances is not limited by the engine but it is by the memory and CPU resources of your PC. 
+Note that the engine does try to reuse data across instances as much as possible.</p>
+<p>You can also instantiate assets dynamically from your code. Here's an example of that for a Model:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -556,89 +542,82 @@ memory (the engine tries to re-use data across instance as much as possible) and
     resource_manager: ResourceManager,
     scene: &amp;mut Scene,
 ) -&gt; Handle&lt;Node&gt; {
-    // Load model first. Alternatively, you can store resource handle somewhere and use it for
-    // instantiation.
+    // Load the model first. Alternatively, you can store the resource handle somewhere and use it for instantiation.
     let model = resource_manager.request_model(path).await.unwrap();
 
     model.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This is very useful in situations when you have a prefab, and you want to add it to your scene at runtime. </p>
+<p>This is very useful with prefabs that you may want to instantiate in a scene at runtime. </p>
 <h2 id="loading-assets"><a class="header" href="#loading-assets">Loading Assets</a></h2>
-<p>Usually there is no need to manually handle assets loading, since you have the editor that can help you with that - create
-a scene with all required assets. However, sometimes you need to instantiate an asset dynamically - for example a
-bot prefab. In this case you can use <code>ResourceManager</code> and respective set of methods (like <code>request_model</code>, 
-<code>request_texture</code>, etc.). See respective asset page for more info.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="data-management"><a class="header" href="#data-management">Data management</a></h1>
-<p>The engine uses generational arenas (pools in engine's terminology) to store most of the objects (scene nodes in a 
-graph, animations in an animation player, sound sources in an audio context, etc.). You'll use them quite often, so it 
-read this chapter thoroughly. </p>
+<p>Usually, there is no need to manually handle the loading of assets since you have the editor to help with that - just create
+a scene with all the required assets. However, there are times when you may need to instantiate some asset dynamically, for 
+example, a bot prefab. For this cases, you can use the <code>ResourceManager</code> and its respective methods, such as <code>request_model</code>, 
+<code>request_texture</code>, etc.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data-management"><a class="header" href="#data-management">Data Management</a></h1>
+<p>The engine uses pools to store most objects (scene nodes in a 
+graph, animations in an animation player, sound sources in an audio context, etc.). Since you'll use them quite often, reading and understanding this chapter is recommended. </p>
 <h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
-<p>Rust ownership system and borrow checker in particular, dictates the rules of data management. In game development you
-often have a need to have some sort of reference to an object in some other object. In languages like C you usually 
-store a raw pointer and consider it done. This works, but it is very unsafe - an object could die (its memory can become
-deallocated), and you'll know about this only when try to access that object. In more advanced languages like C++, you
-could store <code>shared_ptr&lt;Foo&gt;</code> which ensures that the pointer will be valid until at least one <code>shared_ptr&lt;Foo&gt;</code> instance
-is held alive. In Rust, however, it is possible too, but with some limitations and quirks. At first, we won't consider 
-raw pointers and leave this to C or C++. As for smart pointers such as <code>Rc/Arc</code> - they will work, but they do not allow
-to mutate the content, only share it with multiple readers. To mutate the inner data, we can use either <code>RefCell</code> (for
-single-threaded environment) or <code>Mutex</code> (for multithreaded env) to wrap the data. This is where the &quot;fun&quot; begins: for 
-such types (<code>Rc&lt;RefCell&lt;Foo&gt;&gt;</code>, <code>Arc&lt;Mutex&lt;Foo&gt;&gt;</code>) Rust enforces borrowing rules (multiple readers, one writer) at runtime
-which will stab you in the back with panic in unexpected time - any attempt to borrow the inner data mutably twice will
-raise panic. </p>
-<p>The next problem with such shared references is the fact that it is very easy to accidentally create cyclical references
-which will prevent objects from dying (deallocating). While this is more or less ok, the next problem is much more 
-critical for games - overhead for runtime checks. In case of <code>Rc&lt;RefCell&lt;Foo&gt;&gt;</code> it is a single reference counter for
-given references to the data, and in case of <code>Arc&lt;Mutex&lt;Foo&gt;&gt;</code> it is a mutex lock. </p>
-<p>The solution to these problems is not ideal, it has its own pros and cons. Instead of storing objects in random places
-of memory and having to manage their lifetime by reference counting, we can put all objects in a single storage with 
-a contiguous memory block and use indices to access the objects. Such structure is called - pool. </p>
-<h2 id="technical-details"><a class="header" href="#technical-details">Technical details</a></h2>
-<p>Pool is an efficient way data management. Pool is a vector with entries that can be either vacant or occupied. Each 
-entry, no matter occupied or vacant, also stores a special number called <em>generation</em>. The generation number is used 
-to understand whether an entry has been changed over time or not. When an entry is reused, its generation number is 
-increased leaving all previously created handle leading to the entry invalid. This is a very simple and efficient 
-algorithm for tracking the &quot;lifetime&quot; of the objects.</p>
-<p>To access the data in entries, the engine uses <em>handles</em>. The handle is a pair of index of an entry and a
-<em>generation</em> number. When you put an object in the pool, it gives you the handle that &quot;leads&quot; to the object.
-At this moment the generation of the handle matches the generation of the corresponding entry so the handle
-is valid. It will remain valid until you &quot;free&quot; the object, which will make the entry vacant again.</p>
+<p>Rust ownership system and borrow checker, in particular, dictate the rules of data management. In game development, you
+often have the need to reference objects from other objects. In languages like C, this is usually achieved by simply storing a raw 
+pointer and calling it a day. That works, yet it's remarkably unsafe - you risk either forgetting to destroy an object and leaking 
+memory or destroying an object still being referenced and then trying to access deallocated memory. Other languages, like C++, allow 
+you to store <em>shared pointers</em> to your data, which by keeping a reference count, ensures the previous doesn't happen at the cost of 
+a, most often, negligible overhead. Rust counts with smart pointers similar to this, though not without their limitations. There is the <code>Rc/Arc</code> - they function like <em>shared pointers</em>, except they don't allow mutating their content, only 
+reading it. If you want mutability, you use either a <code>RefCell</code> for a
+single-threaded environment, or a <code>Mutex</code> for a multithreaded environment. That is where the problems begin. For 
+types such as <code>Rc&lt;RefCell&gt;</code> or <code>Arc&lt;Mutex&gt;</code>, Rust enforces its borrowing rules at runtime, which are unlimited readers but 
+a single writer. Any attempt to borrow mutably more than once at a time will lead to a runtime error.</p>
+<p>Another problem with these shared references is that is very easy to accidentally create cyclical references
+that prevent objects from ever being destroyed. While the previous could be lived with, the last problem is especially
+severe in the case of games: the overhead of runtime checks. In the case of a <code>Rc&lt;RefCell&gt;</code>, it is a single 
+reference counter for given accesses to the data, but in the case of a <code>Arc&lt;Mutex&gt;</code>, it is a mutex lock. </p>
+<p>The solution to these problems is far from ideal; it certainly has its own downfalls. Instead of scattering objects across memory 
+and then having to manage the lifetime of each of them through reference counting, we can store all of the objects in a single
+and contiguous memory block and then use indices to access each object. Such a structure is called a pool. </p>
+<h2 id="technical-details"><a class="header" href="#technical-details">Technical Details</a></h2>
+<p>A pool is an efficient method of data management. A pool is a vector with entries that can be either vacant or occupied. Each 
+entry, regardless of its status, also stores a number called a <em>generation</em> number. This is used 
+to understand whether an entry has changed over time or not. When an entry is reused, its generation number is 
+increased, rendering all previously created handles leading to the entry invalid. This is a simple and efficient 
+algorithm for tracking the lifetime of objects.</p>
+<p>To access the data in the entries, the engine uses the previously mentioned <em>handles</em>. A handle is a pair of the index of an entry
+and a generation number. When you put an object in the pool, this gives you the handle that leads to the object, as well as the 
+entry's current generation number. The number remains valid until you &quot;free&quot; the object, which makes the entry vacant again.</p>
 <h2 id="advantages"><a class="header" href="#advantages">Advantages</a></h2>
 <ul>
-<li>Since the pool is just a contiguous memory block, it is much more CPU cache-friendly. This means that in most
-cases the data portions will be loaded in CPU caches, making the access to the data blazing fast.</li>
-<li>Almost every entity in the engine &quot;lives&quot; in its own pool, this make it easy to create such data structures
-like graphs, where a node refers to other nodes. In this case scene nodes stores just handles (which is just
-8 bytes of memory) to other nodes.</li>
-<li>Easy lifetime management; no way to create memory leaks since cross-references could be done only via handles.</li>
-<li>Fast random access with constant complexity.</li>
-<li>Handles are the same size as pointer on 64-bit arch (8 bytes).</li>
+<li>Since a pool is a contiguous memory block, it is far more CPU cache-friendly. This reduces the occurrences of CPU cache misses, which makes accesses to data blazingly fast.</li>
+<li>Almost every entity in Fyrox lives on its own pool, which makes it easy to create data structures
+like graphs, where nodes refer to other nodes. In this case, nodes simply need to store a handle to refer to other nodes.</li>
+<li>Simple lifetime management. There is no way to leak memory since cross-references can only be done via handles.</li>
+<li>Fast random access with a constant complexity.</li>
+<li>Handles are the same size as a pointer on a 64-bit architecture, just 8 bytes.</li>
 </ul>
 <h2 id="disadvantages"><a class="header" href="#disadvantages">Disadvantages</a></h2>
 <ul>
-<li>Pool could be considered as a sparse array, which could contains a lot of gaps. This may lead to less efficient memory
-usage. </li>
-<li>Handles is a sort of weak references, but worse. Since they do not own any data (or even pointer to data), you will
-need a pool instance to borrow a data a handle &quot;points&quot; to. </li>
-<li>Handles introduce a level of indirection, that could hurt performance in places with high load that requires random
-access (as a counterargument it is worth to mention, that random access is usually relatively slow because of potential 
-CPU cache misses).</li>
+<li>Pools can contain lots of gaps between currently used memory, which may lead to less efficient memory usage. </li>
+<li>Handles are sort of weak references, but worse. Since they do not own any data nor even point to their data, you
+need a reference to its pool instance in order to borrow the data a handle leads to.</li>
+<li>Handles introduce a level of indirection that can hurt performance in places with high loads that require random
+access, though this is not too significant as random access is already somewhat slow because of potential 
+CPU cache misses.</li>
 </ul>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>You'll use <code>Handle&lt;Something&gt;</code> <em>a lot</em> while developing a game using Fyrox. So where are the main usages of Pool and 
-handles? The largest is indeed a <a href="fyrox/beginning/../scene/graph.html">scene graph</a>; it stores all the nodes in a pool and gives handles
-to nodes. Each scene node stores a handle to a parent node and a set of handle to children nodes. Scene graph
-auto-magically ensures that such handles are valid. In <a href="fyrox/beginning/../scripting/script.html">scripts</a>, you can also store handles
+<p>You'll use <code>Handle</code> <em>a lot</em> while working with Fyrox. So where are the main usages of pools and 
+handles? The largest is in a <a href="fyrox/beginning/../scene/graph.html">scene graph</a>. This stores all the nodes in a pool and gives handles
+to each node. Each scene node stores a handle to their parent node and a set of handles to their children nodes. A scene graph
+automatically ensures that such handles are valid. In <a href="fyrox/beginning/../scripting/script.html">scripts</a>, you can also store handles
 to scene nodes and assign them in the editor.</p>
-<p><a href="fyrox/beginning/../animation/animation.html">Animation</a> is another place which stores handles to animated scene nodes. 
-<a href="fyrox/beginning/../animation/blending.html">Animation Blending State Machine</a> stores its own state graph using pool; it also takes
+<p><a href="fyrox/beginning/../animation/animation.html">Animation</a> is another place that stores handles to animated scene nodes. 
+<a href="fyrox/beginning/../animation/blending.html">Animation Blending State Machine</a> stores its own state graph using a pool; it also takes
 handles to animations from an animation player in a scene. </p>
-<p>This list can be extended for long; this is why you need to understand basic concepts of data management to efficiently
-and fearlessly use the engine.</p>
+<p>And the list could keep going for a long time. This is why you need to understand the basic concepts of data management, as to 
+efficiently and fearlessly use Fyrox.</p>
 <h2 id="borrowing"><a class="header" href="#borrowing">Borrowing</a></h2>
-<p>Once an object was placed in a pool, you have to use respective handle to get a reference to it. This could 
-be done either with <code>.borrow[_mut](handle)</code> or by using <code>Index</code> trait: <code>pool[handle]</code>. These methods panic
-when handle is invalid, if you want to prevent that, use <code>try_borrow[_mut](handle)</code> method.</p>
+<p>Once an object is placed in a pool, you have to use its respective handle to get a reference to it. This can
+be done with either <code>pool.borrow(handle)</code> or <code>pool.borrow_mute(handle)</code>, or by using the <code>Index</code> trait: <code>pool[handle]</code>. Note that 
+these methods panic when the handle given is invalid. If you want to be safe, use the <code>try_borrow(handle)</code> or 
+<code>try_borrow_mut(handle)</code> method.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
@@ -653,8 +632,8 @@ let obj = pool.borrow(handle);
 assert_eq!(*obj, 11);
 <span class="boring">}</span></code></pre></pre>
 <h2 id="freeing"><a class="header" href="#freeing">Freeing</a></h2>
-<p>You can extract an object from a pool by calling <code>pool.free(handle)</code>, it will give you the object back, making
-all handles to the object invalid.</p>
+<p>You can extract an object from a pool by calling <code>pool.free(handle)</code>. This will give you the object back and make all current 
+handles to it invalid.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
 </span><span class="boring">
@@ -667,19 +646,15 @@ pool.free(handle);
 let obj = pool.try_borrow(handle);
 assert_eq!(obj, None);
 <span class="boring">}</span></code></pre></pre>
-<h2 id="take--reserve"><a class="header" href="#take--reserve">Take &amp; reserve</a></h2>
-<p>Sometimes you may need to temporarily extract an object from a pool, do something with it and then put it back
-while preserving handles to that object. There are three special methods for that:</p>
+<h2 id="take-and-reserve"><a class="header" href="#take-and-reserve">Take and Reserve</a></h2>
+<p>Sometimes you may want to temporarily extract an object from a pool, do something with it, and then put it back, yet not want 
+to break every handle to the object in the process. There are three methods for this:</p>
 <ol>
-<li><code>take_reserve</code> + <code>try_take_reserve</code> - moves object out of the pool, but leaves the entry in &quot;occupied&quot; state. This function returns
-a tuple with two values <code>(Ticket&lt;T&gt;, T)</code>. The latter value is obviously your object, but the former is 
-more interesting. It is a special wrapper over object index that allows you to return the object back. It is used
-in <code>put_back</code> method. <strong>Caveat:</strong> an attempt to borrow moved object in the pool will cause panic! </li>
-<li><code>put_back</code> - moves the object back in the pool using given ticket. Ticket says where to put the object in the 
-pool. </li>
-<li><code>forget_ticket</code> - makes the entry of the pool vacant again. It is useful in situations when you've moved object
-out of the pool, but for some reason you don't want to return it back in pool, in this case you <strong>must</strong> call
-this method, otherwise the corresponding entry will be unusable.</li>
+<li><code>take_reserve</code> + <code>try_take_reserve</code> - moves an object out of the pool but leaves the entry in an occupied state. This function returns a tuple with two values <code>(Ticket&lt;T&gt;, T)</code>. The latter one being your object, and the former one being a wrapper over its index that allows you to return the object once you're done with it. This is called a ticket. Note that attempting to borrow a moved object will cause a panic! </li>
+<li><code>put_back</code> - moves the object back using the given ticket. The ticket contains information about where in the pool to return the object to. </li>
+<li><code>forget_ticket</code> - makes the pool entry vacant again. Useful in cases where you move an object
+out of the pool, and then decide you won't return it. If this is the case, you <strong>must</strong> call
+this method, otherwise, the corresponding entry will remain unusable.</li>
 </ol>
 <p>Reservation example:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
@@ -698,7 +673,7 @@ let (ticket, ref mut obj) = pool.take_reserve(handle);
 let attempt_obj = pool.try_borrow(handle);
 assert_eq!(attempt_obj, None);
 
-// Put back, allowing borrowing again.
+// Put the object back, allowing borrowing again.
 
 pool.put_back(ticket, *obj);
 
@@ -723,12 +698,11 @@ let obj = pool.try_borrow(handle);
 assert_eq!(obj, None);
 <span class="boring">}</span></code></pre></pre>
 <h2 id="iterators"><a class="header" href="#iterators">Iterators</a></h2>
-<p>There are few possible iterators, each one is useful for a particular purpose:</p>
+<p>There are a few possible iterators, each one serving its own purpose:</p>
 <ol>
-<li><code>iter/iter_mut</code> - creates an iterator that iterates over occupied pool entries returning references to an 
-object associated with an entry.</li>
-<li><code>pair_iter/pair_iter_mut</code> - creates an iterator that iterates over occupied pool entries returning tuples with
-two elements <code>(handle, reference)</code>. </li>
+<li><code>iter/iter_mut</code> - creates an iterator over occupied pool entries, returning references to each object.</li>
+<li><code>pair_iter/pair_iter_mut</code> - creates an iterator over occupied pool entries, returning tuples of a handle and reference
+to each object. </li>
 </ol>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::pool::Pool;
@@ -747,23 +721,18 @@ let next_obj = iter.next();
 
 assert_eq!(next_obj, None);
 <span class="boring">}</span></code></pre></pre>
-<h2 id="direct-access"><a class="header" href="#direct-access">Direct access</a></h2>
-<p>There is ability to get an object from a pool using only indices, there are two methods for that <code>at</code> and <code>at_mut</code>.</p>
+<h2 id="direct-access"><a class="header" href="#direct-access">Direct Access</a></h2>
+<p>You have the ability to get an object from a pool using only an index. The methods for that are <code>at</code> and <code>at_mut</code>.</p>
 <h2 id="validation"><a class="header" href="#validation">Validation</a></h2>
-<p>Sometimes you may need to check if a handle is valid, to do that use <code>is_valid_handle</code> method.</p>
-<h2 id="type-erased-handles"><a class="header" href="#type-erased-handles">Type-erased handles</a></h2>
-<p>The pool module offers type-erased handles that could be useful for some situations. Try to avoid using type-erased
-handles, because they may introduce hardly-reproducible bugs. Type safety is always good :)</p>
-<p>Type-erased handle is called <code>ErasedHandle</code> and it can be created either manually, or from strongly-typed handles.
-Both handle types are interchangeable, you can use <code>From</code> and <code>Into</code> traits to convert them one into another.</p>
-<h2 id="special"><a class="header" href="#special">Special</a></h2>
-<p>Uncategorized stuff.</p>
-<h3 id="getting-a-handle-of-an-object-by-its-reference"><a class="header" href="#getting-a-handle-of-an-object-by-its-reference">Getting a handle of an object by its reference</a></h3>
-<p>Sometimes you may need to get a handle of an object having only a reference to it, there is a <code>handle_of</code> method
-exactly for that.</p>
-<h3 id="iterate-over-and-discard-unnecessary-objects"><a class="header" href="#iterate-over-and-discard-unnecessary-objects">Iterate over and discard unnecessary objects</a></h3>
-<p>There is a <code>retain</code> method for that, it allows you to &quot;filter&quot; your pool using a closure with custom filtering
-logic.</p>
+<p>To check if a handle is valid, you can use the <code>is_valid_handle</code> method.</p>
+<h2 id="type-erased-handles"><a class="header" href="#type-erased-handles">Type-erased Handles</a></h2>
+<p>The pool module also offers type-erased handles that can be of use in some situations. Still, try to avoid using these, as they may introduce hard-to-reproduce bugs. Type safety is always good :3</p>
+<p>A type-erased handle is called an <code>ErasedHandle</code> and can be created either manually or from a strongly-typed handle.
+Both handle types are interchangeable; you can use the <code>From</code> and <code>Into</code> traits to convert from one to the other.</p>
+<h3 id="getting-a-handle-to-an-object-by-its-reference"><a class="header" href="#getting-a-handle-to-an-object-by-its-reference">Getting a Handle to an Object by its Reference</a></h3>
+<p>If you need to get a handle to an object from only having a reference to it, you can use the <code>handle_of</code> method.</p>
+<h3 id="iterate-over-and-filter-out-objects"><a class="header" href="#iterate-over-and-filter-out-objects">Iterate Over and Filter Out Objects</a></h3>
+<p>The <code>retain</code> method allows you to filter your pool's content using a closure provided by you.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripting"><a class="header" href="#scripting">Scripting</a></h1>
 <p>A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and can provide
 a set of scripts, that can be used to assign custom logic to scene nodes. Every script can be attached to only one 

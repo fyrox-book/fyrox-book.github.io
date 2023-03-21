@@ -70,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -146,72 +148,66 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="fyroxed-overview"><a class="header" href="#fyroxed-overview">FyroxEd Overview</a></h1>
-<p>FyroxEd - is the native editor of Fyrox, it is made for one purpose - be integrated game development environment,
-that helps you to build your game from start to finish with relatively low effort.</p>
-<p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its 
-basic functionality. This chapter will guide you through the basics, advanced topics will be covered in respective 
-chapters.</p>
+<p>FyroxEd - is the native editor of Fyrox, it is made with one purpose - to be an integrated game development environment
+that helps you build your game from start to finish with relatively low effort.</p>
+<p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its basic functionalities.
+This chapter will guide you through the basics, advanced topics will be covered in their respective chapters.</p>
 <h2 id="windows"><a class="header" href="#windows">Windows</a></h2>
-<p>Once the editor is open for the first time, it will confuse you by amount of windows, buttons, lists, etc. Each window
-serves for different purpose, but all of them works together to help you make your game. Let's look at the editor's
-screenshot and learn what parts of it responsible for what (please note that it can change over time, because the 
-development is quite rapid and image can become outdated pretty easily):</p>
+<p>When you open the editor for the first time you may be confused by the amount of windows, buttons, lists, etc. you'll be presented 
+with. Each window serves a different purpose, but all of them work together to help you make your game. Let's take a look at a 
+screenshot of the editor and learn what each part of it is responsible for (please note that this can change over time, because
+development is quite fast and images can easily become outdated):</p>
 <p><img src="./overview.png" alt="Windows" /></p>
 <ul>
-<li><strong>World viewer</strong> - shows every object in the scene and their relations. It allows you to inspect and edit the 
-contents of the scene in hierarchical form.</li>
-<li><strong>Scene preview</strong> - renders your scene with debug info and various editor-specific objects (like gizmos, entity icons,
-etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. On the left side it has a <strong>Toolbar</strong>,
-it shows available context-dependent tools.</li>
-<li><strong>Inspector</strong> - allows you to modify various properties of a selected object.</li>
-<li><strong>Message Log</strong> - shows the important messages from the editor.</li>
-<li><strong>Navmesh Panel</strong> - allows you to create/delete and edit navigational meshes.</li>
-<li><strong>Command Stack</strong> - shows the most recent actions you've done, allows you to undo and redo the changes on demand.</li>
-<li><strong>Asset Browser</strong> - inspects the assets of your game, allows you to instantiate resources in the scene and so on.</li>
-<li><strong>Audio Context</strong> - allows you to edit settings of scene's sound context, such as global volume, available audio
-buses, effects, etc.</li>
+<li><strong>World viewer</strong> - shows every object in the scene and their relationships. Allows inspecting and editing the 
+contents of the scene in a hierarchical form.</li>
+<li><strong>Scene preview</strong> - renders the scene with debug info and various editor-specific objects (gizmos, entity icons,
+etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. The <strong>Toolbar</strong> on its left side
+shows available context-dependent tools.</li>
+<li><strong>Inspector</strong> - allows you to modify various properties of the selected object.</li>
+<li><strong>Message Log</strong> - displays important messages from the editor.</li>
+<li><strong>Navmesh Panel</strong> - allows you to create, delete, and edit navigational meshes.</li>
+<li><strong>Command Stack</strong> - displays your most recent actions and allows you to undo or redo their changes.</li>
+<li><strong>Asset Browser</strong> - allows you to inspect the assets of your game and to instantiate resources in the scene, among other things.</li>
+<li><strong>Audio Context</strong> - allows you to edit the settings of the scene's sound context (global volume, available audio buses, effects,
+etc.)</li>
 </ul>
-<h2 id="creating-loading-a-scene"><a class="header" href="#creating-loading-a-scene">Creating (Loading) a Scene</a></h2>
-<p>FyroxEd works with scenes - scene is a container for game entities, you can create and edit one scene at a time. You
-must have a scene created (or loaded) to begin working with the editor. To create a scene click <code>File -&gt; New Scene</code>.</p>
-<p>To load an existing scene, go to <code>File -&gt; Load</code> and select desired scene using file browser. It may be very useful
-to use list of recently opened scenes, to load them quickly without a need to go <code>File -&gt; Load</code>, search a scene, etc.
-Just go to <code>File -&gt; Recent Scenes</code> and click one to load.</p>
-<h2 id="populating-your-scene"><a class="header" href="#populating-your-scene">Populating Your Scene</a></h2>
-<p>The scene can be filled with various objects, there are two equivalent ways of creating game entities:</p>
+<h2 id="creating-or-loading-a-scene"><a class="header" href="#creating-or-loading-a-scene">Creating or loading a Scene</a></h2>
+<p>FyroxEd works with scenes - a scene is a container for game entities, you can create and edit one scene at a time. You must have a
+scene loaded to begin working with the editor. To create a scene go to <code>File -&gt; New Scene</code>.</p>
+<p>To load an existing scene, go to <code>File -&gt; Load</code> and select the desired scene through the file browser. Recently opened
+scenes can be loaded more quickly by going to <code>File -&gt; Recent Scenes</code> and selecting the desired one.</p>
+<h2 id="populating-a-scene"><a class="header" href="#populating-a-scene">Populating a Scene</a></h2>
+<p>A scene can contain various game entities. There are two equivalent ways of creating these:</p>
 <ul>
-<li>By clicking <code>Create</code> item in the main menu and selecting desired entity from the list.</li>
-<li>By right-clicking on a game entity in the <code>World Viewer</code> and selecting desired entity from <code>Add Child</code> sub-menu.</li>
+<li>By going to <code>Create</code> in the main menu and selecting the desired entity from the drop down.</li>
+<li>By right-clicking on a game entity in the <code>World Viewer</code> and selecting the desired entity from the <code>Add Child</code> sub-menu.</li>
 </ul>
-<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) and saved in various formats, Fyrox
-supports FBX format, which is supported by pretty much any 3D modelling software. You can add such object to your scene
-by drag'n'dropping a desired asset from the Asset Browser. Find one in the browser, click on it, hold the button and drag it
-to the Scene Viewer and then release the button. You'll see a preview of your object while the mouse button is held.</p>
-<p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example you can create a scene with a few 
-objects in it with some scripts and re-use it across any other scenes. Such scene is called <a href="../scene/prefab.html">prefab</a>.</p>
-<h2 id="saving-scene"><a class="header" href="#saving-scene">Saving Scene</a></h2>
-<p>To save your work, go to <code>File -&gt; Save</code>. For the first time (for unsaved scene), the editor will ask you to specify 
-file name and path to a folder where the scene will be saved. A scene loaded from a file will be automatically saved 
-to the path it was loaded from.</p>
-<h2 id="undoredo"><a class="header" href="#undoredo">Undo/redo</a></h2>
-<p>FyroxEd remembers your actions, and it is possible to undo (or redo undone) your changes to fix some stuff in the scene.
-You can undo or redo your changes either by clicking <code>Edit -&gt; Undo/Redo</code> or by standard shortcuts: <code>Ctrl+Z</code> - undo,
-<code>Ctrl+Y</code> - redo.</p>
+<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats. Fyrox supports
+FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects by simply dragging the one you want and dropping it on the <code>Scene Preview</code>. While dragging it, you'll also see a preview of the object.</p>
+<p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example, you can create a scene with a few objects in it
+with some scripts and re-use them within other scenes. Such scenes are called <a href="../scene/prefab.html">prefabs</a>.</p>
+<h2 id="saving-a-scene"><a class="header" href="#saving-a-scene">Saving a Scene</a></h2>
+<p>To save your work, go to <code>File -&gt; Save</code>. If you're saving a new scene, the editor will ask you to specify a file name and a
+path to where the scene will be saved. Scenes loaded from a file will automatically be saved to the path they were loaded
+from.</p>
+<h2 id="undoing-and-redoing"><a class="header" href="#undoing-and-redoing">Undoing and redoing</a></h2>
+<p>FyroxEd remembers your actions and allows you to undo and redo the changes done by these. You can undo or redo changes by either
+going to <code>Edit -&gt; Undo/Redo</code> or through the usual shortcuts: <code>Ctrl+Z</code> - to undo, <code>Ctrl+Y</code> - to redo.</p>
 <h2 id="controls"><a class="header" href="#controls">Controls</a></h2>
-<p>There are number of control keys that you'll be using most of the time, pretty much all of them works in <code>Scene Preview</code>
-window:</p>
+<p>There are number of control keys that you'll be using most of the time, pretty much all of them work in the <code>Scene Preview</code> window:</p>
 <h3 id="editor-camera-movement"><a class="header" href="#editor-camera-movement">Editor camera movement</a></h3>
-<p>Click and hold <code>[Right Mouse Button]</code> within the <code>Scene Preview</code> window to use movement controls:</p>
+<p>Click and hold <code>[Right Mouse Button]</code> within the <code>Scene Preview</code> window to enable the movement controls:</p>
 <ul>
 <li><code>[W][S][A][D]</code> - Move camera forward/backward/left/right</li>
 <li><code>[Space][Q]/[E]</code> - Raise/Lower Camera</li>
-<li><code>[Ctrl]</code> - speed up</li>
-<li><code>[Shift]</code>- slowdown</li>
+<li><code>[Ctrl]</code> - Speed up</li>
+<li><code>[Shift]</code>- Slowdown</li>
 </ul>
 <h3 id="others"><a class="header" href="#others">Others</a></h3>
 <ul>
 <li><code>[Left Mouse Button]</code> - Select</li>
-<li><code>[Middle Mouse Button]</code> to pan camera in viewing plane</li>
+<li><code>[Middle Mouse Button]</code> - Pan camera in viewing plane</li>
 <li><code>[1]</code> - Select interaction mode</li>
 <li><code>[2]</code> - Move interaction mode</li>
 <li><code>[3]</code> - Scale interaction mode</li>
@@ -220,23 +216,23 @@ window:</p>
 <li><code>[6]</code> - Terrain editing interaction mode</li>
 <li><code>[Ctrl]+[Z]</code> - Undo</li>
 <li><code>[Ctrl]+[Y]</code> - Redo</li>
-<li><code>[Delete]</code> - deletes current selection.</li>
+<li><code>[Delete]</code> - Delete current selection.</li>
 </ul>
 <h2 id="play-mode"><a class="header" href="#play-mode">Play Mode</a></h2>
-<p>One of the key features of the editor is that it allows you to run your game from it in a separate process. Use 
-<code>Play/Stop</code> button at the top of <code>Scene Preview</code> window to enter (or leave) Play Mode. Keep in mind, that editor UI 
-will be locked while you're in the Play Mode. </p>
-<p>Play Mode can be activated only for projects that made with <code>fyrox-template</code> (or have similar structure). The editor
+<p>One of the key features of the editor is that it allows you to run your game from it in a separate process. Use the <code>Play/Stop</code>
+button at the top of the <code>Scene Preview</code> window to enter or leave Play Mode. Keep in mind, that the editor UI will be locked while
+you're in Play Mode. </p>
+<p>Play Mode can be activated only for projects made with the <code>fyrox-template</code> (or for projects with a similar structure). The editor
 calls <code>cargo</code> commands to build and run your game in a separate process. Running the game in a separate process ensures
-that the editor won't crash if the game does, it also provides excellent isolation between the game and the editor, not
+that the editor won't crash if your game does, it also provides excellent isolation between the game and the editor, not
 giving a chance to break the editor by running the game.</p>
 <h2 id="additional-utilities"><a class="header" href="#additional-utilities">Additional Utilities</a></h2>
-<p>There are also number of powerful utilities that will make your life easier, they can be found under <code>Utils</code> section of 
-main menu: </p>
+<p>There are also number of powerful utilities that will make your life easier, they can be found under the <code>Utils</code> section of the
+main menu:</p>
 <ul>
-<li>Animation Editor - allows you to create and editor animation blending state machines which are responsible for 
+<li>Animation Editor - allows you to create and edit animation blending state machines which are responsible for 
 animation mixing.</li>
-<li>Curve Editor - create and edit curve resources to make complex laws for game parameters.</li>
+<li>Curve Editor - allows you to create and edit curve resources to make complex laws for game parameters.</li>
 <li>Path Fixer - helps you fix incorrect resource references in your scenes.</li>
 </ul>
 
