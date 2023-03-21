@@ -204,6 +204,16 @@ rigid bodies.</p>
 <p>In the editor you can use <code>MainMenu -&gt; Create -&gt; Physics -&gt; Collider</code>, or right-click on a node in <code>World Viewer</code> and
 select <code>Add Child -&gt; Physics -&gt; Collider</code>. Collider must be direct child of a rigid body, colliders do nothing on
 their own!</p>
+<h2 id="collision-filtering"><a class="header" href="#collision-filtering">Collision filtering</a></h2>
+<p>Sometimes there's a need to prevent collision between various groups of colliders. Fyrox supports bit-wise collision 
+filtering exactly for this purpose. For instance, you may have two groups of colliders: actors and powerups, and you
+want the actors to completely ignore collisions with powerups (and vice versa). In this case you can set collision
+groups for actors like so:</p>
+<p><img src="./collision_groups_a.png" alt="actors collision groups" /></p>
+<p>And set the collision groups for powerups like so:</p>
+<p><img src="./collision_groups_b.png" alt="powerups collision groups" /></p>
+<p>As you can see, actors and powerups now have separate <code>memberships</code> (read - groups) and filters. This way, the actors
+will collide with everything, but powerups and vice versa.</p>
 <h2 id="using-colliders-for-hit-boxes"><a class="header" href="#using-colliders-for-hit-boxes">Using colliders for hit boxes</a></h2>
 <p>You can use colliders to simulate hit boxes for your game characters. It can be done by creating a rigid body with
 <code>KinematicPositionBased</code> type and an appropriate collider as a child node. As the last step you need to attach the body
