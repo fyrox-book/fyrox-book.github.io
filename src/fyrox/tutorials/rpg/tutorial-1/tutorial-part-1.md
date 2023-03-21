@@ -55,6 +55,8 @@ use fyrox::{
     plugin::{Plugin, PluginConstructor, PluginContext},
     scene::{Scene},
 };
+use fyrox::window::WindowAttributes;
+use fyrox::engine::GraphicsContextParams;
 
 struct Game {
     scene: Handle<Scene>,
@@ -96,9 +98,17 @@ impl Plugin for Game {
 }
 
 fn main() {
-    let mut executor = Executor::new();
+    let mut executor = Executor::from_params(
+        Default::default(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                title: "RPG".to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+        },
+    );
     executor.add_plugin_constructor(GameConstructor);
-    executor.get_window().set_title("RPG");
     executor.run();
 }
 ```
@@ -362,6 +372,8 @@ use fyrox::{
     plugin::{Plugin, PluginConstructor, PluginContext},
     scene::{Scene},
 };
+use fyrox::window::WindowAttributes;
+use fyrox::engine::GraphicsContextParams;
 
 # #[cfg(test)]
 mod level;
@@ -424,9 +436,17 @@ impl Plugin for Game {
 }
 
 fn main() {
-    let mut executor = Executor::new();
+    let mut executor = Executor::from_params(
+        Default::default(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                title: "RPG".to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+        },
+    );
     executor.add_plugin_constructor(GameConstructor);
-    executor.get_window().set_title("RPG");
     executor.run();
 }
 

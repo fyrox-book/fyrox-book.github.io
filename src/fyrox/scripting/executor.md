@@ -48,11 +48,21 @@ This section covers typical use cases for the `Executor`.
 
 ### Setting Window Title
 
-You can set window title by accessing window instance and calling `set_title`:
+You can set window title when creating executor instance:
 
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::engine::executor::Executor;
-# let mut executor = Executor::new();
-executor.get_window().set_title("My Game");
+# use fyrox::window::WindowAttributes;
+# use fyrox::engine::GraphicsContextParams;
+let executor = Executor::from_params(
+    Default::default(),
+    GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: "My Game".to_string(),
+            ..Default::default()
+        },
+        vsync: true,
+    },
+);
 ```

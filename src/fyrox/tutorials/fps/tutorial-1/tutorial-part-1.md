@@ -62,6 +62,8 @@ use fyrox::{
     window::WindowBuilder,
 };
 use std::{sync::Arc, time};
+use fyrox::window::WindowAttributes;
+use fyrox::engine::{GraphicsContextParams, GraphicsContext};
 
 // Our game logic will be updated at 60 Hz rate.
 const TIMESTEP: f32 = 1.0 / 60.0;
@@ -81,20 +83,24 @@ impl Game {
 }
 
 fn main() {
-    // Configure main window first.
-    let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
     // Create event loop that will be used to "listen" events from the OS.
     let event_loop = EventLoop::new();
 
     // Finally create an instance of the engine.
+    let graphics_context_params = GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: "3D Shooter Tutorial".to_string(),
+            resizable: true,
+            ..Default::default()
+        },
+        vsync: true,
+    };
+
     let serialization_context = Arc::new(SerializationContext::new());
     let mut engine = Engine::new(EngineInitParams {
-        window_builder,
+        graphics_context_params,
         resource_manager: ResourceManager::new(serialization_context.clone()),
         serialization_context,
-        events_loop: &event_loop,
-        vsync: false,
-        headless: false
     })
     .unwrap();
 
@@ -126,7 +132,9 @@ fn main() {
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
-                engine.get_window().request_redraw();
+                if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
+                    ctx.window.request_redraw();
+                }
             }
             Event::RedrawRequested(_) => {
                 // Render at max speed - it is not tied to the game code.
@@ -180,15 +188,7 @@ impl Game {
 }
 ```
 
-Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating a window builder:
-
-```rust,no_run
-# extern crate fyrox;
-# use fyrox::window::WindowBuilder;
-let window_builder = WindowBuilder::new().with_title("3D Shooter Tutorial");
-```
-
-The builder will be used later by the engine to create a window. Next we're creating our event loop: 
+Finally, we at the point where the interesting stuff happens - `fn main()`. We're starting by creating our event loop: 
 
 ```rust,no_run
 # extern crate fyrox;
@@ -200,13 +200,20 @@ The event loop is a "magic" thing that receives events from the operating system
 important part which makes the application work. Finally, we're creating an instance of the engine:
 
 ```rust,no_run,compile_fail
+let graphics_context_params = GraphicsContextParams {
+    window_attributes: WindowAttributes {
+        title: "3D Shooter Tutorial".to_string(),
+        resizable: true,
+        ..Default::default()
+    },
+    vsync: true,
+};
+
 let serialization_context = Arc::new(SerializationContext::new());
 let mut engine = Engine::new(EngineInitParams {
-    window_builder,
+    graphics_context_params,
     resource_manager: ResourceManager::new(serialization_context.clone()),
     serialization_context,
-    events_loop: &event_loop,
-    vsync: false,
 })
 .unwrap();
 ```
@@ -259,7 +266,9 @@ Event::MainEventsCleared => {
     }
 
     // Rendering must be explicitly requested and handled after RedrawRequested event is received.
-    engine.get_window().request_redraw();
+    if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
+        ctx.window.request_redraw();
+    }
 }
 ```
 
