@@ -63,6 +63,22 @@ In the editor you can use `MainMenu -> Create -> Physics -> Collider`, or right-
 select `Add Child -> Physics -> Collider`. Collider must be direct child of a rigid body, colliders do nothing on
 their own!
 
+## Collision filtering
+
+Sometimes there's a need to prevent collision between various groups of colliders. Fyrox supports bit-wise collision 
+filtering exactly for this purpose. For instance, you may have two groups of colliders: actors and powerups, and you
+want the actors to completely ignore collisions with powerups (and vice versa). In this case you can set collision
+groups for actors like so:
+
+![actors collision groups](./collision_groups_a.png)
+
+And set the collision groups for powerups like so:
+
+![powerups collision groups](./collision_groups_b.png)
+
+As you can see, actors and powerups now have separate `memberships` (read - groups) and filters. This way, the actors
+will collide with everything, but powerups and vice versa.
+
 ## Using colliders for hit boxes
 
 You can use colliders to simulate hit boxes for your game characters. It can be done by creating a rigid body with
