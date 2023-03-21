@@ -185,13 +185,23 @@ to engine instance. </p>
 <h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
 <p>This section covers typical use cases for the <code>Executor</code>.</p>
 <h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
-<p>You can set window title by accessing window instance and calling <code>set_title</code>:</p>
+<p>You can set window title when creating executor instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::engine::executor::Executor;
-</span><span class="boring">let mut executor = Executor::new();
-</span>executor.get_window().set_title(&quot;My Game&quot;);
+</span><span class="boring">use fyrox::window::WindowAttributes;
+</span><span class="boring">use fyrox::engine::GraphicsContextParams;
+</span>let executor = Executor::from_params(
+    Default::default(),
+    GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: &quot;My Game&quot;.to_string(),
+            ..Default::default()
+        },
+        vsync: true,
+    },
+);
 <span class="boring">}</span></code></pre></pre>
 
                     </main>

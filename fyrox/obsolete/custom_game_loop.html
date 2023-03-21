@@ -156,9 +156,10 @@ you're experienced game developer!</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
 </span><span class="boring">    core::instant::Instant,
-</span><span class="boring">    engine::{resource_manager::ResourceManager, Engine, EngineInitParams, SerializationContext},
+</span><span class="boring">    engine::{resource_manager::ResourceManager, GraphicsContextParams, Engine, EngineInitParams, GraphicsContext, SerializationContext},
 </span><span class="boring">    event::{Event, WindowEvent},
 </span><span class="boring">    event_loop::{ControlFlow, EventLoop},
+</span><span class="boring">    window::WindowAttributes,  
 </span><span class="boring">    utils::{
 </span><span class="boring">        log::{Log, MessageKind},
 </span><span class="boring">        translate_event,
@@ -169,20 +170,21 @@ you're experienced game developer!</p>
 fn main() {
     let event_loop = EventLoop::new();
 
-    // Create window builder first.
-    let window_builder = fyrox::window::WindowBuilder::new()
-        .with_title(&quot;Example - Custom Game Loop&quot;)
-        .with_resizable(true);
-
     // Then initialize the engine.
+    let graphics_context_params = GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: &quot;Custom Game Loop&quot;.to_string(),
+            resizable: true,
+            ..Default::default()
+        },
+        vsync: true,
+    };
+
     let serialization_context = Arc::new(SerializationContext::new());
     let mut engine = Engine::new(EngineInitParams {
-        window_builder,
+        graphics_context_params,
         resource_manager: ResourceManager::new(serialization_context.clone()),
         serialization_context,
-        events_loop: &amp;event_loop,
-        vsync: false,
-        headless: false
     })
     .unwrap();
 
@@ -194,7 +196,7 @@ fn main() {
     // Finally run our event loop which will respond to OS and window events and update
     // engine state accordingly. Engine lets you to decide which event should be handled,
     // this is minimal working example if how it should be.
-    event_loop.run(move |event, _, control_flow| {
+    event_loop.run(move |event, window_target, control_flow| {
         match event {
             Event::MainEventsCleared =&gt; {
                 // This main game loop - it has fixed time step which means that game
@@ -230,11 +232,19 @@ fn main() {
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
-                engine.get_window().request_redraw();
+                if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
+                    ctx.window.request_redraw();
+                }
             }
             Event::RedrawRequested(_) =&gt; {
                 // Run renderer at max speed - it is not tied to game code.
                 engine.render().unwrap();
+            }
+            Event::Resumed =&gt; {
+                engine.initialize_graphics_context(window_target).unwrap();
+            }
+            Event::Suspended =&gt; {
+                engine.destroy_graphics_context().unwrap();
             }
             Event::WindowEvent { event, .. } =&gt; {
                 match event {

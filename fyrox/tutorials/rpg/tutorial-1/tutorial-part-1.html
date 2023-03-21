@@ -190,6 +190,8 @@ variant with manual engine initialization and &quot;opened&quot; main loop.</p>
     plugin::{Plugin, PluginConstructor, PluginContext},
     scene::{Scene},
 };
+use fyrox::window::WindowAttributes;
+use fyrox::engine::GraphicsContextParams;
 
 struct Game {
     scene: Handle&lt;Scene&gt;,
@@ -231,9 +233,17 @@ impl Plugin for Game {
 }
 
 fn main() {
-    let mut executor = Executor::new();
+    let mut executor = Executor::from_params(
+        Default::default(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                title: &quot;RPG&quot;.to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+        },
+    );
     executor.add_plugin_constructor(GameConstructor);
-    executor.get_window().set_title(&quot;RPG&quot;);
     executor.run();
 }</code></pre></pre>
 <p>It is much easier to initialize the engine now compared to the initialization described in the series of tutorials about
@@ -480,6 +490,8 @@ use fyrox::{
     plugin::{Plugin, PluginConstructor, PluginContext},
     scene::{Scene},
 };
+use fyrox::window::WindowAttributes;
+use fyrox::engine::GraphicsContextParams;
 
 <span class="boring">#[cfg(test)]
 </span>mod level;
@@ -542,9 +554,17 @@ impl Plugin for Game {
 }
 
 fn main() {
-    let mut executor = Executor::new();
+    let mut executor = Executor::from_params(
+        Default::default(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                title: &quot;RPG&quot;.to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+        },
+    );
     executor.add_plugin_constructor(GameConstructor);
-    executor.get_window().set_title(&quot;RPG&quot;);
     executor.run();
 }
 </code></pre></pre>

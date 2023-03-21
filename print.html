@@ -998,13 +998,23 @@ to engine instance. </p>
 <h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
 <p>This section covers typical use cases for the <code>Executor</code>.</p>
 <h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
-<p>You can set window title by accessing window instance and calling <code>set_title</code>:</p>
+<p>You can set window title when creating executor instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::engine::executor::Executor;
-</span><span class="boring">let mut executor = Executor::new();
-</span>executor.get_window().set_title(&quot;My Game&quot;);
+</span><span class="boring">use fyrox::window::WindowAttributes;
+</span><span class="boring">use fyrox::engine::GraphicsContextParams;
+</span>let executor = Executor::from_params(
+    Default::default(),
+    GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: &quot;My Game&quot;.to_string(),
+            ..Default::default()
+        },
+        vsync: true,
+    },
+);
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripts-1"><a class="header" href="#scripts-1">Scripts</a></h1>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
@@ -6679,6 +6689,8 @@ and paste this code in the <code>main.rs</code>:</p>
     window::WindowBuilder,
 };
 use std::{sync::Arc, time};
+use fyrox::window::WindowAttributes;
+use fyrox::engine::{GraphicsContextParams, GraphicsContext};
 
 // Our game logic will be updated at 60 Hz rate.
 const TIMESTEP: f32 = 1.0 / 60.0;
@@ -6698,20 +6710,24 @@ impl Game {
 }
 
 fn main() {
-    // Configure main window first.
-    let window_builder = WindowBuilder::new().with_title(&quot;3D Shooter Tutorial&quot;);
     // Create event loop that will be used to &quot;listen&quot; events from the OS.
     let event_loop = EventLoop::new();
 
     // Finally create an instance of the engine.
+    let graphics_context_params = GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: &quot;3D Shooter Tutorial&quot;.to_string(),
+            resizable: true,
+            ..Default::default()
+        },
+        vsync: true,
+    };
+
     let serialization_context = Arc::new(SerializationContext::new());
     let mut engine = Engine::new(EngineInitParams {
-        window_builder,
+        graphics_context_params,
         resource_manager: ResourceManager::new(serialization_context.clone()),
         serialization_context,
-        events_loop: &amp;event_loop,
-        vsync: false,
-        headless: false
     })
     .unwrap();
 
@@ -6743,7 +6759,9 @@ fn main() {
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
-                engine.get_window().request_redraw();
+                if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
+                    ctx.window.request_redraw();
+                }
             }
             Event::RedrawRequested(_) =&gt; {
                 // Render at max speed - it is not tied to the game code.
@@ -6793,14 +6811,7 @@ impl Game {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Finally, we at the point where the interesting stuff happens - <code>fn main()</code>. We're starting by creating a window builder:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::window::WindowBuilder;
-</span>let window_builder = WindowBuilder::new().with_title(&quot;3D Shooter Tutorial&quot;);
-<span class="boring">}</span></code></pre></pre>
-<p>The builder will be used later by the engine to create a window. Next we're creating our event loop: </p>
+<p>Finally, we at the point where the interesting stuff happens - <code>fn main()</code>. We're starting by creating our event loop: </p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -6811,13 +6822,20 @@ impl Game {
 important part which makes the application work. Finally, we're creating an instance of the engine:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let serialization_context = Arc::new(SerializationContext::new());
+</span>let graphics_context_params = GraphicsContextParams {
+    window_attributes: WindowAttributes {
+        title: &quot;3D Shooter Tutorial&quot;.to_string(),
+        resizable: true,
+        ..Default::default()
+    },
+    vsync: true,
+};
+
+let serialization_context = Arc::new(SerializationContext::new());
 let mut engine = Engine::new(EngineInitParams {
-    window_builder,
+    graphics_context_params,
     resource_manager: ResourceManager::new(serialization_context.clone()),
     serialization_context,
-    events_loop: &amp;event_loop,
-    vsync: false,
 })
 .unwrap();
 <span class="boring">}</span></code></pre></pre>
@@ -6866,7 +6884,9 @@ event loop and start checking for events coming from the OS:</p>
     }
 
     // Rendering must be explicitly requested and handled after RedrawRequested event is received.
-    engine.get_window().request_redraw();
+    if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
+        ctx.window.request_redraw();
+    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This is the heart of game loop - it stabilizes update rate of game logic by measuring time from last update call
@@ -9053,6 +9073,8 @@ variant with manual engine initialization and &quot;opened&quot; main loop.</p>
     plugin::{Plugin, PluginConstructor, PluginContext},
     scene::{Scene},
 };
+use fyrox::window::WindowAttributes;
+use fyrox::engine::GraphicsContextParams;
 
 struct Game {
     scene: Handle&lt;Scene&gt;,
@@ -9094,9 +9116,17 @@ impl Plugin for Game {
 }
 
 fn main() {
-    let mut executor = Executor::new();
+    let mut executor = Executor::from_params(
+        Default::default(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                title: &quot;RPG&quot;.to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+        },
+    );
     executor.add_plugin_constructor(GameConstructor);
-    executor.get_window().set_title(&quot;RPG&quot;);
     executor.run();
 }</code></pre></pre>
 <p>It is much easier to initialize the engine now compared to the initialization described in the series of tutorials about
@@ -9343,6 +9373,8 @@ use fyrox::{
     plugin::{Plugin, PluginConstructor, PluginContext},
     scene::{Scene},
 };
+use fyrox::window::WindowAttributes;
+use fyrox::engine::GraphicsContextParams;
 
 <span class="boring">#[cfg(test)]
 </span>mod level;
@@ -9405,9 +9437,17 @@ impl Plugin for Game {
 }
 
 fn main() {
-    let mut executor = Executor::new();
+    let mut executor = Executor::from_params(
+        Default::default(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                title: &quot;RPG&quot;.to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+        },
+    );
     executor.add_plugin_constructor(GameConstructor);
-    executor.get_window().set_title(&quot;RPG&quot;);
     executor.run();
 }
 </code></pre></pre>
@@ -10376,9 +10416,10 @@ you're experienced game developer!</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
 </span><span class="boring">    core::instant::Instant,
-</span><span class="boring">    engine::{resource_manager::ResourceManager, Engine, EngineInitParams, SerializationContext},
+</span><span class="boring">    engine::{resource_manager::ResourceManager, GraphicsContextParams, Engine, EngineInitParams, GraphicsContext, SerializationContext},
 </span><span class="boring">    event::{Event, WindowEvent},
 </span><span class="boring">    event_loop::{ControlFlow, EventLoop},
+</span><span class="boring">    window::WindowAttributes,  
 </span><span class="boring">    utils::{
 </span><span class="boring">        log::{Log, MessageKind},
 </span><span class="boring">        translate_event,
@@ -10389,20 +10430,21 @@ you're experienced game developer!</p>
 fn main() {
     let event_loop = EventLoop::new();
 
-    // Create window builder first.
-    let window_builder = fyrox::window::WindowBuilder::new()
-        .with_title(&quot;Example - Custom Game Loop&quot;)
-        .with_resizable(true);
-
     // Then initialize the engine.
+    let graphics_context_params = GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: &quot;Custom Game Loop&quot;.to_string(),
+            resizable: true,
+            ..Default::default()
+        },
+        vsync: true,
+    };
+
     let serialization_context = Arc::new(SerializationContext::new());
     let mut engine = Engine::new(EngineInitParams {
-        window_builder,
+        graphics_context_params,
         resource_manager: ResourceManager::new(serialization_context.clone()),
         serialization_context,
-        events_loop: &amp;event_loop,
-        vsync: false,
-        headless: false
     })
     .unwrap();
 
@@ -10414,7 +10456,7 @@ fn main() {
     // Finally run our event loop which will respond to OS and window events and update
     // engine state accordingly. Engine lets you to decide which event should be handled,
     // this is minimal working example if how it should be.
-    event_loop.run(move |event, _, control_flow| {
+    event_loop.run(move |event, window_target, control_flow| {
         match event {
             Event::MainEventsCleared =&gt; {
                 // This main game loop - it has fixed time step which means that game
@@ -10450,11 +10492,19 @@ fn main() {
                 }
 
                 // Rendering must be explicitly requested and handled after RedrawRequested event is received.
-                engine.get_window().request_redraw();
+                if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
+                    ctx.window.request_redraw();
+                }
             }
             Event::RedrawRequested(_) =&gt; {
                 // Run renderer at max speed - it is not tied to game code.
                 engine.render().unwrap();
+            }
+            Event::Resumed =&gt; {
+                engine.initialize_graphics_context(window_target).unwrap();
+            }
+            Event::Suspended =&gt; {
+                engine.destroy_graphics_context().unwrap();
             }
             Event::WindowEvent { event, .. } =&gt; {
                 match event {
