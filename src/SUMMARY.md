@@ -44,7 +44,7 @@
     - [ABSM Editor](./fyrox/animation/absm_editor.md)
 - [Artificial Intelligence (WIP)](./fyrox/ai/ai.md)s
   - [Behaviour Trees (WIP)](./fyrox/ai/beh_tree.md)
-  - [Path Finding (WIP)](./fyrox/ai/pathfinding.md)
+  - [Path Finding](./fyrox/ai/pathfinding.md)
   - [Navigational Meshes (WIP)](./fyrox/ai/navmesh.md)
 - [Rendering](./fyrox/rendering/rendering.md)
   - [Shaders](./fyrox/rendering/shaders.md)
