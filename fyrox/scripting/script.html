@@ -227,7 +227,7 @@ to add the module with the new script to <code>lib.rs</code> like this: </p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Use your script name instead of `my_script` here.
-pub use my_script;
+pub mod my_script;
 <span class="boring">}</span></code></pre></pre>
 <p>Comments in each generated method should help you to figure out which code should be placed where and what is the purpose
 of every method.</p>
