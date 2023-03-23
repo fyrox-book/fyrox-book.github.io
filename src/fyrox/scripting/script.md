@@ -86,7 +86,7 @@ to add the module with the new script to `lib.rs` like this:
 
 ```rust,no_run,compile_fail
 // Use your script name instead of `my_script` here.
-pub use my_script;
+pub mod my_script;
 ```
 
 Comments in each generated method should help you to figure out which code should be placed where and what is the purpose
