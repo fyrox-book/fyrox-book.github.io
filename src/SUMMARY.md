@@ -45,7 +45,7 @@
 - [Artificial Intelligence (WIP)](./fyrox/ai/ai.md)s
   - [Behaviour Trees (WIP)](./fyrox/ai/beh_tree.md)
   - [Path Finding](./fyrox/ai/pathfinding.md)
-  - [Navigational Meshes (WIP)](./fyrox/ai/navmesh.md)
+  - [Navigational Meshes](./fyrox/ai/navmesh.md)
 - [Rendering](./fyrox/rendering/rendering.md)
   - [Shaders](./fyrox/rendering/shaders.md)
   - [Materials](./fyrox/rendering/materials.md)        
