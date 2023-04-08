@@ -53,6 +53,10 @@ Due to the nature of the software development, some bugs will inevitably sneak i
 you may want to use the latest engine version from the repository on GitHub, since it is the most likely to have bugs fixed
 (you can also contribute by fixing any bugs you find or at least, by [filing an issue](https://github.com/FyroxEngine/Fyrox/issues)).
 
+> ⚠️ Latest `fyrox-template` from the engine's repo has special sub-command - `upgrade` to quickly upgrade to desired engine
+> version. To upgrade to the latest version ("nightly") you should execute `fyrox-template upgrade --version nightly` 
+> command in your game's directory.
+
 The first step you need to take is to install the latest `fyrox-template`, this can be done with a single `cargo` command:
 
 ```shell
