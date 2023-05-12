@@ -4689,6 +4689,27 @@ and by <code>ResourceManager</code> from API.</p>
 <h2 id="general-info"><a class="header" href="#general-info">General Info</a></h2>
 <p>Assets loading is asynchronous, it is possible to load multiple assets in parallel or load until a specific asset is 
 loaded.</p>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<p>It is strongly advised to specify all resources used by your game entities inside your scripts, instead of requesting 
+resources directly from the resource manager on demand. This approach solves two common issues:</p>
+<ol>
+<li>It allows you to set resources directly from the editor by a simple drag'n'drop from the Asset Browser.</li>
+<li>The engine will be able to wait until all resources used by a scene are fully loaded. This is especially important,
+because this way can guarantee, that scene loading will be &quot;seamless&quot; and if the scene was loaded, it means that all
+resources used by it are loaded too. </li>
+</ol>
+<p>This can be achieved by adding a respective field in your script. For example, you may a have a weapon script that 
+shoots some projectiles. In this case all you need to add a <code>projectile: Option&lt;ModelResource&gt;</code> field in your script,
+assign it so some prefab in the editor and then instantiate it from code when shooting. Storing resource handle 
+directly in your script helps the engine to gather all resources used by parent scene and preload them too while loading
+the scene itself. Such approach prevent lags when doing actual shooting, which is especially important if you're targeting
+a WebAssembly platform. On WebAssembly all the files accessed over network API which could work with unstable connection.
+In any case, even on PC it helps a lot.</p>
+<p>Requesting resources on demand could be useful in limited situations:</p>
+<ol>
+<li>You're loading a new game level - in this case it is perfectly fine to request the resource manually.</li>
+<li>You're doing some background work (level streaming for instance).</li>
+</ol>
 <h2 id="asset-browser"><a class="header" href="#asset-browser">Asset Browser</a></h2>
 <p>Asset browser allows you to preview your assets and edit their import properties. It looks something like this (keep
 in mind that the screenshot could be outdated).</p>
