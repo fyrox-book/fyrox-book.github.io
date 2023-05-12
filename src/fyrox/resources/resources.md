@@ -8,6 +8,29 @@ and by `ResourceManager` from API.
 Assets loading is asynchronous, it is possible to load multiple assets in parallel or load until a specific asset is 
 loaded.
 
+## Best Practices
+
+It is strongly advised to specify all resources used by your game entities inside your scripts, instead of requesting 
+resources directly from the resource manager on demand. This approach solves two common issues:
+
+1) It allows you to set resources directly from the editor by a simple drag'n'drop from the Asset Browser.
+2) The engine will be able to wait until all resources used by a scene are fully loaded. This is especially important,
+because this way can guarantee, that scene loading will be "seamless" and if the scene was loaded, it means that all
+resources used by it are loaded too. 
+
+This can be achieved by adding a respective field in your script. For example, you may a have a weapon script that 
+shoots some projectiles. In this case all you need to add a `projectile: Option<ModelResource>` field in your script,
+assign it so some prefab in the editor and then instantiate it from code when shooting. Storing resource handle 
+directly in your script helps the engine to gather all resources used by parent scene and preload them too while loading
+the scene itself. Such approach prevent lags when doing actual shooting, which is especially important if you're targeting
+a WebAssembly platform. On WebAssembly all the files accessed over network API which could work with unstable connection.
+In any case, even on PC it helps a lot.
+
+Requesting resources on demand could be useful in limited situations:
+
+1) You're loading a new game level - in this case it is perfectly fine to request the resource manually.
+2) You're doing some background work (level streaming for instance).
+
 ## Asset Browser
 
 Asset browser allows you to preview your assets and edit their import properties. It looks something like this (keep
