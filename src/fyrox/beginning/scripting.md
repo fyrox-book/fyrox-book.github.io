@@ -2,8 +2,25 @@
 
 Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game from the 
 editor and to be able to edit the game entities in it. Your game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. In this chapter you'll learn the basics of the plugins and scripting system,
-as well as how to run the editor.
+to scene objects to run custom game logic on them. In this chapter you'll learn the basics: how to install the engine with
+its platform-specific dependencies, how to use the plugins and scripting system, how to run the editor.
+
+## Platform-specific Dependencies
+
+Before you start using the engine, make sure you have all required platform-specific development dependencies installed,
+otherwise you'll get compilation errors. If you're on Windows or macOS, you don't need to install anything specific - 
+all you need to have is the latest Rust installed with appropriate toolchain for your platform.
+
+### Linux
+
+On Linux Fyrox needs the development files for the following libraries: `libxcb-shape0`, `libxcb-xfixes0`, `libxcb1`, 
+`libxkbcommon`, `libasound2`.
+
+For Debian based distros like Ubuntu, they can be installed like below:
+
+```shell
+sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev
+```
 
 ## Project Generator
 
