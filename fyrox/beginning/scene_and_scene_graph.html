@@ -207,15 +207,18 @@ state is backed by one or more animation playing or blending nodes. See its <a h
 for more info.</li>
 </ul>
 <p>Every node can be created either in the editor (through <code>Create</code> on the main menu, or through <code>Add Child</code> after right-clicking on 
-a game entitiy) or programmatically via their respective node builder (see [API docs](https://docs.rs/fyrox/latest/fyrox/scene/
-index.html) for more info). These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
+a game entity) or programmatically via their respective node builder (see <a href="https://docs.rs/fyrox/latest/fyrox/scene/index.html">API docs</a> 
+for more info). These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
 types of nodes, but that is an advanced topic, which is covered in a <a href="../scene/custom_node.html">future chapter</a>.</p>
 <h2 id="local-and-global-coordinates"><a class="header" href="#local-and-global-coordinates">Local and Global Coordinates</a></h2>
 <p>A graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
 when working with <em>scene nodes</em>.</p>
 <p>A scene node has two kinds of transform - a local and global. The local transform defines where the node is located
 relative to its origin, its scale as a percentage, and its rotation around any arbitrary axis.
-The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going back to the example of the character and the sword, if the character moves, and by extension the sword, the global transform of the sword will reflect the changes made to the character position, yet its local transform will not, since that represents the sword's position's relative to the character's, which didn't change.</p>
+The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going 
+back to the example of the character and the sword, if the character moves, and by extension the sword, the global 
+transform of the sword will reflect the changes made to the character position, yet its local transform will not, since 
+that represents the sword's position's relative to the character's, which didn't change.</p>
 <p>This mechanism is very simple, yet powerful. The full grace of it unfolds when you're working with 3D models with
 skeletons. Each bone in a skeleton has its parent and a set of children, which allows you to rotate, translate, or scale them to
 animate your entire character.</p>
