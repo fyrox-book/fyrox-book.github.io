@@ -61,8 +61,8 @@ state is backed by one or more animation playing or blending nodes. See its [res
 for more info.
 
 Every node can be created either in the editor (through `Create` on the main menu, or through `Add Child` after right-clicking on 
-a game entitiy) or programmatically via their respective node builder (see [API docs](https://docs.rs/fyrox/latest/fyrox/scene/
-index.html) for more info). These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
+a game entity) or programmatically via their respective node builder (see [API docs](https://docs.rs/fyrox/latest/fyrox/scene/index.html) 
+for more info). These scene nodes allow you to build almost any kind of game. It is also possible to create your own 
 types of nodes, but that is an advanced topic, which is covered in a [future chapter](../scene/custom_node.md).
 
 ## Local and Global Coordinates
@@ -72,7 +72,10 @@ when working with _scene nodes_.
 
 A scene node has two kinds of transform - a local and global. The local transform defines where the node is located
 relative to its origin, its scale as a percentage, and its rotation around any arbitrary axis.
-The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going back to the example of the character and the sword, if the character moves, and by extension the sword, the global transform of the sword will reflect the changes made to the character position, yet its local transform will not, since that represents the sword's position's relative to the character's, which didn't change.
+The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going 
+back to the example of the character and the sword, if the character moves, and by extension the sword, the global 
+transform of the sword will reflect the changes made to the character position, yet its local transform will not, since 
+that represents the sword's position's relative to the character's, which didn't change.
 
 This mechanism is very simple, yet powerful. The full grace of it unfolds when you're working with 3D models with
 skeletons. Each bone in a skeleton has its parent and a set of children, which allows you to rotate, translate, or scale them to
