@@ -272,8 +272,18 @@ tool.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="editor-plugins-and-scripts"><a class="header" href="#editor-plugins-and-scripts">Editor, Plugins and Scripts</a></h1>
 <p>Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game from the 
 editor and to be able to edit the game entities in it. Your game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. In this chapter you'll learn the basics of the plugins and scripting system,
-as well as how to run the editor.</p>
+to scene objects to run custom game logic on them. In this chapter you'll learn the basics: how to install the engine with
+its platform-specific dependencies, how to use the plugins and scripting system, how to run the editor.</p>
+<h2 id="platform-specific-dependencies"><a class="header" href="#platform-specific-dependencies">Platform-specific Dependencies</a></h2>
+<p>Before you start using the engine, make sure you have all required platform-specific development dependencies installed,
+otherwise you'll get compilation errors. If you're on Windows or macOS, you don't need to install anything specific - 
+all you need to have is the latest Rust installed with appropriate toolchain for your platform.</p>
+<h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
+<p>On Linux Fyrox needs the development files for the following libraries: <code>libxcb-shape0</code>, <code>libxcb-xfixes0</code>, <code>libxcb1</code>, 
+<code>libxkbcommon</code>, <code>libasound2</code>.</p>
+<p>For Debian based distros like Ubuntu, they can be installed like below:</p>
+<pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev
+</code></pre>
 <h2 id="project-generator"><a class="header" href="#project-generator">Project Generator</a></h2>
 <p>Fyrox plugins are static, this means that you must re-compile your game or editor if the source code of your game changes,
 such architecture requires some boilerplate code for any game. Fyrox offers a special tiny tool - 
