@@ -16,6 +16,7 @@ engine supports multiple texture formats, such as PNG, JPG, BMP, etc. Compressed
 - [Sound buffers](../resources/sound.md) - are data buffers for sound sources. Fyrox supports WAV and OGG formats. 
 - [Curves](../resources/curve.md) - are parametric curves. They're used to create complex functions for numeric parameters.
 They can be made in the `Curve Editor` (`Utils -> Curve Editor`)
+- It is also possible to create custom assets. See [respective chapter](../resources/custom.md) for more info.
 
 ## Asset Management
 

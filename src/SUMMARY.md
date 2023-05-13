@@ -57,6 +57,7 @@
   - [Textures](./fyrox/resources/texture.md)
   - [Sound Buffers (WIP)](./fyrox/resources/sound.md)
   - [Curves (WIP)](./fyrox/resources/curve.md)
+  - [Custom Resource](./fyrox/resources/custom.md)
 - [User Interface](./fyrox/ui/ui.md)
   - [Basic concepts](./fyrox/ui/basic_concepts/basic_concepts.md)
   - [General rules](./fyrox/ui/general_rules.md)
