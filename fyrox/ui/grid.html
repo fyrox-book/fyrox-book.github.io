@@ -213,10 +213,10 @@ add_column functions while providing a GridDimension instance to the call. GridD
 following functions:</p>
 <ul>
 <li>GridDimension::auto() - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
-<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or </li>
-<li>columns have this option the size is evenly distributed between them.</li>
-<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only </li>
-<li>be the given number of pixels wide, while a column will be that many pixels tall.</li>
+<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or 
+columns have this option the size is evenly distributed between them.</li>
+<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only 
+be the given number of pixels wide, while a column will be that many pixels tall.</li>
 </ul>
 <p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget 
 in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between
