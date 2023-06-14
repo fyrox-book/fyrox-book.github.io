@@ -70,9 +70,9 @@ following functions:
 
 * GridDimension::auto() - Sizes the row or column so it's just large enough to fit the largest child's size.
 * GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or 
-* columns have this option the size is evenly distributed between them.
+columns have this option the size is evenly distributed between them.
 * GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only 
-* be the given number of pixels wide, while a column will be that many pixels tall.
+be the given number of pixels wide, while a column will be that many pixels tall.
 
 You can add any number of rows and columns to a grid widget, and each grid cell does **not** need to have a UI widget 
 in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between
