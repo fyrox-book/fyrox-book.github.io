@@ -152,7 +152,7 @@ you should attach it explicitly by using `graph.link_nodes(..)`:
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::{ResourceManager},
+#     asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
 #     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
 # };
 
@@ -163,7 +163,7 @@ fn link_weapon_to_camera(
 ) {
     let weapon = block_on(
         resource_manager
-            .request_model("path/to/weapon.fbx"),
+            .request::<Model, _>("path/to/weapon.fbx"),
     )
     .unwrap()
     .instantiate(scene);

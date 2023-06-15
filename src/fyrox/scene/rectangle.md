@@ -16,7 +16,7 @@ Use the RectangleBuilder to create Rectangle nodes:
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, color::Color, pool::Handle},
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     scene::{
 #         base::BaseBuilder, dim2::rectangle::RectangleBuilder, graph::Graph, node::Node,
 #         transform::TransformBuilder,
@@ -32,7 +32,7 @@ fn create_rect(graph: &mut Graph, resource_manager: ResourceManager) -> Handle<N
         ),
     )
     .with_color(Color::RED)
-    .with_texture(resource_manager.request_texture("path/to/your_texture.jpg"))
+    .with_texture(resource_manager.request::<Texture, _>("path/to/your_texture.jpg"))
     .build(graph)
 }
 ```

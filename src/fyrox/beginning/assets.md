@@ -45,7 +45,8 @@ You can also instantiate assets dynamically from your code. Here's an example of
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager,
+#     resource::model::{Model, ModelResourceExtension},
 #     scene::{node::Node, Scene},
 # };
 # use std::path::Path;
@@ -55,7 +56,7 @@ async fn instantiate_model(
     scene: &mut Scene,
 ) -> Handle<Node> {
     // Load the model first. Alternatively, you can store the resource handle somewhere and use it for instantiation.
-    let model = resource_manager.request_model(path).await.unwrap();
+    let model = resource_manager.request::<Model, _>(path).await.unwrap();
 
     model.instantiate(scene)
 }

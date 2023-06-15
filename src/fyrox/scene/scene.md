@@ -25,7 +25,7 @@ scene. After a scene is created, you can load it as any other 3D model (or prefa
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::{ResourceManager},
+#     asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
 #     scene::{node::Node, Scene},
 # };
 # use std::path::Path;
@@ -37,7 +37,7 @@ fn load_scene(resource_manager: ResourceManager) -> Scene {
     // Request child scene and block until it loading.
     let scene_resource = block_on(
         resource_manager
-            .request_model("path/to/your/scene.rgs"),
+            .request::<Model, _>("path/to/your/scene.rgs"),
     )
         .unwrap();
 

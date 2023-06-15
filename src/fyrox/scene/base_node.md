@@ -105,6 +105,8 @@ scene.graph[node_handle]
 # }
 ```
 
+See more info about transformations [here](./transform.md).
+
 ## Visibility
 
 `Base` node stores all info about local visibility and global visibility (with parent's chain visibility included).

@@ -10,9 +10,9 @@ Typical script structure is something like this:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*},
+#     core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*, TypeUuidProvider},
 #     event::Event, impl_component_provider,
-#     scene::{graph::map::NodeHandleMap, node::TypeUuidProvider},
+#     scene::{graph::map::NodeHandleMap},
 #     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 # };
 #[derive(Visit, Reflect, Default, Debug, Clone)]
@@ -110,10 +110,9 @@ you need to register it in the list of script constructors like so:
 #             visitor::prelude::*,
 #             reflect::prelude::*,
 #             pool::Handle,
-#             uuid::Uuid
+#             uuid::Uuid, TypeUuidProvider
 #         },
 #         impl_component_provider,
-#         scene::node::TypeUuidProvider,
 #         script::ScriptTrait,
 #     };
 # 
@@ -158,9 +157,9 @@ The script can be attached to a scene node from code:
 ```rust, no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
+#     core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*, TypeUuidProvider},
 #     impl_component_provider,
-#     scene::node::{Node, TypeUuidProvider},
+#     scene::node::{Node},
 #     script::{Script, ScriptTrait},
 # };
 # 
@@ -197,8 +196,8 @@ content of the context is something like this:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::{resource_manager::ResourceManager, ScriptMessageDispatcher},
-#     plugin::Plugin,
+#     engine::{ScriptMessageDispatcher},
+#     plugin::Plugin, asset::manager::ResourceManager,
 #     scene::{node::Node, Scene},
 #     script::ScriptMessageSender
 # };
@@ -270,7 +269,7 @@ by `attacker` flash with some different color. In code this would like so:
 #     impl_component_provider,
 #     scene::node::Node,
 #     script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
-#     utils::log::Log,
+#     core::log::Log,
 # };
 # 
 enum Message {

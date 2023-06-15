@@ -14,7 +14,7 @@ use fyrox::{
         variable::InheritError,
         visitor::prelude::*,
     },
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager,
     scene::{
         base::Base,
         node::{Node, NodeTrait},

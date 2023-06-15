@@ -17,8 +17,8 @@ by experienced graphics programmers. Here's the simplest render pass that render
 #     renderer::{
 #         framework::{
 #             error::FrameworkError,
-#             framebuffer::DrawParameters,
-#             geometry_buffer::{GeometryBuffer, GeometryBufferKind},
+#             framebuffer::{DrawParameters},
+#             geometry_buffer::{GeometryBuffer, ElementRange, GeometryBufferKind},
 #             gpu_program::{GpuProgram, UniformLocation},
 #         },
 #         RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext,
@@ -94,10 +94,11 @@ impl SceneRenderPass for MyRenderPass {
                 ctx.viewport,
                 &self.shader,
                 &DrawParameters::default(),
+                ElementRange::Full,
                 |mut program| {
                     program.set_matrix4(&self.world_view_proj, &Matrix4::identity());
                 },
-            );
+            )?;
         }
 
         Ok(stats)

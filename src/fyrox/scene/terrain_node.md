@@ -67,14 +67,14 @@ Terrain can always be created from code, here's comprehensive example of how to 
 #         algebra::Vector2, algebra::Vector3, parking_lot::Mutex, pool::Handle,
 #         sstorage::ImmutableString,
 #     },
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
 #     rand::{thread_rng, Rng},
 #     scene::{
 #         base::BaseBuilder,
 #         graph::Graph,
 #         node::Node,
-#         terrain::{Brush, BrushMode, BrushShape, LayerDefinition, TerrainBuilder},
+#         terrain::{Brush, BrushMode, BrushShape, Layer, TerrainBuilder},
 #     },
 # };
 # use std::sync::Arc;
@@ -89,7 +89,7 @@ fn setup_layer_material(
         .set_property(
             &ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request_texture(diffuse_texture)),
+                value: Some(resource_manager.request::<Texture, _>(diffuse_texture)),
                 fallback: SamplerFallback::White,
             },
         )
@@ -98,7 +98,7 @@ fn setup_layer_material(
         .set_property(
             &ImmutableString::new("normalTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request_texture(normal_texture)),
+                value: Some(resource_manager.request::<Texture, _>(normal_texture)),
                 fallback: SamplerFallback::Normal,
             },
         )
@@ -114,7 +114,7 @@ fn setup_layer_material(
 fn create_random_two_layer_terrain(graph: &mut Graph, resource_manager: &ResourceManager) -> Handle<Node> {
     let terrain = TerrainBuilder::new(BaseBuilder::new())
         .with_layers(vec![
-            LayerDefinition {
+            Layer {
                 material: {
                     let mut material = Material::standard_terrain();
                     setup_layer_material(
@@ -125,9 +125,9 @@ fn create_random_two_layer_terrain(graph: &mut Graph, resource_manager: &Resourc
                     );
                     SharedMaterial::new(material)
                 },
-                mask_property_name: "maskTexture".to_string(),
+                .. Default::default()
             },
-            LayerDefinition {
+            Layer {
                 material: {
                     let mut material = Material::standard_terrain();
                     setup_layer_material(
@@ -138,7 +138,7 @@ fn create_random_two_layer_terrain(graph: &mut Graph, resource_manager: &Resourc
                     );
                     SharedMaterial::new(material)
                 },
-                mask_property_name: "maskTexture".to_string(),
+                .. Default::default()
             },
         ])
         .build(graph);

@@ -36,7 +36,7 @@ use fyrox::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager,
     physics3d::{
         rapier::dynamics::RigidBodyBuilder, rapier::geometry::ColliderBuilder, ColliderHandle,
         RigidBodyHandle,
@@ -58,7 +58,7 @@ impl Bot {
     ) -> Self {
         // Load bot 3D model as usual.
         let model = resource_manager
-            .request_model("data/models/zombie.fbx")
+            .request::<Model, _>("data/models/zombie.fbx")
             .await
             .unwrap()
             .instantiate(scene);
@@ -134,7 +134,7 @@ As usual, let's disassemble the code line-by-line. Creation of bot begins from l
 
 ```rust,no_run,compile_fail
 let model = resource_manager
-    .request_model("data/models/zombie.fbx")
+    .request::<Model, _>("data/models/zombie.fbx")
     .await
     .unwrap()
     .instantiate(scene);
@@ -309,9 +309,9 @@ impl BotAnimationMachine {
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = fyrox::core::futures::join!(
-            resource_manager.request_model("data/animations/zombie_walk.fbx"),
-            resource_manager.request_model("data/animations/zombie_idle.fbx"),
-            resource_manager.request_model("data/animations/zombie_attack.fbx"),
+            resource_manager.request::<Model, _>("data/animations/zombie_walk.fbx"),
+            resource_manager.request::<Model, _>("data/animations/zombie_idle.fbx"),
+            resource_manager.request::<Model, _>("data/animations/zombie_attack.fbx"),
         );
 
         // Now create three states with different animations.
@@ -466,9 +466,9 @@ let mut machine = Machine::new();
 
 // Load animations in parallel.
 let (walk_animation_resource, idle_animation_resource, attack_animation_resource) = fyrox::core::futures::join!(
-    resource_manager.request_model("data/animations/zombie_walk.fbx"),
-    resource_manager.request_model("data/animations/zombie_idle.fbx"),
-    resource_manager.request_model("data/animations/zombie_attack.fbx"),
+    resource_manager.request::<Model, _>("data/animations/zombie_walk.fbx"),
+    resource_manager.request::<Model, _>("data/animations/zombie_idle.fbx"),
+    resource_manager.request::<Model, _>("data/animations/zombie_attack.fbx"),
 );
 ```
 

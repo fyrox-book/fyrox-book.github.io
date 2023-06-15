@@ -25,7 +25,8 @@ Custom resource is just an ordinary struct with some data. It must implement `De
 traits. Also, it must contain at least path to external file with the content. Here's the simplest custom resource, that
 contains some string data.
 
-```rust,no_run
+```rust,no_run,edition2018
+# extern crate fyrox;
 # use fyrox::{
 #     asset::{
 #         event::ResourceEventBroadcaster,

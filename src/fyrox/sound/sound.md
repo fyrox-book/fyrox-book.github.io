@@ -8,11 +8,11 @@ Audio files are loaded using the resource manager:
 
 ```rust,no_run
 # extern crate fyrox;
-# use fyrox::{engine::Engine, scene::Scene};
+# use fyrox::{engine::Engine, scene::Scene, scene::sound::SoundBuffer};
 # fn build_node(engine: Engine, scene: &mut Scene) {
 let sound = engine
     .resource_manager
-    .request_sound_buffer("/path/to/resource.ogg");
+    .request::<SoundBuffer, _>("/path/to/resource.ogg");
 # }
 ```
 
@@ -24,14 +24,14 @@ Then, the node is built using the standard builder pattern:
 #     engine::Engine,
 #     scene::{
 #         base::BaseBuilder,
-#         sound::{SoundBuilder, Status},
+#         sound::{SoundBuilder, Status, SoundBuffer},
 #         Scene,
 #     },
 # };
 # fn build_node(engine: Engine, scene: &mut Scene) {
 # let sound = engine
 #     .resource_manager
-#     .request_sound_buffer("/path/to/resource.ogg");
+#     .request::<SoundBuffer, _>("/path/to/resource.ogg");
 #
 let sound_handle = SoundBuilder::new(BaseBuilder::new())
     .with_buffer(Some(sound))

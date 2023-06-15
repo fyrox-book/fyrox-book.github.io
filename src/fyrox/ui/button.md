@@ -50,8 +50,8 @@ More fancy-looking button with an image as a background could be created using t
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     core::pool::Handle, resource::texture::Texture,
+#     asset::manager::ResourceManager,
 #     gui::{
 #         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
 #         UserInterface,
@@ -65,7 +65,7 @@ fn create_fancy_button(ui: &mut UserInterface, resource_manager: ResourceManager
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
                 .with_texture(into_gui_texture(
-                    resource_manager.request_texture("path/to/your/texture"),
+                    resource_manager.request::<Texture, _>("path/to/your/texture"),
                 ))
                 .build(ctx),
         )

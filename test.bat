@@ -1,3 +1,4 @@
+clear
 cd ../Fyrox
 cargo build
 cd ../fyrox-book.github.io

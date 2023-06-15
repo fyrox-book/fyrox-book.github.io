@@ -38,7 +38,7 @@ Switch to `weapon.rs` and paste this code into it:
 use fyrox::scene::graph::Graph;
 use fyrox::{
     core::{algebra::Vector3, math::Vector3Ext, pool::Handle},
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
     scene::{node::Node, Scene},
 };
 
@@ -52,7 +52,7 @@ impl Weapon {
     pub async fn new(scene: &mut Scene, resource_manager: ResourceManager) -> Self {
         // Yeah, you need only few lines of code to load a model of any complexity.
         let model = resource_manager
-            .request_model("data/models/m4.fbx")
+            .request::<Model, _>("data/models/m4.fbx")
             .await
             .unwrap()
             .instantiate(scene);
@@ -161,7 +161,7 @@ pub async fn new(engine: &mut Engine) -> Self {
     // Load a scene resource and create its instance.
     engine
         .resource_manager
-        .request_model("data/models/scene.rgs")
+        .request::<Model, _>("data/models/scene.rgs")
         .await
         .unwrap()
         .instantiate(&mut scene);
@@ -746,7 +746,7 @@ that! This is the first time when we'll use particle systems. Let's add this fun
 #         color_gradient::{ColorGradient, GradientPoint},
 #         pool::Handle,
 #     },
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     scene::{
 #         base::BaseBuilder,
 #         graph::Graph,
@@ -807,7 +807,7 @@ fn create_bullet_impact(
     .with_color_over_lifetime_gradient(color_gradient)
     .with_emitters(vec![emitter])
     // We'll use simple spark texture for each particle.
-    .with_texture(resource_manager.request_texture(Path::new("data/textures/spark.png")))
+    .with_texture(resource_manager.request::<Texture, _>(Path::new("data/textures/spark.png")))
     .build(graph)
 }
 ```

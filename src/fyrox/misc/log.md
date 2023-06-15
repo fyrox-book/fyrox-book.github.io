@@ -20,7 +20,7 @@ possible to select desired severity level:
 
 ```rust,no_run
 # extern crate fyrox;
-# use fyrox::utils::log::{Log, MessageKind};
+# use fyrox::core::log::{Log, MessageKind};
 // These lines will be printed.
 Log::info("This is some info");
 Log::warn("This is some warning");

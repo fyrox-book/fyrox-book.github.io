@@ -11,13 +11,13 @@ Here is an example of custom game loop with comments that will guide your throug
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::instant::Instant,
-#     engine::{resource_manager::ResourceManager, GraphicsContextParams, Engine, EngineInitParams, GraphicsContext, SerializationContext},
+#     core::{instant::Instant, log::{Log, MessageKind}},
+#     engine::{GraphicsContextParams, Engine, EngineInitParams, GraphicsContext, SerializationContext},
+#     asset::manager::ResourceManager, 
 #     event::{Event, WindowEvent},
 #     event_loop::{ControlFlow, EventLoop},
 #     window::WindowAttributes,  
 #     utils::{
-#         log::{Log, MessageKind},
 #         translate_event,
 #     },
 # };
@@ -39,7 +39,7 @@ fn main() {
     let serialization_context = Arc::new(SerializationContext::new());
     let mut engine = Engine::new(EngineInitParams {
         graphics_context_params,
-        resource_manager: ResourceManager::new(serialization_context.clone()),
+        resource_manager: ResourceManager::new(),
         serialization_context,
     })
     .unwrap();

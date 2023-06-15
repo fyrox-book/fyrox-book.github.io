@@ -89,7 +89,7 @@ You can also create particle systems from code (in case if you need some procedu
 #     emitter::sphere::SphereEmitter, ParticleSystemBuilder, emitter::Emitter,
 #     emitter::base::BaseEmitterBuilder, emitter::sphere::SphereEmitterBuilder
 # };
-# use fyrox::engine::resource_manager::ResourceManager;
+# use fyrox::asset::manager::ResourceManager;
 # use fyrox::core::algebra::Vector3;
 # use fyrox::scene::graph::Graph;
 # use fyrox::scene::node::Node;
@@ -97,6 +97,7 @@ You can also create particle systems from code (in case if you need some procedu
 # use fyrox::core::color_gradient::{GradientPoint, ColorGradient};
 # use fyrox::scene::base::BaseBuilder;
 # use fyrox::core::color::Color;
+# use fyrox::resource::texture::Texture;
 # use std::path::Path;
 # use fyrox::resource::texture::TexturePixelKind;
 fn create_smoke(graph: &mut Graph, resource_manager: &mut ResourceManager, pos: Vector3<f32>) {
@@ -124,7 +125,7 @@ fn create_smoke(graph: &mut Graph, resource_manager: &mut ResourceManager, pos: 
                 .with_radius(0.01)
                 .build()
         ])
-        .with_texture(resource_manager.request_texture(Path::new("data/particles/smoke_04.tga")))
+        .with_texture(resource_manager.request::<Texture, _>(Path::new("data/particles/smoke_04.tga")))
         .build(graph);
 }
 ```

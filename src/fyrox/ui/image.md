@@ -9,7 +9,7 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
 #     utils::into_gui_texture,
 # };
@@ -22,7 +22,7 @@ fn create_image(ctx: &mut BuildContext, resource_manager: ResourceManager) -> Ha
     ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))        
         .with_texture(into_gui_texture(
             // Ask resource manager to load a texture.
-            resource_manager.request_texture("path/to/your/texture.png"),
+            resource_manager.request::<Texture, _>("path/to/your/texture.png"),
         ))
         .build(ctx)
 }
@@ -41,7 +41,7 @@ bounds first and then create an Image width these bounds:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
 #     resource::texture::TextureKind,
 #     utils::into_gui_texture,
@@ -53,7 +53,7 @@ async fn create_image(
 ) -> Handle<UiNode> {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
-        .request_texture("path/to/your/texture.png")
+        .request::<Texture, _>("path/to/your/texture.png")
         .await
     {
         // A texture can be not only rectangular, so we must check that.
@@ -83,7 +83,7 @@ promise immediately:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager,
 #     gui::{BuildContext, UiNode},
 # };
 # 
@@ -109,7 +109,7 @@ In some rare cases you need to flip your source image before showing it, there i
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
 #     utils::into_gui_texture,
 # };
@@ -118,7 +118,7 @@ fn create_image(ctx: &mut BuildContext, resource_manager: ResourceManager) -> Ha
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
         .with_texture(into_gui_texture(
-            resource_manager.request_texture("path/to/your/texture.png"),
+            resource_manager.request::<Texture, _>("path/to/your/texture.png"),
         ))
         .build(ctx)
 }

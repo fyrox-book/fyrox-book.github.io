@@ -14,7 +14,7 @@ A sprite instance could be created using `SpriteBuilder`:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::{color::Color, pool::Handle},
+#     core::{color::Color, pool::Handle}, resource::texture::Texture,
 #     scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
 # };
 
@@ -33,13 +33,13 @@ A sprite with a texture could be created by using `.with_texture` method of the 
 # extern crate fyrox;
 use fyrox::{
     core::pool::Handle,
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager, resource::texture::Texture,
     scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
 };
 
 fn create_sprite(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
     SpriteBuilder::new(BaseBuilder::new())
-        .with_texture(resource_manager.request_texture("path/to/your/texture.png"))
+        .with_texture(resource_manager.request::<Texture, _>("path/to/your/texture.png"))
         .build(&mut scene.graph)
 }
 ```

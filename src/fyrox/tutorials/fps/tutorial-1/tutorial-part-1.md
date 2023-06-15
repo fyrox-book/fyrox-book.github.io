@@ -46,7 +46,8 @@ use fyrox::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::{resource_manager::ResourceManager, Engine, EngineInitParams, SerializationContext},
+    engine::{Engine, EngineInitParams, SerializationContext},
+    asset::manager::ResourceManager,
     event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
     resource::texture::TextureWrapMode,
@@ -99,7 +100,7 @@ fn main() {
     let serialization_context = Arc::new(SerializationContext::new());
     let mut engine = Engine::new(EngineInitParams {
         graphics_context_params,
-        resource_manager: ResourceManager::new(serialization_context.clone()),
+        resource_manager: ResourceManager::new(),
         serialization_context,
     })
     .unwrap();
@@ -401,7 +402,7 @@ scene as resource and create its instance. Change `fn new()` body to:
 # extern crate fyrox;
 # use fyrox::{
 #     core::{algebra::Vector3, pool::Handle},
-#     engine::Engine,
+#     engine::Engine, resource::model::{Model, ModelResourceExtension},
 #     scene::{
 #         base::BaseBuilder, camera::CameraBuilder, node::Node, transform::TransformBuilder,
 #         Scene,
@@ -418,7 +419,7 @@ pub async fn new(engine: &mut Engine) -> Self {
     // Load a scene resource and create its instance.
     engine
         .resource_manager
-        .request_model("data/models/scene.rgs")
+        .request::<Model, _>("data/models/scene.rgs")
         .await
         .unwrap()
         .instantiate(&mut scene);
@@ -473,7 +474,7 @@ The next few lines are the most interesting:
 ```rust,no_run,compile_fail
 engine
     .resource_manager
-    .request_model("data/models/scene.rgs")
+    .request::<Model, _>("data/models/scene.rgs")
     .await
     .unwrap()
     .instantiate(&mut scene);
@@ -519,7 +520,8 @@ controller which will allow us to walk in our scene. Let's start with a chunk of
 #         algebra::{UnitQuaternion, Vector3},
 #         pool::Handle,
 #     },
-#     engine::{resource_manager::ResourceManager, Engine},
+#     engine::{Engine},
+#     asset::manager::ResourceManager,
 #     event::{DeviceEvent, ElementState, Event, VirtualKeyCode, WindowEvent},
 #     event_loop::{ControlFlow, EventLoop},
 #     resource::texture::TextureWrapMode,
@@ -683,6 +685,7 @@ straightforward.
 # use fyrox::core::pool::Handle;
 # use fyrox::engine::Engine;
 # use fyrox::scene::Scene;
+# use fyrox::resource::model::{Model, ModelResourceExtension};
 # struct Player;
 # impl Player {
 #     fn new(_scene: &mut Scene) -> Self {
@@ -703,7 +706,7 @@ impl Game {
         // Load a scene resource and create its instance.
         engine
             .resource_manager
-            .request_model("data/models/scene.rgs")
+            .request::<Model, _>("data/models/scene.rgs")
             .await
             .unwrap()
             .instantiate(&mut scene);
@@ -882,10 +885,8 @@ somewhere before `impl Player`:
 ```rust,no_run,edition2018
 # extern crate fyrox;
 # use fyrox::{
-#     engine::{
-#         resource_manager::{ResourceManager},
-#     },
-#     resource::texture::TextureWrapMode,
+#     asset::manager::{ResourceManager},
+#     resource::texture::{Texture, TextureWrapMode},
 #     scene::{
 #         camera::{SkyBox, SkyBoxBuilder},
 #     },
@@ -893,12 +894,12 @@ somewhere before `impl Player`:
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request_texture("data/textures/skybox/front.jpg"),
-        resource_manager.request_texture("data/textures/skybox/back.jpg"),
-        resource_manager.request_texture("data/textures/skybox/left.jpg"),
-        resource_manager.request_texture("data/textures/skybox/right.jpg"),
-        resource_manager.request_texture("data/textures/skybox/up.jpg"),
-        resource_manager.request_texture("data/textures/skybox/down.jpg")
+        resource_manager.request::<Texture, _>("data/textures/skybox/front.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/back.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/left.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/right.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/up.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/down.jpg")
     );
 
     // Unwrap everything.

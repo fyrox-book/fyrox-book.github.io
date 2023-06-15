@@ -78,7 +78,7 @@ To apply the settings, use `renderer.set_quality_settings` method:
 # extern crate fyrox;
 # use fyrox::{
 #     renderer::{QualitySettings, Renderer},
-#     utils::log::Log,
+#     core::log::Log,
 # };
 # 
 fn set_quality_settings(renderer: &mut Renderer) {

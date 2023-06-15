@@ -62,9 +62,10 @@ impl Game {
                 block_on(SceneLoader::from_file(
                     "data/scene.rgs",
                     context.serialization_context.clone(),
+                    context.resource_manager.clone()
                 ))
                     .unwrap()
-                    .finish(context.resource_manager.clone()),
+                    .finish(),
             );
 
             context.scenes.add(scene)
@@ -149,7 +150,8 @@ context is something like this:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     engine::{resource_manager::ResourceManager, SerializationContext},
+#     engine::{SerializationContext},
+#     asset::manager::ResourceManager,
 #     gui::UserInterface,
 #     renderer::Renderer,
 #     scene::SceneContainer,
@@ -212,9 +214,10 @@ pub fn new(override_scene: Handle<Scene>, context: PluginContext) -> Self {
             block_on(SceneLoader::from_file(
                 "data/scene.rgs",
                 context.serialization_context.clone(),
+                context.resource_manager.clone(),
             ))
                 .unwrap()
-                .finish(context.resource_manager.clone()),
+                .finish(),
         );
 
         context.scenes.add(scene)

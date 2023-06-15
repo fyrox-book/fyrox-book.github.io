@@ -152,7 +152,7 @@ then "filling" it with values from the visitor.
 
 ## Environment
 
-Sometimes there is a need to pass custom data to `visit` methods, one of the ways to do this is to use `environment` field
+Sometimes there is a need to pass custom data to `visit` methods, one of the ways to do this is to use `blackboard` field
 of the visitor:
 
 ```rust,no_run
@@ -171,9 +171,8 @@ struct MyEnvironment {
 impl Visit for MyStruct {
     fn visit(&mut self, name: &str, visitor: &mut Visitor) -> VisitResult {
         if let Some(environment) = visitor
-            .environment
-            .as_ref()
-            .and_then(|e| e.downcast_ref::<MyEnvironment>())
+            .blackboard
+            .get::<MyEnvironment>()            
         {
             println!("{}", environment.some_data);
         }
@@ -187,7 +186,7 @@ fn serialize_with_environment() {
 
     let mut visitor = Visitor::new();
 
-    visitor.environment = Some(Arc::new(MyEnvironment {
+    visitor.blackboard.register(Arc::new(MyEnvironment {
         some_data: "Foobar".to_owned(),
     }));
 

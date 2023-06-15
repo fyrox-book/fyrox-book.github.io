@@ -124,8 +124,8 @@ be the background of your scene. To create a Skybox and set it to a camera, you 
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::ResourceManager,
-#     resource::texture::TextureWrapMode,
+#     asset::manager::ResourceManager,
+#     resource::texture::{Texture, TextureWrapMode},
 #     scene::{
 #         base::BaseBuilder,
 #         camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
@@ -137,12 +137,12 @@ be the background of your scene. To create a Skybox and set it to a camera, you 
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request_texture("path/to/front.jpg"),
-        resource_manager.request_texture("path/to/back.jpg"),
-        resource_manager.request_texture("path/to/left.jpg"),
-        resource_manager.request_texture("path/to/right.jpg"),
-        resource_manager.request_texture("path/to/up.jpg"),
-        resource_manager.request_texture("path/to/down.jpg")
+        resource_manager.request::<Texture, _>("path/to/front.jpg"),
+        resource_manager.request::<Texture, _>("path/to/back.jpg"),
+        resource_manager.request::<Texture, _>("path/to/left.jpg"),
+        resource_manager.request::<Texture, _>("path/to/right.jpg"),
+        resource_manager.request::<Texture, _>("path/to/up.jpg"),
+        resource_manager.request::<Texture, _>("path/to/down.jpg")
     );
 
     // Unwrap everything.
@@ -193,7 +193,7 @@ To use color grading LUT you could do something like this:
 # extern crate fyrox;
 # use fyrox::{
 #     core::{futures::executor::block_on, pool::Handle},
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     scene::{
 #         base::BaseBuilder,
 #         camera::{CameraBuilder, ColorGradingLut},
@@ -210,7 +210,7 @@ fn create_camera_with_lut(
         .with_color_grading_enabled(true)
         .with_color_grading_lut(
             block_on(ColorGradingLut::new(
-                resource_manager.request_texture("path/to/lut.jpg"),
+                resource_manager.request::<Texture, _>("path/to/lut.jpg"),
             ))
             .unwrap(),
         )

@@ -10,8 +10,8 @@ call of other widget builders. In code, it looks something like this:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     core::pool::Handle, resource::texture::Texture,
+#     asset::manager::ResourceManager,
 #     gui::{
 #         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
 #         UserInterface,
@@ -24,7 +24,7 @@ ButtonBuilder::new(WidgetBuilder::new())
     .with_back(
         ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture("path/to/your/texture"),
+                resource_manager.request::<Texture, _>("path/to/your/texture"),
             ))
             .build(ctx),
     )
@@ -44,7 +44,7 @@ that contains text with some icon. To do that, replace `.with_text("My Button")`
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     gui::{
 #         button::ButtonBuilder,
 #         grid::{Column, GridBuilder, Row},
@@ -69,7 +69,7 @@ that contains text with some icon. To do that, replace `.with_text("My Button")`
                     .with_child(
                         ImageBuilder::new(WidgetBuilder::new().on_column(0))
                             .with_texture(into_gui_texture(
-                                resource_manager.request_texture("your_icon"),
+                                resource_manager.request::<Texture, _>("your_icon"),
                             ))
                             .build(ctx),
                     )
@@ -95,7 +95,7 @@ the fluent syntax:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::texture::Texture,
 #     gui::{
 #         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
 #         UserInterface,
@@ -109,7 +109,7 @@ ButtonBuilder::new(WidgetBuilder::new())
     .with_back({
         image = ImageBuilder::new(WidgetBuilder::new())
             .with_texture(into_gui_texture(
-                resource_manager.request_texture("path/to/your/texture"),
+                resource_manager.request::<Texture, _>("path/to/your/texture"),
             ))
             .build(ctx);
         image

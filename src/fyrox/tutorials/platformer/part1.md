@@ -131,16 +131,16 @@ use fyrox::{
         pool::Handle,
         reflect::prelude::*,
         uuid::{uuid, Uuid},
-        visitor::prelude::*,
+        visitor::prelude::*, TypeUuidProvider
     },
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager,
     event::{ElementState, Event, VirtualKeyCode, WindowEvent},
     impl_component_provider,
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     resource::texture::Texture,
     scene::{
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
-        node::{Node, TypeUuidProvider},
+        node::{Node},
         Scene, SceneLoader,
     },
     script::{ScriptContext, ScriptTrait},
@@ -158,12 +158,11 @@ move. Navigate to `game/src/lib.rs` and at the end of the file add the following
 #     core::{
 #         uuid::{uuid, Uuid},
 #         reflect::prelude::*,
-#         visitor::prelude::*,
+#         visitor::prelude::*, TypeUuidProvider
 #     },
 #     event::Event,
 #     impl_component_provider,
 #     gui::inspector::PropertyChanged,
-#     scene::node::TypeUuidProvider,
 #     script::{ScriptContext, ScriptTrait},
 # };
 #[derive(Visit, Reflect, Debug, Clone, Default)]

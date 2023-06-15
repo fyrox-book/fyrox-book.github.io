@@ -18,7 +18,7 @@ from Asset Browser in the editor or instantiate the model dynamically from code:
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
+#     asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
 #     scene::{node::Node, Scene},
 # };
 # use std::path::Path;
@@ -29,7 +29,7 @@ async fn instantiate_model(
 ) -> Handle<Node> {
     // Load model first. Alternatively, you can store resource handle somewhere and use it for
     // instantiation.
-    let model = resource_manager.request_model(path).await.unwrap();
+    let model = resource_manager.request::<Model, _>(path).await.unwrap();
 
     model.instantiate(scene)
 }

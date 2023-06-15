@@ -143,9 +143,9 @@ use fyrox::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager, 
     event::{DeviceEvent, ElementState, KeyboardInput, VirtualKeyCode},
-    resource::model::Model,
+    resource::model::{Model, ModelResourceExtension},
     scene::{
         animation::AnimationPlayer,
         base::BaseBuilder,
@@ -175,7 +175,7 @@ impl Player {
     pub async fn new(resource_manager: ResourceManager, scene: &mut Scene) -> Self {
         // Load paladin 3D model and create its instance in the scene.
         let model = resource_manager
-            .request_model("data/models/paladin/paladin.fbx")
+            .request::<Model, _>("data/models/paladin/paladin.fbx")
             .await
             .unwrap()
             .instantiate(scene);
@@ -216,9 +216,9 @@ use fyrox::{
         algebra::{UnitQuaternion, Vector3},
         pool::Handle,
     },
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager,
     event::DeviceEvent,
-    resource::texture::TextureWrapMode,
+    resource::texture::{Texture, TextureWrapMode},
     scene::{
         base::BaseBuilder,
         camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
@@ -232,12 +232,12 @@ use fyrox::{
 async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request_texture("data/textures/skybox/front.jpg"),
-        resource_manager.request_texture("data/textures/skybox/back.jpg"),
-        resource_manager.request_texture("data/textures/skybox/left.jpg"),
-        resource_manager.request_texture("data/textures/skybox/right.jpg"),
-        resource_manager.request_texture("data/textures/skybox/up.jpg"),
-        resource_manager.request_texture("data/textures/skybox/down.jpg")
+        resource_manager.request::<Texture, _>("data/textures/skybox/front.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/back.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/left.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/right.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/up.jpg"),
+        resource_manager.request::<Texture, _>("data/textures/skybox/down.jpg")
     );
 
     // Unwrap everything.
@@ -332,7 +332,7 @@ Now let's load a level where our character will "live", add `level.rs` with foll
 # extern crate fyrox;
 use fyrox::{
     core::pool::Handle,
-    engine::resource_manager::{ResourceManager},
+    asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
     scene::{node::Node, Scene},
 };
 
@@ -343,7 +343,7 @@ pub struct Level {
 impl Level {
     pub async fn new(resource_manager: ResourceManager, scene: &mut Scene) -> Self {
         let root = resource_manager
-            .request_model("data/levels/level.rgs")
+            .request::<Model, _>("data/levels/level.rgs")
             .await
             .unwrap()
             .instantiate(scene);
@@ -366,7 +366,8 @@ the following code:
 use crate::{level::Level, player::Player};
 use fyrox::{
     core::{color::Color, futures::executor::block_on, pool::Handle},
-    engine::{resource_manager::ResourceManager, executor::Executor},
+    engine::{executor::Executor},
+    asset::manager::ResourceManager,
     event::{Event, WindowEvent},
     event_loop::ControlFlow,
     plugin::{Plugin, PluginConstructor, PluginContext},
@@ -806,14 +807,14 @@ add just an idle and walk animations and smooth transitions between them. Add fo
 #         Animation,
 #     },
 #     core::pool::Handle,
-#     engine::resource_manager::ResourceManager,
-#     resource::model::Model,
+#     asset::manager::ResourceManager,
+#     resource::model::{Model, ModelResource, ModelResourceExtension},
 #     scene::{node::Node, animation::AnimationPlayer, Scene},
 # };
 
 // Simple helper method to create a state supplied with PlayAnimation node.
 fn create_play_animation_state(
-    animation_resource: Model,
+    animation_resource: ModelResource,
     name: &str,
     layer: &mut MachineLayer,
     scene: &mut Scene,
@@ -862,8 +863,8 @@ impl AnimationMachine {
 
         // Load animations in parallel.
         let (walk_animation_resource, idle_animation_resource) = fyrox::core::futures::join!(
-            resource_manager.request_model("data/models/paladin/walk.fbx"),
-            resource_manager.request_model("data/models/paladin/idle.fbx"),
+            resource_manager.request::<Model, _>("data/models/paladin/walk.fbx"),
+            resource_manager.request::<Model, _>("data/models/paladin/idle.fbx"),
         );
 
         // Now create two states with different animations.
@@ -915,7 +916,7 @@ impl AnimationMachine {
 
     pub fn update(&mut self, scene: &mut Scene, dt: f32, input: AnimationMachineInput) {
         let animation_player = scene.graph[self.animation_player]
-            .query_component_ref::<AnimationPlayer>()
+            .query_component_mut::<AnimationPlayer>()
             .unwrap();
 
         self.machine
@@ -923,7 +924,7 @@ impl AnimationMachine {
             .set_parameter(Self::WALK_TO_IDLE, Parameter::Rule(!input.walk))
             .set_parameter(Self::IDLE_TO_WALK, Parameter::Rule(input.walk))
             // Update machine and evaluate final pose.
-            .evaluate_pose(animation_player.animations(), dt)
+            .evaluate_pose(animation_player.animations_mut().get_value_mut_silent(), dt)
             // Apply the pose to the graph.
             .apply(&mut scene.graph);
     }

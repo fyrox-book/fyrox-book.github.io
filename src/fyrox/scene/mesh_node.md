@@ -28,7 +28,7 @@ instantiation):
 
 use fyrox::{
     core::{futures::executor::block_on, pool::Handle},
-    engine::resource_manager::{ResourceManager},
+    asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
     scene::{node::Node, Scene},
 };
 use std::path::Path;
@@ -40,7 +40,7 @@ fn load_model_to_scene(
 ) -> Handle<Node> {
     // Request model resource and block until it loading. 
     let model_resource =
-        block_on(resource_manager.request_model(path))
+        block_on(resource_manager.request::<Model, _>(path))
             .unwrap();
 
     // Create an instance of the resource in the scene. 
@@ -67,7 +67,8 @@ use fyrox::{
         pool::Handle,
         sstorage::ImmutableString,
     },
-    engine::resource_manager::ResourceManager,
+    asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
+    resource::texture::Texture,
     material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
     scene::{
         base::BaseBuilder,
@@ -94,7 +95,7 @@ fn create_procedural_mesh(
         .set_property(
             &ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request_texture("some_texture.jpg")),
+                value: Some(resource_manager.request::<Texture, _>("some_texture.jpg")),
                 fallback: SamplerFallback::White,
             },
         )
