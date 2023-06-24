@@ -147,7 +147,79 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="numeric-field-wip"><a class="header" href="#numeric-field-wip">Numeric field (WIP)</a></h1>
+                        <h1 id="numericupdown-widget"><a class="header" href="#numericupdown-widget">NumericUpDown Widget</a></h1>
+<p>A widget that handles numbers of any machine type. Use this widget if you need to provide input field for a numeric
+type.</p>
+<h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
+<p>Use <code>NumericUpDownBuilder</code> to create a new instance of the <code>NumericUpDown</code> widget:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
+</span><span class="boring">};
+</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+ NumericUpDownBuilder::new(WidgetBuilder::new())
+     .with_value(123.0f32)
+     .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind, that this widget is generic and can work with any numeric types. Sometimes you might get an &quot;unknown type&quot;
+error message from the compiler (especially if your use <code>123.0</code> ambiguous numeric literals), in this case you need to
+specify the type explicitly (<code>NumericUpDownBuilder::&lt;f32&gt;::new...</code>).</p>
+<h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
+<p>This widget supports lower and upper limits for the values. It can be specified by <code>NumericUpDownBuilder::with_min_value</code>
+and <code>NumericUpDownBuilder::with_max_value</code> (or changed at runtime using <code>NumericUpDownMessage::MinValue</code> and <code>NumericUpDownMessage::MaxValue</code>
+messages):</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
+</span><span class="boring">};
+</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+ NumericUpDownBuilder::new(WidgetBuilder::new())
+     .with_value(123.0f32)
+     .with_min_value(42.0)
+     .with_max_value(666.0)
+     .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The default limits for min and max are <code>NumericType::min_value</code> and <code>NumericType::max_value</code> respectively.</p>
+<h2 id="step"><a class="header" href="#step">Step</a></h2>
+<p>Since the value of the widget can be changed via up/down arrow buttons (also by dragging the cursor up or down on them), the widget
+provides a way to set the step of the value (for increment and decrement at the same time):</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
+</span><span class="boring">};
+</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+ NumericUpDownBuilder::new(WidgetBuilder::new())
+     .with_value(125.0f32)
+     .with_step(5.0)
+     .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The default value of the step is <code>NumericType::one</code>.</p>
+<h2 id="precision"><a class="header" href="#precision">Precision</a></h2>
+<p>It is possible to specify <strong>visual</strong> rounding of the value up to desired decimal place (it does not change the way how
+the actual value is rounded). For example, in some cases you might get irrational values such as <code>1/3 ~= 0.33333333</code>,
+but you interested in only first two decimal places. In this case you can set the precision to <code>2</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
+</span><span class="boring">};
+</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+ NumericUpDownBuilder::new(WidgetBuilder::new())
+     .with_value(0.3333333f32)
+     .with_precision(2)
+     .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 
