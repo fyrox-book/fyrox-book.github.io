@@ -81,7 +81,7 @@
     - [List view (WIP)](./fyrox/ui/list_view.md)        
     - [Menu (WIP)](./fyrox/ui/menu.md)        
     - [Message box (WIP)](./fyrox/ui/message_box.md)        
-    - [Numeric field (WIP)](./fyrox/ui/numeric.md)        
+    - [Numeric field](./fyrox/ui/numeric.md)        
     - [Popup (WIP)](./fyrox/ui/popup.md)        
     - [Progress bar (WIP)](./fyrox/ui/progress_bar.md)        
     - [Range (WIP)](./fyrox/ui/range.md)        
