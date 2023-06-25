@@ -17,3 +17,8 @@ and graphics is not a top-priority task.
 No, the engine uses mixed composition-based, object-oriented design with message passing and other different approaches
 that fits the most for a particular task. Why not ECS for everything, though? Pragmatism. Use a right tool for the job,
 don't use a microscope to hammer nails.
+
+## What kinds of games can I make using Fyrox?
+
+Pretty much any kinds of games, excepts maybe games with vast open-worlds (since there's no built-in world streaming).
+In general, it depends on your game development experience.
