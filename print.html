@@ -89,11 +89,33 @@
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
@@ -3802,6 +3824,8 @@ like this:</p>
 <li><code>Add Animation</code> - adds a new empty animation with the name from the text box at the left to the animation player. </li>
 <li><code>Import Animation</code> - starts animation importing process. See <a href="fyrox/animation/anim_editor.html#animation-importing">Animation Importing</a> section
 for more info.</li>
+<li><code>Reimport Animation</code> - re-imports the animation from an external file, it is useful if you need to change animation's
+content, while keep references to it valid.</li>
 <li><code>Rename Animation</code> - renames a currently selected animation using the name from the text box at the left.</li>
 <li><code>Animation Selector</code> - allows you to switch currently edited animation.</li>
 <li><code>Delete Animation</code> - deletes a currently selected animation, tries to select last animation from the list if possible.</li>
@@ -3810,6 +3834,7 @@ for more info.</li>
 <li><code>Enable Animation</code> - enables or disables a currently selected animation.</li>
 <li><code>Animation Speed</code> - sets a new playback speed of a currently selected animation.</li>
 <li><code>Time Slice</code> - a time range (in seconds) which defines start and end time of a currently selected animation.</li>
+<li><code>Root Motion</code> - open root motion settings. See <a href="fyrox/animation/anim_editor.html#root-motion">Root Motion</a> section for more info.</li>
 <li><code>Preview Switch</code> - enables or disables animation preview. See <a href="fyrox/animation/anim_editor.html#preview-mode"><code>Preview Mode</code></a> section for more info.</li>
 <li><code>Play/Pause</code> - plays or pauses a currently selected animation (allowed only in the preview mode).</li>
 <li><code>Stop</code> - stops a currently selected animation (allowed only in the preview mode).</li>
@@ -3882,12 +3907,25 @@ and map it to the given hierarchy, mapping is done using node names, so animated
 scene and your external animation file. </p>
 <p><img src="fyrox/animation/./ae_import_select_target_node.png" alt="step1" /></p>
 <p><img src="fyrox/animation/./ae_import_select_animation.png" alt="step2" /></p>
+<p>Content of existing animations can be replaced by reimporting. Click on a button with two circular arrows to reimport 
+your animation. It could be useful if you changed your animation in some external editor (Blender for example) and want
+to apply changes in your game.</p>
 <h2 id="preview-mode"><a class="header" href="#preview-mode">Preview Mode</a></h2>
 <p>Preview mode helps you to see and debug your animation. After activating the mode, you need to play the animation by
 clicking the <code>Play/Pause</code> button:</p>
 <p><img src="fyrox/animation/./anim_editor.gif" alt="anim editor" /></p>
 <p>Any significant change made in the scene will automatically deactivate the preview mode reverting all the changes made
 by playing animation.</p>
+<h2 id="root-motion"><a class="header" href="#root-motion">Root Motion</a></h2>
+<p>Root motion is a special technique that transfers motion from some node in a hierarchy to a physical capsule, which is 
+then used to perform the actual motion. You can enable/disable/setup it in the drop-down menu that opens by clicking <code>RM</code> 
+button:</p>
+<p><img src="fyrox/animation/./ae_rm.png" alt="root motion" /></p>
+<p>The most important part here is the <code>Root</code> handle, it should be set to a root node that moves by your animation, usually
+it is called like &quot;hips&quot; or similar:</p>
+<p><img src="fyrox/animation/./ae_root_node.png" alt="root node" /></p>
+<p>After that, you need to apply filters for axes - most of the locomotion animations &quot;works&quot; in oXZ plane, so Y axis should 
+be ignored. Also, if you don't have any turns in your animation, you can also filter out the rotation part.</p>
 <h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
 <p>For now there's no dopesheet mode in the editor, you can edit only one numeric parameter at a time. Also, there's no 
 capture mode - this is a special mode in which the editor automatically adds your changes in the scene to the animation.
