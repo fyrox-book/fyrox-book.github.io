@@ -3804,7 +3804,7 @@ player scene node and it will do the job for you.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="animation-editor"><a class="header" href="#animation-editor">Animation Editor</a></h1>
 <p><img src="fyrox/animation/./anim_editor.png" alt="anim editor" /></p>
 <p>Animation Editor is a tool that helps you to create and preview animations. This is a powerful tool that can be used
-to animated pretty much any numeric property. It has three main parts:</p>
+to animate pretty much any numeric property. It has three main parts:</p>
 <ol>
 <li><code>Toolbar</code> - contains a set of tools that changes a particular part of an animation (name, length, speed, etc.)</li>
 <li><code>Track List</code> - contains a list of tracks of nodes that will be animated.</li>
@@ -3815,6 +3815,12 @@ clicking <code>Open Animation Editor</code> button in the inspector.</p>
 <p><img src="fyrox/animation/./ae_open1.png" alt="open1" /></p>
 <p><img src="fyrox/animation/./ae_open2.png" alt="open2" /></p>
 <p>In both ways you still need to select an animation player for editing.</p>
+<h2 id="typical-workflow"><a class="header" href="#typical-workflow">Typical Workflow</a></h2>
+<p>At first, you need to create or <a href="fyrox/animation/anim_editor.html#animation-importing">import</a> an animation, then you need to set its time slice to 
+desired range (see <a href="fyrox/animation/anim_editor.html#toolbar">Time Slice</a> in the section below), then you need to add a few tracks for desired 
+properties and finally add some keys. You can <a href="fyrox/animation/anim_editor.html#preview-mode">preview</a> the results at any time, keep in
+mind that any attempt to change an animation while it is the preview mode, will revert every change from the 
+preview mode and only then apply your change.</p>
 <h2 id="toolbar"><a class="header" href="#toolbar">Toolbar</a></h2>
 <p>The toolbar contains a set of tools that changes a particular part of an animation (name, length, speed, etc.). It looks
 like this:</p>
@@ -3833,7 +3839,8 @@ content, while keep references to it valid.</li>
 <li><code>Loop Animation</code> - enables or disables looping of a currently selected animation.</li>
 <li><code>Enable Animation</code> - enables or disables a currently selected animation.</li>
 <li><code>Animation Speed</code> - sets a new playback speed of a currently selected animation.</li>
-<li><code>Time Slice</code> - a time range (in seconds) which defines start and end time of a currently selected animation.</li>
+<li><code>Time Slice</code> - a time range (in seconds) which defines start and end time of a currently selected animation. The range
+is highlighted in the curve editor.</li>
 <li><code>Root Motion</code> - open root motion settings. See <a href="fyrox/animation/anim_editor.html#root-motion">Root Motion</a> section for more info.</li>
 <li><code>Preview Switch</code> - enables or disables animation preview. See <a href="fyrox/animation/anim_editor.html#preview-mode"><code>Preview Mode</code></a> section for more info.</li>
 <li><code>Play/Pause</code> - plays or pauses a currently selected animation (allowed only in the preview mode).</li>
