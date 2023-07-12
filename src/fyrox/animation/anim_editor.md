@@ -29,17 +29,20 @@ like this:
 2. `Add Animation` - adds a new empty animation with the name from the text box at the left to the animation player. 
 3. `Import Animation` - starts animation importing process. See [Animation Importing](#animation-importing) section
 for more info.
-4. `Rename Animation` - renames a currently selected animation using the name from the text box at the left.
-5. `Animation Selector` - allows you to switch currently edited animation.
-6. `Delete Animation` - deletes a currently selected animation, tries to select last animation from the list if possible.
-7. `Duplicate Animation` - clones a currently selected animation.
-8. `Loop Animation` - enables or disables looping of a currently selected animation.
-9. `Enable Animation` - enables or disables a currently selected animation.
-10. `Animation Speed` - sets a new playback speed of a currently selected animation.
-11. `Time Slice` - a time range (in seconds) which defines start and end time of a currently selected animation.
-12. `Preview Switch` - enables or disables animation preview. See [`Preview Mode`](#preview-mode) section for more info.
-13. `Play/Pause` - plays or pauses a currently selected animation (allowed only in the preview mode).
-14. `Stop` - stops a currently selected animation (allowed only in the preview mode).
+4. `Reimport Animation` - re-imports the animation from an external file, it is useful if you need to change animation's
+content, while keep references to it valid.
+5. `Rename Animation` - renames a currently selected animation using the name from the text box at the left.
+6. `Animation Selector` - allows you to switch currently edited animation.
+7. `Delete Animation` - deletes a currently selected animation, tries to select last animation from the list if possible.
+8. `Duplicate Animation` - clones a currently selected animation.
+9. `Loop Animation` - enables or disables looping of a currently selected animation.
+10. `Enable Animation` - enables or disables a currently selected animation.
+11. `Animation Speed` - sets a new playback speed of a currently selected animation.
+12. `Time Slice` - a time range (in seconds) which defines start and end time of a currently selected animation.
+13. `Root Motion` - open root motion settings. See [Root Motion](#root-motion) section for more info.
+14. `Preview Switch` - enables or disables animation preview. See [`Preview Mode`](#preview-mode) section for more info.
+15. `Play/Pause` - plays or pauses a currently selected animation (allowed only in the preview mode).
+16. `Stop` - stops a currently selected animation (allowed only in the preview mode).
 
 ## Track List
 
@@ -125,6 +128,10 @@ scene and your external animation file.
 
 ![step2](./ae_import_select_animation.png)
 
+Content of existing animations can be replaced by reimporting. Click on a button with two circular arrows to reimport 
+your animation. It could be useful if you changed your animation in some external editor (Blender for example) and want
+to apply changes in your game.
+
 ## Preview Mode
 
 Preview mode helps you to see and debug your animation. After activating the mode, you need to play the animation by
@@ -134,6 +141,22 @@ clicking the `Play/Pause` button:
 
 Any significant change made in the scene will automatically deactivate the preview mode reverting all the changes made
 by playing animation.
+
+## Root Motion
+
+Root motion is a special technique that transfers motion from some node in a hierarchy to a physical capsule, which is 
+then used to perform the actual motion. You can enable/disable/setup it in the drop-down menu that opens by clicking `RM` 
+button:
+
+![root motion](./ae_rm.png)
+
+The most important part here is the `Root` handle, it should be set to a root node that moves by your animation, usually
+it is called like "hips" or similar:
+
+![root node](./ae_root_node.png)
+
+After that, you need to apply filters for axes - most of the locomotion animations "works" in oXZ plane, so Y axis should 
+be ignored. Also, if you don't have any turns in your animation, you can also filter out the rotation part.
 
 ## Limitations
 
