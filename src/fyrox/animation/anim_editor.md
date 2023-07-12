@@ -3,7 +3,7 @@
 ![anim editor](./anim_editor.png)
 
 Animation Editor is a tool that helps you to create and preview animations. This is a powerful tool that can be used
-to animated pretty much any numeric property. It has three main parts:
+to animate pretty much any numeric property. It has three main parts:
 
 1. `Toolbar` - contains a set of tools that changes a particular part of an animation (name, length, speed, etc.)
 2. `Track List` - contains a list of tracks of nodes that will be animated.
@@ -17,6 +17,14 @@ clicking `Open Animation Editor` button in the inspector.
 ![open2](./ae_open2.png)
 
 In both ways you still need to select an animation player for editing.
+
+## Typical Workflow
+
+At first, you need to create or [import](#animation-importing) an animation, then you need to set its time slice to 
+desired range (see [Time Slice](#toolbar) in the section below), then you need to add a few tracks for desired 
+properties and finally add some keys. You can [preview](#preview-mode) the results at any time, keep in
+mind that any attempt to change an animation while it is the preview mode, will revert every change from the 
+preview mode and only then apply your change.
 
 ## Toolbar
 
@@ -38,7 +46,8 @@ content, while keep references to it valid.
 9. `Loop Animation` - enables or disables looping of a currently selected animation.
 10. `Enable Animation` - enables or disables a currently selected animation.
 11. `Animation Speed` - sets a new playback speed of a currently selected animation.
-12. `Time Slice` - a time range (in seconds) which defines start and end time of a currently selected animation.
+12. `Time Slice` - a time range (in seconds) which defines start and end time of a currently selected animation. The range
+is highlighted in the curve editor.
 13. `Root Motion` - open root motion settings. See [Root Motion](#root-motion) section for more info.
 14. `Preview Switch` - enables or disables animation preview. See [`Preview Mode`](#preview-mode) section for more info.
 15. `Play/Pause` - plays or pauses a currently selected animation (allowed only in the preview mode).
