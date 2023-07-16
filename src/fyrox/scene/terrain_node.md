@@ -196,6 +196,34 @@ to re-render terrain's geometry with different textures and mask. Typical amount
 a terrain could have the following layers: dirt, grass, rock, snow. This is a relatively lightweight scheme. In any case,
 you should measure frame time to understand how each new layer affects performance in your case.
 
+## Chunking
+
+Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
+chunk could be considered as a "sub-terrain". You can "stack" any amount of chunks from any side of the terrain. To do 
+that, you define a range of chunks along each axes. This is very useful if you need to extend your terrain in a particular 
+direction. Imagine that you've created a terrain with just one chunk (`0..1` range on both axes), but suddenly you found
+that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at 
+the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should 
+change `width_chunks` range to `0..2` and leave `length_chunks` as is (`0..1`). This way terrain will be extended, and 
+you can start shaping the new location.
+
+## Level-of-detail
+
+Terrain has automatic LOD system, which means that the closest portions of it will be rendered with the highest
+possible quality (defined by the resolution of height map and masks), while the furthest portions will be
+rendered with the lowest quality. This effectively balances GPU load and allows you to render huge terrains with
+low overhead.
+
+The main parameter that affects LOD system is `block_size` (`Terrain::set_block_size`), which defines size of the patch 
+that will be used for rendering. It is used to divide the size of the height map into a fixed set of blocks using 
+quad-tree algorithm.
+
+Current implementation uses modified version of CDLOD algorithm without patch morphing. Apparently it is not needed, 
+since bilinear filtration in vertex shader prevents seams to occur.
+
+Current implementation makes it possible to render huge terrains (64x64 km) with 4096x4096 heightmap resolution in about a 
+millisecond on average low-to-middle-end GPU.
+
 ## Limitations and known issues
 
 There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create 
