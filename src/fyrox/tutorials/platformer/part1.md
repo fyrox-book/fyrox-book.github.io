@@ -9,8 +9,6 @@
   - [Using the Editor](#using-the-editor)
   - [Scripts - Player](#scripts---player)
   - [Animation](#animation)
-  - [Final Steps](#final-steps)
-  - [Standalone Game](#standalone-game)
   - [Conclusion](#conclusion)
 
 ## Introduction
