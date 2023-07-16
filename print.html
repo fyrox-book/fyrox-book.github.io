@@ -2585,6 +2585,27 @@ and move terrain. Now to move the terrain you should move the body, instead of t
 to re-render terrain's geometry with different textures and mask. Typical amount of layers is from 4 to 8. For example,
 a terrain could have the following layers: dirt, grass, rock, snow. This is a relatively lightweight scheme. In any case,
 you should measure frame time to understand how each new layer affects performance in your case.</p>
+<h2 id="chunking"><a class="header" href="#chunking">Chunking</a></h2>
+<p>Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
+chunk could be considered as a &quot;sub-terrain&quot;. You can &quot;stack&quot; any amount of chunks from any side of the terrain. To do 
+that, you define a range of chunks along each axes. This is very useful if you need to extend your terrain in a particular 
+direction. Imagine that you've created a terrain with just one chunk (<code>0..1</code> range on both axes), but suddenly you found
+that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at 
+the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should 
+change <code>width_chunks</code> range to <code>0..2</code> and leave <code>length_chunks</code> as is (<code>0..1</code>). This way terrain will be extended, and 
+you can start shaping the new location.</p>
+<h2 id="level-of-detail"><a class="header" href="#level-of-detail">Level-of-detail</a></h2>
+<p>Terrain has automatic LOD system, which means that the closest portions of it will be rendered with the highest
+possible quality (defined by the resolution of height map and masks), while the furthest portions will be
+rendered with the lowest quality. This effectively balances GPU load and allows you to render huge terrains with
+low overhead.</p>
+<p>The main parameter that affects LOD system is <code>block_size</code> (<code>Terrain::set_block_size</code>), which defines size of the patch 
+that will be used for rendering. It is used to divide the size of the height map into a fixed set of blocks using 
+quad-tree algorithm.</p>
+<p>Current implementation uses modified version of CDLOD algorithm without patch morphing. Apparently it is not needed, 
+since bilinear filtration in vertex shader prevents seams to occur.</p>
+<p>Current implementation makes it possible to render huge terrains (64x64 km) with 4096x4096 heightmap resolution in about a 
+millisecond on average low-to-middle-end GPU.</p>
 <h2 id="limitations-and-known-issues"><a class="header" href="#limitations-and-known-issues">Limitations and known issues</a></h2>
 <p>There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create 
 ledges, use separate meshes to imitate this. See <a href="https://github.com/FyroxEngine/Fyrox/issues/351">tracking issue</a> for
