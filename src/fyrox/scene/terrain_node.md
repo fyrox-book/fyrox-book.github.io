@@ -201,14 +201,3 @@ you should measure frame time to understand how each new layer affects performan
 There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create 
 ledges, use separate meshes to imitate this. See [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/351) for
 more info.
-
-For now, it is not possible to change width, height, and resolution of terrain, default values may be either too
-small or too high, depending on your game. See [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/352) for 
-more info.
-
-There is no way to flatten terrain slopes in the editor. See [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/353)
-for more info.
-
-There is no level-of-detail for terrain chunks, so distant pieces of terrain will be renderer with the same quality as
-close ones. This may hurt performance in case of large terrains. See [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/127)
-for more info.
