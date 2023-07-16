@@ -70,11 +70,23 @@ Due to the nature of the software development, some bugs will inevitably sneak i
 you may want to use the latest engine version from the repository on GitHub, since it is the most likely to have bugs fixed
 (you can also contribute by fixing any bugs you find or at least, by [filing an issue](https://github.com/FyroxEngine/Fyrox/issues)).
 
-> ⚠️ Latest `fyrox-template` from the engine's repo has special sub-command - `upgrade` to quickly upgrade to desired engine
-> version. To upgrade to the latest version ("nightly") you should execute `fyrox-template upgrade --version nightly` 
-> command in your game's directory.
+### Automatic
 
-The first step you need to take is to install the latest `fyrox-template`, this can be done with a single `cargo` command:
+> ⚠️ `fyrox-template` has special sub-command - `upgrade` to quickly upgrade to desired engine version. To upgrade to 
+> the latest version (`nightly`) you should execute `fyrox-template upgrade --version nightly` command in your game's 
+> directory.
+
+There are three main variants for `--version` switch:
+
+- `nightly` - uses latest nightly version of the engine from GitHub directly. This is the preferable version if you want
+to use the latest changes and bug fixes as they release.
+- `latest` - uses latest stable version of the engine.
+- `major.minor.patch` - uses specific stable version from crates.io (`0.30.0` for example).
+
+### Manual
+
+Engine version can also be updated manually. The first step you need to take is to install the latest `fyrox-template`, 
+this can be done with a single `cargo` command:
 
 ```shell
 cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
