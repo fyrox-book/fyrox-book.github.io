@@ -87,7 +87,7 @@
     - [Progress bar (WIP)](./fyrox/ui/progress_bar.md)        
     - [Range (WIP)](./fyrox/ui/range.md)        
     - [Rect (WIP)](./fyrox/ui/rect.md)        
-    - [Scroll bar (WIP)](./fyrox/ui/scroll_bar.md)        
+    - [Scroll bar](./fyrox/ui/scroll_bar.md)        
     - [Scroll panel (WIP)](./fyrox/ui/scroll_panel.md)        
     - [Scroll viewer (WIP)](./fyrox/ui/scroll_viewer.md)        
     - [Stack panel](./fyrox/ui/stack_panel.md)        
