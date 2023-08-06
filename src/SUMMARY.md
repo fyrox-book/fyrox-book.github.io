@@ -3,6 +3,7 @@
 - [About the Book](./introduction.md)
 - [Introduction](./fyrox/introduction/index.md)
   - [Introduction to Fyrox](./fyrox/introduction/introduction.md)
+  - [System Requirements and Supported Platforms](./fyrox/introduction/requirements.md)
   - [Basic concepts](./fyrox/introduction/basic_concepts.md)
   - [Design Philosophy and Goals](./fyrox/introduction/philosophy_and_goals.md)
   - [Frequently Asked Questions](./fyrox/introduction/faq.md)
