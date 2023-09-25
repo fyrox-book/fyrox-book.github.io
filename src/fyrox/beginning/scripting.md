@@ -5,6 +5,18 @@ editor and to be able to edit the game entities in it. Your game can define any 
 to scene objects to run custom game logic on them. In this chapter you'll learn the basics: how to install the engine with
 its platform-specific dependencies, how to use the plugins and scripting system, how to run the editor.
 
+## Quick Start
+
+Run the following commands to start using the engine as quick as possible. Read the next chapters if you want to know 
+more or if you have any issues with this.
+
+```sh
+cargo install fyrox-template
+fyrox-template init --name fyrox_test --style 2d
+cd fyrox_test
+cargo run --package editor --release
+```
+
 ## Platform-specific Dependencies
 
 Before you start using the engine, make sure you have all required platform-specific development dependencies installed,

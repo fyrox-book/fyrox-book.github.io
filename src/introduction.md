@@ -1,7 +1,8 @@
 # Fyrox Game Engine Book
 
-Practical reference and user guides for [Fyrox Game Engine](https://github.com/FyroxEngine/Fyrox) and its 
-editor [FyroxEd](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
+Practical reference and user guides for [Fyrox Game Engine](https://github.com/FyroxEngine/Fyrox) and its editor [FyroxEd](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
+
+> ⚠️ Tip: If you want to start using the engine as fast as possible - read this [chapter](fyrox/beginning/scripting.md).
 
 **Warning:** The book is in early development stage, you can help to improve it by making a contribution in its
 [repository](https://github.com/fyrox-book/fyrox-book.github.io). Don't be shy, every tip is helpful!
@@ -16,8 +17,7 @@ compile with the latest release from crates.io, then you need to
 
 Almost every chapter in this book can be read in any order, but we recommend reading Chapters 1, 2, 3 (they're quite small)
 and then going through [Platformer Tutorial (2D)](fyrox/tutorials/platformer/part1.md) while learning more about specific 
-areas that interest you from the other chapters. If you want to start using the engine as fast as possible, then read this
-[chapter](fyrox/beginning/scripting.md).
+areas that interest you from the other chapters.
 
 There is also a [First-Person Shooter Tutorial (3D)](fyrox/tutorials/fps/intro.md), but it is based on framework which
 considered obsolete, yet it is still very helpful. 
