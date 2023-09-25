@@ -3,6 +3,16 @@
 Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
 so scripts are as fast as native code. 
 
+## When to Use Scripts and When Not
+
+Scripts are meant to be used to add data and some logic to scene nodes. That being said, you should not use scripts
+to hold some global state of your game (use your game plugin for that). For example, use scripts for your game items, 
+bots, player, level, etc. On the other hand **do not** use scripts for leader boards, game menus, progress information,
+etc.
+
+Also, scripts cannot be assigned to UI widgets due to intentional Game <-> UI decoupling reasons. All user interface 
+components should be created and handled in the game plugin of your game.
+
 ## Script Structure
 
 Typical script structure is something like this:

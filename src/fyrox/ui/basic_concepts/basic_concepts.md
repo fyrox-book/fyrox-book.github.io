@@ -124,4 +124,13 @@ complex layout. Layout pass has two _recursive_ sub-passes:
 2. Arrangement - the sub-pass is used to set final position and size of each node in hierarchy.
 
 Such split is required because we need to know desired size of each node in hierarchy before we can actually do an
-arrangement.  
+arrangement.
+
+## Limitations
+
+1) UI system is fully decoupled from engine scenes, this means that you can't incorporate UI widgets in a scene graph. As
+a consequence, you don't have an ability to attach scripts to widgets. This limitation is intentional, and it is here
+only for one reason - decoupling of UI code from game logic. Currently, there's only one right approach to make UIs -
+to create widgets in your game plugin and sync the state of the widgets with game entities manually.
+2) Also, FyroxEd does not have a UI editor yet, which means that you need to create UI only from code. This limitation
+will be fixed in the future versions.
