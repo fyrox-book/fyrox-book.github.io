@@ -1280,6 +1280,13 @@ to engine instance. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripts-1"><a class="header" href="#scripts-1">Scripts</a></h1>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
 so scripts are as fast as native code. </p>
+<h2 id="when-to-use-scripts-and-when-not"><a class="header" href="#when-to-use-scripts-and-when-not">When to Use Scripts and When Not</a></h2>
+<p>Scripts are meant to be used to add data and some logic to scene nodes. That being said, you should not use scripts
+to hold some global state of your game (use your game plugin for that). For example, use scripts for your game items, 
+bots, player, level, etc. On the other hand <strong>do not</strong> use scripts for leader boards, game menus, progress information,
+etc.</p>
+<p>Also, scripts cannot be assigned to UI widgets due to intentional Game &lt;-&gt; UI decoupling reasons. All user interface 
+components should be created and handled in the game plugin of your game.</p>
 <h2 id="script-structure"><a class="header" href="#script-structure">Script Structure</a></h2>
 <p>Typical script structure is something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -5402,6 +5409,15 @@ complex layout. Layout pass has two <em>recursive</em> sub-passes:</p>
 </ol>
 <p>Such split is required because we need to know desired size of each node in hierarchy before we can actually do an
 arrangement.</p>
+<h2 id="limitations-5"><a class="header" href="#limitations-5">Limitations</a></h2>
+<ol>
+<li>UI system is fully decoupled from engine scenes, this means that you can't incorporate UI widgets in a scene graph. As
+a consequence, you don't have an ability to attach scripts to widgets. This limitation is intentional, and it is here
+only for one reason - decoupling of UI code from game logic. Currently, there's only one right approach to make UIs -
+to create widgets in your game plugin and sync the state of the widgets with game entities manually.</li>
+<li>Also, FyroxEd does not have a UI editor yet, which means that you need to create UI only from code. This limitation
+will be fixed in the future versions.</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="general-rules-1"><a class="header" href="#general-rules-1">General rules</a></h1>
 <p>This chapter covers general rules that will help you to write code that will be easy to understand.</p>
 <h2 id="fluent-syntax"><a class="header" href="#fluent-syntax">Fluent syntax</a></h2>
@@ -7251,7 +7267,7 @@ fn serialize_with_environment() {
     my_object.visit(&quot;MyObject&quot;, &amp;mut visitor).unwrap();
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="limitations-5"><a class="header" href="#limitations-5">Limitations</a></h2>
+<h2 id="limitations-6"><a class="header" href="#limitations-6">Limitations</a></h2>
 <p>All fields of your structure must implement <code>Default</code> trait, this is essential limitation because deserialization must
 have a way to create an instance of an object for you. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="saved-games-wip"><a class="header" href="#saved-games-wip">Saved Games (WIP)</a></h1>
