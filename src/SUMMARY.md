@@ -65,7 +65,7 @@
   - [Basic concepts](./fyrox/ui/basic_concepts/basic_concepts.md)
   - [General rules](./fyrox/ui/general_rules.md)
   - [Fonts](./fyrox/ui/font.md)
-  - [Theme](./fyrox/ui/theme.md)
+  - [Style](./fyrox/ui/style.md)
   - [Widgets](./fyrox/ui/widgets.md)
     - [Button](./fyrox/ui/button.md)
     - [Border](./fyrox/ui/border.md)
