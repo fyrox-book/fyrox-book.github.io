@@ -204,6 +204,9 @@ used to create &quot;straight&quot; transitions between two values.</li>
 where <code>t = (time_position - left) / (right - left)</code> (<code>t</code> is always in <code>0..1</code> range), <code>left_tangent</code> and <code>right_tangent</code>
 is usually a <code>tan(angle)</code>. Cubic interpolation is usually used to create &quot;smooth&quot; transitions between two values.</li>
 </ul>
+<h2 id="web-demo"><a class="header" href="#web-demo">Web Demo</a></h2>
+<p>You can explore animation system capabilities in this <a href="https://fyrox.rs/assets/demo/animation/index.html">web demo</a>. Keep
+in mind, that it was designed to run on PC and wasn't tested on mobile devices.</p>
 <h2 id="track-binding"><a class="header" href="#track-binding">Track binding</a></h2>
 <p>Each track is always bound to a property in a node, either by its name or by a special binding. The name is used to fetch the
 property using reflection, the special binding is a faster way of fetching built-in properties. It is usually used to animate
