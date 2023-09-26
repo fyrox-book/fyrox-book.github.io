@@ -37,6 +37,11 @@ calculate intermediate values between key frames. There are three kinds of inter
   where `t = (time_position - left) / (right - left)` (`t` is always in `0..1` range), `left_tangent` and `right_tangent`
   is usually a `tan(angle)`. Cubic interpolation is usually used to create "smooth" transitions between two values.
 
+## Web Demo
+
+You can explore animation system capabilities in this [web demo](https://fyrox.rs/assets/demo/animation/index.html). Keep
+in mind, that it was designed to run on PC and wasn't tested on mobile devices.
+
 ## Track binding
 
 Each track is always bound to a property in a node, either by its name or by a special binding. The name is used to fetch the
