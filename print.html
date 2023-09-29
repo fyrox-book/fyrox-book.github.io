@@ -1266,8 +1266,9 @@ to engine instance. </p>
 </span><span class="boring">use fyrox::engine::executor::Executor;
 </span><span class="boring">use fyrox::window::WindowAttributes;
 </span><span class="boring">use fyrox::engine::GraphicsContextParams;
+</span><span class="boring">use fyrox::event_loop::EventLoop;
 </span>let executor = Executor::from_params(
-    Default::default(),
+    EventLoop::new().unwrap(),
     GraphicsContextParams {
         window_attributes: WindowAttributes {
             title: &quot;My Game&quot;.to_string(),
@@ -3897,11 +3898,12 @@ it in the Audio Context panel:</p>
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::scene::{
 </span><span class="boring">    graph::Graph,
-</span><span class="boring">    sound::{self, HrirSphere, HrtfRenderer, Renderer},
+</span><span class="boring">    sound::{self, HrirSphere, HrirSphereResource, HrirSphereResourceExt, HrtfRenderer, Renderer},
 </span><span class="boring">};
 </span><span class="boring">
 </span>fn use_hrtf(graph: &amp;mut Graph) {
-    let hrir_sphere = HrirSphere::from_file(&quot;path/to/hrir.bin&quot;, sound::SAMPLE_RATE).unwrap();
+    let hrir_sphere = HrirSphereResource::from_hrir_sphere(
+        HrirSphere::from_file(&quot;path/to/hrir.bin&quot;, sound::SAMPLE_RATE).unwrap(), &quot;path/to/hrir.bin&quot;.into());
     graph
         .sound_context
         .state()
@@ -5794,14 +5796,14 @@ useful:</p>
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    event_loop::ControlFlow,
 </span><span class="boring">    gui::{button::ButtonMessage, message::UiMessage, UiNode},
-</span><span class="boring">    plugin::PluginContext,
+</span><span class="boring">    plugin::{PluginContext, Plugin},
 </span><span class="boring">};
 </span><span class="boring">
 </span>struct Game {
     button: Handle&lt;UiNode&gt;,
 }
 
-impl Game {
+impl Plugin for Game {
     fn on_ui_message(
         &amp;mut self,
         context: &amp;mut PluginContext,
@@ -7484,7 +7486,7 @@ impl Game {
 
 fn main() {
     // Create event loop that will be used to &quot;listen&quot; events from the OS.
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new().unwrap();
 
     // Finally create an instance of the engine.
     let graphics_context_params = GraphicsContextParams {
@@ -7589,7 +7591,7 @@ impl Game {
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::event_loop::EventLoop;
-</span>let event_loop = EventLoop::new();
+</span>let event_loop = EventLoop::new().unwrap();
 <span class="boring">}</span></code></pre></pre>
 <p>The event loop is a &quot;magic&quot; thing that receives events from the operating system and feeds your application, this is a very 
 important part which makes the application work. Finally, we're creating an instance of the engine:</p>
@@ -11199,7 +11201,7 @@ you're experienced game developer!</p>
 </span><span class="boring">use std::{sync::Arc};
 </span>
 fn main() {
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new().unwrap();
 
     // Then initialize the engine.
     let graphics_context_params = GraphicsContextParams {

@@ -249,14 +249,14 @@ useful:</p>
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    event_loop::ControlFlow,
 </span><span class="boring">    gui::{button::ButtonMessage, message::UiMessage, UiNode},
-</span><span class="boring">    plugin::PluginContext,
+</span><span class="boring">    plugin::{PluginContext, Plugin},
 </span><span class="boring">};
 </span><span class="boring">
 </span>struct Game {
     button: Handle&lt;UiNode&gt;,
 }
 
-impl Game {
+impl Plugin for Game {
     fn on_ui_message(
         &amp;mut self,
         context: &amp;mut PluginContext,

@@ -214,8 +214,9 @@ to engine instance. </p>
 </span><span class="boring">use fyrox::engine::executor::Executor;
 </span><span class="boring">use fyrox::window::WindowAttributes;
 </span><span class="boring">use fyrox::engine::GraphicsContextParams;
+</span><span class="boring">use fyrox::event_loop::EventLoop;
 </span>let executor = Executor::from_params(
-    Default::default(),
+    EventLoop::new().unwrap(),
     GraphicsContextParams {
         window_attributes: WindowAttributes {
             title: &quot;My Game&quot;.to_string(),

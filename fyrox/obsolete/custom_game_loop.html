@@ -190,7 +190,7 @@ you're experienced game developer!</p>
 </span><span class="boring">use std::{sync::Arc};
 </span>
 fn main() {
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new().unwrap();
 
     // Then initialize the engine.
     let graphics_context_params = GraphicsContextParams {
