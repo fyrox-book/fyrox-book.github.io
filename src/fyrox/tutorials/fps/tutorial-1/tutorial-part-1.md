@@ -85,7 +85,7 @@ impl Game {
 
 fn main() {
     // Create event loop that will be used to "listen" events from the OS.
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new().unwrap();
 
     // Finally create an instance of the engine.
     let graphics_context_params = GraphicsContextParams {
@@ -194,7 +194,7 @@ Finally, we at the point where the interesting stuff happens - `fn main()`. We'r
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::event_loop::EventLoop;
-let event_loop = EventLoop::new();
+let event_loop = EventLoop::new().unwrap();
 ```
 
 The event loop is a "magic" thing that receives events from the operating system and feeds your application, this is a very 

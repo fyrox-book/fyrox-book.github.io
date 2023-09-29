@@ -85,14 +85,14 @@ useful:
 #     core::pool::Handle,
 #     event_loop::ControlFlow,
 #     gui::{button::ButtonMessage, message::UiMessage, UiNode},
-#     plugin::PluginContext,
+#     plugin::{PluginContext, Plugin},
 # };
 # 
 struct Game {
     button: Handle<UiNode>,
 }
 
-impl Game {
+impl Plugin for Game {
     fn on_ui_message(
         &mut self,
         context: &mut PluginContext,

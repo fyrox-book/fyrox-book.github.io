@@ -24,7 +24,7 @@ Here is an example of custom game loop with comments that will guide your throug
 # use std::{sync::Arc};
 
 fn main() {
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new().unwrap();
 
     // Then initialize the engine.
     let graphics_context_params = GraphicsContextParams {

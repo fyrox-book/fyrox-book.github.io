@@ -55,8 +55,9 @@ You can set window title when creating executor instance:
 # use fyrox::engine::executor::Executor;
 # use fyrox::window::WindowAttributes;
 # use fyrox::engine::GraphicsContextParams;
+# use fyrox::event_loop::EventLoop;
 let executor = Executor::from_params(
-    Default::default(),
+    EventLoop::new().unwrap(),
     GraphicsContextParams {
         window_attributes: WindowAttributes {
             title: "My Game".to_string(),

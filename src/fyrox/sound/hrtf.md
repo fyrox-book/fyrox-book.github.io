@@ -28,11 +28,12 @@ Once it is loaded, all sounds in the scene will use the HRTF for rendering. The 
 # extern crate fyrox;
 # use fyrox::scene::{
 #     graph::Graph,
-#     sound::{self, HrirSphere, HrtfRenderer, Renderer},
+#     sound::{self, HrirSphere, HrirSphereResource, HrirSphereResourceExt, HrtfRenderer, Renderer},
 # };
 # 
 fn use_hrtf(graph: &mut Graph) {
-    let hrir_sphere = HrirSphere::from_file("path/to/hrir.bin", sound::SAMPLE_RATE).unwrap();
+    let hrir_sphere = HrirSphereResource::from_hrir_sphere(
+        HrirSphere::from_file("path/to/hrir.bin", sound::SAMPLE_RATE).unwrap(), "path/to/hrir.bin".into());
     graph
         .sound_context
         .state()
