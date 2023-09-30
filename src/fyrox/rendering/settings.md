@@ -72,23 +72,32 @@ quality-performance balance.
 
 ## How to apply
 
-To apply the settings, use `renderer.set_quality_settings` method:
+To apply the settings, use `Renderer::set_quality_settings` method:
 
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     renderer::{QualitySettings, Renderer},
-#     core::log::Log,
+#     core::log::Log, engine::GraphicsContext, plugin::PluginContext, renderer::QualitySettings,
 # };
 # 
-fn set_quality_settings(renderer: &mut Renderer) {
-    let mut settings = QualitySettings::high();
+fn set_quality_settings(context: &mut PluginContext) {
+    // Keep in mind, that graphics context can be non-initialized. This could happen if you're trying to access it before
+    // your game received `Event::Resumed` event.
+    if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context {
+        let mut settings = QualitySettings::high();
 
-    // Disable something.
-    settings.use_ssao = false;
-    settings.fxaa = false;
+        // Disable something.
+        settings.use_ssao = false;
+        settings.fxaa = false;
 
-    // Apply.
-    Log::verify(renderer.set_quality_settings(&settings))
+        // Apply.
+        Log::verify(graphics_context.renderer.set_quality_settings(&settings))
+    }
 }
 ```
+
+Keep in mind, that graphics context can be non-initialized. This could happen if you're trying to access it before your 
+game received `Event::Resumed` event. See the docs for [Event::Resumed](https://docs.rs/fyrox/latest/fyrox/event/enum.Event.html#variant.Resumed) 
+for more info. There is only one place, where graphics context is guaranteed to be initialized - 
+`Plugin::on_graphics_context_initialized` method. Inside it, you can access the renderer by simple: 
+`context.graphics_context.as_initialized_mut().renderer`, in other places you should always do a checked borrow.

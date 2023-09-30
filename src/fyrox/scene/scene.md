@@ -79,7 +79,7 @@ You can borrow a scene at any time using its handle and do some changes:
 
 ```rust
 # extern crate fyrox;
-# use crate::{
+# use fyrox::{
 #     core::pool::Handle,
 #     event_loop::ControlFlow,
 #     plugin::{Plugin, PluginContext},
