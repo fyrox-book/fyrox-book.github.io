@@ -1678,7 +1678,7 @@ You can borrow a scene at any time using its handle and do some changes:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">use crate::{
+</span><span class="boring">use fyrox::{
 </span><span class="boring">    core::pool::Handle,
 </span><span class="boring">    event_loop::ControlFlow,
 </span><span class="boring">    plugin::{Plugin, PluginContext},
@@ -4970,26 +4970,34 @@ flat surfaces using special textures. This option has low performance impact.</l
 <code>QualitySettings::high()</code>, <code>QualitySettings::medium()</code> and <code>QualitySettings::low()</code> presets to quickly tune 
 quality-performance balance.</p>
 <h2 id="how-to-apply"><a class="header" href="#how-to-apply">How to apply</a></h2>
-<p>To apply the settings, use <code>renderer.set_quality_settings</code> method:</p>
+<p>To apply the settings, use <code>Renderer::set_quality_settings</code> method:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
-</span><span class="boring">    renderer::{QualitySettings, Renderer},
-</span><span class="boring">    core::log::Log,
+</span><span class="boring">    core::log::Log, engine::GraphicsContext, plugin::PluginContext, renderer::QualitySettings,
 </span><span class="boring">};
 </span><span class="boring">
-</span>fn set_quality_settings(renderer: &amp;mut Renderer) {
-    let mut settings = QualitySettings::high();
+</span>fn set_quality_settings(context: &amp;mut PluginContext) {
+    // Keep in mind, that graphics context can be non-initialized. This could happen if you're trying to access it before
+    // your game received `Event::Resumed` event.
+    if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context {
+        let mut settings = QualitySettings::high();
 
-    // Disable something.
-    settings.use_ssao = false;
-    settings.fxaa = false;
+        // Disable something.
+        settings.use_ssao = false;
+        settings.fxaa = false;
 
-    // Apply.
-    Log::verify(renderer.set_quality_settings(&amp;settings))
+        // Apply.
+        Log::verify(graphics_context.renderer.set_quality_settings(&amp;settings))
+    }
 }
 <span class="boring">}</span></code></pre></pre>
+<p>Keep in mind, that graphics context can be non-initialized. This could happen if you're trying to access it before your 
+game received <code>Event::Resumed</code> event. See the docs for <a href="https://docs.rs/fyrox/latest/fyrox/event/enum.Event.html#variant.Resumed">Event::Resumed</a> 
+for more info. There is only one place, where graphics context is guaranteed to be initialized - 
+<code>Plugin::on_graphics_context_initialized</code> method. Inside it, you can access the renderer by simple: 
+<code>context.graphics_context.as_initialized_mut().renderer</code>, in other places you should always do a checked borrow.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="render-pass"><a class="header" href="#render-pass">Render Pass</a></h1>
 <p>You can define your own render passes that extends the renderer, currently there are render passes only for scenes,
 so no custom post-effects (this is planned to be improved in Fyrox 0.28). Render pass has full access to graphics 
