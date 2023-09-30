@@ -1,8 +1,11 @@
 # Canvas
 
+![canvas](canvas.png)
+
 Canvas is a panel widget that allows you to explicitly set coordinates for children widgets. It is useful when you 
-need to manually control position of children widgets. Root UI node is canvas, so any widgets that are not attached
-to any other widgets can have explicit position.
+need to manually control position of children widgets (like potions on the image above). As any other panel widget, it
+does not have its own graphical representation, so the image above shows only its positioning capabilities. Root UI node
+is also canvas, so any widgets that are not attached to any other widgets can have explicit position.
 
 ## How to create
 
