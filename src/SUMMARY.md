@@ -37,6 +37,7 @@
     - [Collider](./fyrox/physics/collider.md)
     - [Joint](./fyrox/physics/joint.md)
     - [Ray Casting](./fyrox/physics/ray.md)
+    - [Ragdoll](./fyrox/physics/ragdoll.md)
   - [Sound](./fyrox/sound/index.md)
     - [Audio Bus](./fyrox/sound/bus.md) 
     - [Sound Node](./fyrox/sound/sound.md)
