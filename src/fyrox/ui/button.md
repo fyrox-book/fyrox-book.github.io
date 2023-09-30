@@ -1,5 +1,7 @@
 # Button
 
+![buttons](button.png)
+
 ## Simple button with text
 
 To create a simple button with text you should do something like this:
