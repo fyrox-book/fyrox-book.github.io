@@ -1674,15 +1674,39 @@ fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
 <p>See respective node builders <a href="fyrox/scene/../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
 <h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
 <p>All scenes &quot;lives&quot; in the engine, the engine has ownership over your scene after you've added it in the engine.
-You can borrow a scene at any time using its handle and do some changes.</p>
+You can borrow a scene at any time using its handle and do some changes:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use crate::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    event_loop::ControlFlow,
+</span><span class="boring">    plugin::{Plugin, PluginContext},
+</span><span class="boring">    scene::Scene,
+</span><span class="boring">};
+</span><span class="boring">
+</span>struct Game {
+    scene: Handle&lt;Scene&gt;,
+}
+
+impl Plugin for Game {
+    fn update(&amp;mut self, context: &amp;mut PluginContext, control_flow: &amp;mut ControlFlow) {
+        // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
+        // use `try_get_mut`.
+        if let Some(scene) = context.scenes.try_get(self.scene) {
+            // Do something.
+            println!(&quot;{:?}&quot;, scene.graph.performance_statistics);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
 <h2 id="building-scene-asynchronously"><a class="header" href="#building-scene-asynchronously">Building scene asynchronously</a></h2>
 <p>You can create your scene in separate thread and then pass it to main thread to insert it in the engine. Why this 
 is needed? Remember the last time you've played a relatively large game, you've probably noticed that it have 
 loading screens and loading screen has some fancy interactive stuff with progress bar. Loading screen is fully 
 responsive while the game doing hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking main thread, thus leaving the game 
-fully responsive. There is comprehensive example of asynchronous scene loading, it can be found 
-<a href="https://github.com/FyroxEngine/Fyrox/blob/master/examples/async.rs">here</a></p>
+fully responsive.</p>
 <h2 id="managing-multiple-scenes"><a class="header" href="#managing-multiple-scenes">Managing multiple scenes</a></h2>
 <p>Usually you should have only one scene active (unless you're making something very special), you should use 
 <code>.enabled</code> flag of a scene to turn it off or on. Deactivated scenes won't be rendered, the physics won't be
