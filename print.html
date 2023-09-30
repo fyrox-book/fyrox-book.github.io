@@ -6022,9 +6022,11 @@ BorderBuilder::new(
 .build(&amp;mut ui.build_ctx());
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="canvas"><a class="header" href="#canvas">Canvas</a></h1>
+<p><img src="fyrox/ui/canvas.png" alt="canvas" /></p>
 <p>Canvas is a panel widget that allows you to explicitly set coordinates for children widgets. It is useful when you 
-need to manually control position of children widgets. Root UI node is canvas, so any widgets that are not attached
-to any other widgets can have explicit position.</p>
+need to manually control position of children widgets (like potions on the image above). As any other panel widget, it
+does not have its own graphical representation, so the image above shows only its positioning capabilities. Root UI node
+is also canvas, so any widgets that are not attached to any other widgets can have explicit position.</p>
 <h2 id="how-to-create-14"><a class="header" href="#how-to-create-14">How to create</a></h2>
 <p>Use <code>CanvasBuilder</code> to create Canvas instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
