@@ -75,7 +75,32 @@ See respective node builders [docs](../scene/graph.md#using-node-builders) to po
 ## Where all my scenes located?
 
 All scenes "lives" in the engine, the engine has ownership over your scene after you've added it in the engine.
-You can borrow a scene at any time using its handle and do some changes.
+You can borrow a scene at any time using its handle and do some changes:
+
+```rust
+# extern crate fyrox;
+# use crate::{
+#     core::pool::Handle,
+#     event_loop::ControlFlow,
+#     plugin::{Plugin, PluginContext},
+#     scene::Scene,
+# };
+# 
+struct Game {
+    scene: Handle<Scene>,
+}
+
+impl Plugin for Game {
+    fn update(&mut self, context: &mut PluginContext, control_flow: &mut ControlFlow) {
+        // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
+        // use `try_get_mut`.
+        if let Some(scene) = context.scenes.try_get(self.scene) {
+            // Do something.
+            println!("{:?}", scene.graph.performance_statistics);
+        }
+    }
+}
+```
 
 ## Building scene asynchronously 
 
@@ -84,8 +109,7 @@ is needed? Remember the last time you've played a relatively large game, you've 
 loading screens and loading screen has some fancy interactive stuff with progress bar. Loading screen is fully 
 responsive while the game doing hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking main thread, thus leaving the game 
-fully responsive. There is comprehensive example of asynchronous scene loading, it can be found 
-[here](https://github.com/FyroxEngine/Fyrox/blob/master/examples/async.rs)  
+fully responsive.
 
 ## Managing multiple scenes
 
