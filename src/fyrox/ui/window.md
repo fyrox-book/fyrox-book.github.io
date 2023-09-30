@@ -1,5 +1,7 @@
 # Window
 
+![window](window.gif)
+
 The Window widget provides a standared window that can contain another widget. Based on setting windows can be configured
 so users can do any of the following:
 

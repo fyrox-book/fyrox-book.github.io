@@ -1,5 +1,7 @@
 # Wrap panel
 
+![wrap panel](wrap_panel.gif)
+
 Wrap panel is used to stack children widgets either in vertical or horizontal direction with overflow - every widget
 that does not have enough space on current line, will automatically be placed on the next line.
 

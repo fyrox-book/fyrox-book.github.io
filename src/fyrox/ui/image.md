@@ -1,5 +1,7 @@
 # Image
 
+![image](image.png)
+
 Image widget is a rectangle with a texture, it is used draw custom bitmaps. The UI in the engine is vector-based, Image
 widget is the only way to draw a bitmap. Usage of the Image is very simple:
 

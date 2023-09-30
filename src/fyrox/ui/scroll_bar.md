@@ -1,5 +1,7 @@
 # Scroll bar 
 
+![scroll bar](scroll_bar.gif)
+
 Scroll bar is used to represent a value on a finite range. It has a thumb that shows the current value on
 on the bar. Usually it is used in pair with `ScrollPanel` to create something like
 `ScrollViewer` widget. However, it could also be used to create sliders to show some

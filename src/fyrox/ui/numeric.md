@@ -1,5 +1,7 @@
 # NumericUpDown Widget
 
+![numeric up down](numeric_up_down.gif)
+
 A widget that handles numbers of any machine type. Use this widget if you need to provide input field for a numeric
 type.
 
