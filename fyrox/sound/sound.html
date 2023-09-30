@@ -294,6 +294,13 @@ corresponding <code>.options</code> file, with the following content:</p>
 )
 </code></pre>
 <p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
+<h2 id="2d-and-3d"><a class="header" href="#2d-and-3d">2D and 3D</a></h2>
+<p>There's no strict separation between 2D and 3D sound sources. The same source could be switched from 2D to 3D (and vice
+versa) at runtime, by just adjusting <code>Spatial Blend</code> property. Spatial blend factor is a numeric value, that defines 
+blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is fully 2D, <code>1.0</code> - the sound is fully 3D. By default, 
+the value is <code>1.0</code> which makes it 3D. Intermediate values could be used to create &quot;ambisonic&quot; sound sources - when the 
+source sounds like it is placed at some position in the world, but some part of it is just 2D and does not depend on 
+positioning.</p>
 <h2 id="audio-bus"><a class="header" href="#audio-bus">Audio bus</a></h2>
 <p>It is possible to specify target audio bus to which the sound will output its audio samples. Audio bus is responsible
 for various audio processing, such as filtering, reverb, etc. To specify output audio bus, just use the <code>set_audio_bus</code>
