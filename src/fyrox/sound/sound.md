@@ -137,6 +137,15 @@ corresponding `.options` file, with the following content:
 
 If the audio file is called, for example, `/path/to/background.ogg`, call this `/path/to/background.ogg.options`.
 
+## 2D and 3D 
+
+There's no strict separation between 2D and 3D sound sources. The same source could be switched from 2D to 3D (and vice
+versa) at runtime, by just adjusting `Spatial Blend` property. Spatial blend factor is a numeric value, that defines 
+blending factor between 2D and 3D sound, where `0.0` - the sound is fully 2D, `1.0` - the sound is fully 3D. By default, 
+the value is `1.0` which makes it 3D. Intermediate values could be used to create "ambisonic" sound sources - when the 
+source sounds like it is placed at some position in the world, but some part of it is just 2D and does not depend on 
+positioning.
+
 ## Audio bus
 
 It is possible to specify target audio bus to which the sound will output its audio samples. Audio bus is responsible
