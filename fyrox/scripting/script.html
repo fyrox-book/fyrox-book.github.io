@@ -318,6 +318,10 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">        }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre></pre>
+<p>Every script type (<code>MyScript</code> in the code snippet above, you need to change it to your script type) must be registered using 
+<a href="https://docs.rs/fyrox/latest/fyrox/script/constructor/struct.ScriptConstructorContainer.html#method.add">ScriptConstructorsContainer::add</a> 
+method, which accepts a script type as a generic argument and its name, that will be shown in the editor. The name can be 
+arbitrary, it is used only in the editor. You can also change it at any time, it won't break existing scenes.</p>
 <h2 id="script-attachment"><a class="header" href="#script-attachment">Script Attachment</a></h2>
 <p>To assign a script and see it in action, run the editor, select an object and find <code>Script</code> property in the Inspector.
 Select your script from the drop-down list. To see the script in action, click &quot;Play/Stop&quot; button. The editor will run
