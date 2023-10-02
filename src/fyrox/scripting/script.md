@@ -156,6 +156,11 @@ fn register(&self, context: PluginRegistrationContext) {
 #     }
 ```
 
+Every script type (`MyScript` in the code snippet above, you need to change it to your script type) must be registered using 
+[ScriptConstructorsContainer::add](https://docs.rs/fyrox/latest/fyrox/script/constructor/struct.ScriptConstructorContainer.html#method.add) 
+method, which accepts a script type as a generic argument and its name, that will be shown in the editor. The name can be 
+arbitrary, it is used only in the editor. You can also change it at any time, it won't break existing scenes.
+
 ## Script Attachment
 
 To assign a script and see it in action, run the editor, select an object and find `Script` property in the Inspector.
