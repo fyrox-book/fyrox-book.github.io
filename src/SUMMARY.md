@@ -65,6 +65,7 @@
 - [User Interface](./fyrox/ui/ui.md)
   - [Basic concepts](./fyrox/ui/basic_concepts/basic_concepts.md)
   - [General rules](./fyrox/ui/general_rules.md)
+  - [Rendering](./fyrox/ui/rendering.md)
   - [Fonts](./fyrox/ui/font.md)
   - [Style](./fyrox/ui/style.md)
   - [Widgets](./fyrox/ui/widgets.md)
