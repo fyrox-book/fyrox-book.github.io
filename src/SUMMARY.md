@@ -56,6 +56,7 @@
   - [Light Maps (WIP)](./fyrox/rendering/lightmaps.md)
   - [Settings](./fyrox/rendering/settings.md)
   - [Render Pass](./fyrox/rendering/render_pass.md)
+  - [Normal Maps](./fyrox/rendering/normal_maps.md)
 - [Resource Management](./fyrox/resources/resources.md)
   - [Models](./fyrox/resources/model.md)
   - [Textures](./fyrox/resources/texture.md)
