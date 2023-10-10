@@ -105,6 +105,7 @@
 - [Serialization](./fyrox/serialization/index.md)
   - [Saved Games (WIP)](./fyrox/serialization/save.md)
 - [Editor](./fyrox/editor/index.md)
+  - [Property Editors](./fyrox/editor/property_editors.md)
   - [Settings](./fyrox/editor/settings.md)
 - [Miscellaneous](./fyrox/misc/misc.md)
   - [Log](./fyrox/misc/log.md)
