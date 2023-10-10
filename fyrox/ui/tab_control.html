@@ -183,37 +183,34 @@ header and the other representing the tab's contents.</p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    text::TextBuilder,
 </span><span class="boring">    tab_control::{TabControlBuilder, TabDefinition},
+</span><span class="boring">    text::TextBuilder,
+</span><span class="boring">    widget::WidgetBuilder,
+</span><span class="boring">    BuildContext,
 </span><span class="boring">};
-</span>
-fn create_tab_control(ctx: &amp;mut BuildContext) {
-
+</span><span class="boring">
+</span>fn create_tab_control(ctx: &amp;mut BuildContext) {
     TabControlBuilder::new(WidgetBuilder::new())
-        .with_tab(
-            TabDefinition{
-                header: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;First&quot;)
-                            .build(ctx),
-                            
-                content: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;First tab's contents!&quot;)
-                            .build(ctx),
-            }
-        )
-        .with_tab(
-            TabDefinition{
-                header: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Second&quot;)
-                            .build(ctx),
-                            
-                content: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Second tab's contents!&quot;)
-                            .build(ctx),
-            }
-        )
+        .with_tab(TabDefinition {
+            header: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;First&quot;)
+                .build(ctx),
+            content: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;First tab's contents!&quot;)
+                .build(ctx),
+            can_be_closed: true,
+            user_data: None,
+        })
+        .with_tab(TabDefinition {
+            header: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;Second&quot;)
+                .build(ctx),
+            content: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;Second tab's contents!&quot;)
+                .build(ctx),
+            can_be_closed: true,
+            user_data: None,
+        })
         .build(ctx);
 }
 <span class="boring">}</span></code></pre></pre>
@@ -250,7 +247,9 @@ code example and you will get a decent look:</p>
         )
             .with_text(&quot;First&quot;)
             .build(ctx),
-<span class="boring">content: Default::default()
+<span class="boring">content: Default::default(),
+</span><span class="boring">can_be_closed: true,
+</span><span class="boring">user_data: None,
 </span><span class="boring">};
 </span><span class="boring">}
 </span>

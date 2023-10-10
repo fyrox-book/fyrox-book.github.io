@@ -1065,7 +1065,7 @@ impl Game {
                     context.resource_manager.clone()
                 ))
                     .unwrap()
-                    .finish(),
+                    .finish(&amp;context.resource_manager),
             );
 
             context.scenes.add(scene)
@@ -1212,7 +1212,7 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
                 context.resource_manager.clone(),
             ))
                 .unwrap()
-                .finish(),
+                .finish(&amp;context.resource_manager),
         );
 
         context.scenes.add(scene)
@@ -1679,7 +1679,7 @@ fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
 <h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
 <p>All scenes &quot;lives&quot; in the engine, the engine has ownership over your scene after you've added it in the engine.
 You can borrow a scene at any time using its handle and do some changes:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -1729,7 +1729,7 @@ line of code:</p>
 </span><span class="boring">use fyrox::core::color::Color;
 </span><span class="boring">let mut scene = Scene::default();
 </span><span class="boring">
-</span>scene.ambient_lighting_color = Color::opaque(30, 30, 30); 
+</span>scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30); 
 <span class="boring">}</span></code></pre></pre>
 <p>Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
 which is not available in the engine yet.</p>
@@ -5392,6 +5392,10 @@ impl ResourceData for CustomResource {
     fn type_uuid(&amp;self) -&gt; Uuid {
         &lt;Self as TypeUuidProvider&gt;::type_uuid()
     }
+    
+    fn is_procedural(&amp;self) -&gt; bool {
+        false
+    }
 }
 
 struct CustomResourceLoader;
@@ -5819,11 +5823,11 @@ impl Game {
             .build(&amp;mut my_ui.build_ctx());
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
-        let material = Material::standard();
+        let mut material = Material::standard();
         Log::verify(material.set_property(
             &amp;ImmutableString::new(&quot;diffuseTexture&quot;),
             PropertyValue::Sampler {
-                value: Some(render_target),
+                value: Some(render_target.clone()),
                 fallback: Default::default(),
             },
         ));
@@ -6719,7 +6723,7 @@ to mismatch of coordinates of UI and graphics API. The UI has origin at left top
 type.</p>
 <h2 id="how-to-create-16"><a class="header" href="#how-to-create-16">How to create</a></h2>
 <p>Use <code>NumericUpDownBuilder</code> to create a new instance of the <code>NumericUpDown</code> widget:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -6738,7 +6742,7 @@ specify the type explicitly (<code>NumericUpDownBuilder::&lt;f32&gt;::new...</co
 <p>This widget supports lower and upper limits for the values. It can be specified by <code>NumericUpDownBuilder::with_min_value</code>
 and <code>NumericUpDownBuilder::with_max_value</code> (or changed at runtime using <code>NumericUpDownMessage::MinValue</code> and <code>NumericUpDownMessage::MaxValue</code>
 messages):</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -6756,7 +6760,7 @@ messages):</p>
 <h2 id="step"><a class="header" href="#step">Step</a></h2>
 <p>Since the value of the widget can be changed via up/down arrow buttons (also by dragging the cursor up or down on them), the widget
 provides a way to set the step of the value (for increment and decrement at the same time):</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -6774,7 +6778,7 @@ provides a way to set the step of the value (for increment and decrement at the 
 <p>It is possible to specify <strong>visual</strong> rounding of the value up to desired decimal place (it does not change the way how
 the actual value is rounded). For example, in some cases you might get irrational values such as <code>1/3 ~= 0.33333333</code>,
 but you interested in only first two decimal places. In this case you can set the precision to <code>2</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -6802,7 +6806,7 @@ on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create s
 value that lies within some range.</p>
 <h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{
@@ -6819,7 +6823,7 @@ value that lies within some range.</p>
 <span class="boring">}</span></code></pre></pre>
 <p>It creates a horizontal scroll bar with <code>123.0</code> value and a range of <code>[0.0..200.0]</code>. To fetch the new value
 of the scroll bar, use <code>ScrollBarMessage::Value</code> message:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{
@@ -6928,37 +6932,34 @@ header and the other representing the tab's contents.</p>
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    text::TextBuilder,
 </span><span class="boring">    tab_control::{TabControlBuilder, TabDefinition},
+</span><span class="boring">    text::TextBuilder,
+</span><span class="boring">    widget::WidgetBuilder,
+</span><span class="boring">    BuildContext,
 </span><span class="boring">};
-</span>
-fn create_tab_control(ctx: &amp;mut BuildContext) {
-
+</span><span class="boring">
+</span>fn create_tab_control(ctx: &amp;mut BuildContext) {
     TabControlBuilder::new(WidgetBuilder::new())
-        .with_tab(
-            TabDefinition{
-                header: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;First&quot;)
-                            .build(ctx),
-                            
-                content: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;First tab's contents!&quot;)
-                            .build(ctx),
-            }
-        )
-        .with_tab(
-            TabDefinition{
-                header: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Second&quot;)
-                            .build(ctx),
-                            
-                content: TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Second tab's contents!&quot;)
-                            .build(ctx),
-            }
-        )
+        .with_tab(TabDefinition {
+            header: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;First&quot;)
+                .build(ctx),
+            content: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;First tab's contents!&quot;)
+                .build(ctx),
+            can_be_closed: true,
+            user_data: None,
+        })
+        .with_tab(TabDefinition {
+            header: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;Second&quot;)
+                .build(ctx),
+            content: TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;Second tab's contents!&quot;)
+                .build(ctx),
+            can_be_closed: true,
+            user_data: None,
+        })
         .build(ctx);
 }
 <span class="boring">}</span></code></pre></pre>
@@ -6995,7 +6996,9 @@ code example and you will get a decent look:</p>
         )
             .with_text(&quot;First&quot;)
             .build(ctx),
-<span class="boring">content: Default::default()
+<span class="boring">content: Default::default(),
+</span><span class="boring">can_be_closed: true,
+</span><span class="boring">user_data: None,
 </span><span class="boring">};
 </span><span class="boring">}
 </span>
@@ -10269,7 +10272,7 @@ impl Game {
     fn new(context: PluginContext) -&gt; Self {
         let mut scene = Scene::new();
 
-        scene.ambient_lighting_color = Color::opaque(150, 150, 150);
+        scene.rendering_options.ambient_lighting_color = Color::opaque(150, 150, 150);
         
         Self {
             scene: context.scenes.add(scene),
@@ -11222,7 +11225,8 @@ use fyrox::{
         visitor::prelude::*, TypeUuidProvider
     },
     asset::manager::ResourceManager,
-    event::{ElementState, Event, VirtualKeyCode, WindowEvent},
+    event::{ElementState, Event, WindowEvent},
+    keyboard::KeyCode,
     impl_component_provider,
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     resource::texture::Texture,
@@ -11344,16 +11348,13 @@ jump: bool,
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if let Event::WindowEvent { event, .. } = event {
-    if let WindowEvent::KeyboardInput { input, .. } = event {
-        if let Some(keycode) = input.virtual_keycode {
-            let is_pressed = input.state == ElementState::Pressed;
-
-            match keycode {
-                VirtualKeyCode::A =&gt; self.move_left = is_pressed,
-                VirtualKeyCode::D =&gt; self.move_right = is_pressed,
-                VirtualKeyCode::Space =&gt; self.jump = is_pressed,
-                _ =&gt; (),
-            }
+    if let WindowEvent::KeyboardInput { event, .. } = event {
+        let pressed = event.state == ElementState::Pressed;
+        match event.physical_key {
+            KeyCode::A =&gt; self.move_left = is_pressed,
+            KeyCode::D =&gt; self.move_right = is_pressed,
+            KeyCode::Space =&gt; self.jump = is_pressed,
+            _ =&gt; (),
         }
     }
 }

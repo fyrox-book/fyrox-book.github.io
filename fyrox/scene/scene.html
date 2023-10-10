@@ -241,7 +241,7 @@ fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
 <h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
 <p>All scenes &quot;lives&quot; in the engine, the engine has ownership over your scene after you've added it in the engine.
 You can borrow a scene at any time using its handle and do some changes:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::{
@@ -291,7 +291,7 @@ line of code:</p>
 </span><span class="boring">use fyrox::core::color::Color;
 </span><span class="boring">let mut scene = Scene::default();
 </span><span class="boring">
-</span>scene.ambient_lighting_color = Color::opaque(30, 30, 30); 
+</span>scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30); 
 <span class="boring">}</span></code></pre></pre>
 <p>Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
 which is not available in the engine yet.</p>

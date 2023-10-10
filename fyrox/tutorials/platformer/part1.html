@@ -281,7 +281,8 @@ use fyrox::{
         visitor::prelude::*, TypeUuidProvider
     },
     asset::manager::ResourceManager,
-    event::{ElementState, Event, VirtualKeyCode, WindowEvent},
+    event::{ElementState, Event, WindowEvent},
+    keyboard::KeyCode,
     impl_component_provider,
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     resource::texture::Texture,
@@ -403,16 +404,13 @@ jump: bool,
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if let Event::WindowEvent { event, .. } = event {
-    if let WindowEvent::KeyboardInput { input, .. } = event {
-        if let Some(keycode) = input.virtual_keycode {
-            let is_pressed = input.state == ElementState::Pressed;
-
-            match keycode {
-                VirtualKeyCode::A =&gt; self.move_left = is_pressed,
-                VirtualKeyCode::D =&gt; self.move_right = is_pressed,
-                VirtualKeyCode::Space =&gt; self.jump = is_pressed,
-                _ =&gt; (),
-            }
+    if let WindowEvent::KeyboardInput { event, .. } = event {
+        let pressed = event.state == ElementState::Pressed;
+        match event.physical_key {
+            KeyCode::A =&gt; self.move_left = is_pressed,
+            KeyCode::D =&gt; self.move_right = is_pressed,
+            KeyCode::Space =&gt; self.jump = is_pressed,
+            _ =&gt; (),
         }
     }
 }

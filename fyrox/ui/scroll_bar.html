@@ -182,7 +182,7 @@ on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create s
 value that lies within some range.</p>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{
@@ -199,7 +199,7 @@ value that lies within some range.</p>
 <span class="boring">}</span></code></pre></pre>
 <p>It creates a horizontal scroll bar with <code>123.0</code> value and a range of <code>[0.0..200.0]</code>. To fetch the new value
 of the scroll bar, use <code>ScrollBarMessage::Value</code> message:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{

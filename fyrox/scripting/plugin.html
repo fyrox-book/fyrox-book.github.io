@@ -236,7 +236,7 @@ impl Game {
                     context.resource_manager.clone()
                 ))
                     .unwrap()
-                    .finish(),
+                    .finish(&amp;context.resource_manager),
             );
 
             context.scenes.add(scene)
@@ -383,7 +383,7 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
                 context.resource_manager.clone(),
             ))
                 .unwrap()
-                .finish(),
+                .finish(&amp;context.resource_manager),
         );
 
         context.scenes.add(scene)

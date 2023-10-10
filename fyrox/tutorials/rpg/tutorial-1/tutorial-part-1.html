@@ -236,7 +236,7 @@ impl Game {
     fn new(context: PluginContext) -&gt; Self {
         let mut scene = Scene::new();
 
-        scene.ambient_lighting_color = Color::opaque(150, 150, 150);
+        scene.rendering_options.ambient_lighting_color = Color::opaque(150, 150, 150);
         
         Self {
             scene: context.scenes.add(scene),
