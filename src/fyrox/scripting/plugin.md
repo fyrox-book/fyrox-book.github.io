@@ -65,7 +65,7 @@ impl Game {
                     context.resource_manager.clone()
                 ))
                     .unwrap()
-                    .finish(),
+                    .finish(&context.resource_manager),
             );
 
             context.scenes.add(scene)
@@ -217,7 +217,7 @@ pub fn new(override_scene: Handle<Scene>, context: PluginContext) -> Self {
                 context.resource_manager.clone(),
             ))
                 .unwrap()
-                .finish(),
+                .finish(&context.resource_manager),
         );
 
         context.scenes.add(scene)

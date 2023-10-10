@@ -9,7 +9,7 @@ type.
 
 Use `NumericUpDownBuilder` to create a new instance of the `NumericUpDown` widget:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
@@ -31,7 +31,7 @@ This widget supports lower and upper limits for the values. It can be specified 
 and `NumericUpDownBuilder::with_max_value` (or changed at runtime using `NumericUpDownMessage::MinValue` and `NumericUpDownMessage::MaxValue`
 messages):
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
@@ -52,7 +52,7 @@ The default limits for min and max are `NumericType::min_value` and `NumericType
 Since the value of the widget can be changed via up/down arrow buttons (also by dragging the cursor up or down on them), the widget
 provides a way to set the step of the value (for increment and decrement at the same time):
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
@@ -73,7 +73,7 @@ It is possible to specify **visual** rounding of the value up to desired decimal
 the actual value is rounded). For example, in some cases you might get irrational values such as `1/3 ~= 0.33333333`,
 but you interested in only first two decimal places. In this case you can set the precision to `2`:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}

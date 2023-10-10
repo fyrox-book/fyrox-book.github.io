@@ -57,11 +57,11 @@ impl Game {
             .build(&mut my_ui.build_ctx());
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
-        let material = Material::standard();
+        let mut material = Material::standard();
         Log::verify(material.set_property(
             &ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(render_target),
+                value: Some(render_target.clone()),
                 fallback: Default::default(),
             },
         ));

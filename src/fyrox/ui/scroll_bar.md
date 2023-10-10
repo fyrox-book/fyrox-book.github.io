@@ -11,7 +11,7 @@ value that lies within some range.
 
 A simple example of how to create a new `ScrollBar` could be something like this:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::gui::{
 #     core::pool::Handle, scroll_bar::ScrollBarBuilder, widget::WidgetBuilder, BuildContext,
@@ -29,7 +29,7 @@ fn create_scroll_bar(ctx: &mut BuildContext) -> Handle<UiNode> {
 It creates a horizontal scroll bar with `123.0` value and a range of `[0.0..200.0]`. To fetch the new value
 of the scroll bar, use `ScrollBarMessage::Value` message:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::gui::{
 #     core::pool::Handle,

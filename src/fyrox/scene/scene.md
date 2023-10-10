@@ -77,7 +77,7 @@ See respective node builders [docs](../scene/graph.md#using-node-builders) to po
 All scenes "lives" in the engine, the engine has ownership over your scene after you've added it in the engine.
 You can borrow a scene at any time using its handle and do some changes:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
 #     core::pool::Handle,
@@ -132,7 +132,7 @@ line of code:
 # use fyrox::core::color::Color;
 # let mut scene = Scene::default();
 # 
-scene.ambient_lighting_color = Color::opaque(30, 30, 30); 
+scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30); 
 ```
 
 Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique

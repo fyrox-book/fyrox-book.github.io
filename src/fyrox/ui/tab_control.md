@@ -9,37 +9,34 @@ The following example makes a 2 tab, Tab Control containing some simple text wid
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::gui::{
-#     BuildContext,
-#     widget::WidgetBuilder,
-#     text::TextBuilder,
 #     tab_control::{TabControlBuilder, TabDefinition},
+#     text::TextBuilder,
+#     widget::WidgetBuilder,
+#     BuildContext,
 # };
-
+# 
 fn create_tab_control(ctx: &mut BuildContext) {
-
     TabControlBuilder::new(WidgetBuilder::new())
-        .with_tab(
-            TabDefinition{
-                header: TextBuilder::new(WidgetBuilder::new())
-                            .with_text("First")
-                            .build(ctx),
-                            
-                content: TextBuilder::new(WidgetBuilder::new())
-                            .with_text("First tab's contents!")
-                            .build(ctx),
-            }
-        )
-        .with_tab(
-            TabDefinition{
-                header: TextBuilder::new(WidgetBuilder::new())
-                            .with_text("Second")
-                            .build(ctx),
-                            
-                content: TextBuilder::new(WidgetBuilder::new())
-                            .with_text("Second tab's contents!")
-                            .build(ctx),
-            }
-        )
+        .with_tab(TabDefinition {
+            header: TextBuilder::new(WidgetBuilder::new())
+                .with_text("First")
+                .build(ctx),
+            content: TextBuilder::new(WidgetBuilder::new())
+                .with_text("First tab's contents!")
+                .build(ctx),
+            can_be_closed: true,
+            user_data: None,
+        })
+        .with_tab(TabDefinition {
+            header: TextBuilder::new(WidgetBuilder::new())
+                .with_text("Second")
+                .build(ctx),
+            content: TextBuilder::new(WidgetBuilder::new())
+                .with_text("Second tab's contents!")
+                .build(ctx),
+            can_be_closed: true,
+            user_data: None,
+        })
         .build(ctx);
 }
 ```
@@ -81,14 +78,10 @@ header: TextBuilder::new(
         )
             .with_text("First")
             .build(ctx),
-# content: Default::default()
+# content: Default::default(),
+# can_be_closed: true,
+# user_data: None,
 # };
 # }
 
 ```
-
-
-
-
-
-

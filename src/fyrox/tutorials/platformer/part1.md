@@ -132,7 +132,8 @@ use fyrox::{
         visitor::prelude::*, TypeUuidProvider
     },
     asset::manager::ResourceManager,
-    event::{ElementState, Event, VirtualKeyCode, WindowEvent},
+    event::{ElementState, Event, WindowEvent},
+    keyboard::KeyCode,
     impl_component_provider,
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     resource::texture::Texture,
@@ -264,16 +265,13 @@ These fields will store the state of keyboard keys responsible for player moveme
 
 ```rust,no_run,compile_fail
 if let Event::WindowEvent { event, .. } = event {
-    if let WindowEvent::KeyboardInput { input, .. } = event {
-        if let Some(keycode) = input.virtual_keycode {
-            let is_pressed = input.state == ElementState::Pressed;
-
-            match keycode {
-                VirtualKeyCode::A => self.move_left = is_pressed,
-                VirtualKeyCode::D => self.move_right = is_pressed,
-                VirtualKeyCode::Space => self.jump = is_pressed,
-                _ => (),
-            }
+    if let WindowEvent::KeyboardInput { event, .. } = event {
+        let pressed = event.state == ElementState::Pressed;
+        match event.physical_key {
+            KeyCode::A => self.move_left = is_pressed,
+            KeyCode::D => self.move_right = is_pressed,
+            KeyCode::Space => self.jump = is_pressed,
+            _ => (),
         }
     }
 }
