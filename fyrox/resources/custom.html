@@ -268,16 +268,8 @@ impl ResourceLoader for CustomResourceLoader {
         &amp;[&quot;my_resource&quot;]
     }
 
-    fn into_any(self: Box&lt;Self&gt;) -&gt; Box&lt;dyn Any&gt; {
-        self
-    }
-
-    fn as_any(&amp;self) -&gt; &amp;dyn Any {
-        self
-    }
-
-    fn as_any_mut(&amp;mut self) -&gt; &amp;mut dyn Any {
-        self
+    fn data_type_uuid(&amp;self) -&gt; Uuid {
+        &lt;CustomResource as TypeUuidProvider&gt;::type_uuid()
     }
 
     fn load(
@@ -310,10 +302,86 @@ impl ResourceLoader for CustomResourceLoader {
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that you must provide <strong>unique</strong> UUID for every resource type that you're creating. Otherwise, using
 existing id multiple times will cause incorrect serialization and type casting. The next step is to register the new 
-resource in the resource manager. This can be done by: <code>resource_manager.state().loaders.set::&lt;CustomResourceLoader&gt;()</code>.
-After doing so, any attempt to load a resource with <code>my_resource</code> extension will call the <code>load</code> method of your 
-resource loader. See <a href="https://github.com/FyroxEngine/Fyrox/blob/master/examples/custom_loader.rs">custom_loader</a> for 
-runnable example.</p>
+resource in the resource manager. This can be done by adding the following code to the <code>register</code> method for
+<code>impl PluginConstructor for GameConstructor</code>:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    asset::{
+</span><span class="boring">        event::ResourceEventBroadcaster,
+</span><span class="boring">        loader::{BoxedLoaderFuture, ResourceLoader},
+</span><span class="boring">        untyped::UntypedResource,
+</span><span class="boring">    },
+</span><span class="boring">    core::{pool::Handle, uuid::Uuid},
+</span><span class="boring">    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+</span><span class="boring">    scene::Scene,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">struct CustomResourceLoader;
+</span><span class="boring">
+</span><span class="boring">impl ResourceLoader for CustomResourceLoader {
+</span><span class="boring">    fn extensions(&amp;self) -&gt; &amp;[&amp;str] {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">
+</span><span class="boring">    fn data_type_uuid(&amp;self) -&gt; Uuid {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">
+</span><span class="boring">    fn load(
+</span><span class="boring">        &amp;self,
+</span><span class="boring">        resource: UntypedResource,
+</span><span class="boring">        event_broadcaster: ResourceEventBroadcaster,
+</span><span class="boring">        reload: bool,
+</span><span class="boring">    ) -&gt; BoxedLoaderFuture {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">pub struct GameConstructor;
+</span><span class="boring">
+</span>impl PluginConstructor for GameConstructor {
+    fn register(&amp;self, context: PluginRegistrationContext) {
+        context
+            .resource_manager
+            .state()
+            .loaders
+            .set(CustomResourceLoader);
+        // ...
+    }
+<span class="boring">
+</span><span class="boring">    fn create_instance(
+</span><span class="boring">        &amp;self,
+</span><span class="boring">        override_scene: Handle&lt;Scene&gt;,
+</span><span class="boring">        context: PluginContext,
+</span><span class="boring">    ) -&gt; Box&lt;dyn Plugin&gt; {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span>}
+<span class="boring">}</span></code></pre></pre>
+<p>After doing so, any attempt to load a resource with <code>my_resource</code> extension will call the <code>load</code> method of your 
+resource loader.</p>
+<h2 id="editor-support"><a class="header" href="#editor-support">Editor Support</a></h2>
+<p>There's one more step before your custom resource is fully usable - you need to register a property editor for it, so
+any fields in your scripts that has <code>my_resource: Option&lt;Resource&lt;CustomResource&gt;&gt;</code> fields can be editable in the editor. 
+Otherwise, you'll see an error message in the Inspector instead of resource selector field. To register a property editor,
+add the following lines to <code>editor/src/main.rs</code> file, somewhere after the editor instance is created:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>editor.inspector.property_editors.insert(
+    ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
+        Rc::new(|resource_manager, path| {
+            resource_manager
+                .try_request::&lt;CustomResource, _&gt;(path)
+                .map(|r| block_on(r))
+        }),
+        editor.message_sender.clone(),
+    ),
+);
+<span class="boring">}</span></code></pre></pre>
+<p>After this, the editor will create this property editor for <code>my_resource</code> field and will allow you to set its value by
+drag'n'dropping an asset from the Asset Browser.</p>
 
                     </main>
 
