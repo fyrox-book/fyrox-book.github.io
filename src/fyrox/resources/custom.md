@@ -95,16 +95,8 @@ impl ResourceLoader for CustomResourceLoader {
         &["my_resource"]
     }
 
-    fn into_any(self: Box<Self>) -> Box<dyn Any> {
-        self
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
+    fn data_type_uuid(&self) -> Uuid {
+        <CustomResource as TypeUuidProvider>::type_uuid()
     }
 
     fn load(
@@ -138,7 +130,87 @@ impl ResourceLoader for CustomResourceLoader {
 
 Keep in mind, that you must provide **unique** UUID for every resource type that you're creating. Otherwise, using
 existing id multiple times will cause incorrect serialization and type casting. The next step is to register the new 
-resource in the resource manager. This can be done by: `resource_manager.state().loaders.set::<CustomResourceLoader>()`.
+resource in the resource manager. This can be done by adding the following code to the `register` method for
+`impl PluginConstructor for GameConstructor`:
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     asset::{
+#         event::ResourceEventBroadcaster,
+#         loader::{BoxedLoaderFuture, ResourceLoader},
+#         untyped::UntypedResource,
+#     },
+#     core::{pool::Handle, uuid::Uuid},
+#     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+#     scene::Scene,
+# };
+# 
+# struct CustomResourceLoader;
+# 
+# impl ResourceLoader for CustomResourceLoader {
+#     fn extensions(&self) -> &[&str] {
+#         todo!()
+#     }
+# 
+#     fn data_type_uuid(&self) -> Uuid {
+#         todo!()
+#     }
+# 
+#     fn load(
+#         &self,
+#         resource: UntypedResource,
+#         event_broadcaster: ResourceEventBroadcaster,
+#         reload: bool,
+#     ) -> BoxedLoaderFuture {
+#         todo!()
+#     }
+# }
+# 
+# pub struct GameConstructor;
+# 
+impl PluginConstructor for GameConstructor {
+    fn register(&self, context: PluginRegistrationContext) {
+        context
+            .resource_manager
+            .state()
+            .loaders
+            .set(CustomResourceLoader);
+        // ...
+    }
+# 
+#     fn create_instance(
+#         &self,
+#         override_scene: Handle<Scene>,
+#         context: PluginContext,
+#     ) -> Box<dyn Plugin> {
+#         todo!()
+#     }
+}
+```
+
 After doing so, any attempt to load a resource with `my_resource` extension will call the `load` method of your 
-resource loader. See [custom_loader](https://github.com/FyroxEngine/Fyrox/blob/master/examples/custom_loader.rs) for 
-runnable example.
+resource loader.
+
+## Editor Support
+
+There's one more step before your custom resource is fully usable - you need to register a property editor for it, so
+any fields in your scripts that has `my_resource: Option<Resource<CustomResource>>` fields can be editable in the editor. 
+Otherwise, you'll see an error message in the Inspector instead of resource selector field. To register a property editor,
+add the following lines to `editor/src/main.rs` file, somewhere after the editor instance is created:
+
+```rust,compile_fail,no_run
+editor.inspector.property_editors.insert(
+    ResourceFieldPropertyEditorDefinition::<CustomResource>::new(
+        Rc::new(|resource_manager, path| {
+            resource_manager
+                .try_request::<CustomResource, _>(path)
+                .map(|r| block_on(r))
+        }),
+        editor.message_sender.clone(),
+    ),
+);
+```
+
+After this, the editor will create this property editor for `my_resource` field and will allow you to set its value by
+drag'n'dropping an asset from the Asset Browser.
