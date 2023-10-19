@@ -185,7 +185,7 @@ impl PluginConstructor for GameConstructor {
 # 
 #     fn create_instance(
 #         &self,
-#         override_scene: Handle<Scene>,
+#         scene_path: Option<&str>,
 #         context: PluginContext,
 #     ) -> Box<dyn Plugin> {
 #         todo!()

@@ -3,7 +3,7 @@
 Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
 The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
 difference between running the game from the editor, or running it as a separate application. The main difference is that
-the editor passes `override_scene` parameter for the executor when entering the play mode.
+the editor passes `scene_path` parameter for the executor when entering the play mode.
 
 ## Usage
 
@@ -21,7 +21,7 @@ Executor is meant to be a part of your project's workspace, its typical look cou
 # impl PluginConstructor for GameConstructor {
 #     fn create_instance(
 #         &self,
-#         _override_scene: Handle<Scene>,
+#         _scene_path: Option<&str>,
 #         _context: PluginContext,
 #     ) -> Box<dyn Plugin> {
 #         todo!()

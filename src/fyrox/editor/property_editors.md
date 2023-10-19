@@ -66,6 +66,9 @@ These two crates responsible for enum to string (and vice versa) conversions whi
 following example shows a typical usage:
 
 ```rust,no_run
+# extern crate fyrox;
+# extern crate strum_macros;
+# extern crate strum;
 use fyrox::{
     core::reflect::prelude::*,
     gui::inspector::editors::{
@@ -82,8 +85,10 @@ use strum_macros::{AsRefStr, EnumString, EnumVariantNames};
 #     property_editors: PropertyEditorDefinitionContainer,
 # }
 
-#[derive(Reflect, Debug, AsRefStr, EnumString, EnumVariantNames, Clone)]
+#[derive(Reflect, Default, Debug, AsRefStr, EnumString, EnumVariantNames, Clone)]
 enum MyEnum {
+    #[default]
+    Baz,
     Foo(u32),
     Bar { baz: String, foobar: u32 },
 }
@@ -105,6 +110,7 @@ then you need one more step. In case of inheritable variables, your fields will 
 this fact requires you to register an appropriate property editor for this:
 
 ```rust,no_run
+# extern crate fyrox;
 use fyrox::{
     core::{reflect::prelude::*, variable::InheritableVariable},
     gui::inspector::editors::{
@@ -158,7 +164,7 @@ editor
 If you have a vector of some custom structure (`Vec<MyStruct>`), then you also need to register a property editor for
 it:
 
-```rust
+```rust,no_run
 # extern crate fyrox;
 use fyrox::{
     core::reflect::prelude::*,
@@ -176,7 +182,7 @@ use fyrox::{
 #     property_editors: PropertyEditorDefinitionContainer,
 # }
 
-#[derive(Reflect, Debug)]
+#[derive(Reflect, Clone, Debug, Default)]
 struct MyStruct {
     foo: u32,
     bar: String,

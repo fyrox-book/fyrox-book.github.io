@@ -31,6 +31,7 @@ use fyrox::{
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
     scene::{Scene, SceneLoader},
 };
+use std::path::Path;
 
 pub struct GameConstructor;
 
@@ -41,10 +42,10 @@ impl PluginConstructor for GameConstructor {
 
     fn create_instance(
         &self,
-        override_scene: Handle<Scene>,
+        scene_path: Option<&str>,
         context: PluginContext,
     ) -> Box<dyn Plugin> {
-        Box::new(Game::new(override_scene, context))
+        Box::new(Game::new(scene_path, context))
     }
 }
 
@@ -53,25 +54,14 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(override_scene: Handle<Scene>, context: PluginContext) -> Self {
-        let scene = if override_scene.is_some() {
-            override_scene
-        } else {
-            // Load a scene from file if there is no override scene specified.
-            let scene = block_on(
-                block_on(SceneLoader::from_file(
-                    "data/scene.rgs",
-                    context.serialization_context.clone(),
-                    context.resource_manager.clone()
-                ))
-                    .unwrap()
-                    .finish(&context.resource_manager),
-            );
-
-            context.scenes.add(scene)
-        };
-
-        Self { scene }
+    pub fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
+        context
+            .async_scene_loader
+            .request(scene_path.unwrap_or("data/scene.rgs"));
+            
+        Self { 
+            scene: Handle::NONE 
+        }
     }
 }
 
@@ -101,6 +91,14 @@ impl Plugin for Game {
     ) {
         // Handle UI events here.
     }
+    
+    fn on_scene_loaded(&mut self, _path: &Path, scene: Handle<Scene>, context: &mut PluginContext) {
+        if self.scene.is_some() {
+            context.scenes.remove(self.scene);
+        }
+
+        self.scene = scene;
+    }
 }
 ```
 
@@ -108,24 +106,38 @@ There are two major parts - `GameConstructor` and `Game` itself. `GameConstructo
 is responsible for script registration (`fn register`) and creating the actual game instance (`fn create_instance`).
 
 - `register` - called once on start allowing you to register your scripts. **Important:** You must register all your
-scripts here, otherwise the engine (and the editor) will know nothing about them.
+scripts here, otherwise the engine (and the editor) will know nothing about them. Also, you should register loaders for
+your custom resources here. See [Custom Resource chapter](../resources/custom.md) more info. 
 - `create_instance` - called once, allowing you to create actual game instance. It is guaranteed to be called once, but 
 _where_ it is called is implementation-defined. For example, the editor will **not** call this method, it does not 
-create any game instance. The method has `override_scene` parameter, in short it is a handle to a scene that must be 
-used by your game instead of any other scenes. It is described in [Editor and Plugins](#editor-and-plugins) section down
-below.
+create any game instance. The method has `scene_path` parameter, in short it is a path to a scene that is currently 
+opened in the editor (it will be `None` if either there's no opened scene or your game was started outside the editor). 
+It is described in [Editor and Plugins](#editor-and-plugins) section down below.
 
 The game structure (`struct Game`) implements a `Plugin` trait which can execute actual game logic in one of its methods:
 
 - `on_deinit` - it is called when the game is about to shut down. Can be used for any clean up, for example logging that
 the game has closed.
-- `update` - it is called each frame at a stable rate (usually 60 Hz) after the plugin is created and fully initialized.
-It is the main place where you should put _object-independent_ game logic, any other logic should be added via scripts.
+- `update` - it is called each frame at a stable rate (usually 60 Hz, but can be configured in the Executor) after the 
+plugin is created and fully initialized. It is the main place where you should put _object-independent_ game logic (such
+as user interface handling, global application state management, etc.), any other logic should be added via scripts.
 - `on_os_event` - it is called when the main application window receives an event from the operating system, it can be 
 any event such as keyboard, mouse, game pad events or any other events. Please note that as for `update` method, you
-should put here only _object-independent_ logic. Scripts can catch window events too.
+should put here only _object-independent_ logic. Scripts can catch OS events too.
 - `on_ui_message` - it is called when there is a message from the user interface, it should be used to react to user
 actions (like pressed buttons, etc.)
+- `on_graphics_context_initialized` - it is called when a graphics context was successfully initialized. This method could
+be used to access the renderer (to change its quality settings, for instance). You can also access a main window instance
+and change its properties (such as title, size, resolution, etc.).
+- `on_graphics_context_destroyed` - it is called when the current graphics context was destroyed. It could happen on a
+small number of platforms, such as Android. Such platforms usually have some sort of suspension mode, in which you are
+not allowed to render graphics, to have a "window", etc.
+- `before_rendering` - it is called when the engine is about to render a new frame. This method is useful to perform
+offscreen rendering (for example - [user interface](../ui/rendering.md#offscreen-rendering)).
+- `on_scene_begin_loading` - it is called when the engine starts to load a game scene. This method could be used to
+show a progress bar or some sort of loading screen, etc.
+- `on_scene_loaded` - it is called when the engine successfully loaded a game scene. This method could be used to add
+custom logic to do something with a newly loaded scene.
 
 ## Control Flow
 
@@ -150,10 +162,9 @@ context is something like this:
 ```rust,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     engine::{SerializationContext},
+#     engine::{SerializationContext, GraphicsContext, PerformanceStatistics, AsyncSceneLoader, ScriptProcessor},
 #     asset::manager::ResourceManager,
 #     gui::UserInterface,
-#     renderer::Renderer,
 #     scene::SceneContainer,
 #     window::Window,
 # };
@@ -162,13 +173,20 @@ pub struct PluginContext<'a, 'b> {
     pub scenes: &'a mut SceneContainer,
     pub resource_manager: &'a ResourceManager,
     pub user_interface: &'a mut UserInterface,
-    pub renderer: &'a mut Renderer,
+    pub graphics_context: &'a mut GraphicsContext,
     pub dt: f32,
     pub lag: &'b mut f32,
     pub serialization_context: &'a Arc<SerializationContext>,
-    pub window: &'a Window,
+    pub performance_statistics: &'a PerformanceStatistics,
+    pub elapsed_time: f32,
+    pub script_processor: &'a ScriptProcessor,
+    pub async_scene_loader: &'a mut AsyncSceneLoader,
 }
 ```
+
+Amount of time (in seconds) that passed from creation of the engine. Keep in mind, that
+this value is **not** guaranteed to match real time. A user can change delta time with
+which the engine "ticks" and this delta time affects elapsed time.
 
 - `scenes` - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading 
 is given in the previous code snippet in `Game::new()` method.
@@ -176,7 +194,8 @@ is given in the previous code snippet in `Game::new()` method.
 different sources (disk, network storage on WebAssembly, etc.)
 - `user_interface` - use it to create user interface for your game, the interface is scene-independent and will remain
 the same even if there are multiple scenes created.
-- `renderer` - can be used to add custom rendering techniques, change quality settings, etc.
+- `graphics_context` - a reference to the graphics_context, it contains a reference to the window and the current renderer.
+It could be `GraphicsContext::Uninitialized` if your application is suspended (possible only on Android).
 - `dt` - a time passed since the last frame. The actual value is implementation-defined, but on current implementation it
 is equal to 1/60 of a second and does not change event if the frame rate is changing (the engine stabilizes update rate
 for the logic).
@@ -185,7 +204,15 @@ A caller splits `lag` into multiple sub-steps using `dt` and thus stabilizes upd
 is to be able to reset `lag` when you're doing some heavy calculations in a game loop (i.e. loading a new level) so the
 engine won't try to "catch up" with all the time that was spent in heavy calculation.
 - `serialization_context` - it can be used to register scripts and custom scene nodes constructors at runtime.
-- `window` - main application window, you can use it to change title, screen resolution, etc.
+- `performance_statistics` - performance statistics from the last frame. To get a rendering performance statistics, use
+`Renderer::get_statistics` method, that could be obtained from the renderer instance in the current graphics context.
+- `elapsed_time` - amount of time (in seconds) that passed from creation of the engine. Keep in mind, that this value 
+is **not** guaranteed to match real time. A user can change delta time with which the engine "ticks" and this delta time 
+affects elapsed time.
+- `script_processor` - a reference to the current script processor instance, which could be used to access a list of 
+scenes that supports scripts.
+- `async_scene_loader` - a reference to the current asynchronous scene loader instance. It could be used to request
+a new scene to be loaded.
 
 ## Editor and Plugins
 
@@ -199,36 +226,26 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
 #     plugin::PluginContext,
 #     scene::{Scene, SceneLoader},
 # };
+# use std::path::Path;
 # 
 # struct Foo {
 #     scene: Handle<Scene>,
 # }
 # 
 # impl Foo {
-pub fn new(override_scene: Handle<Scene>, context: PluginContext) -> Self {
-    let scene = if override_scene.is_some() {
-        override_scene
-    } else {
-        // Load a scene from file if there is no override scene specified.
-        let scene = block_on(
-            block_on(SceneLoader::from_file(
-                "data/scene.rgs",
-                context.serialization_context.clone(),
-                context.resource_manager.clone(),
-            ))
-                .unwrap()
-                .finish(&context.resource_manager),
-        );
-
-        context.scenes.add(scene)
-    };
-
-    Self { scene }
+pub fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
+    context
+        .async_scene_loader
+        .request(scene_path.unwrap_or("data/scene.rgs"));
+        
+    Self { 
+        scene: Handle::NONE 
+    }
 }
 # }
 ```
 
-The `override_scene` parameter is a handle to a scene instance that is currently opened in the editor, your game
-plugin must handle this parameter and use provided scene, otherwise the run from the editor will not have the edited
-scene. If the parameter is undefined (equals to `Handle::NONE`), then there is no scene loaded in the editor or the
-game was run outside the editor.
+The `scene_path` parameter is a path to a scene that is currently opened in the editor, your game should use it if you
+need to load a currently selected scene of the editor in your game. However, it is not strictly necessary - you may 
+desire to start your game from a specific scene all the time, even when the game starts from the editor. If the parameter 
+is `None`, then there is no scene loaded in the editor or the game was run outside the editor.

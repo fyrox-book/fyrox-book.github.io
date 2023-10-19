@@ -150,7 +150,7 @@ fn register(&self, context: PluginRegistrationContext) {
     context.serialization_context.script_constructors.add::<MyScript>("My Script");
 }
 # 
-#         fn create_instance(&self, _override_scene: Handle<Scene>, _context: PluginContext) -> Box<dyn Plugin> {
+#         fn create_instance(&self, _scene_path: Option<&str>, _context: PluginContext) -> Box<dyn Plugin> {
 #             todo!()
 #         }
 #     }
