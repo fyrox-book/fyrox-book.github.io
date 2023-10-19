@@ -231,6 +231,9 @@ strum_macros = &quot;0.25.0&quot;
 following example shows a typical usage:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">extern crate strum_macros;
+</span><span class="boring">extern crate strum;
 </span>use fyrox::{
     core::reflect::prelude::*,
     gui::inspector::editors::{
@@ -247,8 +250,10 @@ use strum_macros::{AsRefStr, EnumString, EnumVariantNames};
 </span><span class="boring">    property_editors: PropertyEditorDefinitionContainer,
 </span><span class="boring">}
 </span>
-#[derive(Reflect, Debug, AsRefStr, EnumString, EnumVariantNames, Clone)]
+#[derive(Reflect, Default, Debug, AsRefStr, EnumString, EnumVariantNames, Clone)]
 enum MyEnum {
+    #[default]
+    Baz,
     Foo(u32),
     Bar { baz: String, foobar: u32 },
 }
@@ -267,6 +272,7 @@ then you need one more step. In case of inheritable variables, your fields will 
 this fact requires you to register an appropriate property editor for this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
 </span>use fyrox::{
     core::{reflect::prelude::*, variable::InheritableVariable},
     gui::inspector::editors::{
@@ -317,7 +323,7 @@ editor
 <h3 id="collections"><a class="header" href="#collections">Collections</a></h3>
 <p>If you have a vector of some custom structure (<code>Vec&lt;MyStruct&gt;</code>), then you also need to register a property editor for
 it:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span>use fyrox::{
@@ -336,7 +342,7 @@ it:</p>
 </span><span class="boring">    property_editors: PropertyEditorDefinitionContainer,
 </span><span class="boring">}
 </span>
-#[derive(Reflect, Debug)]
+#[derive(Reflect, Clone, Debug, Default)]
 struct MyStruct {
     foo: u32,
     bar: String,

@@ -313,7 +313,7 @@ you need to register it in the list of script constructors like so:</p>
     context.serialization_context.script_constructors.add::&lt;MyScript&gt;(&quot;My Script&quot;);
 }
 <span class="boring">
-</span><span class="boring">        fn create_instance(&amp;self, _override_scene: Handle&lt;Scene&gt;, _context: PluginContext) -&gt; Box&lt;dyn Plugin&gt; {
+</span><span class="boring">        fn create_instance(&amp;self, _scene_path: Option&lt;&amp;str&gt;, _context: PluginContext) -&gt; Box&lt;dyn Plugin&gt; {
 </span><span class="boring">            todo!()
 </span><span class="boring">        }
 </span><span class="boring">    }

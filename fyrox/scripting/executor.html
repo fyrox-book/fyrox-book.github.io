@@ -178,7 +178,7 @@
 <p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
 The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
 difference between running the game from the editor, or running it as a separate application. The main difference is that
-the editor passes <code>override_scene</code> parameter for the executor when entering the play mode.</p>
+the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>Executor is meant to be a part of your project's workspace, its typical look could something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
@@ -192,7 +192,7 @@ the editor passes <code>override_scene</code> parameter for the executor when en
 </span><span class="boring">impl PluginConstructor for GameConstructor {
 </span><span class="boring">    fn create_instance(
 </span><span class="boring">        &amp;self,
-</span><span class="boring">        _override_scene: Handle&lt;Scene&gt;,
+</span><span class="boring">        _scene_path: Option&lt;&amp;str&gt;,
 </span><span class="boring">        _context: PluginContext,
 </span><span class="boring">    ) -&gt; Box&lt;dyn Plugin&gt; {
 </span><span class="boring">        todo!()

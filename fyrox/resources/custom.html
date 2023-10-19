@@ -357,7 +357,7 @@ resource in the resource manager. This can be done by adding the following code 
 <span class="boring">
 </span><span class="boring">    fn create_instance(
 </span><span class="boring">        &amp;self,
-</span><span class="boring">        override_scene: Handle&lt;Scene&gt;,
+</span><span class="boring">        scene_path: Option&lt;&amp;str&gt;,
 </span><span class="boring">        context: PluginContext,
 </span><span class="boring">    ) -&gt; Box&lt;dyn Plugin&gt; {
 </span><span class="boring">        todo!()
