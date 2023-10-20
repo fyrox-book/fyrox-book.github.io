@@ -5,12 +5,15 @@
 ## Table of contents
 
 - [Introduction](#introduction)
-- [Framework](#framework)
 - [Assets](#assets)
-- [Player and camera controller](#player-and-camera-controller)
-- [Camera movement](#camera-movement)
-- [Player locomotion](#player-locomotion)
-- [Animations](#animations)
+- [Player Prefab](#player-prefab)
+  - [Camera](#camera)
+  - [Animations](#animations)
+- [Player Script](#player-script)
+  - [Event Handling](#event-handling)
+  - [Logic](#logic)
+  - [Binding](#binding)
+- [Level](#game-level)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -580,7 +583,7 @@ Now, when we have finished coding part, we can open `paladin.rgs` in the editor 
 
 Make sure to correctly set the script fields (as on the screenshot above), otherwise it won't work correctly.
 
-## Level
+## Game Level
 
 Use your imagination to create a game level (or just use the one from the assets pack for this tutorial). Level design
 is not covered by this tutorial. You can create a simple level using a Terrain, a few 3D models from the assets pack:
