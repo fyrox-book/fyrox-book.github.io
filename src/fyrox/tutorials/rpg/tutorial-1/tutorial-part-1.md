@@ -55,7 +55,7 @@ rpg
 Learn more about `fyrox-template` command [here](../../../beginning/scripting.md). Now we can run
 the game using `cargo run --package executor` command, and you should see a white cube floating in blue space. 
 
-> ️⚠️ There are two important commands: 
+> ️⚠️ There are two important commands:  
 > To run the game use: `cargo run --package executor` command  
 > To run the editor use: `cargo run --package editor` command.
 
@@ -594,7 +594,8 @@ The most important part, however, is to add a player instance to the level:
 
 ![player on level](player_on_level.png)
 
-Now all you need to do is to click on the green `>` button and run the game.
+Now all you need to do is to click on the green `>` button and run the game. "Production" build could be created by
+running `cargo run --package executor --release`.
 
 ## Conclusion
 
