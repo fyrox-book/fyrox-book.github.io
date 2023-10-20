@@ -16,105 +16,45 @@
 ## Introduction
 
 In this series of tutorials we will make a game similar to The Elder Scrolls series (but much, much smaller indeed),
-we'll have a main character, a simple world with intractable items and a few kind of enemies. I'll show you how to add an inventory,
-a quests journal, and the quests itself. This series should have at least 5 tutorials, but this might change. At the end
-of the series we'll have a playable RPG which you will be able to use to continue making your own game. It is very ambitious,
-but totally doable with the current state of the engine.
+we'll have a main character, a simple world with intractable items and a few kind of enemies. In this series you'll 
+understand how to add an inventory, a quests journal, and the quests itself. This series should have at least 5 
+tutorials, but this might change. At the end of the series we'll have a playable RPG which you will be able to use to 
+continue making your own game. It is very ambitious, but totally doable with the current state of the engine.
 
 Most of the role-playing games (RPGs for short) using 3rd person camera which allows you to see your character entirely.
 In this tutorial we'll make something similar. Check the video with final result of the tutorial:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by creating
-a new cargo project:
+As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by 
+creating a new game project, by running the following command:
 
-`cargo init rpg-tutorial`
+`fyrox-template init --name=rpg --style=3d`
 
-Add `fyrox` as dependency:
+This command will create a new cargo workspace with a few projects inside, we're interested only in `game` folder
+in this tutorial.
 
-```toml
-[dependencies]
-fyrox = "0.29.0"
+```text
+rpg
+├───data
+├───editor
+│   └───src
+├───executor
+│   └───src
+├───executor-android
+│   └───src
+├───executor-wasm
+│   └───src
+└───game
+    └───src
 ```
 
-## Framework
+Learn more about `fyrox-template` command [here](../../../beginning/scripting.md). Now we can run
+the game using `cargo run --package executor` command, and you should see a white cube floating in blue space. 
 
-Now let's create the window and initialize the engine. We'll skip most engine initialization by using new `Framework` helper
-that hides most of the engine initialization and provides unified interface for your games allowing you to focus on
-your game code. `Framework` is not mandatory, you may use the [previous](https://fyrox.rs/tutorials/2021/03/05/tutorial1.html#creating-a-window)
-variant with manual engine initialization and "opened" main loop.
-
-```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-    core::{color::Color, futures::executor::block_on, pool::Handle},
-    engine::executor::Executor,
-    event::{Event, WindowEvent},
-    event_loop::ControlFlow,
-    plugin::{Plugin, PluginConstructor, PluginContext},
-    scene::{Scene},
-};
-use fyrox::window::WindowAttributes;
-use fyrox::engine::GraphicsContextParams;
-
-struct Game {
-    scene: Handle<Scene>,
-}
-
-struct GameConstructor;
-
-impl PluginConstructor for GameConstructor {
-    fn create_instance(&self, _: Handle<Scene>, context: PluginContext) -> Box<dyn Plugin> {
-        Box::new(Game::new(context))
-    }
-}
-
-impl Game {
-    fn new(context: PluginContext) -> Self {
-        let mut scene = Scene::new();
-
-        scene.rendering_options.ambient_lighting_color = Color::opaque(150, 150, 150);
-        
-        Self {
-            scene: context.scenes.add(scene),
-        }
-    }
-}
-
-impl Plugin for Game {
-    fn update(&mut self, context: &mut PluginContext, _: &mut ControlFlow) {
-        
-    }
-
-    fn on_os_event(
-        &mut self,
-        event: &Event<()>,
-        _context: PluginContext,
-        _control_flow: &mut ControlFlow,
-    ) {
-       
-    }
-}
-
-fn main() {
-    let mut executor = Executor::from_params(
-        Default::default(),
-        GraphicsContextParams {
-            window_attributes: WindowAttributes {
-                title: "RPG".to_string(),
-                ..Default::default()
-            },
-            vsync: true,
-        },
-    );
-    executor.add_plugin_constructor(GameConstructor);
-    executor.run();
-}
-```
-
-It is much easier to initialize the engine now compared to the initialization described in the series of tutorials about
-writing a 3D shooter. If you run it, you'll see a window with black background with an "RPG" title.
+> ️⚠️ There are two important commands: 
+> To run the game use: `cargo run --package executor` command  
+> To run the editor use: `cargo run --package editor` command.
 
 ## Assets
 
@@ -122,852 +62,540 @@ For any kind of game you need a lot of various assets, in our case we need a 3D 
 animations, a level, a set of textures for terrain, trees and bushes, barrels, etc. I prepared all assets as a single
 ZIP archive which can be downloaded [here](./data.zip). Once you've downloaded it, unpack it in `./data` folder.
 
-## Player and camera controller
+## Player Prefab
 
-Now we can start adding Player to our game. Create a folder `player` under your `src` directory and add `mod.rs` with
-following content:
+Let's start from assembling our player prefab, that will also have a camera controller in it. At first, let's find out
+what the prefab is - prefab a scene, that contains some scene nodes, which can be instantiated to some other scene 
+while preserving "connection" between all properties of the nodes. It means, that if you change something in a prefab, 
+the changes will be reflected on every instance of it; on those properties that weren't modified. This is a condensed 
+explanation, that may look a bit complicated - [read this](../../../scene/prefab.md) to learn more about prefabs.
 
-```rust,no_run,edition2018
-# extern crate fyrox;
+Now let's open the editor (`cargo run --package editor`) and start making our prefab by creating a new scene. Save the
+scene to `data/models/paladin/paladin.rgs` by going to `File -> Save`. In the opened window, find the path and click 
+`Save`:
 
-# #[cfg(test)]
-use crate::player::camera::CameraController;
+![save prefab](save_prefab.png)
 
-// Import everything we need for the tutorial.
-use fyrox::{
-    animation::{
-        machine::{Machine, MachineLayer, Parameter, PoseNode, State, Transition},
-        Animation,
-    },
-    core::{
-        algebra::{UnitQuaternion, Vector3},
-        pool::Handle,
-    },
-    asset::manager::ResourceManager, 
-    event::{DeviceEvent, ElementState, KeyboardInput, VirtualKeyCode},
-    resource::model::{Model, ModelResourceExtension},
-    scene::{
-        animation::AnimationPlayer,
-        base::BaseBuilder,
-        collider::{ColliderBuilder, ColliderShape},
-        graph::{Graph, physics::CoefficientCombineRule},
-        node::Node,
-        rigidbody::RigidBodyBuilder,
-        transform::TransformBuilder,
-        Scene,
-    },
-};
+Let's rename the root node of the scene to `Paladin` and change its type to `RigidBody`:
 
-# #[cfg(test)]
-mod camera;
+![replace root](replace_root.png)
 
-# struct CameraController;
-# impl CameraController {
-#     async fn new(_: &mut Graph, _: ResourceManager) -> Self { Self }
-# }
+We need this so out root node of the prefab could move in a scene to which it will be instantiated later. Make sure, that
+the `X/Y/Z Rotation Locked` property is set to `true`. Also `Can Sleep` must be false, otherwise the rigid body will
+be excluded from the physical simulation when it does not move. As you can see, the editor shows a small warning icon 
+near the root node - it warns us, that the rigid body does not have a collider and won't be able to participate in 
+physical simulation. Let's fix it by adding a capsule collider to it and setting its `Begin`, `End`, `Radius` properties
+accordingly:
 
-pub struct Player {
-    model: Handle<Node>,
-    camera_controller: CameraController,
-}
+![capsule colliders](capsule_collider.png)
 
-impl Player {
-    pub async fn new(resource_manager: ResourceManager, scene: &mut Scene) -> Self {
-        // Load paladin 3D model and create its instance in the scene.
-        let model = resource_manager
-            .request::<Model, _>("data/models/paladin/paladin.fbx")
-            .await
-            .unwrap()
-            .instantiate(scene);
+The next step is to add an actual character 3D model, this is very easy - find `paladin.fbx` in the asset browser using
+its searching functionality and then drag'n'drop (click on the asset, and while holding the button, move the mouse in
+the scene, then release the button) it to the scene:
 
-        scene.graph[model]
-            .local_transform_mut()
-            // Move the model a bit down because its center is at model's feet
-            // and we'd get floating model without this offset.
-            .set_position(Vector3::new(0.0, -0.75, 0.0))
-            // Scale down paladin's model because it is too big. 
-            .set_scale(Vector3::new(0.02, 0.02, 0.02));
-        
-        Self {
-            model,
+![model](model.png)
 
-            // As a final stage create camera controller.
-            camera_controller: CameraController::new(&mut scene.graph, resource_manager).await,
-        }
-    }
-}
+Now we need to adjust its `Local Scale` property, because the model is too big. Set it to `0.01` for all 3 axes, like on
+the screenshot above. Also, adjust position of the capsule collider, so it will fully enclose 3d model. Create a new 
+`Pivot` node called `ModelPivot` and attach the `paladin.fbx` node to it by drag'n'dropping the `paladin.fbx` node onto
+`ModelPivot`. The reason why we need to do this will be explained later in the tutorial.
+
+![model pivot](model_pivot.png)
+
+### Camera
+
+It is the time to add camera controller scene nodes. We need to add three nodes in a chain:
+
+![camera nodes chain](camera_nodes_chain.png)
+
+There are three nodes added:
+
+1) `CameraPivot` (`Pivot` node type) - it will serve a pivot point around which we will rotate the camera around Y axis.
+   (horizontal camera rotation). It should be placed right at the center of the Paladin's head.
+2) `CameraHinge` (`Pivot` node type) - it will also be a pivot point, but for X axis (vertical camera rotation)
+3) `Camera` (`Camera` node type) - the camera itself, it should be placed on some distance from the Paladin's back.
+
+This nodes configuration will allow us to create some sort of "orbital" (also called arcball) camera as in many 3rd person
+games nowadays. 
+
+### Animations
+
+The next step is to add animations. Create a new `Animation Player` node, click `Open Animation Editor` near its 
+`Animations` property in the inspector to open the animation editor:
+
+![animation editor](animation_editor.png)
+
+Dock the animation editor below the scene preview - this way it will be much comfortable to use. Now we need to import
+two animations `run.fbx` and `idle.fbx` from the `data/models/paladin` folder. To do this, click on the button with
+arrow at the tool strip in the animation editor: 
+
+![animation import step 1](animation_import_1.png)
+
+The editor asks us for the root node to which import the animation - it our case it is `paladin.fbx`. Select it in the
+window and click `OK`. Another window opens and asks us about the animation we want to import - find `idle.fbx` in the
+tree and click `Open`. You should see something like this as a result:
+
+![idle animation](idle_animation.png)
+
+Click on `Preview` check box in the tool strip and the animation should play without artifacts. Now repeat the previous
+steps and import `running.fbx`. Click `Preview` again, and you'll see that the character is running, but not in-place as
+we'd like it to. Let's fix that by applying a Root Motion settings. Click on the `RM` button and set it up like so:
+
+![root motion](root_motion.png)
+
+Now if you click on `Preview` again, you'll see that the character is now moving in-place. But what we did by applying 
+the root motion? We forced the engine to extract movement vector from the hips of the character that could be later used
+to move the capsule rigid body we've made early. This way the animation itself will drive the character and the actual
+movement will perfectly match the physical movement.
+
+At this point we have two separate animations that work independently. But what if we want to add a smooth transition
+between the two (or more)? This is where animation blending state machines comes into play. Create a new state machine
+and assign an animation player to it:
+
+![absm](absm.png)
+
+The animation player will be used as a source of animations for our state machine. Now open the `ABSM Editor` by clicking
+the `Open ABSM Editor...` button in the inspector (right above the animation player property). Dock the editor and select 
+a `Base Layer` in the dropdown list in the toolbar. Next, we need to add two states - `Idle` and `Running`. This can be 
+done by right-clicking on in the `State Graph` and selecting `Create State`:
+
+![states](states.png)
+
+A state requires animation source to be usable, we can specify it by double-clicking on it (or right-click -> `Enter State`)
+and creating a `Play Animation` pose node in the `State Viewer` (right-click -> `Play Animation`):
+
+![img.png](animation_source.png)
+
+Select the `Play Animation` node and in the `Inspector` select the `Idle` animation from the dropdown list near the 
+`Animation` property. Repeat the same steps for the `Running` state, but in this case set `Running` animation.
+
+Now when we two states ready, we need to create transitions between the two. Transition is a "rule", that defines whether 
+a current active state can be switched to another one. While doing so, the engine will blend an animation coming from
+two states. To create a transition, right-click on a state and click `Create Transition`. Do the same in the opposite
+direction. As a result, you should have something like this:
+
+![transition](transition.png)
+
+A transition requires a boolean value to "understand" whether an actual transition is possible or not. Let's add one
+in the `Parameters` section of the editor. Click on the small `+` button and change the name to `Running` and the type
+to the `Rule`:
+
+![parameters](parameters.png)
+
+Let's assign the rule to our transitions, select the `Idle -> Running` transition and in the Inspector set its condition
+to the following:
+
+![condition](condition.png)
+
+`Running -> Idle` requires a reverse condition, the engine has a computational graph for this purpose (to compute 
+boolean expressions). Set the condition of it to the following:
+
+![not condition](not_condition.png)
+
+As you can see we negate (using the `Not` boolean operator) the value of the `Running` parameter and use it compute the
+final value for the transition. At this point we can check how our animation blending works. Click on `Preview` check box,
+and you should see that the character is currently being in the `Idle` state, now click at the checkbox in the `Running`
+parameter, and you'll see that the `Idle -> Running` transition started and ended shortly after. If you uncheck the 
+parameter, the character will switch back to idle.
+
+This was the last step in this long procedure or making the prefab. As you can see, we haven't written a single line of
+code and saw the results immediately, without a need to compile anything. 
+
+## Player Script
+
+Finally, we can start writing some code. There won't be much of it, but it is still required. Fyrox allows you to add
+custom game logic to scene nodes using scripts. Scripts "skeleton" contains quite a lot of boilerplate code and to 
+prevent this tedious work, `fyrox-template` offers a sub-command called `script`, which allows you to generate a script
+skeleton in a single command. Go to root folder of your project and execute the following command there:
+
+```shell
+fyrox-template script --name=player
 ```
 
-Let's disassemble this heap of code line by line. At first, we're creating pivot for our character, we'll use it as a
-"mounting point" for character's 3D model, also it will have a physical body, but that will be added later in this
-tutorial. Next, we're loading paladin 3D model and creating its instance in the scene, we need only geometry without
-animations, so we use `instantiate_geometry` here, animations will be added later in this tutorial. Next we scale the
-model a bit, because it is too big. Also, we're moving the model a bit down because its center is at paladin's feet so
-when we're attaching the model to the pivot, it will "stay" on the pivot. We want it to stay on ground, so we're moving
-it down by height of the model. Finally, we're attaching the model to the pivot, forcing the engine to move
-the model together with pivot. In the end we're creating camera controller, it needs its own module, so add `camera.rs`
-module under `src/player` with following content:
+The CLI tool will create the new module in `game/src` folder called `player.rs` and all you need to do is to register 
+the module in two places. The first place is to add `mod player;` line somewhere at the beginning of the `game/src/lib.rs`.
+The second place is `PluginConstructor::register` method - every script must be registered before use. Let's do so by adding
+the following code to the method:
 
-```rust,no_run,edition2018
+```rust ,no_run
 # extern crate fyrox;
-// Import everything we need for the tutorial.
-use fyrox::{
-    core::{
-        algebra::{UnitQuaternion, Vector3},
-        pool::Handle,
-    },
-    asset::manager::ResourceManager,
-    event::DeviceEvent,
-    resource::texture::{Texture, TextureWrapMode},
-    scene::{
-        base::BaseBuilder,
-        camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
-        graph::Graph,
-        node::Node,
-        transform::TransformBuilder,
-        pivot::PivotBuilder
-    },
-};
-
-async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
-    // Load skybox textures in parallel.
-    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request::<Texture, _>("data/textures/skybox/front.jpg"),
-        resource_manager.request::<Texture, _>("data/textures/skybox/back.jpg"),
-        resource_manager.request::<Texture, _>("data/textures/skybox/left.jpg"),
-        resource_manager.request::<Texture, _>("data/textures/skybox/right.jpg"),
-        resource_manager.request::<Texture, _>("data/textures/skybox/up.jpg"),
-        resource_manager.request::<Texture, _>("data/textures/skybox/down.jpg")
-    );
-
-    // Unwrap everything.
-    let skybox = SkyBoxBuilder {
-        front: Some(front.unwrap()),
-        back: Some(back.unwrap()),
-        left: Some(left.unwrap()),
-        right: Some(right.unwrap()),
-        top: Some(top.unwrap()),
-        bottom: Some(bottom.unwrap()),
-    }
-        .build()
-        .unwrap();
-
-    // Set S and T coordinate wrap mode, ClampToEdge will remove any possible seams on edges
-    // of the skybox.
-    let cubemap = skybox.cubemap();
-    let mut data = cubemap.as_ref().unwrap().data_ref();
-    data.set_s_wrap_mode(TextureWrapMode::ClampToEdge);
-    data.set_t_wrap_mode(TextureWrapMode::ClampToEdge);
-
-    skybox
-}
-
-pub struct CameraController {
-    pivot: Handle<Node>,
-    hinge: Handle<Node>,
-    camera: Handle<Node>,
-}
-
-impl CameraController {
-    pub async fn new(graph: &mut Graph, resource_manager: ResourceManager) -> Self {
-        let camera;
-        let hinge;
-        let pivot = PivotBuilder::new(BaseBuilder::new()
-            .with_children(&[{
-                hinge = PivotBuilder::new(BaseBuilder::new()
-                    .with_local_transform(
-                        TransformBuilder::new()
-                            .with_local_position(Vector3::new(0.0, 0.55, 0.0))
-                            .build(),
-                    )
-                    .with_children(&[{
-                        camera = CameraBuilder::new(
-                            BaseBuilder::new().with_local_transform(
-                                TransformBuilder::new()
-                                    .with_local_position(Vector3::new(0.0, 0.0, -2.0))
-                                    .build(),
-                            ),
-                        )
-                        .with_z_far(48.0)
-                        .with_skybox(create_skybox(resource_manager).await)
-                        .build(graph);
-                        camera
-                    }]))
-                    .build(graph);
-                hinge
-            }]))
-            .build(graph);
-
-        Self {
-            pivot,
-            hinge,
-            camera,
-        }
-    }
-}
-```
-
-To understand what this code does let's look closely at this picture:
-
-![Camera Layout](./camera-layout.png)
-
-The pivot is marked yellow here, the hinge - green, and finally the camera is just a trapeze. Lines with arrows shows
-how the nodes linked together. As you can see we're attaching the hinge to the pivot and move it up slightly (usually to the
-height of the character). Next we're attaching the camera to the hinge and move it back so in default position it will
-be behind the character. To understand why we need such layout, let's find out how we need to move and rotate the
-camera. We need to rotate the camera around imaginary axis that goes through hinge ("in" the screen on the picture) -
-in this layout the camera will always look at character's head and rotate around **local** hinge's X axis. So to do that
-we need to rotate the hinge around X axis, not the camera. Here's the picture to help your understanding this better.
-
-![Camera Layout](./camera-layout-rotated.png)
-
-That was just one of the axes, now we need to understand how to rotate the camera around Y axis, but preserving the
-rotation around X axis. This is very simple, we have the pivot for that. Remember that each of the nodes (pivot, hinge, camera)
-are linked together, so if we'll rotate the pivot around Y axis the hinge will rotate too as well as the camera. Fow
-now our camera controller does not have an ability to rotate, we'll add this later in the tutorial.
-
-Now let's load a level where our character will "live", add `level.rs` with following content:
-
-```rust,no_run,edition2018
-# extern crate fyrox;
-use fyrox::{
-    core::pool::Handle,
-    asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
-    scene::{node::Node, Scene},
-};
-
-pub struct Level {
-    root: Handle<Node>,
-}
-
-impl Level {
-    pub async fn new(resource_manager: ResourceManager, scene: &mut Scene) -> Self {
-        let root = resource_manager
-            .request::<Model, _>("data/levels/level.rgs")
-            .await
-            .unwrap()
-            .instantiate(scene);
-
-        Self { root }
-    }
-}
-```
-
-This small piece of code just loads the scene I made for this tutorial. It has a terrain and some decorations, including
-houses, trees, bushes, barrels, etc. The scene was made in the Fyroxed and can be freely edited without any
-problems. Just open the scene and modify it as you need.
-
-Now we need to "glue" all the pieces (the player, and the level) together, let's go back to `main.rs` and change it to
-the following code:
-
-```rust,no_run,edition2018
-# extern crate fyrox;
-# #[cfg(test)]
-use crate::{level::Level, player::Player};
-use fyrox::{
-    core::{color::Color, futures::executor::block_on, pool::Handle},
-    engine::{executor::Executor},
-    asset::manager::ResourceManager,
-    event::{Event, WindowEvent},
-    event_loop::ControlFlow,
-    plugin::{Plugin, PluginConstructor, PluginContext},
-    scene::{Scene},
-};
-use fyrox::window::WindowAttributes;
-use fyrox::engine::GraphicsContextParams;
-
-# #[cfg(test)]
-mod level;
-# #[cfg(test)]
-mod player;
-
+# use fyrox::{
+#    core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*, TypeUuidProvider},
+#    impl_component_provider,
+#    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+#    script::ScriptTrait,
+# };
+# 
+# #[derive(Clone, Visit, Reflect, Debug, Default)]
 # struct Player;
-# impl Player {
-#    async fn new(_: ResourceManager, _: &mut Scene) -> Self { Self }
+# 
+# impl_component_provider!(Player);
+# 
+# impl TypeUuidProvider for Player {
+#    fn type_uuid() -> Uuid {
+#       unimplemented!()
+#    }
 # }
-
-# struct Level;
-# impl Level {
-#    async fn new(_: ResourceManager, _: &mut Scene) -> Self { Self }
+# 
+# impl ScriptTrait for Player {
+#    fn id(&self) -> Uuid {
+#       unimplemented!()
+#    }
 # }
-
-struct Game {
-    scene: Handle<Scene>,
-    level: Level,
-    player: Player,
-}
-
-struct GameConstructor;
-
+# 
+# pub struct GameConstructor;
+# 
 impl PluginConstructor for GameConstructor {
-    fn create_instance(&self, _: Handle<Scene>, context: PluginContext) -> Box<dyn Plugin> {
-        Box::new(Game::new(context))
-    }
-}
+   fn register(&self, context: PluginRegistrationContext) {
+      context
+              .serialization_context
+              .script_constructors
+              .add::<Player>("Player");
+   }
 
-impl Game {
-    fn new(context: PluginContext) -> Self {
-        let mut scene = Scene::new();
-
-        scene.ambient_lighting_color = Color::opaque(150, 150, 150);
-
-        let player = block_on(Player::new(context.resource_manager.clone(), &mut scene));
-
-        Self {
-            player,
-            level: block_on(Level::new(context.resource_manager.clone(), &mut scene)),
-            scene: context.scenes.add(scene),
-        }
-    }
-}
-
-impl Plugin for Game {
-    fn update(&mut self, context: &mut PluginContext, _: &mut ControlFlow) {
-
-    }
-
-    fn on_os_event(
-        &mut self,
-        event: &Event<()>,
-        _context: PluginContext,
-        _control_flow: &mut ControlFlow,
-    ) {
-       
-    }
-}
-
-fn main() {
-    let mut executor = Executor::from_params(
-        Default::default(),
-        GraphicsContextParams {
-            window_attributes: WindowAttributes {
-                title: "RPG".to_string(),
-                ..Default::default()
-            },
-            vsync: true,
-        },
-    );
-    executor.add_plugin_constructor(GameConstructor);
-    executor.run();
-}
-
-```
-
-As you can see, everything is pretty straightforward: at first we're creating a new scene, set its ambient lighting to
-"daylight", next we're creating the player and the level. Finally, we're adding the scene to the engine and now if you
-run the game you should see something like this:
-
-![Scene](./scene.jpg)
-
-For now everything is static, let's fix that by adding the ability to move the character and rotate the camera.
-
-## Camera movement
-
-Let's start from the camera movement and rotation. We need two new fields in the `CameraController`:
-
-```rust,no_run
-# struct Stub {
-// An angle around local Y axis of the pivot.
-yaw: f32,
-// An angle around local X axis of the hinge.
-pitch: f32,
-# }
-```
-
-Do not forget to initialize them with zeros:
-
-```rust,no_run,compile_fail
-Self {
-    ...,
-    yaw: 0.0,
-    pitch: 0.0,
+#    fn create_instance(
+#       &self,
+#       scene_path: Option<&str>,
+#       context: PluginContext,
+#    ) -> Box<dyn Plugin> {
+#       unimplemented!()
+#    }
 }
 ```
 
-Now we need to handle device events coming from the OS to rotate the camera. Add following method to the `impl CameraController`:
+Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the `player.rs`
+and you'll see quite a lot of code. Most of the methods, however, can be removed, and we're only interested in `on_update` 
+and `on_os_event`. But for now, let's add the following fields in the `Player` struct:
 
-```rust,no_run,compile_fail
-pub fn handle_device_event(&mut self, device_event: &DeviceEvent) {
-    if let DeviceEvent::MouseMotion { delta } = device_event {
-        const MOUSE_SENSITIVITY: f32 = 0.015;
+```rust ,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::{
+#         math::SmoothAngle, pool::Handle, reflect::prelude::*, variable::InheritableVariable,
+#         visitor::prelude::*,
+#     },
+#     scene::node::Node,
+# };
+# 
+#[derive(Visit, Reflect, Default, Debug, Clone)]
+pub struct Player {
+   #[visit(optional)]
+   camera_pivot: InheritableVariable<Handle<Node>>,
 
-        self.yaw -= (delta.0 as f32) * MOUSE_SENSITIVITY;
-        self.pitch = (self.pitch + (delta.1 as f32) * MOUSE_SENSITIVITY)
-            // Limit vertical angle to [-90; 90] degrees range
-            .max(-90.0f32.to_radians())
-            .min(90.0f32.to_radians());
-    }
-}
-```
+   #[visit(optional)]
+   camera_hinge: InheritableVariable<Handle<Node>>,
 
-In this method we use only `MouseMotion` events, because CameraController does not move - it can only rotate. The method
-is pretty straightforward. We're changing yaw and pitch using mouse offsets in two axes. X axis changes yaw, Y axis changes
-pitch. Pitch should be limited in specific range to prevent camera to rotate 360 degrees around object, we need angle
-to be in `[-90; 90]` range.
+   #[visit(optional)]
+   state_machine: InheritableVariable<Handle<Node>>,
 
-Once we've changed yaw and pitch, we need to apply rotations to the hinge and the camera. To do that, we need to add
-a new method to the `impl CameraController`:
+   #[visit(optional)]
+   model_pivot: InheritableVariable<Handle<Node>>,
 
-```rust,no_run,compile_fail
-pub fn update(&mut self, graph: &mut Graph) {
-    // Apply rotation to the pivot.
-    graph[self.pivot]
-        .local_transform_mut()
-        .set_rotation(UnitQuaternion::from_axis_angle(
-            &Vector3::y_axis(),
-            self.yaw,
-        ));
+   #[visit(optional)]
+   model: InheritableVariable<Handle<Node>>,
 
-    // Apply rotation to the hinge.
-    graph[self.hinge]
-        .local_transform_mut()
-        .set_rotation(UnitQuaternion::from_axis_angle(
-            &Vector3::x_axis(),
-            self.pitch,
-        ));
-}
-```
+   #[visit(optional)]
+   model_yaw: InheritableVariable<SmoothAngle>,
 
-It is a very simple method, it borrows nodes, and applies rotations around specific axes. Now we need to call those two
-methods from somewhere. The most suitable place is `impl Player`, because `Player` owns an instance of `CameraController`:
-
-```rust,no_run,compile_fail
-pub fn handle_device_event(&mut self, device_event: &DeviceEvent) {
-    self.camera_controller.handle_device_event(device_event)
-}
-
-pub fn update(&mut self, scene: &mut Scene) {
-    self.camera_controller.update(&mut scene.graph);
-}
-```
-
-For now both methods are just proxies, but it will be changed pretty soon. Now we need to call the proxies, but from where?
-The most suitable place is `on_tick` and `on_device_event` of the `GameState` trait implementation for our `Game` structure:
-
-```rust,no_run,compile_fail
-fn on_tick(&mut self, engine: &mut Engine, dt: f32, _control_flow: &mut ControlFlow) {
-    let scene = &mut engine.scenes[self.scene];
-
-    self.player.update(scene);
-}
-
-fn on_device_event(
-    &mut self,
-    _engine: &mut Engine,
-    _device_id: DeviceId,
-    event: DeviceEvent,
-) {
-    self.player.handle_device_event(&event);
-}
-```
-
-Now you can run the game, and the camera should rotate when you're moving your mouse. Now it's the time to add an ability
-to walk for our character.
-
-## Player locomotion
-
-Our player still can't move, in this section we'll fix it. Player's movement for third person camera differs from the
-movement of first person. For the third person camera we must move the player either where the camera looks or according
-to pressed keys on the keyboard. Let's start by adding input controller, it will hold info about needed movement:
-
-```rust,no_run
-#[derive(Default)]
-struct InputController {
+    #[reflect(hidden)]
+    #[visit(skip)]
     walk_forward: bool,
+
+    #[reflect(hidden)]
+    #[visit(skip)]
     walk_backward: bool,
+
+    #[reflect(hidden)]
+    #[visit(skip)]
     walk_left: bool,
+
+    #[reflect(hidden)]
+    #[visit(skip)]
     walk_right: bool,
+    
+    #[reflect(hidden)]
+    #[visit(skip)]
+    yaw: f32,
+
+    #[reflect(hidden)]
+    #[visit(skip)]
+    pitch: f32,
 }
 ```
 
-Add new field to the `Player`:
+There are quite a lot of them, but all of them will be in use. The first four fields will contain handles to scene nodes
+we've made earlier, the `model_yaw` field contains a `SmoothAngle` which is used for smooth angle interpolation we'll
+use later in tutorial. Please note that these fields marked with `#[visit(optional)]` attribute, which tells the engine
+that these fields can be missing and should be replaced with default values in this case. This is very useful attribute
+if you're adding new fields to some existing script, it will prevent serialization error. The rest of the fields contains 
+runtime information about movement state (`move_forward`, `move_backward`, `walk_left`, `walk_right`) and the 
+camera orientation (`yaw` and `pitch` fields).
 
-```rust,no_run,compile_fail
-input_controller: InputController,
-```
+A few notes why the first five fields are wrapped in the `InheritableVariable` - it is to support property inheritance
+mechanism for these fields. The engine will save the values for these variables only if they're manually modified, on
+loading, however, it will replace non-modified values with the ones from parent prefab. If it sounds too complicated for
+you, then you should probably read [this chapter](../../../scene/prefab.md#property-inheritance). 
 
-And initialize it with `Default::default` in the `Player::new`:
+Let's start writing player controller's logic. 
 
-```rust,no_run,compile_fail
-Self {
-    ...,
-    input_controller: Default::default(),
-}
-```
+### Event Handling
 
-Now we need to change the state of the input controller, to do that we'll use keyboard events. Add following method to
-the `impl Player`:
+We'll start from keyboard and mouse event handling, add the following code to the `impl ScriptTrait for Player`:
 
-```rust,no_run,compile_fail
-pub fn handle_key_event(&mut self, key: &KeyboardInput) {
-    if let Some(key_code) = key.virtual_keycode {
-        match key_code {
-            VirtualKeyCode::W => {
-                self.input_controller.walk_forward = key.state == ElementState::Pressed
-            }
-            VirtualKeyCode::S => {
-                self.input_controller.walk_backward = key.state == ElementState::Pressed
-            }
-            VirtualKeyCode::A => {
-                self.input_controller.walk_left = key.state == ElementState::Pressed
-            }
-            VirtualKeyCode::D => {
-                self.input_controller.walk_right = key.state == ElementState::Pressed
-            }
-            _ => (),
-        }
-    }
-}
-```
-
-Now we need to call this method, we'll do it from `on_window_event` in the `GameState` trait implementation for our
-`Game`:
-
-```rust,no_run,compile_fail
-fn on_window_event(&mut self, _engine: &mut Engine, event: WindowEvent) {
-    match event {
-        WindowEvent::KeyboardInput { input, .. } => {
-            self.player.handle_key_event(&input);
-        }
-        _ => (),
-    }
-}
-```
-
-Ok, now we have input controller functioning. Now we can start adding movement logic to the player. Let's start by adding
-a physical body to the player. We'll use a capsule rigid body with locked rotations for that. Add these lines somewhere
-in `Player::new`:
-
-```rust,no_run
+```rust ,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     core::algebra::Vector3,
-#     core::pool::Handle,
-#     scene::{
-#         Scene,
-#         base::BaseBuilder,
-#         collider::{ColliderBuilder, ColliderShape},
-#         graph::physics::CoefficientCombineRule,
-#         rigidbody::RigidBodyBuilder,
-#         transform::TransformBuilder,
-#     },
+#     event::{DeviceEvent, ElementState, Event, WindowEvent},
+#     keyboard::KeyCode,
+#     script::ScriptContext,
 # };
-# fn f(scene: &mut Scene) {
-# let model = Handle::NONE;
-let collider;
-let body = RigidBodyBuilder::new(
-    BaseBuilder::new()
-        .with_local_transform(
-            TransformBuilder::new()
-                .with_local_position(Vector3::new(0.0, 2.0, 0.0))
-                .build(),
-        )
-        .with_children(&[
-            {
-                // Attach the model to the pivot. This will force model to move together with the pivot.
-                model
-            },
-            {
-                // Create capsule collider with friction disabled. We need to disable friction because linear
-                // velocity will be set manually, but the physics engine will reduce it using friction so it
-                // won't let us to set linear velocity precisely.
-                collider = ColliderBuilder::new(BaseBuilder::new())
-                    .with_shape(ColliderShape::capsule_y(0.55, 0.15))
-                    .with_friction_combine_rule(CoefficientCombineRule::Min)
-                    .with_friction(0.0)
-                    .build(&mut scene.graph);
-                collider
-            },
-        ]),
-)
-.with_locked_rotations(true)
-.with_can_sleep(false)
-.build(&mut scene.graph);
+# 
+# struct Player {
+#     walk_forward: bool,
+#     walk_backward: bool,
+#     walk_left: bool,
+#     walk_right: bool,
+#     yaw: f32,
+#     pitch: f32,
+# }
+# 
+# impl Player {
+fn on_os_event(&mut self, event: &Event<()>, ctx: &mut ScriptContext) {
+   match event {
+      Event::WindowEvent { event, .. } => {
+         if let WindowEvent::KeyboardInput { event, .. } = event {
+            let pressed = event.state == ElementState::Pressed;
+            match event.physical_key {
+               KeyCode::KeyW => self.walk_forward = pressed,
+               KeyCode::KeyS => self.walk_backward = pressed,
+               KeyCode::KeyA => self.walk_left = pressed,
+               KeyCode::KeyD => self.walk_right = pressed,
+               _ => (),
+            }
+         }
+      }
+      Event::DeviceEvent { event, .. } => {
+         if let DeviceEvent::MouseMotion { delta } = event {
+            let mouse_sens = 0.2 * ctx.dt;
+            self.yaw -= (delta.0 as f32) * mouse_sens;
+            self.pitch = (self.pitch + (delta.1 as f32) * mouse_sens)
+                    .clamp(-90.0f32.to_radians(), 90.0f32.to_radians());
+         }
+      }
+      _ => (),
+   }
+}
 # }
 ```
 
-Now, once our character has physical body, we can move it. Add these lines to the end of `Player::update`:
+This code consists of two major sections: `KeyboardInput` event handling and `MouseMotion` event handling. Let's start
+from `KeyboardInput` event. At the beginning of it we're checking if a key was pressed or not and saving it to the
+`pressed` flag, then we check for `W`, `S`, `A`, `D` keys and set each movement flag accordingly.
 
-```rust,no_run,compile_fail
-let body = scene.graph[self.body].as_rigid_body_mut();
+The `MouseMotion` event handling is different: we're using mouse movement delta to calculate new yaw and pitch values
+for our camera. Pitch calculation also includes angle clamping in `-90.0..90.0` degree range.
 
-let look_vector = body
-    .look_vector()
-    .try_normalize(f32::EPSILON)
-    .unwrap_or(Vector3::z());
+### Logic
 
-let side_vector = body
-    .side_vector()
-    .try_normalize(f32::EPSILON)
-    .unwrap_or(Vector3::x());
+The next important step is to apply all the data we have to a bunch of scene nodes the player consists of. Let's fill
+the `on_update` method with the following code:
 
-let position = **body.local_transform().position();
-
-let mut velocity = Vector3::default();
-
-if self.input_controller.walk_right {
-    velocity -= side_vector;
-}
-if self.input_controller.walk_left {
-    velocity += side_vector;
-}
-if self.input_controller.walk_forward {
-    velocity += look_vector;
-}
-if self.input_controller.walk_backward {
-    velocity -= look_vector;
-}
-
-let speed = 1.35 * dt;
-let velocity = velocity
-    .try_normalize(f32::EPSILON)
-    .and_then(|v| Some(v.scale(speed)))
-    .unwrap_or(Vector3::default());
-
-// Apply linear velocity.
-body.set_lin_vel(Vector3::new(
-    velocity.x / dt,
-    body.lin_vel().y,
-    velocity.z / dt,
-));
-
-let is_moving = velocity.norm_squared() > 0.0;
-if is_moving {
-    // Since we have free camera while not moving, we have to sync rotation of pivot
-    // with rotation of camera so character will start moving in look direction.
-    body.local_transform_mut()
-        .set_rotation(UnitQuaternion::from_axis_angle(
-            &Vector3::y_axis(),
-            self.camera_controller.yaw,
-        ));
-
-    // Apply additional rotation to model - it will turn in front of walking direction.
-    let angle: f32 = if self.input_controller.walk_left {
-        if self.input_controller.walk_forward {
-            45.0
-        } else if self.input_controller.walk_backward {
-            135.0
-        } else {
-            90.0
-        }
-    } else if self.input_controller.walk_right {
-        if self.input_controller.walk_forward {
-            -45.0
-        } else if self.input_controller.walk_backward {
-            -135.0
-        } else {
-            -90.0
-        }
-    } else if self.input_controller.walk_backward {
-        180.0
-    } else {
-        0.0
-    };
-
-    scene.graph[self.model].local_transform_mut().set_rotation(
-        UnitQuaternion::from_axis_angle(&Vector3::y_axis(), angle.to_radians()),
-    );
-}
-
-// Sync camera controller position with player's position.
-scene.graph[self.camera_controller.pivot]
-    .local_transform_mut()
-    .set_position(position + velocity);
-```
-
-There is lots of code, let's thoroughly go through. At first, we're getting two vectors from the pivot: X and Z axes of
-the global transform of the pivot. We'll use them to move the character. Next we're using the state of the input
-controller to form a new velocity vector. Then we're normalizing velocity vector and multiply it with desired speed of
-movement. Normalization is needed to make the vector unit length to prevent speed variations in various directions. Next
-we're applying the velocity to the rigid body, also we're locking any angular movement to prevent player's capsule
-from tilting.
-
-If the player is not moving, we're not syncing its rotation with camera's rotation - this allows us to look at the
-character from any side while not moving. However, if the player is moving, we must sync its rotation with the rotation
-of the camera controller. If we'd do this straightforward (by just syncing rotations) it would look very unnatural,
-especially in case of side movements. To fix this we have this large chain of `if..else` that selects appropriate
-additional rotation for the player's model. This rotation allows us, for example, look forward and move the character
-backwards.
-
-As the final step we're syncing position of the camera controller with the position of the pivot. Now if you run the game
-you'll be able to walk around using `[W][S][A][D]` keys. However, it looks very ugly - the character's model is in T-pose,
-let's fix this.
-
-## Animations
-
-At this point our character can move, and we can rotate the camera around it, but the character is still in T-pose and
-does not have any animation. In this section we'll animate it. To keep this tutorial at reasonable length, we'll
-add just an idle and walk animations and smooth transitions between them. Add following code at the end of `player.rs`:
-
-```rust,no_run,edition2018
+```rust ,no_run
 # extern crate fyrox;
 # use fyrox::{
-#     animation::{
-#         machine::{Machine, MachineLayer, Parameter, PoseNode, State, Transition},
-#         Animation,
+#     animation::machine::Parameter,
+#     core::{
+#         algebra::{UnitQuaternion, Vector3},
+#         math::SmoothAngle,
+#         pool::Handle,
+#         reflect::prelude::*,
+#         uuid::{uuid, Uuid},
+#         variable::InheritableVariable,
+#         visitor::prelude::*,
+#         TypeUuidProvider,
 #     },
-#     core::pool::Handle,
-#     asset::manager::ResourceManager,
-#     resource::model::{Model, ModelResource, ModelResourceExtension},
-#     scene::{node::Node, animation::AnimationPlayer, Scene},
+#     event::{DeviceEvent, ElementState, Event, WindowEvent},
+#     impl_component_provider,
+#     keyboard::KeyCode,
+#     scene::{animation::absm::AnimationBlendingStateMachine, node::Node, rigidbody::RigidBody},
+#     script::{ScriptContext, ScriptTrait},
 # };
+# 
+# #[derive(Visit, Reflect, Default, Debug, Clone)]
+# pub struct Player {
+#     camera_pivot: InheritableVariable<Handle<Node>>,
+#     camera_hinge: InheritableVariable<Handle<Node>>,
+#     state_machine: InheritableVariable<Handle<Node>>,
+#     model_pivot: InheritableVariable<Handle<Node>>,
+#     model: InheritableVariable<Handle<Node>>,
+#     model_yaw: InheritableVariable<SmoothAngle>,
+#     walk_forward: bool,
+#     walk_backward: bool,
+#     walk_left: bool,
+#     walk_right: bool,
+#     yaw: f32,
+#     pitch: f32,
+# }
+# 
+# impl_component_provider!(Player);
+# 
+# impl TypeUuidProvider for Player {
+#     fn type_uuid() -> Uuid {
+#         unimplemented!();
+#     }
+# }
+# 
+impl ScriptTrait for Player {
+    fn on_update(&mut self, ctx: &mut ScriptContext) {
+       // Step 1. Fetch the velocity vector from the animation blending state machine.
+       let transform = ctx.scene.graph[*self.model].global_transform();
+       let mut velocity = Vector3::default();
+       if let Some(state_machine) = ctx
+               .scene
+               .graph
+               .try_get(*self.state_machine)
+               .and_then(|node| node.query_component_ref::<AnimationBlendingStateMachine>())
+       {
+          if let Some(root_motion) = state_machine.machine().pose().root_motion() {
+             velocity = transform
+                     .transform_vector(&root_motion.delta_position)
+                     .scale(1.0 / ctx.dt);
+          }
+       }
 
-// Simple helper method to create a state supplied with PlayAnimation node.
-fn create_play_animation_state(
-    animation_resource: ModelResource,
-    name: &str,
-    layer: &mut MachineLayer,
-    scene: &mut Scene,
-    model: Handle<Node>,
-) -> (Handle<Animation>, Handle<State>) {
-    // Animations retargetting just makes an instance of animation and binds it to
-    // given model using names of bones.
-    let animation = *animation_resource
-        .retarget_animations(model, &mut scene.graph)
-        .get(0)
-        .unwrap();
-    // Create new PlayAnimation node and add it to machine.
-    let node = layer.add_node(PoseNode::make_play_animation(animation));
-    // Make a state using the node we've made.
-    let state = layer.add_state(State::new(name, node));
-    (animation, state)
-}
+        // Step 2. Apply the velocity to the rigid body and lock rotations.
+        if let Some(body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
+            body.set_ang_vel(Default::default());
+            body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
+        }
 
-pub struct AnimationMachineInput {
-    // Whether a bot is walking or not.
-    pub walk: bool,
-}
+        // Step 3. Rotate the model pivot according to the movement direction.
+        let quat_yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw);
 
-pub struct AnimationMachine {
-    machine: Machine,
-    animation_player: Handle<Node>,
-}
+        if velocity.norm_squared() > 0.0 {
+            // Since we have free camera while not moving, we have to sync rotation of pivot
+            // with rotation of camera so character will start moving in look direction.
+            if let Some(model_pivot) = ctx.scene.graph.try_get_mut(*self.model_pivot) {
+                model_pivot.local_transform_mut().set_rotation(quat_yaw);
+            }
 
-impl AnimationMachine {
-    // Names of parameters that will be used for transition rules in machine.
-    const IDLE_TO_WALK: &'static str = "IdleToWalk";
-    const WALK_TO_IDLE: &'static str = "WalkToIdle";
+            // Apply additional rotation to model - it will turn in front of walking direction.
+            let angle: f32 = if self.walk_left {
+                if self.walk_forward {
+                    45.0
+                } else if self.walk_backward {
+                    135.0
+                } else {
+                    90.0
+                }
+            } else if self.walk_right {
+                if self.walk_forward {
+                    -45.0
+                } else if self.walk_backward {
+                    -135.0
+                } else {
+                    -90.0
+                }
+            } else if self.walk_backward {
+                180.0
+            } else {
+                0.0
+            };
 
-    pub async fn new(
-        scene: &mut Scene,
-        model: Handle<Node>,
-        resource_manager: ResourceManager,
-    ) -> Self {
-        let animation_player = scene.graph.find(model, &mut |n| {
-            n.query_component_ref::<AnimationPlayer>().is_some()
-        }).unwrap().0;
+            self.model_yaw.set_target(angle.to_radians()).update(ctx.dt);
 
-        let mut machine = Machine::new();
+            if let Some(model) = ctx.scene.graph.try_get_mut(*self.model) {
+                model
+                    .local_transform_mut()
+                    .set_rotation(UnitQuaternion::from_axis_angle(
+                        &Vector3::y_axis(),
+                        self.model_yaw.angle,
+                    ));
+            }
+        }
 
-        let root = machine.layers_mut().first_mut().unwrap();
+        if let Some(camera_pivot) = ctx.scene.graph.try_get_mut(*self.camera_pivot) {
+            camera_pivot.local_transform_mut().set_rotation(quat_yaw);
+        }
 
-        // Load animations in parallel.
-        let (walk_animation_resource, idle_animation_resource) = fyrox::core::futures::join!(
-            resource_manager.request::<Model, _>("data/models/paladin/walk.fbx"),
-            resource_manager.request::<Model, _>("data/models/paladin/idle.fbx"),
-        );
+        // Rotate camera hinge - this will make camera move up and down while look at character
+        // (well not exactly on character - on characters head)
+        if let Some(camera_hinge) = ctx.scene.graph.try_get_mut(*self.camera_hinge) {
+            camera_hinge
+                .local_transform_mut()
+                .set_rotation(UnitQuaternion::from_axis_angle(
+                    &Vector3::x_axis(),
+                    self.pitch,
+                ));
+        }
 
-        // Now create two states with different animations.
-        let (_, idle_state) = create_play_animation_state(
-            idle_animation_resource.unwrap(),
-            "Idle",
-            root,
-            scene,
-            model,
-        );
+        // Step 4. Feed the animation blending state machine with the current state of the player.
+        if let Some(state_machine) = ctx
+            .scene
+            .graph
+            .try_get_mut(*self.state_machine)
+            .and_then(|node| node.query_component_mut::<AnimationBlendingStateMachine>())
+        {
+            let moving =
+                self.walk_left || self.walk_right || self.walk_forward || self.walk_backward;
 
-        let (walk_animation, walk_state) = create_play_animation_state(
-            walk_animation_resource.unwrap(),
-            "Walk",
-            root,
-            scene,
-            model,
-        );
-
-        // Next, define transitions between states.
-        root.add_transition(Transition::new(
-            // A name for debugging.
-            "Idle->Walk",
-            // Source state.
-            idle_state,
-            // Target state.
-            walk_state,
-            // Transition time in seconds.
-            0.4,
-            // A name of transition rule parameter.
-            Self::IDLE_TO_WALK,
-        ));
-        root.add_transition(Transition::new(
-            "Walk->Idle",
-            walk_state,
-            idle_state,
-            0.4,
-            Self::WALK_TO_IDLE,
-        ));
-
-        // Define entry state.
-        root.set_entry_state(idle_state);
-
-        Self {
-            machine,
-            animation_player,
+            state_machine
+                .machine_mut()
+                .get_value_mut_silent()
+                .set_parameter("Running", Parameter::Rule(moving));
         }
     }
-
-    pub fn update(&mut self, scene: &mut Scene, dt: f32, input: AnimationMachineInput) {
-        let animation_player = scene.graph[self.animation_player]
-            .query_component_mut::<AnimationPlayer>()
-            .unwrap();
-
-        self.machine
-            // Set transition parameters.
-            .set_parameter(Self::WALK_TO_IDLE, Parameter::Rule(!input.walk))
-            .set_parameter(Self::IDLE_TO_WALK, Parameter::Rule(input.walk))
-            // Update machine and evaluate final pose.
-            .evaluate_pose(animation_player.animations_mut().get_value_mut_silent(), dt)
-            // Apply the pose to the graph.
-            .apply(&mut scene.graph);
-    }
+# 
+#     fn id(&self) -> Uuid {
+#         Self::type_uuid()
+#     }
 }
 ```
 
-This is a simple animation blending machine, for more info check
-["Animations" section of "Writing a 3D shooter using Fyrox #3"](https://fyrox.rs/tutorials/2021/03/11/tutorial3.html#animations)
-tutorial, it has detailed explanation how animation blending machines work. In short, here we're loading two animations,
-and create two transitions between them and then applying final pose to the character.
+That's a big chunk of code, but it mostly consists of a set of separate steps. Let's try to understand what each step does.
 
-Now we need to create an instance of the `AnimationMachine`, add a field to the `Player`:
+Step 1 extracts the root motion vector from the animation blending state machine: at first, we're getting the current 
+transformation matrix of the Paladin's model. Then we're trying to borrow the ABSM node from the scene. If it is
+successful, then we're trying to extract the root motion vector from the final pose of the ABSM. If we have one, then
+we need to transform it from the local space to the world space - we're doing this using matrix-vector multiplication.
+And as the last step, we're scaling the vector by delta time to get the final velocity in world coordinates that can
+be used to move the rigid body.
 
-```rust,no_run,compile_fail
-...,
-animation_machine: AnimationMachine,
-```
+Step 2 uses the root motion vector to move the rigid body. The body is the node to which the script is assigned to,
+so we're using `ctx.handle` to borrow a "self" reference and setting the new linear and angular velocities.
 
-And initialize it in the `Player::new`, before `camera_controller`:
+Step 3 is the largest (code-wise) step, yet very simple. All we do here is rotating the camera and the model pivot in 
+according to pressed keys. The code should be self-explanatory.
 
-```rust,no_run,compile_fail
-...,
-animation_machine: AnimationMachine::new(scene, model, resource_manager.clone()).await,
-...
-```
+Step 4 feeds the animation blending state machine with the variables it needs to perform state transitions. Currently,
+we have only one variable - `Running` and to set it, we're trying to borrow the ABSM using its handle, then we're
+using the state of four of our movement variable to combine them into one and use this flag to set the value in the 
+ABSM.
 
-The last thing we need to do is to update animation machine each frame, we'll do this in `Player::update`, at the end
-of the method:
+### Binding
 
-```rust,no_run,compile_fail
-self.animation_machine
-        .update(scene, dt, AnimationMachineInput { walk: is_moving });
-```
+Now, when we have finished coding part, we can open `paladin.rgs` in the editor again and assign the script to it: 
 
-Now if you run the game, you should see the character idling if not moving, and it should play "walking" animation if
-moving. That's it for this tutorial, in the next tutorial we'll "teach" the character to use swords.
+![assigned script](assigned_script.png)
+
+Make sure to correctly set the script fields (as on the screenshot above), otherwise it won't work correctly.
+
+## Level
+
+Use your imagination to create a game level (or just use the one from the assets pack for this tutorial). Level design
+is not covered by this tutorial. You can create a simple level using a Terrain, a few 3D models from the assets pack:
+
+![simple level](simple_level.png)
+
+The most important part, however, is to add a player instance to the level:
+
+![player on level](player_on_level.png)
+
+Now all you need to do is to click on the green `>` button and run the game.
 
 ## Conclusion
 
-In this tutorial we've learned how create a walking character. Created simple character controller and walked on
-the scene. I hope you liked this tutorial, and if so, please consider supporting the project on
-[Patreon](https://patreon.com/mrdimas) or do a one-time donation via [BuyMeACoffee](https://www.buymeacoffee.com/mrDIMAS).
-The source code for this tutorial is available on [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials).
-
-Discussion: [Reddit](https://www.reddit.com/r/rust/comments/ois776/media_writing_a_roleplaying_game_using_rg3d_game/),
-[Discord](https://discord.gg/xENF5Uh).
+In this tutorial we've learned how to set up physics for humanoid characters, how to create simple 3rd person camera
+controllers, how to import and blend multiple animation into one, how to use root motion to extract motion vector from
+animations. We also learned how to create prefabs and use them correctly. Finally, we have created a simple level and
+instantiated the character prefab on it.  
