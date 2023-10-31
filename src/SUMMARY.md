@@ -70,6 +70,7 @@
   - [Fonts](./fyrox/ui/font.md)
   - [Style](./fyrox/ui/style.md)
   - [Widgets](./fyrox/ui/widgets.md)
+    - [Custom Widget](./fyrox/ui/custom.md) 
     - [Button](./fyrox/ui/button.md)
     - [Border](./fyrox/ui/border.md)
     - [Canvas](./fyrox/ui/canvas.md)
