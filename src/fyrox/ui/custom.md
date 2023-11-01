@@ -51,7 +51,8 @@ impl Control for MyButton {
 
 Every widget in the engine must have an instance of `Widget` (`widget: Widget` field) type in them and implement the 
 `Control` trait with two required methods. `query_component` is used for dynamic component fetching and could be used 
-to support behavior mix-ins and support derived widgets, that based on some other widgets.
+to support behavior mix-ins and support derived widgets, that based on some other widgets. There's a lot more of 
+available methods in the `Control` trait, however for simplicity we won't use it in this chapter. 
 
 `handle_routed_message` is used to react to various messages, but only in the `child -> parent -> parent_of_parent -> ...`
 chain. For example, if some of the child widget of our button will receive a message, it will also be passed to our button,
@@ -187,10 +188,15 @@ impl Control for MyButton {
 ```
 
 As you can see, the most of the code was placed in `handle_routed_message`, we using it to respond for four messages:
-`MouseDown`, `MouseUp`, `MouseEnter`, `MouseLeave`. The first two messages is used to handle clicks and send appropriate
-event to the outside world if a click has happened. The last two events are used to alter the visual appearance of the 
-button by changing the colors of both the border and the text. The source code above is very simple and straightforward,
-despite the look of it.
+`MouseDown` + `MouseUp`, `MouseEnter` + `MouseLeave`. Let's look closely at each pair of the messages.
+
+The first two messages is used to handle clicks and send appropriate message to the outside world if a click has happened.
+When you're sending a message, it is not immediately processed, instead it is put in the common message queue and will 
+be processed by the engine later. You can react to such messages to perform a desired action, see 
+[the section below](custom.md#reacting-to-click-messages) for more info. 
+
+The last two events are used to alter the visual appearance of the button by changing the colors of both the border and 
+the text. The source code above is very simple and straightforward, despite the look of it.
 
 ## Builder
 
@@ -300,7 +306,41 @@ MyButtonBuilder::new(
 .build(ctx);
 ```
 
+## Reacting to Click Messages
+
+Our button sends a `Click` message every time when it was pressed, and we can use this message to perform some actions
+in an application. All you need to do is to catch `MyButtonMessage::Click` in `Plugin::on_ui_message` and do something
+in response:
+
+```rust ,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     gui::{message::UiMessage, UiNode},
+#     plugin::{Plugin, PluginContext},
+# };
+# 
+# #[derive(Debug, PartialEq)]
+# enum MyButtonMessage {
+#     Click,
+# }
+# 
+struct MyPlugin {
+    my_button: Handle<UiNode>,
+}
+
+impl Plugin for MyPlugin {
+    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
+        if message.destination() == self.my_button {
+            if let Some(MyButtonMessage::Click) = message.data() {
+                // Do something.
+            }
+        }
+    }
+}
+```
+
 ## Source Code and Web Demo
 
 Full source code for this chapter can be found [here](https://github.com/FyroxEngine/Fyrox-demo-projects/blob/main/ui/game/src/custom.rs)
-and you can also run [web demo](https://fyrox.rs/assets/demo/ui/index.html) to see it in action.
+, and you can also run [web demo](https://fyrox.rs/assets/demo/ui/index.html) to see it in action.
