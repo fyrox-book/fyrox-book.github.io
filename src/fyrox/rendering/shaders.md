@@ -156,15 +156,15 @@ a "global namespace", which means that every sub-shader has "access" to the prop
 There are number of built-in properties, that Fyrox will try to assign automatically if they're defined
 in your shader:
 
-| Name                       | Type            | Description                                 |
-|----------------------------|-----------------|---------------------------------------------|
-| fyrox_worldMatrix          | `Matrix4`       | Local-to-world transformation.              |
-| fyrox_worldViewProjection  | `Matrix4`       | Local-to-clip-space transform.              |
-| fyrox_boneMatrices         | `[Matrix4; 60]` | Array of bone matrices.                     |
-| fyrox_useSkeletalAnimation | `Vector3`       | Whether skinned meshes is rendering or not. |
-| fyrox_cameraPosition       | `Vector3`       | Position of the camera.                     |
-| fyrox_usePOM               | `bool`          | Whether to use parallax mapping or not.     |
-| fyrox_lightPosition        | `Vector3`       | Light position.                             |
+| Name                       | Type        | Description                                                                                                       |
+|----------------------------|-------------|-------------------------------------------------------------------------------------------------------------------|
+| fyrox_worldMatrix          | `mat4`      | Local-to-world transformation.                                                                                    |
+| fyrox_worldViewProjection  | `mat4`      | Local-to-clip-space transform.                                                                                    |
+| fyrox_boneMatrices         | `sampler2D` | Array of bone matrices packed into a texture. Use `S_FetchMatrix` built-in method to fetch a matrix by its index. |
+| fyrox_useSkeletalAnimation | `bool`      | Whether skinned meshes is rendering or not.                                                                       |
+| fyrox_cameraPosition       | `vec3`      | Position of the camera.                                                                                           |
+| fyrox_usePOM               | `bool`      | Whether to use parallax mapping or not.                                                                           |
+| fyrox_lightPosition        | `vec3`      | Light position.                                                                                                   |
 
 To use any of the properties, just define a uniform with an appropriate name:
 
