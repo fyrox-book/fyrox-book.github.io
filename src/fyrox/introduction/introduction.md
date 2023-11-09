@@ -15,7 +15,7 @@ do:
 ![Fish Folly](game_example2.jpg)
 ![2D Platformer](game_example3.jpg)
 
-## How the engine work?
+## How does the engine work?
 
 The engine consists of two parts that you'll be actively using: the framework and the editor. The framework is a 
 foundation of the engine, it manages rendering, sound, scripts, plugins, etc. While the editor contains lots of tools 
@@ -26,7 +26,7 @@ that can be used to create game worlds, manage assets, edit game objects, script
 ## Programming languages
 
 Everything of your game can be written entirely in Rust, utilizing its safety guarantees as well as speed. However, it
-is possible to use any scripting language you want, but that's have no built-in support and you need to implement this
+is possible to use any scripting language you want, but that's have no built-in support, and you need to implement this
 manually.
 
 ## Engine Features
