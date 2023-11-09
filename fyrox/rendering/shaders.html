@@ -272,6 +272,40 @@ is well documented, and you may find some functions useful for you job.</li>
     ],
 )
 </code></pre>
+<p>The engine can load such shaders if you save it in a file with <code>.shader</code> extension. After that, you can assign
+the shader to your material in the Material Editor:</p>
+<p><img src="./shader.png" alt="shader" /></p>
+<p>Alternatively, you can load the shader from code. To do this, you can use this code:</p>
+<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    asset::manager::ResourceManager,
+</span><span class="boring">    material::shader::{Shader, ShaderResource},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn load_shader(resource_manager: &amp;ResourceManager) -&gt; ShaderResource {
+    resource_manager.request::&lt;Shader, _&gt;(&quot;path/to/my/cool.shader&quot;)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>After that you can use the shader to build a material from it:</p>
+<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    asset::manager::ResourceManager,
+</span><span class="boring">    material::{shader::Shader, Material, SharedMaterial},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn create_material(resource_manager: &amp;ResourceManager) -&gt; SharedMaterial {
+    let shader = resource_manager.request::&lt;Shader, _&gt;(&quot;path/to/my/cool.shader&quot;);
+    SharedMaterial::new(Material::from_shader(
+        shader,
+        Some(resource_manager.clone()),
+    ))
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This material instance can be used for rendering. For example, you can assign it a surface of some mesh.</p>
 <h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
 <p>Property is a named variable of some type. Properties are directly tied with the uniforms in the sub-shaders,
 for each you can have a property called <code>time</code>, and then you can define <code>uniform float time;</code> in your sub-shader
