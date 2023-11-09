@@ -193,9 +193,36 @@ to render shadows.
 
 Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters come in handy. There is a relatively large list of drawing
-parameters, and it could confuse a person who isn't used to work with graphics. Thankfully there is a good
-documentation about this available [here](https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#drawing-parameters)
+from both sides. This is when draw parameters come in handy. 
+
+There are relatively large list of drawing parameters, and it could confuse a person who didn't get
+used to work with graphics. The following list should help you to use drawing parameters correctly.
+
+- `cull_face`:
+  - Defines which side of polygon should be culled.
+  - **Possible values:** `None`, `Some(CullFace::Back)`, `Some(CullFace::Front)`
+- `color_write`:
+  - Defines which components of color should be written to a render target
+  - **Possible values:** `ColorMask { .. }`
+- `depth_write`:
+  - Whether to modify depth buffer or not.
+  - **Possible values:** `true/false`
+- `stencil_test`:
+  - Whether to use stencil test or not.
+  - **Possible values:**
+    - `None`
+    - `Some(StencilFunc { .. })`
+- `depth_test`:
+  - Whether to perform depth test when drawing.
+  - **Possible values:** `true/false`
+- `blend`:
+  - Blending options.
+  - **Possible values:**
+    - `None`
+    - `Some(BlendFunc { .. } )`
+- `stencil_op`:
+  - Stencil options.
+  - **Possible values:** `StencilOp { .. } `
 
 ## Vertex shader
 
