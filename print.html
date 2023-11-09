@@ -4907,9 +4907,63 @@ to render shadows.</li>
 <h2 id="drawing-parameters"><a class="header" href="#drawing-parameters">Drawing parameters</a></h2>
 <p>Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters come in handy. There is a relatively large list of drawing
-parameters, and it could confuse a person who isn't used to work with graphics. Thankfully there is a good
-documentation about this available <a href="https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#drawing-parameters">here</a></p>
+from both sides. This is when draw parameters come in handy. </p>
+<p>There are relatively large list of drawing parameters, and it could confuse a person who didn't get
+used to work with graphics. The following list should help you to use drawing parameters correctly.</p>
+<ul>
+<li><code>cull_face</code>:
+<ul>
+<li>Defines which side of polygon should be culled.</li>
+<li><strong>Possible values:</strong> <code>None</code>, <code>Some(CullFace::Back)</code>, <code>Some(CullFace::Front)</code></li>
+</ul>
+</li>
+<li><code>color_write</code>:
+<ul>
+<li>Defines which components of color should be written to a render target</li>
+<li><strong>Possible values:</strong> <code>ColorMask { .. }</code></li>
+</ul>
+</li>
+<li><code>depth_write</code>:
+<ul>
+<li>Whether to modify depth buffer or not.</li>
+<li><strong>Possible values:</strong> <code>true/false</code></li>
+</ul>
+</li>
+<li><code>stencil_test</code>:
+<ul>
+<li>Whether to use stencil test or not.</li>
+<li><strong>Possible values:</strong>
+<ul>
+<li><code>None</code></li>
+<li><code>Some(StencilFunc { .. })</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>depth_test</code>:
+<ul>
+<li>Whether to perform depth test when drawing.</li>
+<li><strong>Possible values:</strong> <code>true/false</code></li>
+</ul>
+</li>
+<li><code>blend</code>:
+<ul>
+<li>Blending options.</li>
+<li><strong>Possible values:</strong>
+<ul>
+<li><code>None</code></li>
+<li><code>Some(BlendFunc { .. } )</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>stencil_op</code>:
+<ul>
+<li>Stencil options.</li>
+<li><strong>Possible values:</strong> <code>StencilOp { .. } </code></li>
+</ul>
+</li>
+</ul>
 <h2 id="vertex-shader"><a class="header" href="#vertex-shader">Vertex shader</a></h2>
 <p>Vertex shader operates on single vertices, it must provide at least the position of the vertex
 in clipping space. In other words it has to do at least this:</p>
