@@ -322,6 +322,9 @@ in your shader:</p>
 <tr><td>fyrox_cameraPosition</td><td><code>vec3</code></td><td>Position of the camera.</td></tr>
 <tr><td>fyrox_usePOM</td><td><code>bool</code></td><td>Whether to use parallax mapping or not.</td></tr>
 <tr><td>fyrox_lightPosition</td><td><code>vec3</code></td><td>Light position.</td></tr>
+<tr><td>fyrox_blendShapesStorage</td><td><code>sampler3D</code></td><td>3D texture of layered blend shape storage. Use <code>S_FetchBlendShapeOffsets</code> built-in method to fetch info.</td></tr>
+<tr><td>fyrox_blendShapesWeights</td><td><code>float[128]</code></td><td>Weights of all available blend shapes.</td></tr>
+<tr><td>fyrox_blendShapesCount</td><td><code>int</code></td><td>Total amount of blend shapes.</td></tr>
 </tbody></table>
 </div>
 <p>To use any of the properties, just define a uniform with an appropriate name:</p>
