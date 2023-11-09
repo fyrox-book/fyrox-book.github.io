@@ -80,12 +80,12 @@ Shader has rigid structure that could be described in this code snippet:
                 r#"
                 layout(location = 0) in vec3 vertexPosition;
                 layout(location = 1) in vec2 vertexTexCoord;
-                uniform mat4 rg3d_worldViewProjection;
+                uniform mat4 fyrox_worldViewProjection;
                 out vec2 texCoord;
                 void main()
                 {
                     texCoord = vertexTexCoord;
-                    gl_Position = rg3d_worldViewProjection * vertexPosition;
+                    gl_Position = fyrox_worldViewProjection * vertexPosition;
                 }
                 "#;
             // Pixel shader code.
@@ -205,11 +205,11 @@ in clipping space. In other words it has to do at least this:
 ```glsl
 layout(location = 0) in vec3 vertexPosition;
 
-uniform mat4 rg3d_worldViewProjection; // Note the built-in variable.
+uniform mat4 fyrox_worldViewProjection; // Note the built-in variable.
 
 void main()
 {
-    gl_Position = rg3d_worldViewProjection * vertexPosition;
+    gl_Position = fyrox_worldViewProjection * vertexPosition;
 }
 ```
 
