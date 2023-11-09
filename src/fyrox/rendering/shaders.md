@@ -156,15 +156,18 @@ a "global namespace", which means that every sub-shader has "access" to the prop
 There are number of built-in properties, that Fyrox will try to assign automatically if they're defined
 in your shader:
 
-| Name                       | Type        | Description                                                                                                       |
-|----------------------------|-------------|-------------------------------------------------------------------------------------------------------------------|
-| fyrox_worldMatrix          | `mat4`      | Local-to-world transformation.                                                                                    |
-| fyrox_worldViewProjection  | `mat4`      | Local-to-clip-space transform.                                                                                    |
-| fyrox_boneMatrices         | `sampler2D` | Array of bone matrices packed into a texture. Use `S_FetchMatrix` built-in method to fetch a matrix by its index. |
-| fyrox_useSkeletalAnimation | `bool`      | Whether skinned meshes is rendering or not.                                                                       |
-| fyrox_cameraPosition       | `vec3`      | Position of the camera.                                                                                           |
-| fyrox_usePOM               | `bool`      | Whether to use parallax mapping or not.                                                                           |
-| fyrox_lightPosition        | `vec3`      | Light position.                                                                                                   |
+| Name                       | Type         | Description                                                                                                       |
+|----------------------------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| fyrox_worldMatrix          | `mat4`       | Local-to-world transformation.                                                                                    |
+| fyrox_worldViewProjection  | `mat4`       | Local-to-clip-space transform.                                                                                    |
+| fyrox_boneMatrices         | `sampler2D`  | Array of bone matrices packed into a texture. Use `S_FetchMatrix` built-in method to fetch a matrix by its index. |
+| fyrox_useSkeletalAnimation | `bool`       | Whether skinned meshes is rendering or not.                                                                       |
+| fyrox_cameraPosition       | `vec3`       | Position of the camera.                                                                                           |
+| fyrox_usePOM               | `bool`       | Whether to use parallax mapping or not.                                                                           |
+| fyrox_lightPosition        | `vec3`       | Light position.                                                                                                   |
+| fyrox_blendShapesStorage   | `sampler3D`  | 3D texture of layered blend shape storage. Use `S_FetchBlendShapeOffsets` built-in method to fetch info.          | 
+| fyrox_blendShapesWeights   | `float[128]` | Weights of all available blend shapes.                                                                            | 
+| fyrox_blendShapesCount     | `int`        | Total amount of blend shapes.                                                                                     | 
 
 To use any of the properties, just define a uniform with an appropriate name:
 
