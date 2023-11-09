@@ -4877,13 +4877,13 @@ a &quot;global namespace&quot;, which means that every sub-shader has &quot;acce
 <p>There are number of built-in properties, that Fyrox will try to assign automatically if they're defined
 in your shader:</p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td>fyrox_worldMatrix</td><td><code>Matrix4</code></td><td>Local-to-world transformation.</td></tr>
-<tr><td>fyrox_worldViewProjection</td><td><code>Matrix4</code></td><td>Local-to-clip-space transform.</td></tr>
-<tr><td>fyrox_boneMatrices</td><td><code>[Matrix4; 60]</code></td><td>Array of bone matrices.</td></tr>
-<tr><td>fyrox_useSkeletalAnimation</td><td><code>Vector3</code></td><td>Whether skinned meshes is rendering or not.</td></tr>
-<tr><td>fyrox_cameraPosition</td><td><code>Vector3</code></td><td>Position of the camera.</td></tr>
+<tr><td>fyrox_worldMatrix</td><td><code>mat4</code></td><td>Local-to-world transformation.</td></tr>
+<tr><td>fyrox_worldViewProjection</td><td><code>mat4</code></td><td>Local-to-clip-space transform.</td></tr>
+<tr><td>fyrox_boneMatrices</td><td><code>sampler2D</code></td><td>Array of bone matrices packed into a texture. Use <code>S_FetchMatrix</code> built-in method to fetch a matrix by its index.</td></tr>
+<tr><td>fyrox_useSkeletalAnimation</td><td><code>bool</code></td><td>Whether skinned meshes is rendering or not.</td></tr>
+<tr><td>fyrox_cameraPosition</td><td><code>vec3</code></td><td>Position of the camera.</td></tr>
 <tr><td>fyrox_usePOM</td><td><code>bool</code></td><td>Whether to use parallax mapping or not.</td></tr>
-<tr><td>fyrox_lightPosition</td><td><code>Vector3</code></td><td>Light position.</td></tr>
+<tr><td>fyrox_lightPosition</td><td><code>vec3</code></td><td>Light position.</td></tr>
 </tbody></table>
 </div>
 <p>To use any of the properties, just define a uniform with an appropriate name:</p>
