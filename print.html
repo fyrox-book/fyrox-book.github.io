@@ -4874,8 +4874,23 @@ for each you can have a property called <code>time</code>, and then you can defi
 and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in 
 a &quot;global namespace&quot;, which means that every sub-shader has &quot;access&quot; to the properties.</p>
 <h2 id="built-in-properties"><a class="header" href="#built-in-properties">Built-in properties</a></h2>
-<p>There are a number of built-in properties, the full list is available
-<a href="https://docs.rs/fyrox/0.23.1/fyrox/material/shader/struct.Shader.html#built-in-variables">here</a></p>
+<p>There are number of built-in properties, that Fyrox will try to assign automatically if they're defined
+in your shader:</p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>fyrox_worldMatrix</td><td><code>Matrix4</code></td><td>Local-to-world transformation.</td></tr>
+<tr><td>fyrox_worldViewProjection</td><td><code>Matrix4</code></td><td>Local-to-clip-space transform.</td></tr>
+<tr><td>fyrox_boneMatrices</td><td><code>[Matrix4; 60]</code></td><td>Array of bone matrices.</td></tr>
+<tr><td>fyrox_useSkeletalAnimation</td><td><code>Vector3</code></td><td>Whether skinned meshes is rendering or not.</td></tr>
+<tr><td>fyrox_cameraPosition</td><td><code>Vector3</code></td><td>Position of the camera.</td></tr>
+<tr><td>fyrox_usePOM</td><td><code>bool</code></td><td>Whether to use parallax mapping or not.</td></tr>
+<tr><td>fyrox_lightPosition</td><td><code>Vector3</code></td><td>Light position.</td></tr>
+</tbody></table>
+</div>
+<p>To use any of the properties, just define a uniform with an appropriate name:</p>
+<pre><code class="language-glsl">uniform mat4 fyrox_worldMatrix;
+uniform vec3 fyrox_cameraPosition;
+</code></pre>
+<p>This list will be extended in future releases.</p>
 <h2 id="predefined-render-passes"><a class="header" href="#predefined-render-passes">Predefined render passes</a></h2>
 <p>Predefined render passes helps you to create your own shader without a need to create your own render pass 
 and to quickly start writing your shaders.</p>
