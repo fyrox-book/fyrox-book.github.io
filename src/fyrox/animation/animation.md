@@ -128,4 +128,128 @@ for _ in 0..10 {
 
 The code above creates a simple animation that moves a node along X axis in various ways. The usage of the animation
 is only for the sake of completeness of the example. In the real games you need to add the animation to an animation
-player scene node and it will do the job for you.
+player scene node, and it will do the job for you.
+
+## Importing
+
+It is also possible to import an animation from external source (such as FBX files). You can do this in two major
+ways: from code or from the editor. The following sections shows how to use both ways.
+
+### From Editor
+
+At first, make sure that you have your 3D model instantiated in the scene. The following example has `agent.fbx`
+instance in the scene (to do that, just drag'n'drop your 3D model in the scene from the Asset Browser). To import 
+an animation you need to create an `Animation Player` scene node, open the [Animation Editor](anim_editor.md) and
+click the button with arrow-down icon:
+
+![Step 1](import_animation_1.png)
+
+Now you need to pick the root node of your 3D model to which you'll import your animation. Usually it will be called
+the same as your 3D model (`agent.fbx` on the screenshot below):
+
+![Step 2](import_animation_2.png)
+
+The last thing you need to do is to pick the animation you want to import:
+
+![Step 3](import_animation_3.png)
+
+If everything is correct, you can preview your animation by clicking `Preview` checkbox:
+
+![Step 4](import_animation_4.png)
+
+### From Code
+
+You can do the same as in the previous section, but from code:
+
+```rust ,edition2018,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     asset::manager::ResourceManager,
+#     core::pool::Handle,
+#     resource::model::{Model, ModelResourceExtension},
+#     scene::{animation::AnimationPlayerBuilder, base::BaseBuilder, node::Node, Scene},
+# };
+# 
+async fn create_animated_character(
+    scene: &mut Scene,
+    resource_manager: &ResourceManager,
+) -> (Handle<Node>, Handle<Node>) {
+    // Load a character model first.
+    let character_resource = resource_manager
+        .request::<Model>("path/to/my/character.fbx")
+        .await
+        .unwrap();
+
+    // Create its instance.
+    let character_instance = character_resource.instantiate(scene);
+
+    // Create a new animation player.
+    let animation_player =
+        AnimationPlayerBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
+
+    // Load an animation.
+    let animation_resource = resource_manager
+        .request::<Model>("path/to/my/animation.fbx")
+        .await
+        .unwrap();
+
+    // "Instantiate" an animation from the animation resource to the animation player.
+    // You can call this method multiple times with different animations, each time it
+    // will create a new animation instance and put it in the animation player.
+    let _animations = animation_resource.retarget_animations_to_player(
+        character_instance,
+        animation_player,
+        &mut scene.graph,
+    );
+
+    (character_instance, animation_player)
+}
+```
+
+As you can see, at first this code creates an instance of a 3D model. Then it loads an animation and creates its
+instance in the animation player. Please note, that this code uses `async`, which produces a future which should
+be driven by some executor. You can use `block_on` method to execute it at call site (this won't work on WebAssembly).
+
+It is advised to prefer the editor to code approach, because it hides all this tedious code and properly handles 
+asynchronous loading on all platforms.
+
+## Playing an Animation
+
+Animations will be played automatically if the respective animation player is has the property `Auto Apply` set to
+`true`. Since the animation player can contain multiple animations, all of them will be played at once. You can 
+enable/disable animations when needed by finding them by name from code and switching `Enabled` property:
+
+```rust ,edition2018,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     scene::{animation::AnimationPlayer, graph::Graph, node::Node},
+# };
+# 
+fn enable_animation(
+    animation_player: Handle<Node>,
+    graph: &mut Graph,
+    name: &str,
+    enabled: bool,
+) {
+    if let Some(animation_player) =
+        graph.try_get_mut_of_type::<AnimationPlayer>(animation_player)
+    {
+        // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
+        // chapter for more info).
+        let animations = animation_player.animations_mut().get_value_mut_silent();
+
+        // Find an animation with the given name.
+        if let Some((_animation_handle, animation)) = animations.find_by_name_mut(name) {
+            // You could also store _animation_handle somewhere and use  animations.get_mut/get(handle)
+            // to fetch an animation faster.
+
+            // Turn the animation on/off.
+            animation.set_enabled(enabled);
+        }
+    }
+}
+```
+
+This code could also be used to change animation properties at runtime. To do that, replace `set_enabled` with some
+other methods, such as `set_speed`, `set_loop`, `set_root_motion_settings` etc.
