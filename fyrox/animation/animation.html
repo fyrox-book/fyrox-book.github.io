@@ -290,7 +290,113 @@ for _ in 0..10 {
 <span class="boring">}</span></code></pre></pre>
 <p>The code above creates a simple animation that moves a node along X axis in various ways. The usage of the animation
 is only for the sake of completeness of the example. In the real games you need to add the animation to an animation
-player scene node and it will do the job for you.</p>
+player scene node, and it will do the job for you.</p>
+<h2 id="importing"><a class="header" href="#importing">Importing</a></h2>
+<p>It is also possible to import an animation from external source (such as FBX files). You can do this in two major
+ways: from code or from the editor. The following sections shows how to use both ways.</p>
+<h3 id="from-editor"><a class="header" href="#from-editor">From Editor</a></h3>
+<p>At first, make sure that you have your 3D model instantiated in the scene. The following example has <code>agent.fbx</code>
+instance in the scene (to do that, just drag'n'drop your 3D model in the scene from the Asset Browser). To import 
+an animation you need to create an <code>Animation Player</code> scene node, open the <a href="anim_editor.html">Animation Editor</a> and
+click the button with arrow-down icon:</p>
+<p><img src="import_animation_1.png" alt="Step 1" /></p>
+<p>Now you need to pick the root node of your 3D model to which you'll import your animation. Usually it will be called
+the same as your 3D model (<code>agent.fbx</code> on the screenshot below):</p>
+<p><img src="import_animation_2.png" alt="Step 2" /></p>
+<p>The last thing you need to do is to pick the animation you want to import:</p>
+<p><img src="import_animation_3.png" alt="Step 3" /></p>
+<p>If everything is correct, you can preview your animation by clicking <code>Preview</code> checkbox:</p>
+<p><img src="import_animation_4.png" alt="Step 4" /></p>
+<h3 id="from-code"><a class="header" href="#from-code">From Code</a></h3>
+<p>You can do the same as in the previous section, but from code:</p>
+<pre><pre class="playground"><code class="language-rust  edition2018 no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    asset::manager::ResourceManager,
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    resource::model::{Model, ModelResourceExtension},
+</span><span class="boring">    scene::{animation::AnimationPlayerBuilder, base::BaseBuilder, node::Node, Scene},
+</span><span class="boring">};
+</span><span class="boring">
+</span>async fn create_animated_character(
+    scene: &amp;mut Scene,
+    resource_manager: &amp;ResourceManager,
+) -&gt; (Handle&lt;Node&gt;, Handle&lt;Node&gt;) {
+    // Load a character model first.
+    let character_resource = resource_manager
+        .request::&lt;Model&gt;(&quot;path/to/my/character.fbx&quot;)
+        .await
+        .unwrap();
+
+    // Create its instance.
+    let character_instance = character_resource.instantiate(scene);
+
+    // Create a new animation player.
+    let animation_player =
+        AnimationPlayerBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
+
+    // Load an animation.
+    let animation_resource = resource_manager
+        .request::&lt;Model&gt;(&quot;path/to/my/animation.fbx&quot;)
+        .await
+        .unwrap();
+
+    // &quot;Instantiate&quot; an animation from the animation resource to the animation player.
+    // You can call this method multiple times with different animations, each time it
+    // will create a new animation instance and put it in the animation player.
+    let _animations = animation_resource.retarget_animations_to_player(
+        character_instance,
+        animation_player,
+        &amp;mut scene.graph,
+    );
+
+    (character_instance, animation_player)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>As you can see, at first this code creates an instance of a 3D model. Then it loads an animation and creates its
+instance in the animation player. Please note, that this code uses <code>async</code>, which produces a future which should
+be driven by some executor. You can use <code>block_on</code> method to execute it at call site (this won't work on WebAssembly).</p>
+<p>It is advised to prefer the editor to code approach, because it hides all this tedious code and properly handles 
+asynchronous loading on all platforms.</p>
+<h2 id="playing-an-animation"><a class="header" href="#playing-an-animation">Playing an Animation</a></h2>
+<p>Animations will be played automatically if the respective animation player is has the property <code>Auto Apply</code> set to
+<code>true</code>. Since the animation player can contain multiple animations, all of them will be played at once. You can 
+enable/disable animations when needed by finding them by name from code and switching <code>Enabled</code> property:</p>
+<pre><pre class="playground"><code class="language-rust  edition2018 no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{animation::AnimationPlayer, graph::Graph, node::Node},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn enable_animation(
+    animation_player: Handle&lt;Node&gt;,
+    graph: &amp;mut Graph,
+    name: &amp;str,
+    enabled: bool,
+) {
+    if let Some(animation_player) =
+        graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player)
+    {
+        // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
+        // chapter for more info).
+        let animations = animation_player.animations_mut().get_value_mut_silent();
+
+        // Find an animation with the given name.
+        if let Some((_animation_handle, animation)) = animations.find_by_name_mut(name) {
+            // You could also store _animation_handle somewhere and use  animations.get_mut/get(handle)
+            // to fetch an animation faster.
+
+            // Turn the animation on/off.
+            animation.set_enabled(enabled);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This code could also be used to change animation properties at runtime. To do that, replace <code>set_enabled</code> with some
+other methods, such as <code>set_speed</code>, <code>set_loop</code>, <code>set_root_motion_settings</code> etc.</p>
 
                     </main>
 
