@@ -23,7 +23,7 @@ timeline to adjust its position.
 ![Edit Signal](signal_edit.png)
 
 Set a meaningful name to the signal, and it is pretty much done - all you need to do next is to write signal handling
-code in your game. See [the next section](#reacting-to-signals) to learn how to do it.
+code in your game. See [the next section](#reacting-to-signal-events) to learn how to do it.
 
 ### From code
 
