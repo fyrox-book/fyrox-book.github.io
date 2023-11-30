@@ -66,8 +66,8 @@ Signal is a named marker on specific time position on the animation timeline. Si
 time passes signal's position from left-to-right (or vice versa depending on playback direction). Signals are usually used to
 attach some specific actions to a position in time. For example, you can have a walking animation and you want to emit sounds
 when character's feet touch ground. In this case you need to add a few signals at times when each foot touches the ground.
-After that all you need to do is to fetch animation events one-by-one and emit respective sounds. See [`AnimationSignal`] docs
-for more info and examples.
+After that all you need to do is to fetch animation events one-by-one and emit respective sounds. See respective 
+[chapter](signal.md) for more info.
 
 ## Creating From Code
 
