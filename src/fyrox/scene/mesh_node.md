@@ -126,4 +126,66 @@ As you can see, creating a mesh procedurally requires lots of manual work and no
 
 ## Animation
 
-Mesh node supports bone-based animation (skinning). See [Animation chapter](./../animation/animation.md) for more info.
+Mesh node supports bone-based animation (skinning) and blend shapes. See [Animation chapter](./../animation/animation.md) 
+for more info.
+
+## Data Buffers
+
+It is possible to access vertex buffer and index buffer of a mesh to either read or write some data there. 
+For example, the following code extracts world-space positions of every vertex of an animated mesh:
+
+```rust ,no_run
+# extern crate fyrox;
+use fyrox::{
+    core::algebra::{Point3, Vector3},
+    scene::{
+        graph::Graph,
+        mesh::{
+            buffer::{VertexAttributeUsage, VertexReadTrait},
+            Mesh,
+        },
+    },
+};
+
+fn extract_world_space_vertices(mesh: &Mesh, graph: &Graph) -> Vec<Vector3<f32>> {
+    let mut vertices = Vec::new();
+
+    for surface in mesh.surfaces() {
+        let data = surface.data().lock();
+
+        for vertex in data.vertex_buffer.iter() {
+            let Ok(position) = vertex.read_3_f32(VertexAttributeUsage::Position) else {
+                continue;
+            };
+
+            let Ok(weights) = vertex.read_4_f32(VertexAttributeUsage::BoneWeight) else {
+                continue;
+            };
+
+            let Ok(indices) = vertex.read_4_u8(VertexAttributeUsage::BoneIndices) else {
+                continue;
+            };
+
+            let mut world_space_vertex = Vector3::default();
+            for (weight, index) in weights.iter().zip(indices.iter()) {
+                if let Some(bone_node) = surface
+                    .bones()
+                    .get(*index as usize)
+                    .and_then(|bone_handle| graph.try_get(*bone_handle))
+                {
+                    let bone_transform =
+                        bone_node.global_transform() * bone_node.inv_bind_pose_transform();
+                    world_space_vertex += bone_transform
+                        .transform_point(&Point3::from(position))
+                        .coords
+                        .scale(*weight);
+                }
+            }
+
+            vertices.push(world_space_vertex);
+        }
+    }
+
+    vertices
+}
+```
