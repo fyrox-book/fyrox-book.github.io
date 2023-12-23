@@ -188,43 +188,10 @@ features:</p>
 <li>Ability to specify a set of variables that will be used as blending coefficients and transition rules.</li>
 </ul>
 <p>All these features consolidated in so-called animation blending state machine (ABSM). Machine is used to blend multiple 
-animation as well as perform automatic &quot;smooth&quot; transition between states. Let's have a quick look at a simple machine
-graph:</p>
-<pre><code class="language-text">                                                 +-------------+
-                                                 |  Idle Anim  |
-                                                 +------+------+
-                                                        |
-          Walk Weight                                   |
-+-----------+      +-------+           Walk-&gt;Idle Rule  |
-| Walk Anim +------+       |                            |
-+-----------+      |       |      +-------+         +---+---+
-                   | Blend |      |       +--------&gt;+       |
-                   |       +------+ Walk  |         |  Idle |
-+-----------+      |       |      |       +&lt;--------+       |
-| Aim Anim  +------+       |      +--+----+         +---+---+
-+-----------+      +-------+         |                  ^
-          Aim Weight                 | Idle-&gt;Walk Rule  |
-                                     |                  |
-                      Walk-&gt;Run Rule |    +---------+   | Run-&gt;Idle Rule
-                                     |    |         |   |
-                                     +---&gt;+   Run   +---+
-                                          |         |
-                                          +----+----+
-                                               |
-                                               |
-                                        +------+------+
-                                        |  Run Anim   |
-                                        +-------------+
-</code></pre>
-<p>Here we have Walk, Idle and Run states which use different sources of poses:</p>
-<ul>
-<li>Walk - is the most complicated here - it uses result of blending between <code>Aim</code> and <code>Walk</code> animations with different 
-weights. This is useful if your character can only walk or can walk <em>and</em> aim at the same time. Desired pose determined
-by Walk Weight and Aim Weight parameters combination.</li>
-<li>Run and idle both directly use animation as pose source.</li>
-</ul>
-<p>There are four transitions between three states each with its own rule. Rule is just a boolean parameter that indicates 
-that transition should be activated. Let's look at the code example of the above state graph:</p>
+animation as well as perform automatic &quot;smooth&quot; transition between states. In general, ABSM could be represented like
+this:</p>
+<p><img src="absm_structure.png" alt="ABSM Structure" /></p>
+<p>A simple ABSM could also be created from code:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -264,6 +231,15 @@ let idle_state = root_layer.add_state(State::new(&quot;Idle&quot;, idle));
 root_layer.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
 root_layer.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
 <span class="boring">}</span></code></pre></pre>
+<p>Here we have Walk, Idle and Run states which use different sources of poses:</p>
+<ul>
+<li>Walk - is the most complicated here - it uses result of blending between <code>Aim</code> and <code>Walk</code> animations with different
+weights. This is useful if your character can only walk or can walk <em>and</em> aim at the same time. Desired pose determined
+by Walk Weight and Aim Weight parameters combination.</li>
+<li>Run and idle both directly use animation as pose source.</li>
+</ul>
+<p>There are four transitions between three states each with its own rule. Rule is just a boolean parameter that indicates
+that transition should be activated. Let's look at the code example of the above state graph:</p>
 <p>As you can see, everything is quite straightforward. Even such simple state machine requires quite a lot of code, which
 can be removed by using ABSM editor. Read the next chapter to learn about it.</p>
 <h2 id="multiple-absm-per-model"><a class="header" href="#multiple-absm-per-model">Multiple ABSM per model</a></h2>
