@@ -102,7 +102,7 @@
     - [Text](./fyrox/ui/text.md)        
     - [Text box](./fyrox/ui/text_box.md)        
     - [Tree (WIP)](./fyrox/ui/tree.md)        
-    - [Vector image (WIP)](./fyrox/ui/vector_image.md)        
+    - [Vector image](./fyrox/ui/vector_image.md)        
     - [Window](./fyrox/ui/window.md)        
     - [Wrap panel](./fyrox/ui/wrap_panel.md)        
 - [Serialization](./fyrox/serialization/index.md)
