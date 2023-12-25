@@ -29,6 +29,11 @@ delete a current content when changing it to some other. If you'll leave button'
 then your button may behave weirdly. Some of the widgets (like layout panels) works directly with their 
 children widgets and do not have "external" handles.
 
+## Widgets 
+
+See a respective chapter for each widget to learn how it can be created and tweaked. Keep in mind, that UI 
+editor is a new feature of the engine and the book's chapters could lack some information about the editor. 
+
 ## Video 
 
 The following video shows how to create a simple main menu for a 2D platformer.

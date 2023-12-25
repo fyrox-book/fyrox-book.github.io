@@ -340,6 +340,18 @@ impl Plugin for MyPlugin {
 }
 ```
 
+## Custom widget or composition of widgets. 
+ 
+When do you need a custom widget? The answer depends on the use case, but the general rules here is quite simple:
+
+- If your widget exist in a single instance, then there is no need to create a custom widget for it.
+- If you need to create multiple instances of your widget, and each widget will carry some specific data, then you
+  definitely need a custom widget.
+
+Custom widgets have some limitations that could be limiting, one of them is that custom widgets do not have
+access to your code, since they're "living" inside UI and know nothing about the "environment" where they're
+being used.
+
 ## Source Code and Web Demo
 
 Full source code for this chapter can be found [here](https://github.com/FyroxEngine/Fyrox-demo-projects/blob/main/ui/game/src/custom.rs)

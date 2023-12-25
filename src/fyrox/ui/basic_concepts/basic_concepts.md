@@ -4,8 +4,8 @@ This chapter should help you understand basic concepts lying in the foundation o
 
 ## Stateful
 
-**Stateful UI* means that we can create and destroy widgets when we need to, it is the opposite approach of 
-**immediate-mode** or **stateless UIs** when you don't have long-lasting state for your widgets
+Stateful UI means that we can create and destroy widgets when we need to, it is the opposite approach of 
+immediate-mode or stateless UIs when you don't have long-lasting state for your widgets
 (usually stateless UI hold its state only for one or two frames). 
 
 Stateful UI is much more powerful and flexible, it allows you to have complex layout system without having to 
@@ -15,6 +15,13 @@ performance.
 Stateful UI is a must for complex user interfaces that requires rich layout and high performance. I'm not telling
 that you _can't_ do it in immediate mode UI, you can, but using tons of hacks. See [Layout](#layout) section for
 more info.
+
+## Model-View-Controller
+
+The UI system is designed to be used in a classic model-view-controller MVC approach. Model in this case is your game
+state, view is the UI system, controller is your event handlers. In other words - the UI shows what happens in your game
+and does not store any game-related information. This is quite old, yet powerful mechanism that decouples UI code from 
+game code very efficiently and allows you to change game code and UI code independently. 
 
 ## Node-based architecture
 
@@ -115,22 +122,155 @@ is used for **every** node by default.
 2. Direct - a message passed directly to every node that are capable to handle it. There is actual routing in this 
 case. Direct routing is used in rare cases when you need to catch a message outside its normal "bubble" route.
 
+Bubble message routing is used to handle complex hierarchies of widgets with ease. Let's take a look at the button
+example above - it has text widget as a content and when, for instance, you hover a mouse over the text widget the UI
+system creates a "mouse moved" message and sends it to the text. Once it was processed by the text, it "floats" one
+level of hierarchy up - to the button widget itself. This way the button widget can process mouse events as well.
+
 ## Layout
 
-The engine uses very complex, yet powerful layout system that allows you to build complex user interfaces with 
+The UI systems uses complex, yet powerful layout system that allows you to build complex user interfaces with 
 complex layout. Layout pass has two _recursive_ sub-passes:
 
-1. Measurement - the sub-pass is used to fetch the desired size of each node in hierarchy.  
-2. Arrangement - the sub-pass is used to set final position and size of each node in hierarchy.
+1. Measurement - the sub-pass is used to fetch the desired size of each widget in hierarchy. Each widget in the hierarchy
+"asked" for its desired size with the constraint from a parent widget. This step is recursive - to know a desired size
+of a widget root of some hierarchy you need to recursively fetch the desired sizes of every descendant.
+2. Arrangement - the sub-pass is used to set final position and size of each widget in hierarchy. It uses desired size
+of every widget from the previous step to set the final size and relative position. This step is recursive.
 
-Such split is required because we need to know desired size of each node in hierarchy before we can actually do an
-arrangement.
+Such separation in two passes is required because we need to know desired size of each node in hierarchy before we can 
+actually do an arrangement.
+
+## Code-first and Editor-first approaches
+
+The UI system supports both ways of making a UI:
+
+1) Code-first approach is used when your user interface is procedural and its appearance is heavily depends on
+your game logic. In this case you need to use various widget builder to create UIs.
+2) Editor-first approach is used when you have relatively static (animations does not count) user interface,
+that almost does not change in time. In this case you can use built-in WYSIWYG (what-you-see-is-what-you-get) 
+editor. See [Editor](../editor/editor.md) chapter for more info. 
+
+In case of code-first approach you should prefer so-called _fluent syntax_: this means that you can create your
+widget in series of nested call of other widget builders. In code, it looks something like this:
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle, resource::texture::Texture,
+#     asset::manager::ResourceManager,
+#     gui::{
+#         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+#         UserInterface,
+#     },
+#     utils::into_gui_texture,
+# };
+# fn create_fancy_button(ui: &mut UserInterface, resource_manager: ResourceManager) -> Handle<UiNode> {
+# let ctx = &mut ui.build_ctx();
+ButtonBuilder::new(WidgetBuilder::new())
+    .with_back(
+        ImageBuilder::new(WidgetBuilder::new())
+            .with_texture(into_gui_texture(
+                resource_manager.request::<Texture, _>("path/to/your/texture"),
+            ))
+            .build(ctx),
+    )
+    .with_text("Click me!")
+    .build(ctx)
+# }
+```
+
+This code snippet creates a button with an image and a text. Actually it creates **three** widgets, that forms
+complex hierarchy. The topmost widget in hierarchy is the `Button` widget itself, it has two children widgets:
+background image and a text. Background image is set explicitly by calling image widget builder with specific
+texture. The text is created implicitly, the button builder creates `Text` widget for you and attaches it to
+the button. The structure of the button can contain _any_ amount of nodes, for example you can create a button
+that contains text with some icon. To do that, replace `.with_text("My Button")` with this:
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     asset::manager::ResourceManager, resource::texture::Texture,
+#     gui::{
+#         button::ButtonBuilder,
+#         grid::{Column, GridBuilder, Row},
+#         image::ImageBuilder,
+#         text::TextBuilder,
+#         widget::WidgetBuilder,
+#         UiNode, UserInterface,
+#     },
+#     utils::into_gui_texture,
+# };
+# 
+# fn create_fancy_button(
+#     ui: &mut UserInterface,
+#     resource_manager: ResourceManager,
+# ) -> Handle<UiNode> {
+#     let ctx = &mut ui.build_ctx();
+# 
+#     ButtonBuilder::new(WidgetBuilder::new())
+        .with_content(
+            GridBuilder::new(
+                WidgetBuilder::new()
+                    .with_child(
+                        ImageBuilder::new(WidgetBuilder::new().on_column(0))
+                            .with_texture(into_gui_texture(
+                                resource_manager.request::<Texture, _>("your_icon"),
+                            ))
+                            .build(ctx),
+                    )
+                    .with_child(
+                        TextBuilder::new(WidgetBuilder::new().on_column(1))
+                            .with_text("My Button")
+                            .build(ctx),
+                    ),
+            )
+            .add_row(Row::stretch())
+            .add_column(Column::auto())
+            .add_column(Column::stretch())
+            .build(ctx),
+        )
+#       .build(ctx)
+# }
+```
+
+Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
+the fluent syntax:
+
+```rust,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     core::pool::Handle,
+#     asset::manager::ResourceManager, resource::texture::Texture,
+#     gui::{
+#         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
+#         UserInterface,
+#     },
+#     utils::into_gui_texture,
+# };
+# fn create_fancy_button(ui: &mut UserInterface, resource_manager: ResourceManager) -> Handle<UiNode> {
+# let ctx = &mut ui.build_ctx();
+let image;
+ButtonBuilder::new(WidgetBuilder::new())
+    .with_back({
+        image = ImageBuilder::new(WidgetBuilder::new())
+            .with_texture(into_gui_texture(
+                resource_manager.request::<Texture, _>("path/to/your/texture"),
+            ))
+            .build(ctx);
+        image
+    })
+    .with_text("Click me!")
+    .build(ctx)
+# }
+// image now contains a handle of the Image widget 
+```
 
 ## Limitations
 
-1) UI system is fully decoupled from engine scenes, this means that you can't incorporate UI widgets in a scene graph. As
-a consequence, you don't have an ability to attach scripts to widgets. This limitation is intentional, and it is here
+UI system uses completely different kind of scenes - UI scenes, which are fully decoupled from game scenes. This means 
+that you can't incorporate UI widgets in a game scene. As a consequence, you don't have an ability to attach scripts to 
+widgets - their logic is strictly defined in their backing code. This limitation is intentional, and it is here
 only for one reason - decoupling of UI code from game logic. Currently, there's only one right approach to make UIs -
 to create widgets in your game plugin and sync the state of the widgets with game entities manually.
-2) Also, FyroxEd does not have a UI editor yet, which means that you need to create UI only from code. This limitation
-will be fixed in the future versions.
