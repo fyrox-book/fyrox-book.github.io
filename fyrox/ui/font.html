@@ -177,62 +177,62 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="font"><a class="header" href="#font">Font</a></h1>
-<p>Font is used to store graphical representation of characters. The engine supports TTF and OTF fonts, you can load
-pretty much any font from the internet and use it as is.</p>
+<p>Font is used to store graphical representation of unicode characters. The engine supports TTF and OTF fonts, 
+you can load pretty much any font from the internet and use it as is.</p>
 <h2 id="create-new-font"><a class="header" href="#create-new-font">Create New Font</a></h2>
 <p>There are two ways to create font instance - either load font from file, or load it directly from memory.</p>
 <h3 id="loading-font-from-file"><a class="header" href="#loading-font-from-file">Loading Font From File</a></h3>
-<p>The easiest way to create a font is load it from file:</p>
-<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
+<p>Since every font in the engine is a resource, you can load fonts using standard resource manager like so:</p>
+<pre><pre class="playground"><code class="language-rust  no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::ttf::Font;
-</span>async fn load_font_from_file() -&gt; Font {
-    let character_set = Font::default_char_set(); // ASCII character set.
-    Font::from_file(&quot;path/to/your/font.ttf&quot;, 20.0, character_set)
-        .await
-        .unwrap()
+</span><span class="boring">use fyrox::{asset::Resource, gui::font::Font, plugin::PluginContext};
+</span><span class="boring">
+</span>fn load_font_from_file(ctx: &amp;PluginContext) -&gt; Resource&lt;Font&gt; {
+    ctx.resource_manager.request::&lt;Font&gt;(&quot;path/to/my/font&quot;)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Please note, that this function is <code>async</code> due to the fact that it supports <code>fetch</code> API on WebAssembly, which does
-remote file fetching which is asynchronous by its nature. If you don't plan to support WebAssembly and don't want to
-use <code>async</code>, then the next section is for you.</p>
 <h3 id="creating-font-from-memory"><a class="header" href="#creating-font-from-memory">Creating Font From Memory</a></h3>
-<p>This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is very
-simple:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<p>This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is 
+very simple:</p>
+<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::ttf::Font;
-</span>fn load_font_from_memory(data: &amp;[u8]) -&gt; Font {
-    let character_set = Font::default_char_set(); // ASCII character set.
-    Font::from_memory(data, 20.0, character_set).unwrap()
+</span><span class="boring">use fyrox::{asset::untyped::ResourceKind, asset::Resource, gui::font::Font};
+</span><span class="boring">
+</span>fn load_font_from_memory(data: Vec&lt;u8&gt;) -&gt; Resource&lt;Font&gt; {
+    Resource::new_ok(
+        ResourceKind::Embedded,
+        Font::from_memory(data, 1024).unwrap(),
+    )
 }
 <span class="boring">}</span></code></pre></pre>
 <p><code>data</code> input parameter could be a buffer that contains any valid TTF/OTF font. For example, you can load TTF file into
 a data buffer and create font using the data buffer:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::ttf::Font;
+</span><span class="boring">use fyrox::{asset::untyped::ResourceKind, asset::Resource, gui::font::Font};
 </span><span class="boring">use std::{fs::File, io::Read};
-</span>fn load_font_from_memory() -&gt; Font {
-    let character_set = Font::default_char_set(); // ASCII character set.
-
+</span><span class="boring">
+</span>fn load_font_from_memory() -&gt; Resource&lt;Font&gt; {
     let mut data = Vec::new();
     File::open(&quot;path/to/your/font.ttf&quot;)
         .unwrap()
         .read_to_end(&amp;mut data)
         .unwrap();
 
-    Font::from_memory(data, 20.0, character_set).unwrap()
+    Resource::new_ok(
+        ResourceKind::Embedded,
+        Font::from_memory(data, 1024).unwrap(),
+    )
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="default-font"><a class="header" href="#default-font">Default Font</a></h2>
 <p>User interface provides its own font of fixed size, it is enough to cover most of the use cases, but the default font
 includes only ASCII characters, if you need extended character set, you can replace default font using the following
 code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust  no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::gui::{ttf::Font, UserInterface};
@@ -248,29 +248,45 @@ code snippet:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-change-font-size"><a class="header" href="#how-to-change-font-size">How to Change Font Size</a></h2>
-<p>Unfortunately, you need to create new font instance for that, there is a 
-<a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Use any method from above paragraphs.</p>
-<h2 id="character-set"><a class="header" href="#character-set">Character Set</a></h2>
-<p>Current font implementation requires you to define fixed character set while creating an instance. What is character
-set and how it can be extended? Character set is just a set of ranges from Unicode, for example here's korean character
-set:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<p>All you need to do is to set font size in your Text or TextBox widgets like so: </p>
+<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use std::ops::Range;
-</span>pub fn korean_char_set() -&gt; &amp;'static [Range&lt;u32&gt;] {
-    &amp;[
-        // Basic Latin + Latin Supplement
-        0x0020..0x00FF,
-        // Korean alphabets
-        0x3131..0x3163,
-        // Korean characters
-        0xAC00..0xD7A3,
-        // Invalid
-        0xFFFD..0xFFFD,
-    ]
+</span>use fyrox::{
+    core::pool::Handle,
+    gui::{text::TextBuilder, widget::WidgetBuilder, BuildContext, UiNode},
+};
+
+fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    TextBuilder::new(WidgetBuilder::new())
+        .with_text(&quot;Some text&quot;)
+        .with_font_size(30.0) // Sets the desired font size.
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>You can create custom character set yourself by defining desired ranges from Unicode.</p>
+<p>You can also change the font size at runtime using <code>TextMessage::FontSize</code> message like so:</p>
+<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    gui::{message::MessageDirection, text::TextMessage, UiNode, UserInterface},
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn set_font_size(text: Handle&lt;UiNode&gt;, ui: &amp;UserInterface, new_font_size: f32) {
+    ui.send_message(TextMessage::font_size(
+        text,
+        MessageDirection::ToWidget,
+        new_font_size,
+    ))
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="important-notes"><a class="header" href="#important-notes">Important notes</a></h2>
+<p>Internally, font may use a number of texture atlases to pack all glyphs into a single texture. Font system creates
+a new atlas for every glyph size. Each atlas could be split into multiple pages, which essentially just a texture
+of a fixed size. Such paging is needed, because there's a hardware limit of maximum texture size on video cards and
+instead of praying that everything fits into a single page, the engine automatically adds a new page if none of the
+previous cannot fit a new character.</p>
+<p>Keep in mind, that when you create a font, its atlases are empty. They're filled on demand when you try to use
+a character that wasn't used previously. </p>
 
                     </main>
 
