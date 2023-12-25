@@ -21,6 +21,7 @@ There are two major ways to create a Screen widget - using the editor or by code
 Go to `Create -> UI` menu and find `Screen` widget there, make sure it is a direct child of the
 root node of the hierarchy. Alternatively, you can right-click on the root node in the hierarchy
 and click `Create Child -> Screen`. After that you can add any number of children nodes to it.
+Screen widget does not have any special properties, so you do not need to tweak it at all.
 
 ### From Code
 
