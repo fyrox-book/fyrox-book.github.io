@@ -70,6 +70,7 @@
   - [Rendering](./fyrox/ui/rendering.md)
   - [Fonts](./fyrox/ui/font.md)
   - [Style](./fyrox/ui/style.md)
+  - [Editor](./fyrox/ui/editor/editor.md)
   - [Widgets](./fyrox/ui/widgets.md)
     - [Custom Widget](./fyrox/ui/custom.md) 
     - [Button](./fyrox/ui/button.md)
