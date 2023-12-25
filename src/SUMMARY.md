@@ -121,5 +121,4 @@
   - [2D Platformer tutorial](./fyrox/tutorials/platformer/part1.md)
 - [Performance](./fyrox/performance/index.md)
 - [Obsolete](./fyrox/obsolete/obsolete.md)
-  - [Installation (Obsolete)](./fyrox/obsolete/installation.md)
-  - [Custom game loop (Obsolete)](./fyrox/obsolete/custom_game_loop.md)
+  - [Custom game loop](./fyrox/obsolete/custom_game_loop.md)
