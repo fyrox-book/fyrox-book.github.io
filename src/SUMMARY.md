@@ -94,7 +94,7 @@
     - [Range (WIP)](./fyrox/ui/range.md)        
     - [Rect (WIP)](./fyrox/ui/rect.md)        
     - [Scroll bar](./fyrox/ui/scroll_bar.md)        
-    - [Scroll panel (WIP)](./fyrox/ui/scroll_panel.md)        
+    - [Scroll panel](./fyrox/ui/scroll_panel.md)        
     - [Scroll viewer](./fyrox/ui/scroll_viewer.md)     
     - [Screen](./fyrox/ui/screen.md)
     - [Stack panel](./fyrox/ui/stack_panel.md)        
