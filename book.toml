@@ -6,7 +6,7 @@ src = "src"
 title = "Fyrox Book"
 
 [output.html]
-default-theme = "light"
+default-theme = "navy"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/fyrox-book/fyrox-book.github.io"
 git-repository-icon = "fa-github"
