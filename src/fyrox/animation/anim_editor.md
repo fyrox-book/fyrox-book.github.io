@@ -153,19 +153,7 @@ by playing animation.
 
 ## Root Motion
 
-Root motion is a special technique that transfers motion from some node in a hierarchy to a physical capsule, which is 
-then used to perform the actual motion. You can enable/disable/setup it in the drop-down menu that opens by clicking `RM` 
-button:
-
-![root motion](./ae_rm.png)
-
-The most important part here is the `Root` handle, it should be set to a root node that moves by your animation, usually
-it is called like "hips" or similar:
-
-![root node](./ae_root_node.png)
-
-After that, you need to apply filters for axes - most of the locomotion animations "works" in oXZ plane, so Y axis should 
-be ignored. Also, if you don't have any turns in your animation, you can also filter out the rotation part.
+See [Root Motion chapter](root_motion/root_motion.md) for more info.
 
 ## Limitations
 

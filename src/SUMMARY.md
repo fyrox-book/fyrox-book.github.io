@@ -47,6 +47,7 @@
     - [Animation Blending](./fyrox/animation/blending.md)
     - [ABSM Editor](./fyrox/animation/absm_editor.md)
     - [Signals](./fyrox/animation/signal.md)
+    - [Root Motion](./fyrox/animation/root_motion/root_motion.md)
 - [Artificial Intelligence (WIP)](./fyrox/ai/ai.md)s
   - [Behaviour Trees (WIP)](./fyrox/ai/beh_tree.md)
   - [Path Finding](./fyrox/ai/pathfinding.md)
