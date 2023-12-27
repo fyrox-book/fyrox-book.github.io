@@ -1,5 +1,7 @@
 # Audio Bus
 
+<iframe width="750" height="410" src="https://youtube.com/embed/6-M3LUv9Jto" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 Audio bus is an audio processing unit that takes audio samples from any number of sound sources and passes them through
 a chain of effects (zero or more). Processed samples then can be either sent to an audio playback device (speakers, 
 headphones, etc.) or to some other audio bus. There's always one audio bus (primary) that sends its data to an audio playback 
