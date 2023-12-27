@@ -102,3 +102,63 @@ fn react_to_signal_events(
 
 You can do pretty much anything when reacting to signals. For example, this could be a prefab instantiation to
 create smoke effect under the feet, playing a footstep sound, etc.
+
+## Events from ABSM
+
+Animation blending state machines are able to collect events from the currently playing animations using 
+different strategies. This ability prevents you from tedious manual animation events collection from a bunch
+of animations manually. 
+
+```rust ,no_run
+# extern crate fyrox;
+# use fyrox::{
+#     animation::machine::{
+#         layer::LayerAnimationEventsCollection, node::AnimationEventCollectionStrategy,
+#     },
+#     core::pool::Handle,
+#     scene::{
+#         animation::{absm::AnimationBlendingStateMachine, AnimationPlayer},
+#         node::Node,
+#     },
+#     script::ScriptContext,
+# };
+# 
+fn collect_events_from_absm(
+    absm: Handle<Node>,
+    strategy: AnimationEventCollectionStrategy,
+    ctx: &mut ScriptContext,
+) -> LayerAnimationEventsCollection {
+    if let Some(absm) = ctx
+        .scene
+        .graph
+        .try_get_of_type::<AnimationBlendingStateMachine>(absm)
+    {
+        if let Some(animation_player) = ctx
+            .scene
+            .graph
+            .try_get_of_type::<AnimationPlayer>(absm.animation_player())
+        {
+            // Fetch a layer first, it could be any layer of the ABMS, but for simplicity 
+            // we'll use the first layer.
+            if let Some(layer) = absm.machine().layers().first() {
+                return layer.collect_active_animations_events(
+                    absm.machine().parameters(),
+                    animation_player.animations(),
+                    strategy,
+                );
+            }
+        }
+    }
+
+    Default::default()
+}
+```
+
+This function collects all animation events from all active animations in the specified ABSM (in its first
+layer). The arguments to it are the following:
+
+- `absm` - a handle to an animation blending state machine node.
+- `strategy` - event collection strategy, which includes all events collection, max and min weight. The 
+last two may be used if you're getting a lot of events and want to get events from the animations with max or
+min weights respectively.
+- `ctx` - current script context, available in pretty much any script methods.
