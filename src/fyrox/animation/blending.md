@@ -17,7 +17,39 @@ this:
 
 ![ABSM Structure](absm_structure.png)
 
-A simple ABSM could also be created from code:
+At the first look it may seem very complicated, but in reality it uses quite simple techniques. Let's start from
+the left side of the picture and go to the right. Yellow rectangle at the left depicts an animation player node
+that contains a bunch of animations, that will be used for blending. Two center blocks (layer 0 and layer 1) depicts
+separate layers (ABSM could have any number of layers in it). Each layer can contain an arbitrary nodes (green
+shapes), states (blue shapes), transitions (thick yellow arrows). 
+
+Nodes serves as a source of poses, that can be blended in any desired way. States are the part of the inner state 
+machine, only one state could be active at the same time. Transitions are used to specify state transition rules. 
+
+At the "exit" of each layer there's a layer filter, it is responsible for filtering out values for specific
+scene nodes and could be used to prevent some scene nodes from being animated by a certain layer. Please note
+that despite the look of it, layer filter not necessarily be applied after all animations and states are blended -
+it could be done at any moment and drawn like so only for simplicity reasons.
+
+The last, but not the least, important thing on the picture is the parameters container on the right side of the
+picture. Parameter either a transition rule, blending weight, or sampling point. If you look closely at the 
+transitions or animation blending nodes you'll see small text marks. This is the names of the respective parameters.
+
+In general, any state machine works like this - ABSM nodes are used to blend or fetch animations and their resulting
+poses are used by ABSM states. Active state provides final pose, which is then passes filtering and returned to
+you. After the last stage, you can apply the pose to a scene graph to make the resulting animation to have effect.
+
+## How to create
+
+As always, there are two major ways of creating things in Fyrox - from the editor or from code. Take your pick.
+
+## From editor
+
+Use [ABSM Editor](absm_editor.md) for to create animation blending state machines. 
+
+## From code
+
+You can always create an ABSM from code, a simple ABSM could be created like this:
 
  ```rust,no_run
 # extern crate fyrox;
@@ -69,8 +101,3 @@ that transition should be activated. Let's look at the code example of the above
 
 As you can see, everything is quite straightforward. Even such simple state machine requires quite a lot of code, which
 can be removed by using ABSM editor. Read the next chapter to learn about it.
-
-## Multiple ABSM per model
-
-You can use multiple machines to animate single model - for example one machine can be used for locomotion and other for 
-combat. This means that locomotion machine will take control over lower body and combat machine will control upper body.
