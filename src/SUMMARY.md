@@ -17,6 +17,7 @@
   - [Plugins](./fyrox/scripting/plugin.md)
   - [Executor](./fyrox/scripting/executor.md)
   - [Scripts](./fyrox/scripting/script.md)
+  - [Tasks](./fyrox/scripting/tasks.md)
 - [Scene](./fyrox/scene/scene.md)
   - [Graph](./fyrox/scene/graph.md) 
   - [Transformation](./fyrox/scene/transform.md)
