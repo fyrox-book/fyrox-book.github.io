@@ -20,11 +20,11 @@ resources used by it are loaded too.
 
 This can be achieved by adding a respective field in your script. For example, you may a have a weapon script that 
 shoots some projectiles. In this case all you need to add a `projectile: Option<ModelResource>` field in your script,
-assign it so some prefab in the editor and then instantiate it from code when shooting. Storing resource handle 
-directly in your script helps the engine to gather all resources used by parent scene and preload them too while loading
-the scene itself. Such approach prevent lags when doing actual shooting, which is especially important if you're targeting
-a WebAssembly platform. On WebAssembly all the files accessed over network API which could work with unstable connection.
-In any case, even on PC it helps a lot.
+assign it to some prefab in the editor and then [instantiate](model.md#instantiation) it from code when shooting. Storing
+resource handle directly in your script helps the engine to gather all resources used by parent scene and preload them 
+too while loading the scene itself. Such approach prevent lags when doing actual shooting, which is especially important 
+if you're targeting a WebAssembly platform. On WebAssembly all the files accessed over network API which could work with 
+unstable connection. In any case, even on PC it helps a lot.
 
 Requesting resources on demand could be useful in limited situations:
 
@@ -52,6 +52,9 @@ Typical workflow could look like this:
 2) Select desired asset in the center previewer
 3) Edit import properties of selected asset and click "Apply" button to save import options and re-load the asset with
 new options.
+
+Alternatively, you can just type in the name of some resource you're looking for in the search bar at the top of the 
+Asset Browser.
 
 Check next chapters to learn how to manage specific asset types and what their import does what.
 
