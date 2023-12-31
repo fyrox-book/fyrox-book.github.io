@@ -177,20 +177,25 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="assets"><a class="header" href="#assets">Assets</a></h1>
-<p>Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own 
-assets pipeline made to make your life easier.</p>
+<p>Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own assets 
+pipeline made to make your life easier.</p>
 <h2 id="asset-types"><a class="header" href="#asset-types">Asset Types</a></h2>
 <p>The engine offers a set of assets that should cover all of your needs:</p>
 <ul>
 <li><a href="../resources/model.html">Models</a> - are a set of objects. They can be a simple 3D model (barrels, bushes, weapons, 
 etc.) or complex scenes with lots of objects and possibly other model instances. Fyrox supports two main formats:
-FBX - which can be used to import 3D models, RGS - which are scenes made in Fyroxed. RGS models are special, as they can be 
+FBX - which can be used to import 3D models, RGS - which are scenes made in FyroxEd. RGS models are special, as they can be 
 used as <em>hierarchical prefabs</em>.</li>
 <li><a href="../resources/texture.html">Textures</a> - are images used to add graphical details to objects. The
 engine supports multiple texture formats, such as PNG, JPG, BMP, etc. Compressed textures in DDS format are also supported.</li>
 <li><a href="../resources/sound.html">Sound buffers</a> - are data buffers for sound sources. Fyrox supports WAV and OGG formats. </li>
-<li><a href="../resources/curve.html">Curves</a> - are parametric curves. They're used to create complex functions for numeric parameters.
+<li><a href="../resources/curve.html">Curves</a> - are parametric curves. They're used to create complex functions for numeric parameters. 
 They can be made in the <code>Curve Editor</code> (<code>Utils -&gt; Curve Editor</code>)</li>
+<li><a href="../sound/hrtf.html">HRIR Spheres</a> - head-related impulse response collection used for head-related transfer function
+in the HRTF sound rendering.</li>
+<li><a href="../ui/font.html">Fonts</a> - arbitrary TTF/OTF fonts.</li>
+<li><a href="../rendering/materials.html">Materials</a> - materials for rendering.</li>
+<li><a href="../rendering/shaders.html">Shaders</a> - shaders for rendering.</li>
 <li>It is also possible to create custom assets. See <a href="../resources/custom.html">respective chapter</a> for more info.</li>
 </ul>
 <h2 id="asset-management"><a class="header" href="#asset-management">Asset Management</a></h2>
@@ -202,7 +207,8 @@ and apply them. Every asset has its own set of import options. See their respect
 what each import option is for.</p>
 <h2 id="asset-instantiation"><a class="header" href="#asset-instantiation">Asset Instantiation</a></h2>
 <p>Some asset types can be instantiated in scenes; for now, you can only create direct instances from models. This
-is done by simply dragging the model you want to instantiate and dropping it on the <code>Scene Preview</code>. While dragging it, you'll also see a preview of the model.</p>
+is done by simply dragging the model you want to instantiate and dropping it on the <code>Scene Preview</code>. While dragging it, 
+you'll also see a preview of the model.</p>
 <p><img src="preview.gif" alt="preview" /></p>
 <p>The maximum amount of asset instances is not limited by the engine but it is by the memory and CPU resources of your PC. 
 Note that the engine does try to reuse data across instances as much as possible.</p>
@@ -232,8 +238,8 @@ Note that the engine does try to reuse data across instances as much as possible
 <h2 id="loading-assets"><a class="header" href="#loading-assets">Loading Assets</a></h2>
 <p>Usually, there is no need to manually handle the loading of assets since you have the editor to help with that - just create
 a scene with all the required assets. However, there are times when you may need to instantiate some asset dynamically, for 
-example, a bot prefab. For this cases, you can use the <code>ResourceManager</code> and its respective methods, such as <code>request_model</code>, 
-<code>request_texture</code>, etc.</p>
+example, a bot prefab. For these cases, you can use the <code>ResourceManager::request&lt;T&gt;</code> method with the appropriate type,
+such as <code>Model</code>, <code>Texture</code>, <code>SoundBuffer</code>, etc.</p>
 
                     </main>
 
