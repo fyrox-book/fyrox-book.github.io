@@ -5697,7 +5697,13 @@ to engine's standard material at almost 100% fidelity. </p>
 <p>Fyrox supports light maps for static lighting, that allows you to pre-compute the lighting, store it into a texture
 and use this texture for rendering. This makes lighting very fast to render, but requires additional pre-processing
 step and slightly increases memory usage. Light maps are very useful for static lights and static level geometry; they
-do not work with dynamic objects and lights. Lightmaps could be used on mobile deviecess</p>
+do not work with dynamic objects and lights. Light maps could be used on mobile devices, to significantly increase 
+performance. This is how &quot;baked&quot; light looks like:</p>
+<p><img src="fyrox/rendering/example_light_map.png" alt="example light map" /></p>
+<p>This is light map for one of the curtains in the scene on screenshot below. As you can see, there are quite a lot of
+parts on this texture, this is because the engine generates second texture coordinates for the light map, and sometimes
+it cannot generate one big chunk, and it has to add seams. Despite the look of it, the light map is actually tightly
+packed, it contains a lot of black pixels because the ambient color is black and not all pixels on it are actually lit.</p>
 <h2 id="how-to-generate"><a class="header" href="#how-to-generate">How to generate</a></h2>
 <p>There are two major ways of generating a light map: from the editor and from code. Usually, using the editor is preferable,
 because you can immediately see the results. Code-based approach could be used if you're making your own tool for light
