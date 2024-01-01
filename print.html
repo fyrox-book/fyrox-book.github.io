@@ -7541,27 +7541,22 @@ impl Plugin for Game {
 thick border around a button widget:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::gui::{
-    UserInterface,
-    widget::WidgetBuilder, 
-    border::BorderBuilder, 
-    Thickness, 
-    text::TextBuilder,
-};
-
-fn create_border_with_button(ui: &amp;mut UserInterface) {
+</span>fn create_border_with_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     BorderBuilder::new(
-        WidgetBuilder::new()
-            .with_child(
-                TextBuilder::new(WidgetBuilder::new())
-                    .with_text(&quot;I'm boxed in!&quot;)
-                    .build(&amp;mut ui.build_ctx())
-            )
+        WidgetBuilder::new().with_child(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;I'm boxed in!&quot;)
+                .build(&amp;mut ui.build_ctx()),
+        ),
     )
     //You can also use Thickness::uniform(1.0)
-    .with_stroke_thickness(Thickness {left: 1.0, right: 1.0, top: 1.0, bottom: 1.0})
-    .build(&amp;mut ui.build_ctx());
+    .with_stroke_thickness(Thickness {
+        left: 1.0,
+        right: 1.0,
+        top: 1.0,
+        bottom: 1.0,
+    })
+    .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As with other UI elements, we create the border using the BorderBuilder helper struct. The widget that should have a
@@ -7573,31 +7568,25 @@ The foreground will set the style of the boarder itself, while setting the backg
 the border. Below is an example of a blue border and a red background with white text inside.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    brush::Brush,
-</span><span class="boring">    core::color::Color,
-</span><span class="boring">    widget::WidgetBuilder, 
-</span><span class="boring">    text::TextBuilder,
-</span><span class="boring">    border::BorderBuilder,
-</span><span class="boring">    UserInterface,
-</span><span class="boring">    Thickness, 
-</span><span class="boring">};
-</span>
-<span class="boring">let mut ui = UserInterface::new(Default::default());
-</span>
-BorderBuilder::new(
-    WidgetBuilder::new()
-        .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)))
-        .with_background(Brush::Solid(Color::opaque(200, 0, 0)))
-        .with_child(
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;I'm boxed in Blue and backed in Red!&quot;)
-                .build(&amp;mut ui.build_ctx())
-        )
-)
-.with_stroke_thickness(Thickness {left: 2.0, right: 2.0, top: 2.0, bottom: 2.0})
-.build(&amp;mut ui.build_ctx());
+</span>fn create_blue_border_with_red_background(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    BorderBuilder::new(
+        WidgetBuilder::new()
+            .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)))
+            .with_background(Brush::Solid(Color::opaque(200, 0, 0)))
+            .with_child(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text(&quot;I'm boxed in Blue and backed in Red!&quot;)
+                    .build(&amp;mut ui.build_ctx()),
+            ),
+    )
+    .with_stroke_thickness(Thickness {
+        left: 2.0,
+        right: 2.0,
+        top: 2.0,
+        bottom: 2.0,
+    })
+    .build(&amp;mut ui.build_ctx())
+}
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="canvas"><a class="header" href="#canvas">Canvas</a></h1>
 <p><img src="ui/canvas.png" alt="canvas" /></p>
