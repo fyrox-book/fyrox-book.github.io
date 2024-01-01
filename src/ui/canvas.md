@@ -12,15 +12,7 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 Use `CanvasBuilder` to create Canvas instance:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{canvas::CanvasBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-# };
-# 
-fn create_canvas(ctx: &mut BuildContext) -> Handle<UiNode> {
-    CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
-}
+{{#include ../code/src/ui/canvas.rs:create_canvas}}
 ```
 
 Canvas does not have any specific options, so its creation is probably simplest of all widgets.
@@ -30,35 +22,7 @@ Canvas does not have any specific options, so its creation is probably simplest 
 Use `.with_desired_position` on children widgets to set specific position:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector2, pool::Handle},
-#     gui::{
-#         button::ButtonBuilder, canvas::CanvasBuilder, text::TextBuilder, widget::WidgetBuilder,
-#         BuildContext, UiNode,
-#     },
-# };
-# 
-fn create_canvas_with_children_widgets(ctx: &mut BuildContext) -> Handle<UiNode> {
-    CanvasBuilder::new(
-        WidgetBuilder::new()
-            .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new().with_desired_position(Vector2::new(100.0, 200.0)),
-                )
-                .with_text("Simple Text at (100.0, 200.0)")
-                .build(ctx),
-            )
-            .with_child(
-                ButtonBuilder::new(
-                    WidgetBuilder::new().with_desired_position(Vector2::new(200.0, 100.0)),
-                )
-                .with_text("Simple Button at (200.0, 100.0)")
-                .build(ctx),
-            ),
-    )
-    .build(ctx)
-}
+{{#include ../code/src/ui/canvas.rs:create_canvas_with_children_widgets}}
 ```
 
 The code snippet will create a canvas with a text widget located at (100.0, 200.0) relative to top-left corner of the
