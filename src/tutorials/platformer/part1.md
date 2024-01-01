@@ -18,7 +18,7 @@ improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:
 
 <iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-You can find the source code of the tutorial [here](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/platformer), you can
+You can find the source code of the tutorial [here](https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer), you can
 test it yourself by cloning the repository and `cargo run --package editor --release` in the `platformer` directory.
 
 ## Project
