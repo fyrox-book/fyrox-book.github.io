@@ -12,7 +12,7 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 Use `CanvasBuilder` to create Canvas instance:
 
 ```rust,no_run
-{{#include ../code/src/ui/canvas.rs:create_canvas}}
+{{#include ../code/snippets/src/ui/canvas.rs:create_canvas}}
 ```
 
 Canvas does not have any specific options, so its creation is probably simplest of all widgets.
@@ -22,7 +22,7 @@ Canvas does not have any specific options, so its creation is probably simplest 
 Use `.with_desired_position` on children widgets to set specific position:
 
 ```rust,no_run
-{{#include ../code/src/ui/canvas.rs:create_canvas_with_children_widgets}}
+{{#include ../code/snippets/src/ui/canvas.rs:create_canvas_with_children_widgets}}
 ```
 
 The code snippet will create a canvas with a text widget located at (100.0, 200.0) relative to top-left corner of the

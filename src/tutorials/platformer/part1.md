@@ -120,30 +120,7 @@ As the last preparation step, let's import all entities at the beginning, so you
 at the beginning of the `game/src/lib.rs`:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::plugin::PluginConstructor;
-use fyrox::{
-    core::{
-        algebra::{Vector2, Vector3},
-        futures::executor::block_on,
-        pool::Handle,
-        reflect::prelude::*,
-        uuid::{uuid, Uuid},
-        visitor::prelude::*, TypeUuidProvider
-    },
-    asset::manager::ResourceManager,
-    event::{ElementState, Event, WindowEvent},
-    keyboard::KeyCode,
-    impl_component_provider,
-    plugin::{Plugin, PluginContext, PluginRegistrationContext},
-    resource::texture::Texture,
-    scene::{
-        dim2::{rectangle::Rectangle, rigidbody::RigidBody},
-        node::{Node},
-        Scene, SceneLoader,
-    },
-    script::{ScriptContext, ScriptTrait},
-};
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:imports}}
 ```
 
 ## Scripts - Player
@@ -152,48 +129,7 @@ Our scene has pretty much everything we need to start adding scripts, we'll star
 move. Navigate to `game/src/lib.rs` and at the end of the file add the following code snippet:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         uuid::{uuid, Uuid},
-#         reflect::prelude::*,
-#         visitor::prelude::*, TypeUuidProvider
-#     },
-#     event::Event,
-#     impl_component_provider,
-#     gui::inspector::PropertyChanged,
-#     script::{ScriptContext, ScriptTrait},
-# };
-#[derive(Visit, Reflect, Debug, Clone, Default)]
-struct Player;
-
-impl_component_provider!(Player,);
-
-impl TypeUuidProvider for Player {
-    // Returns unique script id for serialization needs.
-    fn type_uuid() -> Uuid {
-        uuid!("c5671d19-9f1a-4286-8486-add4ebaadaec")
-    }
-}
-
-impl ScriptTrait for Player {
-    // Called once at initialization.
-    fn on_init(&mut self, context: &mut ScriptContext) {}
-    
-    // Put start logic - it is called when every other script is already initialized.
-    fn on_start(&mut self, context: &mut ScriptContext) { }
-
-    // Called whenever there is an event from OS (mouse click, keypress, etc.)
-    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {}
-
-    // Called every frame at fixed rate of 60 FPS.
-    fn on_update(&mut self, context: &mut ScriptContext) {}
-
-    // Returns unique script ID for serialization needs.
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
-}
+{{#include ../../code/tutorials/platformer/game/src/residuals.rs:player_stub_script}}
 ```
 
 This is a typical "skeleton" of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
@@ -221,11 +157,8 @@ Before we can use the script in the editor, we must tell the engine that our scr
 `register` method in the `PluginConstructor` trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:
 
-```rust,no_run,compile_fail
-fn register(&mut self, context: PluginRegistrationContext) {
-    let script_constructors = &context.serialization_context.script_constructors;
-    script_constructors.add::<Player>("Player");
-}
+```rust,no_run
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:register}}
 ```
 
 Now the engine knows about our script and will be able to use it. It is pretty much useless in the current state, but we can already
@@ -239,10 +172,7 @@ it is a perfect opportunity to learn how the engine and the editor operate with 
 we need to get its sprite first. Let's start by adding the required field in the `Player` structure:
 
 ```rust,no_run,compile_fail
-#[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
-struct Player {
-    sprite: Handle<Node>,
-}
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:sprite_field}} 
 ```
 
 After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector. 
@@ -254,62 +184,22 @@ Alright, at this point we know how to work with script properties, now we can st
 Go to the `Player` structure and add the following fields:
 
 ```rust,no_run
-# struct Foo {
-move_left: bool,
-move_right: bool,
-jump: bool,
-# }
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:movement_fields}}
 ```
 
 These fields will store the state of keyboard keys responsible for player movement. Now for `on_os_event`, add the following code there:
 
-```rust,no_run,compile_fail
-if let Event::WindowEvent { event, .. } = event {
-    if let WindowEvent::KeyboardInput { event, .. } = event {
-        let pressed = event.state == ElementState::Pressed;
-        match event.physical_key {
-            KeyCode::A => self.move_left = is_pressed,
-            KeyCode::D => self.move_right = is_pressed,
-            KeyCode::Space => self.jump = is_pressed,
-            _ => (),
-        }
-    }
-}
+```rust,no_run
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:on_os_event}}
 ```
 
 The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
 `on_update`. The method is called each frame and allows you to put game logic there:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{core::algebra::Vector2, scene::dim2::rigidbody::RigidBody, script::ScriptContext};
-# 
-# struct Foo {
-#     move_left: bool,
-#     move_right: bool,
-#     jump: bool,
-# }
-# 
-# impl Foo {
-// Called every frame at fixed rate of 60 FPS.
-fn on_update(&mut self, context: &mut ScriptContext) {
-    // The script can be assigned to any scene node, but we assert that it will work only with
-    // 2d rigid body nodes.
-    if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::<RigidBody>() {
-        let x_speed = match (self.move_left, self.move_right) {
-            (true, false) => 3.0,
-            (false, true) => -3.0,
-            _ => 0.0,
-        };
-
-        if self.jump {
-            rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0));
-        } else {
-            rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y));
-        }
-    }
-}
-# }
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:on_update_begin}}
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:on_update_closing_bracket_2}}
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:on_update_closing_bracket_1}}
 ```
 
 Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
@@ -324,24 +214,8 @@ The movement is working, but the player does not change orientation, if we'll go
 but if we'll move to the right - it looks like the player moves backward. Let's fix that by changing the horizontal scaling of the player's
 sprite. Add the following code at the end of the `if let ...` block of the code above:
 
-```rust,no_run,compile_fail
-// It is always a good practice to check whether the handles are valid, at this point we don't know
-// for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
-// execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
-if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
-    // We want to change player orientation only if he's moving.
-    if x_speed != 0.0 {
-        let local_transform = sprite.local_transform_mut();
-        let current_scale = **local_transform.scale();
-
-        local_transform.set_scale(Vector3::new(
-            // Just change X scaling to mirror player's sprite.
-            current_scale.x.copysign(-x_speed),
-            current_scale.y,
-            current_scale.z,
-        ));
-    }
-}
+```rust,no_run
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:sprite_scaling}}
 ```
 
 The comments should clarify what's going on here, but in short, we're changing the horizontal scaling of the player's sprite if the player is
@@ -357,19 +231,14 @@ the texture of the player's body sprite. Luckily for us, the engine has built-in
 following fields to the `Player`:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::animation::spritesheet::SpriteSheetAnimation;
-# struct Animation;
-# struct Player {
-animations: Vec<SpriteSheetAnimation>,
-current_animation: u32,
-# }
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:animation_fields}}
 ```
 
 Currently, we just pass default values.
 
-```rust,no_run,compile_fail
-..Default::default()
+```rust,no_run
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:animation_fields_defaults_begin}}
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:animation_fields_defaults_end}}
 ```
 
 The Player will use multiple animations in future tutorials, but for now, it will use only two - idle and run.
@@ -377,44 +246,14 @@ Now we need to somehow switch animations. Go to `on_update` in `Player` and add 
 the `x_speed` declaration:
 
 ```rust,no_run
-# struct Player {
-#     current_animation: usize,
-# }
-# impl Player {
-#     pub fn on_update(&mut self) {
-#       let x_speed = 0.0;
-if x_speed != 0.0 {
-    self.current_animation = 1;
-} else {
-    self.current_animation = 0;
-}
-#    }
-# }
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:animation_selection}}
 ```
 
 Here we assume that the run animation will be at index `1` and the idle animation at index `0`. We also need to
 apply the texture from the current animation to the player's sprite, and add the following lines at the end of `on_update`
 
-```rust,no_run,compile_fail
-if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
-    current_animation.update(context.dt);
-
-    if let Some(sprite) = context
-        .scene
-        .graph
-        .try_get_mut(self.sprite)
-        .and_then(|n| n.cast_mut::<Rectangle>())
-    {
-        // Set new frame to the sprite.
-        sprite.set_uv_rect(
-            current_animation
-                .current_frame_uv_rect()
-                .cloned()
-                .unwrap_or_default()
-                .0,
-        );
-    }
-}
+```rust,no_run
+{{#include ../../code/tutorials/platformer/game/src/lib.rs:applying_animation}}
 ```
 
 The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,

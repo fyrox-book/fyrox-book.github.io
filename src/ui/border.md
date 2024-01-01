@@ -4,7 +4,7 @@ The Border widget provides a stylized, static border around its child widget. Be
 thick border around a button widget:
 
 ```rust,no_run
-{{#include ../code/src/ui/border.rs:create_border_with_button}}
+{{#include ../code/snippets/src/ui/border.rs:create_border_with_button}}
 ```
 
 As with other UI elements, we create the border using the BorderBuilder helper struct. The widget that should have a
@@ -17,5 +17,5 @@ The foreground will set the style of the boarder itself, while setting the backg
 the border. Below is an example of a blue border and a red background with white text inside.
 
 ```rust,no_run
-{{#include ../code/src/ui/border.rs:create_blue_border_with_red_background}}
+{{#include ../code/snippets/src/ui/border.rs:create_blue_border_with_red_background}}
 ```
