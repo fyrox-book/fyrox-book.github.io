@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Sound Node - Fyrox Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="../introduction/requirements.html"><strong aria-hidden="true">2.2.</strong> System Requirements and Supported Platforms</a></li><li class="chapter-item expanded "><a href="../introduction/basic_concepts.html"><strong aria-hidden="true">2.3.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.4.</strong> Design Philosophy and Goals</a></li><li class="chapter-item expanded "><a href="../introduction/faq.html"><strong aria-hidden="true">2.5.</strong> Frequently Asked Questions</a></li></ol></li><li class="chapter-item expanded "><a href="../beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="../beginning/editor_overview.html"><strong aria-hidden="true">3.2.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="../beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../beginning/assets.html"><strong aria-hidden="true">3.4.</strong> Assets</a></li><li class="chapter-item expanded "><a href="../beginning/data_management.html"><strong aria-hidden="true">3.5.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="../scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li><li class="chapter-item expanded "><a href="../scripting/tasks.html"><strong aria-hidden="true">4.4.</strong> Tasks</a></li></ol></li><li class="chapter-item expanded "><a href="../scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="../scene/transform.html"><strong aria-hidden="true">5.2.</strong> Transformation</a></li><li class="chapter-item expanded "><a href="../scene/prefab.html"><strong aria-hidden="true">5.3.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="../scene/inheritance.html"><strong aria-hidden="true">5.4.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="../scene/base_node.html"><strong aria-hidden="true">5.5.</strong> Base Node</a></li><li class="chapter-item expanded "><a href="../scene/mesh_node.html"><strong aria-hidden="true">5.6.</strong> Mesh Node</a></li><li class="chapter-item expanded "><a href="../scene/light_node.html"><strong aria-hidden="true">5.7.</strong> Light Node</a></li><li class="chapter-item expanded "><a href="../scene/sprite_node.html"><strong aria-hidden="true">5.8.</strong> Sprite Node</a></li><li class="chapter-item expanded "><a href="../scene/particle_system_node.html"><strong aria-hidden="true">5.9.</strong> Particle System Node</a></li><li class="chapter-item expanded "><a href="../scene/terrain_node.html"><strong aria-hidden="true">5.10.</strong> Terrain Node</a></li><li class="chapter-item expanded "><a href="../scene/camera_node.html"><strong aria-hidden="true">5.11.</strong> Camera Node</a></li><li class="chapter-item expanded "><a href="../scene/decal_node.html"><strong aria-hidden="true">5.12.</strong> Decal Node</a></li><li class="chapter-item expanded "><a href="../scene/rectangle.html"><strong aria-hidden="true">5.13.</strong> Rectangle Node</a></li><li class="chapter-item expanded "><a href="../scene/custom_node.html"><strong aria-hidden="true">5.14.</strong> Custom Node</a></li><li class="chapter-item expanded "><a href="../physics/physics.html"><strong aria-hidden="true">5.15.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../physics/rigid_body.html"><strong aria-hidden="true">5.15.1.</strong> Rigid Body</a></li><li class="chapter-item expanded "><a href="../physics/collider.html"><strong aria-hidden="true">5.15.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="../physics/joint.html"><strong aria-hidden="true">5.15.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="../physics/ray.html"><strong aria-hidden="true">5.15.4.</strong> Ray Casting</a></li><li class="chapter-item expanded "><a href="../physics/ragdoll.html"><strong aria-hidden="true">5.15.5.</strong> Ragdoll</a></li></ol></li><li class="chapter-item expanded "><a href="../sound/index.html"><strong aria-hidden="true">5.16.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../sound/bus.html"><strong aria-hidden="true">5.16.1.</strong> Audio Bus</a></li><li class="chapter-item expanded "><a href="../sound/sound.html" class="active"><strong aria-hidden="true">5.16.2.</strong> Sound Node</a></li><li class="chapter-item expanded "><a href="../sound/hrtf.html"><strong aria-hidden="true">5.16.3.</strong> HRTF</a></li></ol></li><li class="chapter-item expanded "><a href="../animation/animation.html"><strong aria-hidden="true">5.17.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../animation/anim_editor.html"><strong aria-hidden="true">5.17.1.</strong> Animation Editor</a></li><li class="chapter-item expanded "><a href="../animation/blending.html"><strong aria-hidden="true">5.17.2.</strong> Animation Blending</a></li><li class="chapter-item expanded "><a href="../animation/absm_editor.html"><strong aria-hidden="true">5.17.3.</strong> ABSM Editor</a></li><li class="chapter-item expanded "><a href="../animation/signal.html"><strong aria-hidden="true">5.17.4.</strong> Signals</a></li><li class="chapter-item expanded "><a href="../animation/root_motion/root_motion.html"><strong aria-hidden="true">5.17.5.</strong> Root Motion</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../input/input.html"><strong aria-hidden="true">6.</strong> Input Handling (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">6.1.</strong> Keyboard (WIP)</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">6.2.</strong> Mouse (WIP)</a></li><li class="chapter-item expanded "><a href="../input/text.html"><strong aria-hidden="true">6.3.</strong> Raw Text Input (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../ai/ai.html"><strong aria-hidden="true">7.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ai/beh_tree.html"><strong aria-hidden="true">7.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="../ai/pathfinding.html"><strong aria-hidden="true">7.2.</strong> Path Finding</a></li><li class="chapter-item expanded "><a href="../ai/navmesh.html"><strong aria-hidden="true">7.3.</strong> Navigational Meshes</a></li></ol></li><li class="chapter-item expanded "><a href="../rendering/rendering.html"><strong aria-hidden="true">8.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rendering/shaders.html"><strong aria-hidden="true">8.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../rendering/materials.html"><strong aria-hidden="true">8.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="../rendering/lightmaps.html"><strong aria-hidden="true">8.3.</strong> Light Maps</a></li><li class="chapter-item expanded "><a href="../rendering/settings.html"><strong aria-hidden="true">8.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="../rendering/render_pass.html"><strong aria-hidden="true">8.5.</strong> Render Pass</a></li><li class="chapter-item expanded "><a href="../rendering/normal_maps.html"><strong aria-hidden="true">8.6.</strong> Normal Maps</a></li></ol></li><li class="chapter-item expanded "><a href="../resources/resources.html"><strong aria-hidden="true">9.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../resources/model.html"><strong aria-hidden="true">9.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="../resources/texture.html"><strong aria-hidden="true">9.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../resources/sound.html"><strong aria-hidden="true">9.3.</strong> Sound Buffers (WIP)</a></li><li class="chapter-item expanded "><a href="../resources/curve.html"><strong aria-hidden="true">9.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="../resources/custom.html"><strong aria-hidden="true">9.5.</strong> Custom Resource</a></li><li class="chapter-item expanded "><a href="../resources/hot_reloading.html"><strong aria-hidden="true">9.6.</strong> Hot Reloading (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../ui/ui.html"><strong aria-hidden="true">10.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">10.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../ui/editor/editor.html"><strong aria-hidden="true">10.2.</strong> Editor</a></li><li class="chapter-item expanded "><a href="../ui/rendering.html"><strong aria-hidden="true">10.3.</strong> Rendering</a></li><li class="chapter-item expanded "><a href="../ui/font.html"><strong aria-hidden="true">10.4.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="../ui/style.html"><strong aria-hidden="true">10.5.</strong> Style</a></li><li class="chapter-item expanded "><a href="../ui/widgets.html"><strong aria-hidden="true">10.6.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ui/custom.html"><strong aria-hidden="true">10.6.1.</strong> Custom widget</a></li><li class="chapter-item expanded "><a href="../ui/button.html"><strong aria-hidden="true">10.6.2.</strong> Button</a></li><li class="chapter-item expanded "><a href="../ui/border.html"><strong aria-hidden="true">10.6.3.</strong> Border</a></li><li class="chapter-item expanded "><a href="../ui/canvas.html"><strong aria-hidden="true">10.6.4.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="../ui/checkbox/check_box.html"><strong aria-hidden="true">10.6.5.</strong> Check box</a></li><li class="chapter-item expanded "><a href="../ui/curve_editor.html"><strong aria-hidden="true">10.6.6.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/decorator.html"><strong aria-hidden="true">10.6.7.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/dock.html"><strong aria-hidden="true">10.6.8.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/dropdown_list.html"><strong aria-hidden="true">10.6.9.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/expander.html"><strong aria-hidden="true">10.6.10.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/file_browser.html"><strong aria-hidden="true">10.6.11.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/grid.html"><strong aria-hidden="true">10.6.12.</strong> Grid</a></li><li class="chapter-item expanded "><a href="../ui/image.html"><strong aria-hidden="true">10.6.13.</strong> Image</a></li><li class="chapter-item expanded "><a href="../ui/inspector.html"><strong aria-hidden="true">10.6.14.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/list_view.html"><strong aria-hidden="true">10.6.15.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/menu.html"><strong aria-hidden="true">10.6.16.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/message_box.html"><strong aria-hidden="true">10.6.17.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/numeric.html"><strong aria-hidden="true">10.6.18.</strong> Numeric field</a></li><li class="chapter-item expanded "><a href="../ui/popup.html"><strong aria-hidden="true">10.6.19.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/progress_bar.html"><strong aria-hidden="true">10.6.20.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/range.html"><strong aria-hidden="true">10.6.21.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/rect.html"><strong aria-hidden="true">10.6.22.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/scroll_bar.html"><strong aria-hidden="true">10.6.23.</strong> Scroll bar</a></li><li class="chapter-item expanded "><a href="../ui/scroll_panel.html"><strong aria-hidden="true">10.6.24.</strong> Scroll panel</a></li><li class="chapter-item expanded "><a href="../ui/scroll_viewer.html"><strong aria-hidden="true">10.6.25.</strong> Scroll viewer</a></li><li class="chapter-item expanded "><a href="../ui/screen.html"><strong aria-hidden="true">10.6.26.</strong> Screen</a></li><li class="chapter-item expanded "><a href="../ui/stack_panel.html"><strong aria-hidden="true">10.6.27.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="../ui/tab_control.html"><strong aria-hidden="true">10.6.28.</strong> Tab control</a></li><li class="chapter-item expanded "><a href="../ui/text.html"><strong aria-hidden="true">10.6.29.</strong> Text</a></li><li class="chapter-item expanded "><a href="../ui/text_box.html"><strong aria-hidden="true">10.6.30.</strong> Text box</a></li><li class="chapter-item expanded "><a href="../ui/tree.html"><strong aria-hidden="true">10.6.31.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/vector_image.html"><strong aria-hidden="true">10.6.32.</strong> Vector image</a></li><li class="chapter-item expanded "><a href="../ui/window.html"><strong aria-hidden="true">10.6.33.</strong> Window</a></li><li class="chapter-item expanded "><a href="../ui/wrap_panel.html"><strong aria-hidden="true">10.6.34.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../serialization/index.html"><strong aria-hidden="true">11.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../serialization/save.html"><strong aria-hidden="true">11.1.</strong> Saved Games</a></li></ol></li><li class="chapter-item expanded "><a href="../editor/index.html"><strong aria-hidden="true">12.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editor/property_editors.html"><strong aria-hidden="true">12.1.</strong> Property Editors</a></li><li class="chapter-item expanded "><a href="../editor/settings.html"><strong aria-hidden="true">12.2.</strong> Settings</a></li></ol></li><li class="chapter-item expanded "><a href="../misc/misc.html"><strong aria-hidden="true">13.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../misc/log.html"><strong aria-hidden="true">13.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorials/tutorials.html"><strong aria-hidden="true">14.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorials/fps/intro.html"><strong aria-hidden="true">14.1.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">14.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">14.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">14.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorials/rpg/intro.html"><strong aria-hidden="true">14.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">14.2.1.</strong> Character controller</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorials/platformer/part1.html"><strong aria-hidden="true">14.3.</strong> 2D Platformer tutorial</a></li></ol></li><li class="chapter-item expanded "><a href="../performance/index.html"><strong aria-hidden="true">15.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../obsolete/obsolete.html"><strong aria-hidden="true">16.</strong> Obsolete</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../obsolete/custom_game_loop.html"><strong aria-hidden="true">16.1.</strong> Custom game loop</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Fyrox Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sound"><a class="header" href="#sound">Sound</a></h1>
+<p>In Fyrox, sounds are nodes of type <code>Sound</code>, with all the consequent properties and workflows.</p>
+<h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
+<p>There are two major ways to create sound sources: from the editor and from code.</p>
+<h3 id="from-editor"><a class="header" href="#from-editor">From Editor</a></h3>
+<p>A sound source could be created from <code>Create</code> menu (or from the same menu by right-clicking on a node in the world viewer):</p>
+<p><img src="create.png" alt="create" /></p>
+<p>After the source is created, you can select it and start editing its properties:</p>
+<p><img src="sound.png" alt="sound" /></p>
+<ul>
+<li><code>Buffer</code> - a sound buffer resource, that will be used as a source of samples. If it is empty, then no sound will be
+played. Drag'n'drop a sound resource from the Asset Browser here to assign it to the source. </li>
+<li><code>Play Once</code> - a flag, that defines whether the engine should automatically delete the sound source node from the scene
+when it is finished playing. Could be useful for one-shot sounds.</li>
+<li><code>Gain</code> - a numeric value in <code>[0..1]</code> range, that defines total volume of the sound source. Keep in mind, that this 
+value sets the volume in <em>linear</em> scale, while physically-correct approach would be to use logarithmic scale. This 
+will be fixed in future versions.</li>
+<li><code>Panning</code> - a numeric value in <code>[-1..1]</code> range, that defines how loud audio channels will be. <code>-1</code> - all the sound
+will be routed to the left channel, <code>1</code> - to the right channel. This option works only with 2D sounds (whose spatial
+blend factor is <code>0.0</code>)</li>
+<li><code>Status</code> - a switch with three possible states: <code>Stopped</code>, <code>Playing</code>, <code>Paused</code>. By default, every sound source is 
+in stopped state, do not forget to switch it to the <code>Playing</code> state, otherwise you won't hear anything.</li>
+<li><code>Looping</code> - a flag, that defines whether the sound source should be playing infinitely, or not. Looping sound source
+will never switch their status to <code>Stopped</code>.</li>
+<li><code>Pitch</code> - playback speed multiplier. By default, it is <code>1.0</code> which means default speed.</li>
+<li><code>Max Distance</code> - maximum distance, at which the sound source is affected by distance attenuation (for 3D sounds). 
+By default, it set to max possible value. Lower values could be used to prevent sound source from be silent at certain
+distance.</li>
+<li><code>Rolloff Factor</code> - a numeric value, that defines how fast the volume of the sound source will decay with increasing 
+distance to a listener.</li>
+<li><code>Playback Time</code> - desired time from which the playback should start (in seconds).</li>
+<li><code>Spatial Blend</code> - a numeric value, that defines blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is 
+fully 2D, <code>1.0</code> - the sound is fully 3D. By default, the value is <code>1.0</code>.</li>
+<li><code>Audio Bus</code> - a name of an audio bus, that will be used to process the samples from the sound source. By default, it 
+is set to <code>Primary</code>. It should match the name of some audio bus, that will be used in your scene. More info about 
+audio processing could found <a href="bus.html">here</a>.</li>
+</ul>
+<h3 id="from-code"><a class="header" href="#from-code">From Code</a></h3>
+<p>Audio files are loaded using the resource manager:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{engine::Engine, scene::Scene, scene::sound::SoundBuffer};
+</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
+</span>let sound = engine
+    .resource_manager
+    .request::&lt;SoundBuffer, _&gt;(&quot;/path/to/resource.ogg&quot;);
+<span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>Then, the node is built using the standard builder pattern:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    engine::Engine,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        sound::{SoundBuilder, Status, SoundBuffer},
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
+</span><span class="boring">let sound = engine
+</span><span class="boring">    .resource_manager
+</span><span class="boring">    .request::&lt;SoundBuffer, _&gt;(&quot;/path/to/resource.ogg&quot;);
+</span><span class="boring">
+</span>let sound_handle = SoundBuilder::new(BaseBuilder::new())
+    .with_buffer(Some(sound))
+    .with_status(Status::Playing)
+    .with_play_once(true)
+    .build(&amp;mut scene.graph);
+<span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>There are a few notable things in the example above.</p>
+<p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
+<p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. 
+One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    engine::Engine,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        sound::{SoundBuilder, Status},
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
+</span>let sound_handle = SoundBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
+
+let sound = scene.graph[sound_handle].as_sound();
+
+if sound.status() == Status::Stopped {
+    scene.graph.remove_node(sound_handle);
+}
+<span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>If we want to play background music (or anyway a repeated sound), we just set the <code>looping</code> property when building the node:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    engine::Engine,
+</span><span class="boring">    scene::{base::BaseBuilder, sound::SoundBuilder, Scene},
+</span><span class="boring">};
+</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
+</span>SoundBuilder::new(BaseBuilder::new())
+    .with_looping(true)
+    // etc.
+    .build(&amp;mut scene.graph);
+<span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a 
+corresponding <code>.options</code> file, with the following content:</p>
+<pre><code class="language-ron">(
+  stream: true
+)
+</code></pre>
+<p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
+<h2 id="2d-and-3d"><a class="header" href="#2d-and-3d">2D and 3D</a></h2>
+<p>There's no strict separation between 2D and 3D sound sources. The same source could be switched from 2D to 3D (and vice
+versa) at runtime, by just adjusting <code>Spatial Blend</code> property. Spatial blend factor is a numeric value, that defines 
+blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is fully 2D, <code>1.0</code> - the sound is fully 3D. By default, 
+the value is <code>1.0</code> which makes it 3D. Intermediate values could be used to create &quot;ambisonic&quot; sound sources - when the 
+source sounds like it is placed at some position in the world, but some part of it is just 2D and does not depend on 
+positioning.</p>
+<h2 id="audio-bus"><a class="header" href="#audio-bus">Audio bus</a></h2>
+<p>It is possible to specify target audio bus to which the sound will output its audio samples. Audio bus is responsible
+for various audio processing, such as filtering, reverb, etc. To specify output audio bus, just use the <code>set_audio_bus</code>
+method and set the name of an audio bus.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../sound/bus.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../sound/hrtf.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../sound/bus.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../sound/hrtf.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

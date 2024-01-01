@@ -1,0 +1,539 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Camera Node - Fyrox Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="../introduction/requirements.html"><strong aria-hidden="true">2.2.</strong> System Requirements and Supported Platforms</a></li><li class="chapter-item expanded "><a href="../introduction/basic_concepts.html"><strong aria-hidden="true">2.3.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.4.</strong> Design Philosophy and Goals</a></li><li class="chapter-item expanded "><a href="../introduction/faq.html"><strong aria-hidden="true">2.5.</strong> Frequently Asked Questions</a></li></ol></li><li class="chapter-item expanded "><a href="../beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="../beginning/editor_overview.html"><strong aria-hidden="true">3.2.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="../beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.3.</strong> Scene and scene graph</a></li><li class="chapter-item expanded "><a href="../beginning/assets.html"><strong aria-hidden="true">3.4.</strong> Assets</a></li><li class="chapter-item expanded "><a href="../beginning/data_management.html"><strong aria-hidden="true">3.5.</strong> Data management</a></li></ol></li><li class="chapter-item expanded "><a href="../scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="../scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li><li class="chapter-item expanded "><a href="../scripting/tasks.html"><strong aria-hidden="true">4.4.</strong> Tasks</a></li></ol></li><li class="chapter-item expanded "><a href="../scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="../scene/transform.html"><strong aria-hidden="true">5.2.</strong> Transformation</a></li><li class="chapter-item expanded "><a href="../scene/prefab.html"><strong aria-hidden="true">5.3.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="../scene/inheritance.html"><strong aria-hidden="true">5.4.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="../scene/base_node.html"><strong aria-hidden="true">5.5.</strong> Base Node</a></li><li class="chapter-item expanded "><a href="../scene/mesh_node.html"><strong aria-hidden="true">5.6.</strong> Mesh Node</a></li><li class="chapter-item expanded "><a href="../scene/light_node.html"><strong aria-hidden="true">5.7.</strong> Light Node</a></li><li class="chapter-item expanded "><a href="../scene/sprite_node.html"><strong aria-hidden="true">5.8.</strong> Sprite Node</a></li><li class="chapter-item expanded "><a href="../scene/particle_system_node.html"><strong aria-hidden="true">5.9.</strong> Particle System Node</a></li><li class="chapter-item expanded "><a href="../scene/terrain_node.html"><strong aria-hidden="true">5.10.</strong> Terrain Node</a></li><li class="chapter-item expanded "><a href="../scene/camera_node.html" class="active"><strong aria-hidden="true">5.11.</strong> Camera Node</a></li><li class="chapter-item expanded "><a href="../scene/decal_node.html"><strong aria-hidden="true">5.12.</strong> Decal Node</a></li><li class="chapter-item expanded "><a href="../scene/rectangle.html"><strong aria-hidden="true">5.13.</strong> Rectangle Node</a></li><li class="chapter-item expanded "><a href="../scene/custom_node.html"><strong aria-hidden="true">5.14.</strong> Custom Node</a></li><li class="chapter-item expanded "><a href="../physics/physics.html"><strong aria-hidden="true">5.15.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../physics/rigid_body.html"><strong aria-hidden="true">5.15.1.</strong> Rigid Body</a></li><li class="chapter-item expanded "><a href="../physics/collider.html"><strong aria-hidden="true">5.15.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="../physics/joint.html"><strong aria-hidden="true">5.15.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="../physics/ray.html"><strong aria-hidden="true">5.15.4.</strong> Ray Casting</a></li><li class="chapter-item expanded "><a href="../physics/ragdoll.html"><strong aria-hidden="true">5.15.5.</strong> Ragdoll</a></li></ol></li><li class="chapter-item expanded "><a href="../sound/index.html"><strong aria-hidden="true">5.16.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../sound/bus.html"><strong aria-hidden="true">5.16.1.</strong> Audio Bus</a></li><li class="chapter-item expanded "><a href="../sound/sound.html"><strong aria-hidden="true">5.16.2.</strong> Sound Node</a></li><li class="chapter-item expanded "><a href="../sound/hrtf.html"><strong aria-hidden="true">5.16.3.</strong> HRTF</a></li></ol></li><li class="chapter-item expanded "><a href="../animation/animation.html"><strong aria-hidden="true">5.17.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../animation/anim_editor.html"><strong aria-hidden="true">5.17.1.</strong> Animation Editor</a></li><li class="chapter-item expanded "><a href="../animation/blending.html"><strong aria-hidden="true">5.17.2.</strong> Animation Blending</a></li><li class="chapter-item expanded "><a href="../animation/absm_editor.html"><strong aria-hidden="true">5.17.3.</strong> ABSM Editor</a></li><li class="chapter-item expanded "><a href="../animation/signal.html"><strong aria-hidden="true">5.17.4.</strong> Signals</a></li><li class="chapter-item expanded "><a href="../animation/root_motion/root_motion.html"><strong aria-hidden="true">5.17.5.</strong> Root Motion</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../input/input.html"><strong aria-hidden="true">6.</strong> Input Handling (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">6.1.</strong> Keyboard (WIP)</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">6.2.</strong> Mouse (WIP)</a></li><li class="chapter-item expanded "><a href="../input/text.html"><strong aria-hidden="true">6.3.</strong> Raw Text Input (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../ai/ai.html"><strong aria-hidden="true">7.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ai/beh_tree.html"><strong aria-hidden="true">7.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="../ai/pathfinding.html"><strong aria-hidden="true">7.2.</strong> Path Finding</a></li><li class="chapter-item expanded "><a href="../ai/navmesh.html"><strong aria-hidden="true">7.3.</strong> Navigational Meshes</a></li></ol></li><li class="chapter-item expanded "><a href="../rendering/rendering.html"><strong aria-hidden="true">8.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rendering/shaders.html"><strong aria-hidden="true">8.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="../rendering/materials.html"><strong aria-hidden="true">8.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="../rendering/lightmaps.html"><strong aria-hidden="true">8.3.</strong> Light Maps</a></li><li class="chapter-item expanded "><a href="../rendering/settings.html"><strong aria-hidden="true">8.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="../rendering/render_pass.html"><strong aria-hidden="true">8.5.</strong> Render Pass</a></li><li class="chapter-item expanded "><a href="../rendering/normal_maps.html"><strong aria-hidden="true">8.6.</strong> Normal Maps</a></li></ol></li><li class="chapter-item expanded "><a href="../resources/resources.html"><strong aria-hidden="true">9.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../resources/model.html"><strong aria-hidden="true">9.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="../resources/texture.html"><strong aria-hidden="true">9.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="../resources/sound.html"><strong aria-hidden="true">9.3.</strong> Sound Buffers (WIP)</a></li><li class="chapter-item expanded "><a href="../resources/curve.html"><strong aria-hidden="true">9.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="../resources/custom.html"><strong aria-hidden="true">9.5.</strong> Custom Resource</a></li><li class="chapter-item expanded "><a href="../resources/hot_reloading.html"><strong aria-hidden="true">9.6.</strong> Hot Reloading (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="../ui/ui.html"><strong aria-hidden="true">10.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">10.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="../ui/editor/editor.html"><strong aria-hidden="true">10.2.</strong> Editor</a></li><li class="chapter-item expanded "><a href="../ui/rendering.html"><strong aria-hidden="true">10.3.</strong> Rendering</a></li><li class="chapter-item expanded "><a href="../ui/font.html"><strong aria-hidden="true">10.4.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="../ui/style.html"><strong aria-hidden="true">10.5.</strong> Style</a></li><li class="chapter-item expanded "><a href="../ui/widgets.html"><strong aria-hidden="true">10.6.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ui/custom.html"><strong aria-hidden="true">10.6.1.</strong> Custom widget</a></li><li class="chapter-item expanded "><a href="../ui/button.html"><strong aria-hidden="true">10.6.2.</strong> Button</a></li><li class="chapter-item expanded "><a href="../ui/border.html"><strong aria-hidden="true">10.6.3.</strong> Border</a></li><li class="chapter-item expanded "><a href="../ui/canvas.html"><strong aria-hidden="true">10.6.4.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="../ui/checkbox/check_box.html"><strong aria-hidden="true">10.6.5.</strong> Check box</a></li><li class="chapter-item expanded "><a href="../ui/curve_editor.html"><strong aria-hidden="true">10.6.6.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/decorator.html"><strong aria-hidden="true">10.6.7.</strong> Decorator (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/dock.html"><strong aria-hidden="true">10.6.8.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/dropdown_list.html"><strong aria-hidden="true">10.6.9.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/expander.html"><strong aria-hidden="true">10.6.10.</strong> Expander (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/file_browser.html"><strong aria-hidden="true">10.6.11.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/grid.html"><strong aria-hidden="true">10.6.12.</strong> Grid</a></li><li class="chapter-item expanded "><a href="../ui/image.html"><strong aria-hidden="true">10.6.13.</strong> Image</a></li><li class="chapter-item expanded "><a href="../ui/inspector.html"><strong aria-hidden="true">10.6.14.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/list_view.html"><strong aria-hidden="true">10.6.15.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/menu.html"><strong aria-hidden="true">10.6.16.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/message_box.html"><strong aria-hidden="true">10.6.17.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/numeric.html"><strong aria-hidden="true">10.6.18.</strong> Numeric field</a></li><li class="chapter-item expanded "><a href="../ui/popup.html"><strong aria-hidden="true">10.6.19.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/progress_bar.html"><strong aria-hidden="true">10.6.20.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/range.html"><strong aria-hidden="true">10.6.21.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/rect.html"><strong aria-hidden="true">10.6.22.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/scroll_bar.html"><strong aria-hidden="true">10.6.23.</strong> Scroll bar</a></li><li class="chapter-item expanded "><a href="../ui/scroll_panel.html"><strong aria-hidden="true">10.6.24.</strong> Scroll panel</a></li><li class="chapter-item expanded "><a href="../ui/scroll_viewer.html"><strong aria-hidden="true">10.6.25.</strong> Scroll viewer</a></li><li class="chapter-item expanded "><a href="../ui/screen.html"><strong aria-hidden="true">10.6.26.</strong> Screen</a></li><li class="chapter-item expanded "><a href="../ui/stack_panel.html"><strong aria-hidden="true">10.6.27.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="../ui/tab_control.html"><strong aria-hidden="true">10.6.28.</strong> Tab control</a></li><li class="chapter-item expanded "><a href="../ui/text.html"><strong aria-hidden="true">10.6.29.</strong> Text</a></li><li class="chapter-item expanded "><a href="../ui/text_box.html"><strong aria-hidden="true">10.6.30.</strong> Text box</a></li><li class="chapter-item expanded "><a href="../ui/tree.html"><strong aria-hidden="true">10.6.31.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="../ui/vector_image.html"><strong aria-hidden="true">10.6.32.</strong> Vector image</a></li><li class="chapter-item expanded "><a href="../ui/window.html"><strong aria-hidden="true">10.6.33.</strong> Window</a></li><li class="chapter-item expanded "><a href="../ui/wrap_panel.html"><strong aria-hidden="true">10.6.34.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../serialization/index.html"><strong aria-hidden="true">11.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../serialization/save.html"><strong aria-hidden="true">11.1.</strong> Saved Games</a></li></ol></li><li class="chapter-item expanded "><a href="../editor/index.html"><strong aria-hidden="true">12.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editor/property_editors.html"><strong aria-hidden="true">12.1.</strong> Property Editors</a></li><li class="chapter-item expanded "><a href="../editor/settings.html"><strong aria-hidden="true">12.2.</strong> Settings</a></li></ol></li><li class="chapter-item expanded "><a href="../misc/misc.html"><strong aria-hidden="true">13.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../misc/log.html"><strong aria-hidden="true">13.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorials/tutorials.html"><strong aria-hidden="true">14.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorials/fps/intro.html"><strong aria-hidden="true">14.1.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorials/fps/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">14.1.1.</strong> Character controller</a></li><li class="chapter-item expanded "><a href="../tutorials/fps/tutorial-2/tutorial-part-2.html"><strong aria-hidden="true">14.1.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="../tutorials/fps/tutorial-3/tutorial-part-3.html"><strong aria-hidden="true">14.1.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorials/rpg/intro.html"><strong aria-hidden="true">14.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">14.2.1.</strong> Character controller</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorials/platformer/part1.html"><strong aria-hidden="true">14.3.</strong> 2D Platformer tutorial</a></li></ol></li><li class="chapter-item expanded "><a href="../performance/index.html"><strong aria-hidden="true">15.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../obsolete/obsolete.html"><strong aria-hidden="true">16.</strong> Obsolete</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../obsolete/custom_game_loop.html"><strong aria-hidden="true">16.1.</strong> Custom game loop</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Fyrox Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="camera-node"><a class="header" href="#camera-node">Camera node</a></h1>
+<p>Camera is a special scene node that allows you to &quot;look&quot; at your scene from any point and with any orientation.
+Currently, the engine supports only <em>perspective</em> cameras, which could be represented as a frustum volume. Everything
+that &quot;intersects&quot; with the frustum will be rendered. </p>
+<p><img src="./frustum.svg" alt="Frustum" /></p>
+<h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
+<p>An instance of camera node could be created using <code>CameraBuilder</code>: </p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
+</span><span class="boring">};
+</span>
+fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        // Set some properties.
+        .with_fov(80.0f32.to_radians())
+        .with_z_far(256.0)
+        .build(&amp;mut scene.graph)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Orientation and position should be set in <code>BaseBuilder</code> as usual.</p>
+<h2 id="projection-modes"><a class="header" href="#projection-modes">Projection modes</a></h2>
+<p>Projection mode defines how your scene will look like after rendering, there are two projection modes available.</p>
+<h3 id="perspective"><a class="header" href="#perspective">Perspective</a></h3>
+<p>Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
+common projection type for 3D games. By default, each camera uses perspective projection. It's defined by three 
+parameters that describes frustum volume:</p>
+<ul>
+<li>Field of view angle</li>
+<li>Near clipping plane location</li>
+<li>Far clipping plane location</li>
+</ul>
+<p>Here is a simple example of how to create a camera with perspective projection:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, PerspectiveProjection, Projection},
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Perspective(PerspectiveProjection {
+            // Keep in mind that field of view expressed in radians!
+            fov: 60.0f32.to_radians(),
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="orthographic"><a class="header" href="#orthographic">Orthographic</a></h3>
+<p>Orthographic projection prevents parallel lines from converging, it does not affect object size with distance.
+If you're making 2D games or isometric 3D games, this is the projection mode you're looking for. Orthographic
+projection defined by three parameters:</p>
+<ul>
+<li>Vertical Size</li>
+<li>Near Clipping Plane</li>
+<li>Far Clipping Plane</li>
+</ul>
+<p>Vertical size defines how large the &quot;box&quot; will be in vertical axis, horizontal size is derived from vertical
+size by multiplying vertical size with aspect ratio.</p>
+<p>Here is a simple example of how to create a camera with orthographic projection:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, OrthographicProjection, Projection},
+</span><span class="boring">        graph::Graph,
+</span><span class="boring">        node::Node,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Orthographic(OrthographicProjection {
+            vertical_size: 5.0,
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
+<p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
+operation. </p>
+<p>To reduce GPU load, try to keep the Far Clipping Plane at lowest possible values. For example, if you're making a game
+with closed environment (lots of corridors, small rooms, etc.) set the Far clipping Plane to max possible distance that 
+can be &quot;seen&quot; in your game - if the largest thing is a corridor, then set the Far clipping Plane to slightly exceed the 
+length. This will force the engine to clip everything that is out of bounds and do not draw such objects.</p>
+<h2 id="skybox"><a class="header" href="#skybox">Skybox</a></h2>
+<p>Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
+such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
+be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:</p>
+<pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
+</span><span class="boring">    asset::manager::ResourceManager,
+</span><span class="boring">    resource::texture::{Texture, TextureWrapMode},
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
+</span><span class="boring">        node::Node,
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>
+async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
+    // Load skybox textures in parallel.
+    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
+        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/front.jpg&quot;),
+        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/back.jpg&quot;),
+        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/left.jpg&quot;),
+        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/right.jpg&quot;),
+        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/up.jpg&quot;),
+        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/down.jpg&quot;)
+    );
+
+    // Unwrap everything.
+    let skybox = SkyBoxBuilder {
+        front: Some(front.unwrap()),
+        back: Some(back.unwrap()),
+        left: Some(left.unwrap()),
+        right: Some(right.unwrap()),
+        top: Some(top.unwrap()),
+        bottom: Some(bottom.unwrap()),
+    }
+    .build()
+    .unwrap();
+
+    // Set S and T coordinate wrap mode, ClampToEdge will remove any possible seams on edges
+    // of the skybox.
+    let skybox_texture = skybox.cubemap().unwrap();
+    let mut data = skybox_texture.data_ref();
+    data.set_s_wrap_mode(TextureWrapMode::ClampToEdge);
+    data.set_t_wrap_mode(TextureWrapMode::ClampToEdge);
+
+    skybox
+}
+
+fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_skybox(block_on(create_skybox(resource_manager)))
+        .build(&amp;mut scene.graph)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="color-grading-look-up-tables"><a class="header" href="#color-grading-look-up-tables">Color grading look-up tables</a></h2>
+<p>Color grading Look-Up Tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
+famous &quot;mexican&quot; movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
+via color grading LUT effect. When used wisely, it can significantly improve perception of your scene.</p>
+<p>Here is the same scene having no color correction along with another case that has &quot;mexico&quot; color correction:</p>
+<div class="table-wrapper"><table><thead><tr><th>Scene</th><th>Look-up-table</th></tr></thead><tbody>
+<tr><td><img src="./no_color_correction.PNG" alt="No Color Correction" /></td><td><img src="./lut_neutral.jpg" alt="Neutral LUT" /></td></tr>
+<tr><td><img src="./with_color_correction.PNG" alt="With Color Correction" /></td><td><img src="./lut_mexico.jpg" alt="Neutral LUT" /></td></tr>
+</tbody></table>
+</div>
+<p>To use color grading LUT you could do something like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
+</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
+</span><span class="boring">    scene::{
+</span><span class="boring">        base::BaseBuilder,
+</span><span class="boring">        camera::{CameraBuilder, ColorGradingLut},
+</span><span class="boring">        node::Node,
+</span><span class="boring">        Scene,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span>
+fn create_camera_with_lut(
+    scene: &amp;mut Scene,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_color_grading_enabled(true)
+        .with_color_grading_lut(
+            block_on(ColorGradingLut::new(
+                resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/lut.jpg&quot;),
+            ))
+            .unwrap(),
+        )
+        .build(&amp;mut scene.graph)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="picking"><a class="header" href="#picking">Picking</a></h2>
+<p>In some games you may need to do mouse picking of objects in your scene. To do that, at first you need to somehow convert
+a point on the screen to ray in the world. <code>Camera</code> has <code>make_ray</code> method exactly for that purpose:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{algebra::Vector2, math::ray::Ray},
+</span><span class="boring">    renderer::Renderer,
+</span><span class="boring">    scene::camera::Camera,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn make_picking_ray(camera: &amp;Camera, point: Vector2&lt;f32&gt;, renderer: &amp;Renderer) -&gt; Ray {
+    camera.make_ray(point, renderer.get_frame_bounds())
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The ray then can be used to <a href="../physics/ray.html">perform a ray cast over physics entities</a>. This is the simplest way
+of camera picking, and you should prefer it most of the time.</p>
+<h3 id="advanced-picking"><a class="header" href="#advanced-picking">Advanced picking</a></h3>
+<p><strong>Important</strong>: The following picking method is for advanced engine users only, if you don't know the math you should not
+use it.</p>
+<p>If you know the math and don't want to create physical entities, you can use this ray to perform manual 
+ray intersection check:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{
+</span><span class="boring">        algebra::Vector3,
+</span><span class="boring">        algebra::{Matrix4, Point3},
+</span><span class="boring">        math::TriangleDefinition,
+</span><span class="boring">        math::{ray::Ray, Vector3Ext},
+</span><span class="boring">    },
+</span><span class="boring">    scene::node::Node,
+</span><span class="boring">    scene::mesh::{
+</span><span class="boring">        buffer::{VertexAttributeUsage, VertexReadTrait},
+</span><span class="boring">        surface::SurfaceData,
+</span><span class="boring">        Mesh,
+</span><span class="boring">    },
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn read_vertex_position(data: &amp;SurfaceData, i: u32) -&gt; Option&lt;Vector3&lt;f32&gt;&gt; {
+    data.vertex_buffer
+        .get(i as usize)
+        .and_then(|v| v.read_3_f32(VertexAttributeUsage::Position).ok())
+}
+
+fn transform_vertex(vertex: Vector3&lt;f32&gt;, transform: &amp;Matrix4&lt;f32&gt;) -&gt; Vector3&lt;f32&gt; {
+    transform.transform_point(&amp;Point3::from(vertex)).coords
+}
+
+fn read_triangle(
+    data: &amp;SurfaceData,
+    triangle: &amp;TriangleDefinition,
+    transform: &amp;Matrix4&lt;f32&gt;,
+) -&gt; Option&lt;[Vector3&lt;f32&gt;; 3]&gt; {
+    let a = transform_vertex(read_vertex_position(data, triangle[0])?, transform);
+    let b = transform_vertex(read_vertex_position(data, triangle[1])?, transform);
+    let c = transform_vertex(read_vertex_position(data, triangle[2])?, transform);
+    Some([a, b, c])
+}
+
+pub fn precise_ray_test(
+    node: &amp;Node,
+    ray: &amp;Ray,
+    ignore_back_faces: bool,
+) -&gt; Option&lt;(f32, Vector3&lt;f32&gt;)&gt; {
+    let mut closest_distance = f32::MAX;
+    let mut closest_point = None;
+
+    if let Some(mesh) = node.query_component_ref::&lt;Mesh&gt;() {
+        let transform = mesh.global_transform();
+
+        for surface in mesh.surfaces().iter() {
+            let data = surface.data();
+            let data = data.lock();
+
+            for triangle in data
+                .geometry_buffer
+                .iter()
+                .filter_map(|t| read_triangle(&amp;data, t, &amp;transform))
+            {
+                if ignore_back_faces {
+                    // If normal of the triangle is facing in the same direction as ray's direction,
+                    // then we skip such triangle.
+                    let normal =
+                        (triangle[1] - triangle[0]).cross(&amp;(triangle[2] - triangle[0]));
+                    if normal.dot(&amp;ray.dir) &gt;= 0.0 {
+                        continue;
+                    }
+                }
+
+                if let Some(pt) = ray.triangle_intersection_point(&amp;triangle) {
+                    let distance = ray.origin.sqr_distance(&amp;pt);
+
+                    if distance &lt; closest_distance {
+                        closest_distance = distance;
+                        closest_point = Some(pt);
+                    }
+                }
+            }
+        }
+    }
+
+    closest_point.map(|pt| (closest_distance, pt))
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>precise_ray_test</code> is what you need, it performs precise intersection check with geometry of a mesh node. It returns a
+tuple of the closest distance and the closest intersection point. </p>
+<h2 id="exposure-and-hdr"><a class="header" href="#exposure-and-hdr">Exposure and HDR</a></h2>
+<p>(WIP)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../scene/terrain_node.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../scene/decal_node.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../scene/terrain_node.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../scene/decal_node.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
