@@ -343,85 +343,40 @@ skeleton in a single command. Go to root folder of your project and execute the 
 the module in two places. The first place is to add <code>mod player;</code> line somewhere at the beginning of the <code>game/src/lib.rs</code>.
 The second place is <code>PluginConstructor::register</code> method - every script must be registered before use. Let's do so by adding
 the following code to the method:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">   core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*, TypeUuidProvider},
-</span><span class="boring">   impl_component_provider,
-</span><span class="boring">   plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
-</span><span class="boring">   script::ScriptTrait,
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">#[derive(Clone, Visit, Reflect, Debug, Default)]
-</span><span class="boring">struct Player;
-</span><span class="boring">
-</span><span class="boring">impl_component_provider!(Player);
-</span><span class="boring">
-</span><span class="boring">impl TypeUuidProvider for Player {
-</span><span class="boring">   fn type_uuid() -&gt; Uuid {
-</span><span class="boring">      unimplemented!()
-</span><span class="boring">   }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl ScriptTrait for Player {
-</span><span class="boring">   fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">      unimplemented!()
-</span><span class="boring">   }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">pub struct GameConstructor;
-</span><span class="boring">
 </span>impl PluginConstructor for GameConstructor {
-   fn register(&amp;self, context: PluginRegistrationContext) {
-      context
-              .serialization_context
-              .script_constructors
-              .add::&lt;Player&gt;(&quot;Player&quot;);
-   }
-
-<span class="boring">   fn create_instance(
-</span><span class="boring">      &amp;self,
-</span><span class="boring">      scene_path: Option&lt;&amp;str&gt;,
-</span><span class="boring">      context: PluginContext,
-</span><span class="boring">   ) -&gt; Box&lt;dyn Plugin&gt; {
-</span><span class="boring">      unimplemented!()
-</span><span class="boring">   }
-</span>}
+    fn register(&amp;self, context: PluginRegistrationContext) {
+        context
+            .serialization_context
+            .script_constructors
+            .add::&lt;Player&gt;(&quot;Player&quot;);
+    }
 <span class="boring">}</span></code></pre></pre>
 <p>Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the <code>player.rs</code>
 and you'll see quite a lot of code. Most of the methods, however, can be removed, and we're only interested in <code>on_update</code> 
 and <code>on_os_event</code>. But for now, let's add the following fields in the <code>Player</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        math::SmoothAngle, pool::Handle, reflect::prelude::*, variable::InheritableVariable,
-</span><span class="boring">        visitor::prelude::*,
-</span><span class="boring">    },
-</span><span class="boring">    scene::node::Node,
-</span><span class="boring">};
-</span><span class="boring">
 </span>#[derive(Visit, Reflect, Default, Debug, Clone)]
 pub struct Player {
-   #[visit(optional)]
-   camera_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    #[visit(optional)]
+    camera_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-   #[visit(optional)]
-   camera_hinge: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    #[visit(optional)]
+    camera_hinge: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-   #[visit(optional)]
-   state_machine: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    #[visit(optional)]
+    state_machine: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-   #[visit(optional)]
-   model_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    #[visit(optional)]
+    model_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-   #[visit(optional)]
-   model: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    #[visit(optional)]
+    model: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-   #[visit(optional)]
-   model_yaw: InheritableVariable&lt;SmoothAngle&gt;,
+    #[visit(optional)]
+    model_yaw: InheritableVariable&lt;SmoothAngle&gt;,
 
     #[reflect(hidden)]
     #[visit(skip)]
@@ -438,7 +393,7 @@ pub struct Player {
     #[reflect(hidden)]
     #[visit(skip)]
     walk_right: bool,
-    
+
     #[reflect(hidden)]
     #[visit(skip)]
     yaw: f32,
@@ -462,52 +417,36 @@ you, then you should probably read <a href="../../../scene/prefab.html#property-
 <p>Let's start writing player controller's logic. </p>
 <h3 id="event-handling"><a class="header" href="#event-handling">Event Handling</a></h3>
 <p>We'll start from keyboard and mouse event handling, add the following code to the <code>impl ScriptTrait for Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    event::{DeviceEvent, ElementState, Event, WindowEvent},
-</span><span class="boring">    keyboard::KeyCode,
-</span><span class="boring">    script::ScriptContext,
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">struct Player {
-</span><span class="boring">    walk_forward: bool,
-</span><span class="boring">    walk_backward: bool,
-</span><span class="boring">    walk_left: bool,
-</span><span class="boring">    walk_right: bool,
-</span><span class="boring">    yaw: f32,
-</span><span class="boring">    pitch: f32,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Player {
-</span>fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
-   match event {
-      Event::WindowEvent { event, .. } =&gt; {
-         if let WindowEvent::KeyboardInput { event, .. } = event {
-            let pressed = event.state == ElementState::Pressed;
-            match event.physical_key {
-               KeyCode::KeyW =&gt; self.walk_forward = pressed,
-               KeyCode::KeyS =&gt; self.walk_backward = pressed,
-               KeyCode::KeyA =&gt; self.walk_left = pressed,
-               KeyCode::KeyD =&gt; self.walk_right = pressed,
-               _ =&gt; (),
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
+        match event {
+            Event::WindowEvent { event, .. } =&gt; {
+                if let WindowEvent::KeyboardInput { event, .. } = event {
+                    if let PhysicalKey::Code(code) = event.physical_key {
+                        let pressed = event.state == ElementState::Pressed;
+                        match code {
+                            KeyCode::KeyW =&gt; self.walk_forward = pressed,
+                            KeyCode::KeyS =&gt; self.walk_backward = pressed,
+                            KeyCode::KeyA =&gt; self.walk_left = pressed,
+                            KeyCode::KeyD =&gt; self.walk_right = pressed,
+                            _ =&gt; (),
+                        }
+                    }
+                }
             }
-         }
-      }
-      Event::DeviceEvent { event, .. } =&gt; {
-         if let DeviceEvent::MouseMotion { delta } = event {
-            let mouse_sens = 0.2 * ctx.dt;
-            self.yaw -= (delta.0 as f32) * mouse_sens;
-            self.pitch = (self.pitch + (delta.1 as f32) * mouse_sens)
-                    .clamp(-90.0f32.to_radians(), 90.0f32.to_radians());
-         }
-      }
-      _ =&gt; (),
-   }
-}
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+            Event::DeviceEvent { event, .. } =&gt; {
+                if let DeviceEvent::MouseMotion { delta } = event {
+                    let mouse_sens = 0.2 * ctx.dt;
+                    self.yaw -= (delta.0 as f32) * mouse_sens;
+                    self.pitch = (self.pitch + (delta.1 as f32) * mouse_sens)
+                        .clamp(-90.0f32.to_radians(), 90.0f32.to_radians());
+                }
+            }
+            _ =&gt; (),
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
 <p>This code consists of two major sections: <code>KeyboardInput</code> event handling and <code>MouseMotion</code> event handling. Let's start
 from <code>KeyboardInput</code> event. At the beginning of it we're checking if a key was pressed or not and saving it to the
 <code>pressed</code> flag, then we check for <code>W</code>, <code>S</code>, <code>A</code>, <code>D</code> keys and set each movement flag accordingly.</p>
@@ -516,69 +455,24 @@ for our camera. Pitch calculation also includes angle clamping in <code>-90.0..9
 <h3 id="logic"><a class="header" href="#logic">Logic</a></h3>
 <p>The next important step is to apply all the data we have to a bunch of scene nodes the player consists of. Let's fill
 the <code>on_update</code> method with the following code:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    animation::machine::Parameter,
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{UnitQuaternion, Vector3},
-</span><span class="boring">        math::SmoothAngle,
-</span><span class="boring">        pool::Handle,
-</span><span class="boring">        reflect::prelude::*,
-</span><span class="boring">        uuid::{uuid, Uuid},
-</span><span class="boring">        variable::InheritableVariable,
-</span><span class="boring">        visitor::prelude::*,
-</span><span class="boring">        TypeUuidProvider,
-</span><span class="boring">    },
-</span><span class="boring">    event::{DeviceEvent, ElementState, Event, WindowEvent},
-</span><span class="boring">    impl_component_provider,
-</span><span class="boring">    keyboard::KeyCode,
-</span><span class="boring">    scene::{animation::absm::AnimationBlendingStateMachine, node::Node, rigidbody::RigidBody},
-</span><span class="boring">    script::{ScriptContext, ScriptTrait},
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">#[derive(Visit, Reflect, Default, Debug, Clone)]
-</span><span class="boring">pub struct Player {
-</span><span class="boring">    camera_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-</span><span class="boring">    camera_hinge: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-</span><span class="boring">    state_machine: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-</span><span class="boring">    model_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-</span><span class="boring">    model: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-</span><span class="boring">    model_yaw: InheritableVariable&lt;SmoothAngle&gt;,
-</span><span class="boring">    walk_forward: bool,
-</span><span class="boring">    walk_backward: bool,
-</span><span class="boring">    walk_left: bool,
-</span><span class="boring">    walk_right: bool,
-</span><span class="boring">    yaw: f32,
-</span><span class="boring">    pitch: f32,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl_component_provider!(Player);
-</span><span class="boring">
-</span><span class="boring">impl TypeUuidProvider for Player {
-</span><span class="boring">    fn type_uuid() -&gt; Uuid {
-</span><span class="boring">        unimplemented!();
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span>impl ScriptTrait for Player {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
-       // Step 1. Fetch the velocity vector from the animation blending state machine.
-       let transform = ctx.scene.graph[*self.model].global_transform();
-       let mut velocity = Vector3::default();
-       if let Some(state_machine) = ctx
-               .scene
-               .graph
-               .try_get(*self.state_machine)
-               .and_then(|node| node.query_component_ref::&lt;AnimationBlendingStateMachine&gt;())
-       {
-          if let Some(root_motion) = state_machine.machine().pose().root_motion() {
-             velocity = transform
-                     .transform_vector(&amp;root_motion.delta_position)
-                     .scale(1.0 / ctx.dt);
-          }
-       }
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        // Step 1. Fetch the velocity vector from the animation blending state machine.
+        let transform = ctx.scene.graph[*self.model].global_transform();
+        let mut velocity = Vector3::default();
+        if let Some(state_machine) = ctx
+            .scene
+            .graph
+            .try_get(*self.state_machine)
+            .and_then(|node| node.query_component_ref::&lt;AnimationBlendingStateMachine&gt;())
+        {
+            if let Some(root_motion) = state_machine.machine().pose().root_motion() {
+                velocity = transform
+                    .transform_vector(&amp;root_motion.delta_position)
+                    .scale(1.0 / ctx.dt);
+            }
+        }
 
         // Step 2. Apply the velocity to the rigid body and lock rotations.
         if let Some(body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
@@ -662,11 +556,6 @@ the <code>on_update</code> method with the following code:</p>
                 .set_parameter(&quot;Running&quot;, Parameter::Rule(moving));
         }
     }
-<span class="boring">
-</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">        Self::type_uuid()
-</span><span class="boring">    }
-</span>}
 <span class="boring">}</span></code></pre></pre>
 <p>That's a big chunk of code, but it mostly consists of a set of separate steps. Let's try to understand what each step does.</p>
 <p>Step 1 extracts the root motion vector from the animation blending state machine: at first, we're getting the current 
