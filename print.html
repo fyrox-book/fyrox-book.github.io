@@ -7431,11 +7431,6 @@ being used.</p>
 <p>To create a simple button with text you should do something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{button::ButtonBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
 </span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_text(&quot;Click me!&quot;)
@@ -7446,50 +7441,36 @@ being used.</p>
 right aligned):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{button::ButtonBuilder, widget::WidgetBuilder, UiNode, UserInterface, HorizontalAlignment, VerticalAlignment, text::TextBuilder},
-</span><span class="boring">};
-</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
-    ButtonBuilder::new(
-        WidgetBuilder::new()
-            .with_width(100.0)
-            .with_height(100.0),
-    )
-    .with_content(
-        TextBuilder::new(WidgetBuilder::new())
-            .with_text(&quot;Click me!&quot;)
-            .with_horizontal_text_alignment(HorizontalAlignment::Right)
-            .with_vertical_text_alignment(VerticalAlignment::Center)
-            .build(&amp;mut ui.build_ctx()),
-    )
-    .build(&amp;mut ui.build_ctx())
+</span>fn create_button_custom(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    ButtonBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text(&quot;Click me!&quot;)
+                .with_horizontal_text_alignment(HorizontalAlignment::Right)
+                .with_vertical_text_alignment(VerticalAlignment::Center)
+                .build(&amp;mut ui.build_ctx()),
+        )
+        .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="a-button-with-image"><a class="header" href="#a-button-with-image">A button with image</a></h2>
 <p>More fancy-looking button with an image as a background could be created using this code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, resource::texture::Texture,
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    gui::{
-</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
-</span><span class="boring">        UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_fancy_button(
+    ui: &amp;mut UserInterface,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(into_gui_texture(
-                    resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/your/texture&quot;),
-                ))
+                .with_texture(
+                    resource_manager
+                        .request::&lt;Texture&gt;(&quot;path/to/your/texture&quot;)
+                        .into(),
+                )
                 .build(ctx),
         )
         .with_text(&quot;Click me!&quot;)
@@ -7501,25 +7482,12 @@ right aligned):</p>
 useful:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    event_loop::ControlFlow,
-</span><span class="boring">    gui::{button::ButtonMessage, message::UiMessage, UiNode},
-</span><span class="boring">    plugin::{PluginContext, Plugin},
-</span><span class="boring">};
-</span><span class="boring">
-</span>struct Game {
+</span>struct MyGame {
     button: Handle&lt;UiNode&gt;,
 }
 
-impl Plugin for Game {
-    fn on_ui_message(
-        &amp;mut self,
-        context: &amp;mut PluginContext,
-        message: &amp;UiMessage,
-        control_flow: &amp;mut ControlFlow,
-    ) {
+impl Plugin for MyGame {
+    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
         if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 //
@@ -7534,25 +7502,11 @@ impl Plugin for Game {
 <p>This example shows how to create a button that will close your game.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    event_loop::ControlFlow,
-</span><span class="boring">    gui::{
-</span><span class="boring">        button::{ButtonBuilder, ButtonMessage},
-</span><span class="boring">        message::UiMessage,
-</span><span class="boring">        text::TextBuilder,
-</span><span class="boring">        widget::WidgetBuilder,
-</span><span class="boring">        UiNode, UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">    plugin::PluginContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>struct Game {
     quit_button_handle: Handle&lt;UiNode&gt;,
 }
 
-fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
@@ -7565,19 +7519,18 @@ fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
 impl Game {
     fn new(ctx: PluginContext) -&gt; Self {
         Self {
-            quit_button_handle: create_button(ctx.user_interface),
+            quit_button_handle: create_quit_button(ctx.user_interface),
         }
     }
+}
 
-    fn on_ui_message(
-        &amp;mut self,
-        context: &amp;mut PluginContext,
-        message: &amp;UiMessage,
-        control_flow: &amp;mut ControlFlow,
-    ) {
+impl Plugin for Game {
+    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
         if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.quit_button_handle {
-                *control_flow = ControlFlow::Exit;
+                if let Some(window_target) = context.window_target {
+                    window_target.exit();
+                }
             }
         }
     }
