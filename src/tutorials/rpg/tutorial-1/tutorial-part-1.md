@@ -220,110 +220,16 @@ the module in two places. The first place is to add `mod player;` line somewhere
 The second place is `PluginConstructor::register` method - every script must be registered before use. Let's do so by adding
 the following code to the method:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#    core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*, TypeUuidProvider},
-#    impl_component_provider,
-#    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
-#    script::ScriptTrait,
-# };
-# 
-# #[derive(Clone, Visit, Reflect, Debug, Default)]
-# struct Player;
-# 
-# impl_component_provider!(Player);
-# 
-# impl TypeUuidProvider for Player {
-#    fn type_uuid() -> Uuid {
-#       unimplemented!()
-#    }
-# }
-# 
-# impl ScriptTrait for Player {
-#    fn id(&self) -> Uuid {
-#       unimplemented!()
-#    }
-# }
-# 
-# pub struct GameConstructor;
-# 
-impl PluginConstructor for GameConstructor {
-   fn register(&self, context: PluginRegistrationContext) {
-      context
-              .serialization_context
-              .script_constructors
-              .add::<Player>("Player");
-   }
-
-#    fn create_instance(
-#       &self,
-#       scene_path: Option<&str>,
-#       context: PluginContext,
-#    ) -> Box<dyn Plugin> {
-#       unimplemented!()
-#    }
-}
+```rust,no_run
+{{#include ../../../code/tutorials/rpg/game/src/lib.rs:register}}
 ```
 
 Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the `player.rs`
 and you'll see quite a lot of code. Most of the methods, however, can be removed, and we're only interested in `on_update` 
 and `on_os_event`. But for now, let's add the following fields in the `Player` struct:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         math::SmoothAngle, pool::Handle, reflect::prelude::*, variable::InheritableVariable,
-#         visitor::prelude::*,
-#     },
-#     scene::node::Node,
-# };
-# 
-#[derive(Visit, Reflect, Default, Debug, Clone)]
-pub struct Player {
-   #[visit(optional)]
-   camera_pivot: InheritableVariable<Handle<Node>>,
-
-   #[visit(optional)]
-   camera_hinge: InheritableVariable<Handle<Node>>,
-
-   #[visit(optional)]
-   state_machine: InheritableVariable<Handle<Node>>,
-
-   #[visit(optional)]
-   model_pivot: InheritableVariable<Handle<Node>>,
-
-   #[visit(optional)]
-   model: InheritableVariable<Handle<Node>>,
-
-   #[visit(optional)]
-   model_yaw: InheritableVariable<SmoothAngle>,
-
-    #[reflect(hidden)]
-    #[visit(skip)]
-    walk_forward: bool,
-
-    #[reflect(hidden)]
-    #[visit(skip)]
-    walk_backward: bool,
-
-    #[reflect(hidden)]
-    #[visit(skip)]
-    walk_left: bool,
-
-    #[reflect(hidden)]
-    #[visit(skip)]
-    walk_right: bool,
-    
-    #[reflect(hidden)]
-    #[visit(skip)]
-    yaw: f32,
-
-    #[reflect(hidden)]
-    #[visit(skip)]
-    pitch: f32,
-}
+```rust,no_run
+{{#include ../../../code/tutorials/rpg/game/src/player.rs:player_struct}}
 ```
 
 There are quite a lot of them, but all of them will be in use. The first four fields will contain handles to scene nodes
@@ -345,50 +251,8 @@ Let's start writing player controller's logic.
 
 We'll start from keyboard and mouse event handling, add the following code to the `impl ScriptTrait for Player`:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     event::{DeviceEvent, ElementState, Event, WindowEvent},
-#     keyboard::KeyCode,
-#     script::ScriptContext,
-# };
-# 
-# struct Player {
-#     walk_forward: bool,
-#     walk_backward: bool,
-#     walk_left: bool,
-#     walk_right: bool,
-#     yaw: f32,
-#     pitch: f32,
-# }
-# 
-# impl Player {
-fn on_os_event(&mut self, event: &Event<()>, ctx: &mut ScriptContext) {
-   match event {
-      Event::WindowEvent { event, .. } => {
-         if let WindowEvent::KeyboardInput { event, .. } = event {
-            let pressed = event.state == ElementState::Pressed;
-            match event.physical_key {
-               KeyCode::KeyW => self.walk_forward = pressed,
-               KeyCode::KeyS => self.walk_backward = pressed,
-               KeyCode::KeyA => self.walk_left = pressed,
-               KeyCode::KeyD => self.walk_right = pressed,
-               _ => (),
-            }
-         }
-      }
-      Event::DeviceEvent { event, .. } => {
-         if let DeviceEvent::MouseMotion { delta } = event {
-            let mouse_sens = 0.2 * ctx.dt;
-            self.yaw -= (delta.0 as f32) * mouse_sens;
-            self.pitch = (self.pitch + (delta.1 as f32) * mouse_sens)
-                    .clamp(-90.0f32.to_radians(), 90.0f32.to_radians());
-         }
-      }
-      _ => (),
-   }
-}
-# }
+```rust,no_run
+{{#include ../../../code/tutorials/rpg/game/src/player.rs:on_os_event}}
 ```
 
 This code consists of two major sections: `KeyboardInput` event handling and `MouseMotion` event handling. Let's start
@@ -403,156 +267,8 @@ for our camera. Pitch calculation also includes angle clamping in `-90.0..90.0` 
 The next important step is to apply all the data we have to a bunch of scene nodes the player consists of. Let's fill
 the `on_update` method with the following code:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     animation::machine::Parameter,
-#     core::{
-#         algebra::{UnitQuaternion, Vector3},
-#         math::SmoothAngle,
-#         pool::Handle,
-#         reflect::prelude::*,
-#         uuid::{uuid, Uuid},
-#         variable::InheritableVariable,
-#         visitor::prelude::*,
-#         TypeUuidProvider,
-#     },
-#     event::{DeviceEvent, ElementState, Event, WindowEvent},
-#     impl_component_provider,
-#     keyboard::KeyCode,
-#     scene::{animation::absm::AnimationBlendingStateMachine, node::Node, rigidbody::RigidBody},
-#     script::{ScriptContext, ScriptTrait},
-# };
-# 
-# #[derive(Visit, Reflect, Default, Debug, Clone)]
-# pub struct Player {
-#     camera_pivot: InheritableVariable<Handle<Node>>,
-#     camera_hinge: InheritableVariable<Handle<Node>>,
-#     state_machine: InheritableVariable<Handle<Node>>,
-#     model_pivot: InheritableVariable<Handle<Node>>,
-#     model: InheritableVariable<Handle<Node>>,
-#     model_yaw: InheritableVariable<SmoothAngle>,
-#     walk_forward: bool,
-#     walk_backward: bool,
-#     walk_left: bool,
-#     walk_right: bool,
-#     yaw: f32,
-#     pitch: f32,
-# }
-# 
-# impl_component_provider!(Player);
-# 
-# impl TypeUuidProvider for Player {
-#     fn type_uuid() -> Uuid {
-#         unimplemented!();
-#     }
-# }
-# 
-impl ScriptTrait for Player {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
-       // Step 1. Fetch the velocity vector from the animation blending state machine.
-       let transform = ctx.scene.graph[*self.model].global_transform();
-       let mut velocity = Vector3::default();
-       if let Some(state_machine) = ctx
-               .scene
-               .graph
-               .try_get(*self.state_machine)
-               .and_then(|node| node.query_component_ref::<AnimationBlendingStateMachine>())
-       {
-          if let Some(root_motion) = state_machine.machine().pose().root_motion() {
-             velocity = transform
-                     .transform_vector(&root_motion.delta_position)
-                     .scale(1.0 / ctx.dt);
-          }
-       }
-
-        // Step 2. Apply the velocity to the rigid body and lock rotations.
-        if let Some(body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
-            body.set_ang_vel(Default::default());
-            body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
-        }
-
-        // Step 3. Rotate the model pivot according to the movement direction.
-        let quat_yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw);
-
-        if velocity.norm_squared() > 0.0 {
-            // Since we have free camera while not moving, we have to sync rotation of pivot
-            // with rotation of camera so character will start moving in look direction.
-            if let Some(model_pivot) = ctx.scene.graph.try_get_mut(*self.model_pivot) {
-                model_pivot.local_transform_mut().set_rotation(quat_yaw);
-            }
-
-            // Apply additional rotation to model - it will turn in front of walking direction.
-            let angle: f32 = if self.walk_left {
-                if self.walk_forward {
-                    45.0
-                } else if self.walk_backward {
-                    135.0
-                } else {
-                    90.0
-                }
-            } else if self.walk_right {
-                if self.walk_forward {
-                    -45.0
-                } else if self.walk_backward {
-                    -135.0
-                } else {
-                    -90.0
-                }
-            } else if self.walk_backward {
-                180.0
-            } else {
-                0.0
-            };
-
-            self.model_yaw.set_target(angle.to_radians()).update(ctx.dt);
-
-            if let Some(model) = ctx.scene.graph.try_get_mut(*self.model) {
-                model
-                    .local_transform_mut()
-                    .set_rotation(UnitQuaternion::from_axis_angle(
-                        &Vector3::y_axis(),
-                        self.model_yaw.angle,
-                    ));
-            }
-        }
-
-        if let Some(camera_pivot) = ctx.scene.graph.try_get_mut(*self.camera_pivot) {
-            camera_pivot.local_transform_mut().set_rotation(quat_yaw);
-        }
-
-        // Rotate camera hinge - this will make camera move up and down while look at character
-        // (well not exactly on character - on characters head)
-        if let Some(camera_hinge) = ctx.scene.graph.try_get_mut(*self.camera_hinge) {
-            camera_hinge
-                .local_transform_mut()
-                .set_rotation(UnitQuaternion::from_axis_angle(
-                    &Vector3::x_axis(),
-                    self.pitch,
-                ));
-        }
-
-        // Step 4. Feed the animation blending state machine with the current state of the player.
-        if let Some(state_machine) = ctx
-            .scene
-            .graph
-            .try_get_mut(*self.state_machine)
-            .and_then(|node| node.query_component_mut::<AnimationBlendingStateMachine>())
-        {
-            let moving =
-                self.walk_left || self.walk_right || self.walk_forward || self.walk_backward;
-
-            state_machine
-                .machine_mut()
-                .get_value_mut_silent()
-                .set_parameter("Running", Parameter::Rule(moving));
-        }
-    }
-# 
-#     fn id(&self) -> Uuid {
-#         Self::type_uuid()
-#     }
-}
+```rust,no_run
+{{#include ../../../code/tutorials/rpg/game/src/player.rs:on_update}}
 ```
 
 That's a big chunk of code, but it mostly consists of a set of separate steps. Let's try to understand what each step does.

@@ -9,3 +9,4 @@ platformer = { path = "../game" }
 
 [dependencies.fyrox ]
 git = "https://github.com/FyroxEngine/Fyrox"
+rev = "57d70fe286901e11673716653751083792ad0ba1"
