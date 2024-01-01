@@ -12746,27 +12746,25 @@ for service graphics, such as rigid body shapes, node bounds, and so on. Now we 
 at the beginning of the <code>game/src/lib.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::plugin::PluginConstructor;
+</span>use fyrox::keyboard::PhysicalKey;
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
-        futures::executor::block_on,
         pool::Handle,
         reflect::prelude::*,
         uuid::{uuid, Uuid},
-        visitor::prelude::*, TypeUuidProvider
+        visitor::prelude::*,
+        TypeUuidProvider,
     },
-    asset::manager::ResourceManager,
     event::{ElementState, Event, WindowEvent},
-    keyboard::KeyCode,
     impl_component_provider,
-    plugin::{Plugin, PluginContext, PluginRegistrationContext},
-    resource::texture::Texture,
+    keyboard::KeyCode,
+    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
     scene::{
+        animation::spritesheet::SpriteSheetAnimation,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
-        node::{Node},
-        Scene, SceneLoader,
+        node::Node,
+        Scene,
     },
     script::{ScriptContext, ScriptTrait},
 };
@@ -12776,18 +12774,6 @@ use fyrox::{
 move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        uuid::{uuid, Uuid},
-</span><span class="boring">        reflect::prelude::*,
-</span><span class="boring">        visitor::prelude::*, TypeUuidProvider
-</span><span class="boring">    },
-</span><span class="boring">    event::Event,
-</span><span class="boring">    impl_component_provider,
-</span><span class="boring">    gui::inspector::PropertyChanged,
-</span><span class="boring">    script::{ScriptContext, ScriptTrait},
-</span><span class="boring">};
 </span>#[derive(Visit, Reflect, Debug, Clone, Default)]
 struct Player;
 
@@ -12803,9 +12789,9 @@ impl TypeUuidProvider for Player {
 impl ScriptTrait for Player {
     // Called once at initialization.
     fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {}
-    
+
     // Put start logic - it is called when every other script is already initialized.
-    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) { }
+    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {}
 
     // Called whenever there is an event from OS (mouse click, keypress, etc.)
     fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {}
@@ -12842,12 +12828,14 @@ every method in <a href="https://docs.rs/fyrox/latest/fyrox/script/trait.ScriptT
 <p>Before we can use the script in the editor, we must tell the engine that our script exists - we must register it. Remember that
 <code>register</code> method in the <code>PluginConstructor</code> trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn register(&amp;mut self, context: PluginRegistrationContext) {
-    let script_constructors = &amp;context.serialization_context.script_constructors;
-    script_constructors.add::&lt;Player&gt;(&quot;Player&quot;);
-}
+</span>impl PluginConstructor for GameConstructor {
+    fn register(&amp;self, context: PluginRegistrationContext) {
+        let script_constructors = &amp;context.serialization_context.script_constructors;
+        script_constructors.add::&lt;Player&gt;(&quot;Player&quot;);
+    }
+    // ...
 <span class="boring">}</span></code></pre></pre>
 <p>Now the engine knows about our script and will be able to use it. It is pretty much useless in the current state, but we can already
 assign it to the player. Select the player's rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from the respective
@@ -12858,10 +12846,10 @@ it is a perfect opportunity to learn how the engine and the editor operate with 
 we need to get its sprite first. Let's start by adding the required field in the <code>Player</code> structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Inspect, Debug, Clone, Default)]
+</span>#[derive(Visit, Reflect, Debug, Clone)]
 struct Player {
     sprite: Handle&lt;Node&gt;,
-}
+    // ... 
 <span class="boring">}</span></code></pre></pre>
 <p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector. 
 To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging
@@ -12871,61 +12859,56 @@ everything is ok, the field should &quot;say&quot; something different than &quo
 Go to the <code>Player</code> structure and add the following fields:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">struct Foo {
-</span>move_left: bool,
-move_right: bool,
-jump: bool,
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>    move_left: bool,
+    move_right: bool,
+    jump: bool,
+<span class="boring">}</span></code></pre></pre>
 <p>These fields will store the state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add the following code there:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>if let Event::WindowEvent { event, .. } = event {
-    if let WindowEvent::KeyboardInput { event, .. } = event {
-        let pressed = event.state == ElementState::Pressed;
-        match event.physical_key {
-            KeyCode::A =&gt; self.move_left = is_pressed,
-            KeyCode::D =&gt; self.move_right = is_pressed,
-            KeyCode::Space =&gt; self.jump = is_pressed,
-            _ =&gt; (),
+</span>    // Called everytime when there is an event from OS (mouse click, key press, etc.)
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: &amp;mut ScriptContext) {
+        if let Event::WindowEvent { event, .. } = event {
+            if let WindowEvent::KeyboardInput { event, .. } = event {
+                if let PhysicalKey::Code(keycode) = event.physical_key {
+                    let is_pressed = event.state == ElementState::Pressed;
+
+                    match keycode {
+                        KeyCode::KeyA =&gt; self.move_left = is_pressed,
+                        KeyCode::KeyD =&gt; self.move_right = is_pressed,
+                        KeyCode::Space =&gt; self.jump = is_pressed,
+                        _ =&gt; (),
+                    }
+                }
+            }
         }
     }
-}
 <span class="boring">}</span></code></pre></pre>
 <p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
 <code>on_update</code>. The method is called each frame and allows you to put game logic there:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{core::algebra::Vector2, scene::dim2::rigidbody::RigidBody, script::ScriptContext};
-</span><span class="boring">
-</span><span class="boring">struct Foo {
-</span><span class="boring">    move_left: bool,
-</span><span class="boring">    move_right: bool,
-</span><span class="boring">    jump: bool,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Foo {
-</span>// Called every frame at fixed rate of 60 FPS.
-fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
-    // The script can be assigned to any scene node, but we assert that it will work only with
-    // 2d rigid body nodes.
-    if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::&lt;RigidBody&gt;() {
-        let x_speed = match (self.move_left, self.move_right) {
-            (true, false) =&gt; 3.0,
-            (false, true) =&gt; -3.0,
-            _ =&gt; 0.0,
-        };
+</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+        // The script can be assigned to any scene node, but we assert that it will work only with
+        // 2d rigid body nodes.
+        if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::&lt;RigidBody&gt;() {
+            let x_speed = if self.move_left {
+                3.0
+            } else if self.move_right {
+                -3.0
+            } else {
+                0.0
+            };
 
-        if self.jump {
-            rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0));
-        } else {
-            rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y));
+            if self.jump {
+                rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0))
+            } else {
+                rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y))
+            };
+            // ...
         }
     }
-}
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
 we're checking movement flags and form horizontal speed, and applying velocity to the body. Velocity is applied in two ways: if
 the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If the jump button wasn't pressed -
@@ -12935,25 +12918,26 @@ horizontally and be able to jump. You can jump to the boxes on the right and pus
 <p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite the lack of animation),
 but if we'll move to the right - it looks like the player moves backward. Let's fix that by changing the horizontal scaling of the player's
 sprite. Add the following code at the end of the <code>if let ...</code> block of the code above:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>// It is always a good practice to check whether the handles are valid, at this point we don't know
-// for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
-// execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
-if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
-    // We want to change player orientation only if he's moving.
-    if x_speed != 0.0 {
-        let local_transform = sprite.local_transform_mut();
-        let current_scale = **local_transform.scale();
+</span>            // It is always a good practice to check whether the handles are valid, at this point we don't know
+            // for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
+            // execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
+            if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
+                // We want to change player orientation only if he's moving.
+                if x_speed != 0.0 {
+                    let local_transform = sprite.local_transform_mut();
 
-        local_transform.set_scale(Vector3::new(
-            // Just change X scaling to mirror player's sprite.
-            current_scale.x.copysign(-x_speed),
-            current_scale.y,
-            current_scale.z,
-        ));
-    }
-}
+                    let current_scale = **local_transform.scale();
+
+                    local_transform.set_scale(Vector3::new(
+                        // Just change X scaling to mirror player's sprite.
+                        current_scale.x.copysign(-x_speed),
+                        current_scale.y,
+                        current_scale.z,
+                    ));
+                }
+            }
 <span class="boring">}</span></code></pre></pre>
 <p>The comments should clarify what's going on here, but in short, we're changing the horizontal scaling of the player's sprite if the player is
 moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces the sign of current horizontal scaling
@@ -12965,61 +12949,59 @@ the texture of the player's body sprite. Luckily for us, the engine has built-in
 following fields to the <code>Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::animation::spritesheet::SpriteSheetAnimation;
-</span><span class="boring">struct Animation;
-</span><span class="boring">struct Player {
-</span>animations: Vec&lt;SpriteSheetAnimation&gt;,
-current_animation: u32,
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>    animations: Vec&lt;SpriteSheetAnimation&gt;,
+    current_animation: u32,
+<span class="boring">}</span></code></pre></pre>
 <p>Currently, we just pass default values.</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>..Default::default()
+</span>impl Default for Player {
+    fn default() -&gt; Self {
+        Self {
+            // ...
+            animations: Default::default(),
+            current_animation: 0,
+        }
+    }
+}
 <span class="boring">}</span></code></pre></pre>
 <p>The Player will use multiple animations in future tutorials, but for now, it will use only two - idle and run.
 Now we need to somehow switch animations. Go to <code>on_update</code> in <code>Player</code> and add the following lines after
 the <code>x_speed</code> declaration:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">struct Player {
-</span><span class="boring">    current_animation: usize,
-</span><span class="boring">}
-</span><span class="boring">impl Player {
-</span><span class="boring">    pub fn on_update(&amp;mut self) {
-</span><span class="boring">      let x_speed = 0.0;
-</span>if x_speed != 0.0 {
-    self.current_animation = 1;
-} else {
-    self.current_animation = 0;
-}
-<span class="boring">   }
-</span><span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>            if x_speed != 0.0 {
+                self.current_animation = 0;
+            } else {
+                self.current_animation = 1;
+            }
+<span class="boring">}</span></code></pre></pre>
 <p>Here we assume that the run animation will be at index <code>1</code> and the idle animation at index <code>0</code>. We also need to
 apply the texture from the current animation to the player's sprite, and add the following lines at the end of <code>on_update</code></p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
-    current_animation.update(context.dt);
+</span>        if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
+            current_animation.update(context.dt);
 
-    if let Some(sprite) = context
-        .scene
-        .graph
-        .try_get_mut(self.sprite)
-        .and_then(|n| n.cast_mut::&lt;Rectangle&gt;())
-    {
-        // Set new frame to the sprite.
-        sprite.set_uv_rect(
-            current_animation
-                .current_frame_uv_rect()
-                .cloned()
-                .unwrap_or_default()
-                .0,
-        );
-    }
-}
+            if let Some(sprite) = context
+                .scene
+                .graph
+                .try_get_mut(self.sprite)
+                .and_then(|n| n.cast_mut::&lt;Rectangle&gt;())
+            {
+                // Set new frame to the sprite.
+                sprite
+                    .material()
+                    .data_ref()
+                    .set_texture(&amp;&quot;diffuseTexture&quot;.into(), current_animation.texture())
+                    .unwrap();
+                sprite.set_uv_rect(
+                    current_animation
+                        .current_frame_uv_rect()
+                        .unwrap_or_default(),
+                );
+            }
+        }
 <span class="boring">}</span></code></pre></pre>
 <p>The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,
 and if we're succeeded, we update it. At the next step, we're getting sprite and assigning a current frame of
