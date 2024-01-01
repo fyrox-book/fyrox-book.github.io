@@ -43,8 +43,10 @@ A scene can contain various game entities. There are two equivalent ways of crea
 - By going to `Create` in the main menu and selecting the desired entity from the drop down.
 - By right-clicking on a game entity in the `World Viewer` and selecting the desired entity from the `Add Child` sub-menu.
 
-Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats. Fyrox supports
-FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects by simply dragging the one you want and dropping it on the `Scene Preview`. While dragging it, you'll also see a preview of the object.
+Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats. 
+Fyrox supports FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects 
+by simply dragging the one you want and dropping it on the `Scene Preview`. While dragging it, you'll also see a preview 
+of the object.
 
 You can do the same with other scenes made in the editor (`rgs` files), for example, you can create a scene with a few objects in it
 with some scripts and re-use them within other scenes. Such scenes are called [prefabs](../scene/prefab.md).
@@ -99,7 +101,5 @@ giving a chance to break the editor by running the game.
 There are also number of powerful utilities that will make your life easier, they can be found under the `Utils` section of the
 main menu:
 
-- Animation Editor - allows you to create and edit animation blending state machines which are responsible for 
-animation mixing.
 - Curve Editor - allows you to create and edit curve resources to make complex laws for game parameters.
 - Path Fixer - helps you fix incorrect resource references in your scenes.

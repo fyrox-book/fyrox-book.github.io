@@ -18,7 +18,7 @@ manually by instantiating respective prefabs at runtime.
 
 ### Using FyroxEd
 
-There is a [separate chapter](../../fyrox/beginning/editor_overview.md) in the book that should help you to create a 
+There is a [separate chapter](../../beginning/editor_overview.md) in the book that should help you to create a 
 scene. After a scene is created, you can load it as any other 3D model (or prefab) using the resource manager:
 
 ```rust,no_run

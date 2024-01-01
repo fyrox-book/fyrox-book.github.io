@@ -11,7 +11,7 @@ Practical reference and user guides for [Fyrox Game Engine](https://github.com/F
 
 Fyrox Team is trying to keep the book up-to-date with the latest version from `master` branch. If something does not 
 compile with the latest release from crates.io, then you need to 
-[use the latest engine from GitHub repo](./fyrox/beginning/scripting.md#using-latest-engine-version).
+[use the latest engine from GitHub repo](./beginning/scripting.md#using-latest-engine-version).
 
 ## How to read the book
 

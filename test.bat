@@ -1,5 +1,5 @@
 clear
-cd ../Fyrox
+cd ..
 cargo build
-cd ../fyrox-book.github.io
-mdbook test -L ../Fyrox/target/debug/deps
+cd ..-book.github.io
+mdbook test -L ../target/debug/deps
