@@ -7598,12 +7598,6 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 <p>Use <code>CanvasBuilder</code> to create Canvas instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{canvas::CanvasBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
 }
@@ -7613,15 +7607,6 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 <p>Use <code>.with_desired_position</code> on children widgets to set specific position:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector2, pool::Handle},
-</span><span class="boring">    gui::{
-</span><span class="boring">        button::ButtonBuilder, canvas::CanvasBuilder, text::TextBuilder, widget::WidgetBuilder,
-</span><span class="boring">        BuildContext, UiNode,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_canvas_with_children_widgets(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     CanvasBuilder::new(
         WidgetBuilder::new()
