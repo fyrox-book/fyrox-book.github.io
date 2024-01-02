@@ -1,3 +1,5 @@
+pub mod keyboard;
+
 use fyrox::{
     event::{DeviceEvent, Event, WindowEvent},
     plugin::{Plugin, PluginContext},

@@ -50,7 +50,7 @@
     - [Signals](./animation/signal.md)
     - [Root Motion](./animation/root_motion/root_motion.md)
 - [Input Handling](./input/input.md)
-  - [Keyboard (WIP)](./input/keyboard.md)
+  - [Keyboard](./input/keyboard.md)
   - [Mouse (WIP)](./input/mouse.md)
   - [Raw Text Input (WIP)](./input/text.md)
 - [Artificial Intelligence (WIP)](./ai/ai.md)
