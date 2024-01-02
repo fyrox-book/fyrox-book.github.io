@@ -1,4 +1,5 @@
 pub mod keyboard;
+pub mod mouse;
 
 use fyrox::{
     event::{DeviceEvent, Event, WindowEvent},
