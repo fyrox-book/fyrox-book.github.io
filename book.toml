@@ -4,6 +4,7 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Fyrox Book"
+google_analytics_id = "G-ETGWNBR03Y"
 
 [output.html]
 default-theme = "navy"
