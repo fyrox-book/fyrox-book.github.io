@@ -2,7 +2,6 @@
 
 The subsections of this chapter explains how to use every widget built into Fyrox. The widgets in the table of contents to the left are ordered in alphebetical order. However, below we will order them by primary function to help introduce them to new users.
 
-
 ## Containers
 
 The Container widgets primary purpose is to contain other widgets. They are mostly used as a tool to layout the UI in visually different ways.
@@ -38,7 +37,7 @@ The Visual widgets primary purpose is to provide the user feedback generally wit
 
 Control widgets primary purpose is to provide users with intractable UI elements to control some aspect of the program.
 
-* [Button](./creating_button.md): The Button provides a press-able control that can contain other UI elements, for example a Text or Image Widget.
+* [Button](./button.md): The Button provides a press-able control that can contain other UI elements, for example a Text or Image Widget.
 * [Check Box](./checkbox/check_box.md): The Check Box is a toggle-able control that can contain other UI elements, for example a Text or Image Widget.
 * [Text Box](./text_box.md): The Text Box is a control that allows the editing of text.
 * [Scroll Bar](./scroll_bar.md): The Scroll Bar provides a scroll bar like control that can be used on it's own as a data input or with certain other widgets to provide content scrolling capabilities.
