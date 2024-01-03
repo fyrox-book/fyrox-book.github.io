@@ -1,0 +1,457 @@
+(
+    selection: (
+        ignore_back_faces: false,
+        track_selection: true,
+    ),
+    graphics: (
+        quality: (
+            point_shadow_map_size: 1024,
+            point_soft_shadows: true,
+            point_shadows_enabled: true,
+            point_shadows_distance: 15.0,
+            point_shadow_map_precision: Full,
+            point_shadows_fade_out_range: 1.0,
+            spot_shadow_map_size: 1024,
+            spot_soft_shadows: true,
+            spot_shadows_enabled: true,
+            spot_shadows_distance: 15.0,
+            spot_shadow_map_precision: Full,
+            spot_shadows_fade_out_range: 1.0,
+            csm_settings: (
+                enabled: true,
+                size: 2048,
+                precision: Full,
+                pcf: true,
+            ),
+            use_ssao: true,
+            ssao_radius: 0.5,
+            light_scatter_enabled: true,
+            fxaa: true,
+            use_parallax_mapping: true,
+            use_bloom: true,
+        ),
+        z_near: 0.025,
+        z_far: 128.0,
+    ),
+    general: (
+        show_node_removal_dialog: true,
+        suspend_unfocused_editor: true,
+    ),
+    debugging: (
+        show_physics: true,
+        show_bounds: true,
+        show_tbn: false,
+        show_terrains: false,
+        show_light_bounds: true,
+        show_camera_bounds: true,
+        pictogram_size: 0.33,
+        save_scene_in_text_form: false,
+    ),
+    move_mode_settings: (
+        grid_snapping: false,
+        x_snap_step: 0.05,
+        y_snap_step: 0.05,
+        z_snap_step: 0.05,
+    ),
+    rotate_mode_settings: (
+        angle_snapping: false,
+        x_snap_step: 2.5,
+        y_snap_step: 2.5,
+        z_snap_step: 2.5,
+    ),
+    model: (
+        instantiation_scale: (1.0, 1.0, 1.0),
+    ),
+    camera: (
+        speed: 10.0,
+        invert_dragging: false,
+        drag_speed: 0.01,
+        zoom_speed: 0.5,
+        zoom_range: (
+            start: 0.0,
+            end: 100.0,
+        ),
+    ),
+    navmesh: (
+        draw_all: true,
+        vertex_radius: 0.2,
+    ),
+    key_bindings: (
+        move_forward: Some(KeyW),
+        move_back: Some(KeyS),
+        move_left: Some(KeyA),
+        move_right: Some(KeyD),
+        move_up: Some(KeyQ),
+        move_down: Some(KeyE),
+        speed_up: Some(ControlLeft),
+        slow_down: Some(ShiftLeft),
+        undo: Some(
+            code: KeyZ,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        redo: Some(
+            code: KeyY,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        enable_select_mode: Some(
+            code: Digit1,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        enable_move_mode: Some(
+            code: Digit2,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        enable_rotate_mode: Some(
+            code: Digit3,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        enable_scale_mode: Some(
+            code: Digit4,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        enable_navmesh_mode: Some(
+            code: Digit5,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        enable_terrain_mode: Some(
+            code: Digit6,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        save_scene: Some(
+            code: KeyS,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        load_scene: Some(
+            code: KeyL,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        copy_selection: Some(
+            code: KeyC,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        paste: Some(
+            code: KeyV,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        new_scene: Some(
+            code: KeyN,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        close_scene: Some(
+            code: KeyQ,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        remove_selection: Some(
+            code: Delete,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        focus: Some(
+            code: KeyF,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
+        terrain_key_bindings: (
+            modify_height_map_mode: Some(
+                code: F1,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            draw_on_mask_mode: Some(
+                code: F2,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            flatten_slopes_mode: Some(
+                code: F3,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            increase_brush_size: Some(
+                code: BracketRight,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            decrease_brush_size: Some(
+                code: BracketLeft,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            increase_brush_opacity: Some(
+                code: Period,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            decrease_brush_opacity: Some(
+                code: Comma,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            prev_layer: Some(
+                code: Semicolon,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+            next_layer: Some(
+                code: Quote,
+                modifiers: (
+                    alt: false,
+                    shift: false,
+                    control: false,
+                    system: false,
+                ),
+            ),
+        ),
+    ),
+    scene_settings: {
+        "data/player/player.rgs": (
+            camera_settings: (
+                position: (-0.28094554, 0.9989979, -0.24053025),
+                yaw: 0.87,
+                pitch: 0.39000002,
+            ),
+            node_infos: {
+                (
+                    index: 41,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 42,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/scene.rgs": (
+            camera_settings: (
+                position: (-1.434008, 0.34957862, 0.22626245),
+                yaw: 0.45000258,
+                pitch: 0.63999945,
+            ),
+            node_infos: {
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 47,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 5,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 7,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 46,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 6,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\player\\player.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
+            ),
+            node_infos: {},
+        ),
+    },
+    recent: (
+        scenes: [
+            "data/player/player.rgs",
+            "data/scene.rgs",
+        ],
+    ),
+    windows: (
+        window_position: (128.0, 61.0),
+        window_size: (1414.0, 814.0),
+        layout: None,
+    ),
+)
