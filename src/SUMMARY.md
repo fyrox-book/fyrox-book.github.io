@@ -128,6 +128,7 @@
     - [Character Controller](./tutorials/rpg/tutorial-1/tutorial-part-1.md)
   - [2D Platformer Tutorial](./tutorials/platformer/part1.md)
   - [User Interface Tutorial (WIP)](tutorials/ui/ui-tutorial.md)
+  - [Community Tutorials](tutorials/community.md)
 - [Performance](./performance/index.md)
 - [Obsolete](./obsolete/obsolete.md)
   - [Custom game loop](./obsolete/custom_game_loop.md)
