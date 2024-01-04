@@ -3,7 +3,7 @@
 In this tutorial we'll create a first-person shooter game. 
 
 Before we begin, make sure you know how to create projects and run the game and the editor. Read 
-[this chapter](../../beginning/scripting.md) first and let's start by creating a new project by executing the following 
+[this chapter](../../../beginning/scripting.md) first and let's start by creating a new project by executing the following 
 command in some directory:
 
 ```shell
@@ -30,7 +30,7 @@ fps
 
 ## Player Prefab
 
-Let's start by creating a [prefab](../../scene/prefab.md) for the player. First-person shooters uses quite simple 
+Let's start by creating a [prefab](../../../scene/prefab.md) for the player. First-person shooters uses quite simple 
 layout for characters - usually it is just a physical capsule with a camera on top of it. Run the editor using the 
 following command:
 
@@ -42,7 +42,6 @@ cargo run --package editor
 
 By default, `scene.rgs` scene is loaded, and it is our main scene, but for our player prefab we need a separate scene.
 Go to `File` menu and click `New Scene`. Save the scene in `data/player` folder as `player.rgs`. 
-
 
 Great, now we ready to create the prefab. Right-click on the `__ROOT__` node in the World Viewer and find `Replace Node` 
 and select `Physics -> Rigid Body` there. By doing this, we've replaced the root node of the scene to be a rigid body. 
@@ -70,7 +69,7 @@ Now let's change the size of the collider, because default values are disproport
 ![collider properties](editor_5.png)
 
 This way the capsule is thinner and taller, which roughly corresponds to a person of 1.8m tall. Now we need to add a 
-[camera](../../scene/camera_node.md), because without it, we couldn't see anything. 
+[camera](../../../scene/camera_node.md), because without it, we couldn't see anything. 
 
 ![camera](editor_6.png)
 
@@ -83,7 +82,7 @@ some code.
 
 ## Code
 
-Now we can start writing some code, that will drive our character. Game logic is located in [scripts](../../scripting/script.md).
+Now we can start writing some code, that will drive our character. Game logic is located in [scripts](../../../scripting/script.md).
 Navigate to the `fps` directory and execute the following command there:
 
 ```shell
@@ -176,12 +175,10 @@ After that you can click `Play` button (green triangle above the scene preview) 
 
 ![running game](running_game_1.png)
 
-It should be possible to walk using WSAD keys and rotate the camera using mouse. 
+It should be possible to walk using WSAD keys and rotate the camera using mouse.
 
-## Weapons
+## Conclusion
 
-Work-in-progress.
-
-## Bots and AI
-
-Work-in-progress.
+In this tutorial we've created a basic character controller, that allows you to move using keyboard and look around 
+using mouse. This tutorial showed the main development strategies used in the engine, that should help you to build your 
+own game. In the next tutorial we'll add weapons. 

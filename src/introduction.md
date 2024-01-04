@@ -17,7 +17,7 @@ compile with the latest release from crates.io, then you need to
 
 Almost every chapter in this book can be read in any order, but we recommend reading Chapters 1, 2, 3 (they're quite small)
 and then going through [Platformer Tutorial (2D)](./tutorials/platformer/part1.md) while learning more about specific
-areas that interest you from the other chapters. There is also a [First-Person Shooter Tutorial (3D)](./tutorials/fps/fps-tutorial.md)
+areas that interest you from the other chapters. There is also a [First-Person Shooter Tutorial (3D)](tutorials/fps/tutorial-1/fps-tutorial.md)
 and [RPG Tutorial (3D)](./tutorials/rpg/intro.md).
 
 ## API Documentation

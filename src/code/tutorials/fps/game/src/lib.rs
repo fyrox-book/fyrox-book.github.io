@@ -13,6 +13,7 @@ use std::path::Path;
 // Add this line
 pub mod player;
 // ANCHOR_END: player_mod_reg
+pub mod weapon;
 
 pub struct GameConstructor;
 
