@@ -247,26 +247,107 @@ Navigate to the <code>fps</code> directory and execute the following command the
 to the <code>lib.rs</code> module by adding the <code>pub mod player;</code> after the imports:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/lib.rs:player_mod_reg}}
+</span>//! Game project.
+use crate::player::Player;
+use fyrox::{
+    core::pool::Handle,
+    event::Event,
+    gui::message::UiMessage,
+    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    scene::Scene,
+};
+use std::path::Path;
+
+// Add this line
+pub mod player;
 <span class="boring">}</span></code></pre></pre>
 <p>All scripts must be registered in the engine explicitly, otherwise they won't work. To do that, add the following
 lines to the <code>register</code> method:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/lib.rs:player_script_reg}}
+</span>    fn register(&amp;self, context: PluginRegistrationContext) {
+        context
+            .serialization_context
+            .script_constructors
+            .add::&lt;Player&gt;(&quot;Player&quot;);
+    }
 <span class="boring">}</span></code></pre></pre>
 <p>Great, now the new script is registered, and we can start writing a basic character controller. Let's start by input
 handling. At first, add the following fields to the <code>Player</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/player.rs:input_fields}}
+</span>    #[visit(optional)]
+    #[reflect(hidden)]
+    move_forward: bool,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    move_backward: bool,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    move_left: bool,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    move_right: bool,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    yaw: f32,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    pitch: f32,
 <span class="boring">}</span></code></pre></pre>
 <p>The first four fields are responsible for movement in four directions and the last two responsible for camera rotation.
 The next thing that we need to do is properly react to incoming OS events to modify the variables that we've just 
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/player.rs:on_os_event}}
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {
+        match event {
+            // Raw mouse input is responsible for camera rotation.
+            Event::DeviceEvent {
+                event:
+                    DeviceEvent::MouseMotion {
+                        delta: (dx, dy), ..
+                    },
+                ..
+            } =&gt; {
+                // Pitch is responsible for vertical camera rotation. It has -89.9..89.0 degree limits,
+                // to prevent infinite rotation.
+                let mouse_speed = 0.35;
+                self.pitch = (self.pitch + *dy as f32 * mouse_speed).clamp(-89.9, 89.9);
+                self.yaw -= *dx as f32 * mouse_speed;
+            }
+            // Keyboard input is responsible for player's movement.
+            Event::WindowEvent {
+                event: WindowEvent::KeyboardInput { event, .. },
+                ..
+            } =&gt; {
+                if let PhysicalKey::Code(code) = event.physical_key {
+                    let is_pressed = event.state == ElementState::Pressed;
+                    match code {
+                        KeyCode::KeyW =&gt; {
+                            self.move_forward = is_pressed;
+                        }
+                        KeyCode::KeyS =&gt; {
+                            self.move_backward = is_pressed;
+                        }
+                        KeyCode::KeyA =&gt; {
+                            self.move_left = is_pressed;
+                        }
+                        KeyCode::KeyD =&gt; {
+                            self.move_right = is_pressed;
+                        }
+                        _ =&gt; (),
+                    }
+                }
+            }
+            _ =&gt; {}
+        }
+    }
 <span class="boring">}</span></code></pre></pre>
 <p>This code consists from two major parts:</p>
 <ul>
@@ -278,7 +359,58 @@ axis and vertical mouse movement is used to rotate the camera around horizontal 
 movement code. Add the following code to <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/player.rs:on_update}}
+</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+        let mut look_vector = Vector3::default();
+        let mut side_vector = Vector3::default();
+        if let Some(camera) = context.scene.graph.try_get_mut(self.camera) {
+            look_vector = camera.look_vector();
+            side_vector = camera.side_vector();
+
+            let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
+            let transform = camera.local_transform_mut();
+            transform.set_rotation(
+                UnitQuaternion::from_axis_angle(
+                    &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
+                    self.pitch.to_radians(),
+                ) * yaw,
+            );
+        }
+
+        // Borrow the node to which this script is assigned to. We also check if the node is RigidBody.
+        if let Some(rigid_body) = context
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(context.handle)
+        {
+            // Form a new velocity vector that corresponds to the pressed buttons.
+            let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+            if self.move_forward {
+                velocity += look_vector;
+            }
+            if self.move_backward {
+                velocity -= look_vector;
+            }
+            if self.move_left {
+                velocity += side_vector;
+            }
+            if self.move_right {
+                velocity -= side_vector;
+            }
+
+            let y_vel = rigid_body.lin_vel().y;
+            if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
+                let movement_speed = 240.0 * context.dt;
+                rigid_body.set_lin_vel(Vector3::new(
+                    normalized_velocity.x * movement_speed,
+                    y_vel,
+                    normalized_velocity.z * movement_speed,
+                ));
+            } else {
+                // Hold player in-place in XZ plane when no button is pressed.
+                rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
+            }
+        }
+    }
 <span class="boring">}</span></code></pre></pre>
 <p>This code is responsible for movement when any of WSAD keys are pressed. At first, it tries to borrow the node to which
 this script is assigned to, then it checks if any of the WSAD keys are pressed, and it forms a new velocity vector using
@@ -287,13 +419,28 @@ body velocity.</p>
 <p>Now let's add camera rotation, at first we need to know the camera handle. Add the following field to the <code>Player</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/player.rs:camera_field}}
+</span>    #[visit(optional)]
+    camera: Handle&lt;Node&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>We'll assign this field later in the editor, for let's focus on the code. Add the following piece of code at the end of
 the <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../../code/tutorials/fps/game/src/player.rs:camera_rotation}}
+</span>        let mut look_vector = Vector3::default();
+        let mut side_vector = Vector3::default();
+        if let Some(camera) = context.scene.graph.try_get_mut(self.camera) {
+            look_vector = camera.look_vector();
+            side_vector = camera.side_vector();
+
+            let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
+            let transform = camera.local_transform_mut();
+            transform.set_rotation(
+                UnitQuaternion::from_axis_angle(
+                    &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
+                    self.pitch.to_radians(),
+                ) * yaw,
+            );
+        }
 <span class="boring">}</span></code></pre></pre>
 <p>This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using 
 its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them 
