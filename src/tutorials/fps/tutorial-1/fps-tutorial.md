@@ -93,21 +93,21 @@ This command creates a new script for our player in `game/src` folder. All you n
 to the `lib.rs` module by adding the `pub mod player;` after the imports:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/lib.rs:player_mod_reg}}
+{{#include ../../../code/tutorials/fps/game/src/lib.rs:player_mod_reg}}
 ```
 
 All scripts must be registered in the engine explicitly, otherwise they won't work. To do that, add the following
 lines to the `register` method:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/lib.rs:player_script_reg}}
+{{#include ../../../code/tutorials/fps/game/src/lib.rs:player_script_reg}}
 ```
 
 Great, now the new script is registered, and we can start writing a basic character controller. Let's start by input
 handling. At first, add the following fields to the `Player` struct:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/player.rs:input_fields}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:input_fields}}
 ```
 
 The first four fields are responsible for movement in four directions and the last two responsible for camera rotation.
@@ -115,7 +115,7 @@ The next thing that we need to do is properly react to incoming OS events to mod
 defined. Add the following code to the `on_os_event` method like so:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/player.rs:on_os_event}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:on_os_event}}
 ```
 
 This code consists from two major parts:
@@ -128,7 +128,7 @@ This just modifies the internal script variables, and basically does not affect 
 movement code. Add the following code to `on_update`:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/player.rs:on_update}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:on_update}}
 ```
 
 This code is responsible for movement when any of WSAD keys are pressed. At first, it tries to borrow the node to which
@@ -139,14 +139,14 @@ body velocity.
 Now let's add camera rotation, at first we need to know the camera handle. Add the following field to the `Player` struct:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/player.rs:camera_field}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:camera_field}}
 ```
 
 We'll assign this field later in the editor, for let's focus on the code. Add the following piece of code at the end of
 the `on_update`:
 
 ```rust
-{{#include ../../code/tutorials/fps/game/src/player.rs:camera_rotation}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:camera_rotation}}
 ```
 
 This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using 
