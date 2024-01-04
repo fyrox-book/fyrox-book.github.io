@@ -189,20 +189,19 @@
                         <h1 id="fyrox-game-engine-book"><a class="header" href="#fyrox-game-engine-book">Fyrox Game Engine Book</a></h1>
 <p>Practical reference and user guides for <a href="https://github.com/FyroxEngine/Fyrox">Fyrox Game Engine</a> and its editor <a href="https://github.com/FyroxEngine/Fyrox/tree/master/editor">FyroxEd</a>.</p>
 <blockquote>
-<p>⚠️ Tip: If you want to start using the engine as fast as possible - read this <a href="src/beginning/scripting.html">chapter</a>.</p>
+<p>⚠️ Tip: If you want to start using the engine as fast as possible - read this <a href="./beginning/scripting.html">chapter</a>.</p>
 </blockquote>
 <p><strong>Warning:</strong> The book is in early development stage, you can help to improve it by making a contribution in its
 <a href="https://github.com/fyrox-book/fyrox-book.github.io">repository</a>. Don't be shy, every tip is helpful!</p>
 <h2 id="engine-version"><a class="header" href="#engine-version">Engine Version</a></h2>
 <p>Fyrox Team is trying to keep the book up-to-date with the latest version from <code>master</code> branch. If something does not
 compile with the latest release from crates.io, then you need to
-<a href="./beginning/scripting.html#using-latest-engine-version">use the latest engine from GitHub repo</a>.</p>
+<a href="./beginning/scripting.html#using-the-latest-engine-version">use the latest engine from GitHub repo</a>.</p>
 <h2 id="how-to-read-the-book"><a class="header" href="#how-to-read-the-book">How to read the book</a></h2>
 <p>Almost every chapter in this book can be read in any order, but we recommend reading Chapters 1, 2, 3 (they're quite small)
-and then going through <a href="src/tutorials/platformer/part1.html">Platformer Tutorial (2D)</a> while learning more about specific
-areas that interest you from the other chapters.</p>
-<p>There is also a <a href="src/tutorials/fps/intro.html">First-Person Shooter Tutorial (3D)</a>, but it is based on framework which
-considered obsolete, yet it is still very helpful.</p>
+and then going through <a href="./tutorials/platformer/part1.html">Platformer Tutorial (2D)</a> while learning more about specific
+areas that interest you from the other chapters. There is also a <a href="./tutorials/fps/fps-tutorial.html">First-Person Shooter Tutorial (3D)</a>
+and <a href="./tutorials/rpg/intro.html">RPG Tutorial (3D)</a>.</p>
 <h2 id="api-documentation"><a class="header" href="#api-documentation">API Documentation</a></h2>
 <p>The book is primarily focused on game development with Fyrox, not on its API. You can find API docs
 <a href="https://docs.rs/fyrox/latest/fyrox/">here</a>.</p>
@@ -490,11 +489,18 @@ in revealing weak spots in design and fix them.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
 <p>This chapter contains answers for frequently asked questions.</p>
 <h2 id="which-graphics-api-does-the-engine-use"><a class="header" href="#which-graphics-api-does-the-engine-use">Which graphics API does the engine use?</a></h2>
-<p>Fyrox uses OpenGL 3.3 on PC and OpenGL ES 3.0 on WebAssembly. Why? Mainly due to historical reasons. Back in the day (Q4 of 2018), there weren't any good alternatives to it with a wide range of supported platforms. For example, <code>wgpu</code> <a href="https://crates.io/crates/wgpu/0.1.0">didn't even exist</a>, as its first version was released in January 2019. Other crates were taking their first baby steps and weren't ready for production.</p>
+<p>Fyrox uses OpenGL 3.3 on PC and OpenGL ES 3.0 on WebAssembly. Why? Mainly due to historical reasons. Back in the day 
+(Q4 of 2018), there weren't any good alternatives to it with a wide range of supported platforms. For example, <code>wgpu</code> 
+<a href="https://crates.io/crates/wgpu/0.1.0">didn't even exist</a>, as its first version was released in January 2019. Other crates were taking their first baby 
+steps and weren't ready for production.</p>
 <h3 id="why-not-use-alternatives-now"><a class="header" href="#why-not-use-alternatives-now">Why not use alternatives now?</a></h3>
-<p>There is no need for it. The current implementation works and is more than good enough. So instead of focusing on replacing something that works for little to no benefit, the current focus is on adding features that are missing as well as improving existing features when needed.</p>
+<p>There is no need for it. The current implementation works and is more than good enough. So instead of focusing on 
+replacing something that works for little to no benefit, the current focus is on adding features that are missing as 
+well as improving existing features when needed.</p>
 <h2 id="is-the-engine-based-on-ecs"><a class="header" href="#is-the-engine-based-on-ecs">Is the engine based on ECS?</a></h2>
-<p>No, the engine uses a mixed composition-based, object-oriented design with message passing and other different approaches that fit the most for a particular task. Why not use ECS for everything, though? Pragmatism. Use the right tool for the job. Don't use a microscope to hammer nails.</p>
+<p>No, the engine uses a mixed composition-based, object-oriented design with message passing and other different approaches 
+that fit the most for a particular task. Why not use ECS for everything, though? Pragmatism. Use the right tool for the job. 
+Don't use a microscope to hammer nails.</p>
 <h2 id="what-kinds-of-games-can-i-make-using-fyrox"><a class="header" href="#what-kinds-of-games-can-i-make-using-fyrox">What kinds of games can I make using Fyrox?</a></h2>
 <p>Pretty much any kind of games, except maybe games with vast open-worlds (since there's no built-in world streaming).
 In general, it depends on your game development experience.</p>
@@ -2553,7 +2559,7 @@ fn extract_world_space_vertices(mesh: &amp;Mesh, graph: &amp;Graph) -&gt; Vec&lt
 <div style="break-before: page; page-break-before: always;"></div><h1 id="light-node"><a class="header" href="#light-node">Light node</a></h1>
 <p>The engine offers complex lighting system with various types of light sources. </p>
 <h2 id="light-types"><a class="header" href="#light-types">Light types</a></h2>
-<p>There are three main types of light sources: directional, point, and spot lights.</p>
+<p>There are three main types of light sources: directional, point, and spotlights.</p>
 <h3 id="directional-light"><a class="header" href="#directional-light">Directional light</a></h3>
 <p>Directional light does not have a position, its rays are always parallel, and it has a particular direction in space.
 An example of directional light in real-life could be our Sun. Even if it is a point light, it is so far away from
@@ -2919,19 +2925,10 @@ system completely, use <code>particle_system.set_visibility(false)</code> method
 particles simulated on CPU side and may significantly impact overall performance when there are many particle systems
 with lots of particles in each.</p>
 <h2 id="limitations-1"><a class="header" href="#limitations-1">Limitations</a></h2>
-<p>Current particle system implementation is <strong>not deterministic</strong>, this means that the state of the
-particles will be different at each run of your game. Also you <strong>cannot</strong> rewind the particle system, nor set
-a particular position in time. This fact limits potential usages of the particle system, however it is still useful
-for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is a known issue, and
-it will eventually be fixed by adding a new kind of particle systems. Tracking issue could be found 
-<a href="https://github.com/FyroxEngine/Fyrox/issues/120">here</a>.</p>
 <p>Particle systems does not interact with lighting, this means that particles will not be lit by light sources in the scene.</p>
-<p>The editor still (in 0.27) does not have an ability to edit color-over-lifetime curve, you should set it manually
-from code after particle system instantiation using 
-<a href="https://docs.rs/fyrox/latest/fyrox/scene/particle_system/struct.ParticleSystem.html#method.set_color_over_lifetime_gradient">respective method</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="terrain"><a class="header" href="#terrain">Terrain</a></h1>
 <p>Terrain is a scene node that represents uniform grid of cells where each cell can have different height. Other, commonly
-known name for terrain is heightmap. Terrains used to create maps for open-world games, it be used to create hills,
+known name for terrain is heightmap. Terrains used to create maps for open-world games, it is used to create hills,
 mountains, plateau, roads, etc.</p>
 <p><img src="scene/./terrain.png" alt="terrain" /></p>
 <h2 id="basic-concepts-2"><a class="header" href="#basic-concepts-2">Basic concepts</a></h2>
@@ -3101,7 +3098,7 @@ you should measure frame time to understand how each new layer affects performan
 <h2 id="chunking"><a class="header" href="#chunking">Chunking</a></h2>
 <p>Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
 chunk could be considered as a &quot;sub-terrain&quot;. You can &quot;stack&quot; any amount of chunks from any side of the terrain. To do 
-that, you define a range of chunks along each axes. This is very useful if you need to extend your terrain in a particular 
+that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular 
 direction. Imagine that you've created a terrain with just one chunk (<code>0..1</code> range on both axes), but suddenly you found
 that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at 
 the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should 
@@ -3225,7 +3222,7 @@ can be &quot;seen&quot; in your game - if the largest thing is a corridor, then 
 length. This will force the engine to clip everything that is out of bounds and do not draw such objects.</p>
 <h2 id="skybox"><a class="header" href="#skybox">Skybox</a></h2>
 <p>Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
-such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
+such objects can be pre-rendered and then applied to a huge cube around camera, it will always be rendered first and will
 be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3473,7 +3470,7 @@ other scene node. Its final size and orientation are defined by the chain of tra
 <h2 id="layers-1"><a class="header" href="#layers-1">Layers</a></h2>
 <p>There are situations when you want to prevent some geometry from being covered with a decal, to do that the engine
 offers a concept of layers. A decal will be applied to a geometry if and only if they have matching layer index. This 
-allows you to create environment damage decals and they won't affect dynamic objects since they're located on 
+allows you to create environment damage decals, and they won't affect dynamic objects since they're located on 
 different layers.</p>
 <h2 id="performance-6"><a class="header" href="#performance-6">Performance</a></h2>
 <p>Current implementation of decals is relatively cheap, this allows you to create many decals on scene. However, you
@@ -11051,7 +11048,7 @@ generational arenas (<em>pool</em> in Fyrox's terminology) and handles. Instead 
 you put all your objects in a pool, and it gives you handles which can later be used to borrow a reference to
 that object. This approach allows you to build any data structures that may hold &quot;references&quot; to other objects.
 The references replaced with handles, which can be treated (very roughly) as just an index. See
-<a href="performance/src/beginning/data_management.html">separate chapter</a> in the book for more info.</p>
+<a href="performance/../beginning/data_management.html">separate chapter</a> in the book for more info.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="obsolete-features"><a class="header" href="#obsolete-features">Obsolete Features</a></h1>
 <p>The following chapters contains information about obsolete features that should not be used.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-game-loop"><a class="header" href="#custom-game-loop">Custom game loop</a></h1>
