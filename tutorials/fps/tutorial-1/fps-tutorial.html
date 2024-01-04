@@ -247,8 +247,7 @@ Navigate to the <code>fps</code> directory and execute the following command the
 to the <code>lib.rs</code> module by adding the <code>pub mod player;</code> after the imports:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>//! Game project.
-use crate::player::Player;
+</span>use crate::{player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
     event::Event,
@@ -265,12 +264,10 @@ pub mod player;
 lines to the <code>register</code> method:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn register(&amp;self, context: PluginRegistrationContext) {
-        context
+</span>        context
             .serialization_context
             .script_constructors
             .add::&lt;Player&gt;(&quot;Player&quot;);
-    }
 <span class="boring">}</span></code></pre></pre>
 <p>Great, now the new script is registered, and we can start writing a basic character controller. Let's start by input
 handling. At first, add the following fields to the <code>Player</code> struct:</p>
@@ -305,7 +302,7 @@ The next thing that we need to do is properly react to incoming OS events to mod
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
@@ -347,7 +344,7 @@ defined. Add the following code to the <code>on_os_event</code> method like so:<
             }
             _ =&gt; {}
         }
-    }
+        // ...
 <span class="boring">}</span></code></pre></pre>
 <p>This code consists from two major parts:</p>
 <ul>

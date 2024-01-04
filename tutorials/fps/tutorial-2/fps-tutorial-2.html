@@ -185,12 +185,235 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="weapons-wip"><a class="header" href="#weapons-wip">Weapons (WIP)</a></h1>
+                        <h1 id="weapons"><a class="header" href="#weapons">Weapons</a></h1>
 <p>In the <a href="../tutorial-1/fps-tutorial.html">previous tutorial</a> we've added basic character controller, but what is a 
-first-person shooter without weapons? Let's add them. As usual, we need a script that will &quot;drive&quot; our weapons:</p>
+first-person shooter without weapons? Let's add them. </p>
+<h2 id="weapon-prefab"><a class="header" href="#weapon-prefab">Weapon Prefab</a></h2>
+<p>At first, we need a 3D model for our weapon -  use this <a href="m4.zip">ZIP-archive</a> - it contains an M4 rifle 3D model that is 
+prepared for direct usage in the engine. Unzip this archive in <code>data/models</code> folder. Now we can start by making a prefab 
+for our weapon. Create a new scene (<code>File -&gt; NewScene</code>) and find the <code>m4.FBX</code> 3D model in the Asset Browser and instantiate
+it in the scene by dragging it using mouse. Make sure to set location position of the weapon to <code>(0, 0, 0)</code>. You
+should get something like this:</p>
+<p><img src="weapon_prefab.png" alt="weapon prefab" /></p>
+<p>This prefab is almost ready, all we need to do is to create a script for it that will contain a code for shooting.</p>
+<h2 id="code"><a class="header" href="#code">Code</a></h2>
+<p>As usual, we need a script that will &quot;drive&quot; our weapons, run the following command at the root folder of your game:</p>
 <pre><code class="language-shell">fyrox-template script --name=weapon
 </code></pre>
-<p>Add the <code>weapon</code> mod to the <code>lib.rs</code> module using <code>pub mod weapon;</code>.</p>
+<p>Add the <code>weapon</code> mod to the <code>lib.rs</code> module using <code>pub mod weapon;</code>. This script will spawn projectiles and play shooting 
+animation when we'll shoot the weapon. Let's add a &quot;reference&quot; to our projectile prefab that will be used for shooing:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    projectile: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>This field has quite complex type: <code>InheritableVariable</code> is used for <a href="../../../scene/inheritance.html">property inheritance</a>,
+<code>Option</code> is used to allow the field to be unassigned, and finally <code>ModelResource</code> is a reference to some projectile prefab.
+We'll assign this field later in the tutorial. </p>
+<p>Next thing we need to define is a point from which the weapon will shoot. We can't just use the position of the weapon,
+because it will look unnatural if a projectile appear at a handle of the weapon or at some other place other than the 
+barrel of the weapon. We'll use a child scene node of the weapon to define such point. Let's add the following field 
+to the <code>Weapon</code> struct.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+<span class="boring">}</span></code></pre></pre>
+<p>We'll assign this field later in the tutorial as well as projectile prefab. </p>
+<p>Now we need some mechanism to &quot;tell&quot; the weapon to shoot, we could directly access the weapon script and call some <code>shoot</code>
+method, but in more or less complex game would almost certainly lead to lots of complaints from borrow checker. Instead
+of this, we'll use <a href="../../../scripting/script.html#message-passing">message passing mechanism</a> - this will allow us to
+send a request for the weapon to shoot and the weapon will shoot when it will receive the message. Let's add a message
+for shooting in <code>weapon.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ShootWeaponMessage {}
+<span class="boring">}</span></code></pre></pre>
+<p>To actually be able to receive this message, we need to explicitly &quot;subscribe&quot; out script to it. Add the following code
+to the <code>on_start</code> method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+        context
+            .message_dispatcher
+            .subscribe_to::&lt;ShootWeaponMessage&gt;(context.handle);
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>Every script has <code>on_message</code> method that is used for a message processing, we'll use it for shooting. Add the following
+code in the <code>impl ScriptTrait for Weapon</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_message(
+        &amp;mut self,
+        message: &amp;mut dyn ScriptMessagePayload,
+        ctx: &amp;mut ScriptMessageContext,
+    ) {
+        dbg!();
+
+        // Check if we've received an appropriate message. This is needed because message channel is
+        // common across all scripts.
+        if message.downcast_ref::&lt;ShootWeaponMessage&gt;().is_some() {
+            dbg!();
+            if let Some(projectile_prefab) = self.projectile.as_ref() {
+                // Try to get the position of the shooting point.
+                if let Some(shot_point) = ctx
+                    .scene
+                    .graph
+                    .try_get(*self.shot_point)
+                    .map(|point| point.global_position())
+                {
+                    dbg!();
+                    // Shooting direction is just a direction of the weapon (its look vector)
+                    let direction = ctx.scene.graph[ctx.handle].look_vector();
+
+                    // Finally instantiate our projectile at the position and direction.
+                    projectile_prefab.instantiate_at(
+                        ctx.scene,
+                        shot_point,
+                        math::vector_to_quat(direction),
+                    );
+                }
+            }
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>This code is pretty straightforward: at first, we're checking the message type, then we're checking if we have a prefab
+for projectiles. If so, we're fetching a position of the shot point scene node and finally instantiating the projectile
+prefab.</p>
+<p>All is left to do is to register this script and assign it in the editor. To register the script, add the following 
+code to the <code>register</code> method in <code>lib.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        context
+            .serialization_context
+            .script_constructors
+            .add::&lt;Weapon&gt;(&quot;Weapon&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>Start the editor and open <code>m4.rgs</code> prefab that we made at the beginning. Select the root node of the scene add <code>Weapon</code>
+script to it. Assign a <code>Weapon:ShotPoint</code> node to the <code>Shot Point</code> property:</p>
+<p><img src="weapon_prefab_final.png" alt="weapon prefab final" /></p>
+<p>The next thing we need to do is to create a prefab for projectile, that will be used for shooting.</p>
+<h2 id="projectile"><a class="header" href="#projectile">Projectile</a></h2>
+<p>You mask ask - why we need a prefab for projectiles, why not just make a ray-based shooting? The answer is very simple -
+flexibility. Once we'll finish with this &quot;complex&quot; system, we'll get very flexible weapon system that will allow you 
+to create weapons of any kind - it could be simple bullets, grenades, rockets, plasma, etc. </p>
+<p>As usual, we need a prefab for our projectile. Create a new scene and add a Cylinder mesh scene node there, make sure
+to orient it along the Z axis (blue one) and adjust its XY scale to make it thin enough - this will be our &quot;projectile&quot;.
+It will represent a bullet trail, but in reality the &quot;bullet&quot; will be represented by a simple ray cast and the trail
+will be extended to a point of impact. Overall your prefab should look like this:</p>
+<p><img src="bullet_prefab.png" alt="bullet prefab" /></p>
+<p>Select the root node of the prefab and set its lifetime to <code>Some(0.1)</code> - this will force the engine to remove the 
+projectile automatically after 100 ms.</p>
+<p>The projectile also needs its own script which will do a ray casting and other actions later in the tutorial, such as
+hit testing with enemies, etc. Create a new script by a well known command:</p>
+<pre><code class="language-shell">fyrox-template script --name=projectile
+</code></pre>
+<p>Add the <code>projectile</code> mod to the <code>lib.rs</code> module using <code>pub mod projectile;</code> and register it in <code>register</code> method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        context
+            .serialization_context
+            .script_constructors
+            .add::&lt;Projectile&gt;(&quot;Projectile&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>Go to <code>projectile.rs</code> and add the following field to the <code>Projectile</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    trail: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>This field will hold a handle to the trail (the red cylinder on the screenshot about) and we'll use this handle to 
+borrow the node and modify the trail's length after ray casting.</p>
+<p>The ray casting itself is the core of our projectiles, add the following code to the <code>on_start</code> method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        let this_node = &amp;ctx.scene.graph[ctx.handle];
+        let this_node_position = this_node.global_position();
+
+        // Cast a ray in from the node in its &quot;look&quot; direction.
+        let mut intersections = Vec::new();
+        ctx.scene.graph.physics.cast_ray(
+            RayCastOptions {
+                ray_origin: this_node_position.into(),
+                ray_direction: this_node.look_vector(),
+                max_len: 1000.0,
+                groups: Default::default(),
+                // Sort results of the ray casting so the closest intersection will be in the
+                // beginning of the list.
+                sort_results: true,
+            },
+            &amp;mut intersections,
+        );
+
+        // If we got an intersection, scale the trail by the distance between the position of the node
+        // with this script and the intersection position.
+        if let Some(intersection) = intersections.first() {
+            let trail_length = this_node_position.metric_distance(&amp;intersection.position.coords);
+
+            if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
+                let transform = trail_node.local_transform_mut();
+                let current_trail_scale = **transform.scale();
+                transform.set_scale(Vector3::new(
+                    // Keep x scaling.
+                    current_trail_scale.x,
+                    trail_length,
+                    // Keep z scaling.
+                    current_trail_scale.z,
+                ));
+            }
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>This code is pretty straightforward - at first we're borrowing the node of the projectile, saving its global position 
+in a variable and then casting a ray from the position and in the &quot;look&quot; direction of the projectile. Finally, we're 
+taking the first intersection from the list (it will be the closest one) and adjusting the trail's length accordingly.</p>
+<p>The final step is to assign the script and its variables in the editor. Run the editor, open <code>bullet.rgs</code> (or how your
+prefab is called) prefab and select the root node, set <code>Projectile</code> script to it and set <code>trail</code> field to the Trail node.
+It should look like so:</p>
+<p><img src="bullet_properties.png" alt="bullet properties" /></p>
+<h2 id="gluing-everything-together"><a class="header" href="#gluing-everything-together">Gluing Everything Together</a></h2>
+<p>We have everything ready for final tuning - in this section of the tutorial we'll finish putting everything together and
+will have a fully functioning weapon. Let's start from our weapon prefab, we need to &quot;inform&quot; it about the projectile
+prefab we've just made. Open the <code>m4.rgs</code> prefab of our weapon and find <code>projectile</code> field in the Weapon script there.
+Now find the <code>bullet.rgs</code> prefab of the projectile and drag'n'drop it onto the <code>projectile</code> field to set the value of it:</p>
+<p><img src="weapon_prefab_projectile.png" alt="weapon prefab projectile" /></p>
+<p>The last step is to add the weapon to the player. Open the <code>player.rgs</code> prefab and find the <code>m4.rgs</code> prefab in the 
+Asset Browser, instantiate it in the scene and make it a child of the camera node. Overall it should look like this:</p>
+<p><img src="weapon_in_player.png" alt="weapon in player" /></p>
+<p>We almost finished our final preparations, you can even open <code>scene.rgs</code> and hit <code>Play</code> and see the weapon in game:</p>
+<p><img src="weapon_in_game.png" alt="weapon in game" /></p>
+<p>However, it won't shoot just yet - we need to send a message to the weapon for it to shoot. To do that, at first, we
+need to know to which weapon we'll send a request to shoot. It is very easy to do by using weapon's node handle. Add
+the following field to the <code>Player</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    current_weapon: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>We'll send a request to shoot in reaction to left mouse button clicks. To do that, go to <code>player.rs</code> and add the 
+following code to the <code>on_os_event</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        if let Event::WindowEvent {
+            event: WindowEvent::MouseInput { state, button, .. },
+            ..
+        } = event
+        {
+            if *button == MouseButton::Left &amp;&amp; *state == ElementState::Pressed {
+                ctx.message_sender
+                    .send_to_target(*self.current_weapon, ShootWeaponMessage {});
+            }
+        }
+<span class="boring">}</span></code></pre></pre>
+<p>The last step is to assign the handle to the current weapon in the player's prefab. Open the <code>player.rgs</code> prefab in
+the editor and in the Player script find the <code>Current Weapon</code> field and assign to the Weapon node like so:</p>
+<p><img src="current_weapon_assignment.png" alt="current weapon assignment" /></p>
+<h2 id="bells-and-whistles"><a class="header" href="#bells-and-whistles">Bells and Whistles</a></h2>
+<p>We can improve overall feeling of our weapon by adding various effects. </p>
+<h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
+<p>Work-in-progress.</p>
+<h3 id="impact-effects"><a class="header" href="#impact-effects">Impact Effects</a></h3>
+<p>Work-in-progress.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this tutorial part we've added weapons that can shoot projectiles, which in their turn can interact with the 
 environment.</p>
