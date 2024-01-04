@@ -1,13 +1,15 @@
+use crate::weapon::ShootWeaponMessage;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, UnitVector3, Vector3},
         pool::Handle,
         reflect::prelude::*,
         uuid::{uuid, Uuid},
+        variable::InheritableVariable,
         visitor::prelude::*,
         TypeUuidProvider,
     },
-    event::{DeviceEvent, ElementState, Event, WindowEvent},
+    event::{DeviceEvent, ElementState, Event, MouseButton, WindowEvent},
     impl_component_provider,
     keyboard::{KeyCode, PhysicalKey},
     scene::{node::Node, rigidbody::RigidBody},
@@ -46,6 +48,11 @@ pub struct Player {
     #[visit(optional)]
     camera: Handle<Node>,
     // ANCHOR_END: camera_field
+
+    // ANCHOR: current_weapon_field
+    #[visit(optional)]
+    current_weapon: InheritableVariable<Handle<Node>>,
+    // ANCHOR_END: current_weapon_field
 }
 
 impl_component_provider!(Player);
@@ -58,7 +65,7 @@ impl TypeUuidProvider for Player {
 
 impl ScriptTrait for Player {
     // ANCHOR: on_os_event
-    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {
+    fn on_os_event(&mut self, event: &Event<()>, ctx: &mut ScriptContext) {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
@@ -100,8 +107,22 @@ impl ScriptTrait for Player {
             }
             _ => {}
         }
+        // ...
+        // ANCHOR_END: on_os_event
+
+        // ANCHOR: shooting
+        if let Event::WindowEvent {
+            event: WindowEvent::MouseInput { state, button, .. },
+            ..
+        } = event
+        {
+            if *button == MouseButton::Left && *state == ElementState::Pressed {
+                ctx.message_sender
+                    .send_to_target(*self.current_weapon, ShootWeaponMessage {});
+            }
+        }
+        // ANCHOR_END: shooting
     }
-    // ANCHOR_END: on_os_event
 
     // ANCHOR: on_update
     fn on_update(&mut self, context: &mut ScriptContext) {
