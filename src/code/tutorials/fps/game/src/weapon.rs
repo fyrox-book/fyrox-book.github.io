@@ -72,12 +72,9 @@ impl ScriptTrait for Weapon {
         message: &mut dyn ScriptMessagePayload,
         ctx: &mut ScriptMessageContext,
     ) {
-        dbg!();
-
         // Check if we've received an appropriate message. This is needed because message channel is
         // common across all scripts.
         if message.downcast_ref::<ShootWeaponMessage>().is_some() {
-            dbg!();
             if let Some(projectile_prefab) = self.projectile.as_ref() {
                 // Try to get the position of the shooting point.
                 if let Some(shot_point) = ctx
@@ -86,7 +83,6 @@ impl ScriptTrait for Weapon {
                     .try_get(*self.shot_point)
                     .map(|point| point.global_position())
                 {
-                    dbg!();
                     // Shooting direction is just a direction of the weapon (its look vector)
                     let direction = ctx.scene.graph[ctx.handle].look_vector();
 
