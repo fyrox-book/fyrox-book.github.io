@@ -168,16 +168,5 @@ with lots of particles in each.
 
 ## Limitations
 
-Current particle system implementation is **not deterministic**, this means that the state of the
-particles will be different at each run of your game. Also you **cannot** rewind the particle system, nor set
-a particular position in time. This fact limits potential usages of the particle system, however it is still useful
-for any effects that does not have to be deterministic, like sparks, smoke, steam, etc. This is a known issue, and
-it will eventually be fixed by adding a new kind of particle systems. Tracking issue could be found 
-[here](https://github.com/FyroxEngine/Fyrox/issues/120).
-
 Particle systems does not interact with lighting, this means that particles will not be lit by light sources in the scene.
-
-The editor still (in 0.27) does not have an ability to edit color-over-lifetime curve, you should set it manually
-from code after particle system instantiation using 
-[respective method](https://docs.rs/fyrox/latest/fyrox/scene/particle_system/struct.ParticleSystem.html#method.set_color_over_lifetime_gradient).
 

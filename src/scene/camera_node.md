@@ -117,7 +117,7 @@ length. This will force the engine to clip everything that is out of bounds and 
 ## Skybox
 
 Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
-such objects can be pre-rendered and then applied to a huge cube around camera, it always will be rendered first and will
+such objects can be pre-rendered and then applied to a huge cube around camera, it will always be rendered first and will
 be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:
 
 ```rust,no_run,edition2018

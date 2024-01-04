@@ -1,7 +1,7 @@
 # Terrain
 
 Terrain is a scene node that represents uniform grid of cells where each cell can have different height. Other, commonly
-known name for terrain is heightmap. Terrains used to create maps for open-world games, it be used to create hills,
+known name for terrain is heightmap. Terrains used to create maps for open-world games, it is used to create hills,
 mountains, plateau, roads, etc.
 
 ![terrain](./terrain.png)
@@ -200,7 +200,7 @@ you should measure frame time to understand how each new layer affects performan
 
 Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
 chunk could be considered as a "sub-terrain". You can "stack" any amount of chunks from any side of the terrain. To do 
-that, you define a range of chunks along each axes. This is very useful if you need to extend your terrain in a particular 
+that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular 
 direction. Imagine that you've created a terrain with just one chunk (`0..1` range on both axes), but suddenly you found
 that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at 
 the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should 

@@ -4,7 +4,7 @@ The engine offers complex lighting system with various types of light sources.
 
 ## Light types
 
-There are three main types of light sources: directional, point, and spot lights.
+There are three main types of light sources: directional, point, and spotlights.
 
 ### Directional light
 
