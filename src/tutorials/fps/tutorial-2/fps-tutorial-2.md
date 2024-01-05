@@ -197,8 +197,7 @@ The `shot_timer` variable will be used to measure time between shots and the `sh
 desired period of shooting (in seconds). We'll handle one of these variables in `on_update` method:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_update_begin}}
-{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_update_end}}
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_update}}
 ```
 
 This code is very simple - it just decreases the timer and that's all. Now let's add a new condition to the 

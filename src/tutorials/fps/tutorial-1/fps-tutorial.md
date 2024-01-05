@@ -128,7 +128,8 @@ This just modifies the internal script variables, and basically does not affect 
 movement code. Add the following code to `on_update`:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/player.rs:on_update}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:on_update_begin}}
+{{#include ../../../code/tutorials/fps/game/src/player.rs:on_update_end}}
 ```
 
 This code is responsible for movement when any of WSAD keys are pressed. At first, it tries to borrow the node to which
