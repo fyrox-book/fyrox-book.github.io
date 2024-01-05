@@ -432,10 +432,11 @@ shoot with desired interval while we're holding the mouse button. Add the two ti
 <p>The <code>shot_timer</code> variable will be used to measure time between shots and the <code>shot_interval</code> will set the 
 desired period of shooting (in seconds). We'll handle one of these variables in <code>on_update</code> method:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>
-
-<span class="boring">fn main() {
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">fn main() {
+</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+        self.shot_timer -= context.dt;
+    }
+<span class="boring">}</span></code></pre></pre>
 <p>This code is very simple - it just decreases the timer and that's all. Now let's add a new condition to the 
 <code>on_message</code> method right after <code>if message.downcast_ref::&lt;ShootWeaponMessage&gt;().is_some() {</code> line:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]

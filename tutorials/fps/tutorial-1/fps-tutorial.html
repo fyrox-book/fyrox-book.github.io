@@ -355,9 +355,40 @@ axis and vertical mouse movement is used to rotate the camera around horizontal 
 <p>This just modifies the internal script variables, and basically does not affect anything else. Next thing we'll add
 movement code. Add the following code to <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>
-<span class="boring">fn main() {
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">fn main() {
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        // Borrow the node to which this script is assigned to. We also check if the node is RigidBody.
+        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
+            // Form a new velocity vector that corresponds to the pressed buttons.
+            let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+            if self.move_forward {
+                velocity += look_vector;
+            }
+            if self.move_backward {
+                velocity -= look_vector;
+            }
+            if self.move_left {
+                velocity += side_vector;
+            }
+            if self.move_right {
+                velocity -= side_vector;
+            }
+
+            let y_vel = rigid_body.lin_vel().y;
+            if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
+                let movement_speed = 240.0 * ctx.dt;
+                rigid_body.set_lin_vel(Vector3::new(
+                    normalized_velocity.x * movement_speed,
+                    y_vel,
+                    normalized_velocity.z * movement_speed,
+                ));
+            } else {
+                // Hold player in-place in XZ plane when no button is pressed.
+                rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
+            }
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
 <p>This code is responsible for movement when any of WSAD keys are pressed. At first, it tries to borrow the node to which
 this script is assigned to, then it checks if any of the WSAD keys are pressed, and it forms a new velocity vector using
 the basis vectors of node. As the last step, it normalizes the vector (makes it unity length) and sets it to the rigid
