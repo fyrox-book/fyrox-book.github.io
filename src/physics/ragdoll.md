@@ -16,7 +16,7 @@ connects body parts, and then setup linear and angular limits. To save time, Fyr
 
 It can be opened from `Utils` menu and contains quite a lot of node handle fields that needs to be filled. Thankfully, 
 there's an `Autofill` button, by pressing which, the wizard will try to find respective bones of the skeleton and put their
-handles in the respective fields in the wizard. For now, it is configured to work with [mixamo](https://mixamo.com) 
+handles in the respective fields in the wizard. For now, it is configured to work with [mixamo](https://www.mixamo.com) 
 skeletons.
 
 Other parameters are listed below:

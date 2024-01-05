@@ -60,4 +60,4 @@ Check next chapters to learn how to manage specific asset types and what their i
 
 ## API Docs
 
-Please read API docs [here](https://docs.rs/fyrox/latest/fyrox/engine/resource_manager/index.html)
+Please read API docs [here](https://docs.rs/fyrox/latest/fyrox/asset/manager/struct.ResourceManager.html)

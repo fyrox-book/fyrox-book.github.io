@@ -1,6 +1,6 @@
 # RPG Tutorial Part 1 - Character Controller
 
-**Source code**: [GitHub](https://github.com/FyroxEngine/Fyrox-tutorials/tree/main/rpg-tutorial1-character-controller)
+**Source code**: [GitHub](https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg)
 
 ## Table of contents
 
