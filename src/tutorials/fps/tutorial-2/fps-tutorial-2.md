@@ -66,7 +66,8 @@ Every script has `on_message` method that is used for a message processing, we'l
 code in the `impl ScriptTrait for Weapon`:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_message}}
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_message_begin}}
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_message_end}}
 ```
 
 This code is pretty straightforward: at first, we're checking the message type, then we're checking if we have a prefab
@@ -174,10 +175,41 @@ following code to the `on_os_event`:
 {{#include ../../../code/tutorials/fps/game/src/player.rs:shooting}}
 ```
 
+And the following code to the `on_update`:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/player.rs:shooting_on_update}}
+```
+
 The last step is to assign the handle to the current weapon in the player's prefab. Open the `player.rgs` prefab in
 the editor and in the Player script find the `Current Weapon` field and assign to the Weapon node like so:
 
 ![current weapon assignment](current_weapon_assignment.png)
+
+Run the game, and you should be able to shoot from the weapon, but it shoots way too fast. Let's make the weapon to 
+shoot with desired interval while we're holding the mouse button. Add the two timer variables to the `Weapon` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:shot_timer}}
+```
+
+The `shot_timer` variable will be used to measure time between shots and the `shot_interval` will set the 
+desired period of shooting (in seconds). We'll handle one of these variables in `on_update` method:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_update_begin}}
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:on_update_end}}
+```
+
+This code is very simple - it just decreases the timer and that's all. Now let's add a new condition to the 
+`on_message` method right after `if message.downcast_ref::<ShootWeaponMessage>().is_some() {` line:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:shooting_condition}}
+```
+
+Open the `m4.rgs` prefab in the editor and set the interval in the `Weapon` script to 0.1. Run the game and the
+weapon should shoot less fast.
 
 ## Bells and Whistles
 

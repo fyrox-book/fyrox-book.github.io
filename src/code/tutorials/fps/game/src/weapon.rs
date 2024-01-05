@@ -26,7 +26,17 @@ pub struct Weapon {
 
     // ANCHOR: shot_point
     #[visit(optional)]
-    shot_point: InheritableVariable<Handle<Node>>, // ANCHOR_END: shot_point
+    shot_point: InheritableVariable<Handle<Node>>,
+    // ANCHOR_END: shot_point
+
+    // ANCHOR: shot_timer
+    #[visit(optional)]
+    shot_interval: InheritableVariable<f32>,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    shot_timer: f32,
+    // ANCHOR_END: shot_timer
 }
 
 // ANCHOR: shoot_message
@@ -62,11 +72,13 @@ impl ScriptTrait for Weapon {
         // Respond to OS events here.
     }
 
+    // ANCHOR: on_update
     fn on_update(&mut self, context: &mut ScriptContext) {
-        // Put object logic here.
+        self.shot_timer -= context.dt;
     }
+    // ANCHOR_END: on_update
 
-    // ANCHOR: on_message
+    // ANCHOR: on_message_begin
     fn on_message(
         &mut self,
         message: &mut dyn ScriptMessagePayload,
@@ -75,6 +87,17 @@ impl ScriptTrait for Weapon {
         // Check if we've received an appropriate message. This is needed because message channel is
         // common across all scripts.
         if message.downcast_ref::<ShootWeaponMessage>().is_some() {
+            // ANCHOR_END: on_message_begin
+
+            // ANCHOR: shooting_condition
+            if self.shot_timer >= 0.0 {
+                return;
+            }
+            // Reset the timer, this way the next shot cannot be done earlier than the interval.
+            self.shot_timer = *self.shot_interval;
+            // ANCHOR_END: shooting_condition
+
+            // ANCHOR: on_message_end
             if let Some(projectile_prefab) = self.projectile.as_ref() {
                 // Try to get the position of the shooting point.
                 if let Some(shot_point) = ctx
@@ -96,7 +119,7 @@ impl ScriptTrait for Weapon {
             }
         }
     }
-    // ANCHOR_END: on_message
+    // ANCHOR_END: on_message_end
 
     fn id(&self) -> Uuid {
         Self::type_uuid()

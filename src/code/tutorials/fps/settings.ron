@@ -314,6 +314,27 @@
         ),
     ),
     scene_settings: {
+        "data/models/bullet.rgs": (
+            camera_settings: (
+                position: (-1.822205, -1.0976024, 1.0095938),
+                yaw: -1.1599995,
+                pitch: 0.50000006,
+            ),
+            node_infos: {
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
         "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\bullet.rgs": (
             camera_settings: (
                 position: (-1.6473036, -1.2300191, 1.4784386),
@@ -343,11 +364,116 @@
             ),
             node_infos: {},
         ),
-        "data/models/bullet.rgs": (
+        "data/scene.rgs": (
             camera_settings: (
-                position: (-1.822205, -1.0976024, 1.0095938),
-                yaw: -1.1599995,
-                pitch: 0.50000006,
+                position: (-1.2840884, 0.09686279, 1.302556),
+                yaw: -2.7099974,
+                pitch: 0.6107965,
+            ),
+            node_infos: {
+                (
+                    index: 7,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 6,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 46,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 10,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 5,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 47,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 8,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/models/m4.rgs": (
+            camera_settings: (
+                position: (-2.3658044, -0.78334, 0.98359746),
+                yaw: -1.2100003,
+                pitch: 0.32,
             ),
             node_infos: {
                 (
@@ -362,6 +488,12 @@
                 ): (
                     is_expanded: true,
                 ),
+                (
+                    index: 6,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
             },
         ),
         "data/player/player.rgs": (
@@ -371,24 +503,6 @@
                 pitch: 0.38079646,
             ),
             node_infos: {
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 51,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
                 (
                     index: 3,
                     generation: 1,
@@ -413,107 +527,20 @@
                 ): (
                     is_expanded: true,
                 ),
-            },
-        ),
-        "data/scene.rgs": (
-            camera_settings: (
-                position: (-1.2840884, 0.09686279, 1.302556),
-                yaw: -2.7099974,
-                pitch: 0.6107965,
-            ),
-            node_infos: {
                 (
-                    index: 4,
+                    index: 43,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 44,
+                    index: 51,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
                     index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 46,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 5,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 7,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 47,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 10,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 8,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 49,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -527,33 +554,6 @@
                 pitch: 0.0,
             ),
             node_infos: {},
-        ),
-        "data/models/m4.rgs": (
-            camera_settings: (
-                position: (-2.3658044, -0.78334, 0.98359746),
-                yaw: -1.2100003,
-                pitch: 0.32,
-            ),
-            node_infos: {
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
         ),
     },
     recent: (
