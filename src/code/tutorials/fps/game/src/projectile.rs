@@ -50,22 +50,25 @@ impl ScriptTrait for Projectile {
             &mut intersections,
         );
 
-        // If we got an intersection, scale the trail by the distance between the position of the node
-        // with this script and the intersection position.
-        if let Some(intersection) = intersections.first() {
-            let trail_length = this_node_position.metric_distance(&intersection.position.coords);
+        let trail_length = if let Some(intersection) = intersections.first() {
+            // If we got an intersection, scale the trail by the distance between the position of the node
+            // with this script and the intersection position.
+            this_node_position.metric_distance(&intersection.position.coords)
+        } else {
+            // Otherwise the trail will be as large as possible.
+            1000.0
+        };
 
-            if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
-                let transform = trail_node.local_transform_mut();
-                let current_trail_scale = **transform.scale();
-                transform.set_scale(Vector3::new(
-                    // Keep x scaling.
-                    current_trail_scale.x,
-                    trail_length,
-                    // Keep z scaling.
-                    current_trail_scale.z,
-                ));
-            }
+        if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
+            let transform = trail_node.local_transform_mut();
+            let current_trail_scale = **transform.scale();
+            transform.set_scale(Vector3::new(
+                // Keep x scaling.
+                current_trail_scale.x,
+                trail_length,
+                // Keep z scaling.
+                current_trail_scale.z,
+            ));
         }
     }
     // ANCHOR_END: on_start

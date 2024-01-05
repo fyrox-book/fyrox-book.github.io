@@ -215,6 +215,19 @@ weapon should shoot less fast.
 
 We can improve overall feeling of our weapon by adding various effects. 
 
+### Trail Dissolving
+
+Our shot trails disappear instantly and this looks unnatural. It can be fixed very easy by using animations.
+Read the docs about the [animation editor](../../../animation/anim_editor.md) first to get familiar with it. 
+Open the `bullet.rgs` prefab, add `Animation Player` node to the prefab and open the animation editor.
+Add a new track that binds to the alpha channel of the color of the trail's material:
+
+![trail animation](trail_animation.png)
+
+Also, make sure the `Unique Material` check box is checked in the material property of the trail's mesh. Otherwise,
+all trails will share the same material and once the animation is finished, you won't see the trail anymore. 
+Run the game and shot trails should disappear smoothly.
+
 ### Recoil
 
 Work-in-progress.
