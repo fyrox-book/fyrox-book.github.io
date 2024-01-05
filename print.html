@@ -4305,8 +4305,7 @@ will be and vice versa.</p>
 <p>Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
 consists of multiple tracks, where each track is bound to a property of a scene node. A track can animate
 any numeric properties, starting from numbers (including <code>bool</code>) end ending by 2/3/4 dimensional vectors.
-Each component (number, x/y/z/w vector components) is stored in a <em>parametric curve</em> (see
-[<code>crate::core::curve::Curve</code>] docs for more info). Every parametric curve contains zero or more <em>key frames</em>.
+Each component (number, x/y/z/w vector components) is stored in a <em>parametric curve</em>. Every parametric curve contains zero or more <em>key frames</em>.
 Graphically this could be represented like so:</p>
 <pre><code class="language-text">                                         Timeline
                                             v
@@ -4352,7 +4351,7 @@ playback directions.</p>
 tells how faster (&gt;1) or slower (&lt;1) the animation needs to be played. Negative speed multiplier values will reverse playback.</p>
 <h2 id="enabling-or-disabling-animations"><a class="header" href="#enabling-or-disabling-animations">Enabling or disabling animations</a></h2>
 <p>Sometimes there's a need to disable/enable an animation or check if it is enabled or not, you can do this by using the pair
-of respective methods - [<code>Animation::set_enabled</code>] and [<code>Animation::is_enabled</code>].</p>
+of respective methods - <code>Animation::set_enabled</code> and <code>Animation::is_enabled</code>.</p>
 <h2 id="signals"><a class="header" href="#signals">Signals</a></h2>
 <p>Signal is a named marker on specific time position on the animation timeline. Signal will emit an event if the animation playback
 time passes signal's position from left-to-right (or vice versa depending on playback direction). Signals are usually used to
@@ -4362,8 +4361,8 @@ After that all you need to do is to fetch animation events one-by-one and emit r
 <a href="animation/signal.html">chapter</a> for more info.</p>
 <h2 id="creating-from-code"><a class="header" href="#creating-from-code">Creating From Code</a></h2>
 <p>Usually, animations are created from the editor or some external tool and then imported in the engine. Before trying the example
-below, please read the docs for [<code>crate::scene::animation::AnimationPlayer</code>] node, it is much more convenient way of animating
-other nodes. The node can be created from the editor and you don't even need to write any code.
+below, please read the docs for <code>AnimationPlayer</code> node, it is much more convenient way of animating
+other nodes. The node can be created from the editor, and you don't even need to write any code.
 Use the following example code as a guide <strong>only</strong> if you need to create procedural animations:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
