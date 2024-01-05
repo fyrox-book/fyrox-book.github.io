@@ -3,8 +3,7 @@
 Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
 consists of multiple tracks, where each track is bound to a property of a scene node. A track can animate
 any numeric properties, starting from numbers (including `bool`) end ending by 2/3/4 dimensional vectors.
-Each component (number, x/y/z/w vector components) is stored in a _parametric curve_ (see
-[`crate::core::curve::Curve`] docs for more info). Every parametric curve contains zero or more _key frames_.
+Each component (number, x/y/z/w vector components) is stored in a _parametric curve_. Every parametric curve contains zero or more _key frames_.
 Graphically this could be represented like so:
 
 ```text
@@ -59,7 +58,7 @@ tells how faster (>1) or slower (<1) the animation needs to be played. Negative 
 
 ## Enabling or disabling animations
 Sometimes there's a need to disable/enable an animation or check if it is enabled or not, you can do this by using the pair
-of respective methods - [`Animation::set_enabled`] and [`Animation::is_enabled`].
+of respective methods - `Animation::set_enabled` and `Animation::is_enabled`.
 
 ## Signals
 Signal is a named marker on specific time position on the animation timeline. Signal will emit an event if the animation playback
@@ -72,8 +71,8 @@ After that all you need to do is to fetch animation events one-by-one and emit r
 ## Creating From Code
 
 Usually, animations are created from the editor or some external tool and then imported in the engine. Before trying the example
-below, please read the docs for [`crate::scene::animation::AnimationPlayer`] node, it is much more convenient way of animating
-other nodes. The node can be created from the editor and you don't even need to write any code.
+below, please read the docs for `AnimationPlayer` node, it is much more convenient way of animating
+other nodes. The node can be created from the editor, and you don't even need to write any code.
 Use the following example code as a guide **only** if you need to create procedural animations:
 
 ```rust,no_run
