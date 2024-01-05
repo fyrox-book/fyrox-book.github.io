@@ -314,36 +314,33 @@
         ),
     ),
     scene_settings: {
-        "data/models/bullet.rgs": (
+        "data/player/player.rgs": (
             camera_settings: (
-                position: (-1.822205, -1.0976024, 1.0095938),
-                yaw: -1.1599995,
-                pitch: 0.50000006,
+                position: (-1.7964343, 0.5015054, 1.5938219),
+                yaw: -0.9200007,
+                pitch: 0.38079646,
             ),
             node_infos: {
                 (
-                    index: 0,
+                    index: 42,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 1,
+                    index: 2,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
-            },
-        ),
-        "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\bullet.rgs": (
-            camera_settings: (
-                position: (-1.6473036, -1.2300191, 1.4784386),
-                yaw: -0.98000056,
-                pitch: 0.52,
-            ),
-            node_infos: {
                 (
-                    index: 0,
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -354,7 +351,27 @@
                 ): (
                     is_expanded: true,
                 ),
+                (
+                    index: 51,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
             },
+        ),
+        "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\player\\player.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
+            ),
+            node_infos: {},
         ),
         "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\m4.rgs": (
             camera_settings: (
@@ -372,31 +389,7 @@
             ),
             node_infos: {
                 (
-                    index: 7,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
+                    index: 5,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -426,25 +419,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 5,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 47,
+                    index: 8,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -456,13 +431,76 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 44,
+                    index: 7,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 8,
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 47,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 6,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\bullet.rgs": (
+            camera_settings: (
+                position: (-1.6473036, -1.2300191, 1.4784386),
+                yaw: -0.98000056,
+                pitch: 0.52,
+            ),
+            node_infos: {
+                (
+                    index: 41,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -496,15 +534,21 @@
                 ),
             },
         ),
-        "data/player/player.rgs": (
+        "data/models/bullet.rgs": (
             camera_settings: (
-                position: (-1.7964343, 0.5015054, 1.5938219),
-                yaw: -0.9200007,
-                pitch: 0.38079646,
+                position: (-2.4404705, -0.82559675, 0.54963845),
+                yaw: -1.54,
+                pitch: 0.33999965,
             ),
             node_infos: {
                 (
-                    index: 3,
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -521,39 +565,7 @@
                 ): (
                     is_expanded: true,
                 ),
-                (
-                    index: 41,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 51,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
             },
-        ),
-        "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\player\\player.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-            ),
-            node_infos: {},
         ),
     },
     recent: (

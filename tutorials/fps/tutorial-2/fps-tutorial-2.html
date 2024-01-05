@@ -342,22 +342,25 @@ borrow the node and modify the trail's length after ray casting.</p>
             &amp;mut intersections,
         );
 
-        // If we got an intersection, scale the trail by the distance between the position of the node
-        // with this script and the intersection position.
-        if let Some(intersection) = intersections.first() {
-            let trail_length = this_node_position.metric_distance(&amp;intersection.position.coords);
+        let trail_length = if let Some(intersection) = intersections.first() {
+            // If we got an intersection, scale the trail by the distance between the position of the node
+            // with this script and the intersection position.
+            this_node_position.metric_distance(&amp;intersection.position.coords)
+        } else {
+            // Otherwise the trail will be as large as possible.
+            1000.0
+        };
 
-            if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
-                let transform = trail_node.local_transform_mut();
-                let current_trail_scale = **transform.scale();
-                transform.set_scale(Vector3::new(
-                    // Keep x scaling.
-                    current_trail_scale.x,
-                    trail_length,
-                    // Keep z scaling.
-                    current_trail_scale.z,
-                ));
-            }
+        if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
+            let transform = trail_node.local_transform_mut();
+            let current_trail_scale = **transform.scale();
+            transform.set_scale(Vector3::new(
+                // Keep x scaling.
+                current_trail_scale.x,
+                trail_length,
+                // Keep z scaling.
+                current_trail_scale.z,
+            ));
         }
     }
 <span class="boring">}</span></code></pre></pre>
@@ -447,6 +450,15 @@ desired period of shooting (in seconds). We'll handle one of these variables in 
 weapon should shoot less fast.</p>
 <h2 id="bells-and-whistles"><a class="header" href="#bells-and-whistles">Bells and Whistles</a></h2>
 <p>We can improve overall feeling of our weapon by adding various effects. </p>
+<h3 id="trail-dissolving"><a class="header" href="#trail-dissolving">Trail Dissolving</a></h3>
+<p>Our shot trails disappear instantly and this looks unnatural. It can be fixed very easy by using animations.
+Read the docs about the <a href="../../../animation/anim_editor.html">animation editor</a> first to get familiar with it. 
+Open the <code>bullet.rgs</code> prefab, add <code>Animation Player</code> node to the prefab and open the animation editor.
+Add a new track that binds to the alpha channel of the color of the trail's material:</p>
+<p><img src="trail_animation.png" alt="trail animation" /></p>
+<p>Also, make sure the <code>Unique Material</code> check box is checked in the material property of the trail's mesh. Otherwise,
+all trails will share the same material and once the animation is finished, you won't see the trail anymore. 
+Run the game and shot trails should disappear smoothly.</p>
 <h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
 <p>Work-in-progress.</p>
 <h3 id="impact-effects"><a class="header" href="#impact-effects">Impact Effects</a></h3>
