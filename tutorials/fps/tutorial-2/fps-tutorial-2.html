@@ -217,6 +217,7 @@ to the <code>Weapon</code> struct.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    #[visit(optional)]
+    shot_point: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>We'll assign this field later in the tutorial as well as projectile prefab. </p>
 <p>Now we need some mechanism to &quot;tell&quot; the weapon to shoot, we could directly access the weapon script and call some <code>shoot</code>
@@ -391,19 +392,59 @@ following code to the <code>on_os_event</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let Event::WindowEvent {
-            event: WindowEvent::MouseInput { state, button, .. },
+            event:
+                WindowEvent::MouseInput {
+                    state,
+                    button: MouseButton::Left,
+                    ..
+                },
             ..
         } = event
         {
-            if *button == MouseButton::Left &amp;&amp; *state == ElementState::Pressed {
-                ctx.message_sender
-                    .send_to_target(*self.current_weapon, ShootWeaponMessage {});
-            }
+            self.shoot = *state == ElementState::Pressed;
+        }
+<span class="boring">}</span></code></pre></pre>
+<p>And the following code to the <code>on_update</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        if self.shoot {
+            ctx.message_sender
+                .send_to_target(*self.current_weapon, ShootWeaponMessage {});
         }
 <span class="boring">}</span></code></pre></pre>
 <p>The last step is to assign the handle to the current weapon in the player's prefab. Open the <code>player.rgs</code> prefab in
 the editor and in the Player script find the <code>Current Weapon</code> field and assign to the Weapon node like so:</p>
 <p><img src="current_weapon_assignment.png" alt="current weapon assignment" /></p>
+<p>Run the game, and you should be able to shoot from the weapon, but it shoots way too fast. Let's make the weapon to 
+shoot with desired interval while we're holding the mouse button. Add the two timer variables to the <code>Weapon</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    shot_interval: InheritableVariable&lt;f32&gt;,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
+    shot_timer: f32,
+<span class="boring">}</span></code></pre></pre>
+<p>The <code>shot_timer</code> variable will be used to measure time between shots and the <code>shot_interval</code> will set the 
+desired period of shooting (in seconds). We'll handle one of these variables in <code>on_update</code> method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>
+
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>This code is very simple - it just decreases the timer and that's all. Now let's add a new condition to the 
+<code>on_message</code> method right after <code>if message.downcast_ref::&lt;ShootWeaponMessage&gt;().is_some() {</code> line:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>            if self.shot_timer &gt;= 0.0 {
+                return;
+            }
+            // Reset the timer, this way the next shot cannot be done earlier than the interval.
+            self.shot_timer = *self.shot_interval;
+<span class="boring">}</span></code></pre></pre>
+<p>Open the <code>m4.rgs</code> prefab in the editor and set the interval in the <code>Weapon</code> script to 0.1. Run the game and the
+weapon should shoot less fast.</p>
 <h2 id="bells-and-whistles"><a class="header" href="#bells-and-whistles">Bells and Whistles</a></h2>
 <p>We can improve overall feeling of our weapon by adding various effects. </p>
 <h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>

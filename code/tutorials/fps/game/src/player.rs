@@ -53,6 +53,9 @@ pub struct Player {
     #[visit(optional)]
     current_weapon: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: current_weapon_field
+    #[visit(optional)]
+    #[reflect(hidden)]
+    shoot: bool,
 }
 
 impl_component_provider!(Player);
@@ -112,24 +115,35 @@ impl ScriptTrait for Player {
 
         // ANCHOR: shooting
         if let Event::WindowEvent {
-            event: WindowEvent::MouseInput { state, button, .. },
+            event:
+                WindowEvent::MouseInput {
+                    state,
+                    button: MouseButton::Left,
+                    ..
+                },
             ..
         } = event
         {
-            if *button == MouseButton::Left && *state == ElementState::Pressed {
-                ctx.message_sender
-                    .send_to_target(*self.current_weapon, ShootWeaponMessage {});
-            }
+            self.shoot = *state == ElementState::Pressed;
         }
         // ANCHOR_END: shooting
     }
 
-    // ANCHOR: on_update
-    fn on_update(&mut self, context: &mut ScriptContext) {
+    // ANCHOR: on_update_begin
+    fn on_update(&mut self, ctx: &mut ScriptContext) {
+        // ANCHOR_END: on_update_begin
+
+        // ANCHOR: shooting_on_update
+        if self.shoot {
+            ctx.message_sender
+                .send_to_target(*self.current_weapon, ShootWeaponMessage {});
+        }
+        // ANCHOR_END: shooting_on_update
+
         // ANCHOR: camera_rotation
         let mut look_vector = Vector3::default();
         let mut side_vector = Vector3::default();
-        if let Some(camera) = context.scene.graph.try_get_mut(self.camera) {
+        if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
             look_vector = camera.look_vector();
             side_vector = camera.side_vector();
 
@@ -144,12 +158,9 @@ impl ScriptTrait for Player {
         }
         // ANCHOR_END: camera_rotation
 
+        // ANCHOR: on_update_end
         // Borrow the node to which this script is assigned to. We also check if the node is RigidBody.
-        if let Some(rigid_body) = context
-            .scene
-            .graph
-            .try_get_mut_of_type::<RigidBody>(context.handle)
-        {
+        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
             // Form a new velocity vector that corresponds to the pressed buttons.
             let mut velocity = Vector3::new(0.0, 0.0, 0.0);
             if self.move_forward {
@@ -167,7 +178,7 @@ impl ScriptTrait for Player {
 
             let y_vel = rigid_body.lin_vel().y;
             if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
-                let movement_speed = 240.0 * context.dt;
+                let movement_speed = 240.0 * ctx.dt;
                 rigid_body.set_lin_vel(Vector3::new(
                     normalized_velocity.x * movement_speed,
                     y_vel,
@@ -179,7 +190,7 @@ impl ScriptTrait for Player {
             }
         }
     }
-    // ANCHOR_END: on_update
+    // ANCHOR_END: on_update_end
 
     fn id(&self) -> Uuid {
         Self::type_uuid()
