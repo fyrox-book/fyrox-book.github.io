@@ -1,3 +1,4 @@
+use fyrox::scene::rigidbody::RigidBody;
 use fyrox::{
     core::{
         algebra::Vector3,
@@ -90,6 +91,28 @@ impl ScriptTrait for Projectile {
             }
         }
         // ANCHOR_END: effect_spawn
+
+        // ANCHOR: object_pushing
+        if let Some(intersection) = intersections.first() {
+            if let Some(collider) = ctx.scene.graph.try_get(intersection.collider) {
+                let rigid_body_handle = collider.parent();
+                if let Some(rigid_body) = ctx
+                    .scene
+                    .graph
+                    .try_get_mut_of_type::<RigidBody>(rigid_body_handle)
+                {
+                    if let Some(force_dir) = (intersection.position.coords - this_node_position)
+                        .try_normalize(f32::EPSILON)
+                    {
+                        let force = force_dir.scale(200.0);
+
+                        rigid_body.apply_force_at_point(force, intersection.position.coords);
+                        rigid_body.wake_up();
+                    }
+                }
+            }
+        }
+        // ANCHOR_END: object_pushing
 
         // ANCHOR: on_start_end
     }

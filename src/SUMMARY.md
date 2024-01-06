@@ -122,7 +122,7 @@
 - [Tutorials](./tutorials/tutorials.md)
   - [FPS Tutorial](tutorials/fps/fps-intro.md)
     - [Character Controller](tutorials/fps/tutorial-1/fps-tutorial.md)
-    - [Weapons (WIP)](tutorials/fps/tutorial-2/fps-tutorial-2.md)
+    - [Weapons](tutorials/fps/tutorial-2/fps-tutorial-2.md)
     - [Bots and AI (WIP)](tutorials/fps/tutorial-3/fps-tutorial-3.md)
   - [RPG Tutorial](./tutorials/rpg/intro.md)
     - [Character Controller](./tutorials/rpg/tutorial-1/tutorial-part-1.md)

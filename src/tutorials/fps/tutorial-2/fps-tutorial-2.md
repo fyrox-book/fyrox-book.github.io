@@ -253,13 +253,25 @@ Run the game, and you should see something like this when shooting:
 
 ### World Interaction 
 
-Work-in-progress.
+In this section we'll add an ability to push physical objects by shooting. All we need to do is to add the 
+following code to at the end of `on_start` of `impl ScriptTrait for Projectile`:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/projectile.rs:object_pushing}}
+```
+
+This code is very straightforward: at first, we're taking the closest intersection and by using its info about
+collider taking a reference to the rigid body we've just hit by the ray. Next, we're applying force at the point
+of impact, which will push the rigid body.
+
+To check how it works, unzip [this prefab](barrel.zip) to `data/models` and add some instances of it to the `scene.rgs` 
+and run the game. You should see something like this:
+
+![pushing](pushing.gif)
 
 ### Recoil
 
 Work-in-progress.
-
-
 
 ## Conclusion
 
