@@ -250,8 +250,6 @@ to the <code>lib.rs</code> module by adding the <code>pub mod player;</code> aft
 </span>use crate::{player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
-    event::Event,
-    gui::message::UiMessage,
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
@@ -302,7 +300,7 @@ The next thing that we need to do is properly react to incoming OS events to mod
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {

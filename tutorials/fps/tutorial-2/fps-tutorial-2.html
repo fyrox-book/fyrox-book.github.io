@@ -460,9 +460,35 @@ Add a new track that binds to the alpha channel of the color of the trail's mate
 <p>Also, make sure the <code>Unique Material</code> check box is checked in the material property of the trail's mesh. Otherwise,
 all trails will share the same material and once the animation is finished, you won't see the trail anymore. 
 Run the game and shot trails should disappear smoothly.</p>
-<h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
-<p>Work-in-progress.</p>
 <h3 id="impact-effects"><a class="header" href="#impact-effects">Impact Effects</a></h3>
+<p>Right now our projectiles does not interact with world, we can improve that by creating sparks effect
+at the point of impact. Download <a href="bullet_impact.zip">this</a> pre-made effect and unzip it in <code>data/effects</code> folder. </p>
+<p>Add the following field to the <code>Projectile</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    impact_effect: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>This is a &quot;link&quot; to particle effect, that we'll spawn at the impact position. Let's add this code to the end
+of <code>on_start</code> of <code>impl ScriptTrait for Projectile</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        if let Some(intersection) = intersections.first() {
+            if let Some(effect) = self.impact_effect.as_ref() {
+                effect.instantiate_at(
+                    ctx.scene,
+                    intersection.position.coords,
+                    math::vector_to_quat(intersection.normal),
+                );
+            }
+        }
+<span class="boring">}</span></code></pre></pre>
+<p>The last thing we need to do is to assign <code>Impact Effect</code> property in <code>bullet.rgs</code> to the pre-made effect. 
+Run the game, and you should see something like this when shooting:</p>
+<p><img src="shooting.gif" alt="shooting" /></p>
+<h3 id="world-interaction"><a class="header" href="#world-interaction">World Interaction</a></h3>
+<p>Work-in-progress.</p>
+<h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
 <p>Work-in-progress.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this tutorial part we've added weapons that can shoot projectiles, which in their turn can interact with the 

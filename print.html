@@ -9998,8 +9998,6 @@ to the <code>lib.rs</code> module by adding the <code>pub mod player;</code> aft
 </span>use crate::{player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
-    event::Event,
-    gui::message::UiMessage,
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
@@ -10050,7 +10048,7 @@ The next thing that we need to do is properly react to incoming OS events to mod
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
@@ -10465,9 +10463,35 @@ Add a new track that binds to the alpha channel of the color of the trail's mate
 <p>Also, make sure the <code>Unique Material</code> check box is checked in the material property of the trail's mesh. Otherwise,
 all trails will share the same material and once the animation is finished, you won't see the trail anymore. 
 Run the game and shot trails should disappear smoothly.</p>
-<h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
-<p>Work-in-progress.</p>
 <h3 id="impact-effects"><a class="header" href="#impact-effects">Impact Effects</a></h3>
+<p>Right now our projectiles does not interact with world, we can improve that by creating sparks effect
+at the point of impact. Download <a href="tutorials/fps/tutorial-2/bullet_impact.zip">this</a> pre-made effect and unzip it in <code>data/effects</code> folder. </p>
+<p>Add the following field to the <code>Projectile</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    impact_effect: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>This is a &quot;link&quot; to particle effect, that we'll spawn at the impact position. Let's add this code to the end
+of <code>on_start</code> of <code>impl ScriptTrait for Projectile</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        if let Some(intersection) = intersections.first() {
+            if let Some(effect) = self.impact_effect.as_ref() {
+                effect.instantiate_at(
+                    ctx.scene,
+                    intersection.position.coords,
+                    math::vector_to_quat(intersection.normal),
+                );
+            }
+        }
+<span class="boring">}</span></code></pre></pre>
+<p>The last thing we need to do is to assign <code>Impact Effect</code> property in <code>bullet.rgs</code> to the pre-made effect. 
+Run the game, and you should see something like this when shooting:</p>
+<p><img src="tutorials/fps/tutorial-2/shooting.gif" alt="shooting" /></p>
+<h3 id="world-interaction"><a class="header" href="#world-interaction">World Interaction</a></h3>
+<p>Work-in-progress.</p>
+<h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
 <p>Work-in-progress.</p>
 <h2 id="conclusion-1"><a class="header" href="#conclusion-1">Conclusion</a></h2>
 <p>In this tutorial part we've added weapons that can shoot projectiles, which in their turn can interact with the 

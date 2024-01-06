@@ -1,6 +1,7 @@
 use fyrox::{
     core::{
         algebra::Vector3,
+        math,
         pool::Handle,
         reflect::prelude::*,
         uuid::{uuid, Uuid},
@@ -9,6 +10,7 @@ use fyrox::{
         TypeUuidProvider,
     },
     impl_component_provider,
+    resource::model::{ModelResource, ModelResourceExtension},
     scene::{graph::physics::RayCastOptions, node::Node},
     script::{ScriptContext, ScriptTrait},
 };
@@ -19,6 +21,11 @@ pub struct Projectile {
     #[visit(optional)]
     trail: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: trail_field
+
+    // ANCHOR: effect_field
+    #[visit(optional)]
+    impact_effect: InheritableVariable<Option<ModelResource>>,
+    // ANCHOR_END: effect_field
 }
 
 impl_component_provider!(Projectile);
@@ -30,7 +37,7 @@ impl TypeUuidProvider for Projectile {
 }
 
 impl ScriptTrait for Projectile {
-    // ANCHOR: on_start
+    // ANCHOR: on_start_begin
     fn on_start(&mut self, ctx: &mut ScriptContext) {
         let this_node = &ctx.scene.graph[ctx.handle];
         let this_node_position = this_node.global_position();
@@ -70,8 +77,23 @@ impl ScriptTrait for Projectile {
                 current_trail_scale.z,
             ));
         }
+        // ANCHOR_END: on_start_begin
+
+        // ANCHOR: effect_spawn
+        if let Some(intersection) = intersections.first() {
+            if let Some(effect) = self.impact_effect.as_ref() {
+                effect.instantiate_at(
+                    ctx.scene,
+                    intersection.position.coords,
+                    math::vector_to_quat(intersection.normal),
+                );
+            }
+        }
+        // ANCHOR_END: effect_spawn
+
+        // ANCHOR: on_start_end
     }
-    // ANCHOR_END: on_start
+    // ANCHOR_END: on_start_end
 
     fn id(&self) -> Uuid {
         Self::type_uuid()
