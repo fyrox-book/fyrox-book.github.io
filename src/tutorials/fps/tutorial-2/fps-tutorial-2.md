@@ -1,7 +1,9 @@
 # Weapons
 
 In the [previous tutorial](../tutorial-1/fps-tutorial.md) we've added basic character controller, but what is a 
-first-person shooter without weapons? Let's add them. 
+first-person shooter without weapons? Let's add them. In the end of the tutorial you should get something like this:
+
+![recoil](recoil.gif)
 
 ## Weapon Prefab
 
@@ -271,7 +273,29 @@ and run the game. You should see something like this:
 
 ### Recoil
 
-Work-in-progress.
+The final improvement that we could do is to add a recoil to our weapon. We'll use animation for that, like 
+we did for [trails](#trail-dissolving). Instead of animation the color, we'll animation position of the weapon
+model. Open `m4.rgs` prefab, add an animation player, create a new animation, add a binding to `Position`
+property of `m4.FBX` node with the following parameters:
+
+![recoil animation](recoil_animation.png)
+
+Now we need a way to enable this animation when shooting, to do that we need to know a handle of the animation
+player in the weapon script. Let's add it to the `Weapon` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:animation_player}}
+```
+
+Add the following code to the `on_message` in `weapon.rs`, right after the shooting condition (`if self.shot_timer >= 0.0 { ...`):
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/weapon.rs:recoil_animation}}
+```
+
+Run the game, and you should see something like this when shooting:
+
+![recoil](recoil.gif)
 
 ## Conclusion
 
