@@ -1,3 +1,4 @@
+use fyrox::scene::animation::AnimationPlayer;
 use fyrox::{
     core::{
         math,
@@ -34,6 +35,11 @@ pub struct Weapon {
     #[reflect(hidden)]
     shot_timer: f32,
     // ANCHOR_END: shot_timer
+
+    // ANCHOR: animation_player
+    #[visit(optional)]
+    animation_player: InheritableVariable<Handle<Node>>,
+    // ANCHOR_END: animation_player
 }
 
 // ANCHOR: shoot_message
@@ -81,6 +87,24 @@ impl ScriptTrait for Weapon {
             // Reset the timer, this way the next shot cannot be done earlier than the interval.
             self.shot_timer = *self.shot_interval;
             // ANCHOR_END: shooting_condition
+
+            // ANCHOR: recoil_animation
+            if let Some(animation_player) = ctx
+                .scene
+                .graph
+                .try_get_mut_of_type::<AnimationPlayer>(*self.animation_player)
+            {
+                if let Some(animation) = animation_player
+                    .animations_mut()
+                    .get_value_mut_silent()
+                    .iter_mut()
+                    .next()
+                {
+                    animation.rewind();
+                    animation.set_enabled(true);
+                }
+            }
+            // ANCHOR_END: recoil_animation
 
             // ANCHOR: on_message_end
             if let Some(projectile_prefab) = self.projectile.as_ref() {

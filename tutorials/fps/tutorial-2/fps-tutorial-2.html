@@ -187,7 +187,8 @@
                     <main>
                         <h1 id="weapons"><a class="header" href="#weapons">Weapons</a></h1>
 <p>In the <a href="../tutorial-1/fps-tutorial.html">previous tutorial</a> we've added basic character controller, but what is a 
-first-person shooter without weapons? Let's add them. </p>
+first-person shooter without weapons? Let's add them. In the end of the tutorial you should get something like this:</p>
+<p><img src="recoil.gif" alt="recoil" /></p>
 <h2 id="weapon-prefab"><a class="header" href="#weapon-prefab">Weapon Prefab</a></h2>
 <p>At first, we need a 3D model for our weapon -  use this <a href="m4.zip">ZIP-archive</a> - it contains an M4 rifle 3D model that is 
 prepared for direct usage in the engine. Unzip this archive in <code>data/models</code> folder. Now we can start by making a prefab 
@@ -518,7 +519,39 @@ of impact, which will push the rigid body.</p>
 and run the game. You should see something like this:</p>
 <p><img src="pushing.gif" alt="pushing" /></p>
 <h3 id="recoil"><a class="header" href="#recoil">Recoil</a></h3>
-<p>Work-in-progress.</p>
+<p>The final improvement that we could do is to add a recoil to our weapon. We'll use animation for that, like 
+we did for <a href="#trail-dissolving">trails</a>. Instead of animation the color, we'll animation position of the weapon
+model. Open <code>m4.rgs</code> prefab, add an animation player, create a new animation, add a binding to <code>Position</code>
+property of <code>m4.FBX</code> node with the following parameters:</p>
+<p><img src="recoil_animation.png" alt="recoil animation" /></p>
+<p>Now we need a way to enable this animation when shooting, to do that we need to know a handle of the animation
+player in the weapon script. Let's add it to the <code>Weapon</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>Add the following code to the <code>on_message</code> in <code>weapon.rs</code>, right after the shooting condition (<code>if self.shot_timer &gt;= 0.0 { ...</code>):</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>            if let Some(animation_player) = ctx
+                .scene
+                .graph
+                .try_get_mut_of_type::&lt;AnimationPlayer&gt;(*self.animation_player)
+            {
+                if let Some(animation) = animation_player
+                    .animations_mut()
+                    .get_value_mut_silent()
+                    .iter_mut()
+                    .next()
+                {
+                    animation.rewind();
+                    animation.set_enabled(true);
+                }
+            }
+<span class="boring">}</span></code></pre></pre>
+<p>Run the game, and you should see something like this when shooting:</p>
+<p><img src="recoil.gif" alt="recoil" /></p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this tutorial part we've added weapons that can shoot projectiles, which in their turn can interact with the 
 environment.</p>
