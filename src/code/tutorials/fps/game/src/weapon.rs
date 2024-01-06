@@ -8,13 +8,10 @@ use fyrox::{
         visitor::prelude::*,
         TypeUuidProvider,
     },
-    event::Event,
     impl_component_provider,
     resource::{model::ModelResource, model::ModelResourceExtension},
     scene::node::Node,
-    script::{
-        ScriptContext, ScriptDeinitContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait,
-    },
+    script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
 };
 
 #[derive(Visit, Reflect, Default, Debug, Clone)]
@@ -52,10 +49,6 @@ impl TypeUuidProvider for Weapon {
 }
 
 impl ScriptTrait for Weapon {
-    fn on_init(&mut self, context: &mut ScriptContext) {
-        // Put initialization logic here.
-    }
-
     // ANCHOR: on_start
     fn on_start(&mut self, context: &mut ScriptContext) {
         context
@@ -63,14 +56,6 @@ impl ScriptTrait for Weapon {
             .subscribe_to::<ShootWeaponMessage>(context.handle);
     }
     // ANCHOR_END: on_start
-
-    fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
-        // Put de-initialization logic here.
-    }
-
-    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {
-        // Respond to OS events here.
-    }
 
     // ANCHOR: on_update
     fn on_update(&mut self, context: &mut ScriptContext) {

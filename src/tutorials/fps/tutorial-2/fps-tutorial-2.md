@@ -129,7 +129,8 @@ borrow the node and modify the trail's length after ray casting.
 The ray casting itself is the core of our projectiles, add the following code to the `on_start` method:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/projectile.rs:on_start}}
+{{#include ../../../code/tutorials/fps/game/src/projectile.rs:on_start_begin}}
+{{#include ../../../code/tutorials/fps/game/src/projectile.rs:on_start_end}}
 ```
 
 This code is pretty straightforward - at first we're borrowing the node of the projectile, saving its global position 
@@ -227,13 +228,38 @@ Also, make sure the `Unique Material` check box is checked in the material prope
 all trails will share the same material and once the animation is finished, you won't see the trail anymore. 
 Run the game and shot trails should disappear smoothly.
 
+### Impact Effects
+
+Right now our projectiles does not interact with world, we can improve that by creating sparks effect
+at the point of impact. Download [this](bullet_impact.zip) pre-made effect and unzip it in `data/effects` folder. 
+
+Add the following field to the `Projectile` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/projectile.rs:effect_field}}
+```
+
+This is a "link" to particle effect, that we'll spawn at the impact position. Let's add this code to the end
+of `on_start` of `impl ScriptTrait for Projectile`:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/projectile.rs:effect_spawn}}
+```
+
+The last thing we need to do is to assign `Impact Effect` property in `bullet.rgs` to the pre-made effect. 
+Run the game, and you should see something like this when shooting:
+
+![shooting](shooting.gif)
+
+### World Interaction 
+
+Work-in-progress.
+
 ### Recoil
 
 Work-in-progress.
 
-### Impact Effects
 
-Work-in-progress.
 
 ## Conclusion
 

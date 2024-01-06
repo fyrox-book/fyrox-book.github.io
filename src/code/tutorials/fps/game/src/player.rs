@@ -68,7 +68,7 @@ impl TypeUuidProvider for Player {
 
 impl ScriptTrait for Player {
     // ANCHOR: on_os_event
-    fn on_os_event(&mut self, event: &Event<()>, ctx: &mut ScriptContext) {
+    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
