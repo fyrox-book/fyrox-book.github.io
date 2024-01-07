@@ -44,6 +44,10 @@ fn create_sprite(scene: &mut Scene, resource_manager: ResourceManager) -> Handle
 }
 ```
 
+## Animation
+
+See [Sprite Animation](../animation/spritesheet/spritesheet.md) chapter for more info.
+
 ## General rules
 
 Sprites **must not** be used to create any visual effects that involve many particles. You should use 

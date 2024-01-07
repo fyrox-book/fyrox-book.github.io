@@ -62,6 +62,10 @@ Keep in mind that every part of uv rectangle is proportional. For example 0.5 me
 or height is exceeding 1.0 and the texture being used is set to Wrapping mode at respective axis, the image will tile
 across axes.
 
+## Animation
+
+See [Sprite Animation](../animation/spritesheet/spritesheet.md) chapter for more info.
+
 ## Performance
 
 Rectangles use specialized renderer that is heavily optimized to render tons of rectangles at once, so you can use 

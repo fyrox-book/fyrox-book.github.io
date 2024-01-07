@@ -49,6 +49,7 @@
     - [ABSM Editor](./animation/absm_editor.md)
     - [Signals](./animation/signal.md)
     - [Root Motion](./animation/root_motion/root_motion.md)
+    - [Sprite Animation](./animation/spritesheet/spritesheet.md)
 - [Input Handling](./input/input.md)
   - [Keyboard](./input/keyboard.md)
   - [Mouse](./input/mouse.md)
