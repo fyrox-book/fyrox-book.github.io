@@ -714,19 +714,31 @@
         ),
         "data/models/zombie/zombie.rgs": (
             camera_settings: (
-                position: (-1.6084437, -0.67894244, -1.692116),
-                yaw: -2.4600003,
-                pitch: 0.53999925,
+                position: (-3.1053581, 0.21261728, -3.035266),
+                yaw: -2.36,
+                pitch: 0.099999174,
             ),
             node_infos: {
                 (
-                    index: 110,
+                    index: 111,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
                     index: 109,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 110,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -769,7 +781,7 @@
     ),
     windows: (
         window_position: (490.0, 11.0),
-        window_size: (2560.0, 1377.0),
+        window_size: (1520.0, 847.0),
         layout: None,
     ),
 )

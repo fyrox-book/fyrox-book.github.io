@@ -10675,8 +10675,73 @@ a <code>Rewind Animation</code> action when entering <code>Attack</code> state. 
 the Inspector and add a new action by clicking <code>+</code> button, select <code>Rewind Animation</code> and select <code>zombie_attack</code>
 from the list.</p>
 <p>Great, now we have all animations working, and now we can add a physical capsule for the bot, so it won't fall
-through the ground. Create a new rigid body, add a capsule collider node to it, adjust its size to fully enclose
-the bot (we did the same in the first tutorial, but for player).</p>
+through the ground. Replace the root node of the prefab with a Rigid Body, add a capsule collider child node to 
+it, adjust its size to fully enclose the bot (we did the same in the first tutorial, but for player):</p>
+<p><img src="tutorials/fps/tutorial-3/rigid_body.png" alt="rigid body" /></p>
+<p>For now, our prefab is more or less finished. As usual, we need to write some code, that will drive the bot.</p>
+<h2 id="code-2"><a class="header" href="#code-2">Code</a></h2>
+<p>Add a new script using the following command:</p>
+<pre><code class="language-shell">fyrox-template script --name=bot
+</code></pre>
+<p>Add this module to the <code>lib.rs</code> module as we did in the previous tutorials. At first, our bot needs an ability
+&quot;to see&quot;. In games such ability can be represented by a simple frustum with its top at the head of the bot and
+the base oriented forward. We can construct such frustum from a pair of matrices - view and projection. After
+that the frustum can be used for simple frustum-point intersection check. We'll check if the player's position
+intersects with the bot's viewing frustum and if so, the bot will start chasing the player. On to the code we go, 
+add the following field to the <code>Bot</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(skip)]
+    #[reflect(hidden)]
+    frustum: Frustum,
+<span class="boring">}</span></code></pre></pre>
+<p>To construct the frustum, add the following code somewhere in the <code>bot.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn update_frustum(
+        &amp;mut self,
+        position: Vector3&lt;f32&gt;,
+        look_vector: Vector3&lt;f32&gt;,
+        up_vector: Vector3&lt;f32&gt;,
+        max_observing_distance: f32,
+    ) {
+        // Calculate an average head position.
+        let head_pos = position + Vector3::new(0.0, 0.4, 0.0);
+        let look_at = head_pos + look_vector;
+
+        // View matrix is constructed using three parameters - observer position, target point,
+        // and an up vector (usually it is just (0,1,0) vector).
+        let view_matrix =
+            Matrix4::look_at_rh(&amp;Point3::from(head_pos), &amp;Point3::from(look_at), &amp;up_vector);
+
+        // Build the perspective projection matrix.
+        let projection_matrix = Matrix4::new_perspective(
+            // Aspect ratio
+            16.0 / 9.0,
+            // Field of view of the bot
+            90.0f32.to_radians(),
+            0.1,
+            max_observing_distance,
+        );
+        self.frustum =
+            Frustum::from_view_projection_matrix(projection_matrix * view_matrix).unwrap();
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>We'll call this method every frame to keep the frustum updated with the current location and orientation of
+the bot. Add the following code to the <code>on_update</code> method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        if let Some(rigid_body) = ctx.scene.graph.try_get_mut(ctx.handle) {
+            let position = rigid_body.global_position();
+            let up_vector = rigid_body.up_vector();
+            let look_vector = rigid_body.look_vector();
+
+            // Update the viewing frustum.
+            self.update_frustum(position, look_vector, up_vector);
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
 <h2 id="conclusion-2"><a class="header" href="#conclusion-2">Conclusion</a></h2>
 <p>In this tutorial part we've added bots with animation and simple AI.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="role-playing-game-tutorial"><a class="header" href="#role-playing-game-tutorial">Role-Playing Game Tutorial</a></h1>
