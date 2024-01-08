@@ -81,8 +81,46 @@ the Inspector and add a new action by clicking `+` button, select `Rewind Animat
 from the list.
 
 Great, now we have all animations working, and now we can add a physical capsule for the bot, so it won't fall
-through the ground. Create a new rigid body, add a capsule collider node to it, adjust its size to fully enclose
-the bot (we did the same in the first tutorial, but for player).
+through the ground. Replace the root node of the prefab with a Rigid Body, add a capsule collider child node to 
+it, adjust its size to fully enclose the bot (we did the same in the first tutorial, but for player):
+
+![rigid body](rigid_body.png)
+
+For now, our prefab is more or less finished. As usual, we need to write some code, that will drive the bot.
+
+## Code
+
+Add a new script using the following command:
+
+```shell
+fyrox-template script --name=bot
+```
+
+Add this module to the `lib.rs` module as we did in the previous tutorials. At first, our bot needs an ability
+"to see". In games such ability can be represented by a simple frustum with its top at the head of the bot and
+the base oriented forward. We can construct such frustum from a pair of matrices - view and projection. After
+that the frustum can be used for simple frustum-point intersection check. We'll check if the player's position
+intersects with the bot's viewing frustum and if so, the bot will start chasing the player. On to the code we go, 
+add the following field to the `Bot` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:frustum}}
+```
+
+To construct the frustum, add the following code somewhere in the `bot.rs`:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:frustum_update}}
+```
+
+We'll call this method every frame to keep the frustum updated with the current location and orientation of
+the bot. Add the following code to the `on_update` method:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:on_update}}
+```
+
+
 
 ## Conclusion
 

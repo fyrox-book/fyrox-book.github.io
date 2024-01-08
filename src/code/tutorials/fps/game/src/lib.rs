@@ -10,6 +10,7 @@ use std::path::Path;
 // Add this line
 pub mod player;
 // ANCHOR_END: player_mod_reg
+pub mod bot;
 pub mod projectile;
 pub mod weapon;
 
