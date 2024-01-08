@@ -514,6 +514,83 @@ pattern matching and do something useful.</li>
 </ul>
 <p>Try to use message passing in all cases, loose coupling significantly improves code quality and readability, however
 in simple projects it can be ignored completely.</p>
+<h2 id="accessing-other-scripts-data"><a class="header" href="#accessing-other-scripts-data">Accessing Other Script's Data</a></h2>
+<p>Every script &quot;lives&quot; on some scene node, so to access a script data from some other script you need to know
+a handle of a scene node with that script first. You can do this like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug, Reflect, Visit, Default)]
+struct MyScript {
+    second_node: Handle&lt;Node&gt;,
+}
+
+impl ScriptTrait for MyScript {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        if let Some(second_nodes_script_ref) = ctx
+            .scene
+            .graph
+            .try_get_script_of::&lt;MyOtherScript&gt;(self.second_node)
+        {
+            if second_nodes_script_ref.counter &gt; 60.0 {
+                Log::info(&quot;Done!&quot;);
+            }
+        }
+
+        // The code below is equivalent to the code above. The only difference is that
+        // it borrows the node and then borrows the script from it, giving you access
+        // to the node.
+        if let Some(second_node_ref) = ctx.scene.graph.try_get(self.second_node) {
+            if let Some(second_nodes_script_ref) = second_node_ref.try_get_script::&lt;MyOtherScript&gt;()
+            {
+                if second_nodes_script_ref.counter &gt; 60.0 {
+                    Log::info(&quot;Done!&quot;);
+                }
+            }
+        }
+    }
+
+    fn id(&amp;self) -&gt; Uuid {
+        Self::type_uuid()
+    }
+}
+
+#[derive(Clone, Debug, Reflect, Visit, Default)]
+struct MyOtherScript {
+    counter: f32,
+}
+
+impl ScriptTrait for MyOtherScript {
+    fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) {
+        // Counting.
+        self.counter += 1.0;
+    }
+
+    fn id(&amp;self) -&gt; Uuid {
+        Self::type_uuid()
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In this example we have the two script types: <code>MyScript</code> and <code>MyOtherScript</code>. Now imagine that we have two scene
+nodes, where the first one contains <code>MyScript</code> and the second one <code>MyOtherScript</code>. <code>MyScript</code> knows about
+the second node by storing a handle of in <code>second_node</code> field. <code>MyScript</code> waits until <code>MyOtherScript</code> will count
+its internal counter to <code>60.0</code> and then prints a message into the log. This code does immutable borrowing and 
+does not allow you to modify other script's data. If you a mutable access, then use <code>try_get_script_of_mut</code>
+method (or <code>try_get_script_mut</code> for the alternative code).</p>
+<p><code>second_node</code> field of the <code>MyScript</code> is usually assigned in the editor, but you can also find the node in
+your scene by using the following code:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        self.second_node = ctx
+            .scene
+            .graph
+            .find_by_name_from_root(&quot;SomeName&quot;)
+            .map(|(handle, _)| handle)
+            .unwrap_or_default();
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>This code searches for a node with <code>SomeName</code> and assigns its handle to the <code>second_node</code> variable in the script
+for later use.</p>
 
                     </main>
 
