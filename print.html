@@ -9985,8 +9985,10 @@ Log::err(&quot;This is some error&quot;);
 from mild difficulty and keep increasing the difficulty until the end. All tutorials are very well structured and
 you shouldn't be able to lost in them.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="first-person-shooter-tutorial"><a class="header" href="#first-person-shooter-tutorial">First-person Shooter Tutorial</a></h1>
-<p>This tutorial will guide your through a process of creation a simple 3D shooter, that will have basic character controller,
-weapons, projectiles, bots, animation, and simple AI.</p>
+<p>This tutorial series will guide your through a process of creation a simple 3D shooter, that will have basic 
+character controller, weapons, projectiles, bots, animation, and simple AI.</p>
+<p>Keep in mind, that every tutorial part expects that you've read every previous part. It is needed to not explain
+all required actions over and over again.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="first-person-shooter-tutorial-1"><a class="header" href="#first-person-shooter-tutorial-1">First-Person Shooter Tutorial</a></h1>
 <p>In this tutorial we'll create a first-person shooter game. </p>
 <p>Before we begin, make sure you know how to create projects and run the game and the editor. Read 
@@ -10612,10 +10614,69 @@ player in the weapon script. Let's add it to the <code>Weapon</code> struct:</p>
 <h2 id="conclusion-1"><a class="header" href="#conclusion-1">Conclusion</a></h2>
 <p>In this tutorial part we've added weapons that can shoot projectiles, which in their turn can interact with the 
 environment.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="bots-and-ai"><a class="header" href="#bots-and-ai">Bots and AI</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bots-and-ai-wip"><a class="header" href="#bots-and-ai-wip">Bots and AI (WIP)</a></h1>
+<p><strong>WORK IN PROGRESS</strong></p>
 <p>In the <a href="tutorials/fps/tutorial-3/../tutorial-2/fps-tutorial-2.html">previous</a> we've added weapons and projectiles, but we still do not have 
 anything to shoot at. In this tutorial part we'll add bots with simple AI.</p>
-<p>Work-in-progress.</p>
+<h2 id="bot-prefab"><a class="header" href="#bot-prefab">Bot Prefab</a></h2>
+<p>Let's start by zombie 3D model and animations for it, grab it from <a href="tutorials/fps/tutorial-3/zombie.zip">here</a> and unpack into 
+<code>data/models/zombie</code> folder. Open the editor and create <code>zombie.rgs</code> scene. Instantiate a <code>zombie.FBX</code> 3D model
+in the scene and make sure it is located at (0, 0, 0) coordinates. Scale it down to have 0.01 scale in both axes.
+You should get something like this:</p>
+<p><img src="tutorials/fps/tutorial-3/zombie.png" alt="zombie" /></p>
+<p>Next thing that we'll add is animations. Create a new Animation Player scene node, open the animation editor 
+and add three animations (use <a href="tutorials/fps/tutorial-3/../../../animation/anim_editor.html#animation-importing">this chapter</a> to learn how to 
+do this) - <code>zombie_attack</code>, <code>zombie_idle</code>, <code>zombie_running</code>. You should get something like this:</p>
+<p><img src="tutorials/fps/tutorial-3/zombie_animation.png" alt="zombie animation" /></p>
+<p>Do not forget to disable looping for <code>zombie_attack</code> animation, otherwise our zombie will attack infinitely.
+Also, make sure to set up the root motion for the <code>zombie_running</code> animation, read 
+<a href="tutorials/fps/tutorial-3/../../../animation/root_motion/root_motion.html">this chapter</a> for more info. Root motion will allow us to get
+nice animation of movement, which will also serve as a source velocity for our bot.</p>
+<p>You can select each animation from the list and see how it plays by clicking the &quot;Preview&quot; check box at the 
+toolbar. Animations by their own are not very useful for us, because our bot can be in multiple states in the
+game:</p>
+<ul>
+<li>Idle - when there's no one around and the bot is just standing still; looking for potential targets.</li>
+<li>Run - when the bot spotted someone and walks towards it.</li>
+<li>Attack - when the bot is close enough to a target and can attack it.</li>
+</ul>
+<p>We need to somehow manage all these states and do smooth transition between the states. Fyrox has a special
+tool for this called <a href="tutorials/fps/tutorial-3/../../../animation/blending.html">animation blending state machine</a> (ABSM). Let's create a new 
+ABSM scene node and add the three states mentioned above (if you don't know how - 
+<a href="tutorials/fps/tutorial-3/../../../animation/absm_editor.html">read this chapter</a>):</p>
+<p><img src="tutorials/fps/tutorial-3/absm_states.png" alt="absm states" /></p>
+<p>Connect them with bidirectional transitions and set transition time for them to 0.3s. Select the Animation Blending 
+State Machine node and assign <code>Animation Player</code> property in the Inspector. </p>
+<p>Now add <code>Play Animation</code> pose node for each of the states (double-click on a state, right-click, Play Animation)
+and set an appropriate animation from the list in the inspector. For example, for <code>Idle</code> state it could look 
+like this:</p>
+<p><img src="tutorials/fps/tutorial-3/pose_node.png" alt="pose node" /></p>
+<p>Click <code>Preview</code> check box, and you should see the bot with <code>Idle</code> animation playing. Let's add two parameters 
+that will be used for transitions:</p>
+<p><img src="tutorials/fps/tutorial-3/parameters.png" alt="parameters" /></p>
+<p>All we need to do now is to thoroughly set these variables in all six transitions. Select the <code>Idle -&gt; Attack</code>
+transition and in the Inspector find <code>Condition</code> property and type in <code>Attack</code> parameter name:</p>
+<p><img src="tutorials/fps/tutorial-3/attack_transition.png" alt="attack transition" /></p>
+<p>For the opposite transition you need to add almost the same, but with additional <code>Not</code> computational node:</p>
+<p><img src="tutorials/fps/tutorial-3/attack_rev_transition.png" alt="attack reverse transition" /></p>
+<p>Do the same for the rest of four transitions, all six transitions should have these values set:</p>
+<ul>
+<li><code>Idle -&gt; Attack</code> - Parameter(Attack)</li>
+<li><code>Attack -&gt; Idle</code> - Not(Parameter(Attack))</li>
+<li><code>Idle -&gt; Run</code> - And(Parameter(Run), Not(Parameter(Attack)))</li>
+<li><code>Run -&gt; Idle</code> - Not(Parameter(Run))</li>
+<li><code>Run -&gt; Attack</code> - And(Parameter(Run), Parameter(Attack))</li>
+<li><code>Attack -&gt; Run</code> - And(Parameter(Run), Not(Parameter(Attack)))</li>
+</ul>
+<p>Click <code>Preview</code> and click on some parameters, you should see transitions between states.</p>
+<p>You may probably notice that there's something off with <code>Attack</code> state, sometimes it enters it in mid-attack
+state. This happens because the attack animation could be in arbitrary play time. It could be fixed by adding
+a <code>Rewind Animation</code> action when entering <code>Attack</code> state. Select the <code>Attack</code> state, find <code>On Enter Actions</code> in
+the Inspector and add a new action by clicking <code>+</code> button, select <code>Rewind Animation</code> and select <code>zombie_attack</code>
+from the list.</p>
+<p>Great, now we have all animations working, and now we can add a physical capsule for the bot, so it won't fall
+through the ground. Create a new rigid body, add a capsule collider node to it, adjust its size to fully enclose
+the bot (we did the same in the first tutorial, but for player).</p>
 <h2 id="conclusion-2"><a class="header" href="#conclusion-2">Conclusion</a></h2>
 <p>In this tutorial part we've added bots with animation and simple AI.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="role-playing-game-tutorial"><a class="header" href="#role-playing-game-tutorial">Role-Playing Game Tutorial</a></h1>
