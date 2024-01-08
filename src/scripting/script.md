@@ -351,3 +351,30 @@ pattern matching and do something useful.
 
 Try to use message passing in all cases, loose coupling significantly improves code quality and readability, however
 in simple projects it can be ignored completely.
+
+## Accessing Other Script's Data
+
+Every script "lives" on some scene node, so to access a script data from some other script you need to know
+a handle of a scene node with that script first. You can do this like so:
+
+```rust,no_run
+{{#include ../code/snippets/src/script/mod.rs:access_other_1}}
+{{#include ../code/snippets/src/script/mod.rs:access_other_2}}
+```
+
+In this example we have the two script types: `MyScript` and `MyOtherScript`. Now imagine that we have two scene
+nodes, where the first one contains `MyScript` and the second one `MyOtherScript`. `MyScript` knows about
+the second node by storing a handle of in `second_node` field. `MyScript` waits until `MyOtherScript` will count
+its internal counter to `60.0` and then prints a message into the log. This code does immutable borrowing and 
+does not allow you to modify other script's data. If you a mutable access, then use `try_get_script_of_mut`
+method (or `try_get_script_mut` for the alternative code).
+
+`second_node` field of the `MyScript` is usually assigned in the editor, but you can also find the node in
+your scene by using the following code:
+
+```rust,no_run
+{{#include ../code/snippets/src/script/mod.rs:find_node}}
+```
+
+This code searches for a node with `SomeName` and assigns its handle to the `second_node` variable in the script
+for later use.
