@@ -45,7 +45,7 @@
         show_light_bounds: true,
         show_camera_bounds: true,
         pictogram_size: 0.33,
-        save_scene_in_text_form: true,
+        save_scene_in_text_form: false,
     ),
     move_mode_settings: (
         grid_snapping: false,
@@ -314,15 +314,15 @@
         ),
     ),
     scene_settings: {
-        "data/effects/bullet_impact.rgs": (
+        "data/models/m4.rgs": (
             camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
+                position: (-2.3658044, -0.78334, 0.98359746),
+                yaw: -1.2100003,
+                pitch: 0.32,
             ),
             node_infos: {
                 (
-                    index: 3,
+                    index: 6,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -334,7 +334,54 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 44,
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "\\\\?\\I:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\zombie\\zombie.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: -2.9399996,
+                pitch: 0.49999985,
+            ),
+            node_infos: {},
+        ),
+        "data/scene.rgs": (
+            camera_settings: (
+                position: (0.07066023, 1.3245558, 0.4848578),
+                yaw: -3.5299995,
+                pitch: 0.51079684,
+            ),
+            node_infos: {
+                (
+                    index: 46,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -346,12 +393,110 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 4,
+                    index: 28,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 10,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 5,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 8,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 6,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 74,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 58,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 33,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 47,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 7,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
             },
+        ),
+        "\\\\?\\I:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\unnamed.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
+            ),
+            node_infos: {},
         ),
         "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\bullet.rgs": (
             camera_settings: (
@@ -374,60 +519,6 @@
                 ),
             },
         ),
-        "data/unnamed.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-            ),
-            node_infos: {
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "data/models/m4.rgs": (
-            camera_settings: (
-                position: (-2.3658044, -0.78334, 0.98359746),
-                yaw: -1.2100003,
-                pitch: 0.32,
-            ),
-            node_infos: {
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 49,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
         "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\models\\m4.rgs": (
             camera_settings: (
                 position: (0.08306122, -0.020895928, 0.12323859),
@@ -435,39 +526,6 @@
                 pitch: 0.42000028,
             ),
             node_infos: {},
-        ),
-        "data/models/barrel.rgs": (
-            camera_settings: (
-                position: (1.4056002, -0.028071642, 0.34818304),
-                yaw: 1.1999996,
-                pitch: 0.28000012,
-            ),
-            node_infos: {
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
         ),
         "\\\\?\\C:\\rust-engine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\player\\player.rgs": (
             camera_settings: (
@@ -479,11 +537,47 @@
         ),
         "data/player/player.rgs": (
             camera_settings: (
-                position: (-1.7964343, 0.5015054, 1.5938219),
-                yaw: -0.9200007,
-                pitch: 0.38079646,
+                position: (-2.0968628, 0.87944573, 1.225207),
+                yaw: -1.08,
+                pitch: 0.22079653,
             ),
             node_infos: {
+                (
+                    index: 42,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 52,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 51,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 41,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
                 (
                     index: 0,
                     generation: 1,
@@ -496,14 +590,23 @@
                 ): (
                     is_expanded: true,
                 ),
+            },
+        ),
+        "data/models/barrel.rgs": (
+            camera_settings: (
+                position: (1.4056002, -0.028071642, 0.34818304),
+                yaw: 1.1999996,
+                pitch: 0.28000012,
+            ),
+            node_infos: {
                 (
-                    index: 52,
+                    index: 45,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 42,
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -515,19 +618,46 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 41,
+                    index: 3,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
+            },
+        ),
+        "data/effects/bullet_impact.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
+            ),
+            node_infos: {
                 (
-                    index: 51,
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
                     index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -557,6 +687,18 @@
             ),
             node_infos: {
                 (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 42,
                     generation: 1,
                 ): (
@@ -568,91 +710,23 @@
                 ): (
                     is_expanded: true,
                 ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
             },
         ),
-        "\\\\?\\I:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\fps\\data\\unnamed.rgs": (
+        "data/models/zombie/zombie.rgs": (
             camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-            ),
-            node_infos: {},
-        ),
-        "data/scene.rgs": (
-            camera_settings: (
-                position: (0.07066023, 1.3245558, 0.4848578),
-                yaw: -3.6899993,
-                pitch: 0.33079687,
+                position: (-1.6084437, -0.67894244, -1.692116),
+                yaw: -2.4600003,
+                pitch: 0.53999925,
             ),
             node_infos: {
                 (
-                    index: 58,
+                    index: 110,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 49,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 33,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 10,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 5,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 47,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
+                    index: 109,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -663,50 +737,17 @@
                 ): (
                     is_expanded: true,
                 ),
-                (
-                    index: 7,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 28,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 8,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
+            },
+        ),
+        "data/unnamed.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
+            ),
+            node_infos: {
                 (
                     index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 46,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 44,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -720,13 +761,14 @@
             "data/models/barrel.rgs",
             "data/models/bullet.rgs",
             "data/models/m4.rgs",
+            "data/models/zombie/zombie.rgs",
             "data/player/player.rgs",
             "data/scene.rgs",
             "data/unnamed.rgs",
         ],
     ),
     windows: (
-        window_position: (128.0, 61.0),
+        window_position: (490.0, 11.0),
         window_size: (2560.0, 1377.0),
         layout: None,
     ),
