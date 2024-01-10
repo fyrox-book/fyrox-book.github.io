@@ -149,7 +149,7 @@ for that. Root motion will be extracted from the animation blending state machin
 add this code to the `Bot` struct:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/bot.rs:absm_field}}
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:absm_model_root_fields}}
 ```
 
 The first field will hold a handle to the ABSM and the second - a handle to the 3D model root. We'll assign 
