@@ -1,22 +1,15 @@
-use fyrox::scene::rigidbody::RigidBody;
 use fyrox::{
     core::{
-        algebra::Vector3,
-        math,
-        pool::Handle,
-        reflect::prelude::*,
-        uuid::{uuid, Uuid},
-        variable::InheritableVariable,
-        visitor::prelude::*,
-        TypeUuidProvider,
+        algebra::Vector3, math, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
+        variable::InheritableVariable, visitor::prelude::*,
     },
-    impl_component_provider,
     resource::model::{ModelResource, ModelResourceExtension},
-    scene::{graph::physics::RayCastOptions, node::Node},
+    scene::{graph::physics::RayCastOptions, node::Node, rigidbody::RigidBody},
     script::{ScriptContext, ScriptTrait},
 };
 
-#[derive(Visit, Reflect, Default, Debug, Clone)]
+#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "55199744-33be-4c1a-832a-727fe5f0ea28")]
 pub struct Projectile {
     // ANCHOR: trail_field
     #[visit(optional)]
@@ -27,14 +20,6 @@ pub struct Projectile {
     #[visit(optional)]
     impact_effect: InheritableVariable<Option<ModelResource>>,
     // ANCHOR_END: effect_field
-}
-
-impl_component_provider!(Projectile);
-
-impl TypeUuidProvider for Projectile {
-    fn type_uuid() -> Uuid {
-        uuid!("55199744-33be-4c1a-832a-727fe5f0ea28")
-    }
 }
 
 impl ScriptTrait for Projectile {
@@ -117,8 +102,4 @@ impl ScriptTrait for Projectile {
         // ANCHOR: on_start_end
     }
     // ANCHOR_END: on_start_end
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }

@@ -3,19 +3,16 @@
 mod residuals;
 
 // ANCHOR: imports
-use fyrox::keyboard::PhysicalKey;
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
         pool::Handle,
         reflect::prelude::*,
-        uuid::{uuid, Uuid},
+        type_traits::prelude::*,
         visitor::prelude::*,
-        TypeUuidProvider,
     },
     event::{ElementState, Event, WindowEvent},
-    impl_component_provider,
-    keyboard::KeyCode,
+    keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
@@ -28,13 +25,6 @@ use fyrox::{
 // ANCHOR_END: imports
 
 pub struct GameConstructor;
-
-impl TypeUuidProvider for GameConstructor {
-    fn type_uuid() -> Uuid {
-        // Ideally this should be unique per-project.
-        uuid!("cb358b1c-fc23-4c44-9e59-0a9671324196")
-    }
-}
 
 // ANCHOR: register
 impl PluginConstructor for GameConstructor {
@@ -68,7 +58,8 @@ impl Game {
 impl Plugin for Game {}
 
 // ANCHOR: sprite_field
-#[derive(Visit, Reflect, Debug, Clone)]
+#[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
 struct Player {
     sprite: Handle<Node>,
     // ...
@@ -85,8 +76,6 @@ struct Player {
     current_animation: u32,
     // ANCHOR_END: animation_fields
 }
-
-impl_component_provider!(Player,);
 
 // ANCHOR: animation_fields_defaults_begin
 impl Default for Player {
@@ -105,13 +94,6 @@ impl Default for Player {
     }
 }
 // ANCHOR_END: animation_fields_defaults_end
-
-impl TypeUuidProvider for Player {
-    // Returns unique script id for serialization needs.
-    fn type_uuid() -> Uuid {
-        uuid!("c5671d19-9f1a-4286-8486-add4ebaadaec")
-    }
-}
 
 impl ScriptTrait for Player {
     // ANCHOR: on_os_event
@@ -217,9 +199,4 @@ impl ScriptTrait for Player {
         // ANCHOR: on_update_closing_bracket_1
     }
     // ANCHOR_END: on_update_closing_bracket_1
-
-    // Returns unique script id for serialization needs.
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }

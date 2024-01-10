@@ -4,19 +4,18 @@ use fyrox::{
         algebra::{UnitQuaternion, UnitVector3, Vector3},
         pool::Handle,
         reflect::prelude::*,
-        uuid::{uuid, Uuid},
+        type_traits::prelude::*,
         variable::InheritableVariable,
         visitor::prelude::*,
-        TypeUuidProvider,
     },
     event::{DeviceEvent, ElementState, Event, MouseButton, WindowEvent},
-    impl_component_provider,
     keyboard::{KeyCode, PhysicalKey},
     scene::{node::Node, rigidbody::RigidBody},
     script::{ScriptContext, ScriptTrait},
 };
 
-#[derive(Visit, Reflect, Default, Debug, Clone)]
+#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "49cfe29e-c7c7-4317-8178-996251a0c2f9")]
 pub struct Player {
     // ANCHOR: input_fields
     #[visit(optional)]
@@ -56,14 +55,6 @@ pub struct Player {
     #[visit(optional)]
     #[reflect(hidden)]
     shoot: bool,
-}
-
-impl_component_provider!(Player);
-
-impl TypeUuidProvider for Player {
-    fn type_uuid() -> Uuid {
-        uuid!("49cfe29e-c7c7-4317-8178-996251a0c2f9")
-    }
 }
 
 impl ScriptTrait for Player {
@@ -191,8 +182,4 @@ impl ScriptTrait for Player {
         }
     }
     // ANCHOR_END: on_update_end
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }

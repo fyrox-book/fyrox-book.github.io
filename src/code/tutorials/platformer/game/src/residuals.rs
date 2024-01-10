@@ -2,29 +2,15 @@
 // Ignore this code.
 
 use fyrox::{
-    core::{
-        reflect::prelude::*,
-        uuid::{uuid, Uuid},
-        visitor::prelude::*,
-        TypeUuidProvider,
-    },
+    core::{reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
     event::Event,
-    impl_component_provider,
     script::{ScriptContext, ScriptTrait},
 };
 
 // ANCHOR: player_stub_script
-#[derive(Visit, Reflect, Debug, Clone, Default)]
+#[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
 struct Player;
-
-impl_component_provider!(Player,);
-
-impl TypeUuidProvider for Player {
-    // Returns unique script id for serialization needs.
-    fn type_uuid() -> Uuid {
-        uuid!("c5671d19-9f1a-4286-8486-add4ebaadaec")
-    }
-}
 
 impl ScriptTrait for Player {
     // Called once at initialization.
@@ -38,10 +24,5 @@ impl ScriptTrait for Player {
 
     // Called every frame at fixed rate of 60 FPS.
     fn on_update(&mut self, context: &mut ScriptContext) {}
-
-    // Returns unique script ID for serialization needs.
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 // ANCHOR_END: player_stub_script

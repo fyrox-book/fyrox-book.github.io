@@ -10,7 +10,7 @@ use fyrox::{
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn on_os_event(&mut self, event: &Event<()>, context: PluginContext) {
+    fn on_os_event(&mut self, event: &Event<()>, _context: PluginContext) {
         match event {
             // This branch should be used for pre-processed events that comes from
             // the main window.

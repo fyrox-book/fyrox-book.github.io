@@ -3,16 +3,15 @@ use fyrox::{
         algebra::{Matrix4, Point3, Vector3},
         math::frustum::Frustum,
         reflect::prelude::*,
-        uuid::{uuid, Uuid},
+        type_traits::prelude::*,
         visitor::prelude::*,
-        TypeUuidProvider,
     },
     event::Event,
-    impl_component_provider,
     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 };
 
-#[derive(Visit, Reflect, Default, Debug, Clone)]
+#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "40c225ca-9657-4f4e-af67-48d6482a7aeb")]
 pub struct Bot {
     // ANCHOR: frustum
     #[visit(skip)]
@@ -54,14 +53,6 @@ impl Bot {
     // ANCHOR_END: frustum_update
 }
 
-impl_component_provider!(Bot);
-
-impl TypeUuidProvider for Bot {
-    fn type_uuid() -> Uuid {
-        uuid!("40c225ca-9657-4f4e-af67-48d6482a7aeb")
-    }
-}
-
 impl ScriptTrait for Bot {
     fn on_init(&mut self, context: &mut ScriptContext) {
         // Put initialization logic here.
@@ -88,12 +79,8 @@ impl ScriptTrait for Bot {
             let look_vector = rigid_body.look_vector();
 
             // Update the viewing frustum.
-            self.update_frustum(position, look_vector, up_vector);
+            self.update_frustum(position, look_vector, up_vector, 20.0);
         }
     }
     // ANCHOR_END: on_update
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }

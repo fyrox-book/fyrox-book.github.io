@@ -1,21 +1,15 @@
-use fyrox::scene::animation::AnimationPlayer;
 use fyrox::{
     core::{
-        math,
-        pool::Handle,
-        reflect::prelude::*,
-        uuid::{uuid, Uuid},
-        variable::InheritableVariable,
-        visitor::prelude::*,
-        TypeUuidProvider,
+        math, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
+        variable::InheritableVariable, visitor::prelude::*,
     },
-    impl_component_provider,
     resource::{model::ModelResource, model::ModelResourceExtension},
-    scene::node::Node,
+    scene::{animation::AnimationPlayer, node::Node},
     script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
 };
 
-#[derive(Visit, Reflect, Default, Debug, Clone)]
+#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "e8adde73-1e96-471c-8531-5c0d16f0c29a")]
 pub struct Weapon {
     // ANCHOR: projectile_field
     #[visit(optional)]
@@ -45,14 +39,6 @@ pub struct Weapon {
 // ANCHOR: shoot_message
 pub struct ShootWeaponMessage {}
 // ANCHOR_END: shoot_message
-
-impl_component_provider!(Weapon);
-
-impl TypeUuidProvider for Weapon {
-    fn type_uuid() -> Uuid {
-        uuid!("e8adde73-1e96-471c-8531-5c0d16f0c29a")
-    }
-}
 
 impl ScriptTrait for Weapon {
     // ANCHOR: on_start
@@ -129,8 +115,4 @@ impl ScriptTrait for Weapon {
         }
     }
     // ANCHOR_END: on_message_end
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
