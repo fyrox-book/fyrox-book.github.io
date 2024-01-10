@@ -1,15 +1,16 @@
 use fyrox::{
     core::{
-        log::Log, pool::Handle, reflect::prelude::*, uuid::Uuid, uuid_provider,
-        visitor::prelude::*, TypeUuidProvider,
+        log::Log, pool::Handle, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*,
+        TypeUuidProvider,
     },
-    impl_component_provider,
     scene::node::Node,
     script::{ScriptContext, ScriptTrait},
 };
 
 // ANCHOR: access_other_1
-#[derive(Clone, Debug, Reflect, Visit, Default)]
+#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "a9fb05ad-ab56-4be6-8a06-73e73d8b1f48")]
+#[visit(optional)]
 struct MyScript {
     second_node: Handle<Node>,
 }
@@ -52,13 +53,11 @@ impl ScriptTrait for MyScript {
             }
         }
     }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 
-#[derive(Clone, Debug, Reflect, Visit, Default)]
+#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "a9fb05ad-ab56-4be6-8a06-73e73d8b1f49")]
+#[visit(optional)]
 struct MyOtherScript {
     counter: f32,
 }
@@ -68,15 +67,5 @@ impl ScriptTrait for MyOtherScript {
         // Counting.
         self.counter += 1.0;
     }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 // ANCHOR_END: access_other_2
-
-uuid_provider!(MyScript = "a9fb05ad-ab56-4be6-8a06-73e73d8b1f48");
-impl_component_provider!(MyScript);
-
-uuid_provider!(MyOtherScript = "a9fb05ad-ab56-4be6-8a06-73e73d8b1f49");
-impl_component_provider!(MyOtherScript);

@@ -10,14 +10,13 @@ use fyrox::{
 
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "55199744-33be-4c1a-832a-727fe5f0ea28")]
+#[visit(optional)]
 pub struct Projectile {
     // ANCHOR: trail_field
-    #[visit(optional)]
     trail: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: trail_field
 
     // ANCHOR: effect_field
-    #[visit(optional)]
     impact_effect: InheritableVariable<Option<ModelResource>>,
     // ANCHOR_END: effect_field
 }

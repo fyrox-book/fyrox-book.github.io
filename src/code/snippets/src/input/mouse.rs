@@ -2,18 +2,17 @@ use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
         reflect::prelude::*,
-        uuid::Uuid,
-        uuid_provider,
+        type_traits::prelude::*,
         visitor::prelude::*,
-        TypeUuidProvider,
     },
     event::{DeviceEvent, ElementState, Event, MouseButton, WindowEvent},
-    impl_component_provider,
     script::{ScriptContext, ScriptTrait},
 };
 
 // ANCHOR: mouse
-#[derive(Clone, Debug, Reflect, Visit)]
+#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
+#[visit(optional)]
 pub struct Player {
     yaw: f32,
     pitch: f32,
@@ -44,18 +43,13 @@ impl ScriptTrait for Player {
                 * UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw),
         );
     }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 // ANCHOR_END: mouse
 
-impl_component_provider!(Player);
-uuid_provider!(Player = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0");
-
 // ANCHOR: clicker
-#[derive(Clone, Debug, Reflect, Visit)]
+#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff1")]
+#[visit(optional)]
 pub struct Clicker {
     counter: i32,
 }
@@ -80,12 +74,5 @@ impl ScriptTrait for Clicker {
             }
         }
     }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 // ANCHOR_END: clicker
-
-impl_component_provider!(Clicker);
-uuid_provider!(Clicker = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0");

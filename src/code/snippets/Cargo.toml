@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "47b79d4acaf11b755d279ccb36de0f2ffd08172f" }

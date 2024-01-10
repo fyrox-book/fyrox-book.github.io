@@ -1,12 +1,13 @@
 use fyrox::{
-    core::{reflect::prelude::*, uuid::Uuid, uuid_provider, visitor::prelude::*, TypeUuidProvider},
-    impl_component_provider,
+    core::{reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
     scene::{animation::spritesheet::SpriteSheetAnimation, dim2::rectangle::Rectangle},
     script::{ScriptContext, ScriptTrait},
 };
 
 // ANCHOR: animation
-#[derive(Default, Clone, Debug, Reflect, Visit)]
+#[derive(Default, Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "aeebb95f-8e32-490e-971c-c22417bd19c5")]
+#[visit(optional)]
 struct Player {
     animation: SpriteSheetAnimation,
 }
@@ -33,12 +34,5 @@ impl ScriptTrait for Player {
             sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
         }
     }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 // ANCHOR_END: animation
-
-uuid_provider!(Player = "aeebb95f-8e32-490e-971c-c22417bd19c5");
-impl_component_provider!(Player);

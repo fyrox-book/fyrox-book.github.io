@@ -10,6 +10,7 @@ use fyrox::{
 // ANCHOR: player_stub_script
 #[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
+#[visit(optional)]
 struct Player;
 
 impl ScriptTrait for Player {
