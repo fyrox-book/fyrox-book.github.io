@@ -10057,6 +10057,23 @@ IntelliJ IDEA + Rust Plugin, RustRover, etc.) that can import all missing stuff 
 look at the source code of all tutorials in the link above. This is intentional, to reduce the size of all tutorials;
 to prevent them from bloating with useless information.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2d-platformer-tutorial"><a class="header" href="#2d-platformer-tutorial">2D Platformer Tutorial</a></h1>
+<h2 id="source-code"><a class="header" href="#source-code">Source Code</a></h2>
+<p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer">available here</a>.</p>
+<h2 id="engine-version-1"><a class="header" href="#engine-version-1">Engine Version</a></h2>
+<blockquote>
+<p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as
+dependencies to ensure that it will compile:</p>
+</blockquote>
+<pre><code class="language-toml">[workspace.dependencies.fyrox]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+[workspace.dependencies.fyroxed_base]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+</code></pre>
+<p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
+<pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
+</code></pre>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
 <ul>
 <li><a href="tutorials/platformer/part1.html#2d-platformer-tutorial">2D Platformer Tutorial</a>
@@ -10410,12 +10427,23 @@ simple, but it is just the beginning. It is easy to add more scripts for enemies
 <p>This tutorial starts the series of tutorials about writing a role-playing game in Rust using Fyrox game engine. Strangely,
 but Fyrox has a reputation of an engine for 3D shooters. In this series I'll try to prove that it is a general purpose
 game engine.</p>
-<h2 id="fyrox-and-fyroxed-version"><a class="header" href="#fyrox-and-fyroxed-version">Fyrox and Fyroxed version</a></h2>
-<p>Fyrox changes rapidly and tutorial's code could not compile with the newest versions of the engine, to prevent that
-and keep the code compilable over time the versions of both the engine and the editor are set to specific commits 
-in the main repo.</p>
-<p><strong>Fyrox repo commit hash</strong>: a2079c684fd6f2e9b21ef15fc5818e9a27fdf8cc
-<strong>Source code</strong>: <a href="https://github.com/FyroxEngine/Fyrox-tutorials/">GitHub</a></p>
+<h2 id="source-code-1"><a class="header" href="#source-code-1">Source Code</a></h2>
+<p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg">available here</a>.</p>
+<h2 id="engine-version-2"><a class="header" href="#engine-version-2">Engine Version</a></h2>
+<blockquote>
+<p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as
+dependencies to ensure that it will compile:</p>
+</blockquote>
+<pre><code class="language-toml">[workspace.dependencies.fyrox]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+[workspace.dependencies.fyroxed_base]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+</code></pre>
+<p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
+<pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rpg-tutorial-part-1---character-controller"><a class="header" href="#rpg-tutorial-part-1---character-controller">RPG Tutorial Part 1 - Character Controller</a></h1>
 <p><strong>Source code</strong>: <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg">GitHub</a></p>
 <h2 id="table-of-contents-1"><a class="header" href="#table-of-contents-1">Table of contents</a></h2>
@@ -10834,7 +10862,9 @@ instantiated the character prefab on it.  </p>
 character controller, weapons, projectiles, bots, animation, and simple AI.</p>
 <p>Keep in mind, that every tutorial part expects that you've read every previous part. It is needed to not explain
 all required actions over and over again.</p>
+<h2 id="source-code-2"><a class="header" href="#source-code-2">Source Code</a></h2>
 <p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/fps">available here</a>.</p>
+<h2 id="engine-version-3"><a class="header" href="#engine-version-3">Engine Version</a></h2>
 <blockquote>
 <p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as 
 dependencies to ensure that it will compile:</p>
@@ -10849,8 +10879,6 @@ rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
 <p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
 <pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
 </code></pre>
-<p>In other words, it uses specific commit from the engine repository. It is required, because the engine is still in 
-pre 1.0 version and can contain small-to-big breaking changes here and there.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="first-person-shooter-tutorial-1"><a class="header" href="#first-person-shooter-tutorial-1">First-Person Shooter Tutorial</a></h1>
 <p>In this tutorial we'll create a first-person shooter game. </p>
 <p>Before we begin, make sure you know how to create projects and run the game and the editor. Read 

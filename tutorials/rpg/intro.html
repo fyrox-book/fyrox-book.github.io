@@ -189,12 +189,23 @@
 <p>This tutorial starts the series of tutorials about writing a role-playing game in Rust using Fyrox game engine. Strangely,
 but Fyrox has a reputation of an engine for 3D shooters. In this series I'll try to prove that it is a general purpose
 game engine.</p>
-<h2 id="fyrox-and-fyroxed-version"><a class="header" href="#fyrox-and-fyroxed-version">Fyrox and Fyroxed version</a></h2>
-<p>Fyrox changes rapidly and tutorial's code could not compile with the newest versions of the engine, to prevent that
-and keep the code compilable over time the versions of both the engine and the editor are set to specific commits 
-in the main repo.</p>
-<p><strong>Fyrox repo commit hash</strong>: a2079c684fd6f2e9b21ef15fc5818e9a27fdf8cc
-<strong>Source code</strong>: <a href="https://github.com/FyroxEngine/Fyrox-tutorials/">GitHub</a></p>
+<h2 id="source-code"><a class="header" href="#source-code">Source Code</a></h2>
+<p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg">available here</a>.</p>
+<h2 id="engine-version"><a class="header" href="#engine-version">Engine Version</a></h2>
+<blockquote>
+<p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as
+dependencies to ensure that it will compile:</p>
+</blockquote>
+<pre><code class="language-toml">[workspace.dependencies.fyrox]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+[workspace.dependencies.fyroxed_base]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+</code></pre>
+<p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
+<pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
+</code></pre>
 
                     </main>
 
