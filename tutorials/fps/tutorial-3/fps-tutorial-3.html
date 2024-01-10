@@ -363,9 +363,10 @@ Do not forget to add this code to the <code>Bot</code> struct:</p>
 for that. Root motion will be extracted from the animation blending state machine we've made earlier. Let's
 add this code to the <code>Bot</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>
-<span class="boring">fn main() {
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">fn main() {
+</span>    absm: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    model_root: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
 <p>The first field will hold a handle to the ABSM and the second - a handle to the 3D model root. We'll assign 
 these field later, now we need to add the code that will extract velocity vector for the bot movement and apply
 this vector to the rigid body of the bot:</p>
