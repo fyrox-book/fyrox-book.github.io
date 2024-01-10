@@ -197,7 +197,7 @@ events, that could be used in your game (some rare events are omitted):</p>
 </span>struct MyGame {}
 
 impl Plugin for MyGame {
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) {
         match event {
             // This branch should be used for pre-processed events that comes from
             // the main window.

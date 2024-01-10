@@ -1,7 +1,6 @@
 use fyrox::{
     asset::manager::ResourceManager,
     core::pool::Handle,
-    event_loop::ControlFlow,
     gui::image::ImageBuilder,
     gui::{
         button::ButtonBuilder, text::TextBuilder, widget::WidgetBuilder, HorizontalAlignment,
@@ -62,7 +61,7 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
+    fn on_ui_message(&mut self, _context: &mut PluginContext, message: &UiMessage) {
         if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 //

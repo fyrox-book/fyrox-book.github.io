@@ -247,7 +247,7 @@ useful:</p>
 }
 
 impl Plugin for MyGame {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, message: &amp;UiMessage) {
         if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 //

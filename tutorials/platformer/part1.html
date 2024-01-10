@@ -280,19 +280,16 @@ for service graphics, such as rigid body shapes, node bounds, and so on. Now we 
 at the beginning of the <code>game/src/lib.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use fyrox::keyboard::PhysicalKey;
-use fyrox::{
+</span>use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
         pool::Handle,
         reflect::prelude::*,
-        uuid::{uuid, Uuid},
+        type_traits::prelude::*,
         visitor::prelude::*,
-        TypeUuidProvider,
     },
     event::{ElementState, Event, WindowEvent},
-    impl_component_provider,
-    keyboard::KeyCode,
+    keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
@@ -308,17 +305,9 @@ use fyrox::{
 move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Clone, Default)]
+</span>#[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
 struct Player;
-
-impl_component_provider!(Player,);
-
-impl TypeUuidProvider for Player {
-    // Returns unique script id for serialization needs.
-    fn type_uuid() -&gt; Uuid {
-        uuid!(&quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)
-    }
-}
 
 impl ScriptTrait for Player {
     // Called once at initialization.
@@ -332,11 +321,6 @@ impl ScriptTrait for Player {
 
     // Called every frame at fixed rate of 60 FPS.
     fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {}
-
-    // Returns unique script ID for serialization needs.
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
-    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This is a typical &quot;skeleton&quot; of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
@@ -380,7 +364,8 @@ it is a perfect opportunity to learn how the engine and the editor operate with 
 we need to get its sprite first. Let's start by adding the required field in the <code>Player</code> structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Clone)]
+</span>#[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
 struct Player {
     sprite: Handle&lt;Node&gt;,
     // ... 

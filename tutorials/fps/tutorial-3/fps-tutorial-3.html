@@ -309,7 +309,7 @@ the bot. Add the following code to the <code>on_update</code> method:</p>
             let look_vector = rigid_body.look_vector();
 
             // Update the viewing frustum.
-            self.update_frustum(position, look_vector, up_vector);
+            self.update_frustum(position, look_vector, up_vector, 20.0);
         }
     }
 <span class="boring">}</span></code></pre></pre>
