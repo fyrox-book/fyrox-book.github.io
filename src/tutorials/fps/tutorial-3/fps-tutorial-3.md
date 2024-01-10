@@ -1,9 +1,9 @@
-# Bots and AI (WIP)
-
-**WORK IN PROGRESS**
+# Bots and AI
 
 In the [previous](../tutorial-2/fps-tutorial-2.md) we've added weapons and projectiles, but we still do not have 
-anything to shoot at. In this tutorial part we'll add bots with simple AI.
+anything to shoot at. In this tutorial part we'll add bots with simple AI:
+
+![bot](bot.gif)
 
 ## Bot Prefab
 
@@ -86,7 +86,9 @@ it, adjust its size to fully enclose the bot (we did the same in the first tutor
 
 ![rigid body](rigid_body.png)
 
-For now, our prefab is more or less finished. As usual, we need to write some code, that will drive the bot.
+Do not forget to disable rotations for the rigid body (`X/Y/Z Rotation Locked` properties must be checked) and
+disable sleeping for it (uncheck `Can Sleep`). For now, our prefab is more or less finished. As usual, we need to 
+write some code, that will drive the bot.
 
 ## Code
 
@@ -96,12 +98,18 @@ Add a new script using the following command:
 fyrox-template script --name=bot
 ```
 
-Add this module to the `lib.rs` module as we did in the previous tutorials. At first, our bot needs an ability
-"to see". In games such ability can be represented by a simple frustum with its top at the head of the bot and
-the base oriented forward. We can construct such frustum from a pair of matrices - view and projection. After
-that the frustum can be used for simple frustum-point intersection check. We'll check if the player's position
-intersects with the bot's viewing frustum and if so, the bot will start chasing the player. On to the code we go, 
-add the following field to the `Bot` struct:
+Add this module to the `lib.rs` module as we did in the previous tutorials. Register the bot in the `register`
+method like so:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/lib.rs:bot_script_reg}}
+```
+
+At first, our bot needs an ability "to see". In games such ability can be represented by a simple frustum with 
+its top at the head of the bot and the base oriented forward. We can construct such frustum from a pair of 
+matrices - view and projection. After that the frustum can be used for simple frustum-point intersection check. 
+We'll check if the player's position intersects with the bot's viewing frustum and if so, the bot will start 
+chasing the player. On to the code we go, add the following field to the `Bot` struct:
 
 ```rust
 {{#include ../../../code/tutorials/fps/game/src/bot.rs:frustum}}
@@ -117,11 +125,92 @@ We'll call this method every frame to keep the frustum updated with the current 
 the bot. Add the following code to the `on_update` method:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/bot.rs:on_update}}
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:on_update_1}}
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:on_update_2}}
 ```
 
+Now we need to check if the player's position intersects with the frustum. Add the following code at the beginning
+of `on_update`:
 
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:frustum_check}}
+```
+
+In this code we're iterating over the all available scene nodes and check if a node has `Player` script and
+if the node's position intersects with the bot's frustum. If so, we're remembering this node as a target. 
+Do not forget to add this code to the `Bot` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:target_field}}
+```
+
+Now we need to add movement for the bot, we'll use [root motion](../../../animation/root_motion/root_motion.md#how-to-use)
+for that. Root motion will be extracted from the animation blending state machine we've made earlier. Let's
+add this code to the `Bot` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:absm_field}}
+```
+
+The first field will hold a handle to the ABSM and the second - a handle to the 3D model root. We'll assign 
+these field later, now we need to add the code that will extract velocity vector for the bot movement and apply
+this vector to the rigid body of the bot:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:root_motion_1}}
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:root_motion_2}}
+```
+
+At first, we're getting current world-space transform of the 3D model's root and saving it into a local variable.
+Then we're borrowing the ABSM we've made earlier and extracting the root motion offset vector. As a final step
+we're scaling it by `1.0 / dt` factor to convert it to velocity. This final velocity vector needs to be set to
+the rigid body of the bot. To do that, add the following code at the end of the last `if` statement (where
+we're borrowing the rigid body):
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:rigid_body_velocity}}
+```
+
+Next we need to somehow inform the ABSM about the current state of the bot. Remember that we have two parameters
+in the ABSM? We need to set them from the code, it could be done like so:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:rigid_body_velocity}}
+```
+
+Now it's time to do small adjustments to our prefabs. Open the `zombie.rgs` prefab and assign the `Bot` 
+script to the root node of the prefab, set its properties like so:
+
+![bot properties](bot_properties.png)
+
+Open the `scene.rgs`, find the `zombie.rgs` prefab in the asset browser and instantiate it in the scene:
+
+![bot instance](bot_instance.png)
+
+Now you can run the game and walk in front of the bot, it should run, but it runs straight and does not follow
+the target (the player). Let's fix that. At first, we need to calculate an angle between a target and the bot.
+We'll calculate it using `atan2` trigonometric function, add the following code somewhere in `on_update`:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:angle_calculation}}
+```
+
+This code calculates a vector between the bot's position and a target, and then calculates an angle in XZ plane,
+using `atan2(x, z)` trigonometric function. Let's use this angle, add the following code the end of the 
+last `if` statement (where we're borrowing the rigid body):
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/bot.rs:angle_usage}}
+```
+
+This code is trivial - we're making a rotation quaternion, that rotates the bot around Y axis using the angle
+we've calculated.
+
+Run the game and the bot should follow you as long as it sees you:
+
+![bot](bot.gif)
 
 ## Conclusion
 
-In this tutorial part we've added bots with animation and simple AI.
+In this tutorial part we've added bots with animation and simple AI. In the next tutorial we'll add an ability to 
+kill the bots.

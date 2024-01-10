@@ -1,5 +1,5 @@
 // ANCHOR: player_mod_reg
-use crate::{player::Player, projectile::Projectile, weapon::Weapon};
+use crate::{bot::Bot, player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
     plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
@@ -38,6 +38,13 @@ impl PluginConstructor for GameConstructor {
             .script_constructors
             .add::<Projectile>("Projectile");
         // ANCHOR_END: projectile_script_reg
+
+        // ANCHOR: bot_script_reg
+        context
+            .serialization_context
+            .script_constructors
+            .add::<Bot>("Bot");
+        // ANCHOR_END: bot_script_reg
     }
 
     fn create_instance(&self, scene_path: Option<&str>, context: PluginContext) -> Box<dyn Plugin> {
