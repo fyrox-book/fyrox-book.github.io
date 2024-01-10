@@ -205,8 +205,7 @@ should get something like this:</p>
 animation when we'll shoot the weapon. Let's add a &quot;reference&quot; to our projectile prefab that will be used for shooing:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    projectile: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+</span>    projectile: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>This field has quite complex type: <code>InheritableVariable</code> is used for <a href="../../../scene/inheritance.html">property inheritance</a>,
 <code>Option</code> is used to allow the field to be unassigned, and finally <code>ModelResource</code> is a reference to some projectile prefab.
@@ -217,8 +216,7 @@ barrel of the weapon. We'll use a child scene node of the weapon to define such 
 to the <code>Weapon</code> struct.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    shot_point: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    shot_point: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>We'll assign this field later in the tutorial as well as projectile prefab. </p>
 <p>Now we need some mechanism to &quot;tell&quot; the weapon to shoot, we could directly access the weapon script and call some <code>shoot</code>
@@ -316,8 +314,7 @@ hit testing with enemies, etc. Create a new script by a well known command:</p>
 <p>Go to <code>projectile.rs</code> and add the following field to the <code>Projectile</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    trail: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    trail: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>This field will hold a handle to the trail (the red cylinder on the screenshot about) and we'll use this handle to 
 borrow the node and modify the trail's length after ray casting.</p>
@@ -423,10 +420,8 @@ the editor and in the Player script find the <code>Current Weapon</code> field a
 shoot with desired interval while we're holding the mouse button. Add the two timer variables to the <code>Weapon</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    shot_interval: InheritableVariable&lt;f32&gt;,
+</span>    shot_interval: InheritableVariable&lt;f32&gt;,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     shot_timer: f32,
 <span class="boring">}</span></code></pre></pre>
@@ -467,8 +462,7 @@ at the point of impact. Download <a href="bullet_impact.zip">this</a> pre-made e
 <p>Add the following field to the <code>Projectile</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    impact_effect: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+</span>    impact_effect: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>This is a &quot;link&quot; to particle effect, that we'll spawn at the impact position. Let's add this code to the end
 of <code>on_start</code> of <code>impl ScriptTrait for Projectile</code>:</p>
@@ -528,8 +522,7 @@ property of <code>m4.FBX</code> node with the following parameters:</p>
 player in the weapon script. Let's add it to the <code>Weapon</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>Add the following code to the <code>on_message</code> in <code>weapon.rs</code>, right after the shooting condition (<code>if self.shot_timer &gt;= 0.0 { ...</code>):</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]

@@ -519,7 +519,9 @@ in simple projects it can be ignored completely.</p>
 a handle of a scene node with that script first. You can do this like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit, Default)]
+</span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;a9fb05ad-ab56-4be6-8a06-73e73d8b1f48&quot;)]
+#[visit(optional)]
 struct MyScript {
     second_node: Handle&lt;Node&gt;,
 }
@@ -548,13 +550,11 @@ impl ScriptTrait for MyScript {
             }
         }
     }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
-    }
 }
 
-#[derive(Clone, Debug, Reflect, Visit, Default)]
+#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;a9fb05ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[visit(optional)]
 struct MyOtherScript {
     counter: f32,
 }
@@ -563,10 +563,6 @@ impl ScriptTrait for MyOtherScript {
     fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) {
         // Counting.
         self.counter += 1.0;
-    }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
     }
 }
 <span class="boring">}</span></code></pre></pre>

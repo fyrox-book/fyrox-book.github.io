@@ -1656,7 +1656,9 @@ in simple projects it can be ignored completely.</p>
 a handle of a scene node with that script first. You can do this like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit, Default)]
+</span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;a9fb05ad-ab56-4be6-8a06-73e73d8b1f48&quot;)]
+#[visit(optional)]
 struct MyScript {
     second_node: Handle&lt;Node&gt;,
 }
@@ -1685,13 +1687,11 @@ impl ScriptTrait for MyScript {
             }
         }
     }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
-    }
 }
 
-#[derive(Clone, Debug, Reflect, Visit, Default)]
+#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;a9fb05ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[visit(optional)]
 struct MyOtherScript {
     counter: f32,
 }
@@ -1700,10 +1700,6 @@ impl ScriptTrait for MyOtherScript {
     fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) {
         // Counting.
         self.counter += 1.0;
-    }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -5289,7 +5285,9 @@ all you need to do is to add a <code>SpriteSheetAnimation</code> field (or a bun
 the following code in its <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Clone, Debug, Reflect, Visit)]
+</span>#[derive(Default, Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;aeebb95f-8e32-490e-971c-c22417bd19c5&quot;)]
+#[visit(optional)]
 struct Player {
     animation: SpriteSheetAnimation,
 }
@@ -5315,10 +5313,6 @@ impl ScriptTrait for Player {
             // Set the current animation's UV rect to the sprite.
             sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
         }
-    }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -5392,7 +5386,9 @@ keys and save their state in some variables in your script. These variables will
 which the script was assigned, should move in a certain direction. This could be expressed like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit)]
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff0&quot;)]
+#[visit(optional)]
 pub struct Player {
     move_left: bool,
     move_right: bool,
@@ -5432,10 +5428,6 @@ impl ScriptTrait for Player {
             transform.offset(Vector3::new(1.0, 0.0, 0.0));
         }
     }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
-    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The main method here is <code>on_os_event</code>, which listens for keyboard events and modifies script variables accordingly.
@@ -5448,7 +5440,9 @@ the most common use cases.</p>
 in your game (with slight modifications).</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit)]
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff0&quot;)]
+#[visit(optional)]
 pub struct Player {
     yaw: f32,
     pitch: f32,
@@ -5479,10 +5473,6 @@ impl ScriptTrait for Player {
                 * UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw),
         );
     }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
-    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This example consists of two main parts - <code>on_os_event</code> and <code>on_update</code> methods. The first one is called when some 
@@ -5493,7 +5483,9 @@ every frame and it is used to apply <code>pitch</code> and <code>yaw</code> valu
 <p>The following example shows how to handle events from mouse buttons.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit)]
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff1&quot;)]
+#[visit(optional)]
 pub struct Clicker {
     counter: i32,
 }
@@ -5517,10 +5509,6 @@ impl ScriptTrait for Clicker {
                 }
             }
         }
-    }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -10341,8 +10329,7 @@ should get something like this:</p>
 animation when we'll shoot the weapon. Let's add a &quot;reference&quot; to our projectile prefab that will be used for shooing:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    projectile: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+</span>    projectile: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>This field has quite complex type: <code>InheritableVariable</code> is used for <a href="tutorials/fps/tutorial-2/../../../scene/inheritance.html">property inheritance</a>,
 <code>Option</code> is used to allow the field to be unassigned, and finally <code>ModelResource</code> is a reference to some projectile prefab.
@@ -10353,8 +10340,7 @@ barrel of the weapon. We'll use a child scene node of the weapon to define such 
 to the <code>Weapon</code> struct.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    shot_point: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    shot_point: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>We'll assign this field later in the tutorial as well as projectile prefab. </p>
 <p>Now we need some mechanism to &quot;tell&quot; the weapon to shoot, we could directly access the weapon script and call some <code>shoot</code>
@@ -10452,8 +10438,7 @@ hit testing with enemies, etc. Create a new script by a well known command:</p>
 <p>Go to <code>projectile.rs</code> and add the following field to the <code>Projectile</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    trail: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    trail: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>This field will hold a handle to the trail (the red cylinder on the screenshot about) and we'll use this handle to 
 borrow the node and modify the trail's length after ray casting.</p>
@@ -10559,10 +10544,8 @@ the editor and in the Player script find the <code>Current Weapon</code> field a
 shoot with desired interval while we're holding the mouse button. Add the two timer variables to the <code>Weapon</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    shot_interval: InheritableVariable&lt;f32&gt;,
+</span>    shot_interval: InheritableVariable&lt;f32&gt;,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     shot_timer: f32,
 <span class="boring">}</span></code></pre></pre>
@@ -10603,8 +10586,7 @@ at the point of impact. Download <a href="tutorials/fps/tutorial-2/bullet_impact
 <p>Add the following field to the <code>Projectile</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    impact_effect: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
+</span>    impact_effect: InheritableVariable&lt;Option&lt;ModelResource&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>This is a &quot;link&quot; to particle effect, that we'll spawn at the impact position. Let's add this code to the end
 of <code>on_start</code> of <code>impl ScriptTrait for Projectile</code>:</p>
@@ -10664,8 +10646,7 @@ property of <code>m4.FBX</code> node with the following parameters:</p>
 player in the weapon script. Let's add it to the <code>Weapon</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>Add the following code to the <code>on_message</code> in <code>weapon.rs</code>, right after the shooting condition (<code>if self.shot_timer &gt;= 0.0 { ...</code>):</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -11366,6 +11347,7 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
+#[visit(optional)]
 struct Player;
 
 impl ScriptTrait for Player {
@@ -11425,6 +11407,7 @@ we need to get its sprite first. Let's start by adding the required field in the
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
+#[visit(optional)]
 struct Player {
     sprite: Handle&lt;Node&gt;,
     // ... 

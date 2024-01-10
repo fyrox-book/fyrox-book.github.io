@@ -10,28 +10,24 @@ use fyrox::{
 
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "e8adde73-1e96-471c-8531-5c0d16f0c29a")]
+#[visit(optional)]
 pub struct Weapon {
     // ANCHOR: projectile_field
-    #[visit(optional)]
     projectile: InheritableVariable<Option<ModelResource>>,
     // ANCHOR_END: projectile_field
 
     // ANCHOR: shot_point
-    #[visit(optional)]
     shot_point: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: shot_point
 
     // ANCHOR: shot_timer
-    #[visit(optional)]
     shot_interval: InheritableVariable<f32>,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     shot_timer: f32,
     // ANCHOR_END: shot_timer
 
     // ANCHOR: animation_player
-    #[visit(optional)]
     animation_player: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: animation_player
 }

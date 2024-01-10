@@ -193,7 +193,9 @@ the most common use cases.</p>
 in your game (with slight modifications).</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit)]
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff0&quot;)]
+#[visit(optional)]
 pub struct Player {
     yaw: f32,
     pitch: f32,
@@ -224,10 +226,6 @@ impl ScriptTrait for Player {
                 * UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw),
         );
     }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
-    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This example consists of two main parts - <code>on_os_event</code> and <code>on_update</code> methods. The first one is called when some 
@@ -238,7 +236,9 @@ every frame and it is used to apply <code>pitch</code> and <code>yaw</code> valu
 <p>The following example shows how to handle events from mouse buttons.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Clone, Debug, Reflect, Visit)]
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff1&quot;)]
+#[visit(optional)]
 pub struct Clicker {
     counter: i32,
 }
@@ -262,10 +262,6 @@ impl ScriptTrait for Clicker {
                 }
             }
         }
-    }
-
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
     }
 }
 <span class="boring">}</span></code></pre></pre>

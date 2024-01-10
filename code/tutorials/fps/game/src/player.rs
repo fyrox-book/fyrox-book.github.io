@@ -16,6 +16,7 @@ use fyrox::{
 
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "49cfe29e-c7c7-4317-8178-996251a0c2f9")]
+#[visit(optional)]
 pub struct Player {
     // ANCHOR: input_fields
     #[visit(optional)]

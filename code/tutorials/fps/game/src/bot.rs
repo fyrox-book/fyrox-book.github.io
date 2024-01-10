@@ -12,6 +12,7 @@ use fyrox::{
 
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "40c225ca-9657-4f4e-af67-48d6482a7aeb")]
+#[visit(optional)]
 pub struct Bot {
     // ANCHOR: frustum
     #[visit(skip)]

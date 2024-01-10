@@ -1,14 +1,14 @@
-use fyrox::core::algebra::Vector3;
 use fyrox::{
-    core::{reflect::prelude::*, uuid::Uuid, uuid_provider, visitor::prelude::*, TypeUuidProvider},
+    core::{algebra::Vector3, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
     event::{ElementState, Event, WindowEvent},
-    impl_component_provider,
     keyboard::{KeyCode, PhysicalKey},
     script::{ScriptContext, ScriptTrait},
 };
 
 // ANCHOR: keyboard
-#[derive(Clone, Debug, Reflect, Visit)]
+#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
+#[visit(optional)]
 pub struct Player {
     move_left: bool,
     move_right: bool,
@@ -48,12 +48,5 @@ impl ScriptTrait for Player {
             transform.offset(Vector3::new(1.0, 0.0, 0.0));
         }
     }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }
 // ANCHOR_END: keyboard
-
-impl_component_provider!(Player);
-uuid_provider!(Player = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0");

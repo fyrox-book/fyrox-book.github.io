@@ -307,6 +307,7 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
+#[visit(optional)]
 struct Player;
 
 impl ScriptTrait for Player {
@@ -366,6 +367,7 @@ we need to get its sprite first. Let's start by adding the required field in the
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
+#[visit(optional)]
 struct Player {
     sprite: Handle&lt;Node&gt;,
     // ... 

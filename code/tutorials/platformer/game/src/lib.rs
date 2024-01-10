@@ -60,6 +60,7 @@ impl Plugin for Game {}
 // ANCHOR: sprite_field
 #[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
+#[visit(optional)]
 struct Player {
     sprite: Handle<Node>,
     // ...
