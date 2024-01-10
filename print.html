@@ -10054,6 +10054,18 @@ you shouldn't be able to lost in them.</p>
 character controller, weapons, projectiles, bots, animation, and simple AI.</p>
 <p>Keep in mind, that every tutorial part expects that you've read every previous part. It is needed to not explain
 all required actions over and over again.</p>
+<p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/fps">available here</a>.
+Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as 
+dependencies to ensure that it will compile:</p>
+<pre><code class="language-toml">[workspace.dependencies.fyrox]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+[workspace.dependencies.fyroxed_base]
+git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
+rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
+</code></pre>
+<p>In other words, it uses specific commit from the engine repository. It is required, because the engine is still in 
+pre 1.0 version and can contain small-to-big breaking changes here and there.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="first-person-shooter-tutorial-1"><a class="header" href="#first-person-shooter-tutorial-1">First-Person Shooter Tutorial</a></h1>
 <p>In this tutorial we'll create a first-person shooter game. </p>
 <p>Before we begin, make sure you know how to create projects and run the game and the editor. Read 
