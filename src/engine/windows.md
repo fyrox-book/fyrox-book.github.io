@@ -12,7 +12,7 @@ This chapter of the book explains how to manage the main application window and 
 Setting a title is very easy to do:
 
 ```rust
-{{#include ../code/snippets/window/mod.rs:title}}
+{{#include ../code/snippets/src/window/mod.rs:title}}
 ```
 
 ## Cursor
@@ -24,7 +24,7 @@ This section contains the code for the most common use cases of the mouse cursor
 You can show or hide the mouse cursor using the following code:
 
 ```rust
-{{#include ../code/snippets/window/mod.rs:hide_cursor}}
+{{#include ../code/snippets/src/window/mod.rs:hide_cursor}}
 ```
 
 ### Lock Inside Window
@@ -33,11 +33,11 @@ It is possible to lock the mouse cursor in the window bounds. You can do it usin
 method if the main window:
 
 ```rust
-{{#include ../code/snippets/window/mod.rs:lock_cursor}}
+{{#include ../code/snippets/src/window/mod.rs:lock_cursor}}
 ```
 
 ## Fullscreen Mode
 
 ```rust
-{{#include ../code/snippets/window/mod.rs:fullscreen}}
+{{#include ../code/snippets/src/window/mod.rs:fullscreen}}
 ```
