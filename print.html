@@ -6800,7 +6800,9 @@ that support application suspension.</p>
 <p>Setting a title is very easy to do:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../code/snippets/window/mod.rs:title}}
+</span>        if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
+            graphics_context.window.set_title(&quot;My Awesome Game&quot;);
+        }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="cursor"><a class="header" href="#cursor">Cursor</a></h2>
 <p>This section contains the code for the most common use cases of the mouse cursor. </p>
@@ -6808,19 +6810,42 @@ that support application suspension.</p>
 <p>You can show or hide the mouse cursor using the following code:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../code/snippets/window/mod.rs:hide_cursor}}
+</span>        // Hide the cursor if the window exists.
+        if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
+            graphics_context.window.set_cursor_visible(false);
+        }
 <span class="boring">}</span></code></pre></pre>
 <h3 id="lock-inside-window"><a class="header" href="#lock-inside-window">Lock Inside Window</a></h3>
 <p>It is possible to lock the mouse cursor in the window bounds. You can do it using the <code>set_cursor_grab</code>
 method if the main window:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../code/snippets/window/mod.rs:lock_cursor}}
+</span>        if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
+            Log::verify(graphics_context.window.set_cursor_grab(
+                // Use one of the following here: None, Confined, Locked. See the API docs for
+                // CursorGrabMode for more info.
+                CursorGrabMode::Confined,
+            ));
+        }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="fullscreen-mode"><a class="header" href="#fullscreen-mode">Fullscreen Mode</a></h2>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>{{#include ../code/snippets/window/mod.rs:fullscreen}}
+</span>        if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
+            // Option 1: Use borderless non-exclusive full screen mode.
+            graphics_context
+                .window
+                .set_fullscreen(Some(Fullscreen::Borderless(None)));
+
+            // Option 2: Use true exclusive full screen mode.
+            if let Some(monitor) = graphics_context.window.current_monitor() {
+                if let Some(first_avilable_video_mode) = monitor.video_modes().next() {
+                    graphics_context
+                        .window
+                        .set_fullscreen(Some(Fullscreen::Exclusive(first_avilable_video_mode)));
+                }
+            }
+        }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="graphics-context-wip"><a class="header" href="#graphics-context-wip">Graphics Context (WIP)</a></h1>
 <p>Graphics context stores the main application window, renderer, sound output device.</p>
