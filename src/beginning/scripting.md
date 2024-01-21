@@ -34,6 +34,26 @@ For Debian based distros like Ubuntu, they can be installed like below:
 sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev
 ```
 
+For NixOS, you can use a `shell.nix` like below:
+
+```nix
+{ pkgs ? import <nixpkgs> { } }:
+pkgs.mkShell rec {
+  nativeBuildInputs = with pkgs.buildPackages; [
+    pkg-config
+    xorg.libxcb
+    alsa-lib
+    wayland
+    libxkbcommon
+    libGL
+  ];
+
+  shellHook = with pkgs.lib; ''
+    export LD_LIBRARY_PATH=${makeLibraryPath nativeBuildInputs}:/run/opengl-driver/lib:$LD_LIBRARY_PATH
+  '';
+}
+```
+
 ## Project Generator
 
 Fyrox plugins are static, this means that you must re-compile your game or editor if the source code of your game changes,
