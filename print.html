@@ -534,6 +534,23 @@ all you need to have is the latest Rust installed with appropriate toolchain for
 <p>For Debian based distros like Ubuntu, they can be installed like below:</p>
 <pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev
 </code></pre>
+<p>For NixOS, you can use a <code>shell.nix</code> like below:</p>
+<pre><code class="language-nix">{ pkgs ? import &lt;nixpkgs&gt; { } }:
+pkgs.mkShell rec {
+  nativeBuildInputs = with pkgs.buildPackages; [
+    pkg-config
+    xorg.libxcb
+    alsa-lib
+    wayland
+    libxkbcommon
+    libGL
+  ];
+
+  shellHook = with pkgs.lib; ''
+    export LD_LIBRARY_PATH=${makeLibraryPath nativeBuildInputs}:/run/opengl-driver/lib:$LD_LIBRARY_PATH
+  '';
+}
+</code></pre>
 <h2 id="project-generator"><a class="header" href="#project-generator">Project Generator</a></h2>
 <p>Fyrox plugins are static, this means that you must re-compile your game or editor if the source code of your game changes,
 such architecture requires some boilerplate code for any game. Fyrox offers a special tiny tool - 
