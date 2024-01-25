@@ -2,16 +2,16 @@ use fyrox::keyboard::PhysicalKey;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
+        impl_component_provider,
         math::SmoothAngle,
         pool::Handle,
         reflect::prelude::*,
-        uuid::{uuid, Uuid},
+        type_traits::prelude::*,
         variable::InheritableVariable,
         visitor::prelude::*,
         TypeUuidProvider,
     },
     event::{DeviceEvent, ElementState, Event, WindowEvent},
-    impl_component_provider,
     keyboard::KeyCode,
     scene::{animation::absm::prelude::*, node::Node, rigidbody::RigidBody},
     script::{ScriptContext, ScriptTrait},
@@ -204,8 +204,4 @@ impl ScriptTrait for Player {
         }
     }
     // ANCHOR_END: on_update
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
 }

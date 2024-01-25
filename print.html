@@ -10142,20 +10142,7 @@ to prevent them from bloating with useless information.</p>
 <h2 id="source-code"><a class="header" href="#source-code">Source Code</a></h2>
 <p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer">available here</a>.</p>
 <h2 id="engine-version-1"><a class="header" href="#engine-version-1">Engine Version</a></h2>
-<blockquote>
-<p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as
-dependencies to ensure that it will compile:</p>
-</blockquote>
-<pre><code class="language-toml">[workspace.dependencies.fyrox]
-git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
-rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
-[workspace.dependencies.fyroxed_base]
-git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
-rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
-</code></pre>
-<p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
-<pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
-</code></pre>
+<p>This tutorial is made using Fyrox 0.33.</p>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
 <ul>
 <li><a href="tutorials/platformer/part1.html#2d-platformer-tutorial">2D Platformer Tutorial</a>
@@ -10512,20 +10499,7 @@ game engine.</p>
 <h2 id="source-code-1"><a class="header" href="#source-code-1">Source Code</a></h2>
 <p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg">available here</a>.</p>
 <h2 id="engine-version-2"><a class="header" href="#engine-version-2">Engine Version</a></h2>
-<blockquote>
-<p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as
-dependencies to ensure that it will compile:</p>
-</blockquote>
-<pre><code class="language-toml">[workspace.dependencies.fyrox]
-git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
-rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
-[workspace.dependencies.fyroxed_base]
-git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
-rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
-</code></pre>
-<p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
-<pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
-</code></pre>
+<p>This tutorial is made using Fyrox 0.33.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rpg-tutorial-part-1---character-controller"><a class="header" href="#rpg-tutorial-part-1---character-controller">RPG Tutorial Part 1 - Character Controller</a></h1>
 <p><strong>Source code</strong>: <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg">GitHub</a></p>
 <h2 id="table-of-contents-1"><a class="header" href="#table-of-contents-1">Table of contents</a></h2>
@@ -10947,20 +10921,7 @@ all required actions over and over again.</p>
 <h2 id="source-code-2"><a class="header" href="#source-code-2">Source Code</a></h2>
 <p>Source code for the entire tutorial is <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/fps">available here</a>.</p>
 <h2 id="engine-version-3"><a class="header" href="#engine-version-3">Engine Version</a></h2>
-<blockquote>
-<p>⚠️ Keep in mind that this tutorial uses specific version of the engine. You need to set this to your root <code>Cargo.toml</code> as 
-dependencies to ensure that it will compile:</p>
-</blockquote>
-<pre><code class="language-toml">[workspace.dependencies.fyrox]
-git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
-rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
-[workspace.dependencies.fyroxed_base]
-git = &quot;https://github.com/FyroxEngine/Fyrox&quot;
-rev = &quot;47b79d4acaf11b755d279ccb36de0f2ffd08172f&quot;
-</code></pre>
-<p>Also make sure to install <code>fyrox-template</code> directly from the engine repo using the following command:</p>
-<pre><code class="language-shell">cargo install fyrox-template --git=https://github.com/FyroxEngine/Fyrox --rev 47b79d4acaf11b755d279ccb36de0f2ffd08172f
-</code></pre>
+<p>This tutorial is made using Fyrox 0.33.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="first-person-shooter-tutorial-1"><a class="header" href="#first-person-shooter-tutorial-1">First-Person Shooter Tutorial</a></h1>
 <p>In this tutorial we'll create a first-person shooter game. </p>
 <p>Before we begin, make sure you know how to create projects and run the game and the editor. Read 
@@ -11257,7 +11218,8 @@ send a request for the weapon to shoot and the weapon will shoot when it will re
 for shooting in <code>weapon.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub struct ShootWeaponMessage {}
+</span>#[derive(Debug)]
+pub struct ShootWeaponMessage {}
 <span class="boring">}</span></code></pre></pre>
 <p>To actually be able to receive this message, we need to explicitly &quot;subscribe&quot; out script to it. Add the following code
 to the <code>on_start</code> method:</p>

@@ -1,7 +1,7 @@
 //! Editor with your game connected to it as a plugin.
+use fps::GameConstructor;
 use fyrox::event_loop::EventLoop;
 use fyroxed_base::{Editor, StartupData};
-use fps::GameConstructor;
 
 fn main() {
     let event_loop = EventLoop::new().unwrap();
@@ -9,7 +9,7 @@ fn main() {
         &event_loop,
         Some(StartupData {
             working_directory: Default::default(),
-            scene: "data/scene.rgs".into(),
+            scenes: vec!["data/scene.rgs".into()],
         }),
     );
     editor.add_game_plugin(GameConstructor);

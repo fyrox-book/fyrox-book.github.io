@@ -226,7 +226,8 @@ send a request for the weapon to shoot and the weapon will shoot when it will re
 for shooting in <code>weapon.rs</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub struct ShootWeaponMessage {}
+</span>#[derive(Debug)]
+pub struct ShootWeaponMessage {}
 <span class="boring">}</span></code></pre></pre>
 <p>To actually be able to receive this message, we need to explicitly &quot;subscribe&quot; out script to it. Add the following code
 to the <code>on_start</code> method:</p>

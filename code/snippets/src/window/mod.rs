@@ -51,5 +51,9 @@ impl Plugin for MyGame {
             ));
         }
         // ANCHOR_END: lock_cursor
+
+        if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
+            let window_size = graphics_context.window.inner_size();
+        }
     }
 }
