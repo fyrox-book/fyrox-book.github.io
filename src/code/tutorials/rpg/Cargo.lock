@@ -208,6 +208,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "35636a1494ede3b646cc98f74f8e62c773a38a659ebc777a2cf26b9b74171df9"
 
 [[package]]
+name = "bincode"
+version = "1.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "bindgen"
 version = "0.69.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -950,8 +959,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox"
-version = "0.32.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.33.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cd2759a8fabdfe88240df91224dff0939a363002863188aa4a3711d631dbbf57"
 dependencies = [
  "bitflags 2.4.1",
  "clap",
@@ -987,7 +997,8 @@ dependencies = [
 [[package]]
 name = "fyrox-animation"
 version = "0.1.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0b9e6f3bda1cfc10f8e97a4e5feb56690951328f81c6e8392dc18a87a135752b"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -998,12 +1009,14 @@ dependencies = [
 
 [[package]]
 name = "fyrox-core"
-version = "0.26.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.27.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "528ee7400248ca46e0008838ae2de8fcbffa2b5faf4a7b38de1e72c971019852"
 dependencies = [
  "android-activity",
  "arrayvec",
  "base64",
+ "bincode",
  "bitflags 2.4.1",
  "byteorder",
  "futures",
@@ -1028,8 +1041,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox-core-derive"
-version = "0.21.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.22.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "157ef060c10b2cd2d16e369f6346fe06b993bc7021e1b7340a7f367393dea9e7"
 dependencies = [
  "convert_case",
  "darling",
@@ -1041,8 +1055,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox-resource"
-version = "0.10.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba91c20584eae12d663099bf7e68693d65b86894e48aec92bc706d761c2812bb"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1054,8 +1069,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox-sound"
-version = "0.33.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.34.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2f368375b302e28a87307ed22aba9d63eedbe37c7b8417bafb45682236bef5fd"
 dependencies = [
  "fyrox-core",
  "fyrox-resource",
@@ -1071,8 +1087,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox-ui"
-version = "0.23.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e45fb7408906fca2ad53ef598461617c3e001cf124d3c0c76771a6892163a82b"
 dependencies = [
  "copypasta",
  "fontdue",
@@ -1089,8 +1106,9 @@ dependencies = [
 
 [[package]]
 name = "fyroxed_base"
-version = "0.19.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=57d70fe286901e11673716653751083792ad0ba1#57d70fe286901e11673716653751083792ad0ba1"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95dc70e07e78277586c1e1d21d2523427947b40e92c1424093f9568f118b356d"
 dependencies = [
  "fyrox",
  "lazy_static",

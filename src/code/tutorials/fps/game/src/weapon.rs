@@ -33,6 +33,7 @@ pub struct Weapon {
 }
 
 // ANCHOR: shoot_message
+#[derive(Debug)]
 pub struct ShootWeaponMessage {}
 // ANCHOR_END: shoot_message
 
