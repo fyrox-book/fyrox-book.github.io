@@ -191,15 +191,15 @@ By default, sound spatialization is very simple - volume of each audio channel (
 orientation of the listener. While this simple and fast, it does not provide good audio spatialization - sometimes
 it is hard to tell from which direction the actual sound is coming from. To solve this issue, we can use head-related
 transfer function. Despite its scary, mathematical name, it is easy to understand what it's doing. Instead of uniformly
-changing volume of all frequencies of the signal (as the naive spatialization does), it changes them separately for 
-each channel. The exact &quot;gains&quot; of each frequency of each channel is depends on the contents of head-related transfer
+changing volume of all frequencies of the signal (as the naive spatialization does), it changes them separately for
+each channel. The exact "gains" of each frequency of each channel is depends on the contents of head-related transfer
 function. This is done for each azimuth and elevation angles, which gives full picture of how audio signal from each
 direction travels to each ear.</p>
 <p>HRTF is usually recorded using a head model with ears with a microphone inside each ear. To capture head-related impulse
-response (time domain) at a fixed distance and angle pair (azimuth and elevation), a very short impulse of sound is produced. 
+response (time domain) at a fixed distance and angle pair (azimuth and elevation), a very short impulse of sound is produced.
 Microphones inside each ear records the signal, and then HRIR (time domain) can be converted in HRTF (frequency domain).</p>
 <h2 id="hrtf-on-practice"><a class="header" href="#hrtf-on-practice">HRTF on practice</a></h2>
-<p>The theory above could be boring, however it is very simple to use HRTF on practice. Pick a HRIR sphere from the 
+<p>The theory above could be boring, however it is very simple to use HRTF on practice. Pick a HRIR sphere from the
 <a href="https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM">database</a> (any of *.bin files) and load
 it in the Audio Context panel:</p>
 <p><img src="hrtf.png" alt="hrtf" /></p>
@@ -214,7 +214,7 @@ it in the Audio Context panel:</p>
 </span><span class="boring">
 </span>fn use_hrtf(graph: &amp;mut Graph) {
     let hrir_sphere = HrirSphereResource::from_hrir_sphere(
-        HrirSphere::from_file(&quot;path/to/hrir.bin&quot;, sound::SAMPLE_RATE).unwrap(), &quot;path/to/hrir.bin&quot;.into());
+        HrirSphere::from_file("path/to/hrir.bin", sound::SAMPLE_RATE).unwrap(), "path/to/hrir.bin".into());
     graph
         .sound_context
         .state()

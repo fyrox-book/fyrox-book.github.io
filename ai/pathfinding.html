@@ -187,10 +187,10 @@
                     <main>
                         <h1 id="path-finding"><a class="header" href="#path-finding">Path Finding</a></h1>
 <p>Fyrox has built-in <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A* (A-star)</a> algorithm for pathfinding. It can be
-used to find a path on arbitrary graph without cycles. It could be a simple grid where each point knows about its 
-&quot;neighbours&quot;, <a href="./navmesh.html">navigational mesh</a>, or some other graph.</p>
+used to find a path on arbitrary graph without cycles. It could be a simple grid where each point knows about its
+"neighbours", <a href="./navmesh.html">navigational mesh</a>, or some other graph.</p>
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
-<p>The simplest examples could be a search of path on uniform grid. This could be useful for games with open worlds, 
+<p>The simplest examples could be a search of path on uniform grid. This could be useful for games with open worlds,
 strategies, and any other types of games that uses uniform grid for pathfinding.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -226,15 +226,15 @@ fn astar_on_uniform_grid() {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that the returned path is always reversed (its first point corresponds to an <code>end</code> point). You need either
-to reverse the path, or (which is much faster) just iterate in reverse over its points. </p>
+to reverse the path, or (which is much faster) just iterate in reverse over its points.</p>
 <h2 id="what-to-use"><a class="header" href="#what-to-use">What to use</a></h2>
 <p>A* is very simple, yet powerful algorithm. However, it is not always suitable, because it searches only on graph vertices
 and cannot build paths that are lying on a surface of arbitrary meshes. Simple path finding on a uniform grid is ok
-for some games (strategies for instance), but in FPS games it will look awful. In this case you should use 
+for some games (strategies for instance), but in FPS games it will look awful. In this case you should use
 <a href="./navmesh.html">navigational meshes</a> which can build path on a surface of arbitrary meshes.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
-<p>Current A* implementation is not ideal and may hurt performance if you need to calculate a lot of paths on large 
-graphs. It will be optimized in the future (see <a href="https://github.com/FyroxEngine/Fyrox/issues/442">tracking issue</a> for 
+<p>Current A* implementation is not ideal and may hurt performance if you need to calculate a lot of paths on large
+graphs. It will be optimized in the future (see <a href="https://github.com/FyroxEngine/Fyrox/issues/442">tracking issue</a> for
 info).</p>
 
                     </main>

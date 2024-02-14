@@ -211,7 +211,7 @@ fn main() {
     // Then initialize the engine.
     let graphics_context_params = GraphicsContextParams {
         window_attributes: WindowAttributes {
-            title: &quot;Custom Game Loop&quot;.to_string(),
+            title: "Custom Game Loop".to_string(),
             resizable: true,
             ..Default::default()
         },
@@ -256,7 +256,7 @@ fn main() {
                     engine.update(fixed_timestep, control_flow, &amp;mut lag, Default::default());
                 }
 
-                // It is very important to &quot;pump&quot; messages from UI. Even if don't need to
+                // It is very important to "pump" messages from UI. Even if don't need to
                 // respond to such message, you should call this method, otherwise UI
                 // might behave very weird.
                 while let Some(_ui_event) = engine.user_interface.poll_message() {
@@ -294,7 +294,7 @@ fn main() {
                         if let Err(e) = engine.set_frame_size(size.into()) {
                             Log::writeln(
                                 MessageKind::Error,
-                                format!(&quot;Unable to set frame size: {:?}&quot;, e),
+                                format!("Unable to set frame size: {:?}", e),
                             );
                         }
                     }
@@ -302,7 +302,7 @@ fn main() {
                     _ =&gt; (),
                 }
 
-                // It is very important to &quot;feed&quot; user interface (UI) with events coming
+                // It is very important to "feed" user interface (UI) with events coming
                 // from main window, otherwise UI won't respond to mouse, keyboard, or any
                 // other event.
                 if let Some(os_event) = translate_event(&amp;event) {

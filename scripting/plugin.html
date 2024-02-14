@@ -188,9 +188,9 @@
                         <h1 id="plugins"><a class="header" href="#plugins">Plugins</a></h1>
 <p>A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and provides
 a set of scripts, that can be used to assign custom logic to scene nodes.</p>
-<p>Plugin is an &quot;entry point&quot; of your game, it has a fixed set of methods that can be used for initialization, update,
+<p>Plugin is an "entry point" of your game, it has a fixed set of methods that can be used for initialization, update,
 OS event handling, etc. Every plugin is statically linked to the engine (and the editor), there is no support for hot-reloading
-due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytime - if you don't change 
+due to lack of stable ABI in Rust. However, it is possible to not recompile the editor everytime - if you don't change
 data layout in your structures the editor will be able to compile your game and run it with the currently loaded scene,
 thus reducing amount of iterations. You can freely modify application logic and this won't affect the running editor.</p>
 <p>The main purpose of the plugins is to hold and operate on some global application data, that can be used in scripts and
@@ -239,7 +239,7 @@ impl Game {
     pub fn new(scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; Self {
         context
             .async_scene_loader
-            .request(scene_path.unwrap_or(&quot;data/scene.rgs&quot;));
+            .request(scene_path.unwrap_or("data/scene.rgs"));
             
         Self { 
             scene: Handle::NONE 
@@ -288,21 +288,21 @@ is responsible for script registration (<code>fn register</code>) and creating t
 <ul>
 <li><code>register</code> - called once on start allowing you to register your scripts. <strong>Important:</strong> You must register all your
 scripts here, otherwise the engine (and the editor) will know nothing about them. Also, you should register loaders for
-your custom resources here. See <a href="../resources/custom.html">Custom Resource chapter</a> more info. </li>
-<li><code>create_instance</code> - called once, allowing you to create actual game instance. It is guaranteed to be called once, but 
-<em>where</em> it is called is implementation-defined. For example, the editor will <strong>not</strong> call this method, it does not 
-create any game instance. The method has <code>scene_path</code> parameter, in short it is a path to a scene that is currently 
-opened in the editor (it will be <code>None</code> if either there's no opened scene or your game was started outside the editor). 
+your custom resources here. See <a href="../resources/custom.html">Custom Resource chapter</a> more info.</li>
+<li><code>create_instance</code> - called once, allowing you to create actual game instance. It is guaranteed to be called once, but
+<em>where</em> it is called is implementation-defined. For example, the editor will <strong>not</strong> call this method, it does not
+create any game instance. The method has <code>scene_path</code> parameter, in short it is a path to a scene that is currently
+opened in the editor (it will be <code>None</code> if either there's no opened scene or your game was started outside the editor).
 It is described in <a href="#editor-and-plugins">Editor and Plugins</a> section down below.</li>
 </ul>
 <p>The game structure (<code>struct Game</code>) implements a <code>Plugin</code> trait which can execute actual game logic in one of its methods:</p>
 <ul>
 <li><code>on_deinit</code> - it is called when the game is about to shut down. Can be used for any clean up, for example logging that
 the game has closed.</li>
-<li><code>update</code> - it is called each frame at a stable rate (usually 60 Hz, but can be configured in the Executor) after the 
+<li><code>update</code> - it is called each frame at a stable rate (usually 60 Hz, but can be configured in the Executor) after the
 plugin is created and fully initialized. It is the main place where you should put <em>object-independent</em> game logic (such
 as user interface handling, global application state management, etc.), any other logic should be added via scripts.</li>
-<li><code>on_os_event</code> - it is called when the main application window receives an event from the operating system, it can be 
+<li><code>on_os_event</code> - it is called when the main application window receives an event from the operating system, it can be
 any event such as keyboard, mouse, game pad events or any other events. Please note that as for <code>update</code> method, you
 should put here only <em>object-independent</em> logic. Scripts can catch OS events too.</li>
 <li><code>on_ui_message</code> - it is called when there is a message from the user interface, it should be used to react to user
@@ -312,7 +312,7 @@ be used to access the renderer (to change its quality settings, for instance). Y
 and change its properties (such as title, size, resolution, etc.).</li>
 <li><code>on_graphics_context_destroyed</code> - it is called when the current graphics context was destroyed. It could happen on a
 small number of platforms, such as Android. Such platforms usually have some sort of suspension mode, in which you are
-not allowed to render graphics, to have a &quot;window&quot;, etc.</li>
+not allowed to render graphics, to have a "window", etc.</li>
 <li><code>before_rendering</code> - it is called when the engine is about to render a new frame. This method is useful to perform
 offscreen rendering (for example - <a href="../ui/rendering.html#offscreen-rendering">user interface</a>).</li>
 <li><code>on_scene_begin_loading</code> - it is called when the engine starts to load a game scene. This method could be used to
@@ -363,9 +363,9 @@ context is something like this:</p>
 <span class="boring">}</span></code></pre></pre>
 <p>Amount of time (in seconds) that passed from creation of the engine. Keep in mind, that
 this value is <strong>not</strong> guaranteed to match real time. A user can change delta time with
-which the engine &quot;ticks&quot; and this delta time affects elapsed time.</p>
+which the engine "ticks" and this delta time affects elapsed time.</p>
 <ul>
-<li><code>scenes</code> - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading 
+<li><code>scenes</code> - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading
 is given in the previous code snippet in <code>Game::new()</code> method.</li>
 <li><code>resource_manager</code> - is used to load external resources (scenes, models, textures, animations, sound buffers, etc.) from
 different sources (disk, network storage on WebAssembly, etc.)</li>
@@ -376,17 +376,17 @@ It could be <code>GraphicsContext::Uninitialized</code> if your application is s
 <li><code>dt</code> - a time passed since the last frame. The actual value is implementation-defined, but on current implementation it
 is equal to 1/60 of a second and does not change event if the frame rate is changing (the engine stabilizes update rate
 for the logic).</li>
-<li><code>lag</code> - a reference to the time accumulator, that holds remaining amount of time that should be used to update a plugin. 
-A caller splits <code>lag</code> into multiple sub-steps using <code>dt</code> and thus stabilizes update rate. The main use of this variable, 
+<li><code>lag</code> - a reference to the time accumulator, that holds remaining amount of time that should be used to update a plugin.
+A caller splits <code>lag</code> into multiple sub-steps using <code>dt</code> and thus stabilizes update rate. The main use of this variable,
 is to be able to reset <code>lag</code> when you're doing some heavy calculations in a game loop (i.e. loading a new level) so the
-engine won't try to &quot;catch up&quot; with all the time that was spent in heavy calculation.</li>
+engine won't try to "catch up" with all the time that was spent in heavy calculation.</li>
 <li><code>serialization_context</code> - it can be used to register scripts and custom scene nodes constructors at runtime.</li>
 <li><code>performance_statistics</code> - performance statistics from the last frame. To get a rendering performance statistics, use
 <code>Renderer::get_statistics</code> method, that could be obtained from the renderer instance in the current graphics context.</li>
-<li><code>elapsed_time</code> - amount of time (in seconds) that passed from creation of the engine. Keep in mind, that this value 
-is <strong>not</strong> guaranteed to match real time. A user can change delta time with which the engine &quot;ticks&quot; and this delta time 
+<li><code>elapsed_time</code> - amount of time (in seconds) that passed from creation of the engine. Keep in mind, that this value
+is <strong>not</strong> guaranteed to match real time. A user can change delta time with which the engine "ticks" and this delta time
 affects elapsed time.</li>
-<li><code>script_processor</code> - a reference to the current script processor instance, which could be used to access a list of 
+<li><code>script_processor</code> - a reference to the current script processor instance, which could be used to access a list of
 scenes that supports scripts.</li>
 <li><code>async_scene_loader</code> - a reference to the current asynchronous scene loader instance. It could be used to request
 a new scene to be loaded.</li>
@@ -412,7 +412,7 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
 </span>pub fn new(scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; Self {
     context
         .async_scene_loader
-        .request(scene_path.unwrap_or(&quot;data/scene.rgs&quot;));
+        .request(scene_path.unwrap_or("data/scene.rgs"));
         
     Self { 
         scene: Handle::NONE 
@@ -421,8 +421,8 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
 <p>The <code>scene_path</code> parameter is a path to a scene that is currently opened in the editor, your game should use it if you
-need to load a currently selected scene of the editor in your game. However, it is not strictly necessary - you may 
-desire to start your game from a specific scene all the time, even when the game starts from the editor. If the parameter 
+need to load a currently selected scene of the editor in your game. However, it is not strictly necessary - you may
+desire to start your game from a specific scene all the time, even when the game starts from the editor. If the parameter
 is <code>None</code>, then there is no scene loaded in the editor or the game was run outside the editor.</p>
 
                     </main>

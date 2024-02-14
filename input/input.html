@@ -188,7 +188,7 @@
                         <h1 id="input"><a class="header" href="#input">Input</a></h1>
 <p>This chapter explains how the input handling in the engine works. The input system based on various events, that comes
 to the window from the OS. It could be mouse events (such as mouse motion, button clicks), keyboard events, touchpad
-events, etc. </p>
+events, etc.</p>
 <p>There are two major points for event handling: <code>Plugin::on_os_event</code> and <code>Script::on_os_event</code>, the first one is used
 to react to OS events on plugin scale and the latter - on script scale. Here's a list (not full) of the most common
 events, that could be used in your game (some rare events are omitted):</p>
@@ -241,7 +241,7 @@ impl Plugin for MyGame {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, to do an action in response to an event all you need to do is to write some code in a desired branch.
-You can also put the handler code into a method of your plugin/script and call it instead. </p>
+You can also put the handler code into a method of your plugin/script and call it instead.</p>
 <h2 id="immediate-input-state-fetching"><a class="header" href="#immediate-input-state-fetching">Immediate input state fetching</a></h2>
 <p>You may be used to much simpler approach of immediate input state fetching, such as <code>keyboard.is_key_pressed(..)</code> or
 <code>mouse.position()</code> - this is not supported in Fyrox out-of-the-box. You can write this functionality yourself if needed,

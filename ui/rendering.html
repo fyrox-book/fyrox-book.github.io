@@ -186,7 +186,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="rendering"><a class="header" href="#rendering">Rendering</a></h1>
-<p>User interface is usually rendered directly on screen, and in most cases this is enough. However, there are some 
+<p>User interface is usually rendered directly on screen, and in most cases this is enough. However, there are some
 specific cases when you need to incorporate user interface in your game scene as an interactive screen (holographic,
 for example) or to render some scene inside some UI element (to create some sort of in-game CCTV, for example). This
 chapter covers these specific cases and rendering nuances in general.</p>
@@ -195,7 +195,7 @@ chapter covers these specific cases and rendering nuances in general.</p>
 example - holographic inventory in sci-fi games:</p>
 <p><img src="offscreen_ui.png" alt="offscreen ui" /></p>
 <p>Default engine's user interface instance (accessible in <code>context.user_interface</code> from plugin methods) can't be rendered
-offscreen due to engine design. However, you can create a new user interface instance, populate it with widgets, and 
+offscreen due to engine design. However, you can create a new user interface instance, populate it with widgets, and
 then render it to a texture. This could be done like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -235,13 +235,13 @@ impl Game {
 
         // Create some widgets as usual.
         ButtonBuilder::new(WidgetBuilder::new())
-            .with_text(&quot;Click Me!&quot;)
+            .with_text("Click Me!")
             .build(&amp;mut my_ui.build_ctx());
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
         let mut material = Material::standard();
         Log::verify(material.set_property(
-            &amp;ImmutableString::new(&quot;diffuseTexture&quot;),
+            &amp;ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
                 value: Some(render_target.clone()),
                 fallback: Default::default(),
@@ -306,9 +306,9 @@ impl Plugin for Game {
 It uses standard plugin structure and contents of each method should be placed in the according methods in your game.
 This code creates a new user interface, a render target of appropriate size and renders the UI into the render
 target. The render target then could be used as a diffuse texture in one of your materials, which in its turn, can
-be assigned to pretty much any mesh in your game. </p>
+be assigned to pretty much any mesh in your game.</p>
 <h2 id="embedding-scene-into-ui"><a class="header" href="#embedding-scene-into-ui">Embedding Scene into UI</a></h2>
-<p>It is possible to &quot;embed&quot; a scene into arbitrary user interface. This could be useful if you need to create some sort
+<p>It is possible to "embed" a scene into arbitrary user interface. This could be useful if you need to create some sort
 of CCTV, or to show 3D graphics in 2D user interface and so on. To do so, you need to specify a render target for your
 scene and then use the texture (render target) in an <code>Image</code> widget.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -349,7 +349,7 @@ scene and then use the texture (render target) in an <code>Image</code> widget.<
 first, then it assigns it to the scene, and also it creates a new <code>Image</code> widget with the render target as a texture.
 A simple example of what this code does is the scene previewer in the editor:</p>
 <p><img src="rerouting.png" alt="rerouting" /></p>
-<p>If you set <code>width</code> and <code>height</code> to match your screen size, you'll create a simple &quot;overlay&quot; that will allow you to 
+<p>If you set <code>width</code> and <code>height</code> to match your screen size, you'll create a simple "overlay" that will allow you to
 render scene entities on top of the UI. In this case, however, you also need to configure scene camera accordingly,
 and probably use orthographic projection so the coordinates would match.</p>
 

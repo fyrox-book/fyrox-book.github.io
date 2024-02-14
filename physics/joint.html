@@ -186,17 +186,17 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="joint"><a class="header" href="#joint">Joint</a></h1>
-<p>Joint is a configurable link between two rigid bodies, it restricts relative motion of two bodies. Fyrox provides a 
+<p>Joint is a configurable link between two rigid bodies, it restricts relative motion of two bodies. Fyrox provides a
 fixed set of joints that are suitable for various applications.</p>
 <ul>
-<li>Fixed Joint - hard link between two bodies, it is the same is if two rigid bodies were &quot;welded&quot; to each other with 
+<li>Fixed Joint - hard link between two bodies, it is the same is if two rigid bodies were "welded" to each other with
 a metal rod.</li>
 <li>Revolute Joint - restricts all translational movement and any rotations around Y and Z axes, but leaves rotation
-around local X axis free. An example of the joint from real world is a door hinge, it allows the door to rotate around 
+around local X axis free. An example of the joint from real world is a door hinge, it allows the door to rotate around
 single axis, but not move.</li>
 <li>Prismatic Joint - restricts all rotations, movement is allowed along single axis (local X of the joint). An example
 of the joint from real world could be a slider that supports drawers on a table.</li>
-<li>Ball Joint - restricts all movement, but leaves rotations unrestricted. An example of a ball joint from real world 
+<li>Ball Joint - restricts all movement, but leaves rotations unrestricted. An example of a ball joint from real world
 could be human shoulder.</li>
 </ul>
 <p>2D joints does not have revolute joints, because it degenerates into ball joint.</p>
@@ -235,10 +235,10 @@ can be initiated by moving the joint to some other position by changing local tr
 <span class="boring">}</span></code></pre></pre>
 <p>Once the joint is created, it will bind given bodies, using the process describe in the above section.</p>
 <p>To create a joint from editor, use  <code>MainMenu -&gt; Create -&gt; Physics -&gt; Joint</code>, select the new joint and find <code>Body1</code> and
-<code>Body2</code> properties. Assign the fields by holding <code>Alt</code> key and drag'n'drop a rigid body to a field. Move the joint to 
+<code>Body2</code> properties. Assign the fields by holding <code>Alt</code> key and drag'n'drop a rigid body to a field. Move the joint to
 correct position to ensure the binding will happen as intended.</p>
 <h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
-<p>You can restrict motion on primary joint axis (rotational and translational) by setting a limit to desired axis. </p>
+<p>You can restrict motion on primary joint axis (rotational and translational) by setting a limit to desired axis.</p>
 <ul>
 <li>Ball Joint have three angular limits, one per rotation around an axis. The angle range is given in radians.</li>
 <li>Prismatic Joint have only one limit it is maximum linear distance between two bodies along primary joint axis.</li>
@@ -246,8 +246,8 @@ correct position to ensure the binding will happen as intended.</p>
 <li>Fixed Joint does not have any limit setting, because it locks all degrees of freedom.</li>
 </ul>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>Joints can be used to create many game entities, such as doors, chains and rag dolls. The most interesting here is 
-rag doll. It is used to create realistic behaviour for humans and creatures in games. In general, it is a set of 
+<p>Joints can be used to create many game entities, such as doors, chains and rag dolls. The most interesting here is
+rag doll. It is used to create realistic behaviour for humans and creatures in games. In general, it is a set of
 rigid bodies, colliders and joints. Where each joint configured to match joints of a creature, for example ball joint
 could be used for shoulders, revolute joints for knees and elbows.</p>
 

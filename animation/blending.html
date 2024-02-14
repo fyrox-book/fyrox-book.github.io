@@ -188,7 +188,7 @@
                         <h1 id="animation-blending"><a class="header" href="#animation-blending">Animation Blending</a></h1>
 <p>Animation blending is a powerful feature that allows you to mix multiple animations into one. Each animation
 is mixed with a various weights which in sum gives 1.0 (100%). By having opposite coefficients (k1 = 0 -&gt; 1, k2 = 1 -&gt; 0)
-changing in time it is possible to create transition effect. </p>
+changing in time it is possible to create transition effect.</p>
 <p>Handling transitions with all the coefficients is a routine job, the engine can handle it for you giving you some nice
 features:</p>
 <ul>
@@ -196,23 +196,23 @@ features:</p>
 <li>Ability to blend multiple animations in one and use it as pose source for blending</li>
 <li>Ability to specify a set of variables that will be used as blending coefficients and transition rules.</li>
 </ul>
-<p>All these features consolidated in so-called animation blending state machine (ABSM). Machine is used to blend multiple 
-animation as well as perform automatic &quot;smooth&quot; transition between states. In general, ABSM could be represented like
+<p>All these features consolidated in so-called animation blending state machine (ABSM). Machine is used to blend multiple
+animation as well as perform automatic "smooth" transition between states. In general, ABSM could be represented like
 this:</p>
 <p><img src="absm_structure.png" alt="ABSM Structure" /></p>
 <p>At the first look it may seem very complicated, but in reality it uses quite simple techniques. Let's start from
 the left side of the picture and go to the right. Yellow rectangle at the left depicts an animation player node
 that contains a bunch of animations, that will be used for blending. Two center blocks (layer 0 and layer 1) depicts
 separate layers (ABSM could have any number of layers in it). Each layer can contain an arbitrary nodes (green
-shapes), states (blue shapes), transitions (thick yellow arrows). </p>
-<p>Nodes serves as a source of poses, that can be blended in any desired way. States are the part of the inner state 
-machine, only one state could be active at the same time. Transitions are used to specify state transition rules. </p>
-<p>At the &quot;exit&quot; of each layer there's a layer filter, it is responsible for filtering out values for specific
+shapes), states (blue shapes), transitions (thick yellow arrows).</p>
+<p>Nodes serves as a source of poses, that can be blended in any desired way. States are the part of the inner state
+machine, only one state could be active at the same time. Transitions are used to specify state transition rules.</p>
+<p>At the "exit" of each layer there's a layer filter, it is responsible for filtering out values for specific
 scene nodes and could be used to prevent some scene nodes from being animated by a certain layer. Please note
 that despite the look of it, layer filter not necessarily be applied after all animations and states are blended -
 it could be done at any moment and drawn like so only for simplicity reasons.</p>
 <p>The last, but not the least, important thing on the picture is the parameters container on the right side of the
-picture. Parameter either a transition rule, blending weight, or sampling point. If you look closely at the 
+picture. Parameter either a transition rule, blending weight, or sampling point. If you look closely at the
 transitions or animation blending nodes you'll see small text marks. This is the names of the respective parameters.</p>
 <p>In general, any state machine works like this - ABSM nodes are used to blend or fetch animations and their resulting
 poses are used by ABSM states. Active state provides final pose, which is then passes filtering and returned to
@@ -220,7 +220,7 @@ you. After the last stage, you can apply the pose to a scene graph to make the r
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>As always, there are two major ways of creating things in Fyrox - from the editor or from code. Take your pick.</p>
 <h2 id="from-editor"><a class="header" href="#from-editor">From editor</a></h2>
-<p>Use <a href="absm_editor.html">ABSM Editor</a> for to create animation blending state machines. </p>
+<p>Use <a href="absm_editor.html">ABSM Editor</a> for to create animation blending state machines.</p>
 <h2 id="from-code"><a class="header" href="#from-code">From code</a></h2>
 <p>You can always create an ABSM from code, a simple ABSM could be created like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -254,13 +254,13 @@ let blend_aim_walk = root_layer.add_node(PoseNode::BlendAnimations(
   ])
 ));
 
-let walk_state = root_layer.add_state(State::new(&quot;Walk&quot;, blend_aim_walk));
+let walk_state = root_layer.add_state(State::new("Walk", blend_aim_walk));
 
 let idle = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
-let idle_state = root_layer.add_state(State::new(&quot;Idle&quot;, idle));
+let idle_state = root_layer.add_state(State::new("Idle", idle));
 
-root_layer.add_transition(Transition::new(&quot;Walk-&gt;Idle&quot;, walk_state, idle_state, 1.0, &quot;WalkToIdle&quot;));
-root_layer.add_transition(Transition::new(&quot;Idle-&gt;Walk&quot;, idle_state, walk_state, 1.0, &quot;IdleToWalk&quot;));
+root_layer.add_transition(Transition::new("Walk-&gt;Idle", walk_state, idle_state, 1.0, "WalkToIdle"));
+root_layer.add_transition(Transition::new("Idle-&gt;Walk", idle_state, walk_state, 1.0, "IdleToWalk"));
 <span class="boring">}</span></code></pre></pre>
 <p>Here we have Walk, Idle and Run states which use different sources of poses:</p>
 <ul>

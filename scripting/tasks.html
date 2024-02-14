@@ -189,12 +189,12 @@
 <p>Fyrox supports task-based programming for both scripts and plugins. Task is a closure that does something in a separate
 thread and then the result of it is returned back to the main thread. This is very useful technique, that allows you to
 perform heavy calculations using all available CPU power, not just one CPU core with a single main thread. Tasks could
-be used for pretty much anything, that can be done as a separate piece of work. </p>
+be used for pretty much anything, that can be done as a separate piece of work.</p>
 <h2 id="how-it-works"><a class="header" href="#how-it-works">How it works</a></h2>
 <p>Main thread spawns a task which is then sent to the task pool. There's a fixed set of worker threads, that extracts
 tasks from the task pool when there's any. Task's code is then executed in one of the worker thread, which may take
 any amount of time. When the task is completed, its result is sent to the main thread and then a callback closure is
-executed to do a desired action on task completion. Usually it's something relatively fast - for example you may 
+executed to do a desired action on task completion. Usually it's something relatively fast - for example you may
 spawn a task that calculates a path on a large navigational mesh and when it is done, you store that path in one of your
 script instance from which the task was spawned. As you can see, there are two major parts - the task itself and the
 closure. Graphically it can be represented like this:</p>
@@ -205,15 +205,15 @@ this image (yellow-ish one). At first, we spawn a task, and it is immediately pu
 after this if we have a free worker thread it extracts our task from the pool and sends it to execution. As you can
 see any task must implement <code>Send</code> trait, otherwise you'll get a <em>compilation error</em>. When the task is complete, the
 worker thread sends the result (again, the result must be <code>Send</code>) to the main thread and an associated callback closure
-is executed to do something with the result. While the task is being executed, the main thread is not blocked, and it 
-can do other useful stuff. </p>
+is executed to do something with the result. While the task is being executed, the main thread is not blocked, and it
+can do other useful stuff.</p>
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
 <p>The following example calculates a path on a navigational mesh in using task-based approach described above. At first,
-it prepares the &quot;environment&quot; for the task by cloning a shared navigational mesh (<code>Arc&lt;RwLock&lt;NavMesh&gt;&gt;</code>) into a 
+it prepares the "environment" for the task by cloning a shared navigational mesh (<code>Arc&lt;RwLock&lt;NavMesh&gt;&gt;</code>) into a
 local variable. Then it spawns a new task (<code>async move { .. }</code> block) which reads the shared navigational mesh
 and calculates a long path, that could take a few frames to compute (imagine a huge island, and we need to get
 a path from one corner to another). As the last argument to the <code>spawn_script_task</code> method we pass a closure that
-will be executed on the main thread when the task is complete. It just saves the computed path in the script's 
+will be executed on the main thread when the task is complete. It just saves the computed path in the script's
 field which is then used for visualization.</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -275,7 +275,7 @@ struct MyScript {
                 |path, this: &amp;mut MyScript, _ctx| {
                     this.path = path;
 
-                    Log::info(&quot;Path is calculated!&quot;);
+                    Log::info("Path is calculated!");
                 },
             );
         }
@@ -329,7 +329,7 @@ impl MyGame {
             // Emulate heavy task by reading a potentially large file. The game will be fully
             // responsive while it runs.
             async move {
-                let mut file = File::open(&quot;some/file.txt&quot;).unwrap();
+                let mut file = File::open("some/file.txt").unwrap();
                 let mut data = Vec::new();
                 file.read_to_end(&amp;mut data).unwrap();
                 data
@@ -351,17 +351,17 @@ impl Plugin for MyGame {
     fn update(&amp;mut self, _context: &amp;mut PluginContext) {
         // Do something with the data.
         if let Some(data) = self.data.take() {
-            println!(&quot;The data is: {:?}&quot;, data);
+            println!("The data is: {:?}", data);
         }
     }
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>You should avoid task-based approach for small (in time terms) tasks, because each task has additional cost which
-might be larger than the actual task executed in-place. This is because you need to send your task to a separate 
-thread using a channel, then the callback closure is stored as a trait object which involves memory allocation. 
+might be larger than the actual task executed in-place. This is because you need to send your task to a separate
+thread using a channel, then the callback closure is stored as a trait object which involves memory allocation.
 Since tasks uses type erasure technique, they perform dynamic type casting which is not free. Also, there could be
-any other implementation-defined &quot;slow&quot; spots.</p>
+any other implementation-defined "slow" spots.</p>
 <p>A general advice would be: run a profiler first to find hot spots in your game, then try to optimize them. If you
 hit the optimization limit, use tasks. Do not use tasks until you really need them, try to optimize your game first!
 If you're working on a simple 2D game, you'll never need to use tasks. You might need to use tasks when your have,

@@ -219,10 +219,10 @@ fn create_window(ui: &amp;mut UserInterface) {
     )
     .with_content(
         TextBuilder::new(WidgetBuilder::new())
-            .with_text(&quot;Example Window content.&quot;)
+            .with_text("Example Window content.")
             .build(&amp;mut ui.build_ctx())
     )
-    .with_title(WindowTitle::text(&quot;Window&quot;))
+    .with_title(WindowTitle::text("Window"))
     .can_close(true)
     .can_minimize(true)
     .open(true)
@@ -232,13 +232,13 @@ fn create_window(ui: &amp;mut UserInterface) {
 <span class="boring">}</span></code></pre></pre>
 <p>You will likely want to constrain the initial size of the window to somethig as shown in the example by providing a set
 width and/or height to the base WidgetBuilder. Otherwise it will expand to fit it's content.</p>
-<p>You may also want to set an inital position with the <em>with_desired_position</em> function called on the base WidgetBuilder 
+<p>You may also want to set an inital position with the <em>with_desired_position</em> function called on the base WidgetBuilder
 which sets the position of the window's top-left corner. Otherwise all your windows will start with it's top-left corner
 at 0,0 and be stacked on top of eachother.</p>
-<p>Windows can only contain a single direct child widget, set by using the <em>with_content</em> function. 
-Additional calls to <em>with_content</em> replaces the widgets given in previous calls, and the old widgets exist outside the 
-window, so you should delete old widgets before changing a window's widget.  If you want multiple widgets, you need to 
-use one of the layout container widgets like the Grid, Stack Panel, etc then add the additional widgets to that widget 
+<p>Windows can only contain a single direct child widget, set by using the <em>with_content</em> function.
+Additional calls to <em>with_content</em> replaces the widgets given in previous calls, and the old widgets exist outside the
+window, so you should delete old widgets before changing a window's widget.  If you want multiple widgets, you need to
+use one of the layout container widgets like the Grid, Stack Panel, etc then add the additional widgets to that widget
 as needed.</p>
 <p>The Window is a user editable object, but can only be affected by UI Messages they trigger if the message's corresponding
 variable has been set to true aka what is set by the <em>can_close</em>, <em>can_minimize</em>, and <em>can_resize</em> functions.</p>
@@ -249,8 +249,8 @@ function providing a true or false as desired.</p>
 <p>The window close and minimise buttons can be configured with the <em>with_close_button</em> and <em>with_minimize_button</em> functions.
 You will want to pass them a button widget, but can do anything else you like past that.</p>
 <h2 id="modal-aka-forced-focus"><a class="header" href="#modal-aka-forced-focus">Modal (AKA Forced Focus)</a></h2>
-<p>A Modal in UI design terms indicates a window or box that has forced focus. The user is not able to interact with anything 
-else until the modal is dissmissed. </p>
+<p>A Modal in UI design terms indicates a window or box that has forced focus. The user is not able to interact with anything
+else until the modal is dissmissed.</p>
 <p>Any window can be set and unset as a modal via the <em>modal</em> function.</p>
 
                     </main>

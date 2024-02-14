@@ -192,7 +192,7 @@ to animate pretty much any numeric property. It has three main parts:</p>
 <ol>
 <li><code>Toolbar</code> - contains a set of tools that changes a particular part of an animation (name, length, speed, etc.)</li>
 <li><code>Track List</code> - contains a list of tracks of nodes that will be animated.</li>
-<li><code>Curve Editor</code> - curve editor allows you to edit behaviour of a numeric parameter over the time. </li>
+<li><code>Curve Editor</code> - curve editor allows you to edit behaviour of a numeric parameter over the time.</li>
 </ol>
 <p>The editor can be opened in two ways - using <code>Utils -&gt; Animation Editor</code> or by selecting an animation player node and
 clicking <code>Open Animation Editor</code> button in the inspector.</p>
@@ -200,10 +200,10 @@ clicking <code>Open Animation Editor</code> button in the inspector.</p>
 <p><img src="./ae_open2.png" alt="open2" /></p>
 <p>In both ways you still need to select an animation player for editing.</p>
 <h2 id="typical-workflow"><a class="header" href="#typical-workflow">Typical Workflow</a></h2>
-<p>At first, you need to create or <a href="#animation-importing">import</a> an animation, then you need to set its time slice to 
-desired range (see <a href="#toolbar">Time Slice</a> in the section below), then you need to add a few tracks for desired 
+<p>At first, you need to create or <a href="#animation-importing">import</a> an animation, then you need to set its time slice to
+desired range (see <a href="#toolbar">Time Slice</a> in the section below), then you need to add a few tracks for desired
 properties and finally add some keys. You can <a href="#preview-mode">preview</a> the results at any time, keep in
-mind that any attempt to change an animation while it is the preview mode, will revert every change from the 
+mind that any attempt to change an animation while it is the preview mode, will revert every change from the
 preview mode and only then apply your change.</p>
 <h2 id="toolbar"><a class="header" href="#toolbar">Toolbar</a></h2>
 <p>The toolbar contains a set of tools that changes a particular part of an animation (name, length, speed, etc.). It looks
@@ -211,7 +211,7 @@ like this:</p>
 <p><img src="./ae_toolbar.png" alt="toolbar" /></p>
 <ol>
 <li><code>Animation Name</code> - name of a currently selected animation.</li>
-<li><code>Add Animation</code> - adds a new empty animation with the name from the text box at the left to the animation player. </li>
+<li><code>Add Animation</code> - adds a new empty animation with the name from the text box at the left to the animation player.</li>
 <li><code>Import Animation</code> - starts animation importing process. See <a href="#animation-importing">Animation Importing</a> section
 for more info.</li>
 <li><code>Reimport Animation</code> - re-imports the animation from an external file, it is useful if you need to change animation's
@@ -241,7 +241,7 @@ tracks that belong to a particular scene node.</li>
 <li><code>Expand All</code> - expands all the tracks in the list.</li>
 <li><code>Track</code> - a track with some number of children parametric curves.</li>
 <li><code>Track Component Curve</code> - parametric curve that serves a data source for the animation for a particular track.</li>
-<li><code>Track Switch</code> - enables or disables a track; disabled tracks won't &quot;touch&quot; their properties.</li>
+<li><code>Track Switch</code> - enables or disables a track; disabled tracks won't "touch" their properties.</li>
 <li><code>Add Track</code> - starts property binding process, see <a href="#property-binding">Property Binding</a> section for more info.</li>
 </ol>
 <h3 id="track-context-menu"><a class="header" href="#track-context-menu">Track Context Menu</a></h3>
@@ -251,16 +251,16 @@ tracks that belong to a particular scene node.</li>
 holding <code>Ctrl</code>.</li>
 </ul>
 <h2 id="curve-editor"><a class="header" href="#curve-editor">Curve Editor</a></h2>
-<p>Curve editor allows you to edit parametric curves (one at a time). A curve consists of zero or more key frames with 
+<p>Curve editor allows you to edit parametric curves (one at a time). A curve consists of zero or more key frames with
 various transition rules between current and the next. The editor looks like this:</p>
 <p><img src="./ae_curve_editor.png" alt="curve editor" /></p>
 <ol>
 <li><code>Time Ruler</code> - shows time values and every signal of a currently selected animation. A click on the time ruler will
-move the playback cursor at the click position. You can move it by clicking at the cursor and moving the mouse while 
+move the playback cursor at the click position. You can move it by clicking at the cursor and moving the mouse while
 holding the left mouse button. Animation signals can be moved in the same fashion.</li>
 <li><code>Parametric Curve</code> - a curve that defines how a value changes over time.</li>
 <li><code>Time Thumb</code> - animation playback cursor, useful only for preview.</li>
-<li><code>Animation Signal</code> - some animation signal that will produce animation events when the playback cursor passes it. </li>
+<li><code>Animation Signal</code> - some animation signal that will produce animation events when the playback cursor passes it.</li>
 </ol>
 <h3 id="time-ruler-context-menu"><a class="header" href="#time-ruler-context-menu">Time Ruler Context Menu</a></h3>
 <p><img src="./ae_time_ruler_context_menu.png" alt="time ruler context menu" /></p>
@@ -271,7 +271,7 @@ holding the left mouse button. Animation signals can be moved in the same fashio
 <h3 id="key-frame-context-menu"><a class="header" href="#key-frame-context-menu">Key Frame Context Menu</a></h3>
 <p><img src="./ae_key_frame_context_menu.png" alt="key frame context menu" /></p>
 <ul>
-<li><code>Location</code> - shows a key location and allows you to change it. Useful for setting precise values. </li>
+<li><code>Location</code> - shows a key location and allows you to change it. Useful for setting precise values.</li>
 <li><code>Value</code> - shows a key value and allows you to change it. Useful for setting precise values.</li>
 <li><code>Add Key</code> - adds a new key to the curve.</li>
 <li><code>Remove</code> - removes all selected keys. You can select multiple keys either by box selection (click and drag the mouse
@@ -291,14 +291,14 @@ another:</p>
 only numeric properties, so not every property is shown in the window.</p>
 <h2 id="animation-importing"><a class="header" href="#animation-importing">Animation Importing</a></h2>
 <p>Animations can be stored in separate files, but the engine requires all of them to be in a single Animation Player. To
-put an animation from an external resource (an FBX, for instance) in the animation player you can use animation 
+put an animation from an external resource (an FBX, for instance) in the animation player you can use animation
 importing. To do that, click on animation import icon and then select a root node of the hierarchy that is animated in
 the external animation file, then select the animation file and click <code>Ok</code>. The engine will try to import the animation
-and map it to the given hierarchy, mapping is done using node names, so animated node names must match in both your 
-scene and your external animation file. </p>
+and map it to the given hierarchy, mapping is done using node names, so animated node names must match in both your
+scene and your external animation file.</p>
 <p><img src="./ae_import_select_target_node.png" alt="step1" /></p>
 <p><img src="./ae_import_select_animation.png" alt="step2" /></p>
-<p>Content of existing animations can be replaced by reimporting. Click on a button with two circular arrows to reimport 
+<p>Content of existing animations can be replaced by reimporting. Click on a button with two circular arrows to reimport
 your animation. It could be useful if you changed your animation in some external editor (Blender for example) and want
 to apply changes in your game.</p>
 <h2 id="preview-mode"><a class="header" href="#preview-mode">Preview Mode</a></h2>
@@ -310,7 +310,7 @@ by playing animation.</p>
 <h2 id="root-motion"><a class="header" href="#root-motion">Root Motion</a></h2>
 <p>See <a href="root_motion/root_motion.html">Root Motion chapter</a> for more info.</p>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
-<p>For now there's no dopesheet mode in the editor, you can edit only one numeric parameter at a time. Also, there's no 
+<p>For now there's no dopesheet mode in the editor, you can edit only one numeric parameter at a time. Also, there's no
 capture mode - this is a special mode in which the editor automatically adds your changes in the scene to the animation.
 These limitations will be removed in the future versions.</p>
 

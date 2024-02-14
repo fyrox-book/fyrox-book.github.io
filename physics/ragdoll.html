@@ -186,36 +186,36 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="ragdoll"><a class="header" href="#ragdoll">Ragdoll</a></h1>
-<p>Ragdoll physics is a sort of procedural animation, that allows you to create naturally looking death animations and 
-body physics in general. Ragdoll is just an arbitrary combination of rigid bodies, colliders, joints. Rigid bodies and 
-colliders define physical &quot;boundaries&quot; for limbs of your character, while joints restrict relative motion (linear and 
+<p>Ragdoll physics is a sort of procedural animation, that allows you to create naturally looking death animations and
+body physics in general. Ragdoll is just an arbitrary combination of rigid bodies, colliders, joints. Rigid bodies and
+colliders define physical "boundaries" for limbs of your character, while joints restrict relative motion (linear and
 rotational).</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How To Create</a></h2>
-<p>Creating a ragdoll manually is a very tedious procedure, you need to create rigid bodies and colliders for every body 
-part of your character, place them correctly, adjust their size, etc. Then you need to create a set of joints, that 
-connects body parts, and then setup linear and angular limits. To save time, Fyrox has a special tool called 
+<p>Creating a ragdoll manually is a very tedious procedure, you need to create rigid bodies and colliders for every body
+part of your character, place them correctly, adjust their size, etc. Then you need to create a set of joints, that
+connects body parts, and then setup linear and angular limits. To save time, Fyrox has a special tool called
 <code>Ragdoll Wizard</code>:</p>
 <p><img src="ragdoll.png" alt="ragdoll wizard" /></p>
-<p>It can be opened from <code>Utils</code> menu and contains quite a lot of node handle fields that needs to be filled. Thankfully, 
+<p>It can be opened from <code>Utils</code> menu and contains quite a lot of node handle fields that needs to be filled. Thankfully,
 there's an <code>Autofill</code> button, by pressing which, the wizard will try to find respective bones of the skeleton and put their
-handles in the respective fields in the wizard. For now, it is configured to work with <a href="https://www.mixamo.com">mixamo</a> 
+handles in the respective fields in the wizard. For now, it is configured to work with <a href="https://www.mixamo.com">mixamo</a>
 skeletons.</p>
 <p>Other parameters are listed below:</p>
 <ul>
-<li><code>Total Mass</code> - total mass of the ragdoll, it will be used to configure masses of rigid bodies of body parts. </li>
+<li><code>Total Mass</code> - total mass of the ragdoll, it will be used to configure masses of rigid bodies of body parts.</li>
 <li><code>Use CCD</code> - a flag, that defines whether the continuous collision detection (CCD) for body parts should be used or not.
-It is advised to keep this flag on, otherwise body parts might get stuck or fall through the floor, leading to &quot;explosive&quot;
+It is advised to keep this flag on, otherwise body parts might get stuck or fall through the floor, leading to "explosive"
 ragdoll behaviour.</li>
-<li><code>Can Sleep</code> - a flag, that defines whether the body parts can &quot;sleep&quot; or not. Sleep in this case means, that a body
+<li><code>Can Sleep</code> - a flag, that defines whether the body parts can "sleep" or not. Sleep in this case means, that a body
 part can be excluded from physical simulation if it is not moving for some time.</li>
 <li><code>Collision Groups</code> and <code>Solver Groups</code> could be used to configure <a href="collider.html#collision-filtering">collision filtering</a>.
-It is very important in case if your character has a physical capsule, that is used to &quot;standard&quot; character physics. In
-this case body parts must ignore physical capsule (and vice versa), otherwise your ragdoll will &quot;explode&quot;.</li>
+It is very important in case if your character has a physical capsule, that is used to "standard" character physics. In
+this case body parts must ignore physical capsule (and vice versa), otherwise your ragdoll will "explode".</li>
 </ul>
-<p>After everything is filled in, you can click <code>OK</code> button and if everything is correct, you should see a bunch of new 
+<p>After everything is filled in, you can click <code>OK</code> button and if everything is correct, you should see a bunch of new
 scene nodes in the world viewer, located under a <code>Ragdoll</code> scene node:</p>
 <p><img src="ragdoll2.png" alt="ragdoll result" /></p>
-<p>As you can see, the amount of entities you'd have to create and configure manually is quite high. Keep in mind, that 
+<p>As you can see, the amount of entities you'd have to create and configure manually is quite high. Keep in mind, that
 ragdoll wizard can't generate perfect ragdoll, because of lack of information. The generated ragdoll will most likely
 require some minor tweaks (mostly joint angular limits).</p>
 <h2 id="video-tutorials"><a class="header" href="#video-tutorials">Video Tutorials</a></h2>

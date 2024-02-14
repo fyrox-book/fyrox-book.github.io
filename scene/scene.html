@@ -193,11 +193,11 @@
 <li>Physics (rigid bodies, colliders, joints)</li>
 <li>Sound</li>
 </ol>
-<p>Scene allows you to create isolated &quot;world&quot; which won't interact with other scenes, it is very useful for many
+<p>Scene allows you to create isolated "world" which won't interact with other scenes, it is very useful for many
 more or less complex games.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>A scene could be created either in FyroxEd or programmatically. You can also combine both approaches, where
-you build all &quot;static&quot; content in the editor and adding rest of the entities (bots, interactive objects, etc.)
+you build all "static" content in the editor and adding rest of the entities (bots, interactive objects, etc.)
 manually by instantiating respective prefabs at runtime.</p>
 <h3 id="using-fyroxed"><a class="header" href="#using-fyroxed">Using FyroxEd</a></h3>
 <p>There is a <a href="../beginning/editor_overview.html">separate chapter</a> in the book that should help you to create a
@@ -219,7 +219,7 @@ fn load_scene(resource_manager: ResourceManager) -&gt; Scene {
     // Request child scene and block until it loading.
     let scene_resource = block_on(
         resource_manager
-            .request::&lt;Model, _&gt;(&quot;path/to/your/scene.rgs&quot;),
+            .request::&lt;Model, _&gt;("path/to/your/scene.rgs"),
     )
         .unwrap();
 
@@ -230,7 +230,7 @@ fn load_scene(resource_manager: ResourceManager) -&gt; Scene {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Please note that here we're creating an empty scene and only then instantiating another scene into it. Why is this
-needed? Child scene is considered as <a href="./prefab.html">prefab</a>, and it is &quot;instantiated&quot; in the parent scene. Considering
+needed? Child scene is considered as <a href="./prefab.html">prefab</a>, and it is "instantiated" in the parent scene. Considering
 it as prefab allows you modifying your scene separately and serialization/deserialization will be able to correctly
 apply any changes in the scene.</p>
 <h3 id="create-scene-manually"><a class="header" href="#create-scene-manually">Create scene manually</a></h3>
@@ -250,7 +250,7 @@ fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
 <span class="boring">}</span></code></pre></pre>
 <p>See respective node builders <a href="../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
 <h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
-<p>All scenes &quot;lives&quot; in the engine, the engine has ownership over your scene after you've added it in the engine.
+<p>All scenes "lives" in the engine, the engine has ownership over your scene after you've added it in the engine.
 You can borrow a scene at any time using its handle and do some changes:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -272,7 +272,7 @@ impl Plugin for Game {
         // use `try_get_mut`.
         if let Some(scene) = context.scenes.try_get(self.scene) {
             // Do something.
-            println!(&quot;{:?}&quot;, scene.graph.performance_statistics);
+            println!("{:?}", scene.graph.performance_statistics);
         }
     }
 }

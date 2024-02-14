@@ -204,15 +204,15 @@ possible to select desired severity level:</p>
 </span><span class="boring">extern crate fyrox;
 </span><span class="boring">use fyrox::core::log::{Log, MessageKind};
 </span>// These lines will be printed.
-Log::info(&quot;This is some info&quot;);
-Log::warn(&quot;This is some warning&quot;);
-Log::err(&quot;This is some error&quot;);
+Log::info("This is some info");
+Log::warn("This is some warning");
+Log::err("This is some error");
 
 Log::set_verbosity(MessageKind::Warning);
 
-Log::info(&quot;This is some info&quot;); // This won't be printed.
-Log::warn(&quot;This is some warning&quot;);
-Log::err(&quot;This is some error&quot;);
+Log::info("This is some info"); // This won't be printed.
+Log::warn("This is some warning");
+Log::err("This is some error");
 <span class="boring">}</span></code></pre></pre>
 
                     </main>

@@ -189,17 +189,17 @@
 <p>Serialization is a process that converts arbitrary objects into a set of bytes that can be stored to disk or to send
 them over the network. An opposite to serialization - deserialization - is a process that restores objects from a given
 set of bytes. Serialization often used to make save/load functionality in games.</p>
-<p>Fyrox has built-in serializer that is used all over the place the engine and which is represented by a <code>Visit</code> trait. 
-<code>Visit</code> name could be confusing, but it is called after well-known <a href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitor</a> 
-design pattern. </p>
+<p>Fyrox has built-in serializer that is used all over the place the engine and which is represented by a <code>Visit</code> trait.
+<code>Visit</code> name could be confusing, but it is called after well-known <a href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitor</a>
+design pattern.</p>
 <p>Serialization and deserialization itself is handled by <code>Visitor</code>, it can be created in two modes: read and write. See
 mode info in respective sections below.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>There are two main ways to implement <code>Visit</code> trait, each way serves for specific cases. Let's understand which one to
 use when.</p>
 <h3 id="proc-macro-derivevisit"><a class="header" href="#proc-macro-derivevisit">Proc-macro <code>#[derive(Visit)]</code></a></h3>
-<p>The engine provides proc-macro, that uses code generation to implement <code>Visit</code> trait for you. All you need to do is 
-to add <code>#[derive(Visit)]</code> to your struct/enum. Code generation in most cases is capable to generate typical 
+<p>The engine provides proc-macro, that uses code generation to implement <code>Visit</code> trait for you. All you need to do is
+to add <code>#[derive(Visit)]</code> to your struct/enum. Code generation in most cases is capable to generate typical
 implementation for serialization/deserialization. You should prefer proc-macro to manual implementation in most cases.</p>
 <p>The macro supports few very useful attributes, that can be added to fields of a struct/enum:</p>
 <ul>
@@ -207,7 +207,7 @@ implementation for serialization/deserialization. You should prefer proc-macro t
 value in default state. Very useful option if you're adding a new field to your structure, otherwise the engine will
 refuse to continue loading of your struct. In case of scripts, deserialization will stop on missing field, and it will
 be partially loaded.</li>
-<li><code>#[visit(rename = &quot;new_name&quot;)]</code> - replaces the name of a field with given value. Useful if you need to rename a field
+<li><code>#[visit(rename = "new_name")]</code> - replaces the name of a field with given value. Useful if you need to rename a field
 in the code, but leave backward compatibility with previous versions.</li>
 <li><code>#[visit(skip)]</code> - ignores a field completely. Useful if you don't want to serialize a field at all, or a field is not
 serializable.</li>
@@ -223,7 +223,7 @@ an example:</p>
 struct MyStruct {
     foo: u32,
 
-    #[visit(rename = &quot;baz&quot;)]
+    #[visit(rename = "baz")]
     foobar: f32,
 
     #[visit(optional)]
@@ -254,13 +254,13 @@ impl Visit for MyStruct {
         let mut region = visitor.enter_region(name)?;
 
         // Add fields to it.
-        self.foo.visit(&quot;Foo&quot;, &amp;mut region)?;
+        self.foo.visit("Foo", &amp;mut region)?;
 
         // Manually rename the field for serialization.
-        self.foobar.visit(&quot;Baz&quot;, &amp;mut region)?;
+        self.foobar.visit("Baz", &amp;mut region)?;
 
         // Ignore result for option field.
-        let _ = self.optional.visit(&quot;Baz&quot;, &amp;mut region);
+        let _ = self.optional.visit("Baz", &amp;mut region);
 
         // Ignore `self.ignored`
 
@@ -285,7 +285,7 @@ use std::path::Path;
 struct MyStruct {
     foo: u32,
 
-    #[visit(rename = &quot;baz&quot;)]
+    #[visit(rename = "baz")]
     foobar: f32,
 
     #[visit(optional)]
@@ -298,7 +298,7 @@ struct MyStruct {
 async fn visit_my_structure(path: &amp;Path, object: &amp;mut MyStruct, write: bool) -&gt; VisitResult {
     if write {
         let mut visitor = Visitor::new();
-        object.visit(&quot;MyObject&quot;, &amp;mut visitor)?;
+        object.visit("MyObject", &amp;mut visitor)?;
 
         // Dump to the path.
         visitor.save_binary(path)
@@ -308,17 +308,17 @@ async fn visit_my_structure(path: &amp;Path, object: &amp;mut MyStruct, write: b
         // Create default instance of an object.
         let mut my_object = MyStruct::default();
 
-        // &quot;Fill&quot; it with contents from visitor.
-        my_object.visit(&quot;MyObject&quot;, &amp;mut visitor)
+        // "Fill" it with contents from visitor.
+        my_object.visit("MyObject", &amp;mut visitor)
     }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The key function here is <code>visit_my_structure</code> which works in both serialization and deserialization modes depending on
-<code>write</code> flag value. </p>
-<p>When <code>write</code> is true (serialization), we're creating a new empty visitor and filling it with values from our <code>object</code> 
-and then &quot;dump&quot; its content to binary file.</p>
-<p>When <code>write</code> is false (deserialization), we're loading contents of a file, creating the object in its default state and 
-then &quot;filling&quot; it with values from the visitor.</p>
+<code>write</code> flag value.</p>
+<p>When <code>write</code> is true (serialization), we're creating a new empty visitor and filling it with values from our <code>object</code>
+and then "dump" its content to binary file.</p>
+<p>When <code>write</code> is false (deserialization), we're loading contents of a file, creating the object in its default state and
+then "filling" it with values from the visitor.</p>
 <h2 id="environment"><a class="header" href="#environment">Environment</a></h2>
 <p>Sometimes there is a need to pass custom data to <code>visit</code> methods, one of the ways to do this is to use <code>blackboard</code> field
 of the visitor:</p>
@@ -342,7 +342,7 @@ impl Visit for MyStruct {
             .blackboard
             .get::&lt;MyEnvironment&gt;()            
         {
-            println!(&quot;{}&quot;, environment.some_data);
+            println!("{}", environment.some_data);
         }
 
         Ok(())
@@ -355,15 +355,15 @@ fn serialize_with_environment() {
     let mut visitor = Visitor::new();
 
     visitor.blackboard.register(Arc::new(MyEnvironment {
-        some_data: &quot;Foobar&quot;.to_owned(),
+        some_data: "Foobar".to_owned(),
     }));
 
-    my_object.visit(&quot;MyObject&quot;, &amp;mut visitor).unwrap();
+    my_object.visit("MyObject", &amp;mut visitor).unwrap();
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
 <p>All fields of your structure must implement <code>Default</code> trait, this is essential limitation because deserialization must
-have a way to create an instance of an object for you. </p>
+have a way to create an instance of an object for you.</p>
 
                     </main>
 

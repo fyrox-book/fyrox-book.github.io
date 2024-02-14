@@ -187,9 +187,9 @@
                     <main>
                         <h1 id="scroll-panel"><a class="header" href="#scroll-panel">Scroll panel</a></h1>
 <p>Scroll panel widget does the same as <a href="scroll_viewer.html">Scroll Viewer</a> widget, but it does not have any additional
-widgets and does not have any graphics. It is a panel widget that provides basic scrolling functionality and 
-<a href="scroll_viewer.html">Scroll Viewer</a> is built on top of it. Strictly speaking, scroll panel widget is used to arrange its 
-children widgets, so they can be offset by a certain amount of units from top-left corner. It is used to provide basic 
+widgets and does not have any graphics. It is a panel widget that provides basic scrolling functionality and
+<a href="scroll_viewer.html">Scroll Viewer</a> is built on top of it. Strictly speaking, scroll panel widget is used to arrange its
+children widgets, so they can be offset by a certain amount of units from top-left corner. It is used to provide basic
 scrolling functionality.</p>
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -211,12 +211,12 @@ scrolling functionality.</p>
                 WidgetBuilder::new()
                     .with_child(
                         ButtonBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Some Button&quot;)
+                            .with_text("Some Button")
                             .build(ctx),
                     )
                     .with_child(
                         ButtonBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Some Other Button&quot;)
+                            .with_text("Some Other Button")
                             .build(ctx),
                     ),
             )

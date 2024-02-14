@@ -186,13 +186,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="light-node"><a class="header" href="#light-node">Light node</a></h1>
-<p>The engine offers complex lighting system with various types of light sources. </p>
+<p>The engine offers complex lighting system with various types of light sources.</p>
 <h2 id="light-types"><a class="header" href="#light-types">Light types</a></h2>
 <p>There are three main types of light sources: directional, point, and spotlights.</p>
 <h3 id="directional-light"><a class="header" href="#directional-light">Directional light</a></h3>
 <p>Directional light does not have a position, its rays are always parallel, and it has a particular direction in space.
 An example of directional light in real-life could be our Sun. Even if it is a point light, it is so far away from
-the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor 
+the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor
 scenes.</p>
 <p>A directional light source could be created like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -213,7 +213,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>By default, the light source will be oriented to lit &quot;the ground&quot;. In other words its direction will be faced towards
+<p>By default, the light source will be oriented to lit "the ground". In other words its direction will be faced towards
 <code>(0.0, -1.0, 0.0)</code> vector. You can rotate it as you want by setting local transform of it while building. Something
 like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -249,7 +249,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <span class="boring">}</span></code></pre></pre>
 <h3 id="point-light"><a class="header" href="#point-light">Point light</a></h3>
 <p>Point light is a light source that emits lights in all directions, it has a position, but does not have an orientation.
-An example of a point light source: light bulb. </p>
+An example of a point light source: light bulb.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -270,7 +270,7 @@ fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <h3 id="spotlight"><a class="header" href="#spotlight">Spotlight</a></h3>
-<p>Spotlight is a light source that emits lights in cone shape, it has a position and orientation. An example of 
+<p>Spotlight is a light source that emits lights in cone shape, it has a position and orientation. An example of
 a spotlight source: flashlight.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -296,8 +296,8 @@ fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <h2 id="light-scattering"><a class="header" href="#light-scattering">Light scattering</a></h2>
 <p><img src="scattering.png" alt="scattering" /></p>
 <p>Spot and point lights support light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
-the fog will scatter the light from your flashlight making it, so you'll see the &quot;light volume&quot;. Light scattering is
-<strong>enabled by default</strong>, so you don't have to do anything to enable it. However, in some cases you might want to disable 
+the fog will scatter the light from your flashlight making it, so you'll see the "light volume". Light scattering is
+<strong>enabled by default</strong>, so you don't have to do anything to enable it. However, in some cases you might want to disable
 it, you can do this either while building a light source or change light scattering options on existing light source.
 Here is the small example of how to do that.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -315,7 +315,7 @@ fn disable_light_scatter(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;
         .enable_scatter(false);
 }
 <span class="boring">}</span></code></pre></pre>
-<p>You could also change the amount of scattering per each color channel, using this you could imitate the 
+<p>You could also change the amount of scattering per each color channel, using this you could imitate the
 <a href="https://en.wikipedia.org/wiki/Rayleigh_scattering">Rayleigh scattering</a>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -334,8 +334,8 @@ fn use_rayleigh_scattering(scene: &amp;mut Scene, light_handle: Handle&lt;Node&g
 <span class="boring">}</span></code></pre></pre>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
 <p>By default, light sources cast shadows. You can change this by using <code>set_cast_shadows</code> method of a light source. You
-should carefully manage shadows: shadows giving the most significant performance impact, you should keep the amount of 
-light sources that can cast shadows at lowest possible amount to keep performance at good levels. You can also turn 
+should carefully manage shadows: shadows giving the most significant performance impact, you should keep the amount of
+light sources that can cast shadows at lowest possible amount to keep performance at good levels. You can also turn
 on/off shadows when you need:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -355,11 +355,11 @@ fn switch_shadows(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;, cast_
 <p>Not every light should cast shadows, for example a small light that a player can see only in a distance can have
 shadows disabled. You should set the appropriate values depending on your scene, just remember: the fewer the shadows
 the better the performance. The most expensive shadows are from point lights, the less, from spotlights and directional
-lights. </p>
+lights.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>Lights are not cheap, every light source has some performance impact. As a general rule, try to keep the amount
 of light sources at reasonable levels and especially try to avoid creating tons of light sources in a small area.
-Keep in mind that the less area the light needs to &quot;cover&quot;, the higher the performance. This means that you can have
+Keep in mind that the less area the light needs to "cover", the higher the performance. This means that you can have
 tons of small light sources for free.</p>
 
                     </main>

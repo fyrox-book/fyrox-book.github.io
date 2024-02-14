@@ -186,12 +186,12 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="camera-node"><a class="header" href="#camera-node">Camera node</a></h1>
-<p>Camera is a special scene node that allows you to &quot;look&quot; at your scene from any point and with any orientation.
+<p>Camera is a special scene node that allows you to "look" at your scene from any point and with any orientation.
 Currently, the engine supports only <em>perspective</em> cameras, which could be represented as a frustum volume. Everything
-that &quot;intersects&quot; with the frustum will be rendered. </p>
+that "intersects" with the frustum will be rendered.</p>
 <p><img src="./frustum.svg" alt="Frustum" /></p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
-<p>An instance of camera node could be created using <code>CameraBuilder</code>: </p>
+<p>An instance of camera node could be created using <code>CameraBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -212,8 +212,8 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <h2 id="projection-modes"><a class="header" href="#projection-modes">Projection modes</a></h2>
 <p>Projection mode defines how your scene will look like after rendering, there are two projection modes available.</p>
 <h3 id="perspective"><a class="header" href="#perspective">Perspective</a></h3>
-<p>Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most 
-common projection type for 3D games. By default, each camera uses perspective projection. It's defined by three 
+<p>Perspective projection makes distant objects smaller and parallel lines converging when using it, it is the most
+common projection type for 3D games. By default, each camera uses perspective projection. It's defined by three
 parameters that describes frustum volume:</p>
 <ul>
 <li>Field of view angle</li>
@@ -253,7 +253,7 @@ projection defined by three parameters:</p>
 <li>Near Clipping Plane</li>
 <li>Far Clipping Plane</li>
 </ul>
-<p>Vertical size defines how large the &quot;box&quot; will be in vertical axis, horizontal size is derived from vertical
+<p>Vertical size defines how large the "box" will be in vertical axis, horizontal size is derived from vertical
 size by multiplying vertical size with aspect ratio.</p>
 <p>Here is a simple example of how to create a camera with orthographic projection:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -280,10 +280,10 @@ size by multiplying vertical size with aspect ratio.</p>
 <span class="boring">}</span></code></pre></pre>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
-operation. </p>
+operation.</p>
 <p>To reduce GPU load, try to keep the Far Clipping Plane at lowest possible values. For example, if you're making a game
-with closed environment (lots of corridors, small rooms, etc.) set the Far clipping Plane to max possible distance that 
-can be &quot;seen&quot; in your game - if the largest thing is a corridor, then set the Far clipping Plane to slightly exceed the 
+with closed environment (lots of corridors, small rooms, etc.) set the Far clipping Plane to max possible distance that
+can be "seen" in your game - if the largest thing is a corridor, then set the Far clipping Plane to slightly exceed the
 length. This will force the engine to clip everything that is out of bounds and do not draw such objects.</p>
 <h2 id="skybox"><a class="header" href="#skybox">Skybox</a></h2>
 <p>Outdoor scenes usually have distant objects that can't be reached, these can be mountains, sky, distant forest, etc.
@@ -307,12 +307,12 @@ be the background of your scene. To create a Skybox and set it to a camera, you 
 async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/front.jpg&quot;),
-        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/back.jpg&quot;),
-        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/left.jpg&quot;),
-        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/right.jpg&quot;),
-        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/up.jpg&quot;),
-        resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/down.jpg&quot;)
+        resource_manager.request::&lt;Texture, _&gt;("path/to/front.jpg"),
+        resource_manager.request::&lt;Texture, _&gt;("path/to/back.jpg"),
+        resource_manager.request::&lt;Texture, _&gt;("path/to/left.jpg"),
+        resource_manager.request::&lt;Texture, _&gt;("path/to/right.jpg"),
+        resource_manager.request::&lt;Texture, _&gt;("path/to/up.jpg"),
+        resource_manager.request::&lt;Texture, _&gt;("path/to/down.jpg")
     );
 
     // Unwrap everything.
@@ -345,9 +345,9 @@ fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="color-grading-look-up-tables"><a class="header" href="#color-grading-look-up-tables">Color grading look-up tables</a></h2>
 <p>Color grading Look-Up Tables (LUT) allows you to transform color space of your frame. Probably everyone saw the
-famous &quot;mexican&quot; movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
+famous "mexican" movie effect when everything becomes yellow-ish when action takes place in Mexico, this is done
 via color grading LUT effect. When used wisely, it can significantly improve perception of your scene.</p>
-<p>Here is the same scene having no color correction along with another case that has &quot;mexico&quot; color correction:</p>
+<p>Here is the same scene having no color correction along with another case that has "mexico" color correction:</p>
 <div class="table-wrapper"><table><thead><tr><th>Scene</th><th>Look-up-table</th></tr></thead><tbody>
 <tr><td><img src="./no_color_correction.PNG" alt="No Color Correction" /></td><td><img src="./lut_neutral.jpg" alt="Neutral LUT" /></td></tr>
 <tr><td><img src="./with_color_correction.PNG" alt="With Color Correction" /></td><td><img src="./lut_mexico.jpg" alt="Neutral LUT" /></td></tr>
@@ -376,7 +376,7 @@ fn create_camera_with_lut(
         .with_color_grading_enabled(true)
         .with_color_grading_lut(
             block_on(ColorGradingLut::new(
-                resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/lut.jpg&quot;),
+                resource_manager.request::&lt;Texture, _&gt;("path/to/lut.jpg"),
             ))
             .unwrap(),
         )
@@ -404,7 +404,7 @@ of camera picking, and you should prefer it most of the time.</p>
 <h3 id="advanced-picking"><a class="header" href="#advanced-picking">Advanced picking</a></h3>
 <p><strong>Important</strong>: The following picking method is for advanced engine users only, if you don't know the math you should not
 use it.</p>
-<p>If you know the math and don't want to create physical entities, you can use this ray to perform manual 
+<p>If you know the math and don't want to create physical entities, you can use this ray to perform manual
 ray intersection check:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -491,7 +491,7 @@ pub fn precise_ray_test(
 }
 <span class="boring">}</span></code></pre></pre>
 <p><code>precise_ray_test</code> is what you need, it performs precise intersection check with geometry of a mesh node. It returns a
-tuple of the closest distance and the closest intersection point. </p>
+tuple of the closest distance and the closest intersection point.</p>
 <h2 id="exposure-and-hdr"><a class="header" href="#exposure-and-hdr">Exposure and HDR</a></h2>
 <p>(WIP)</p>
 

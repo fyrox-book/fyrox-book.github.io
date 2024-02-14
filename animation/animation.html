@@ -207,17 +207,17 @@ Graphically this could be represented like so:</p>
 </code></pre>
 <p>Each key frame is just a real number with interpolation mode. Interpolation mode tells the engine how to
 calculate intermediate values between key frames. There are three kinds of interpolation used in animations
-(you can skip &quot;boring math&quot; if you want):</p>
+(you can skip "boring math" if you want):</p>
 <ul>
-<li><strong>Constant</strong> - intermediate value will be calculated using leftmost value of two. Constant &quot;interpolation&quot; is
-usually used to create step-like behaviour, the most common case is to &quot;interpolate&quot; two boolean values.</li>
+<li><strong>Constant</strong> - intermediate value will be calculated using leftmost value of two. Constant "interpolation" is
+usually used to create step-like behaviour, the most common case is to "interpolate" two boolean values.</li>
 <li><strong>Linear</strong> - intermediate value will be calculated using linear interpolation <code>i = left + (right - left) / t</code>,
 where <code>t = (time_position - left) / (right - left)</code>. <code>t</code> is always in <code>0..1</code> range. Linear interpolation is usually
-used to create &quot;straight&quot; transitions between two values.</li>
+used to create "straight" transitions between two values.</li>
 <li><strong>Cubic</strong> - intermediate value will be calculated using Hermite cubic spline:
 <code>i = (2t^3 - 3t^2 + 1) * left + (t^3 - 2t^2 + t) * left_tangent + (-2t^3 + 3t^2) * right + (t^3 - t^2) * right_tangent</code>,
 where <code>t = (time_position - left) / (right - left)</code> (<code>t</code> is always in <code>0..1</code> range), <code>left_tangent</code> and <code>right_tangent</code>
-is usually a <code>tan(angle)</code>. Cubic interpolation is usually used to create &quot;smooth&quot; transitions between two values.</li>
+is usually a <code>tan(angle)</code>. Cubic interpolation is usually used to create "smooth" transitions between two values.</li>
 </ul>
 <h2 id="web-demo"><a class="header" href="#web-demo">Web Demo</a></h2>
 <p>You can explore animation system capabilities in this <a href="https://fyrox.rs/assets/demo/animation/index.html">web demo</a>. Keep
@@ -241,7 +241,7 @@ of respective methods - <code>Animation::set_enabled</code> and <code>Animation:
 time passes signal's position from left-to-right (or vice versa depending on playback direction). Signals are usually used to
 attach some specific actions to a position in time. For example, you can have a walking animation and you want to emit sounds
 when character's feet touch ground. In this case you need to add a few signals at times when each foot touches the ground.
-After that all you need to do is to fetch animation events one-by-one and emit respective sounds. See respective 
+After that all you need to do is to fetch animation events one-by-one and emit respective sounds. See respective
 <a href="signal.html">chapter</a> for more info.</p>
 <h2 id="creating-from-code"><a class="header" href="#creating-from-code">Creating From Code</a></h2>
 <p>Usually, animations are created from the editor or some external tool and then imported in the engine. Before trying the example
@@ -306,7 +306,7 @@ player scene node, and it will do the job for you.</p>
 ways: from code or from the editor. The following sections shows how to use both ways.</p>
 <h3 id="from-editor"><a class="header" href="#from-editor">From Editor</a></h3>
 <p>At first, make sure that you have your 3D model instantiated in the scene. The following example has <code>agent.fbx</code>
-instance in the scene (to do that, just drag'n'drop your 3D model in the scene from the Asset Browser). To import 
+instance in the scene (to do that, just drag'n'drop your 3D model in the scene from the Asset Browser). To import
 an animation you need to create an <code>Animation Player</code> scene node, open the <a href="anim_editor.html">Animation Editor</a> and
 click the button with arrow-down icon:</p>
 <p><img src="import_animation_1.png" alt="Step 1" /></p>
@@ -335,7 +335,7 @@ the same as your 3D model (<code>agent.fbx</code> on the screenshot below):</p>
 ) -&gt; (Handle&lt;Node&gt;, Handle&lt;Node&gt;) {
     // Load a character model first.
     let character_resource = resource_manager
-        .request::&lt;Model&gt;(&quot;path/to/my/character.fbx&quot;)
+        .request::&lt;Model&gt;("path/to/my/character.fbx")
         .await
         .unwrap();
 
@@ -348,11 +348,11 @@ the same as your 3D model (<code>agent.fbx</code> on the screenshot below):</p>
 
     // Load an animation.
     let animation_resource = resource_manager
-        .request::&lt;Model&gt;(&quot;path/to/my/animation.fbx&quot;)
+        .request::&lt;Model&gt;("path/to/my/animation.fbx")
         .await
         .unwrap();
 
-    // &quot;Instantiate&quot; an animation from the animation resource to the animation player.
+    // "Instantiate" an animation from the animation resource to the animation player.
     // You can call this method multiple times with different animations, each time it
     // will create a new animation instance and put it in the animation player.
     let _animations = animation_resource.retarget_animations_to_player(
@@ -367,11 +367,11 @@ the same as your 3D model (<code>agent.fbx</code> on the screenshot below):</p>
 <p>As you can see, at first this code creates an instance of a 3D model. Then it loads an animation and creates its
 instance in the animation player. Please note, that this code uses <code>async</code>, which produces a future which should
 be driven by some executor. You can use <code>block_on</code> method to execute it at call site (this won't work on WebAssembly).</p>
-<p>It is advised to prefer the editor to code approach, because it hides all this tedious code and properly handles 
+<p>It is advised to prefer the editor to code approach, because it hides all this tedious code and properly handles
 asynchronous loading on all platforms.</p>
 <h2 id="playing-an-animation"><a class="header" href="#playing-an-animation">Playing an Animation</a></h2>
 <p>Animations will be played automatically if the respective animation player is has the property <code>Auto Apply</code> set to
-<code>true</code>. Since the animation player can contain multiple animations, all of them will be played at once. You can 
+<code>true</code>. Since the animation player can contain multiple animations, all of them will be played at once. You can
 enable/disable animations when needed by finding them by name from code and switching <code>Enabled</code> property:</p>
 <pre><pre class="playground"><code class="language-rust  edition2018 no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

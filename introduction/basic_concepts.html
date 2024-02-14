@@ -198,11 +198,11 @@ parts. Scene in Fyrox is also plays a role of prefab, there's pretty much no dif
 <h2 id="nodes-and-scene-graph"><a class="header" href="#nodes-and-scene-graph">Nodes and Scene Graph</a></h2>
 <p>A scene is made of one or more nodes (every scene must have at least one root node, to which everything else is attached).
 Scene node contains specific set of properties as well as <em>one</em> optional script instance which is responsible for custom
-game logic. </p>
-<p>Typical structure of a scene node could be represented by the following example. The base object for every scene node is 
-a <code>Base</code> node, it contains a transform, a list of children, etc. A more complex node, that <em>extends</em> functionality of the <code>Base</code> 
-node stores an instance of <code>Base</code> inside of them. For example, a <code>Mesh</code> node is a <code>Base</code> node <em>plus</em> some specific info 
-(a list of surfaces, material, etc.). The &quot;hierarchy&quot; depth is unlimited - a <code>Light</code> node in the engine is an enumeration 
+game logic.</p>
+<p>Typical structure of a scene node could be represented by the following example. The base object for every scene node is
+a <code>Base</code> node, it contains a transform, a list of children, etc. A more complex node, that <em>extends</em> functionality of the <code>Base</code>
+node stores an instance of <code>Base</code> inside of them. For example, a <code>Mesh</code> node is a <code>Base</code> node <em>plus</em> some specific info
+(a list of surfaces, material, etc.). The "hierarchy" depth is unlimited - a <code>Light</code> node in the engine is an enumeration
 of three possible types of light source. <code>Directional</code>, <code>Point</code>, and <code>Spot</code> light sources both use <code>BaseLight</code> node,
 which in its turn contains <code>Base</code> node inside. Graphically it can be represented like so:</p>
 <pre><code class="language-text">`Point`
@@ -215,7 +215,7 @@ which in its turn contains <code>Base</code> node inside. Graphically it can be 
 <p>As you can see, this forms the nice tree (graph) that shows what the object contains. This is very natural way of describing
 scene nodes, it gives you the full power of building an object of any complexity.</p>
 <h2 id="plugins"><a class="header" href="#plugins">Plugins</a></h2>
-<p>Plugin is a container for &quot;global&quot; game data and logic, its main usage is to provide scripts with some data and to 
+<p>Plugin is a container for "global" game data and logic, its main usage is to provide scripts with some data and to
 manage global game state.</p>
 <h2 id="scripts"><a class="header" href="#scripts">Scripts</a></h2>
 <p>Script - is a separate piece of data and logic, that can be attached to scene nodes. This is primary (but not single)

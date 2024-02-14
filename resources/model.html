@@ -222,13 +222,13 @@ from Asset Browser in the editor or instantiate the model dynamically from code:
 because some 3D modelling software could use different shading models. By default, the engine tries to convert
 everything to PBR materials, so if you have a 3D model with a special material made for cartoon shading, the
 engine will still import it as PBR material (with lots of missing textures of course). You should take this into
-account when working with something other than PBR materials. </p>
+account when working with something other than PBR materials.</p>
 <p>In cases when your 3D model have some weird materials, you should create appropriate materials and shaders <em>manually</em>,
 the engine is not a magic tool, it has some defaults that do not cover all possible cases.</p>
 <p>It is also possible to specify how to resolve textures while loading a 3D model, select your model in the <code>Asset Browser</code>
 and there will be import options right below the model preview:</p>
 <p><img src="model_import.png" alt="model import" /></p>
-<p>It is also possible to specify such options manually. To do that, you need to create import options file with the 
+<p>It is also possible to specify such options manually. To do that, you need to create import options file with the
 following content near your 3D model (this is what the editor does for you):</p>
 <pre><code class="language-text">(
     material_search_options: RecursiveUp
@@ -242,7 +242,7 @@ the editor to edit import options, because it reduces the chance of messing up.<
 of your model in the engine. It will have <code>(100.0, 100.0, 100.0)</code> scale which is very huge. To fix that, set
 the scale in the exporter to <code>0.01</code>.</p>
 <h2 id="tips-for-3ds-max"><a class="header" href="#tips-for-3ds-max">Tips for 3Ds Max</a></h2>
-<p>Latest versions of 3Ds max have node-based material editor which creates some &quot;junk&quot; nodes which may mess up
+<p>Latest versions of 3Ds max have node-based material editor which creates some "junk" nodes which may mess up
 material import. To prevent any issues with that, you should clean all assignments to material slots to use
 maps directly.</p>
 

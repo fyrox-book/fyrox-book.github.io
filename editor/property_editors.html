@@ -186,15 +186,15 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="property-editors"><a class="header" href="#property-editors">Property Editors</a></h1>
-<p>The editor uses <a href="../ui/inspector.html">Inspector</a> widget to show the contents of your scripts and when you're using 
-custom structures inside your scripts the editor needs to know how to show them in the UI. Inspector widget has a 
+<p>The editor uses <a href="../ui/inspector.html">Inspector</a> widget to show the contents of your scripts and when you're using
+custom structures inside your scripts the editor needs to know how to show them in the UI. Inspector widget has a
 special mechanism for this called <em>property editors</em>. Basically, it defines a pair <code>TypeId -&gt; Widget</code> - a type has
 an associated widget that is responsible for showing the content of the type and (optionally) edit it. If there's no
-widget associated with a type, the editor will print an error message near this field, basically telling you that 
+widget associated with a type, the editor will print an error message near this field, basically telling you that
 you need to fix this.</p>
 <h2 id="adding-property-editors"><a class="header" href="#adding-property-editors">Adding Property Editors</a></h2>
 <p>The engine has property editors for pretty much every case, all you need to do is to associate your type with one of
-them. The following sections covers the most common use cases, each of them should be added to <code>editor/src/main.rs</code> 
+them. The following sections covers the most common use cases, each of them should be added to <code>editor/src/main.rs</code>
 file, after editor's initialization.</p>
 <h3 id="structures"><a class="header" href="#structures">Structures</a></h3>
 <p>This is the most common case when you need to associate your type with a property editor, and in this case the property
@@ -232,13 +232,13 @@ struct MyStruct {
 </span><span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that your structure must implement <code>Reflect</code> trait, otherwise you'll get a compilation error.</p>
 <h3 id="enumerations"><a class="header" href="#enumerations">Enumerations</a></h3>
-<p>Enumerations are a bit trickier to support, than simple structures, because they require a bit more traits to be 
+<p>Enumerations are a bit trickier to support, than simple structures, because they require a bit more traits to be
 implemented for your enumeration. At first, make sure that your <code>editor</code> project has the following dependencies:</p>
 <pre><code class="language-toml">#[dependencies]
-strum = &quot;0.25.0&quot;
-strum_macros = &quot;0.25.0&quot;
+strum = "0.25.0"
+strum_macros = "0.25.0"
 </code></pre>
-<p>These two crates responsible for enum to string (and vice versa) conversions which will be very useful for us. The 
+<p>These two crates responsible for enum to string (and vice versa) conversions which will be very useful for us. The
 following example shows a typical usage:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

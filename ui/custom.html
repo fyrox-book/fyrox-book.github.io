@@ -191,7 +191,7 @@ widgets that the engine provides.</p>
 <p>Let's say, for instance, that we need to have a custom button with specific visual effects. It will have a border and
 a text, and it will also react to mouse events:</p>
 <p><img src="custom_widget.gif" alt="custom widget" /></p>
-<p>A &quot;skeleton&quot; of such widget could be something like this (for now it does nothing):</p>
+<p>A "skeleton" of such widget could be something like this (for now it does nothing):</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -231,17 +231,17 @@ impl Control for MyButton {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Every widget in the engine must have an instance of <code>Widget</code> (<code>widget: Widget</code> field) type in them and implement the 
-<code>Control</code> trait with two required methods. <code>query_component</code> is used for dynamic component fetching and could be used 
-to support behavior mix-ins and support derived widgets, that based on some other widgets. There's a lot more of 
-available methods in the <code>Control</code> trait, however for simplicity we won't use it in this chapter. </p>
+<p>Every widget in the engine must have an instance of <code>Widget</code> (<code>widget: Widget</code> field) type in them and implement the
+<code>Control</code> trait with two required methods. <code>query_component</code> is used for dynamic component fetching and could be used
+to support behavior mix-ins and support derived widgets, that based on some other widgets. There's a lot more of
+available methods in the <code>Control</code> trait, however for simplicity we won't use it in this chapter.</p>
 <p><code>handle_routed_message</code> is used to react to various messages, but only in the <code>child -&gt; parent -&gt; parent_of_parent -&gt; ...</code>
 chain. For example, if some of the child widget of our button will receive a message, it will also be passed to our button,
-then to a parent of our button (if any), etc. This routing strategy is called &quot;bubble&quot; routing (it acts like a bubble of
+then to a parent of our button (if any), etc. This routing strategy is called "bubble" routing (it acts like a bubble of
 air in the water; it always goes up). See <a href="basic_concepts/basic_concepts.html#message-routing-strategies">this section</a> for
 more info.</p>
 <h2 id="custom-logic"><a class="header" href="#custom-logic">Custom Logic</a></h2>
-<p>Now let's add some logic to the button, that will handle various mouse events. The full version of our button widget's 
+<p>Now let's add some logic to the button, that will handle various mouse events. The full version of our button widget's
 logic will be like so:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -368,15 +368,15 @@ impl Control for MyButton {
 <p>As you can see, the most of the code was placed in <code>handle_routed_message</code>, we using it to respond for four messages:
 <code>MouseDown</code> + <code>MouseUp</code>, <code>MouseEnter</code> + <code>MouseLeave</code>. Let's look closely at each pair of the messages.</p>
 <p>The first two messages is used to handle clicks and send appropriate message to the outside world if a click has happened.
-When you're sending a message, it is not immediately processed, instead it is put in the common message queue and will 
-be processed by the engine later. You can react to such messages to perform a desired action, see 
-<a href="custom.html#reacting-to-click-messages">the section below</a> for more info. </p>
-<p>The last two events are used to alter the visual appearance of the button by changing the colors of both the border and 
+When you're sending a message, it is not immediately processed, instead it is put in the common message queue and will
+be processed by the engine later. You can react to such messages to perform a desired action, see
+<a href="custom.html#reacting-to-click-messages">the section below</a> for more info.</p>
+<p>The last two events are used to alter the visual appearance of the button by changing the colors of both the border and
 the text. The source code above is very simple and straightforward, despite the look of it.</p>
 <h2 id="builder"><a class="header" href="#builder">Builder</a></h2>
 <p>Did you notice, that we didn't assign anything to <code>border</code> and <code>text</code> handles in our button widget? It is because, we
 haven't made a respective builder for our button. Builder is a separate structure, that collects all the info from
-the outside world and &quot;compiles&quot; it into a finished widget. Usually, widgets contains a bunch of children widgets, which
+the outside world and "compiles" it into a finished widget. Usually, widgets contains a bunch of children widgets, which
 in their turn could have their own children and so on. In our case, the button will have two child widgets: a border and
 a text.</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
@@ -461,7 +461,7 @@ impl MyButtonBuilder {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This is how a button is created, at first we're creating a border widget instance with a text widget as a child of it.
-Text widget uses the actual text string from our builder, and also it sets the desired alignment in parent border's 
+Text widget uses the actual text string from our builder, and also it sets the desired alignment in parent border's
 bounds. Finally, we're initializing an instance of <code>MyButton</code> with the handles of the widget we've just made and as
 the last step we're adding the widget to the user interface.</p>
 <h2 id="using-the-builder"><a class="header" href="#using-the-builder">Using the Builder</a></h2>
@@ -473,7 +473,7 @@ the last step we're adding the widget to the user interface.</p>
         .with_width(200.0)
         .with_height(32.0)
 )
-.with_text(&quot;Click Me!&quot;.to_string())
+.with_text("Click Me!".to_string())
 .build(ctx);
 <span class="boring">}</span></code></pre></pre>
 <h2 id="reacting-to-click-messages"><a class="header" href="#reacting-to-click-messages">Reacting to Click Messages</a></h2>
@@ -516,7 +516,7 @@ impl Plugin for MyPlugin {
 definitely need a custom widget.</li>
 </ul>
 <p>Custom widgets have some limitations that could be limiting, one of them is that custom widgets do not have
-access to your code, since they're &quot;living&quot; inside UI and know nothing about the &quot;environment&quot; where they're
+access to your code, since they're "living" inside UI and know nothing about the "environment" where they're
 being used.</p>
 <h2 id="source-code-and-web-demo"><a class="header" href="#source-code-and-web-demo">Source Code and Web Demo</a></h2>
 <p>Full source code for this chapter can be found <a href="https://github.com/FyroxEngine/Fyrox-demo-projects/blob/main/ui/game/src/custom.rs">here</a>

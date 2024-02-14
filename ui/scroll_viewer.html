@@ -189,7 +189,7 @@
 <p><img src="scroll_bar.gif" alt="scroll viewer" /></p>
 <p>Scroll viewer is a scrollable region with two scroll bars for each axis. It is used to wrap a content of unknown
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
-<a href="window.html">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than 
+<a href="window.html">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
@@ -209,12 +209,12 @@ the content.</p>
                 WidgetBuilder::new()
                     .with_child(
                         ButtonBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Click Me!&quot;)
+                            .with_text("Click Me!")
                             .build(ctx),
                     )
                     .with_child(
                         TextBuilder::new(WidgetBuilder::new())
-                            .with_text(&quot;Some\nlong\ntext&quot;)
+                            .with_text("Some\nlong\ntext")
                             .build(ctx),
                     ),
             )

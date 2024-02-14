@@ -186,7 +186,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="text-box"><a class="header" href="#text-box">Text Box</a></h1>
-<p>TextBox is a text widget that allows you to edit text and create specialized input fields. It has various options like 
+<p>TextBox is a text widget that allows you to edit text and create specialized input fields. It has various options like
 word wrapping, text alignment, and so on.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>An instance of the TextBox widget could be created like so:</p>
@@ -281,7 +281,7 @@ fn load_font() -&gt; SharedFont {
 
     // Normally `block_on` should be avoided.
     let font = block_on(Font::from_file(
-        &quot;path/to/your/font.ttf&quot;,
+        "path/to/your/font.ttf",
         24.0,
         character_set,
     ))
@@ -309,9 +309,9 @@ to create fonts.</p>
 <li><code>TextBoxMessage::CaretBrush</code> - changes the brush of the caret (small blinking vertical line).</li>
 <li><code>TextBoxMessage::TextCommitMode</code> - changes the <a href="text_box.html#text-commit-mode">text commit mode</a>.</li>
 <li><code>TextBoxMessage::Multiline</code> - makes the TextBox either multiline (<code>true</code>) or single line (<code>false</code>)</li>
-<li><code>TextBoxMessage::Editable</code> - enables or disables editing of the text. </li>
+<li><code>TextBoxMessage::Editable</code> - enables or disables editing of the text.</li>
 </ul>
-<p><strong>Important:</strong> Please keep in mind, that TextBox widget also accepts <code>Text</code> <a href="text.html#messages">widget messages</a>. An 
+<p><strong>Important:</strong> Please keep in mind, that TextBox widget also accepts <code>Text</code> <a href="text.html#messages">widget messages</a>. An
 example of changing text at runtime could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -332,7 +332,7 @@ example of changing text at runtime could be something like this:</p>
     ))
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Please keep in mind, that like any other situation when you &quot;changing&quot; something via messages, you should remember
+<p>Please keep in mind, that like any other situation when you "changing" something via messages, you should remember
 that the change is <strong>not</strong> immediate. The change will be applied on <code>ui.poll_message(..)</code> call somewhere in your
 code (or will be done automatically if you're using scripts or Framework (obsolete)).</p>
 <h2 id="shortcuts"><a class="header" href="#shortcuts">Shortcuts</a></h2>
@@ -351,22 +351,22 @@ code (or will be done automatically if you're using scripts or Framework (obsole
 <li><code>Enter</code> - new line (if multiline mode is set) or <code>commit</code> message</li>
 </ul>
 <h2 id="multiline-text-box"><a class="header" href="#multiline-text-box">Multiline Text Box</a></h2>
-<p>By default, text box will not add new line character to the text if you press <code>Enter</code> on keyboard. To enable this 
+<p>By default, text box will not add new line character to the text if you press <code>Enter</code> on keyboard. To enable this
 functionality use <code>.with_multiline(true)</code></p>
 <h2 id="read-only-mode"><a class="header" href="#read-only-mode">Read-only Mode</a></h2>
 <p>You can enable or disable content editing by using read-only mode. Use <code>.with_readonly</code> at build stage.</p>
 <h2 id="mask-character"><a class="header" href="#mask-character">Mask Character</a></h2>
-<p>You can specify replacement character for every other characters, this is useful option for password fields. Use 
-<code>.with_mask_char</code> at build stage. For example, you can set replacement character to asterisk <code>*</code> using 
+<p>You can specify replacement character for every other characters, this is useful option for password fields. Use
+<code>.with_mask_char</code> at build stage. For example, you can set replacement character to asterisk <code>*</code> using
 <code>.with_mask_char(Some('*'))</code></p>
 <h2 id="text-commit-mode"><a class="header" href="#text-commit-mode">Text Commit Mode</a></h2>
-<p>In many situations you don't need the text box to send <code>new text</code> message every new character, you either want this 
-message if <code>Enter</code> key is pressed or TextBox has lost keyboard focus (or both). There is <code>with_text_commit_mode</code> on builder 
+<p>In many situations you don't need the text box to send <code>new text</code> message every new character, you either want this
+message if <code>Enter</code> key is pressed or TextBox has lost keyboard focus (or both). There is <code>with_text_commit_mode</code> on builder
 specifically for that purpose. Use one of the following modes:</p>
 <ul>
 <li><code>TextCommitMode::Immediate</code> - text box will immediately send <code>Text</code> message after any change.</li>
 <li><code>TextCommitMode::LostFocus</code> - text box will send <code>Text</code> message only when it loses focus.</li>
-<li><code>TextCommitMode::LostFocusPlusEnter</code> - text box will send <code>Text</code> message when it loses focus or if Enter key was pressed. 
+<li><code>TextCommitMode::LostFocusPlusEnter</code> - text box will send <code>Text</code> message when it loses focus or if Enter key was pressed.
 This is <strong>default</strong> behavior. In case of multiline text box hitting Enter key won't commit text!</li>
 </ul>
 <h2 id="filtering"><a class="header" href="#filtering">Filtering</a></h2>

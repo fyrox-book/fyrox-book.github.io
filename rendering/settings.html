@@ -217,7 +217,7 @@ rendering quality and performance. Quality settings are represented by the follo
 but lower performance. Typical values for medium GPU (GTX 1050) is 1024 pixels.</li>
 <li><code>point_soft_shadows</code> - should the shadows from point lights be smooth (<code>true</code>) or blocky (<code>false</code>). The latter option
 has better performance, but lower quality.</li>
-<li><code>point_shadows_enabled</code> - are the shadows from point lights enabled? </li>
+<li><code>point_shadows_enabled</code> - are the shadows from point lights enabled?</li>
 <li><code>point_shadows_distance</code> - maximal distance from a camera to draw point light shadows. It is used to disable shadows
 on distant lights. The distance is given in meters. The lower the value, the better performance is.</li>
 <li><code>point_shadow_map_precision</code> - defines bit-depth (<code>u16</code> or <code>u32</code>) for shadow map pixels. Lower bit depth means better
@@ -226,14 +226,14 @@ performance and lower quality.</li>
 but lower performance. Typical values for medium GPU (GTX 1050) is 1024 pixels.</li>
 <li><code>spot_soft_shadows</code> - should the shadows from spotlights be smooth (<code>true</code>) or blocky (<code>false</code>). The latter option
 has better performance, but lower quality.</li>
-<li><code>spot_shadows_enabled</code> - are the shadows from spotlights enabled? </li>
+<li><code>spot_shadows_enabled</code> - are the shadows from spotlights enabled?</li>
 <li><code>spot_shadows_distance</code> - maximal distance from a camera to draw spotlight shadows. It is used to disable shadows
-on distant lights. The distance is given in meters. The lower the value, the better performance is. </li>
+on distant lights. The distance is given in meters. The lower the value, the better performance is.</li>
 <li><code>spot_shadow_map_precision</code> - defines bit-depth (<code>u16</code> or <code>u32</code>) for shadow map pixels.  Lower bit depth means better
 performance and lower quality.</li>
 <li><code>csm_settings</code> - settings for cascaded shadow maps for directional lights.
 <ul>
-<li><code>enabled</code> - whether cascaded shadow maps enabled or not. </li>
+<li><code>enabled</code> - whether cascaded shadow maps enabled or not.</li>
 <li><code>size</code> - size of texture for each cascade.</li>
 <li><code>precision</code> - defines bit-depth (<code>u16</code> or <code>u32</code>) for shadow map pixels. Lower bit depth means better
 performance and lower quality.</li>
@@ -246,7 +246,7 @@ has relatively small performance impact.</li>
 <li><code>ssao_radius</code> - radius of sampling hemisphere used in SSAO, it defines much ambient occlusion will be in your scene.
 has no performance impact.</li>
 <li><code>light_scatter_enabled</code> - global switch to enable or disable light scattering. Each light have its own scatter switch,
-but this one is able to globally disable scatter. Light scattering has medium performance impact, it also depends on 
+but this one is able to globally disable scatter. Light scattering has medium performance impact, it also depends on
 light count in your scene.</li>
 <li><code>fxaa</code> - is full-screen anti-aliasing needed? This option has low performance impact.</li>
 <li><code>use_parallax_mapping</code> - defines whether the renderer should use parallax mapping to simulate bumps and dents on
@@ -254,8 +254,8 @@ flat surfaces using special textures. This option has low performance impact.</l
 <li><code>use_bloom</code> - defines whether the renderer should draw glowing pixels. This option has low performance impact.</li>
 </ul>
 <h2 id="presets"><a class="header" href="#presets">Presets</a></h2>
-<p>The renderer offers built-in presets for various graphics quality, use <code>QualitySettings::ultra()</code>, 
-<code>QualitySettings::high()</code>, <code>QualitySettings::medium()</code> and <code>QualitySettings::low()</code> presets to quickly tune 
+<p>The renderer offers built-in presets for various graphics quality, use <code>QualitySettings::ultra()</code>,
+<code>QualitySettings::high()</code>, <code>QualitySettings::medium()</code> and <code>QualitySettings::low()</code> presets to quickly tune
 quality-performance balance.</p>
 <h2 id="how-to-apply"><a class="header" href="#how-to-apply">How to apply</a></h2>
 <p>To apply the settings, use <code>Renderer::set_quality_settings</code> method:</p>
@@ -281,10 +281,10 @@ quality-performance balance.</p>
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Keep in mind, that graphics context can be non-initialized. This could happen if you're trying to access it before your 
-game received <code>Event::Resumed</code> event. See the docs for <a href="https://docs.rs/fyrox/latest/fyrox/event/enum.Event.html#variant.Resumed">Event::Resumed</a> 
-for more info. There is only one place, where graphics context is guaranteed to be initialized - 
-<code>Plugin::on_graphics_context_initialized</code> method. Inside it, you can access the renderer by simple: 
+<p>Keep in mind, that graphics context can be non-initialized. This could happen if you're trying to access it before your
+game received <code>Event::Resumed</code> event. See the docs for <a href="https://docs.rs/fyrox/latest/fyrox/event/enum.Event.html#variant.Resumed">Event::Resumed</a>
+for more info. There is only one place, where graphics context is guaranteed to be initialized -
+<code>Plugin::on_graphics_context_initialized</code> method. Inside it, you can access the renderer by simple:
 <code>context.graphics_context.as_initialized_mut().renderer</code>, in other places you should always do a checked borrow.</p>
 
                     </main>

@@ -224,13 +224,13 @@ of the scroll bar, use <code>ScrollBarMessage::Value</code> message:</p>
     &amp;&amp; message.direction() == MessageDirection::FromWidget
 {
     if let Some(ScrollBarMessage::Value(value)) = message.data() {
-        println!(&quot;{}&quot;, value);
+        println!("{}", value);
     }
 }
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
 <p>Please note, that you need to explicitly filter messages by <code>MessageDirection::FromWidget</code>, because it's the only
-direction that is used as an &quot;indicator&quot; that the value was accepted by the scroll bar.</p>
+direction that is used as an "indicator" that the value was accepted by the scroll bar.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
 <p>Scroll bar could be either horizontal (default) or vertical. You can select the orientation when building
 a scroll bar using <code>ScrollBarBuilder::with_orientation</code> method and provide a desired value from <code>Orientation</code>

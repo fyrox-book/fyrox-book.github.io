@@ -186,14 +186,14 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="scripts"><a class="header" href="#scripts">Scripts</a></h1>
-<p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
-so scripts are as fast as native code. </p>
+<p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting,
+so scripts are as fast as native code.</p>
 <h2 id="when-to-use-scripts-and-when-not"><a class="header" href="#when-to-use-scripts-and-when-not">When to Use Scripts and When Not</a></h2>
 <p>Scripts are meant to be used to add data and some logic to scene nodes. That being said, you should not use scripts
-to hold some global state of your game (use your game plugin for that). For example, use scripts for your game items, 
+to hold some global state of your game (use your game plugin for that). For example, use scripts for your game items,
 bots, player, level, etc. On the other hand <strong>do not</strong> use scripts for leader boards, game menus, progress information,
 etc.</p>
-<p>Also, scripts cannot be assigned to UI widgets due to intentional Game &lt;-&gt; UI decoupling reasons. All user interface 
+<p>Also, scripts cannot be assigned to UI widgets due to intentional Game &lt;-&gt; UI decoupling reasons. All user interface
 components should be created and handled in the game plugin of your game.</p>
 <h2 id="script-structure"><a class="header" href="#script-structure">Script Structure</a></h2>
 <p>Typical script structure is something like this:</p>
@@ -215,7 +215,7 @@ impl_component_provider!(MyScript);
 
 impl TypeUuidProvider for MyScript {
     fn type_uuid() -&gt; Uuid {
-        uuid!(&quot;bf0f9804-56cb-4a2e-beba-93d75371a568&quot;)
+        uuid!("bf0f9804-56cb-4a2e-beba-93d75371a568")
     }
 }
 
@@ -247,19 +247,19 @@ impl ScriptTrait for MyScript {
 <span class="boring">}</span></code></pre></pre>
 <p>Each script must implement following traits:</p>
 <ul>
-<li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a 
+<li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a
 scene file.</li>
-<li><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values, 
+<li><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values,
 find fields by their paths, etc.</li>
-<li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it turn the structure and its fields 
+<li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it turn the structure and its fields
 into string.</li>
-<li><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be 
+<li><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be
 cloned.</li>
 <li><code>Default</code> implementation is very important - the scripting system uses it to create your scripts in the default state.
 This is necessary to set some data to it and so on. If it's a special case, you can always implement your own <code>Default</code>'s
 implementation if it's necessary for your script.</li>
-<li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script <strong>must</strong> have a unique ID, otherwise, 
-the engine will not be able to save and load your scripts. To generate a new UUID, use 
+<li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script <strong>must</strong> have a unique ID, otherwise,
+the engine will not be able to save and load your scripts. To generate a new UUID, use
 <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or any other tool that can generate UUIDs.</li>
 </ul>
 <h2 id="script-template-generator"><a class="header" href="#script-template-generator">Script Template Generator</a></h2>
@@ -268,7 +268,7 @@ much less tedious. To generate a new script use <code>script</code> command:</p>
 <pre><code class="language-shell">fyrox-template script --name MyScript
 </code></pre>
 <p>It will create a new file in <code>game/src</code> directory with <code>my_script.rs</code> name and fill with required code. Do not forget
-to add the module with the new script to <code>lib.rs</code> like this: </p>
+to add the module with the new script to <code>lib.rs</code> like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Use your script name instead of `my_script` here.
@@ -278,10 +278,10 @@ pub mod my_script;
 of every method.</p>
 <blockquote>
 <p>⚠️ Keep in mind that every new script must be registered in <code>PluginConstructor::register</code>, otherwise you won't be able
-to assign the script in the editor to a node. See the next section for more info. </p>
+to assign the script in the editor to a node. See the next section for more info.</p>
 </blockquote>
 <h2 id="script-registration"><a class="header" href="#script-registration">Script Registration</a></h2>
-<p>Every script must be registered before use, otherwise the engine won't &quot;see&quot; your script and won't let you assign it
+<p>Every script must be registered before use, otherwise the engine won't "see" your script and won't let you assign it
 to an object. <code>PluginConstructor</code> trait has <code>register</code> method exactly for script registration. To register a script
 you need to register it in the list of script constructors like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -321,7 +321,7 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">
 </span><span class="boring">    impl PluginConstructor for Constructor {
 </span>fn register(&amp;self, context: PluginRegistrationContext) {
-    context.serialization_context.script_constructors.add::&lt;MyScript&gt;(&quot;My Script&quot;);
+    context.serialization_context.script_constructors.add::&lt;MyScript&gt;("My Script");
 }
 <span class="boring">
 </span><span class="boring">        fn create_instance(&amp;self, _scene_path: Option&lt;&amp;str&gt;, _context: PluginContext) -&gt; Box&lt;dyn Plugin&gt; {
@@ -329,13 +329,13 @@ you need to register it in the list of script constructors like so:</p>
 </span><span class="boring">        }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre></pre>
-<p>Every script type (<code>MyScript</code> in the code snippet above, you need to change it to your script type) must be registered using 
-<a href="https://docs.rs/fyrox/latest/fyrox/script/constructor/struct.ScriptConstructorContainer.html#method.add">ScriptConstructorsContainer::add</a> 
-method, which accepts a script type as a generic argument and its name, that will be shown in the editor. The name can be 
+<p>Every script type (<code>MyScript</code> in the code snippet above, you need to change it to your script type) must be registered using
+<a href="https://docs.rs/fyrox/latest/fyrox/script/constructor/struct.ScriptConstructorContainer.html#method.add">ScriptConstructorsContainer::add</a>
+method, which accepts a script type as a generic argument and its name, that will be shown in the editor. The name can be
 arbitrary, it is used only in the editor. You can also change it at any time, it won't break existing scenes.</p>
 <h2 id="script-attachment"><a class="header" href="#script-attachment">Script Attachment</a></h2>
 <p>To assign a script and see it in action, run the editor, select an object and find <code>Script</code> property in the Inspector.
-Select your script from the drop-down list. To see the script in action, click &quot;Play/Stop&quot; button. The editor will run
+Select your script from the drop-down list. To see the script in action, click "Play/Stop" button. The editor will run
 your game in separate process with the scene active in the editor.</p>
 <p>The script can be attached to a scene node from code:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
@@ -398,22 +398,22 @@ content of the context is something like this:</p>
 <li><code>dt</code> - amount of time passed since last frame. The value of the variable is implementation-defined, usually it is
 something like 1/60 (0.016) of a second.</li>
 <li><code>elapsed_time</code> - amount of time that passed since start of your game (in seconds).</li>
-<li><code>plugins</code> - a mutable reference to all registered plugins, it allows you to access some &quot;global&quot; game data that does 
-not belong to any object. For example, a plugin could store key mapping used for player controls, you can access it 
-using <code>plugins</code> field and find desired plugin. In case of a single plugin, you just need to cast the reference to a 
+<li><code>plugins</code> - a mutable reference to all registered plugins, it allows you to access some "global" game data that does
+not belong to any object. For example, a plugin could store key mapping used for player controls, you can access it
+using <code>plugins</code> field and find desired plugin. In case of a single plugin, you just need to cast the reference to a
 particular type using <code>context.plugins[0].cast::&lt;MyPlugin&gt;().unwrap()</code> call.</li>
 <li><code>handle</code> - a handle of the node to which the script is assigned to (parent node). You can borrow the node using
 <code>context.scene.graph[handle]</code> call. Typecasting can be used to obtain a reference to a particular node type.</li>
 <li><code>scene</code> - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
 add/modify/remove scene nodes.</li>
-<li><code>resource_manager</code> - a reference to resource manager, you can use it to load and instantiate assets. </li>
-<li><code>message_sender</code> - a message sender. Every message sent via this sender will be then passed to every 
+<li><code>resource_manager</code> - a reference to resource manager, you can use it to load and instantiate assets.</li>
+<li><code>message_sender</code> - a message sender. Every message sent via this sender will be then passed to every
 <code>ScriptTrait::on_message</code> method of every script.</li>
-<li><code>message_dispatcher</code> - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
+<li><code>message_dispatcher</code> - a message dispatcher. If you need to receive messages of a particular type, you must subscribe
 to a type explicitly.</li>
 </ul>
 <h2 id="execution-order"><a class="header" href="#execution-order">Execution order</a></h2>
-<p>Scripts have strictly defined execution order for their methods (the order if execution is linear and <strong>do not</strong> depend 
+<p>Scripts have strictly defined execution order for their methods (the order if execution is linear and <strong>do not</strong> depend
 on actual tree structure of the graph where the script is located):</p>
 <ul>
 <li><code>on_init</code> - called first for every script instance</li>
@@ -427,10 +427,10 @@ will be called once per 4 frames.</li>
 <li><code>on_deinit</code> - called at the end of the update cycle once when the script (or parent node) is about to be deleted.</li>
 </ul>
 <h2 id="message-passing"><a class="header" href="#message-passing">Message passing</a></h2>
-<p>Script system of Fyrox supports message passing for scripts. Message passing is a mechanism that allows you to send some 
-data (message) to a node, hierarchy of nodes or the entire graph. Each script can subscribe for a specific message type. 
-It is an efficient way for decoupling scripts from each other. For instance, you may want to detect and respond to some 
-event in your game. In this case when the event has happened, you send a message of a type and every &quot;subscriber&quot; will 
+<p>Script system of Fyrox supports message passing for scripts. Message passing is a mechanism that allows you to send some
+data (message) to a node, hierarchy of nodes or the entire graph. Each script can subscribe for a specific message type.
+It is an efficient way for decoupling scripts from each other. For instance, you may want to detect and respond to some
+event in your game. In this case when the event has happened, you send a message of a type and every "subscriber" will
 react to it. This way subscribers will not know anything about sender(s); they'll only use message data to do some actions.</p>
 <p>A simple example where the message passing can be useful is when you need to react to some event in your game. Imagine,
 that you have weapons in your game, and they can have a laser sight that flashes with a different color when some target
@@ -495,7 +495,7 @@ impl ScriptTrait for LaserSight {
     ) {
         // React to message.
         if let Some(Message::Damage { actor, attacker }) = message.downcast_ref::&lt;Message&gt;() {
-            Log::info(format!(&quot;{actor} damaged {attacker}&quot;,))
+            Log::info(format!("{actor} damaged {attacker}",))
         }
     }
 <span class="boring">
@@ -515,12 +515,12 @@ pattern matching and do something useful.</li>
 <p>Try to use message passing in all cases, loose coupling significantly improves code quality and readability, however
 in simple projects it can be ignored completely.</p>
 <h2 id="accessing-other-scripts-data"><a class="header" href="#accessing-other-scripts-data">Accessing Other Script's Data</a></h2>
-<p>Every script &quot;lives&quot; on some scene node, so to access a script data from some other script you need to know
+<p>Every script "lives" on some scene node, so to access a script data from some other script you need to know
 a handle of a scene node with that script first. You can do this like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb05ad-ab56-4be6-8a06-73e73d8b1f48&quot;)]
+#[type_uuid(id = "a9fb05ad-ab56-4be6-8a06-73e73d8b1f48")]
 #[visit(optional)]
 struct MyScript {
     second_node: Handle&lt;Node&gt;,
@@ -534,7 +534,7 @@ impl ScriptTrait for MyScript {
             .try_get_script_of::&lt;MyOtherScript&gt;(self.second_node)
         {
             if second_nodes_script_ref.counter &gt; 60.0 {
-                Log::info(&quot;Done!&quot;);
+                Log::info("Done!");
             }
         }
 
@@ -545,7 +545,7 @@ impl ScriptTrait for MyScript {
             if let Some(second_nodes_script_ref) = second_node_ref.try_get_script::&lt;MyOtherScript&gt;()
             {
                 if second_nodes_script_ref.counter &gt; 60.0 {
-                    Log::info(&quot;Done!&quot;);
+                    Log::info("Done!");
                 }
             }
         }
@@ -553,7 +553,7 @@ impl ScriptTrait for MyScript {
 }
 
 #[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb05ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb05ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct MyOtherScript {
     counter: f32,
@@ -569,7 +569,7 @@ impl ScriptTrait for MyOtherScript {
 <p>In this example we have the two script types: <code>MyScript</code> and <code>MyOtherScript</code>. Now imagine that we have two scene
 nodes, where the first one contains <code>MyScript</code> and the second one <code>MyOtherScript</code>. <code>MyScript</code> knows about
 the second node by storing a handle of in <code>second_node</code> field. <code>MyScript</code> waits until <code>MyOtherScript</code> will count
-its internal counter to <code>60.0</code> and then prints a message into the log. This code does immutable borrowing and 
+its internal counter to <code>60.0</code> and then prints a message into the log. This code does immutable borrowing and
 does not allow you to modify other script's data. If you a mutable access, then use <code>try_get_script_of_mut</code>
 method (or <code>try_get_script_mut</code> for the alternative code).</p>
 <p><code>second_node</code> field of the <code>MyScript</code> is usually assigned in the editor, but you can also find the node in
@@ -580,7 +580,7 @@ your scene by using the following code:</p>
         self.second_node = ctx
             .scene
             .graph
-            .find_by_name_from_root(&quot;SomeName&quot;)
+            .find_by_name_from_root("SomeName")
             .map(|(handle, _)| handle)
             .unwrap_or_default();
     }

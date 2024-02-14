@@ -196,30 +196,30 @@
 <p><img src="sound.png" alt="sound" /></p>
 <ul>
 <li><code>Buffer</code> - a sound buffer resource, that will be used as a source of samples. If it is empty, then no sound will be
-played. Drag'n'drop a sound resource from the Asset Browser here to assign it to the source. </li>
+played. Drag'n'drop a sound resource from the Asset Browser here to assign it to the source.</li>
 <li><code>Play Once</code> - a flag, that defines whether the engine should automatically delete the sound source node from the scene
 when it is finished playing. Could be useful for one-shot sounds.</li>
-<li><code>Gain</code> - a numeric value in <code>[0..1]</code> range, that defines total volume of the sound source. Keep in mind, that this 
-value sets the volume in <em>linear</em> scale, while physically-correct approach would be to use logarithmic scale. This 
+<li><code>Gain</code> - a numeric value in <code>[0..1]</code> range, that defines total volume of the sound source. Keep in mind, that this
+value sets the volume in <em>linear</em> scale, while physically-correct approach would be to use logarithmic scale. This
 will be fixed in future versions.</li>
 <li><code>Panning</code> - a numeric value in <code>[-1..1]</code> range, that defines how loud audio channels will be. <code>-1</code> - all the sound
 will be routed to the left channel, <code>1</code> - to the right channel. This option works only with 2D sounds (whose spatial
 blend factor is <code>0.0</code>)</li>
-<li><code>Status</code> - a switch with three possible states: <code>Stopped</code>, <code>Playing</code>, <code>Paused</code>. By default, every sound source is 
+<li><code>Status</code> - a switch with three possible states: <code>Stopped</code>, <code>Playing</code>, <code>Paused</code>. By default, every sound source is
 in stopped state, do not forget to switch it to the <code>Playing</code> state, otherwise you won't hear anything.</li>
 <li><code>Looping</code> - a flag, that defines whether the sound source should be playing infinitely, or not. Looping sound source
 will never switch their status to <code>Stopped</code>.</li>
 <li><code>Pitch</code> - playback speed multiplier. By default, it is <code>1.0</code> which means default speed.</li>
-<li><code>Max Distance</code> - maximum distance, at which the sound source is affected by distance attenuation (for 3D sounds). 
+<li><code>Max Distance</code> - maximum distance, at which the sound source is affected by distance attenuation (for 3D sounds).
 By default, it set to max possible value. Lower values could be used to prevent sound source from be silent at certain
 distance.</li>
-<li><code>Rolloff Factor</code> - a numeric value, that defines how fast the volume of the sound source will decay with increasing 
+<li><code>Rolloff Factor</code> - a numeric value, that defines how fast the volume of the sound source will decay with increasing
 distance to a listener.</li>
 <li><code>Playback Time</code> - desired time from which the playback should start (in seconds).</li>
-<li><code>Spatial Blend</code> - a numeric value, that defines blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is 
+<li><code>Spatial Blend</code> - a numeric value, that defines blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is
 fully 2D, <code>1.0</code> - the sound is fully 3D. By default, the value is <code>1.0</code>.</li>
-<li><code>Audio Bus</code> - a name of an audio bus, that will be used to process the samples from the sound source. By default, it 
-is set to <code>Primary</code>. It should match the name of some audio bus, that will be used in your scene. More info about 
+<li><code>Audio Bus</code> - a name of an audio bus, that will be used to process the samples from the sound source. By default, it
+is set to <code>Primary</code>. It should match the name of some audio bus, that will be used in your scene. More info about
 audio processing could found <a href="bus.html">here</a>.</li>
 </ul>
 <h3 id="from-code"><a class="header" href="#from-code">From Code</a></h3>
@@ -231,7 +231,7 @@ audio processing could found <a href="bus.html">here</a>.</li>
 </span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
 </span>let sound = engine
     .resource_manager
-    .request::&lt;SoundBuffer, _&gt;(&quot;/path/to/resource.ogg&quot;);
+    .request::&lt;SoundBuffer, _&gt;("/path/to/resource.ogg");
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
 <p>Then, the node is built using the standard builder pattern:</p>
@@ -249,7 +249,7 @@ audio processing could found <a href="bus.html">here</a>.</li>
 </span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
 </span><span class="boring">let sound = engine
 </span><span class="boring">    .resource_manager
-</span><span class="boring">    .request::&lt;SoundBuffer, _&gt;(&quot;/path/to/resource.ogg&quot;);
+</span><span class="boring">    .request::&lt;SoundBuffer, _&gt;("/path/to/resource.ogg");
 </span><span class="boring">
 </span>let sound_handle = SoundBuilder::new(BaseBuilder::new())
     .with_buffer(Some(sound))
@@ -260,7 +260,7 @@ audio processing could found <a href="bus.html">here</a>.</li>
 </span><span class="boring">}</span></code></pre></pre>
 <p>There are a few notable things in the example above.</p>
 <p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
-<p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways. 
+<p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways.
 One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -298,7 +298,7 @@ if sound.status() == Status::Stopped {
     .build(&amp;mut scene.graph);
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
-<p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a 
+<p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a
 corresponding <code>.options</code> file, with the following content:</p>
 <pre><code class="language-ron">(
   stream: true
@@ -307,10 +307,10 @@ corresponding <code>.options</code> file, with the following content:</p>
 <p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
 <h2 id="2d-and-3d"><a class="header" href="#2d-and-3d">2D and 3D</a></h2>
 <p>There's no strict separation between 2D and 3D sound sources. The same source could be switched from 2D to 3D (and vice
-versa) at runtime, by just adjusting <code>Spatial Blend</code> property. Spatial blend factor is a numeric value, that defines 
-blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is fully 2D, <code>1.0</code> - the sound is fully 3D. By default, 
-the value is <code>1.0</code> which makes it 3D. Intermediate values could be used to create &quot;ambisonic&quot; sound sources - when the 
-source sounds like it is placed at some position in the world, but some part of it is just 2D and does not depend on 
+versa) at runtime, by just adjusting <code>Spatial Blend</code> property. Spatial blend factor is a numeric value, that defines
+blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is fully 2D, <code>1.0</code> - the sound is fully 3D. By default,
+the value is <code>1.0</code> which makes it 3D. Intermediate values could be used to create "ambisonic" sound sources - when the
+source sounds like it is placed at some position in the world, but some part of it is just 2D and does not depend on
 positioning.</p>
 <h2 id="audio-bus"><a class="header" href="#audio-bus">Audio bus</a></h2>
 <p>It is possible to specify target audio bus to which the sound will output its audio samples. Audio bus is responsible

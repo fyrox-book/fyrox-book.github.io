@@ -208,7 +208,7 @@ fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -
     ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))        
         .with_texture(into_gui_texture(
             // Ask resource manager to load a texture.
-            resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/your/texture.png&quot;),
+            resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"),
         ))
         .build(ctx)
 }
@@ -217,7 +217,7 @@ fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -
 not placed to some panel, that will stretch it automatically. In other words if you created an image with undefined
 width and height, then putting it to some container like Grid' cell will stretch the image to fit cell bounds.</p>
 <h2 id="equal-size-to-source"><a class="header" href="#equal-size-to-source">Equal Size to Source</a></h2>
-<p>Sometimes you need your image to have equal size with the texture it uses, in this case you should fetch texture 
+<p>Sometimes you need your image to have equal size with the texture it uses, in this case you should fetch texture
 bounds first and then create an Image width these bounds:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -236,7 +236,7 @@ async fn create_image(
 ) -&gt; Handle&lt;UiNode&gt; {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
-        .request::&lt;Texture, _&gt;(&quot;path/to/your/texture.png&quot;)
+        .request::&lt;Texture, _&gt;("path/to/your/texture.png")
         .await
     {
         // A texture can be not only rectangular, so we must check that.
@@ -298,7 +298,7 @@ fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
         .with_texture(into_gui_texture(
-            resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/your/texture.png&quot;),
+            resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"),
         ))
         .build(ctx)
 }

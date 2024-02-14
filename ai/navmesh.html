@@ -187,22 +187,22 @@
                     <main>
                         <h1 id="navigational-meshes"><a class="header" href="#navigational-meshes">Navigational Meshes</a></h1>
 <p><img src="./navmesh.gif" alt="navmesh" /></p>
-<p>Navigational mesh (navmesh for short) is a surface which can be used for path finding. Unlike 
-<a href="./pathfinding.html">A* Pathfinder</a>, it can build arbitrary paths on a surface of large polygons, making a path from 
+<p>Navigational mesh (navmesh for short) is a surface which can be used for path finding. Unlike
+<a href="./pathfinding.html">A* Pathfinder</a>, it can build arbitrary paths on a surface of large polygons, making a path from
 point A to point B linear (standard pathfinder builds path only from vertex to vertex). Navmeshes should be used when
-you have an arbitrary &quot;walkable&quot; surface, for example, a game level with rooms, hallways, multiple floors and so on. 
+you have an arbitrary "walkable" surface, for example, a game level with rooms, hallways, multiple floors and so on.
 A* pathfinder should be used for strategies or any other types of games with uniform pathfinding grid.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>There are three major ways of creating navigational meshes: manual, automatic, from external data.</p>
 <h3 id="using-the-editor"><a class="header" href="#using-the-editor">Using the editor</a></h3>
-<p>Navigational meshes can be created and edited in the FyroxEd. At first, create a &quot;Navigational Mesh&quot; node, select it and
-switch to &quot;navmesh&quot; interaction mode:</p>
+<p>Navigational meshes can be created and edited in the FyroxEd. At first, create a "Navigational Mesh" node, select it and
+switch to "navmesh" interaction mode:</p>
 <p><img src="./navmesh.png" alt="navmesh" /></p>
 <p>Now you can edit the navmesh. For now, editing capabilities are quite limited and the only way to edit the navmesh is
 to Shift+Drag one if its edges:</p>
 <p><img src="./navmesh_edit.gif" alt="navmesh edit" /></p>
 <p>You can also delete edges and vertices: select a vertex or an edge and press <code>Delete</code> key. If you need to create closed
-loops, use &quot;Connect Edges&quot; button in the &quot;Navmesh&quot; floating panel:</p>
+loops, use "Connect Edges" button in the "Navmesh" floating panel:</p>
 <p><img src="./navmesh_connect.png" alt="navmesh connect" /></p>
 <h3 id="using-automatic-generation"><a class="header" href="#using-automatic-generation">Using automatic generation</a></h3>
 <p>Fyrox does not support automatic navigational mesh generation yet. You can help by adding such feature.</p>
@@ -247,10 +247,10 @@ something like this to build a navmesh from it:</p>
     ],
 );
 <span class="boring">}</span></code></pre></pre>
-<p>The <code>Navmesh::new</code> method accepts a list of triangles and vertices, where triangles is a set of three indices of 
+<p>The <code>Navmesh::new</code> method accepts a list of triangles and vertices, where triangles is a set of three indices of
 vertices forming a triangle.</p>
 <h2 id="agents"><a class="header" href="#agents">Agents</a></h2>
-<p>Navigational mesh agent helps you to build paths along the surface of a navigational mesh and follow it. Agents can be 
+<p>Navigational mesh agent helps you to build paths along the surface of a navigational mesh and follow it. Agents can be
 used to drive the motion of your game characters. Every agent knows about its target and automatically rebuilds the path
 if the target has moved. Navmesh agents are able to move along the path, providing you with their current position, so you
 can use it to perform an actual motion of your game characters. Agents work together with navigational meshes, you need
@@ -285,11 +285,11 @@ agent: NavmeshAgent
     agent.update(dt, navmesh.navmesh_mut()).unwrap();
 
     // Print its position - you can use this position as target point of your game character.
-    println!(&quot;{}&quot;, agent.position());
+    println!("{}", agent.position());
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This method should be called in <code>on_update</code> of your script. It accepts four parameters: a reference to the agent, a 
-target which it will follow, a time step (<code>context.dt</code>), and a reference to navigational mesh node. You can fetch 
+<p>This method should be called in <code>on_update</code> of your script. It accepts four parameters: a reference to the agent, a
+target which it will follow, a time step (<code>context.dt</code>), and a reference to navigational mesh node. You can fetch
 navigational mesh from the scene graph by its name:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

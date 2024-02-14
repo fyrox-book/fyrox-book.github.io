@@ -186,8 +186,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="rectangle-node"><a class="header" href="#rectangle-node">Rectangle node</a></h1>
-<p>Rectangle is the simplest &quot;2D&quot; node, it can be used to create &quot;2D&quot; graphics. 2D is in quotes here because the node
-is actually a 3D node, like everything else in the engine. Here is an example scene made with the rectangle nodes and 
+<p>Rectangle is the simplest "2D" node, it can be used to create "2D" graphics. 2D is in quotes here because the node
+is actually a 3D node, like everything else in the engine. Here is an example scene made with the rectangle nodes and
 an orthographic camera:</p>
 <p><img src="2d_scene.PNG" alt="2d scene" /></p>
 <p>As you can see it is a good basis for 2D games.</p>
@@ -214,7 +214,7 @@ an orthographic camera:</p>
         ),
     )
     .with_color(Color::RED)
-    .with_texture(resource_manager.request::&lt;Texture, _&gt;(&quot;path/to/your_texture.jpg&quot;))
+    .with_texture(resource_manager.request::&lt;Texture, _&gt;("path/to/your_texture.jpg"))
     .build(graph)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -243,12 +243,12 @@ across axes.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
 <p>See <a href="../animation/spritesheet/spritesheet.html">Sprite Animation</a> chapter for more info.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
-<p>Rectangles use specialized renderer that is heavily optimized to render tons of rectangles at once, so you can use 
-rectangles almost for everything in 2D games. </p>
+<p>Rectangles use specialized renderer that is heavily optimized to render tons of rectangles at once, so you can use
+rectangles almost for everything in 2D games.</p>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
 <p>Rectangle nodes does not support custom materials - it is a simplified version of a Mesh node that allows you draw a
 rectangle with a texture and a color. Its main purpose is to be able to start making games as quick as possible without
-diving too deep into details (shaders, render passes, etc.). You can still create a &quot;rectangle&quot; with custom material, use
+diving too deep into details (shaders, render passes, etc.). You can still create a "rectangle" with custom material, use
 Mesh node with single rectangle surface:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -293,11 +293,11 @@ fn create_rect_with_custom_material(
     .build(graph)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This will effectively &quot;mimic&quot; the Rectangle node, but will allow you to use the full power of custom shaders. Keep in
+<p>This will effectively "mimic" the Rectangle node, but will allow you to use the full power of custom shaders. Keep in
 mind that Mesh nodes will be rendered via Deferred Renderer, while Rectangle nodes rendered with specialized renderer,
 that might result in some graphical artifacts.</p>
 <p>Rectangle nodes has limited lighting support, it means that they still will be lit by standard scene lights, but it will
-be a very simple diffuse lighting without any &quot;physically correct&quot; lighting. This is perfectly ok for 95% of 2D games,
+be a very simple diffuse lighting without any "physically correct" lighting. This is perfectly ok for 95% of 2D games,
 if you want to add custom lighting then you should use custom shader.</p>
 <p>Rectangle nodes works well with 2D physics nodes, check 2D physics section of the book for more info.</p>
 

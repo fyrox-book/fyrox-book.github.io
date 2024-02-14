@@ -191,13 +191,13 @@ that helps you build your game from start to finish with relatively low effort.<
 <p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its basic functionalities.
 This chapter will guide you through the basics, advanced topics will be covered in their respective chapters.</p>
 <h2 id="windows"><a class="header" href="#windows">Windows</a></h2>
-<p>When you open the editor for the first time you may be confused by the amount of windows, buttons, lists, etc. you'll be presented 
-with. Each window serves a different purpose, but all of them work together to help you make your game. Let's take a look at a 
+<p>When you open the editor for the first time you may be confused by the amount of windows, buttons, lists, etc. you'll be presented
+with. Each window serves a different purpose, but all of them work together to help you make your game. Let's take a look at a
 screenshot of the editor and learn what each part of it is responsible for (please note that this can change over time, because
 development is quite fast and images can easily become outdated):</p>
 <p><img src="./overview.png" alt="Windows" /></p>
 <ul>
-<li><strong>World viewer</strong> - shows every object in the scene and their relationships. Allows inspecting and editing the 
+<li><strong>World viewer</strong> - shows every object in the scene and their relationships. Allows inspecting and editing the
 contents of the scene in a hierarchical form.</li>
 <li><strong>Scene preview</strong> - renders the scene with debug info and various editor-specific objects (gizmos, entity icons,
 etc.). Allows you to select, move, rotate, scale, delete, etc. various entities. The <strong>Toolbar</strong> on its left side
@@ -221,9 +221,9 @@ scenes can be loaded more quickly by going to <code>File -&gt; Recent Scenes</co
 <li>By going to <code>Create</code> in the main menu and selecting the desired entity from the drop down.</li>
 <li>By right-clicking on a game entity in the <code>World Viewer</code> and selecting the desired entity from the <code>Add Child</code> sub-menu.</li>
 </ul>
-<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats. 
-Fyrox supports FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects 
-by simply dragging the one you want and dropping it on the <code>Scene Preview</code>. While dragging it, you'll also see a preview 
+<p>Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats.
+Fyrox supports FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects
+by simply dragging the one you want and dropping it on the <code>Scene Preview</code>. While dragging it, you'll also see a preview
 of the object.</p>
 <p>You can do the same with other scenes made in the editor (<code>rgs</code> files), for example, you can create a scene with a few objects in it
 with some scripts and re-use them within other scenes. Such scenes are called <a href="../scene/prefab.html">prefabs</a>.</p>
@@ -261,7 +261,7 @@ going to <code>Edit -&gt; Undo/Redo</code> or through the usual shortcuts: <code
 <h2 id="play-mode"><a class="header" href="#play-mode">Play Mode</a></h2>
 <p>One of the key features of the editor is that it allows you to run your game from it in a separate process. Use the <code>Play/Stop</code>
 button at the top of the <code>Scene Preview</code> window to enter or leave Play Mode. Keep in mind, that the editor UI will be locked while
-you're in Play Mode. </p>
+you're in Play Mode.</p>
 <p>Play Mode can be activated only for projects made with the <code>fyrox-template</code> (or for projects with a similar structure). The editor
 calls <code>cargo</code> commands to build and run your game in a separate process. Running the game in a separate process ensures
 that the editor won't crash if your game does, it also provides excellent isolation between the game and the editor, not

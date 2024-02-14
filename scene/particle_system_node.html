@@ -188,12 +188,12 @@
                         <h1 id="particle-system"><a class="header" href="#particle-system">Particle system</a></h1>
 <p>Particle system is a scene node that is used to create complex visual effects (VFX). It operates on huge amount
 of particles at once allowing you to do complex simulation that involves large amount of particles. Typically,
-particle systems are used to create following visual effects: smoke, sparks, blood splatters, steam, etc. </p>
+particle systems are used to create following visual effects: smoke, sparks, blood splatters, steam, etc.</p>
 <p><img src="./particle_system_example.png" alt="smoke" /></p>
 <h2 id="basic-concepts"><a class="header" href="#basic-concepts">Basic Concepts</a></h2>
 <p>Particle system uses <em>single</em> texture for every particle in the system, only Red channel is used. Red channel interpreted
 as an alpha for all particles.</p>
-<p>Every particle is affected by <code>Acceleration</code> parameters of the particle system. It defines acceleration 
+<p>Every particle is affected by <code>Acceleration</code> parameters of the particle system. It defines acceleration
 (in m/s<sup>2</sup>) that will affect velocities of every particle. It is used to simulate gravity.</p>
 <h3 id="particle"><a class="header" href="#particle">Particle</a></h3>
 <p>Particle is a square (not quadrilateral, this is important) with a texture which is always facing towards camera. It
@@ -201,10 +201,10 @@ has the following properties:</p>
 <ul>
 <li><code>Position</code> - defines a position in <em>local</em> coordinates of particle system (this means that if you rotate a particle
 system, all particles will be rotated too).</li>
-<li><code>Velocity</code> - defines a speed vector (in local coordinates) that will be used to modify local position of the particle 
+<li><code>Velocity</code> - defines a speed vector (in local coordinates) that will be used to modify local position of the particle
 each frame.</li>
 <li><code>Size</code> - size (in meters) of the square shape of the particle.</li>
-<li><code>Size Modifier</code> - a numeric value (in meters per second), that will be added to the Size at each frame, it is used 
+<li><code>Size Modifier</code> - a numeric value (in meters per second), that will be added to the Size at each frame, it is used
 to modify size of the particles.</li>
 <li><code>Lifetime</code> - amount of time (in seconds) that the particle can be active for.</li>
 <li><code>Rotation</code> - angle (in radians) that defines rotation around particle-to-camera axis (clockwise).</li>
@@ -212,8 +212,8 @@ to modify size of the particles.</li>
 <li><code>Color</code> - RGBA color of the particle.</li>
 </ul>
 <h3 id="emitters"><a class="header" href="#emitters">Emitters</a></h3>
-<p>Particle system uses <em>emitters</em> to define a set of zones where particles will be spawned, it also defines initial ranges of 
-parameters of particles. Particle system must have at least one emitter to generate particles. </p>
+<p>Particle system uses <em>emitters</em> to define a set of zones where particles will be spawned, it also defines initial ranges of
+parameters of particles. Particle system must have at least one emitter to generate particles.</p>
 <p>Emitter can be one of the following types:</p>
 <ul>
 <li><code>Cuboid</code> - emits particles uniformly in a cuboid shape, the shape cannot be rotated, only translated.</li>
@@ -224,28 +224,28 @@ parameters of particles. Particle system must have at least one emitter to gener
 <ul>
 <li><code>Position</code> - emitter have its own <em>local</em> position (position relative to parent particle system node), this helps you
 to create complex particle systems that may spawn particles from multiple zones in space at once.</li>
-<li><code>Max Particles</code> - maximum amount of particles available for spawn. By default, it is <code>None</code>, which says that there is 
+<li><code>Max Particles</code> - maximum amount of particles available for spawn. By default, it is <code>None</code>, which says that there is
 no limit.</li>
 <li><code>Spawn Rate</code> - rate (in units per second) defines how fast the emitter will spawn particles.</li>
 <li><code>Lifetime Range</code> - numeric range (in seconds) for particle lifetime values. The lower the beginning of the range
 the less spawned particles will live, and vice versa.</li>
 <li><code>Size Range</code> - numeric range (in meters) for particle size.</li>
 <li><code>Size Modifier Range</code> - numeric range (in meters per second, m/s) for particle size modifier parameter.</li>
-<li><code>X/Y/Z Velocity Range</code> - a numeric range (in meters per second, m/s) for a respective velocity axis (X, Y, Z) 
+<li><code>X/Y/Z Velocity Range</code> - a numeric range (in meters per second, m/s) for a respective velocity axis (X, Y, Z)
 that defines initial speed along the axis.</li>
 <li><code>Rotation Range</code> - a numeric range (in radians) for initial rotation of a new particle.</li>
 <li><code>Rotation Speed Range</code> - a numeric range (in radians per second, rad/s) for rotation speed of a new particle.</li>
 </ul>
-<p><strong>Important:</strong> Every range (like Lifetime Range, Size Range, etc.) parameter generates <em>random</em> value for respective 
+<p><strong>Important:</strong> Every range (like Lifetime Range, Size Range, etc.) parameter generates <em>random</em> value for respective
 parameter of a particle. You can tweak the seed of current random number generator (<code>fyrox::core::thread_rng()</code>) to
 ensure that generated values will be different each time.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>There are multiple ways of creating a particle system, pick one that best suits your current needs.</p>
 <h3 id="using-the-editor"><a class="header" href="#using-the-editor">Using the editor</a></h3>
 <p>The best way to create a particle system is to configure it in the editor, creating from code is possible too (see below),
-but way harder and may be not intuitive, because of the large amount of parameters. The editor allows you see the result 
-and tweak it very fast. Create a particle system by <code>Create -&gt; Particle System</code> and then you can start editing its 
-properties. By default, new particle system has one Sphere particle emitter, you can add new emitters by clicking <code>+</code> 
+but way harder and may be not intuitive, because of the large amount of parameters. The editor allows you see the result
+and tweak it very fast. Create a particle system by <code>Create -&gt; Particle System</code> and then you can start editing its
+properties. By default, new particle system has one Sphere particle emitter, you can add new emitters by clicking <code>+</code>
 button at the right of <code>Emitters</code> property in the Inspector (or remove by clicking <code>-</code>). Here's a simple example:</p>
 <p><img src="./particle_system.png" alt="particle system" /></p>
 <p>Now start tweaking desired parameters, it is hard to give any recommendations of how to achieve a particular effect,
@@ -295,27 +295,27 @@ only practice matters here.</p>
                 .with_radius(0.01)
                 .build()
         ])
-        .with_texture(resource_manager.request::&lt;Texture, _&gt;(Path::new(&quot;data/particles/smoke_04.tga&quot;)))
+        .with_texture(resource_manager.request::&lt;Texture, _&gt;(Path::new("data/particles/smoke_04.tga")))
         .build(graph);
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code creates smoke effect with smooth dissolving (by using color-over-lifetime gradient). Please refer to
-<a href="https://docs.rs/fyrox/latest/fyrox/scene/particle_system/index.html">API docs</a> for particle system for more information. </p>
+<a href="https://docs.rs/fyrox/latest/fyrox/scene/particle_system/index.html">API docs</a> for particle system for more information.</p>
 <h3 id="using-prefabs"><a class="header" href="#using-prefabs">Using prefabs</a></h3>
 <p>If you need to create particle systems made in the editor, you can always use prefabs. Create a scene with desired
 particle system and then <a href="../resources/model.html#instantiation">instantiate</a> it to your scene.</p>
 <h2 id="soft-particles"><a class="header" href="#soft-particles">Soft particles</a></h2>
-<p>Fyrox used special technique, called soft particles, that smooths sharp transitions between particles and scene geometry: </p>
+<p>Fyrox used special technique, called soft particles, that smooths sharp transitions between particles and scene geometry:</p>
 <p><img src="./soft_particles.png" alt="soft particles" /></p>
-<p>This technique especially useful for effects such as smoke, fog, etc. where you don't want to see the &quot;edge&quot; between 
+<p>This technique especially useful for effects such as smoke, fog, etc. where you don't want to see the "edge" between
 particles and scene geometry. You can tweak this effect using <code>Soft Boundary Sharpness Factor</code>, the larger the value
-the more &quot;sharp&quot; the edge will be and vice versa.</p>
+the more "sharp" the edge will be and vice versa.</p>
 <h2 id="restarting-emission"><a class="header" href="#restarting-emission">Restarting emission</a></h2>
-<p>You can &quot;rewind&quot; particle systems in the &quot;initial&quot; state by calling <code>particle_system.clear_particles()</code> method, it 
+<p>You can "rewind" particle systems in the "initial" state by calling <code>particle_system.clear_particles()</code> method, it
 will remove all generated particles and emission will start over.</p>
 <h2 id="enabling-or-disabling-particle-systems"><a class="header" href="#enabling-or-disabling-particle-systems">Enabling or disabling particle systems</a></h2>
 <p>By default, every particle system is enabled. Sometimes there is a need to create a particle system, but not enable
-it (for example for some delayed effect). You can achieve this by calling <code>particle_system.set_enabled(true/false)</code> 
+it (for example for some delayed effect). You can achieve this by calling <code>particle_system.set_enabled(true/false)</code>
 method. Disabled particle systems will still be drawn, but emission and animation will be stopped. To hide particle
 system completely, use <code>particle_system.set_visibility(false)</code> method.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>

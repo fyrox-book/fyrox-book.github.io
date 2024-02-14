@@ -190,8 +190,8 @@
 Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
 and loaded in your scene.</p>
 <h2 id="surfaces"><a class="header" href="#surfaces">Surfaces</a></h2>
-<p>Surface is a set of triangles that uses the same <a href="../rendering/materials.html">material</a>. Mesh node could contain zero of 
-more surfaces; each surface contains a set of vertices and indices that binds vertices with triangles. Mesh nodes split 
+<p>Surface is a set of triangles that uses the same <a href="../rendering/materials.html">material</a>. Mesh node could contain zero of
+more surfaces; each surface contains a set of vertices and indices that binds vertices with triangles. Mesh nodes split
 into surfaces to be rendered effectively by modern GPUs.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
@@ -201,7 +201,7 @@ the way to go, especially with tons and tons of free 3D models available online.
 </blockquote>
 <h3 id="using-a-3d-modelling-software"><a class="header" href="#using-a-3d-modelling-software">Using a 3D modelling software</a></h3>
 <p>To create a 3D model, you could use <a href="https://www.blender.org/">Blender</a> and then export it to <code>FBX</code> file format.
-To load your 3D model in the game, you should do few simple steps (loading a 3D model does not differ from a prefab 
+To load your 3D model in the game, you should do few simple steps (loading a 3D model does not differ from a prefab
 instantiation):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -232,7 +232,7 @@ fn load_model_to_scene(
 model is loading) and error handling. In the real game you should carefully handle all errors and use <code>async/await</code>
 properly.</p>
 <h3 id="creating-a-procedural-mesh"><a class="header" href="#creating-a-procedural-mesh">Creating a procedural mesh</a></h3>
-<p>A mesh instance could be created from code, such meshes are called &quot;procedural&quot;. They're suitable for cases when you
+<p>A mesh instance could be created from code, such meshes are called "procedural". They're suitable for cases when you
 cannot create a mesh in 3D modelling software.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -271,9 +271,9 @@ fn create_procedural_mesh(
     // create procedural meshes with any material you want.
     material
         .set_property(
-            &amp;ImmutableString::new(&quot;diffuseTexture&quot;),
+            &amp;ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture, _&gt;(&quot;some_texture.jpg&quot;)),
+                value: Some(resource_manager.request::&lt;Texture, _&gt;("some_texture.jpg")),
                 fallback: SamplerFallback::White,
             },
         )
@@ -301,10 +301,10 @@ fn create_procedural_mesh(
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, creating a mesh procedurally requires lots of manual work and not so easy.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
-<p>Mesh node supports bone-based animation (skinning) and blend shapes. See <a href="./../animation/animation.html">Animation chapter</a> 
+<p>Mesh node supports bone-based animation (skinning) and blend shapes. See <a href="./../animation/animation.html">Animation chapter</a>
 for more info.</p>
 <h2 id="data-buffers"><a class="header" href="#data-buffers">Data Buffers</a></h2>
-<p>It is possible to access vertex buffer and index buffer of a mesh to either read or write some data there. 
+<p>It is possible to access vertex buffer and index buffer of a mesh to either read or write some data there.
 For example, the following code extracts world-space positions of every vertex of an animated mesh:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

@@ -188,7 +188,7 @@
                         <h1 id="check-box"><a class="header" href="#check-box">Check box</a></h1>
 <p>Checkbox is a UI widget that have three states - <code>Checked</code>, <code>Unchecked</code> and <code>Undefined</code>. In most cases it is used
 only with two values which fits in <code>bool</code> type. Third, undefined, state is used for specific situations when your
-data have such state. </p>
+data have such state.</p>
 <h2 id="how-it-looks"><a class="header" href="#how-it-looks">How it looks</a></h2>
 <p>Checkbox in <code>Checked</code> state:</p>
 <p><img src="checked.PNG" alt="Checked" /></p>
@@ -212,7 +212,7 @@ data have such state. </p>
 <span class="boring">}</span></code></pre></pre>
 <p>The above code will create a checkbox without any textual info, but usually checkboxes have some useful info
 near them. To create such checkbox, you could use <code>.with_content(..)</code> method which accepts any widget handle.
-For checkbox with text, you could use <code>TextBuilder</code> to create textual content, for checkbox with text - use 
+For checkbox with text, you could use <code>TextBuilder</code> to create textual content, for checkbox with text - use
 <code>ImageBuilder</code>. As already said, you're free to use any widget handle there.</p>
 <p>Here's an example of checkbox with textual content.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -233,7 +233,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
         .checked(Some(true))
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;This is a checkbox&quot;)
+                .with_text("This is a checkbox")
                 .build(ctx),
         )
         .build(ctx)
@@ -277,11 +277,11 @@ a <code>CheckBoxMessage::Check</code> message. To do so, you can do something li
 <p>Keep in mind that checkbox (as any other widget) generates <code>WidgetMessage</code> instances. You can catch them too and
 do a custom handling if you need.</p>
 <h2 id="theme"><a class="header" href="#theme">Theme</a></h2>
-<p>Checkbox can be fully customized to have any look you want, there are few methods that will help you with 
+<p>Checkbox can be fully customized to have any look you want, there are few methods that will help you with
 customization:</p>
 <ol>
-<li><code>.with_content(..)</code> - sets the content that will be shown near the checkbox. </li>
-<li><code>.with_check_mark(..)</code> - sets the widget that will be used as checked icon. </li>
+<li><code>.with_content(..)</code> - sets the content that will be shown near the checkbox.</li>
+<li><code>.with_check_mark(..)</code> - sets the widget that will be used as checked icon.</li>
 <li><code>.with_uncheck_mark(..)</code> - sets the widget that will be used as unchecked icon.</li>
 <li><code>.with_undefined_mark(..)</code> - sets the widget that will be used as undefined icon.</li>
 </ol>

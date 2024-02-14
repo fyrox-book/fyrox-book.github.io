@@ -187,23 +187,23 @@
                     <main>
                         <h1 id="sprite-animation"><a class="header" href="#sprite-animation">Sprite Animation</a></h1>
 <p>Sprites can be animated using a series of pre-made images. For performance reasons they're usually packed
-into a rectangular texture, where each individual image located in its own cell of a grid. Such texture is 
+into a rectangular texture, where each individual image located in its own cell of a grid. Such texture is
 called a sprite sheet, and it looks something like this:</p>
 <p><img src="sprite_sheet_example.png" alt="sprite sheet example" /></p>
-<p>As you can see, there are multiple frames for each animation (idle, run, sword swing, etc.) packed into a 
+<p>As you can see, there are multiple frames for each animation (idle, run, sword swing, etc.) packed into a
 single image. To play an animation, all we need to do is to change frames with some desired frequency and...
 that's pretty much all. That's the simplest animation technique one could imagine.</p>
-<p>Sprite sheets usually made by artists, not programmers, so just search online for some sprite sheet or 
+<p>Sprite sheets usually made by artists, not programmers, so just search online for some sprite sheet or
 order a new one from an artist. Programmer's art is pretty much always bad.</p>
 <h2 id="how-to-use"><a class="header" href="#how-to-use">How to use</a></h2>
 <p><img src="sprite_animation_editor.png" alt="sprite animation editor" /></p>
 <p>Fyrox offers a built-in sprite animation system which has its own editor. To be able to use sprite animation
-all you need to do is to add a <code>SpriteSheetAnimation</code> field (or a bunch of them) to your script and put 
+all you need to do is to add a <code>SpriteSheetAnimation</code> field (or a bunch of them) to your script and put
 the following code in its <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Default, Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;aeebb95f-8e32-490e-971c-c22417bd19c5&quot;)]
+#[type_uuid(id = "aeebb95f-8e32-490e-971c-c22417bd19c5")]
 #[visit(optional)]
 struct Player {
     animation: SpriteSheetAnimation,
@@ -224,7 +224,7 @@ impl ScriptTrait for Player {
             sprite
                 .material()
                 .data_ref()
-                .set_texture(&amp;&quot;diffuseTexture&quot;.into(), self.animation.texture())
+                .set_texture(&amp;"diffuseTexture".into(), self.animation.texture())
                 .unwrap();
 
             // Set the current animation's UV rect to the sprite.

@@ -192,8 +192,8 @@ set explicitly in an instance. Such feature allows you to tweak instances, add s
 general properties from parent prefabs.</p>
 <p>Property inheritance works for prefab hierarchies of any depth, this means that you can create something like this:
 a room prefab can have multiple instances of various furniture prefabs in it, while the furniture prefabs can also be
-constructed from other prefabs and so on. In this case if you modify a property in one of the prefabs in the chain, 
-all instance will immediately sync their unmodified properties. </p>
+constructed from other prefabs and so on. In this case if you modify a property in one of the prefabs in the chain,
+all instance will immediately sync their unmodified properties.</p>
 <h2 id="how-to-create-inheritable-properties"><a class="header" href="#how-to-create-inheritable-properties">How To Create Inheritable Properties</a></h2>
 <p>It is possible to use property inheritance for script variables. To make a property of your script inheritable, all you
 need is to wrap its value using <code>InheritableVariable</code> wrapper.</p>
@@ -212,12 +212,12 @@ struct MyScript {
 property was modified, then its value will remain the same, it won't be overwritten by parent's value. Keep in mind,
 that the type of the inheritable variable must be cloneable and support reflection.</p>
 <p><code>InheritableVariable</code> implements the <code>Deref&lt;Target = T&gt; + DerefMut</code> traits, this means that any access via the <code>DerefMut</code> trait
-will mark the property as modified. This could be undesired in some cases so <code>InheritableVariable</code> supports special <code>xxx_silent</code> 
-methods that don't touch the internal modifiers and allows you to substitute the value with some other &quot;silently&quot; -
+will mark the property as modified. This could be undesired in some cases so <code>InheritableVariable</code> supports special <code>xxx_silent</code>
+methods that don't touch the internal modifiers and allows you to substitute the value with some other "silently" -
 without marking the variable as modified.</p>
 <h2 id="which-fields-should-be-inheritable"><a class="header" href="#which-fields-should-be-inheritable">Which Fields Should Be Inheritable?</a></h2>
-<p>Inheritable variables intended to be &quot;atomic&quot; - it means that the variable stores some simple variable (<code>f32</code>, <code>String</code>,
-<code>Handle&lt;Node&gt;</code>, etc.). While it is possible to store &quot;compound&quot; variables (<code>InheritableVariable&lt;YourStruct&gt;</code>), it is
+<p>Inheritable variables intended to be "atomic" - it means that the variable stores some simple variable (<code>f32</code>, <code>String</code>,
+<code>Handle&lt;Node&gt;</code>, etc.). While it is possible to store "compound" variables (<code>InheritableVariable&lt;YourStruct&gt;</code>), it is
 not advised because of inheritance mechanism. When the engine sees inheritable variable, it searches the same variable
 in a parent entity and copies its value to the child, thus completely replacing its content. In this case, even if you
 have inheritable variables inside compound field, they won't be inherited correctly. Let's demonstrate this in the
@@ -247,11 +247,11 @@ struct MyEntity {
     inheritable_data: SomeComplexData,
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This code snippet should clarify, that inheritable fields should contain some &quot;simple&quot; data, and almost never - complex
+<p>This code snippet should clarify, that inheritable fields should contain some "simple" data, and almost never - complex
 structs.</p>
 <h2 id="editor"><a class="header" href="#editor">Editor</a></h2>
 <p>The editor wraps all inheritable properties in a special widget that supports property reversion. Reversion allows you
-to drop current changes and take the parent's property value. This is useful if you want a property to inherit its parent's 
+to drop current changes and take the parent's property value. This is useful if you want a property to inherit its parent's
 value. In the Inspector it looks like this:</p>
 <p><img src="./revert.png" alt="revert" /></p>
 <p>Clicking on the <code>&lt;</code> button will take the value from the parent prefab and the property won't be marked as modified anymore. In case

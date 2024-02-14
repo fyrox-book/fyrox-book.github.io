@@ -186,30 +186,30 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="root-motion"><a class="header" href="#root-motion">Root Motion</a></h1>
-<p>Root motion is a special technique that transfers motion from some node in a hierarchy to a physical 
+<p>Root motion is a special technique that transfers motion from some node in a hierarchy to a physical
 capsule, which is then used to perform the actual motion. In action it looks like this:</p>
 <iframe width="750" height="410" src="https://youtube.com/embed/0lG8Spzk128" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <p>As you can see in the first part of the video, the movement of the character looks more like floating above
-the ground. This happens because the actual movement of the physical capsule is not synchronized with the 
+the ground. This happens because the actual movement of the physical capsule is not synchronized with the
 movement of the character. Root motion fixes exactly this issue by taking the motion of some root node of the
-animated hierarchy (hips in case of this character) and transferring it to the physical capsule. This makes 
-the actual movement to be fully synchronized with the movement &quot;baked&quot; in the animation.</p>
+animated hierarchy (hips in case of this character) and transferring it to the physical capsule. This makes
+the actual movement to be fully synchronized with the movement "baked" in the animation.</p>
 <p>Root motion also have some nice effect - you can move your character solely by the movement from animation, and
 it will work perfectly in 99% of cases. Animations can also contain some rotations which can also be extracted
-and applied to the physical capsule. The next awesome property is that your character will never stand out of 
+and applied to the physical capsule. The next awesome property is that your character will never stand out of
 its physical capsule, which will prevent phasing it into walls when playing animations with large movements.</p>
 <p>In general, you should prefer root motion -driven movement for your characters whenever you can. Simply because
-it eliminates a lot of common problems with character movement. It can also be applied to 2D world and will 
-work exactly the same. </p>
+it eliminates a lot of common problems with character movement. It can also be applied to 2D world and will
+work exactly the same.</p>
 <h2 id="how-to-enable"><a class="header" href="#how-to-enable">How to enable</a></h2>
 <p>You can enable/disable/setup it in the drop-down menu that opens by clicking <code>RM</code> button in the animation editor.
 Keep in mind, that root motion should be configured on <em>per animation</em> basis. Most of the animations does not
 need the root motion at all.</p>
 <p><img src="../ae_rm.png" alt="root motion" /></p>
 <p>The most important part here is the <code>Root</code> handle, it should be set to a root node that moves by your animation, usually
-it is called like &quot;hips&quot; or similar:</p>
+it is called like "hips" or similar:</p>
 <p><img src="../ae_root_node.png" alt="root node" /></p>
-<p>After that, you need to apply filters for axes - most of the locomotion animations &quot;works&quot; in oXZ plane, so Y axis should
+<p>After that, you need to apply filters for axes - most of the locomotion animations "works" in oXZ plane, so Y axis should
 be ignored. Also, if you don't have any turns in your animation, you can also filter out the rotation part.</p>
 <p>Alternatively, you can do the same from code:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
@@ -246,20 +246,20 @@ be ignored. Also, if you don't have any turns in your animation, you can also fi
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code does pretty much the same as the editor on the screenshots above. The arguments of this function are
-the following: </p>
+the following:</p>
 <ul>
 <li><code>animation_player</code> - a handle to the animation player in which all your animations are stored,</li>
 <li><code>animation</code> - a handle of the animation in which you want to enable the root motion (you can obtain the handle
-by using <a href="https://docs.rs/fyrox/latest/fyrox/animation/struct.AnimationContainer.html#method.find_by_name_ref">AnimationContainer::find_by_name_ref</a> 
+by using <a href="https://docs.rs/fyrox/latest/fyrox/animation/struct.AnimationContainer.html#method.find_by_name_ref">AnimationContainer::find_by_name_ref</a>
 method).</li>
-<li><code>root_node</code> - a handle to a root node of your character's hierarchy, usually it is called something like &quot;Hips&quot;
-or &quot;Pelvis&quot;.</li>
+<li><code>root_node</code> - a handle to a root node of your character's hierarchy, usually it is called something like "Hips"
+or "Pelvis".</li>
 <li><code>ctx</code> - script context from your current script.</li>
 </ul>
 <h2 id="how-to-use"><a class="header" href="#how-to-use">How to use</a></h2>
 <p>Direct root motion values extracted from animations are kind of useless by their own and in 99% of the cases you
 should get the average root motion values from a <a href="../blending.html">state machine</a> that animates your character. This
-is because animation blending state machine properly blends the root motion from all active animation sources. 
+is because animation blending state machine properly blends the root motion from all active animation sources.
 In general, it could look something like this:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -302,7 +302,7 @@ In general, it could look something like this:</p>
 <p>This code extracts the current <strong>local-space offset</strong> for the current frame and then transforms the offset to
 world-space coordinates. Finally, it reduces the offset by the current delta time (<code>1.0 / ctx.dt</code>) to obtain the
 new velocity vector which is then applied to the rigid body (player's capsule).</p>
-<p>The arguments in this function are following: </p>
+<p>The arguments in this function are following:</p>
 <ul>
 <li><code>absm</code> a handle to an instance of Animation Blending State Machine node</li>
 <li><code>rigid_body</code> a handle to the rigid body that is used by your character</li>

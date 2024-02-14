@@ -187,7 +187,7 @@
                     <main>
                         <h1 id="render-pass"><a class="header" href="#render-pass">Render Pass</a></h1>
 <p>You can define your own render passes that extends the renderer, currently there are render passes only for scenes,
-so no custom post-effects (this is planned to be improved in Fyrox 0.28). Render pass has full access to graphics 
+so no custom post-effects (this is planned to be improved in Fyrox 0.28). Render pass has full access to graphics
 framework (which is a thin wrapper around OpenGL) so it can utilize full power of it to implement various graphical
 effects.</p>
 <h2 id="creating-a-render-pass"><a class="header" href="#creating-a-render-pass">Creating a render pass</a></h2>
@@ -224,7 +224,7 @@ impl MyRenderPass {
         renderer: &amp;mut Renderer,
         target_scene: Handle&lt;Scene&gt;,
     ) -&gt; Result&lt;Self, FrameworkError&gt; {
-        let vs = r#&quot;
+        let vs = r#"
                 layout(location = 0) in vec3 vertexPosition;
                 
                 uniform mat4 c;
@@ -233,24 +233,24 @@ impl MyRenderPass {
                 {
                     gl_Position = worldViewProjectionMatrix * vertexPosition;
                 }
-            &quot;#;
+            "#;
 
-        let fs = r#&quot;                
+        let fs = r#"                
                 out vec4 FragColor;             
                 
                 void main()
                 {
                     FragColor = vec4(1.0, 0.0, 0.0, 1.0);
                 }
-            &quot;#;
+            "#;
 
-        let shader = GpuProgram::from_source(&amp;mut renderer.state, &quot;MyShader&quot;, vs, fs)?;
+        let shader = GpuProgram::from_source(&amp;mut renderer.state, "MyShader", vs, fs)?;
 
         Ok(Self {
             enabled: true,
             world_view_proj: shader.uniform_location(
                 &amp;renderer.state,
-                &amp;ImmutableString::new(&quot;worldViewProjectionMatrix&quot;),
+                &amp;ImmutableString::new("worldViewProjectionMatrix"),
             )?,
             target_scene,
             quad: GeometryBuffer::from_surface_data(
@@ -289,7 +289,7 @@ impl SceneRenderPass for MyRenderPass {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p>The code snippet shows how to create a shader, find its uniforms, and finally how to actually render something in 
+<p>The code snippet shows how to create a shader, find its uniforms, and finally how to actually render something in
 target frame buffer.</p>
 <h2 id="registering-a-render-pass"><a class="header" href="#registering-a-render-pass">Registering a render pass</a></h2>
 <p>Every render pass must be registered in the renderer, otherwise it won't be used. You can register a render pass using

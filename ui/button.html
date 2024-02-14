@@ -193,11 +193,11 @@
 </span><span class="boring">fn main() {
 </span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
-        .with_text(&quot;Click me!&quot;)
+        .with_text("Click me!")
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
-<p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal 
+<p>How to create a button using custom dimensions (100x100) and custom text alignment (Vertical centered and Horizontal
 right aligned):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -205,7 +205,7 @@ right aligned):</p>
     ButtonBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;Click me!&quot;)
+                .with_text("Click me!")
                 .with_horizontal_text_alignment(HorizontalAlignment::Right)
                 .with_vertical_text_alignment(VerticalAlignment::Center)
                 .build(&amp;mut ui.build_ctx()),
@@ -228,12 +228,12 @@ right aligned):</p>
             ImageBuilder::new(WidgetBuilder::new())
                 .with_texture(
                     resource_manager
-                        .request::&lt;Texture&gt;(&quot;path/to/your/texture&quot;)
+                        .request::&lt;Texture&gt;("path/to/your/texture")
                         .into(),
                 )
                 .build(ctx),
         )
-        .with_text(&quot;Click me!&quot;)
+        .with_text("Click me!")
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -270,7 +270,7 @@ fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;Quit&quot;)
+                .with_text("Quit")
                 .build(&amp;mut ui.build_ctx()),
         )
         .build(&amp;mut ui.build_ctx())

@@ -186,7 +186,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="mouse-input"><a class="header" href="#mouse-input">Mouse Input</a></h1>
-<p>Mouse input is usually used to control a camera rotation, to pick objects in game world, etc. Let's take a look at 
+<p>Mouse input is usually used to control a camera rotation, to pick objects in game world, etc. Let's take a look at
 the most common use cases.</p>
 <h2 id="mouse-motion"><a class="header" href="#mouse-motion">Mouse Motion</a></h2>
 <p>The following example shows how to use raw mouse events to rotate an object. It could also be used to rotate a camera
@@ -194,7 +194,7 @@ in your game (with slight modifications).</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff0&quot;)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
 #[visit(optional)]
 pub struct Player {
     yaw: f32,
@@ -228,16 +228,16 @@ impl ScriptTrait for Player {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This example consists of two main parts - <code>on_os_event</code> and <code>on_update</code> methods. The first one is called when some 
+<p>This example consists of two main parts - <code>on_os_event</code> and <code>on_update</code> methods. The first one is called when some
 event comes to the main window, and we need to check if this event is <code>DeviceEvent::MouseMotion</code>. After that, we're taking
-relative offsets (<code>dx</code>, <code>dy</code>) and modifying the <code>pitch</code>, <code>yaw</code> variables accordingly. <code>on_update</code> method is called 
+relative offsets (<code>dx</code>, <code>dy</code>) and modifying the <code>pitch</code>, <code>yaw</code> variables accordingly. <code>on_update</code> method is called
 every frame and it is used to apply <code>pitch</code> and <code>yaw</code> values to the scene node the script is assigned to.</p>
 <h2 id="mouse-buttons"><a class="header" href="#mouse-buttons">Mouse Buttons</a></h2>
 <p>The following example shows how to handle events from mouse buttons.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff1&quot;)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff1")]
 #[visit(optional)]
 pub struct Clicker {
     counter: i32,

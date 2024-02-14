@@ -186,7 +186,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="font"><a class="header" href="#font">Font</a></h1>
-<p>Font is used to store graphical representation of unicode characters. The engine supports TTF and OTF fonts, 
+<p>Font is used to store graphical representation of unicode characters. The engine supports TTF and OTF fonts,
 you can load pretty much any font from the internet and use it as is.</p>
 <h2 id="create-new-font"><a class="header" href="#create-new-font">Create New Font</a></h2>
 <p>There are two ways to create font instance - either load font from file, or load it directly from memory.</p>
@@ -198,11 +198,11 @@ you can load pretty much any font from the internet and use it as is.</p>
 </span><span class="boring">use fyrox::{asset::Resource, gui::font::Font, plugin::PluginContext};
 </span><span class="boring">
 </span>fn load_font_from_file(ctx: &amp;PluginContext) -&gt; Resource&lt;Font&gt; {
-    ctx.resource_manager.request::&lt;Font&gt;(&quot;path/to/my/font&quot;)
+    ctx.resource_manager.request::&lt;Font&gt;("path/to/my/font")
 }
 <span class="boring">}</span></code></pre></pre>
 <h3 id="creating-font-from-memory"><a class="header" href="#creating-font-from-memory">Creating Font From Memory</a></h3>
-<p>This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is 
+<p>This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is
 very simple:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -226,7 +226,7 @@ a data buffer and create font using the data buffer:</p>
 </span><span class="boring">
 </span>fn load_font_from_memory() -&gt; Resource&lt;Font&gt; {
     let mut data = Vec::new();
-    File::open(&quot;path/to/your/font.ttf&quot;)
+    File::open("path/to/your/font.ttf")
         .unwrap()
         .read_to_end(&amp;mut data)
         .unwrap();
@@ -249,7 +249,7 @@ code snippet:</p>
     // Select character set.
     let character_set = Font::korean_char_set();
     // Load font.
-    let new_font = Font::from_file(&quot;path/to/your/font.ttf&quot;, 20.0, character_set)
+    let new_font = Font::from_file("path/to/your/font.ttf", 20.0, character_set)
         .await
         .unwrap();
     // Set as default font.
@@ -257,7 +257,7 @@ code snippet:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-change-font-size"><a class="header" href="#how-to-change-font-size">How to Change Font Size</a></h2>
-<p>All you need to do is to set font size in your Text or TextBox widgets like so: </p>
+<p>All you need to do is to set font size in your Text or TextBox widgets like so:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use fyrox::{
@@ -267,7 +267,7 @@ code snippet:</p>
 
 fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
-        .with_text(&quot;Some text&quot;)
+        .with_text("Some text")
         .with_font_size(30.0) // Sets the desired font size.
         .build(ctx)
 }
@@ -295,7 +295,7 @@ of a fixed size. Such paging is needed, because there's a hardware limit of maxi
 instead of praying that everything fits into a single page, the engine automatically adds a new page if none of the
 previous cannot fit a new character.</p>
 <p>Keep in mind, that when you create a font, its atlases are empty. They're filled on demand when you try to use
-a character that wasn't used previously. </p>
+a character that wasn't used previously.</p>
 
                     </main>
 

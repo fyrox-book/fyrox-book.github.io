@@ -186,7 +186,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="tab-control"><a class="header" href="#tab-control">Tab Control</a></h1>
-<p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the 
+<p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the
 tab header buttons. Each tab is defined via a Tab Definition struct which takes two widgets, one representing the tab
 header and the other representing the tab's contents.</p>
 <p>The following example makes a 2 tab, Tab Control containing some simple text widgets:</p>
@@ -204,20 +204,20 @@ header and the other representing the tab's contents.</p>
     TabControlBuilder::new(WidgetBuilder::new())
         .with_tab(TabDefinition {
             header: TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;First&quot;)
+                .with_text("First")
                 .build(ctx),
             content: TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;First tab's contents!&quot;)
+                .with_text("First tab's contents!")
                 .build(ctx),
             can_be_closed: true,
             user_data: None,
         })
         .with_tab(TabDefinition {
             header: TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;Second&quot;)
+                .with_text("Second")
                 .build(ctx),
             content: TextBuilder::new(WidgetBuilder::new())
-                .with_text(&quot;Second tab's contents!&quot;)
+                .with_text("Second tab's contents!")
                 .build(ctx),
             can_be_closed: true,
             user_data: None,
@@ -225,19 +225,19 @@ header and the other representing the tab's contents.</p>
         .build(ctx);
 }
 <span class="boring">}</span></code></pre></pre>
-<p>As usual, we create the widget via the builder TabControlBuilder. Tabs are added via the <em>with_tab</em> function in the 
-order you want them to appear, passing each call to the function a directly constructed TabDefinition struct. Tab 
-headers will appear from left to right at the top with tab contents shown directly below the tabs. As usual, if no 
+<p>As usual, we create the widget via the builder TabControlBuilder. Tabs are added via the <em>with_tab</em> function in the
+order you want them to appear, passing each call to the function a directly constructed TabDefinition struct. Tab
+headers will appear from left to right at the top with tab contents shown directly below the tabs. As usual, if no
 constraints are given to the base WidgetBuilder of the TabControlBuilder, then the tab content area will resize to fit
 whatever is in the current tab.</p>
-<p>Each tab's content is made up of one widget, so to be useful you will want to use one of the container widgets to help 
+<p>Each tab's content is made up of one widget, so to be useful you will want to use one of the container widgets to help
 arrange additional widgets within the tab.</p>
 <h2 id="tab-header-styling"><a class="header" href="#tab-header-styling">Tab Header Styling</a></h2>
 <p>Notice that you can put any widget into the tab header, so if you want images to denote each tab you can add an Image
-widget to each header, and if you want an image <em>and</em> some text you can insert a stack panel with an image on top and 
-text below it. </p>
-<p>You will also likely want to style whatever widgets you add. As can be seen when running the code example above, the 
-tab headers are scrunched when there are no margins provided to your text widgets. Simply add something like the below 
+widget to each header, and if you want an image <em>and</em> some text you can insert a stack panel with an image on top and
+text below it.</p>
+<p>You will also likely want to style whatever widgets you add. As can be seen when running the code example above, the
+tab headers are scrunched when there are no margins provided to your text widgets. Simply add something like the below
 code example and you will get a decent look:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -256,7 +256,7 @@ code example and you will get a decent look:</p>
             WidgetBuilder::new()
                 .with_margin(Thickness::uniform(4.0))
         )
-            .with_text(&quot;First&quot;)
+            .with_text("First")
             .build(ctx),
 <span class="boring">content: Default::default(),
 </span><span class="boring">can_be_closed: true,

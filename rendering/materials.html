@@ -189,8 +189,8 @@
 <p>Material defines a set of values for a shader. Materials usually contains textures (diffuse, normal, height, emission and other maps), numerical values (floats, integers), vectors, booleans, matrices and arrays of each type, except
 textures. Each parameter can be changed in runtime giving you the ability to create animated materials. However,
 in practice, most materials are static, this means that once it's created, it won't be changed anymore.</p>
-<p>Please keep in mind that the actual &quot;rules&quot; of drawing an entity are stored in the shader, 
-<strong>material is only a storage</strong> for specific uses of the shader. </p>
+<p>Please keep in mind that the actual "rules" of drawing an entity are stored in the shader,
+<strong>material is only a storage</strong> for specific uses of the shader.</p>
 <p>Multiple materials can share the same shader, for example standard shader covers 95% of most common use cases,
 and it is shared across multiple materials. The only difference are property values, for example you can draw
 multiple cubes using the same shader, but with different textures.</p>
@@ -202,38 +202,38 @@ significantly correlates with performance. The more unique materials you have pe
 the renderer and video driver need in order to render a frame and more time the frame will require for
 rendering, thus lowering your FPS.</p>
 <h2 id="standard-material"><a class="header" href="#standard-material">Standard material</a></h2>
-<p>The engine offers a standard PBR material, PBR stands for &quot;Physically-Based Rendering&quot; which gives you the quality
+<p>The engine offers a standard PBR material, PBR stands for "Physically-Based Rendering" which gives you the quality
 of shading which is very close to materials in real world (to some extent of course).</p>
 <p>The standard material can cover 95% of use cases, and it is suitable for almost any kind of game, except maybe
-some cartoon-ish or stylized games. </p>
+some cartoon-ish or stylized games.</p>
 <p>The standard material has quite a lot of properties that can be used to fully utilize the power of PBR rendering:</p>
 <ul>
 <li><strong>diffuseColor</strong> - an RGBA color that will be used as a base color for you object. <strong>Caveat:</strong> the opacity value
 (alpha) will be used only with <code>Forward</code> render path! This means that you will need to switch render path on your
 mesh (<a href="#transparency">see below</a>)</li>
-<li><strong>diffuseTexture</strong> - a 2D texture containing the unlit &quot;basic&quot; colors of your object, this is the most commonly
+<li><strong>diffuseTexture</strong> - a 2D texture containing the unlit "basic" colors of your object, this is the most commonly
 used texture. For example, you can assign a brick wall texture to this property and your object will look like a brick
 wall.</li>
-<li><strong>normalTexture</strong> - a 2D texture containing per-pixel normal vectors. </li>
+<li><strong>normalTexture</strong> - a 2D texture containing per-pixel normal vectors.</li>
 <li><strong>metallicTexture</strong> - a 2D texture containing per-pixel metallic factor, where 0 - dielectric, 1 - metal.
-In simple words it defines whether your object reflects (1.0) the environment or not (0.0). </li>
-<li><strong>roughnessTexture</strong> - a 2D texture containing per-pixel roughness factor, where 0 - completely flat, 1 - 
+In simple words it defines whether your object reflects (1.0) the environment or not (0.0).</li>
+<li><strong>roughnessTexture</strong> - a 2D texture containing per-pixel roughness factor, where 0 - completely flat, 1 -
 very rough.</li>
 <li><strong>heightTexture</strong> - a 2D texture containing per-pixel displacement value, it is used with parallax mapping to
 crate an effect of volume on a flat surface.</li>
 <li><strong>emissionTexture</strong> - a 2D texture containing per-pixel emission lighting. You could use this to create emissive
-surfaces like small lamps on wall of sci-fi ship, or to create glowing eyes for your monsters that will scare 
+surfaces like small lamps on wall of sci-fi ship, or to create glowing eyes for your monsters that will scare
 the player.</li>
 <li><strong>lightmapTexture</strong> - a 2D texture containing per-pixel <strong>static</strong> lighting. It is used to apply precomputed
 light to your 3D models, and the most common use case is to lit a static object using a static light. Precomputed
 light is very cheap. The engine offers built-in lightmapper that can generate lightmaps for you.</li>
-<li><strong>aoTexture</strong> - a 2D texture containing per-pixel shading values, allows you to &quot;bake&quot; shadows in for your 3D
+<li><strong>aoTexture</strong> - a 2D texture containing per-pixel shading values, allows you to "bake" shadows in for your 3D
 object.</li>
-<li><strong>texCoordScale</strong> - a 2D vector that allows you to scale texture coordinates used to sample the textures 
+<li><strong>texCoordScale</strong> - a 2D vector that allows you to scale texture coordinates used to sample the textures
 mentioned above (except lightmaps, they're using separate texture coordinates)</li>
 <li><strong>layerIndex</strong> - a natural number that is used for decals masking, a decal will only be applied to your mesh
-if and only if the decal has matching index. </li>
-<li><strong>emissionStrength</strong> - a 3D vector that allows you to set the strength of emission per-channel (R, G, B) for 
+if and only if the decal has matching index.</li>
+<li><strong>emissionStrength</strong> - a 3D vector that allows you to set the strength of emission per-channel (R, G, B) for
 your <code>emissionTexture</code></li>
 </ul>
 <h2 id="transparency"><a class="header" href="#transparency">Transparency</a></h2>
@@ -258,13 +258,13 @@ and transparent objects. <strong>Caveat:</strong> Current forward renderer imple
 if you need lighting, you will need to use custom shader for that!</p>
 <h2 id="material-import"><a class="header" href="#material-import">Material import</a></h2>
 <p>When you're loading a 3D model in the engine, the engine tries to convert the materials stored inside to standard
-material. In most cases there is no way to create 100% matching material on the fly, instead the engine tries 
+material. In most cases there is no way to create 100% matching material on the fly, instead the engine tries
 to do its best to make sure the material will be imported as closely as possible to the original one. Various 3D modelling
 tools use different material system, but all of them allow you to export your 3D model in one of the commonly
 used formats (such as FBX).</p>
 <h3 id="blender"><a class="header" href="#blender">Blender</a></h3>
 <p>When using Blender, make sure you are using <strong>Principled BSDF</strong> material, it is the closest material that can be converted
-to engine's standard material at almost 100% fidelity. </p>
+to engine's standard material at almost 100% fidelity.</p>
 <h3 id="3ds-max"><a class="header" href="#3ds-max">3Ds max</a></h3>
 <p>It highly depends on the version of the 3Ds max, but in general the default material should work fine.</p>
 

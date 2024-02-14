@@ -187,17 +187,17 @@
                     <main>
                         <h1 id="signals"><a class="header" href="#signals">Signals</a></h1>
 <p>In some cases you may need to perform an action when at certain time of your animation. It could be a footstep sound,
-when foot touches ground, grenade tossing, etc. This could be done via animation signals. Animation signal is just 
+when foot touches ground, grenade tossing, etc. This could be done via animation signals. Animation signal is just
 a named marker that has time position at an animation timeline. It will be emitted when animation playback time passes
 it (left-to-right or right-to-left depending on the actual speed of your animation). All you need to do, is to catch
 these signals in your game code and do the desired actions.</p>
 <h2 id="how-to-add"><a class="header" href="#how-to-add">How to add</a></h2>
-<p>As usual, there are two possible ways of adding animation signals - from the animation editor and from code. </p>
+<p>As usual, there are two possible ways of adding animation signals - from the animation editor and from code.</p>
 <h3 id="from-animation-editor"><a class="header" href="#from-animation-editor">From animation editor</a></h3>
-<p>To add a signal to some animation, select an animation player, open the animation editor, select some animation in 
+<p>To add a signal to some animation, select an animation player, open the animation editor, select some animation in
 it. Now all you need to do is to right-click on the timeline and press <code>Add Signal</code>.</p>
 <p><img src="signal_add.png" alt="Add Signal" /></p>
-<p>After the signal is added, you can select it and edit its properties in the inspector. Also, you can drag it on the 
+<p>After the signal is added, you can select it and edit its properties in the inspector. Also, you can drag it on the
 timeline to adjust its position.</p>
 <p><img src="signal_edit.png" alt="Edit Signal" /></p>
 <p>Set a meaningful name to the signal, and it is pretty much done - all you need to do next is to write signal handling
@@ -229,7 +229,7 @@ your animation. Please note the comment about signal's uuid in the code below.</
             // will generate random uuid on every call. This uuid does not used by the engine,
             // it is used only for searching and useful when you have multiple signals with the
             // same name, but with different uuid.
-            let uuid = uuid!(&quot;6d472c99-e1d3-44fd-81fd-5eb83bbafdf7&quot;);
+            let uuid = uuid!("6d472c99-e1d3-44fd-81fd-5eb83bbafdf7");
 
             animation.add_signal(AnimationSignal::new(uuid, signal_name, 0.5));
         }
@@ -266,7 +266,7 @@ just borrow your animation from the animation player and pop animation event one
             while let Some(signal) = animation.pop_event() {
                 // We're interested only in signals with specific name.
                 if signal.name == signal_name {
-                    println!(&quot;Signal event {} has occurred!&quot;, signal.name);
+                    println!("Signal event {} has occurred!", signal.name);
                 }
             }
         }
@@ -276,9 +276,9 @@ just borrow your animation from the animation player and pop animation event one
 <p>You can do pretty much anything when reacting to signals. For example, this could be a prefab instantiation to
 create smoke effect under the feet, playing a footstep sound, etc.</p>
 <h2 id="events-from-absm"><a class="header" href="#events-from-absm">Events from ABSM</a></h2>
-<p>Animation blending state machines are able to collect events from the currently playing animations using 
+<p>Animation blending state machines are able to collect events from the currently playing animations using
 different strategies. This ability prevents you from tedious manual animation events collection from a bunch
-of animations manually. </p>
+of animations manually.</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -328,7 +328,7 @@ of animations manually. </p>
 layer). The arguments to it are the following:</p>
 <ul>
 <li><code>absm</code> - a handle to an animation blending state machine node.</li>
-<li><code>strategy</code> - event collection strategy, which includes all events collection, max and min weight. The 
+<li><code>strategy</code> - event collection strategy, which includes all events collection, max and min weight. The
 last two may be used if you're getting a lot of events and want to get events from the animations with max or
 min weights respectively.</li>
 <li><code>ctx</code> - current script context, available in pretty much any script methods.</li>

@@ -201,7 +201,7 @@ while Y is stored in a separate array which is then used to modify heights of ce
 <h3 id="layers"><a class="header" href="#layers">Layers</a></h3>
 <p>Layer is a material + mask applied to terrain's mesh. Mask is a separate, greyscale texture that defines in which parts
 of the terrain the material should be visible or not. White pixels in the mask makes the material to be visible, black -
-completely transparent, everything between helps you to create smooth transitions between layers. Here's a simple 
+completely transparent, everything between helps you to create smooth transitions between layers. Here's a simple
 example of multiple layers:</p>
 <p><img src="./terrain_layers_layout.png" alt="terrain layers layout" /></p>
 <p>There are 3 layers: 1 - dirt, 2 - grass, 3 - rocks and grass. As you can see, there are smooth transitions between each
@@ -209,12 +209,12 @@ layer, it is achieved by layer's mask.</p>
 <p>Each layer uses separate material, which can be edited from respective property editor in the Inspector:</p>
 <p><img src="./terrain_layer_material.png" alt="terrain layer material" /></p>
 <h2 id="creating-terrain-in-the-editor"><a class="header" href="#creating-terrain-in-the-editor">Creating terrain in the editor</a></h2>
-<p>You can create a terrain node by clicking <code>Create -&gt; Terrain</code>. It will create a terrain with fixed width, height, 
+<p>You can create a terrain node by clicking <code>Create -&gt; Terrain</code>. It will create a terrain with fixed width, height,
 and resolution (see <a href="./terrain_node.html#limitations-and-known-issues">limitations</a>). Once the terrain is created, select
-it in the World Viewer and click on Hill icon on the toolbar. This will enable terrain editing, brush options panel 
+it in the World Viewer and click on Hill icon on the toolbar. This will enable terrain editing, brush options panel
 should also appear. See the picture below with all the steps:</p>
 <p><img src="./terrain_editing.png" alt="terrain editing" /></p>
-<p>The green rectangle on the terrain under the cursor represents current brush. You can edit brush options in the 
+<p>The green rectangle on the terrain under the cursor represents current brush. You can edit brush options in the
 <code>Brush Options</code> window:</p>
 <p><img src="./brush_options.png" alt="brush options" /></p>
 <p>You can select a shape (either circle or rectangle with configurable size) and a mode (either modify the height map, or
@@ -252,7 +252,7 @@ content.</p>
 ) {
     material
         .set_property(
-            &amp;ImmutableString::new(&quot;diffuseTexture&quot;),
+            &amp;ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
                 value: Some(resource_manager.request::&lt;Texture, _&gt;(diffuse_texture)),
                 fallback: SamplerFallback::White,
@@ -261,7 +261,7 @@ content.</p>
         .unwrap();
     material
         .set_property(
-            &amp;ImmutableString::new(&quot;normalTexture&quot;),
+            &amp;ImmutableString::new("normalTexture"),
             PropertyValue::Sampler {
                 value: Some(resource_manager.request::&lt;Texture, _&gt;(normal_texture)),
                 fallback: SamplerFallback::Normal,
@@ -270,7 +270,7 @@ content.</p>
         .unwrap();
     material
         .set_property(
-            &amp;ImmutableString::new(&quot;texCoordScale&quot;),
+            &amp;ImmutableString::new("texCoordScale"),
             PropertyValue::Vector2(Vector2::new(10.0, 10.0)),
         )
         .unwrap();
@@ -285,8 +285,8 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                     setup_layer_material(
                         &amp;mut material,
                         resource_manager.clone(),
-                        &quot;examples/data/Grass_DiffuseColor.jpg&quot;,
-                        &quot;examples/data/Grass_NormalColor.jpg&quot;,
+                        "examples/data/Grass_DiffuseColor.jpg",
+                        "examples/data/Grass_NormalColor.jpg",
                     );
                     SharedMaterial::new(material)
                 },
@@ -298,8 +298,8 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                     setup_layer_material(
                         &amp;mut material,
                         resource_manager.clone(),
-                        &quot;examples/data/Rock_DiffuseColor.jpg&quot;,
-                        &quot;examples/data/Rock_Normal.jpg&quot;,
+                        "examples/data/Rock_DiffuseColor.jpg",
+                        "examples/data/Rock_Normal.jpg",
                     );
                     SharedMaterial::new(material)
                 },
@@ -339,15 +339,15 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see there is quite a lot of code, ideally you should use editor all the times, because handling everything
-from code could be very tedious. The result of its execution (if all textures are set correctly) could be something 
+from code could be very tedious. The result of its execution (if all textures are set correctly) could be something
 like this (keep in mind that terrain will be random everytime you run the code):</p>
 <p><img src="./terrain_random.png" alt="terrain from code" /></p>
 <h2 id="physics"><a class="header" href="#physics">Physics</a></h2>
-<p>By default, terrains does not have respective physical body and shape, it should be added manually. Create a static 
+<p>By default, terrains does not have respective physical body and shape, it should be added manually. Create a static
 rigid body node with a collider with Heightmap shape (<a href="../physics/collider.html">learn more about colliders</a>). Then attach
-the terrain to the rigid body. Keep in mind that terrain's origin differs from Heightmap rigid body, so you need to offset 
-the terrain to match its physical representation. Enable physics visualization in editor settings to see physical shapes 
-and move terrain. Now to move the terrain you should move the body, instead of the terrain (because of parent-child 
+the terrain to the rigid body. Keep in mind that terrain's origin differs from Heightmap rigid body, so you need to offset
+the terrain to match its physical representation. Enable physics visualization in editor settings to see physical shapes
+and move terrain. Now to move the terrain you should move the body, instead of the terrain (because of parent-child
 <a href="../beginning/scene_and_scene_graph.html#local-and-global-coordinates">relations</a>).</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>Terrain rendering complexity have linear dependency with the amount of layers terrain have. Each layer forces the engine
@@ -356,27 +356,27 @@ a terrain could have the following layers: dirt, grass, rock, snow. This is a re
 you should measure frame time to understand how each new layer affects performance in your case.</p>
 <h2 id="chunking"><a class="header" href="#chunking">Chunking</a></h2>
 <p>Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
-chunk could be considered as a &quot;sub-terrain&quot;. You can &quot;stack&quot; any amount of chunks from any side of the terrain. To do 
-that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular 
+chunk could be considered as a "sub-terrain". You can "stack" any amount of chunks from any side of the terrain. To do
+that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular
 direction. Imagine that you've created a terrain with just one chunk (<code>0..1</code> range on both axes), but suddenly you found
-that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at 
-the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should 
-change <code>width_chunks</code> range to <code>0..2</code> and leave <code>length_chunks</code> as is (<code>0..1</code>). This way terrain will be extended, and 
+that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at
+the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should
+change <code>width_chunks</code> range to <code>0..2</code> and leave <code>length_chunks</code> as is (<code>0..1</code>). This way terrain will be extended, and
 you can start shaping the new location.</p>
 <h2 id="level-of-detail"><a class="header" href="#level-of-detail">Level-of-detail</a></h2>
 <p>Terrain has automatic LOD system, which means that the closest portions of it will be rendered with the highest
 possible quality (defined by the resolution of height map and masks), while the furthest portions will be
 rendered with the lowest quality. This effectively balances GPU load and allows you to render huge terrains with
 low overhead.</p>
-<p>The main parameter that affects LOD system is <code>block_size</code> (<code>Terrain::set_block_size</code>), which defines size of the patch 
-that will be used for rendering. It is used to divide the size of the height map into a fixed set of blocks using 
+<p>The main parameter that affects LOD system is <code>block_size</code> (<code>Terrain::set_block_size</code>), which defines size of the patch
+that will be used for rendering. It is used to divide the size of the height map into a fixed set of blocks using
 quad-tree algorithm.</p>
-<p>Current implementation uses modified version of CDLOD algorithm without patch morphing. Apparently it is not needed, 
+<p>Current implementation uses modified version of CDLOD algorithm without patch morphing. Apparently it is not needed,
 since bilinear filtration in vertex shader prevents seams to occur.</p>
-<p>Current implementation makes it possible to render huge terrains (64x64 km) with 4096x4096 heightmap resolution in about a 
+<p>Current implementation makes it possible to render huge terrains (64x64 km) with 4096x4096 heightmap resolution in about a
 millisecond on average low-to-middle-end GPU.</p>
 <h2 id="limitations-and-known-issues"><a class="header" href="#limitations-and-known-issues">Limitations and known issues</a></h2>
-<p>There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create 
+<p>There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create
 ledges, use separate meshes to imitate this. See <a href="https://github.com/FyroxEngine/Fyrox/issues/351">tracking issue</a> for
 more info.</p>
 

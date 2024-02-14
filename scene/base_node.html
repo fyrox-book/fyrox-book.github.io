@@ -189,7 +189,7 @@
 <p>Base node is a scene node that stores hierarchical information (a handle to the parent node and a set of handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it
 is used as a base node for every other scene node (via composition).</p>
-<p>It has no graphical information, so it is invisible all the time, but it is useful as a &quot;container&quot; for children
+<p>It has no graphical information, so it is invisible all the time, but it is useful as a "container" for children
 nodes.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>Use the <code>PivotBuilder</code> to create an instance of the Pivot node (remember <code>Base</code> node itself is used only to build other
@@ -223,7 +223,7 @@ to build a hierarchy of any complexity:</p>
 </span><span class="boring">}</span></code></pre></pre>
 <p>Note that when we're building a <code>Camera</code> instance, we're passing a new instance of <code>BaseBuilder</code> to it, this
 instance can also be used to set some properties and a set of children nodes.</p>
-<p>The &quot;fluent syntax&quot; is not mandatory to use, the above code snipped could be rewritten like this:</p>
+<p>The "fluent syntax" is not mandatory to use, the above code snipped could be rewritten like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate fyrox;
@@ -282,13 +282,13 @@ to move a node at specific location you could use this:</p>
 <p>See more info about transformations <a href="./transform.html">here</a>.</p>
 <h2 id="visibility"><a class="header" href="#visibility">Visibility</a></h2>
 <p><code>Base</code> node stores all info about local visibility and global visibility (with parent's chain visibility included).
-Changing node's visibility could be useful if you want to improve performance by hiding distant objects (however it 
+Changing node's visibility could be useful if you want to improve performance by hiding distant objects (however it
 strongly advised to use level-of-detail for this) or to hide some objects in your scene. There are three main methods
 to set or fetch visibility:</p>
 <ul>
 <li><code>set_visibility</code> - sets local visibility for a node.</li>
 <li><code>visibility</code> - returns current local visibility of a node.</li>
-<li><code>global_visibility</code> - returns combined visibility of a node. It includes visibility of every parent node in the 
+<li><code>global_visibility</code> - returns combined visibility of a node. It includes visibility of every parent node in the
 hierarchy, so if you have a parent node with some children nodes and set parent's visibility to <code>false</code>, global visibility
 of children nodes will be <code>false</code> too, even if local visibility is <code>true</code>. This is useful technique for hiding complex
 objects with lots of children nodes.</li>

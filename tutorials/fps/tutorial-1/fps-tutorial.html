@@ -186,9 +186,9 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="first-person-shooter-tutorial"><a class="header" href="#first-person-shooter-tutorial">First-Person Shooter Tutorial</a></h1>
-<p>In this tutorial we'll create a first-person shooter game. </p>
-<p>Before we begin, make sure you know how to create projects and run the game and the editor. Read 
-<a href="../../../beginning/scripting.html">this chapter</a> first and let's start by creating a new project by executing the following 
+<p>In this tutorial we'll create a first-person shooter game.</p>
+<p>Before we begin, make sure you know how to create projects and run the game and the editor. Read
+<a href="../../../beginning/scripting.html">this chapter</a> first and let's start by creating a new project by executing the following
 command in some directory:</p>
 <pre><code class="language-shell">fyrox-template init --name=fps --style=3d
 </code></pre>
@@ -208,31 +208,31 @@ in this tutorial.</p>
     └───src
 </code></pre>
 <h2 id="player-prefab"><a class="header" href="#player-prefab">Player Prefab</a></h2>
-<p>Let's start by creating a <a href="../../../scene/prefab.html">prefab</a> for the player. First-person shooters uses quite simple 
-layout for characters - usually it is just a physical capsule with a camera on top of it. Run the editor using the 
+<p>Let's start by creating a <a href="../../../scene/prefab.html">prefab</a> for the player. First-person shooters uses quite simple
+layout for characters - usually it is just a physical capsule with a camera on top of it. Run the editor using the
 following command:</p>
 <pre><code class="language-shell">cargo run --package editor
 </code></pre>
 <p><img src="editor_1.png" alt="editor startup" /></p>
 <p>By default, <code>scene.rgs</code> scene is loaded, and it is our main scene, but for our player prefab we need a separate scene.
-Go to <code>File</code> menu and click <code>New Scene</code>. Save the scene in <code>data/player</code> folder as <code>player.rgs</code>. </p>
-<p>Great, now we ready to create the prefab. Right-click on the <code>__ROOT__</code> node in the World Viewer and find <code>Replace Node</code> 
-and select <code>Physics -&gt; Rigid Body</code> there. By doing this, we've replaced the root node of the scene to be a rigid body. 
+Go to <code>File</code> menu and click <code>New Scene</code>. Save the scene in <code>data/player</code> folder as <code>player.rgs</code>.</p>
+<p>Great, now we ready to create the prefab. Right-click on the <code>__ROOT__</code> node in the World Viewer and find <code>Replace Node</code>
+and select <code>Physics -&gt; Rigid Body</code> there. By doing this, we've replaced the root node of the scene to be a rigid body.
 This is needed, because our player will be moving.</p>
 <p><img src="editor_2.png" alt="replace node" /></p>
 <p>Select rigid body and set the <code>X/Y/Z Rotation Locked</code> properties to <code>true</code>, <code>Can Sleep</code> - to <code>false</code>. The first three
 properties prevents the rigid body from any undesired rotations and the last one prevents the rigid body to be excluded
 from simulation.s</p>
 <p><img src="rigid_body_props.png" alt="rigid body props" /></p>
-<p>As you may notice, the editor added a small &quot;warning&quot; icon near the root node - it tells us that the rigid body does not
+<p>As you may notice, the editor added a small "warning" icon near the root node - it tells us that the rigid body does not
 have a collider. Let's fix that:</p>
 <p><img src="editor_3.png" alt="collider node" /></p>
 <p>By default, the editor creates a cube collider, but we need a capsule. Let's change that in the Inspector:</p>
 <p><img src="editor_4.png" alt="change collider type" /></p>
 <p>Now let's change the size of the collider, because default values are disproportional for a humanoid character:</p>
 <p><img src="editor_5.png" alt="collider properties" /></p>
-<p>This way the capsule is thinner and taller, which roughly corresponds to a person of 1.8m tall. Now we need to add a 
-<a href="../../../scene/camera_node.html">camera</a>, because without it, we couldn't see anything. </p>
+<p>This way the capsule is thinner and taller, which roughly corresponds to a person of 1.8m tall. Now we need to add a
+<a href="../../../scene/camera_node.html">camera</a>, because without it, we couldn't see anything.</p>
 <p><img src="editor_6.png" alt="camera" /></p>
 <p>Put the camera at the top of the capsule like so:</p>
 <p><img src="editor_7.png" alt="camera position" /></p>
@@ -265,7 +265,7 @@ lines to the <code>register</code> method:</p>
 </span>        context
             .serialization_context
             .script_constructors
-            .add::&lt;Player&gt;(&quot;Player&quot;);
+            .add::&lt;Player&gt;("Player");
 <span class="boring">}</span></code></pre></pre>
 <p>Great, now the new script is registered, and we can start writing a basic character controller. Let's start by input
 handling. At first, add the following fields to the <code>Player</code> struct:</p>
@@ -296,7 +296,7 @@ handling. At first, add the following fields to the <code>Player</code> struct:<
     pitch: f32,
 <span class="boring">}</span></code></pre></pre>
 <p>The first four fields are responsible for movement in four directions and the last two responsible for camera rotation.
-The next thing that we need to do is properly react to incoming OS events to modify the variables that we've just 
+The next thing that we need to do is properly react to incoming OS events to modify the variables that we've just
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -417,16 +417,16 @@ the <code>on_update</code>:</p>
             );
         }
 <span class="boring">}</span></code></pre></pre>
-<p>This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using 
-its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them 
-using simple multiplication. </p>
+<p>This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using
+its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them
+using simple multiplication.</p>
 <p>Our script is almost ready, now all we need to do is to assign it to the player's prefab. Open the <code>player.rgs</code> prefab
 in the editor, select <code>Player</code> node and assign the Player script to it. Do not forget to set Camera handle (by clicking
 on the small green button and selecting Camera from the list):</p>
 <p><img src="script_instance.png" alt="script instance" /></p>
 <p>Great, now we're done with the player movement. We can test it our main scene, but at first let's create a simple level.
 Open <code>scene.rgs</code> and create a rigid body with a collider. Add a cube as a child of the rigid body and squash it to some
-floor-like shape. Select the collider and set it's kind to <code>Trimesh</code>, add a geometry source there and point it to the 
+floor-like shape. Select the collider and set it's kind to <code>Trimesh</code>, add a geometry source there and point it to the
 floor. Select the rigid body and set its type to <code>Static</code>. You can also add some texture to the cube to make it look
 much better.</p>
 <p>Now we can instantiate our player prefab in the scene. To do that, find the <code>player.rgs</code> in the Asset Browser, click
@@ -437,9 +437,9 @@ at the cursor position like so:</p>
 <p><img src="running_game_1.png" alt="running game" /></p>
 <p>It should be possible to walk using WSAD keys and rotate the camera using mouse.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this tutorial we've created a basic character controller, that allows you to move using keyboard and look around 
-using mouse. This tutorial showed the main development strategies used in the engine, that should help you to build your 
-own game. In the next tutorial we'll add weapons. </p>
+<p>In this tutorial we've created a basic character controller, that allows you to move using keyboard and look around
+using mouse. This tutorial showed the main development strategies used in the engine, that should help you to build your
+own game. In the next tutorial we'll add weapons.</p>
 
                     </main>
 

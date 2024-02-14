@@ -205,7 +205,7 @@ alignment, and so on.</p>
 <span class="boring">}</span></code></pre></pre>
 <h2 id="text-alignment-and-word-wrapping"><a class="header" href="#text-alignment-and-word-wrapping">Text alignment and word wrapping</a></h2>
 <p>There are various text alignment options for both vertical and horizontal axes. Typical alignment values are:
-<code>Left</code>, <code>Center</code>, <code>Right</code> for horizontal axis, and <code>Top</code>, <code>Center</code>, <code>Bottom</code> for vertical axis. An instance of 
+<code>Left</code>, <code>Center</code>, <code>Right</code> for horizontal axis, and <code>Top</code>, <code>Center</code>, <code>Bottom</code> for vertical axis. An instance of
 centered text could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -245,7 +245,7 @@ centered text could be created like so:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="background"><a class="header" href="#background">Background</a></h2>
-<p>If you need to have a text with some background, you should use <a href="./border.html">Border</a> widget as a parent widget of your 
+<p>If you need to have a text with some background, you should use <a href="./border.html">Border</a> widget as a parent widget of your
 text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <code>Text</code> widget!</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -310,7 +310,7 @@ fn load_font() -&gt; SharedFont {
 
     // Normally `block_on` should be avoided.
     let font = block_on(Font::from_file(
-        &quot;path/to/your/font.ttf&quot;,
+        "path/to/your/font.ttf",
         24.0,
         character_set,
     ))
@@ -329,7 +329,7 @@ fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNod
 <p>Please refer to <a href="font.html">Font</a> chapter to learn more about fonts.</p>
 <h3 id="font-size"><a class="header" href="#font-size">Font size</a></h3>
 <p>There is no way to change font size without changing the entire font used by Text, it is known issue and there is
-<a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Check <a href="font.html">Font</a> chapter to learn how 
+<a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Check <a href="font.html">Font</a> chapter to learn how
 to create fonts.</p>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
 <p>Text widget supports shadows effect to add contrast to your text, which could be useful to make text readable independent
@@ -358,16 +358,16 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
-<p>Text widget can accept the following list of messages at runtime (respective constructors are name with small letter - 
+<p>Text widget can accept the following list of messages at runtime (respective constructors are name with small letter -
 <code>TextMessage::Text -&gt; TextMessage::text(widget_handle, direction, text)</code>):</p>
 <ul>
 <li><code>TextMessage::Text</code> - sets new text for a <code>Text</code> widget.</li>
-<li><code>TextMessage::Wrap</code> - sets new <a href="text.html#text-alignment-and-word-wrapping">wrapping mode</a>. </li>
-<li><code>TextMessage::Font</code> - sets new <a href="text.html#fonts-and-colors">font</a> </li>
-<li><code>TextMessage::VerticalAlignment</code> and <code>TextMessage::HorizontalAlignment</code> sets 
+<li><code>TextMessage::Wrap</code> - sets new <a href="text.html#text-alignment-and-word-wrapping">wrapping mode</a>.</li>
+<li><code>TextMessage::Font</code> - sets new <a href="text.html#fonts-and-colors">font</a></li>
+<li><code>TextMessage::VerticalAlignment</code> and <code>TextMessage::HorizontalAlignment</code> sets
 <a href="text.html#text-alignment-and-word-wrapping">vertical and horizontal</a> text alignment respectively.</li>
 <li><code>TextMessage::Shadow</code> - enables or disables <a href="text.html#shadows">shadow casting</a></li>
-<li><code>TextMessage::ShadowDilation</code> - sets &quot;thickness&quot; of the shadows under the tex.</li>
+<li><code>TextMessage::ShadowDilation</code> - sets "thickness" of the shadows under the tex.</li>
 <li><code>TextMessage::ShadowBrush</code> - sets shadow brush (allows you to change color and even make shadow with color gradients).</li>
 <li><code>TextMessage::ShadowOffset</code> - sets offset of the shadows.</li>
 </ul>
@@ -391,7 +391,7 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
     ))
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Please keep in mind, that like any other situation when you &quot;changing&quot; something via messages, you should remember
+<p>Please keep in mind, that like any other situation when you "changing" something via messages, you should remember
 that the change is <strong>not</strong> immediate. The change will be applied on <code>ui.poll_message(..)</code> call somewhere in your
 code (or will be done automatically if you're using scripts or Framework (obsolete)).</p>
 

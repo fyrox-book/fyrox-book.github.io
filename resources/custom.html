@@ -187,13 +187,13 @@
                     <main>
                         <h1 id="custom-resources"><a class="header" href="#custom-resources">Custom Resources</a></h1>
 <p>In Fyrox, you can create your own, custom resource type that can be embedded in the standard resource management pipeline.
-It could be useful to access specific data using engine's resource manager. Custom resources has a few major advantages 
+It could be useful to access specific data using engine's resource manager. Custom resources has a few major advantages
 over manual resource management via direct files access:</p>
 <ol>
 <li>Since Fyrox resource system is asynchronous, your resource can be loaded in separate worker thread which speeds up
 loading (since it may run on a separate CPU core).</li>
 <li>You can access your resources from the Asset Browser and assign their handles to scripts directly from the editor.</li>
-<li>File access for resource management has an abstraction, that unifies the access over all supported platforms. This 
+<li>File access for resource management has an abstraction, that unifies the access over all supported platforms. This
 means that you don't need to use <code>fetch</code> API directly, if you're targeting WebAssembly platform, or use <code>AssetManager</code>
 on Android.</li>
 </ol>
@@ -203,7 +203,7 @@ on Android.</li>
 <li>Add a custom resource loader, that will be used by the resource manager to load your custom resource.</li>
 <li>Register the resource loader in the resource manager.</li>
 </ol>
-<p>See the code snippet in the next section as a guide. </p>
+<p>See the code snippet in the next section as a guide.</p>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>Custom resource is just an ordinary struct with some data. It must implement <code>Debug</code>, <code>Reflect</code>, <code>Visit</code>, <code>ResourceData</code>
 traits. Also, it must contain at least path to external file with the content. Here's the simplest custom resource, that
@@ -243,7 +243,7 @@ impl TypeUuidProvider for CustomResource {
     // Every resource must provide a unique identifier, that is used for dynamic type
     // casting, serialization, etc.
     fn type_uuid() -&gt; Uuid {
-        uuid!(&quot;15551157-651b-4f1d-a5fb-6874fbfe8637&quot;)
+        uuid!("15551157-651b-4f1d-a5fb-6874fbfe8637")
     }
 }
 
@@ -280,7 +280,7 @@ impl ResourceLoader for CustomResourceLoader {
         // An array of extensitions, supported by this loader. There could be any number of extensions
         // since sometimes multiple extensions map to a single resource (for instance, jpg, png, bmp, are
         // all images).
-        &amp;[&quot;my_resource&quot;]
+        &amp;["my_resource"]
     }
 
     fn data_type_uuid(&amp;self) -&gt; Uuid {
@@ -316,7 +316,7 @@ impl ResourceLoader for CustomResourceLoader {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that you must provide <strong>unique</strong> UUID for every resource type that you're creating. Otherwise, using
-existing id multiple times will cause incorrect serialization and type casting. The next step is to register the new 
+existing id multiple times will cause incorrect serialization and type casting. The next step is to register the new
 resource in the resource manager. This can be done by adding the following code to the <code>register</code> method for
 <code>impl PluginConstructor for GameConstructor</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -375,11 +375,11 @@ resource in the resource manager. This can be done by adding the following code 
 </span><span class="boring">    }
 </span>}
 <span class="boring">}</span></code></pre></pre>
-<p>After doing so, any attempt to load a resource with <code>my_resource</code> extension will call the <code>load</code> method of your 
+<p>After doing so, any attempt to load a resource with <code>my_resource</code> extension will call the <code>load</code> method of your
 resource loader.</p>
 <h2 id="editor-support"><a class="header" href="#editor-support">Editor Support</a></h2>
 <p>There's one more step before your custom resource is fully usable - you need to register a property editor for it, so
-any fields in your scripts that has <code>my_resource: Option&lt;Resource&lt;CustomResource&gt;&gt;</code> fields can be editable in the editor. 
+any fields in your scripts that has <code>my_resource: Option&lt;Resource&lt;CustomResource&gt;&gt;</code> fields can be editable in the editor.
 Otherwise, you'll see an error message in the Inspector instead of resource selector field. To register a property editor,
 add the following lines to <code>editor/src/main.rs</code> file, somewhere after the editor instance is created:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail no_run"><span class="boring">#![allow(unused)]

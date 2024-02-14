@@ -186,8 +186,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="animation-blending-state-machine-absm-editor"><a class="header" href="#animation-blending-state-machine-absm-editor">Animation Blending State Machine (ABSM) Editor</a></h1>
-<p>While it is possible to create and manage animation blending and state manually from code, it quickly becomes too 
-annoying and hardly manageable. To help you create and manage blending machines in easy way, the engine offers 
+<p>While it is possible to create and manage animation blending and state manually from code, it quickly becomes too
+annoying and hardly manageable. To help you create and manage blending machines in easy way, the engine offers
 an ABSM Editor tool. This chapter is an overview of the editor, it is quite complex, but the guide should help you
 to figure out which part is made for what. Next chapter will help you to create your first animation blending state
 machine.</p>
@@ -196,11 +196,11 @@ machine.</p>
 <ol>
 <li><code>Toolbar</code> - contains a set of tools to edit animation layers and enable/disable preview mode. See <a href="#toolbar">Toolbar</a>
 section for more info.</li>
-<li><code>Parameters</code> - allows you to edit various variables that are responsible for transitions, weight parameters for 
+<li><code>Parameters</code> - allows you to edit various variables that are responsible for transitions, weight parameters for
 blending, etc. See <a href="./absm_parameters.png">Parameters</a> section for more info.</li>
 <li><code>State Graph</code> - allows you to create, delete, edit states and transition between them. See <a href="#state-graph">State Graph</a>
 section for more info.</li>
-<li><code>State Viewer</code> - allows you to edit pose source for a state. Pose source can be represented either by a single 
+<li><code>State Viewer</code> - allows you to edit pose source for a state. Pose source can be represented either by a single
 node that plays an animation, or a series of play animation nodes connected to blending nodes (which can be connected
 to other blending nodes, etc.). See <a href="#state-viewer">State Viewer</a> section for more info.</li>
 </ol>
@@ -221,7 +221,7 @@ with the same name, but it strongly advised to set unique names here.</li>
 <li><code>Remove Current Layer</code> - removes currently selected layer. You can delete all layers, but in this case your ABSM won't
 have any effect.</li>
 <li><code>Layer Selector</code> - allows you to select a layer for editing, default selection is none.</li>
-<li><code>Layer Mask</code> - opens a <code>Layer Mask Editor</code> and helps you to edit the layer mask of the current layer. See 
+<li><code>Layer Mask</code> - opens a <code>Layer Mask Editor</code> and helps you to edit the layer mask of the current layer. See
 <a href="#layer-mask">Layer Mask</a> section for more info.</li>
 </ol>
 <h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
@@ -242,11 +242,11 @@ of the parameter and if it is <code>true</code> transition starts.</li>
 <li><code>Parameter Value</code> - allows you to set parameter value.</li>
 </ol>
 <h2 id="state-graph"><a class="header" href="#state-graph">State Graph</a></h2>
-<p>State Graph allows you to create states and transitions between them. </p>
+<p>State Graph allows you to create states and transitions between them.</p>
 <p><img src="./absm_state_graph.png" alt="state graph" /></p>
 <ol>
 <li><code>State</code> - state is final animation for a set of scene nodes, only one state can be active at a time.</li>
-<li><code>Transition</code> - is an <em>ordered</em> connection between two states, it defines how much time it needed to perform 
+<li><code>Transition</code> - is an <em>ordered</em> connection between two states, it defines how much time it needed to perform
 blending of two states.</li>
 <li><code>Root State</code> - is an entry state of the current layer.</li>
 </ol>
@@ -281,7 +281,7 @@ blending of two states.</li>
 <li><code>Desc</code> - handle of a destination state.</li>
 <li><code>Rule</code> - a name of <code>Rule</code> type parameter that defines whether the transition can be activated or not.</li>
 <li><code>Invert Rule</code> - defines whether to invert the value of <code>Rule</code> or not.</li>
-<li><code>Blend Factor</code> - defines a percentage (in <code>0..1</code> range) of how much transition was active. </li>
+<li><code>Blend Factor</code> - defines a percentage (in <code>0..1</code> range) of how much transition was active.</li>
 </ul>
 <h2 id="state-viewer"><a class="header" href="#state-viewer">State Viewer</a></h2>
 <p>State Viewer allows you to edit contents of states. You can create animation blending chains of any complexity, the
@@ -289,17 +289,17 @@ simplest content of a state is just a single <code>Play Animation</code> node. C
 blending nodes:</p>
 <ul>
 <li><code>Play Animation</code> - takes animation pose directly from specified animation, does nothing to it.</li>
-<li><code>Blend Animations</code> - takes multiple animation poses from respective animations and blends them together with 
+<li><code>Blend Animations</code> - takes multiple animation poses from respective animations and blends them together with
 respective blend weights.</li>
-<li><code>Blend Animations By Index</code> - takes multiple animation poses from respective animations and switches between them 
-with &quot;smooth&quot; transition using an index parameter.</li>
+<li><code>Blend Animations By Index</code> - takes multiple animation poses from respective animations and switches between them
+with "smooth" transition using an index parameter.</li>
 </ul>
 <p><img src="./absm_state_viewer.png" alt="state viewer" /></p>
 <ol>
 <li><code>Node</code> - is a source of animation for blending.</li>
 <li><code>Connection</code> - defines how nodes are connected to each other. To create a new connection, click on a small dot on a
-node, hold the button and start dragging to a dot on some other node. </li>
-<li><code>Root Node</code> - root node is marked green; root node is a final source of animation for the parent state. </li>
+node, hold the button and start dragging to a dot on some other node.</li>
+<li><code>Root Node</code> - root node is marked green; root node is a final source of animation for the parent state.</li>
 </ol>
 <h3 id="play-animation-properties"><a class="header" href="#play-animation-properties"><code>Play Animation</code> Properties</a></h3>
 <p>Select a <code>Play Animation</code> node to edit the following properties:</p>
@@ -322,7 +322,7 @@ to connect some nodes to the new input poses.
 </ul>
 <h3 id="blend-animations-by-index-properties"><a class="header" href="#blend-animations-by-index-properties"><code>Blend Animations By Index</code> Properties</a></h3>
 <p>Select a <code>Blend Animations By Index</code> node to edit the following properties:</p>
-<p><img src="./absm_blend_animations_by_index_properties.png" alt="blend animations by index properties" /> </p>
+<p><img src="./absm_blend_animations_by_index_properties.png" alt="blend animations by index properties" /></p>
 <ul>
 <li><code>Position</code> - is a location of the node on the canvas.</li>
 <li><code>Index Parameter</code> - a name of an indexing parameter (must be <code>Index</code> type).</li>
@@ -343,7 +343,7 @@ connect some nodes to the new input poses.
 <p>Every node has a context menu that can be shown by a right-click on a connection.</p>
 <p><img src="./absm_node_context_menu.png" alt="node context menu" /></p>
 <ul>
-<li><code>Set As Root</code> - sets the node as the final pose source of the parent state. </li>
+<li><code>Set As Root</code> - sets the node as the final pose source of the parent state.</li>
 <li><code>Remove</code> - removes the node from the state.</li>
 </ul>
 <h2 id="layer-mask"><a class="header" href="#layer-mask">Layer Mask</a></h2>
@@ -354,8 +354,8 @@ of the window allows you to search for a particular scene node. To save edited l
 <h2 id="preview-mode"><a class="header" href="#preview-mode">Preview Mode</a></h2>
 <p>Preview mode turns on the animation blending state machine and its animation player and allows you to see the result
 of the work of the machine. Any significant changes in the scene automatically disables the preview mode and any
-changes done by the machine is discarded. While the preview mode is active, you can freely change the values of the 
-parameters to see how the machine will react to this. This helps you to debug your state machine, it is especially 
+changes done by the machine is discarded. While the preview mode is active, you can freely change the values of the
+parameters to see how the machine will react to this. This helps you to debug your state machine, it is especially
 useful for complex state machines with lots of layers. Here's how the preview mode works:</p>
 <p><img src="./absm.gif" alt="absm" /></p>
 

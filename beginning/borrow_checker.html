@@ -186,20 +186,20 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="borrow-checker"><a class="header" href="#borrow-checker">Borrow Checker</a></h1>
-<p>Rust has a <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html">famous borrow checker</a>, that became a 
-sort of horror story for newcomers. It usually treated like an enemy, that prevents your from writing anything 
+<p>Rust has a <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html">famous borrow checker</a>, that became a
+sort of horror story for newcomers. It usually treated like an enemy, that prevents your from writing anything
 useful as you may get used in other languages. In fact, it is a very useful part of Rust that proves correctness
-of your program and does not let you doing nasty things like memory corruption, data races, etc. This chapter 
-explains how Fyrox solves the most common borrowing issues and makes game development as easy as in any other 
+of your program and does not let you doing nasty things like memory corruption, data races, etc. This chapter
+explains how Fyrox solves the most common borrowing issues and makes game development as easy as in any other
 game engine.</p>
 <h2 id="multiple-borrowing"><a class="header" href="#multiple-borrowing">Multiple Borrowing</a></h2>
 <p>When writing a script logic there is often a need to do a multiple borrowing of some data, usually it is other scene
-nodes. In normal circumstances you can borrow each node one-by-one, but in other cases you can't do an action 
+nodes. In normal circumstances you can borrow each node one-by-one, but in other cases you can't do an action
 without borrowing two or more nodes simultaneously. In this case you can use multi-borrowing:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb15ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb15ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct MyScript {
     some_node: Handle&lt;Node&gt;,
@@ -231,17 +231,17 @@ are enforced at runtime. They're the same as standard Rust borrowing rules:</p>
 <li>You can have infinite number of immutable references to the same object.</li>
 <li>You can have only one mutable reference to the same object.</li>
 </ol>
-<p>Multi-borrow context provides detailed error messages for cases when borrowing has failed. For example, itt will 
+<p>Multi-borrow context provides detailed error messages for cases when borrowing has failed. For example, itt will
 tell you if you're trying to mutably borrow an object, that was already borrowed as immutable (and vice versa).
 It also provides handle validation and will tell you what's wrong with it. It could be either invalid index of it,
 or the generation. The latter means that the object at the handle was changed and the handle is invalid.</p>
-<p>The previous example looks kinda synthetic and does not show the real-world code that could lead to borrowing 
-issues. Let's fix this. Imagine that you're making a shooter, and you have bots, that can follow and attack 
-targets. Then the code could look like this: </p>
+<p>The previous example looks kinda synthetic and does not show the real-world code that could lead to borrowing
+issues. Let's fix this. Imagine that you're making a shooter, and you have bots, that can follow and attack
+targets. Then the code could look like this:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb15ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb15ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct Bot {
     target: Handle&lt;Node&gt;,
@@ -273,7 +273,7 @@ impl ScriptTrait for Bot {
                     .unwrap();
                 absm.machine_mut()
                     .get_value_mut_silent()
-                    .set_parameter(&quot;Attack&quot;, Parameter::Rule(close_enough));
+                    .set_parameter("Attack", Parameter::Rule(close_enough));
             }
             Err(err) =&gt; {
                 // Optionally, you can print the actual reason why borrowing wasn't successful.
@@ -284,9 +284,9 @@ impl ScriptTrait for Bot {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see, for this code to compile we need to borrow at least two nodes simultaneously: the node with <code>Bot</code>
-script and the <code>target</code> node. This is because we're calculating distance between the two nodes to switch 
+script and the <code>target</code> node. This is because we're calculating distance between the two nodes to switch
 animations accordingly (attack if the target is close enough).</p>
-<p>As pretty much any approach, this one is not ideal and comes with its own pros and cons. The pros are quite 
+<p>As pretty much any approach, this one is not ideal and comes with its own pros and cons. The pros are quite
 simple:</p>
 <ul>
 <li>No compilation errors - sometimes Rust is too strict about borrowing rules, and valid code not pass its
@@ -295,14 +295,14 @@ checks.</li>
 </ul>
 <p>The cons are:</p>
 <ul>
-<li>Multi-borrowing is slightly slower (~1-4% depending on your use case) - this happens because the 
+<li>Multi-borrowing is slightly slower (~1-4% depending on your use case) - this happens because the
 multi-borrowing context checks borrowing rules at runtime.</li>
 </ul>
 <h2 id="message-passing"><a class="header" href="#message-passing">Message Passing</a></h2>
-<p>Sometimes the code becomes so convoluted, so it is simply hard to maintain and understand what it is doing. 
+<p>Sometimes the code becomes so convoluted, so it is simply hard to maintain and understand what it is doing.
 This happens when code coupling get to a certain point, which requires very broad context for the code to
-be executed. For example, if bots in your game have weapons it is so tempting to just borrow the weapon 
-and call something like <code>weapon.shoot(..)</code>. When your weapon is simple then it might work fine, however when 
+be executed. For example, if bots in your game have weapons it is so tempting to just borrow the weapon
+and call something like <code>weapon.shoot(..)</code>. When your weapon is simple then it might work fine, however when
 your game gets bigger and weapons get new features simple <code>weapon.shoot(..)</code> could be not enough. It could be
 because <code>shoot</code> method get more and more arguments or by some other reason. This is quite common case and in
 general when your code become tightly coupled it becomes hard to maintain it and what's more important - it
@@ -311,7 +311,7 @@ this code:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb15ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb15ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct Weapon {
     bullets: u32,
@@ -356,7 +356,7 @@ impl Weapon {
 impl ScriptTrait for Weapon {}
 
 #[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb15ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb15ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct Bot {
     weapon: Handle&lt;Node&gt;,
@@ -384,8 +384,8 @@ impl ScriptTrait for Bot {
 <span class="boring">}</span></code></pre></pre>
 <p>This is probably one of the typical implementations of shooting in games - you cast a ray from the weapon
 and if it hits a bot, you're applying some damage to it. In this case bots can also shoot, and this is where
-borrow checker again gets in our way. If you try to uncomment the 
-<code>// weapon.shoot(ctx.handle, &amp;mut ctx.scene.graph);</code> line you'll get a compilation error, that tells you that 
+borrow checker again gets in our way. If you try to uncomment the
+<code>// weapon.shoot(ctx.handle, &amp;mut ctx.scene.graph);</code> line you'll get a compilation error, that tells you that
 <code>ctx.scene.graph</code> is already borrowed. It seems that we've stuck, and we need to somehow fix this issue.
 We can't use multi-borrowing in this case, because it still enforces borrowing rules and instead of compilation
 error, you'll runtime error.</p>
@@ -395,7 +395,7 @@ Here's how it will look:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb15ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb15ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct Weapon {
     bullets: u32,
@@ -429,7 +429,7 @@ impl ScriptTrait for Weapon {
 }
 
 #[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;a9fb15ad-ab56-4be6-8a06-73e73d8b1f49&quot;)]
+#[type_uuid(id = "a9fb15ad-ab56-4be6-8a06-73e73d8b1f49")]
 #[visit(optional)]
 struct Bot {
     weapon: Handle&lt;Node&gt;,
@@ -450,18 +450,18 @@ impl ScriptTrait for Bot {
 perform the actual shooting without any borrowing issues. The bot now just sends the <code>ShootMessage</code> instead of
 borrowing the weapon trying to call <code>shoot</code> directly. The messages do not add any one-frame delay as you might
 think, they're processed in the same frame so there's no one-or-more frames desynchronization.</p>
-<p>This approach with messages has its own pros and cons. The pros are quite significant: </p>
+<p>This approach with messages has its own pros and cons. The pros are quite significant:</p>
 <ul>
 <li>Decoupling - coupling is now very loose and done mostly on message side.</li>
 <li>Easy to refactor - since the coupling is loose, you can refactor the internals with low chance of breaking
 existing code, that could otherwise be done because of intertwined and convoluted code.</li>
 <li>No borrowing issues - the method calls are done in different places and there's no lifetime collisions.</li>
-<li>Easy to write unit and integration tests - this comes from loose coupling. </li>
+<li>Easy to write unit and integration tests - this comes from loose coupling.</li>
 </ul>
-<p>The cons are the following: </p>
+<p>The cons are the following:</p>
 <ul>
-<li>Message passing is slightly slower than direct method calls (~1-7% depending on your use case) - you should 
-keep message granularity at a reasonable level. Do not use message passing for tiny changes, it will most likely make 
+<li>Message passing is slightly slower than direct method calls (~1-7% depending on your use case) - you should
+keep message granularity at a reasonable level. Do not use message passing for tiny changes, it will most likely make
 your game slower.</li>
 </ul>
 

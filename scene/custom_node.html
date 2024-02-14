@@ -241,7 +241,7 @@ impl NodeTrait for CustomNode {
     fn id(&amp;self) -&gt; Uuid {
         // Provide unique id for serialization needs. It must be unique, use https://www.uuidgenerator.net/
         // to generate one.
-        uuid!(&quot;f592e7f7-5e34-4043-9226-407c7457bb48&quot;)
+        uuid!("f592e7f7-5e34-4043-9226-407c7457bb48")
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -260,12 +260,12 @@ impl NodeTrait for CustomNode {
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
-<p>Scene nodes have no access to outer context, this means that you cannot reference any data that is located outside 
+<p>Scene nodes have no access to outer context, this means that you cannot reference any data that is located outside
 graph easily. You still can define a global variable that <strong>will</strong> be accessible, but it is considered as a hack and
 should be avoided. If you want to add custom logic to scene nodes, then you should use scripts instead. Custom nodes
-are intended for very specific use cases, such as adding &quot;data sources&quot; for renderer, etc.</p>
+are intended for very specific use cases, such as adding "data sources" for renderer, etc.</p>
 <h2 id="editor-support"><a class="header" href="#editor-support">Editor support</a></h2>
-<p>For now, you cannot create custom nodes from the editor. This will be available in future versions of the engine; when 
+<p>For now, you cannot create custom nodes from the editor. This will be available in future versions of the engine; when
 editor plugins will be supported.</p>
 
                     </main>

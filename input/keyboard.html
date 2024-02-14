@@ -192,7 +192,7 @@ which the script was assigned, should move in a certain direction. This could be
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;abbad54c-e267-4d7e-a3cd-e125a7e87ff0&quot;)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
 #[visit(optional)]
 pub struct Player {
     move_left: bool,

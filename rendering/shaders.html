@@ -187,21 +187,21 @@
                     <main>
                         <h1 id="shaders"><a class="header" href="#shaders">Shaders</a></h1>
 <p>Shader is a set of programs that run directly on graphics adapter. Each program from the set is called
-<em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines &quot;where&quot; to draw an object.
-&quot;where&quot; means that you can set up your own render pass and the renderer will use the sub-shader with 
+<em>sub-shader</em>. Sub-shaders linked with render pass, each render pass defines "where" to draw an object.
+"where" means that you can set up your own render pass and the renderer will use the sub-shader with
 your render pass. For the ease of use there are a number of <a href="#predefined-render-passes">predefined render passes</a>.</p>
-<p>Shaders have properties of various types that can be used together with materials to draw an object. </p>
+<p>Shaders have properties of various types that can be used together with materials to draw an object.</p>
 <h2 id="shaders-language"><a class="header" href="#shaders-language">Shaders language</a></h2>
-<p>The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the 
-internet, so there is no need to &quot;re-post&quot; the well documented info again.</p>
+<p>The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the
+internet, so there is no need to "re-post" the well documented info again.</p>
 <p>There are very few differences:</p>
 <ol>
-<li>No need to define a version of the shader. Every shader source will be pre-processed, and it will 
+<li>No need to define a version of the shader. Every shader source will be pre-processed, and it will
 get correct version automatically. Preprocessing is needed because the same shader could run on OpenGL
 and WebGL (OpenGL ES) which have some differences.</li>
-<li>There is a &quot;standard&quot; library of useful methods which is automatically included in every shader source
+<li>There is a "standard" library of useful methods which is automatically included in every shader source
 at preprocessing stage. The library source could be found
-<a href="https://github.com/FyroxEngine/Fyrox/blob/master/src/renderer/framework/shaders/shared.glsl">here</a>. It 
+<a href="https://github.com/FyroxEngine/Fyrox/blob/master/src/renderer/framework/shaders/shared.glsl">here</a>. It
 is well documented, and you may find some functions useful for you job.</li>
 </ol>
 <h2 id="structure"><a class="header" href="#structure">Structure</a></h2>
@@ -212,7 +212,7 @@ is well documented, and you may find some functions useful for you job.</li>
         (
             // Each property must have a name. This name must match with respective
             // uniforms! That's is the whole point of having properties.
-            name: &quot;diffuseTexture&quot;,
+            name: "diffuseTexture",
             // Value has limited set of possible variants.
             value: Sampler(default: None, fallback: White)
         )
@@ -222,7 +222,7 @@ is well documented, and you may find some functions useful for you job.</li>
         (
             // Name must match with the name of either standard render pass (see below) or
             // one of your passes.
-            name: &quot;Forward&quot;,
+            name: "Forward",
             // A set of parameters that regulate renderer pipeline state.
             // This is mandatory field of each render pass.
             draw_parameters: DrawParameters(
@@ -256,7 +256,7 @@ is well documented, and you may find some functions useful for you job.</li>
             ),
             // Vertex shader code.
             vertex_shader:
-                r#&quot;
+                r#"
                 layout(location = 0) in vec3 vertexPosition;
                 layout(location = 1) in vec2 vertexTexCoord;
                 uniform mat4 fyrox_worldViewProjection;
@@ -266,10 +266,10 @@ is well documented, and you may find some functions useful for you job.</li>
                     texCoord = vertexTexCoord;
                     gl_Position = fyrox_worldViewProjection * vertexPosition;
                 }
-                &quot;#;
+                "#;
             // Pixel shader code.
             pixel_shader:
-                r#&quot;
+                r#"
                 // Note that the name of this uniform match the name of the property up above.
                 uniform sampler2D diffuseTexture;
                 out vec4 FragColor;
@@ -278,7 +278,7 @@ is well documented, and you may find some functions useful for you job.</li>
                 {
                     FragColor = diffuseColor * texture(diffuseTexture, texCoord);
                 }
-                &quot;#;
+                "#;
         )
     ],
 )
@@ -296,7 +296,7 @@ the shader to your material in the Material Editor:</p>
 </span><span class="boring">};
 </span><span class="boring">
 </span>fn load_shader(resource_manager: &amp;ResourceManager) -&gt; ShaderResource {
-    resource_manager.request::&lt;Shader, _&gt;(&quot;path/to/my/cool.shader&quot;)
+    resource_manager.request::&lt;Shader, _&gt;("path/to/my/cool.shader")
 }
 <span class="boring">}</span></code></pre></pre>
 <p>After that you can use the shader to build a material from it:</p>
@@ -309,7 +309,7 @@ the shader to your material in the Material Editor:</p>
 </span><span class="boring">};
 </span><span class="boring">
 </span>fn create_material(resource_manager: &amp;ResourceManager) -&gt; SharedMaterial {
-    let shader = resource_manager.request::&lt;Shader, _&gt;(&quot;path/to/my/cool.shader&quot;);
+    let shader = resource_manager.request::&lt;Shader, _&gt;("path/to/my/cool.shader");
     SharedMaterial::new(Material::from_shader(
         shader,
         Some(resource_manager.clone()),
@@ -320,8 +320,8 @@ the shader to your material in the Material Editor:</p>
 <h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
 <p>Property is a named variable of some type. Properties are directly tied with the uniforms in the sub-shaders,
 for each you can have a property called <code>time</code>, and then you can define <code>uniform float time;</code> in your sub-shader
-and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in 
-a &quot;global namespace&quot;, which means that every sub-shader has &quot;access&quot; to the properties.</p>
+and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in
+a "global namespace", which means that every sub-shader has "access" to the properties.</p>
 <h2 id="built-in-properties"><a class="header" href="#built-in-properties">Built-in properties</a></h2>
 <p>There are number of built-in properties, that Fyrox will try to assign automatically if they're defined
 in your shader:</p>
@@ -344,13 +344,13 @@ uniform vec3 fyrox_cameraPosition;
 </code></pre>
 <p>This list will be extended in future releases.</p>
 <h2 id="predefined-render-passes"><a class="header" href="#predefined-render-passes">Predefined render passes</a></h2>
-<p>Predefined render passes helps you to create your own shader without a need to create your own render pass 
+<p>Predefined render passes helps you to create your own shader without a need to create your own render pass
 and to quickly start writing your shaders.</p>
 <ul>
-<li><strong>GBuffer</strong> - A pass that fills a set with render target sized textures with various data about each rendered 
-object. These textures then are used for physically-based lighting. Use this pass when you want the standard 
+<li><strong>GBuffer</strong> - A pass that fills a set with render target sized textures with various data about each rendered
+object. These textures then are used for physically-based lighting. Use this pass when you want the standard
 lighting to work with your objects.</li>
-<li><strong>Forward</strong> - A pass that draws an object directly in render target. This pass is very limiting, it does not 
+<li><strong>Forward</strong> - A pass that draws an object directly in render target. This pass is very limiting, it does not
 support lighting, shadows, etc. It should be only used to render translucent objects.</li>
 <li><strong>SpotShadow</strong> - A pass that emits depth values for an object, later this depth map will be used to render shadows.</li>
 <li><strong>PointShadow</strong> - A pass that emits distance from a fragment to a point light, later this depth map will be used
@@ -359,7 +359,7 @@ to render shadows.</li>
 <h2 id="drawing-parameters"><a class="header" href="#drawing-parameters">Drawing parameters</a></h2>
 <p>Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters come in handy. </p>
+from both sides. This is when draw parameters come in handy.</p>
 <p>There are relatively large list of drawing parameters, and it could confuse a person who didn't get
 used to work with graphics. The following list should help you to use drawing parameters correctly.</p>
 <ul>

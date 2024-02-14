@@ -209,14 +209,14 @@
 </ul>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>In this series of tutorials we will make a game similar to The Elder Scrolls series (but much, much smaller indeed),
-we'll have a main character, a simple world with intractable items and a few kind of enemies. In this series you'll 
-understand how to add an inventory, a quests journal, and the quests itself. This series should have at least 5 
-tutorials, but this might change. At the end of the series we'll have a playable RPG which you will be able to use to 
+we'll have a main character, a simple world with intractable items and a few kind of enemies. In this series you'll
+understand how to add an inventory, a quests journal, and the quests itself. This series should have at least 5
+tutorials, but this might change. At the end of the series we'll have a playable RPG which you will be able to use to
 continue making your own game. It is very ambitious, but totally doable with the current state of the engine.</p>
 <p>Most of the role-playing games (RPGs for short) using 3rd person camera which allows you to see your character entirely.
 In this tutorial we'll make something similar. Check the video with final result of the tutorial:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<p>As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by 
+<p>As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by
 creating a new game project, by running the following command:</p>
 <p><code>fyrox-template init --name=rpg --style=3d</code></p>
 <p>This command will create a new cargo workspace with a few projects inside, we're interested only in <code>game</code> folder
@@ -235,7 +235,7 @@ in this tutorial.</p>
     └───src
 </code></pre>
 <p>Learn more about <code>fyrox-template</code> command <a href="../../../beginning/scripting.html">here</a>. Now we can run
-the game using <code>cargo run --package executor</code> command, and you should see a white cube floating in blue space. </p>
+the game using <code>cargo run --package executor</code> command, and you should see a white cube floating in blue space.</p>
 <blockquote>
 <p>️⚠️ There are two important commands:<br />
 To run the game use: <code>cargo run --package executor</code> command<br />
@@ -247,20 +247,20 @@ animations, a level, a set of textures for terrain, trees and bushes, barrels, e
 ZIP archive which can be downloaded <a href="./data.zip">here</a>. Once you've downloaded it, unpack it in <code>./data</code> folder.</p>
 <h2 id="player-prefab"><a class="header" href="#player-prefab">Player Prefab</a></h2>
 <p>Let's start from assembling our player prefab, that will also have a camera controller in it. At first, let's find out
-what the prefab is - prefab a scene, that contains some scene nodes, which can be instantiated to some other scene 
-while preserving &quot;connection&quot; between all properties of the nodes. It means, that if you change something in a prefab, 
-the changes will be reflected on every instance of it; on those properties that weren't modified. This is a condensed 
+what the prefab is - prefab a scene, that contains some scene nodes, which can be instantiated to some other scene
+while preserving "connection" between all properties of the nodes. It means, that if you change something in a prefab,
+the changes will be reflected on every instance of it; on those properties that weren't modified. This is a condensed
 explanation, that may look a bit complicated - <a href="../../../scene/prefab.html">read this</a> to learn more about prefabs.</p>
 <p>Now let's open the editor (<code>cargo run --package editor</code>) and start making our prefab by creating a new scene. Save the
-scene to <code>data/models/paladin/paladin.rgs</code> by going to <code>File -&gt; Save</code>. In the opened window, find the path and click 
+scene to <code>data/models/paladin/paladin.rgs</code> by going to <code>File -&gt; Save</code>. In the opened window, find the path and click
 <code>Save</code>:</p>
 <p><img src="save_prefab.png" alt="save prefab" /></p>
 <p>Let's rename the root node of the scene to <code>Paladin</code> and change its type to <code>RigidBody</code>:</p>
 <p><img src="replace_root.png" alt="replace root" /></p>
 <p>We need this so out root node of the prefab could move in a scene to which it will be instantiated later. Make sure, that
 the <code>X/Y/Z Rotation Locked</code> property is set to <code>true</code>. Also <code>Can Sleep</code> must be false, otherwise the rigid body will
-be excluded from the physical simulation when it does not move. As you can see, the editor shows a small warning icon 
-near the root node - it warns us, that the rigid body does not have a collider and won't be able to participate in 
+be excluded from the physical simulation when it does not move. As you can see, the editor shows a small warning icon
+near the root node - it warns us, that the rigid body does not have a collider and won't be able to participate in
 physical simulation. Let's fix it by adding a capsule collider to it and setting its <code>Begin</code>, <code>End</code>, <code>Radius</code> properties
 accordingly:</p>
 <p><img src="capsule_collider.png" alt="capsule colliders" /></p>
@@ -269,7 +269,7 @@ its searching functionality and then drag'n'drop (click on the asset, and while 
 the scene, then release the button) it to the scene:</p>
 <p><img src="model.png" alt="model" /></p>
 <p>Now we need to adjust its <code>Local Scale</code> property, because the model is too big. Set it to <code>0.01</code> for all 3 axes, like on
-the screenshot above. Also, adjust position of the capsule collider, so it will fully enclose 3d model. Create a new 
+the screenshot above. Also, adjust position of the capsule collider, so it will fully enclose 3d model. Create a new
 <code>Pivot</code> node called <code>ModelPivot</code> and attach the <code>paladin.fbx</code> node to it by drag'n'dropping the <code>paladin.fbx</code> node onto
 <code>ModelPivot</code>. The reason why we need to do this will be explained later in the tutorial.</p>
 <p><img src="model_pivot.png" alt="model pivot" /></p>
@@ -283,15 +283,15 @@ the screenshot above. Also, adjust position of the capsule collider, so it will 
 <li><code>CameraHinge</code> (<code>Pivot</code> node type) - it will also be a pivot point, but for X axis (vertical camera rotation)</li>
 <li><code>Camera</code> (<code>Camera</code> node type) - the camera itself, it should be placed on some distance from the Paladin's back.</li>
 </ol>
-<p>This nodes configuration will allow us to create some sort of &quot;orbital&quot; (also called arcball) camera as in many 3rd person
-games nowadays. </p>
+<p>This nodes configuration will allow us to create some sort of "orbital" (also called arcball) camera as in many 3rd person
+games nowadays.</p>
 <h3 id="animations"><a class="header" href="#animations">Animations</a></h3>
-<p>The next step is to add animations. Create a new <code>Animation Player</code> node, click <code>Open Animation Editor</code> near its 
+<p>The next step is to add animations. Create a new <code>Animation Player</code> node, click <code>Open Animation Editor</code> near its
 <code>Animations</code> property in the inspector to open the animation editor:</p>
 <p><img src="animation_editor.png" alt="animation editor" /></p>
 <p>Dock the animation editor below the scene preview - this way it will be much comfortable to use. Now we need to import
 two animations <code>run.fbx</code> and <code>idle.fbx</code> from the <code>data/models/paladin</code> folder. To do this, click on the button with
-arrow at the tool strip in the animation editor: </p>
+arrow at the tool strip in the animation editor:</p>
 <p><img src="animation_import_1.png" alt="animation import step 1" /></p>
 <p>The editor asks us for the root node to which import the animation - it our case it is <code>paladin.fbx</code>. Select it in the
 window and click <code>OK</code>. Another window opens and asks us about the animation we want to import - find <code>idle.fbx</code> in the
@@ -301,7 +301,7 @@ tree and click <code>Open</code>. You should see something like this as a result
 steps and import <code>running.fbx</code>. Click <code>Preview</code> again, and you'll see that the character is running, but not in-place as
 we'd like it to. Let's fix that by applying a Root Motion settings. Click on the <code>RM</code> button and set it up like so:</p>
 <p><img src="root_motion.png" alt="root motion" /></p>
-<p>Now if you click on <code>Preview</code> again, you'll see that the character is now moving in-place. But what we did by applying 
+<p>Now if you click on <code>Preview</code> again, you'll see that the character is now moving in-place. But what we did by applying
 the root motion? We forced the engine to extract movement vector from the hips of the character that could be later used
 to move the capsule rigid body we've made early. This way the animation itself will drive the character and the actual
 movement will perfectly match the physical movement.</p>
@@ -310,45 +310,45 @@ between the two (or more)? This is where animation blending state machines comes
 and assign an animation player to it:</p>
 <p><img src="absm.png" alt="absm" /></p>
 <p>The animation player will be used as a source of animations for our state machine. Now open the <code>ABSM Editor</code> by clicking
-the <code>Open ABSM Editor...</code> button in the inspector (right above the animation player property). Dock the editor and select 
-a <code>Base Layer</code> in the dropdown list in the toolbar. Next, we need to add two states - <code>Idle</code> and <code>Running</code>. This can be 
+the <code>Open ABSM Editor...</code> button in the inspector (right above the animation player property). Dock the editor and select
+a <code>Base Layer</code> in the dropdown list in the toolbar. Next, we need to add two states - <code>Idle</code> and <code>Running</code>. This can be
 done by right-clicking on in the <code>State Graph</code> and selecting <code>Create State</code>:</p>
 <p><img src="states.png" alt="states" /></p>
 <p>A state requires animation source to be usable, we can specify it by double-clicking on it (or right-click -&gt; <code>Enter State</code>)
 and creating a <code>Play Animation</code> pose node in the <code>State Viewer</code> (right-click -&gt; <code>Play Animation</code>):</p>
 <p><img src="animation_source.png" alt="img.png" /></p>
-<p>Select the <code>Play Animation</code> node and in the <code>Inspector</code> select the <code>Idle</code> animation from the dropdown list near the 
+<p>Select the <code>Play Animation</code> node and in the <code>Inspector</code> select the <code>Idle</code> animation from the dropdown list near the
 <code>Animation</code> property. Repeat the same steps for the <code>Running</code> state, but in this case set <code>Running</code> animation.</p>
-<p>Now when we two states ready, we need to create transitions between the two. Transition is a &quot;rule&quot;, that defines whether 
+<p>Now when we two states ready, we need to create transitions between the two. Transition is a "rule", that defines whether
 a current active state can be switched to another one. While doing so, the engine will blend an animation coming from
 two states. To create a transition, right-click on a state and click <code>Create Transition</code>. Do the same in the opposite
 direction. As a result, you should have something like this:</p>
 <p><img src="transition.png" alt="transition" /></p>
-<p>A transition requires a boolean value to &quot;understand&quot; whether an actual transition is possible or not. Let's add one
+<p>A transition requires a boolean value to "understand" whether an actual transition is possible or not. Let's add one
 in the <code>Parameters</code> section of the editor. Click on the small <code>+</code> button and change the name to <code>Running</code> and the type
 to the <code>Rule</code>:</p>
 <p><img src="parameters.png" alt="parameters" /></p>
 <p>Let's assign the rule to our transitions, select the <code>Idle -&gt; Running</code> transition and in the Inspector set its condition
 to the following:</p>
 <p><img src="condition.png" alt="condition" /></p>
-<p><code>Running -&gt; Idle</code> requires a reverse condition, the engine has a computational graph for this purpose (to compute 
+<p><code>Running -&gt; Idle</code> requires a reverse condition, the engine has a computational graph for this purpose (to compute
 boolean expressions). Set the condition of it to the following:</p>
 <p><img src="not_condition.png" alt="not condition" /></p>
 <p>As you can see we negate (using the <code>Not</code> boolean operator) the value of the <code>Running</code> parameter and use it compute the
 final value for the transition. At this point we can check how our animation blending works. Click on <code>Preview</code> check box,
 and you should see that the character is currently being in the <code>Idle</code> state, now click at the checkbox in the <code>Running</code>
-parameter, and you'll see that the <code>Idle -&gt; Running</code> transition started and ended shortly after. If you uncheck the 
+parameter, and you'll see that the <code>Idle -&gt; Running</code> transition started and ended shortly after. If you uncheck the
 parameter, the character will switch back to idle.</p>
 <p>This was the last step in this long procedure or making the prefab. As you can see, we haven't written a single line of
-code and saw the results immediately, without a need to compile anything. </p>
+code and saw the results immediately, without a need to compile anything.</p>
 <h2 id="player-script"><a class="header" href="#player-script">Player Script</a></h2>
 <p>Finally, we can start writing some code. There won't be much of it, but it is still required. Fyrox allows you to add
-custom game logic to scene nodes using scripts. Scripts &quot;skeleton&quot; contains quite a lot of boilerplate code and to 
+custom game logic to scene nodes using scripts. Scripts "skeleton" contains quite a lot of boilerplate code and to
 prevent this tedious work, <code>fyrox-template</code> offers a sub-command called <code>script</code>, which allows you to generate a script
 skeleton in a single command. Go to root folder of your project and execute the following command there:</p>
 <pre><code class="language-shell">fyrox-template script --name=player
 </code></pre>
-<p>The CLI tool will create the new module in <code>game/src</code> folder called <code>player.rs</code> and all you need to do is to register 
+<p>The CLI tool will create the new module in <code>game/src</code> folder called <code>player.rs</code> and all you need to do is to register
 the module in two places. The first place is to add <code>mod player;</code> line somewhere at the beginning of the <code>game/src/lib.rs</code>.
 The second place is <code>PluginConstructor::register</code> method - every script must be registered before use. Let's do so by adding
 the following code to the method:</p>
@@ -359,11 +359,11 @@ the following code to the method:</p>
         context
             .serialization_context
             .script_constructors
-            .add::&lt;Player&gt;(&quot;Player&quot;);
+            .add::&lt;Player&gt;("Player");
     }
 <span class="boring">}</span></code></pre></pre>
 <p>Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the <code>player.rs</code>
-and you'll see quite a lot of code. Most of the methods, however, can be removed, and we're only interested in <code>on_update</code> 
+and you'll see quite a lot of code. Most of the methods, however, can be removed, and we're only interested in <code>on_update</code>
 and <code>on_os_event</code>. But for now, let's add the following fields in the <code>Player</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -416,14 +416,14 @@ pub struct Player {
 we've made earlier, the <code>model_yaw</code> field contains a <code>SmoothAngle</code> which is used for smooth angle interpolation we'll
 use later in tutorial. Please note that these fields marked with <code>#[visit(optional)]</code> attribute, which tells the engine
 that these fields can be missing and should be replaced with default values in this case. This is very useful attribute
-if you're adding new fields to some existing script, it will prevent serialization error. The rest of the fields contains 
-runtime information about movement state (<code>move_forward</code>, <code>move_backward</code>, <code>walk_left</code>, <code>walk_right</code>) and the 
+if you're adding new fields to some existing script, it will prevent serialization error. The rest of the fields contains
+runtime information about movement state (<code>move_forward</code>, <code>move_backward</code>, <code>walk_left</code>, <code>walk_right</code>) and the
 camera orientation (<code>yaw</code> and <code>pitch</code> fields).</p>
 <p>A few notes why the first five fields are wrapped in the <code>InheritableVariable</code> - it is to support property inheritance
 mechanism for these fields. The engine will save the values for these variables only if they're manually modified, on
 loading, however, it will replace non-modified values with the ones from parent prefab. If it sounds too complicated for
-you, then you should probably read <a href="../../../scene/prefab.html#property-inheritance">this chapter</a>. </p>
-<p>Let's start writing player controller's logic. </p>
+you, then you should probably read <a href="../../../scene/prefab.html#property-inheritance">this chapter</a>.</p>
+<p>Let's start writing player controller's logic.</p>
 <h3 id="event-handling"><a class="header" href="#event-handling">Event Handling</a></h3>
 <p>We'll start from keyboard and mouse event handling, add the following code to the <code>impl ScriptTrait for Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -562,27 +562,27 @@ the <code>on_update</code> method with the following code:</p>
             state_machine
                 .machine_mut()
                 .get_value_mut_silent()
-                .set_parameter(&quot;Running&quot;, Parameter::Rule(moving));
+                .set_parameter("Running", Parameter::Rule(moving));
         }
     }
 <span class="boring">}</span></code></pre></pre>
 <p>That's a big chunk of code, but it mostly consists of a set of separate steps. Let's try to understand what each step does.</p>
-<p>Step 1 extracts the root motion vector from the animation blending state machine: at first, we're getting the current 
+<p>Step 1 extracts the root motion vector from the animation blending state machine: at first, we're getting the current
 transformation matrix of the Paladin's model. Then we're trying to borrow the ABSM node from the scene. If it is
 successful, then we're trying to extract the root motion vector from the final pose of the ABSM. If we have one, then
 we need to transform it from the local space to the world space - we're doing this using matrix-vector multiplication.
 And as the last step, we're scaling the vector by delta time to get the final velocity in world coordinates that can
 be used to move the rigid body.</p>
 <p>Step 2 uses the root motion vector to move the rigid body. The body is the node to which the script is assigned to,
-so we're using <code>ctx.handle</code> to borrow a &quot;self&quot; reference and setting the new linear and angular velocities.</p>
-<p>Step 3 is the largest (code-wise) step, yet very simple. All we do here is rotating the camera and the model pivot in 
+so we're using <code>ctx.handle</code> to borrow a "self" reference and setting the new linear and angular velocities.</p>
+<p>Step 3 is the largest (code-wise) step, yet very simple. All we do here is rotating the camera and the model pivot in
 according to pressed keys. The code should be self-explanatory.</p>
 <p>Step 4 feeds the animation blending state machine with the variables it needs to perform state transitions. Currently,
 we have only one variable - <code>Running</code> and to set it, we're trying to borrow the ABSM using its handle, then we're
-using the state of four of our movement variable to combine them into one and use this flag to set the value in the 
+using the state of four of our movement variable to combine them into one and use this flag to set the value in the
 ABSM.</p>
 <h3 id="binding"><a class="header" href="#binding">Binding</a></h3>
-<p>Now, when we have finished coding part, we can open <code>paladin.rgs</code> in the editor again and assign the script to it: </p>
+<p>Now, when we have finished coding part, we can open <code>paladin.rgs</code> in the editor again and assign the script to it:</p>
 <p><img src="assigned_script.png" alt="assigned script" /></p>
 <p>Make sure to correctly set the script fields (as on the screenshot above), otherwise it won't work correctly.</p>
 <h2 id="game-level"><a class="header" href="#game-level">Game Level</a></h2>
@@ -591,13 +591,13 @@ is not covered by this tutorial. You can create a simple level using a Terrain, 
 <p><img src="simple_level.png" alt="simple level" /></p>
 <p>The most important part, however, is to add a player instance to the level:</p>
 <p><img src="player_on_level.png" alt="player on level" /></p>
-<p>Now all you need to do is to click on the green <code>&gt;</code> button and run the game. &quot;Production&quot; build could be created by
+<p>Now all you need to do is to click on the green <code>&gt;</code> button and run the game. "Production" build could be created by
 running <code>cargo run --package executor --release</code>.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this tutorial we've learned how to set up physics for humanoid characters, how to create simple 3rd person camera
 controllers, how to import and blend multiple animation into one, how to use root motion to extract motion vector from
 animations. We also learned how to create prefabs and use them correctly. Finally, we have created a simple level and
-instantiated the character prefab on it.  </p>
+instantiated the character prefab on it.</p>
 
                     </main>
 

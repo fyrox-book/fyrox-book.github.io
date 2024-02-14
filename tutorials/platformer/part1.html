@@ -243,7 +243,7 @@ camera mode to <code>Orthographic</code> at the right top corner of the scene pr
 we'll start by adding a simple ground block. Right-click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select
 <code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body, and
 set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we're telling the physics engine that our ground block should not move
-and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions, 
+and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions,
 right-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We've just added a new collider to the rigid
 body, by default it has a <code>Cuboid</code> shape with a <code>1.0</code> meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>. This adds a simple 2D sprite, select it and set a texture
@@ -271,13 +271,13 @@ clone it. Switch body type of the copy to <code>Dynamic</code>. Now change its s
 <p>Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - <code>Begin = 0.0, 0.0</code> and <code>End = 0.0, 0.3</code>. Add a 2D sprite (rectangle) to the rigid body and set its texture to
 <code>data/characters/adventurer/adventurer-Sheet.png</code>. Set its uv rect to <code>(0.0, 0.0, 0.143, 0.091)</code> to see only one frame.
-We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our 
-camera will have no background, there'll be a black &quot;void&quot;, this is not great and let's fix that. Select the camera
-and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag'n'drop it to 
-the <code>Front</code> field of the <code>Skybox</code> property. Don't forget to adjust the far plane distance to something like <code>20.0</code>, 
+We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our
+camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
+and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag'n'drop it to
+the <code>Front</code> field of the <code>Skybox</code> property. Don't forget to adjust the far plane distance to something like <code>20.0</code>,
 otherwise, you'll see just a portion of the background image. If everything is done correctly, you should get something like this:</p>
 <p><img src="editor_step5.png" alt="editor_step5" /></p>
-<p>Save your scene by goint to <code>File -&gt; Save Scene</code>. Now we can run the game using the <code>Play/Stop</code> button at the top of the 
+<p>Save your scene by goint to <code>File -&gt; Save Scene</code>. Now we can run the game using the <code>Play/Stop</code> button at the top of the
 scene previewer. You should see pretty much the same as in the scene preview, except
 for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts.</p>
 <p>As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
@@ -310,7 +310,7 @@ move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add th
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
+#[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
 #[visit(optional)]
 struct Player;
 
@@ -328,12 +328,12 @@ impl ScriptTrait for Player {
     fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {}
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This is a typical &quot;skeleton&quot; of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
+<p>This is a typical "skeleton" of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
 Let's go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone, Default)]</code>
 attributes:</p>
 <ul>
 <li><code>Visit</code> - implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.</li>
-<li><code>Inspect</code> - generates metadata for the fields of your type - in other words, it allows the editor to &quot;see&quot; what's inside
+<li><code>Inspect</code> - generates metadata for the fields of your type - in other words, it allows the editor to "see" what's inside
 your structure and show additional information attached to the fields via proc-macro attributes.</li>
 <li><code>Reflect</code> - implements compile-time reflection that allows the editor to mutate your objects.</li>
 <li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.</li>
@@ -356,7 +356,7 @@ code snippet:</p>
 </span>impl PluginConstructor for GameConstructor {
     fn register(&amp;self, context: PluginRegistrationContext) {
         let script_constructors = &amp;context.serialization_context.script_constructors;
-        script_constructors.add::&lt;Player&gt;(&quot;Player&quot;);
+        script_constructors.add::&lt;Player&gt;("Player");
     }
     // ...
 <span class="boring">}</span></code></pre></pre>
@@ -370,16 +370,16 @@ we need to get its sprite first. Let's start by adding the required field in the
 <pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
-#[type_uuid(id = &quot;c5671d19-9f1a-4286-8486-add4ebaadaec&quot;)]
+#[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
 #[visit(optional)]
 struct Player {
     sprite: Handle&lt;Node&gt;,
     // ... 
 <span class="boring">}</span></code></pre></pre>
-<p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector. 
+<p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector.
 To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging
-the sprite node from the world viewer to the respective field in the player script. Release the mouse button and if 
-everything is ok, the field should &quot;say&quot; something different than &quot;Unassigned&quot;.</p>
+the sprite node from the world viewer to the respective field in the player script. Release the mouse button and if
+everything is ok, the field should "say" something different than "Unassigned".</p>
 <p>Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player.
 Go to the <code>Player</code> structure and add the following fields:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -467,10 +467,10 @@ sprite. Add the following code at the end of the <code>if let ...</code> block o
 <p>The comments should clarify what's going on here, but in short, we're changing the horizontal scaling of the player's sprite if the player is
 moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces the sign of current horizontal scaling
 using the opposite sign of <code>x_speed</code>.</p>
-<p>Now if you run the game, the player will &quot;look&quot; in correct direction depending on the velocity vector.</p>
+<p>Now if you run the game, the player will "look" in correct direction depending on the velocity vector.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
 <p>Since we're making a 2D game, we'll be using simple animations based on the continuous change of keyframes. In other words, we'll be changing
-the texture of the player's body sprite. Luckily for us, the engine has built-in sprite sheet animations. Just add the 
+the texture of the player's body sprite. Luckily for us, the engine has built-in sprite sheet animations. Just add the
 following fields to the <code>Player</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -518,7 +518,7 @@ apply the texture from the current animation to the player's sprite, and add the
                 sprite
                     .material()
                     .data_ref()
-                    .set_texture(&amp;&quot;diffuseTexture&quot;.into(), current_animation.texture())
+                    .set_texture(&amp;"diffuseTexture".into(), current_animation.texture())
                     .unwrap();
                 sprite.set_uv_rect(
                     current_animation
@@ -537,7 +537,7 @@ find the <code>Script</code> section in the <code>Inspector</code>. Add two anim
 <p>After filling in the animations and turning them on, you can run the game and your character should play animations
 correctly.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this tutorial, we've learned the basics of the new scripting system of the engine. The game we've built it very 
+<p>In this tutorial, we've learned the basics of the new scripting system of the engine. The game we've built it very
 simple, but it is just the beginning. It is easy to add more scripts for enemies, weapons, collectible items, and so on.</p>
 
                     </main>

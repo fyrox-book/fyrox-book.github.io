@@ -187,7 +187,7 @@
                     <main>
                         <h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
 <p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
+The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant
 difference between running the game from the editor, or running it as a separate application. The main difference is that
 the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
@@ -216,8 +216,8 @@ the editor passes <code>scene_path</code> parameter for the executor when enteri
     executor.run()
 }</code></pre></pre>
 <p>Executor has full access to the engine, and through it to the main application window. You can freely change desired
-parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an &quot;alias&quot;
-to engine instance. </p>
+parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an "alias"
+to engine instance.</p>
 <p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
 <code>PluginConstructor</code> traits.</p>
 <h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
@@ -235,7 +235,7 @@ to engine instance. </p>
     EventLoop::new().unwrap(),
     GraphicsContextParams {
         window_attributes: WindowAttributes {
-            title: &quot;My Game&quot;.to_string(),
+            title: "My Game".to_string(),
             ..Default::default()
         },
         vsync: true,

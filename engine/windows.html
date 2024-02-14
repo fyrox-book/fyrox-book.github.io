@@ -189,8 +189,8 @@
 <p>This chapter of the book explains how to manage the main application window and its related parts.</p>
 <blockquote>
 <p>⚠️ Main window exists only if there's a graphics context. That's why the following examples
-checks for a graphics context to be available. Graphics context could be missing if you're using 
-the engine in &quot;headless&quot; mode (could be useful for game servers) or on some platforms (such as Android)
+checks for a graphics context to be available. Graphics context could be missing if you're using
+the engine in "headless" mode (could be useful for game servers) or on some platforms (such as Android)
 that support application suspension.</p>
 </blockquote>
 <h2 id="title"><a class="header" href="#title">Title</a></h2>
@@ -198,11 +198,11 @@ that support application suspension.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
-            graphics_context.window.set_title(&quot;My Awesome Game&quot;);
+            graphics_context.window.set_title("My Awesome Game");
         }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="cursor"><a class="header" href="#cursor">Cursor</a></h2>
-<p>This section contains the code for the most common use cases of the mouse cursor. </p>
+<p>This section contains the code for the most common use cases of the mouse cursor.</p>
 <h3 id="show-or-hide"><a class="header" href="#show-or-hide">Show or Hide</a></h3>
 <p>You can show or hide the mouse cursor using the following code:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
