@@ -10,6 +10,6 @@ All tutorials in the book are ordered from simplest to hardest, and each chapter
 the same way. 
 
 Code snippets in all tutorials does not include required imports, you should use a good IDE (Visual Studio Code + rust-analyzer,
-IntelliJ IDEA + Rust Plugin, RustRover, etc.) that can import all missing stuff for your. Alternatively, you can always
+IntelliJ IDEA + Rust Plugin, RustRover, etc.) that can import all missing stuff for your project. Alternatively, you can always
 look at the source code of all tutorials in the link above. This is intentional, to reduce the size of all tutorials;
 to prevent them from bloating with useless information.
