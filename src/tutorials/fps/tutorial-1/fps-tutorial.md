@@ -124,8 +124,26 @@ This code consists from two major parts:
 axis and vertical mouse movement is used to rotate the camera around horizontal axis.
 - Keyboard input handling for movement.
 
-This just modifies the internal script variables, and basically does not affect anything else. Next thing we'll add
-movement code. Add the following code to `on_update`:
+This just modifies the internal script variables, and basically does not affect anything else.
+
+Now let's add camera rotation, at first we need to know the camera handle. Add the following field to the `Player` struct:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/player.rs:camera_field}}
+```
+
+We'll assign this field later in the editor, for let's focus on the code. Add the following piece of code at the start of
+the `on_update`:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/player.rs:camera_rotation}}
+```
+
+This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using 
+its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them 
+using simple multiplication. 
+
+Next thing we'll add movement code. Add the following code to the end of `on_update`:
 
 ```rust
 {{#include ../../../code/tutorials/fps/game/src/player.rs:on_update_begin}}
@@ -136,23 +154,6 @@ This code is responsible for movement when any of WSAD keys are pressed. At firs
 this script is assigned to, then it checks if any of the WSAD keys are pressed, and it forms a new velocity vector using
 the basis vectors of node. As the last step, it normalizes the vector (makes it unity length) and sets it to the rigid
 body velocity.
-
-Now let's add camera rotation, at first we need to know the camera handle. Add the following field to the `Player` struct:
-
-```rust
-{{#include ../../../code/tutorials/fps/game/src/player.rs:camera_field}}
-```
-
-We'll assign this field later in the editor, for let's focus on the code. Add the following piece of code at the end of
-the `on_update`:
-
-```rust
-{{#include ../../../code/tutorials/fps/game/src/player.rs:camera_rotation}}
-```
-
-This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using 
-its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them 
-using simple multiplication. 
 
 Our script is almost ready, now all we need to do is to assign it to the player's prefab. Open the `player.rgs` prefab
 in the editor, select `Player` node and assign the Player script to it. Do not forget to set Camera handle (by clicking
