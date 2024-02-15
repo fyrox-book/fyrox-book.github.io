@@ -11366,8 +11366,37 @@ defined. Add the following code to the <code>on_os_event</code> method like so:<
 axis and vertical mouse movement is used to rotate the camera around horizontal axis.</li>
 <li>Keyboard input handling for movement.</li>
 </ul>
-<p>This just modifies the internal script variables, and basically does not affect anything else. Next thing we'll add
-movement code. Add the following code to <code>on_update</code>:</p>
+<p>This just modifies the internal script variables, and basically does not affect anything else.</p>
+<p>Now let's add camera rotation, at first we need to know the camera handle. Add the following field to the <code>Player</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    #[visit(optional)]
+    camera: Handle&lt;Node&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>We'll assign this field later in the editor, for let's focus on the code. Add the following piece of code at the start of
+the <code>on_update</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        let mut look_vector = Vector3::default();
+        let mut side_vector = Vector3::default();
+        if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
+            look_vector = camera.look_vector();
+            side_vector = camera.side_vector();
+
+            let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
+            let transform = camera.local_transform_mut();
+            transform.set_rotation(
+                UnitQuaternion::from_axis_angle(
+                    &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
+                    self.pitch.to_radians(),
+                ) * yaw,
+            );
+        }
+<span class="boring">}</span></code></pre></pre>
+<p>This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using
+its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them
+using simple multiplication.</p>
+<p>Next thing we'll add movement code. Add the following code to the end of <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
@@ -11407,35 +11436,6 @@ movement code. Add the following code to <code>on_update</code>:</p>
 this script is assigned to, then it checks if any of the WSAD keys are pressed, and it forms a new velocity vector using
 the basis vectors of node. As the last step, it normalizes the vector (makes it unity length) and sets it to the rigid
 body velocity.</p>
-<p>Now let's add camera rotation, at first we need to know the camera handle. Add the following field to the <code>Player</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    camera: Handle&lt;Node&gt;,
-<span class="boring">}</span></code></pre></pre>
-<p>We'll assign this field later in the editor, for let's focus on the code. Add the following piece of code at the end of
-the <code>on_update</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>        let mut look_vector = Vector3::default();
-        let mut side_vector = Vector3::default();
-        if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
-            look_vector = camera.look_vector();
-            side_vector = camera.side_vector();
-
-            let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
-            let transform = camera.local_transform_mut();
-            transform.set_rotation(
-                UnitQuaternion::from_axis_angle(
-                    &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
-                    self.pitch.to_radians(),
-                ) * yaw,
-            );
-        }
-<span class="boring">}</span></code></pre></pre>
-<p>This piece of code is relatively straightforward: at first we're trying to borrow the camera in the scene graph using
-its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them
-using simple multiplication.</p>
 <p>Our script is almost ready, now all we need to do is to assign it to the player's prefab. Open the <code>player.rgs</code> prefab
 in the editor, select <code>Player</code> node and assign the Player script to it. Do not forget to set Camera handle (by clicking
 on the small green button and selecting Camera from the list):</p>
