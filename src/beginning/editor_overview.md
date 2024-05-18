@@ -41,7 +41,7 @@ scenes can be loaded more quickly by going to `File -> Recent Scenes` and select
 A scene can contain various game entities. There are two equivalent ways of creating these:
 
 - By going to `Create` in the main menu and selecting the desired entity from the drop down.
-- By right-clicking on a game entity in the `World Viewer` and selecting the desired entity from the `Add Child` sub-menu.
+- By right-clicking on a game entity in the `World Viewer` and selecting the desired entity from the `Create Child` sub-menu.
 
 Complex objects usually made in 3D modelling software (Blender, 3Ds Max, Maya, etc.) can be saved in various formats. 
 Fyrox supports FBX format, which is supported by pretty much any 3D modelling software. You can instantiate such objects 
