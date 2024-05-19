@@ -8,6 +8,7 @@ use fyrox::{
     scene::node::Node,
     script::{ScriptContext, ScriptTrait},
 };
+use fyrox::graph::SceneGraph;
 
 // ANCHOR: without_message_passing
 #[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]

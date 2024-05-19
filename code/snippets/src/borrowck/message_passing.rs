@@ -21,6 +21,7 @@ impl Weapon {
     }
 }
 
+#[derive(Debug)]
 pub struct ShootMessage;
 
 impl ScriptTrait for Weapon {

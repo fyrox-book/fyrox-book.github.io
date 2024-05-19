@@ -242,7 +242,8 @@ right aligned):</p>
 useful:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct MyGame {
+</span>#[derive(Debug, Reflect, Visit)]
+struct MyGame {
     button: Handle&lt;UiNode&gt;,
 }
 
@@ -262,7 +263,8 @@ impl Plugin for MyGame {
 <p>This example shows how to create a button that will close your game.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct Game {
+</span>#[derive(Visit, Reflect, Debug)]
+struct Game {
     quit_button_handle: Handle&lt;UiNode&gt;,
 }
 
@@ -279,7 +281,7 @@ fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
 impl Game {
     fn new(ctx: PluginContext) -&gt; Self {
         Self {
-            quit_button_handle: create_quit_button(ctx.user_interface),
+            quit_button_handle: create_quit_button(ctx.user_interfaces.first_mut()),
         }
     }
 }

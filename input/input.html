@@ -194,7 +194,8 @@ to react to OS events on plugin scale and the latter - on script scale. Here's a
 events, that could be used in your game (some rare events are omitted):</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct MyGame {}
+</span>#[derive(Reflect, Debug, Visit)]
+struct MyGame {}
 
 impl Plugin for MyGame {
     fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) {

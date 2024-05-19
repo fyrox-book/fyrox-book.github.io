@@ -1199,7 +1199,7 @@ impl ScriptTrait for Bot {
                 // Optionally, you can print the actual reason why borrowing wasn't successful.
                 Log::err(err.to_string())
             }
-        }
+        };
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -1327,6 +1327,7 @@ impl Weapon {
     }
 }
 
+#[derive(Debug)]
 pub struct ShootMessage;
 
 impl ScriptTrait for Weapon {
@@ -5690,7 +5691,8 @@ to react to OS events on plugin scale and the latter - on script scale. Here's a
 events, that could be used in your game (some rare events are omitted):</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct MyGame {}
+</span>#[derive(Reflect, Debug, Visit)]
+struct MyGame {}
 
 impl Plugin for MyGame {
     fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) {
@@ -8235,7 +8237,8 @@ right aligned):</p>
 useful:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct MyGame {
+</span>#[derive(Debug, Reflect, Visit)]
+struct MyGame {
     button: Handle&lt;UiNode&gt;,
 }
 
@@ -8255,7 +8258,8 @@ impl Plugin for MyGame {
 <p>This example shows how to create a button that will close your game.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct Game {
+</span>#[derive(Visit, Reflect, Debug)]
+struct Game {
     quit_button_handle: Handle&lt;UiNode&gt;,
 }
 
@@ -8272,7 +8276,7 @@ fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
 impl Game {
     fn new(ctx: PluginContext) -&gt; Self {
         Self {
-            quit_button_handle: create_quit_button(ctx.user_interface),
+            quit_button_handle: create_quit_button(ctx.user_interfaces.first_mut()),
         }
     }
 }

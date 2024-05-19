@@ -1,6 +1,8 @@
 use fyrox::{
     asset::manager::ResourceManager,
     core::pool::Handle,
+    core::visitor::prelude::*,
+    core::reflect::prelude::*,
     gui::image::ImageBuilder,
     gui::{
         button::ButtonBuilder, text::TextBuilder, widget::WidgetBuilder, HorizontalAlignment,
@@ -56,6 +58,7 @@ fn create_fancy_button(
 // ANCHOR_END: create_fancy_button
 
 // ANCHOR: button_click_handling
+#[derive(Debug, Reflect, Visit)]
 struct MyGame {
     button: Handle<UiNode>,
 }
@@ -74,6 +77,7 @@ impl Plugin for MyGame {
 // ANCHOR_END: button_click_handling
 
 // ANCHOR: quit_button
+#[derive(Visit, Reflect, Debug)]
 struct Game {
     quit_button_handle: Handle<UiNode>,
 }
@@ -91,7 +95,7 @@ fn create_quit_button(ui: &mut UserInterface) -> Handle<UiNode> {
 impl Game {
     fn new(ctx: PluginContext) -> Self {
         Self {
-            quit_button_handle: create_quit_button(ctx.user_interface),
+            quit_button_handle: create_quit_button(ctx.user_interfaces.first_mut()),
         }
     }
 }

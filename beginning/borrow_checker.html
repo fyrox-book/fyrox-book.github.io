@@ -279,7 +279,7 @@ impl ScriptTrait for Bot {
                 // Optionally, you can print the actual reason why borrowing wasn't successful.
                 Log::err(err.to_string())
             }
-        }
+        };
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -407,6 +407,7 @@ impl Weapon {
     }
 }
 
+#[derive(Debug)]
 pub struct ShootMessage;
 
 impl ScriptTrait for Weapon {

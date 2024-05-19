@@ -1,10 +1,13 @@
 use fyrox::{
     core::log::Log,
+    core::visitor::prelude::*,
+    core::reflect::prelude::*,
     engine::GraphicsContext,
     plugin::{Plugin, PluginContext},
     window::{CursorGrabMode, Fullscreen},
 };
 
+#[derive(Debug, Reflect, Visit)]
 struct MyGame {
     fullscreen: bool,
 }

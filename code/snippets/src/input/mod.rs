@@ -4,9 +4,12 @@ pub mod mouse;
 use fyrox::{
     event::{DeviceEvent, Event, WindowEvent},
     plugin::{Plugin, PluginContext},
+    core::reflect::prelude::*,
+    core::visitor::prelude::*
 };
 
 // ANCHOR: events_example
+#[derive(Reflect, Debug, Visit)]
 struct MyGame {}
 
 impl Plugin for MyGame {
