@@ -1,37 +1,26 @@
 # Editor, Plugins and Scripts
 
-Every Fyrox game is just a plugin for both the engine and the editor, such approach allows you to run your game from the 
-editor and to be able to edit the game entities in it. Your game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. In this chapter you'll learn the basics: how to install the engine with
-its platform-specific dependencies, how to use the plugins and scripting system, how to run the editor.
+Every Fyrox game is just a plugin for both the engine and the editor, such approach allows the game to run from the 
+editor and be able to edit the game entities in it. A game can define any number of scripts, which can be assigned 
+to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its platform-
+specific dependencies, how to use the plugins and scripting system, how to run the editor.
 
-## Quick Start
-
-Run the following commands to start using the engine as quick as possible. Read the next chapters if you want to know 
-more or if you have any issues with this.
-
-```sh
-cargo install fyrox-template
-fyrox-template init --name fyrox_test --style 2d
-cd fyrox_test
-cargo run --package editor --release
-```
 
 ## Platform-specific Dependencies
 
-Before you start using the engine, make sure you have all required platform-specific development dependencies installed,
-otherwise you'll get compilation errors. If you're on Windows or macOS, you don't need to install anything specific - 
-all you need to have is the latest Rust installed with appropriate toolchain for your platform.
+Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If 
+using Windows or macOS, no additional dependencies are required other than the latest Rust installed with appropriate 
+toolchain for your platform.
 
 ### Linux
 
-On Linux Fyrox needs the development files for the following libraries: `libxcb-shape0`, `libxcb-xfixes0`, `libxcb1`, 
-`libxkbcommon`, `libasound2`.
+On Linux, Fyrox needs the following libraries for development: `libxcb-shape0`, `libxcb-xfixes0`, `libxcb1`, 
+`libxkbcommon`, `libasound2` and the `build-essential` package group.
 
 For Debian based distros like Ubuntu, they can be installed like below:
 
 ```shell
-sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev
+sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev build-essential
 ```
 
 For NixOS, you can use a `shell.nix` like below:
@@ -54,21 +43,31 @@ pkgs.mkShell rec {
 }
 ```
 
+## Quick Start
+
+Run the following commands to start using the editor as quickly as possible.
+
+```sh
+cargo install fyrox-template
+fyrox-template init --name fyrox_test --style 2d
+cd fyrox_test
+cargo run --package editor --release
+```
+
 ## Project Generator
 
-Fyrox plugins are static, this means that you must re-compile your game or editor if the source code of your game changes,
-such architecture requires some boilerplate code for any game. Fyrox offers a special tiny tool - 
-`fyrox-template` - that helps you generate all this boilerplate with a single command. Install it by running the following 
-command:
+Fyrox plugins are static, this means that if the source code of the game changes one must recompile. This architecture
+requires some boilerplate code. Fyrox offers a special tiny tool - `fyrox-template` - that helps generate all this
+boilerplate with a single command. Install it by running the following command:
 
 ```shell
 cargo install fyrox-template
 ```
 
-_Note for Linux:_ This installs it in `$user/.cargo/bin`. If you get errors about the `fyrox-template` command not found 
-then you need to add this folder to your `$PATH` still.
+_Note for Linux:_ This installs it in `$user/.cargo/bin`. If receiving errors about the `fyrox-template` command not  
+being found, add this hidden cargo bin folder to the operating systems `$PATH` environment variable.
 
-Navigate to the folder where you want the project to be created and run the following command:
+Now, navigate to the desired project folder and run the following command:
 
 ```shell
 fyrox-template init --name my_game --style 3d
@@ -77,11 +76,11 @@ fyrox-template init --name my_game --style 3d
 Note that unlike `cargo init`, this will create a new folder with the given name.
 
 The tool accepts two arguments - a project name (`--name`) and a style (`--style`), which defines the contents of the default
-scene. Once you initialize your project, go to `game/src/lib.rs` - this is where your game logic is located, as you can 
+scene. After initializing the project, go to `game/src/lib.rs` - this is where the game logic is located, as you can 
 see, the `fyrox-template` generated quite a bit of code for you. There are comments explaining what each place is for. For 
 more info about each method, please refer [to the docs](https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html).
 
-Once the project is generated, you should memorize the two commands that will help you to run your game in different modes:
+Once the project is generated, memorize the two commands that will help run your game in different modes:
 
 - `cargo run --package editor --release` - launches the editor with your game attached. The editor allows you to run your game
   from it and edit its game entities. It is intended to be used only for development.
@@ -117,8 +116,8 @@ to use the latest changes and bug fixes as they release.
 
 ### Manual
 
-Engine version can also be updated manually. The first step you need to take is to install the latest `fyrox-template`, 
-this can be done with a single `cargo` command:
+Engine version can also be updated manually. The first step to take is to install the latest `fyrox-template`, this can be done
+with a single `cargo` command:
 
 ```shell
 cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox

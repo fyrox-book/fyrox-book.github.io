@@ -12,29 +12,29 @@ does not degrade over time as it was in C, it is very easy to manage growing pro
 
 ## Safety
 
-One of the main goals of in the development of the engine is to provide high level of safety. What does this mean? 
-In short: protect from memory-unsafety bugs. This does not include any logic errors, but when your game is free 
+One of the main goals in the development of the engine is to provide a high level of safety. What does this mean? 
+In short: protection from memory-safety related bugs. This does not include any logic errors, but when your game is free 
 of random crashes due to memory unsafety it is much easier to fix logic bugs, because you don't have to think about
 potentially corrupted memory.
 
-Safety is also dictates architecture design decisions of your game, typical callback hell, that is possible to do in
+Safety also dictates the architectural design decisions of your game. The typical callback hell, that is possible to do in
 many other languages, is very tedious to implement in Rust. It is possible, but it requires quite a lot of manual work
-and quickly tell you that you're doing it wrong.
+which quickly tells you that you're doing it wrong.
 
 ## Performance
 
-Game engines usually built using system-level programming languages, that provides peak performance levels. Fyrox is not
-an exception. One if its design goals is to provide high levels of performance by default, leaving an opportunity for
+Game engines are usually built using system-level programming languages, which provide peak performance levels. Fyrox is not
+an exception. One of its design goals is to provide high levels of performance by default, leaving an opportunity for
 adding custom solutions for performance-critical places.
 
 ## Ease of use
 
-Other very important part is that the engine should be friendly to newcomers. It should lower entry threshold, not make
-it worse. Fyrox uses well known and battle-tested concepts, thus making it easier to make games with it. On other hand,
-it still can be extended with anything you need - it tries to be as good for veterans of the game industry as for 
+Another very important part is that the engine should be friendly to newcomers. It should lower the entry threshold, not make
+it worse. Fyrox uses well known and battle-tested concepts, thus making it easier to make games with it. On the other hand,
+it can still be extended with anything you need - it tries to be as good for veterans of the game industry as it is for 
 newcomers.
 
 ## Battle-tested
 
-Fyrox has large projects built on it, that helps to understand real needs for general-purpose game engine. This helps
-in revealing weak spots in design and fix them.
+Fyrox has large projects built on it, which helps with understanding the real needs of a general-purpose game engine. It also helps
+reveal weak spots in the design and fix them.
