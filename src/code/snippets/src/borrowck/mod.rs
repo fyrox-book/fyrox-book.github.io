@@ -79,7 +79,7 @@ impl ScriptTrait for Bot {
                 // Optionally, you can print the actual reason why borrowing wasn't successful.
                 Log::err(err.to_string())
             }
-        }
+        };
     }
 }
 // ANCHOR_END: bot_example
