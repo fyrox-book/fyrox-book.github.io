@@ -23,7 +23,7 @@ are enforced at runtime. They're the same as standard Rust borrowing rules:
 1) You can have infinite number of immutable references to the same object.
 2) You can have only one mutable reference to the same object.
 
-Multi-borrow context provides detailed error messages for cases when borrowing has failed. For example, itt will 
+Multi-borrow context provides detailed error messages for cases when borrowing has failed. For example, it will 
 tell you if you're trying to mutably borrow an object, that was already borrowed as immutable (and vice versa).
 It also provides handle validation and will tell you what's wrong with it. It could be either invalid index of it,
 or the generation. The latter means that the object at the handle was changed and the handle is invalid.
@@ -43,7 +43,7 @@ animations accordingly (attack if the target is close enough).
 As pretty much any approach, this one is not ideal and comes with its own pros and cons. The pros are quite 
 simple:
 
-- No compilation errors - sometimes Rust is too strict about borrowing rules, and valid code not pass its
+- No compilation errors - sometimes Rust is too strict about borrowing rules, and valid code does not pass its
 checks.
 - Better ergonomics - no need to juggle with temporary variable here and there to perform an action.
 
