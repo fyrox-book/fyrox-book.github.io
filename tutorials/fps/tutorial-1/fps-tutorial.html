@@ -250,7 +250,8 @@ to the <code>lib.rs</code> module by adding the <code>pub mod player;</code> aft
 </span>use crate::{bot::Bot, player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    core::{reflect::prelude::*, visitor::prelude::*},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
 use std::path::Path;

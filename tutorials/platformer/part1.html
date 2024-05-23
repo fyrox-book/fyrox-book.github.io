@@ -294,7 +294,7 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
     },
     event::{ElementState, Event, WindowEvent},
     keyboard::{KeyCode, PhysicalKey},
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
@@ -353,7 +353,7 @@ every method in <a href="https://docs.rs/fyrox/latest/fyrox/script/trait.ScriptT
 code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>impl PluginConstructor for GameConstructor {
+</span>impl Plugin for Game {
     fn register(&amp;self, context: PluginRegistrationContext) {
         let script_constructors = &amp;context.serialization_context.script_constructors;
         script_constructors.add::&lt;Player&gt;("Player");

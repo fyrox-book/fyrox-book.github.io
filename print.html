@@ -10678,7 +10678,7 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
     },
     event::{ElementState, Event, WindowEvent},
     keyboard::{KeyCode, PhysicalKey},
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
@@ -10737,7 +10737,7 @@ every method in <a href="https://docs.rs/fyrox/latest/fyrox/script/trait.ScriptT
 code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>impl PluginConstructor for GameConstructor {
+</span>impl Plugin for Game {
     fn register(&amp;self, context: PluginRegistrationContext) {
         let script_constructors = &amp;context.serialization_context.script_constructors;
         script_constructors.add::&lt;Player&gt;("Player");
@@ -11100,7 +11100,7 @@ The second place is <code>PluginConstructor::register</code> method - every scri
 the following code to the method:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>impl PluginConstructor for GameConstructor {
+</span>impl Plugin for Game {
     fn register(&amp;self, context: PluginRegistrationContext) {
         context
             .serialization_context
@@ -11418,7 +11418,8 @@ to the <code>lib.rs</code> module by adding the <code>pub mod player;</code> aft
 </span>use crate::{bot::Bot, player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    core::{reflect::prelude::*, visitor::prelude::*},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
 use std::path::Path;

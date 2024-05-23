@@ -1,3 +1,4 @@
+use fyrox::graph::{BaseSceneGraph, SceneGraph};
 use fyrox::{
     core::{
         math, pool::Handle, reflect::prelude::*, type_traits::prelude::*,

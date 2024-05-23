@@ -32,10 +32,156 @@
         ),
         z_near: 0.025,
         z_far: 128.0,
+        draw_grid: true,
+    ),
+    build: (
+        selected_profile: 0,
+        profiles: [
+            (
+                name: "Debug",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                        ],
+                        environment_variables: [],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                    ],
+                    environment_variables: [],
+                ),
+            ),
+            (
+                name: "Debug (HR)",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "game_dylib",
+                            "--no-default-features",
+                            "--features",
+                            "dylib-engine",
+                            "--profile",
+                            "dev-hot-reload",
+                        ],
+                        environment_variables: [
+                            (
+                                name: "RUSTFLAGS",
+                                value: "-C prefer-dynamic=yes",
+                            ),
+                        ],
+                    ),
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                            "--no-default-features",
+                            "--features",
+                            "dylib",
+                            "--profile",
+                            "dev-hot-reload",
+                        ],
+                        environment_variables: [
+                            (
+                                name: "RUSTFLAGS",
+                                value: "-C prefer-dynamic=yes",
+                            ),
+                        ],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                        "--no-default-features",
+                        "--features",
+                        "dylib",
+                        "--profile",
+                        "dev-hot-reload",
+                    ],
+                    environment_variables: [
+                        (
+                            name: "RUSTFLAGS",
+                            value: "-C prefer-dynamic=yes",
+                        ),
+                    ],
+                ),
+            ),
+            (
+                name: "Release",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                            "--release",
+                        ],
+                        environment_variables: [],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                        "--release",
+                    ],
+                    environment_variables: [],
+                ),
+            ),
+            (
+                name: "Release (HR)",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                            "--release",
+                            "--release",
+                        ],
+                        environment_variables: [],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                        "--release",
+                        "--release",
+                    ],
+                    environment_variables: [],
+                ),
+            ),
+        ],
     ),
     general: (
         show_node_removal_dialog: true,
         suspend_unfocused_editor: true,
+        script_editor: SystemDefault,
+        max_history_entries: 512,
+        generate_previews: true,
     ),
     debugging: (
         show_physics: true,
@@ -312,6 +458,15 @@
                 ),
             ),
         ),
+        run_game: Some(
+            code: F5,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
     ),
     scene_settings: {
         ".\\data\\scene.rgs": (
@@ -322,25 +477,13 @@
             ),
             node_infos: {
                 (
-                    index: 7,
+                    index: 58,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 61,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
+                    index: 59,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -358,43 +501,13 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 3,
+                    index: 4,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 58,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 12,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 56,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 64,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -412,7 +525,31 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 13,
+                    index: 11,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 61,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 12,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -424,14 +561,32 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 11,
+                    index: 56,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 59,
+                    index: 6,
                     generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 13,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 7,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 64,
+                    generation: 2,
                 ): (
                     is_expanded: true,
                 ),
@@ -446,6 +601,42 @@
             node_infos: {
                 (
                     index: 51,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 59,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 48,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 65,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 58,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 46,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 60,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -469,19 +660,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 54,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 58,
+                    index: 64,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -493,31 +672,25 @@
                     is_expanded: true,
                 ),
                 (
+                    index: 52,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 61,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 64,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 46,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 53,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -529,19 +702,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 52,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 48,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 65,
+                    index: 53,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -553,19 +714,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 60,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 59,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 63,
+                    index: 54,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -577,7 +726,13 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 61,
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 63,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -591,8 +746,8 @@
         ],
     ),
     windows: (
-        window_position: (0.0, 19.0),
-        window_size: (2560.0, 1377.0),
+        window_position: (-8.0, -8.0),
+        window_size: (1920.0, 1017.0),
         layout: None,
     ),
 )

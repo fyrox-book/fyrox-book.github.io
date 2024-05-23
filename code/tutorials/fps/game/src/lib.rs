@@ -2,7 +2,8 @@
 use crate::{bot::Bot, player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::{
     core::pool::Handle,
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    core::{reflect::prelude::*, visitor::prelude::*},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
 use std::path::Path;
@@ -14,9 +15,12 @@ pub mod bot;
 pub mod projectile;
 pub mod weapon;
 
-pub struct GameConstructor;
+#[derive(Visit, Reflect, Default, Debug)]
+pub struct Game {
+    scene: Handle<Scene>,
+}
 
-impl PluginConstructor for GameConstructor {
+impl Plugin for Game {
     fn register(&self, context: PluginRegistrationContext) {
         // ANCHOR: player_script_reg
         context
@@ -47,28 +51,12 @@ impl PluginConstructor for GameConstructor {
         // ANCHOR_END: bot_script_reg
     }
 
-    fn create_instance(&self, scene_path: Option<&str>, context: PluginContext) -> Box<dyn Plugin> {
-        Box::new(Game::new(scene_path, context))
-    }
-}
-
-pub struct Game {
-    scene: Handle<Scene>,
-}
-
-impl Game {
-    pub fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
     }
-}
 
-impl Plugin for Game {
     fn on_scene_begin_loading(&mut self, _path: &Path, ctx: &mut PluginContext) {
         if self.scene.is_some() {
             ctx.scenes.remove(self.scene);

@@ -2,17 +2,21 @@
 use crate::player::Player;
 use fyrox::{
     core::pool::Handle,
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    core::{reflect::prelude::*, visitor::prelude::*},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
 use std::path::Path;
 
 mod player;
 
-pub struct GameConstructor;
+#[derive(Visit, Reflect, Default, Debug)]
+pub struct Game {
+    scene: Handle<Scene>,
+}
 
 // ANCHOR: register
-impl PluginConstructor for GameConstructor {
+impl Plugin for Game {
     fn register(&self, context: PluginRegistrationContext) {
         context
             .serialization_context
@@ -21,28 +25,12 @@ impl PluginConstructor for GameConstructor {
     }
     // ANCHOR_END: register
 
-    fn create_instance(&self, scene_path: Option<&str>, context: PluginContext) -> Box<dyn Plugin> {
-        Box::new(Game::new(scene_path, context))
-    }
-}
-
-pub struct Game {
-    scene: Handle<Scene>,
-}
-
-impl Game {
-    pub fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
     }
-}
 
-impl Plugin for Game {
     fn on_scene_loaded(
         &mut self,
         _path: &Path,
