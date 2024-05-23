@@ -1,7 +1,7 @@
 //! Executor with your game connected to it as a plugin.
-use fyrox::engine::executor::Executor;
-use fps::GameConstructor;
+use fps::Game;
 use fyrox::core::wasm_bindgen::{self, prelude::*};
+use fyrox::engine::executor::Executor;
 
 #[wasm_bindgen]
 extern "C" {
@@ -40,6 +40,6 @@ pub fn set_panic_hook() {
 pub fn main() {
     set_panic_hook();
     let mut executor = Executor::new();
-    executor.add_plugin_constructor(GameConstructor);
+    executor.add_plugin(Game::default());
     executor.run()
 }

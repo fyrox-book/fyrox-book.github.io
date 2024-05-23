@@ -13,7 +13,7 @@ use fyrox::{
     },
     event::{ElementState, Event, WindowEvent},
     keyboard::{KeyCode, PhysicalKey},
-    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
+    plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
@@ -24,38 +24,26 @@ use fyrox::{
 };
 // ANCHOR_END: imports
 
-pub struct GameConstructor;
+#[derive(Visit, Reflect, Debug, Default)]
+pub struct Game {
+    scene: Handle<Scene>,
+}
 
 // ANCHOR: register
-impl PluginConstructor for GameConstructor {
+impl Plugin for Game {
     fn register(&self, context: PluginRegistrationContext) {
         let script_constructors = &context.serialization_context.script_constructors;
         script_constructors.add::<Player>("Player");
     }
     // ...
     // ANCHOR_END: register
-    fn create_instance(&self, scene_path: Option<&str>, context: PluginContext) -> Box<dyn Plugin> {
-        Box::new(Game::new(scene_path, context))
-    }
-}
 
-pub struct Game {
-    scene: Handle<Scene>,
-}
-
-impl Game {
-    pub fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
     }
 }
-
-impl Plugin for Game {}
 
 // ANCHOR: sprite_field
 #[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
