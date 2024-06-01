@@ -1,7 +1,7 @@
 # Scripts
 
 Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting, 
-so scripts are as fast as native code. 
+so scripts are as fast as native code. Every scene node can have any number of scripts assigned.
 
 ## When to Use Scripts and When Not
 
@@ -18,51 +18,7 @@ components should be created and handled in the game plugin of your game.
 Typical script structure is something like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*, TypeUuidProvider},
-#     event::Event, impl_component_provider,
-#     scene::{graph::map::NodeHandleMap},
-#     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
-# };
-#[derive(Visit, Reflect, Default, Debug, Clone)]
-struct MyScript {
-    // Add fields here.
-}
-
-impl_component_provider!(MyScript);
-
-impl TypeUuidProvider for MyScript {
-    fn type_uuid() -> Uuid {
-        uuid!("bf0f9804-56cb-4a2e-beba-93d75371a568")
-    }
-}
-
-impl ScriptTrait for MyScript {
-    fn on_init(&mut self, context: &mut ScriptContext) {
-        // Put initialization logic here.
-    }
-    
-    fn on_start(&mut self, context: &mut ScriptContext) {
-        // Put start logic - it is called when every other script is already initialized.
-    }
-
-    fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
-        // Put de-initialization logic here.
-    }
-
-    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {
-        // Respond to OS events here.
-    }
-
-    fn on_update(&mut self, context: &mut ScriptContext) {
-        // Put object logic here.
-    }
-
-    fn id(&self) -> Uuid {
-        Self::type_uuid()
-    }
-}
+{{#include ../code/snippets/src/scripting/example.rs:example_script}}
 ```
 
 Each script must implement following traits:
@@ -81,6 +37,9 @@ implementation if it's necessary for your script.
 - `TypeUuidProvider` is used to attach some unique id for your type, every script **must** have a unique ID, otherwise, 
 the engine will not be able to save and load your scripts. To generate a new UUID, use 
 [Online UUID Generator](https://www.uuidgenerator.net/) or any other tool that can generate UUIDs.
+- `ComponentProvider` - gives access to inner fields of the script marked with `#[component(include)]` attribute.
+
+`#[visit(optional)]` attribute is used to suppress serialization errors when some fields are missing or changed. 
 
 ## Script Template Generator
 
@@ -112,48 +71,7 @@ to an object. `PluginConstructor` trait has `register` method exactly for script
 you need to register it in the list of script constructors like so:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#         scene::Scene,
-#         plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
-#         core::{
-#             visitor::prelude::*,
-#             reflect::prelude::*,
-#             pool::Handle,
-#             uuid::Uuid, TypeUuidProvider
-#         },
-#         impl_component_provider,
-#         script::ScriptTrait,
-#     };
-# 
-#     #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
-#     struct MyScript;
-# 
-#     impl TypeUuidProvider for MyScript {
-#         fn type_uuid() -> Uuid {
-#             todo!()
-#         }
-#     }
-# 
-#     impl_component_provider!(MyScript);
-# 
-#     impl ScriptTrait for MyScript {
-#         fn id(&self) -> Uuid {
-#             todo!()
-#         }
-#     }
-# 
-#     struct Constructor;
-# 
-#     impl PluginConstructor for Constructor {
-fn register(&self, context: PluginRegistrationContext) {
-    context.serialization_context.script_constructors.add::<MyScript>("My Script");
-}
-# 
-#         fn create_instance(&self, _scene_path: Option<&str>, _context: PluginContext) -> Box<dyn Plugin> {
-#             todo!()
-#         }
-#     }
+{{#include ../code/snippets/src/scripting/example.rs:register}}
 ```
 
 Every script type (`MyScript` in the code snippet above, you need to change it to your script type) must be registered using 
@@ -163,41 +81,14 @@ arbitrary, it is used only in the editor. You can also change it at any time, it
 
 ## Script Attachment
 
-To assign a script and see it in action, run the editor, select an object and find `Script` property in the Inspector.
-Select your script from the drop-down list. To see the script in action, click "Play/Stop" button. The editor will run
-your game in separate process with the scene active in the editor.
+To assign a script and see it in action, run the editor, select an object and find `Scripts` property in the Inspector.
+Click on a small `+` button and select your script from the drop-down list on the newly added entry. To see the script 
+in action, click "Play/Stop" button. The editor will run your game in separate process with the scene active in the editor.
 
 The script can be attached to a scene node from code:
 
 ```rust, no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*, TypeUuidProvider},
-#     impl_component_provider,
-#     scene::node::{Node},
-#     script::{Script, ScriptTrait},
-# };
-# 
-# #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
-# struct MyScript;
-# 
-# impl TypeUuidProvider for MyScript {
-#     fn type_uuid() -> Uuid {
-#         todo!()
-#     }
-# }
-# 
-# impl_component_provider!(MyScript);
-# 
-# impl ScriptTrait for MyScript {
-#     fn id(&self) -> Uuid {
-#         todo!()
-#     }
-# }
-# 
-fn set_script<T: ScriptTrait>(node: &mut Node, script: T) {
-    node.set_script(Some(Script::new(script)))
-}
+{{#include ../code/snippets/src/scripting/example.rs:add_my_script}}
 ```
 
 Initialization as well as update of newly assigned script will happen on next update tick of the engine.
@@ -208,24 +99,7 @@ Script context provides access to the environment that can be used to modify eng
 content of the context is something like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     engine::{ScriptMessageDispatcher},
-#     plugin::Plugin, asset::manager::ResourceManager,
-#     scene::{node::Node, Scene},
-#     script::ScriptMessageSender
-# };
-pub struct ScriptContext<'a, 'b, 'c> {
-    pub dt: f32,
-    pub elapsed_time: f32,
-    pub plugins: &'a mut [Box<dyn Plugin>],
-    pub handle: Handle<Node>,
-    pub scene: &'b mut Scene,
-    pub resource_manager: &'a ResourceManager,
-    pub message_sender: &'c ScriptMessageSender,
-    pub message_dispatcher: &'c mut ScriptMessageDispatcher,
-}
+{{#include ../code/snippets/src/scripting/context.rs:context}}
 ```
 
 - `dt` - amount of time passed since last frame. The value of the variable is implementation-defined, usually it is
@@ -239,11 +113,17 @@ particular type using `context.plugins[0].cast::<MyPlugin>().unwrap()` call.
 `context.scene.graph[handle]` call. Typecasting can be used to obtain a reference to a particular node type.
 - `scene` - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
 add/modify/remove scene nodes.
+- `scene_handle` - a handle of a scene the script instance belongs to.
 - `resource_manager` - a reference to resource manager, you can use it to load and instantiate assets. 
 - `message_sender` - a message sender. Every message sent via this sender will be then passed to every 
 `ScriptTrait::on_message` method of every script.
-- `message_dispatcher` - a message dispatcher. If you need to receive messages of a particular type, you must subscribe 
+- `message_dispatcher` - a message dispatcher. If you need to receive messages of a particular type, you must subscribe
 to a type explicitly.
+- `task_pool` - task pool for asynchronous task management.
+- `graphics_context` - Current graphics context of the engine.
+- `user_interfaces` - a reference to user interface container of the engine. The engine guarantees that there's
+at least one user interface exists. Use `context.user_interfaces.first()/first_mut()` to get a reference to it.
+- `script_index` - index of the script. Never save this index, it is only valid while this context exists!
 
 ## Execution order
 
@@ -259,6 +139,9 @@ will be called once per 4 frames.
 - `on_message` - called once per incoming message.
 - `on_os_event` - called once per incoming OS event.
 - `on_deinit` - called at the end of the update cycle once when the script (or parent node) is about to be deleted.
+
+If a scene node has multiple scripts assigned, then they will be processed as described above in the same order as they
+assigned to the scene node.
 
 ## Message passing
 
@@ -278,67 +161,7 @@ message and handle all incoming messages and compare `attacker` with owner of th
 by `attacker` flash with some different color. In code this would like so:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{pool::Handle, reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
-#     impl_component_provider,
-#     scene::node::Node,
-#     script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
-#     core::log::Log,
-# };
-# 
-enum Message {
-    Damage {
-        actor: Handle<Node>,
-        attacker: Handle<Node>,
-    },
-}
-
-#[derive(Default, Clone, Reflect, Visit, Debug)]
-struct Projectile;
-# 
-# impl_component_provider!(Projectile);
-
-impl ScriptTrait for Projectile {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
-        // Broadcast the message globally.
-        ctx.message_sender.send_global(Message::Damage {
-            actor: Default::default(),
-            attacker: ctx.handle,
-        });
-    }
-# 
-#     fn id(&self) -> Uuid {
-#         todo!()
-#     }
-}
-
-#[derive(Default, Clone, Reflect, Visit, Debug)]
-struct LaserSight;
-# 
-# impl_component_provider!(LaserSight);
-
-impl ScriptTrait for LaserSight {
-    fn on_start(&mut self, ctx: &mut ScriptContext) {
-        // Subscript to messages.
-        ctx.message_dispatcher.subscribe_to::<Message>(ctx.handle);
-    }
-
-    fn on_message(
-        &mut self,
-        message: &mut dyn ScriptMessagePayload,
-        _ctx: &mut ScriptMessageContext,
-    ) {
-        // React to message.
-        if let Some(Message::Damage { actor, attacker }) = message.downcast_ref::<Message>() {
-            Log::info(format!("{actor} damaged {attacker}",))
-        }
-    }
-# 
-#     fn id(&self) -> Uuid {
-#         todo!()
-#     }
-}
+{{#include ../code/snippets/src/scripting/mod.rs:message_passing}}
 ```
 
 There are few key parts:
@@ -358,8 +181,8 @@ Every script "lives" on some scene node, so to access a script data from some ot
 a handle of a scene node with that script first. You can do this like so:
 
 ```rust,no_run
-{{#include ../code/snippets/src/script/mod.rs:access_other_1}}
-{{#include ../code/snippets/src/script/mod.rs:access_other_2}}
+{{#include ../code/snippets/src/scripting/mod.rs:access_other_1}}
+{{#include ../code/snippets/src/scripting/mod.rs:access_other_2}}
 ```
 
 In this example we have the two script types: `MyScript` and `MyOtherScript`. Now imagine that we have two scene
@@ -373,7 +196,7 @@ method (or `try_get_script_mut` for the alternative code).
 your scene by using the following code:
 
 ```rust,no_run
-{{#include ../code/snippets/src/script/mod.rs:find_node}}
+{{#include ../code/snippets/src/scripting/mod.rs:find_node}}
 ```
 
 This code searches for a node with `SomeName` and assigns its handle to the `second_node` variable in the script

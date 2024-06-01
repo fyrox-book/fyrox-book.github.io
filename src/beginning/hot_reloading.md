@@ -1,8 +1,5 @@
 # Code Hot Reloading
 
-> ⚠️ This functionality is available on nightly version of the engine only. It will be a part of upcoming stable release
-> of Fyrox 0.34.
-
 Fyrox supports code hot reloading (CHR for short), which allows you to recompile the game code while the game is running. 
 This functionality significantly reduces iteration times and allows rapid prototyping. This way, Rust becomes a sort of 
 "scripting" language, but with all Rust safety and performance guarantees. CHR in action looks like this:
