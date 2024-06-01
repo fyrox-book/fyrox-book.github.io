@@ -14,11 +14,15 @@ A sprite instance could be created using `SpriteBuilder`:
 {{#include ../code/snippets/src/scene/sprite.rs:create_sprite}}
 ```
 
-A sprite with a texture could be created by using `.with_texture` method of the builder:
+A sprite with a texture could be created by using `.with_material` method of the builder:
 
 ```rust,no_run
 {{#include ../code/snippets/src/scene/sprite.rs:create_sprite_with_texture}}
 ```
+
+Please note, that this code create a material per each sprite. This could be very unoptimal if you're using tons of 
+sprites at once, share the same material resource across multiple sprites if you can. Otherwise, each sprite will be
+rendered in a separate draw call and the overall performance will be very low.
 
 ## Animation
 
