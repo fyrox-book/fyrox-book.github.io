@@ -38,29 +38,7 @@ builder must know how to build Base node. While it may sound confusing, it is ac
 Consider this example:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, pool::Handle},
-#     scene::{
-#         base::BaseBuilder, camera::CameraBuilder, node::Node, transform::TransformBuilder,
-#         Scene,
-#     },
-# };
-
-fn create_camera(scene: &mut Scene) -> Handle<Node> {
-    CameraBuilder::new(
-        // Here we passing a base builder. Note that, since we can build Base node separately
-        // we can pass any custom values to it while building.
-        BaseBuilder::new().with_local_transform(
-            TransformBuilder::new()
-                .with_local_position(Vector3::new(2.0, 0.0, 3.0))
-                .build(),
-        ),
-    ) 
-    // Here we just setting desired Camera properties.
-    .with_fov(60.0f32.to_radians())
-    .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/graph.rs:create_camera}}
 ```
 
 As you can see, we're creating an instance of BaseBuilder and fill it with desired properties as well as filling
@@ -68,52 +46,7 @@ the CameraBuilder's instance properties. This is a very flexible mechanism, allo
 in a declarative manner:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, pool::Handle},
-#     scene::{
-#         base::BaseBuilder, camera::CameraBuilder, mesh::MeshBuilder, node::Node,
-#         sprite::SpriteBuilder, transform::TransformBuilder, Scene,
-#     },
-# };
-
-fn create_node(scene: &mut Scene) -> Handle<Node> {
-    CameraBuilder::new(
-        BaseBuilder::new()
-            // Add some children nodes.
-            .with_children(&[
-                // A staff...
-                MeshBuilder::new(
-                    BaseBuilder::new()
-                        .with_name("MyFancyStaff")
-                        .with_local_transform(
-                            TransformBuilder::new()
-                                .with_local_position(Vector3::new(0.5, 0.5, 1.0))
-                                .build(),
-                        ),
-                )
-                .build(&mut scene.graph),
-                // and a spell.
-                SpriteBuilder::new(
-                    BaseBuilder::new()
-                        .with_name("MyFancyFireball")
-                        .with_local_transform(
-                            TransformBuilder::new()
-                                .with_local_position(Vector3::new(-0.5, 0.5, 1.0))
-                                .build(),
-                        ),
-                )
-                .build(&mut scene.graph),
-            ])
-            .with_local_transform(
-                TransformBuilder::new()
-                    .with_local_position(Vector3::new(2.0, 0.0, 3.0))
-                    .build(),
-            ),
-    )
-    .with_fov(60.0f32.to_radians())
-    .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/graph.rs:create_node}}
 ```
 
 This code snippet creates a camera for first-person role-playing game's player, it will have a staff in "right-hand"
@@ -128,18 +61,7 @@ For some rare cases you may also want to delay adding a node to the graph, speci
 builder has `.build_node` method which creates an instance of `Node`  but does not add it to the graph.
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
-# };
-
-fn create_node(scene: &mut Scene) -> Handle<Node> {
-    let node: Node = CameraBuilder::new(BaseBuilder::new()).build_node();
-
-    // We must explicitly add the node to the graph.
-    scene.graph.add_node(node)
-}
+{{#include ../code/snippets/src/scene/graph.rs:create_node_manually}}
 ```
 
 ## How to modify the hierarchy
@@ -149,28 +71,7 @@ you're creating an instance of some 3D model. If you want the instance to be a c
 you should attach it explicitly by using `graph.link_nodes(..)`:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{futures::executor::block_on, pool::Handle},
-#     asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
-#     scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
-# };
-
-fn link_weapon_to_camera(
-    scene: &mut Scene,
-    camera: Handle<Node>,
-    resource_manager: ResourceManager,
-) {
-    let weapon = block_on(
-        resource_manager
-            .request::<Model, _>("path/to/weapon.fbx"),
-    )
-    .unwrap()
-    .instantiate(scene);
-
-    // Link weapon to the camera.
-    scene.graph.link_nodes(weapon, camera);
-}
+{{#include ../code/snippets/src/scene/graph.rs:link_weapon_to_camera}}
 ```
 
 Here we've loaded a weapon 3D model, instantiated it on scene and attached to _existing_ camera. 
@@ -183,19 +84,7 @@ nodes while deleting parent node. To do that, you need to explicitly detach chil
 to delete:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{node::Node, Scene},
-# };
-
-fn remove_preserve_children(scene: &mut Scene, node_to_remove: Handle<Node>) {
-    for child in scene.graph[node_to_remove].children().to_vec() {
-        scene.graph.unlink_node(child);
-    }
-
-    scene.graph.remove_node(node_to_remove);
-}
+{{#include ../code/snippets/src/scene/graph.rs:remove_preserve_children}}
 ```
 
 After calling this function, every child node of `node_to_remove` will be detached from it and the `node_to_remove`
