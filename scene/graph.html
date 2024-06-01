@@ -218,16 +218,7 @@ builder must know how to build Base node. While it may sound confusing, it is ac
 Consider this example:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder, camera::CameraBuilder, node::Node, transform::TransformBuilder,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     CameraBuilder::new(
         // Here we passing a base builder. Note that, since we can build Base node separately
         // we can pass any custom values to it while building.
@@ -236,7 +227,7 @@ fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
                 .with_local_position(Vector3::new(2.0, 0.0, 3.0))
                 .build(),
         ),
-    ) 
+    )
     // Here we just setting desired Camera properties.
     .with_fov(60.0f32.to_radians())
     .build(&amp;mut scene.graph)
@@ -247,16 +238,7 @@ the CameraBuilder's instance properties. This is a very flexible mechanism, allo
 in a declarative manner:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder, camera::CameraBuilder, mesh::MeshBuilder, node::Node,
-</span><span class="boring">        sprite::SpriteBuilder, transform::TransformBuilder, Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     CameraBuilder::new(
         BaseBuilder::new()
             // Add some children nodes.
@@ -304,13 +286,7 @@ together with the camera.</p>
 builder has <code>.build_node</code> method which creates an instance of <code>Node</code>  but does not add it to the graph.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
-</span><span class="boring">};
-</span>
-fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_node_manually(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     let node: Node = CameraBuilder::new(BaseBuilder::new()).build_node();
 
     // We must explicitly add the node to the graph.
@@ -323,24 +299,14 @@ you're creating an instance of some 3D model. If you want the instance to be a c
 you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
-</span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
-</span><span class="boring">};
-</span>
-fn link_weapon_to_camera(
+</span>fn link_weapon_to_camera(
     scene: &amp;mut Scene,
     camera: Handle&lt;Node&gt;,
     resource_manager: ResourceManager,
 ) {
-    let weapon = block_on(
-        resource_manager
-            .request::&lt;Model, _&gt;("path/to/weapon.fbx"),
-    )
-    .unwrap()
-    .instantiate(scene);
+    let weapon = block_on(resource_manager.request::&lt;Model&gt;("path/to/weapon.fbx"))
+        .unwrap()
+        .instantiate(scene);
 
     // Link weapon to the camera.
     scene.graph.link_nodes(weapon, camera);
@@ -354,13 +320,7 @@ nodes while deleting parent node. To do that, you need to explicitly detach chil
 to delete:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">};
-</span>
-fn remove_preserve_children(scene: &amp;mut Scene, node_to_remove: Handle&lt;Node&gt;) {
+</span>fn remove_preserve_children(scene: &amp;mut Scene, node_to_remove: Handle&lt;Node&gt;) {
     for child in scene.graph[node_to_remove].children().to_vec() {
         scene.graph.unlink_node(child);
     }

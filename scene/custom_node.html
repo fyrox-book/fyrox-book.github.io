@@ -190,25 +190,7 @@
 code.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::{
-        reflect::prelude::*,
-        math::aabb::AxisAlignedBoundingBox,
-        pool::Handle,
-        uuid::{uuid, Uuid},
-        variable::InheritError,
-        visitor::prelude::*,
-    },
-    asset::manager::ResourceManager,
-    scene::{
-        base::Base,
-        node::{Node, NodeTrait},
-    },
-};
-use std::ops::{Deref, DerefMut};
-
-#[derive(Clone, Reflect, Visit, Debug)]
+</span>#[derive(Default, Clone, Reflect, Visit, Debug)]
 pub struct CustomNode {
     base: Base,
 }
@@ -248,13 +230,6 @@ impl NodeTrait for CustomNode {
 <p>Once the node is defined, you can create is as usual and put in the graph:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{camera::Camera, graph::Graph, node::Node},
-</span><span class="boring">};
-</span><span class="boring">type CustomNode = Camera;
-</span><span class="boring">
 </span>fn add_custom_node(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     graph.add_node(Node::new(CustomNode::default()))
 }
@@ -265,8 +240,7 @@ graph easily. You still can define a global variable that <strong>will</strong> 
 should be avoided. If you want to add custom logic to scene nodes, then you should use scripts instead. Custom nodes
 are intended for very specific use cases, such as adding "data sources" for renderer, etc.</p>
 <h2 id="editor-support"><a class="header" href="#editor-support">Editor support</a></h2>
-<p>For now, you cannot create custom nodes from the editor. This will be available in future versions of the engine; when
-editor plugins will be supported.</p>
+<p>For now, you cannot create custom nodes from the editor. This will be available in future versions of the engine.</p>
 
                     </main>
 
