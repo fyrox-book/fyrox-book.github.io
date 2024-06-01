@@ -12,18 +12,7 @@ The rust marks are applied on existing geometry of the scene by projecting a rus
 A decal instance can be created using DecalBuilder:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     asset::manager::ResourceManager, resource::texture::Texture,
-#     scene::{base::BaseBuilder, decal::DecalBuilder, node::Node, Scene},
-# };
-
-fn create_decal(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
-    DecalBuilder::new(BaseBuilder::new())
-        .with_diffuse_texture(resource_manager.request::<Texture, _>("path/to/your/decal.png"))
-        .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/decal.rs:create_decal}}
 ```
 
 ## Textures

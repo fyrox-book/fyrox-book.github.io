@@ -13,11 +13,7 @@ Use the `PivotBuilder` to create an instance of the Pivot node (remember `Base` 
 node types):
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::scene::{base::BaseBuilder, pivot::PivotBuilder, Scene};
-# fn build_node(scene: &mut Scene) {
-let handle = PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
-# }
+{{#include ../code/snippets/src/scene/base.rs:build_node}}
 ```
 
 ## Building a complex hierarchy
@@ -26,19 +22,7 @@ To build a complex hierarchy of some nodes, use `.with_children()` method of the
 to build a hierarchy of any complexity:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::scene::{base::BaseBuilder, pivot::PivotBuilder, camera::CameraBuilder, Scene};
-#
-# fn build_node(scene: &mut Scene) {
-let handle = PivotBuilder::new(BaseBuilder::new()
-    .with_children(&[
-        CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph),
-        PivotBuilder::new(BaseBuilder::new()
-            .with_children(&[PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph)]))
-            .build(&mut scene.graph),
-    ]))
-    .build(&mut scene.graph);
-# }
+{{#include ../code/snippets/src/scene/base.rs:build_complex_node}}
 ```
 
 Note that when we're building a `Camera` instance, we're passing a new instance of `BaseBuilder` to it, this
@@ -47,22 +31,7 @@ instance can also be used to set some properties and a set of children nodes.
 The "fluent syntax" is not mandatory to use, the above code snipped could be rewritten like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::scene::{base::BaseBuilder, pivot::PivotBuilder, camera::CameraBuilder, Scene};
-# 
-# fn build_node(scene: &mut Scene) {
-let camera = CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
-
-let child_base = PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
-
-let base = PivotBuilder::new(BaseBuilder::new()
-    .with_children(&[child_base]))
-    .build(&mut scene.graph);
-
-let handle = PivotBuilder::new(BaseBuilder::new()
-    .with_children(&[camera, base]))
-    .build(&mut scene.graph);
-# }
+{{#include ../code/snippets/src/scene/base.rs:build_complex_node_flat}}
 ```
 
 However, it looks less informative, because it loses the hierarchical view and it is harder to tell the relations
@@ -74,35 +43,13 @@ Base node has a local transform that allows you to translate/scale/rotate/etc. y
 to move a node at specific location you could use this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#    core::{algebra::Vector3, pool::Handle},
-#    scene::{node::Node, Scene},
-# };
-#
-# fn translate_node(scene: &mut Scene, node_handle: Handle<Node>) {
-scene.graph[node_handle]
-    .local_transform_mut()
-    .set_position(Vector3::new(1.0, 0.0, 2.0));
-# }
+{{#include ../code/snippets/src/scene/base.rs:translate_node}}
 ```
 
 You could also chain multiple `set_x` calls, like so:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#    core::{algebra::Vector3, pool::Handle},
-#    scene::{node::Node, Scene},
-# };
-#
-# fn transform_node(scene: &mut Scene, node_handle: Handle<Node>) {
-scene.graph[node_handle]
-    .local_transform_mut()
-    .set_position(Vector3::new(1.0, 0.0, 2.0))
-    .set_scale(Vector3::new(2.0, 2.0, 2.0))
-    .set_rotation_offset(Vector3::new(1.0, 1.0, 0.0));
-# }
+{{#include ../code/snippets/src/scene/base.rs:transform_node}}
 ```
 
 See more info about transformations [here](./transform.md).

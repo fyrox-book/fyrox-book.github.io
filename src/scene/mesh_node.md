@@ -15,7 +15,8 @@ into surfaces to be rendered effectively by modern GPUs.
 There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
 the way to go, especially with tons and tons of free 3D models available online.
 
-> ⚠️ The engine supports _only_ FBX file format for 3D models!
+> ⚠️ The engine supports _only_ FBX and GLTF file format for 3D models! 
+> To use GLTF, specify `gltf` feature of the engine in your root Cargo.toml
 
 ### Using a 3D modelling software
 
