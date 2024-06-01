@@ -2290,51 +2290,76 @@ you build all "static" content in the editor and adding rest of the entities (bo
 manually by instantiating respective prefabs at runtime.</p>
 <h3 id="using-fyroxed"><a class="header" href="#using-fyroxed">Using FyroxEd</a></h3>
 <p>There is a <a href="scene/../beginning/editor_overview.html">separate chapter</a> in the book that should help you to create a
-scene. After a scene is created, you can load it as any other 3D model (or prefab) using the resource manager:</p>
+scene. After a scene is created, you can load it using async scene loader:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
-</span>
-fn load_scene(resource_manager: ResourceManager) -&gt; Scene {
-    // Create parent scene.
-    let mut scene = Scene::new();
-
-    // Request child scene and block until it loading.
-    let scene_resource = block_on(
-        resource_manager
-            .request::&lt;Model, _&gt;("path/to/your/scene.rgs"),
-    )
-        .unwrap();
-
-    // Create an instance of the scene in the parent scene.
-    let child_scene = scene_resource.instantiate(&amp;mut scene);
-
-    scene
+</span>#[derive(Visit, Reflect, Debug)]
+struct MyGame {
+    main_scene: Handle&lt;Scene&gt;,
 }
+
+impl Plugin for MyGame {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+        // Step 1. Kick off scene loading in a separate thread. This method could
+        // be located in any place of your code.
+        context.async_scene_loader.request("path/to/your/scene.rgs")
+    }
+
+    fn on_scene_loaded(
+        &amp;mut self,
+        path: &amp;Path,
+        scene: Handle&lt;Scene&gt;,
+        data: &amp;[u8],
+        context: &amp;mut PluginContext,
+    ) {
+        // Step 2.
+        // This method is called once a scene was fully loaded.
+        // You may want to remove previous scene first.
+        if self.main_scene.is_some() {
+            context.scenes.remove(self.main_scene)
+        }
+
+        // Remember new scene as main.
+        self.main_scene = scene;
+    }
+
+    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) {
+        // This method is called if a scene just began to load.
+    }
+
+    fn on_scene_loading_failed(
+        &amp;mut self,
+        path: &amp;Path,
+        error: &amp;VisitError,
+        context: &amp;mut PluginContext,
+    ) {
+        // This method is called if a scene failed to load.
+    }
+
+    // ...
 <span class="boring">}</span></code></pre></pre>
-<p>Please note that here we're creating an empty scene and only then instantiating another scene into it. Why is this
-needed? Child scene is considered as <a href="scene/./prefab.html">prefab</a>, and it is "instantiated" in the parent scene. Considering
-it as prefab allows you modifying your scene separately and serialization/deserialization will be able to correctly
-apply any changes in the scene.</p>
+<p>The code is quite straightforward. At first, we're using async scene loader to create a scene loading request.
+This request will be processed in a separate thread, leaving your game fully responsible while the scene is loading.
+Next, when the scene is fully loaded and added to the engine, <code>on_scene_loaded</code> method is called. Usually there's
+only one active scene, so we're removing the previous one and setting the new one as active.</p>
+<p>There are two additional methods:</p>
+<ol>
+<li><code>on_scene_begin_loading</code> - is called when a scene is just began to load. Keep in mind, that async scene loader
+could load multiple scenes at once and this method is guaranteed to be called exactly before the scene is started
+to load.</li>
+<li><code>on_scene_loading_failed</code> - is called when a scene is failed to load. This method could be useful if you're using
+non-verified scenes (i.e. from game mods) and want to react somehow when the scene is failed to load.</li>
+</ol>
 <h3 id="create-scene-manually"><a class="header" href="#create-scene-manually">Create scene manually</a></h3>
 <p>A scene could also be created manually:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{core::pool::Handle, engine::Engine, scene::Scene};
-</span>
-fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
-    let mut scene = Scene::new();
+</span>fn create_scene(ctx: &amp;mut PluginContext) -&gt; Handle&lt;Scene&gt; {
+    let scene = Scene::new();
 
     // Use node builders, create sounds, add physics, etc. here to fill the scene.
 
-    engine.scenes.add(scene)
+    ctx.scenes.add(scene)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>See respective node builders <a href="scene/../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
@@ -2343,28 +2368,14 @@ fn create_scene(engine: &amp;mut Engine) -&gt; Handle&lt;Scene&gt; {
 You can borrow a scene at any time using its handle and do some changes:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    event_loop::ControlFlow,
-</span><span class="boring">    plugin::{Plugin, PluginContext},
-</span><span class="boring">    scene::Scene,
-</span><span class="boring">};
-</span><span class="boring">
-</span>struct Game {
-    scene: Handle&lt;Scene&gt;,
-}
-
-impl Plugin for Game {
-    fn update(&amp;mut self, context: &amp;mut PluginContext, control_flow: &amp;mut ControlFlow) {
+</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
-        if let Some(scene) = context.scenes.try_get(self.scene) {
+        if let Some(scene) = context.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }
     }
-}
 <span class="boring">}</span></code></pre></pre>
 <h2 id="building-scene-asynchronously"><a class="header" href="#building-scene-asynchronously">Building scene asynchronously</a></h2>
 <p>You can create your scene in separate thread and then pass it to main thread to insert it in the engine. Why this
@@ -2386,12 +2397,8 @@ need to adjust it or even make it black (for horror games for instance), this ca
 line of code:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::scene::Scene;
-</span><span class="boring">use fyrox::core::color::Color;
-</span><span class="boring">let mut scene = Scene::default();
-</span><span class="boring">
-</span>scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30);
+</span>fn set_ambient_lighting(scene: &amp;mut Scene) {
+    scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30);
 <span class="boring">}</span></code></pre></pre>
 <p>Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
 which is not available in the engine yet.</p>
