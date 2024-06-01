@@ -3004,7 +3004,7 @@ Use <a href="scene/./rectangle.html">Rectangle node</a> if you need 2D sprites.<
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>A sprite with a texture could be created by using <code>.with_texture</code> method of the builder:</p>
+<p>A sprite with a texture could be created by using <code>.with_material</code> method of the builder:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_sprite_with_texture(
@@ -3029,6 +3029,9 @@ Use <a href="scene/./rectangle.html">Rectangle node</a> if you need 2D sprites.<
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
+<p>Please note, that this code create a material per each sprite. This could be very unoptimal if you're using tons of
+sprites at once, share the same material resource across multiple sprites if you can. Otherwise, each sprite will be
+rendered in a separate draw call and the overall performance will be very low.</p>
 <h2 id="animation-2"><a class="header" href="#animation-2">Animation</a></h2>
 <p>See <a href="scene/../animation/spritesheet/spritesheet.html">Sprite Animation</a> chapter for more info.</p>
 <h2 id="general-rules"><a class="header" href="#general-rules">General rules</a></h2>
