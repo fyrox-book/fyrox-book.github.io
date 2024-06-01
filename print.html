@@ -3520,13 +3520,7 @@ that "intersects" with the frustum will be rendered.</p>
 <p>An instance of camera node could be created using <code>CameraBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{base::BaseBuilder, camera::CameraBuilder, node::Node, Scene},
-</span><span class="boring">};
-</span>
-fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     CameraBuilder::new(BaseBuilder::new())
         // Set some properties.
         .with_fov(80.0f32.to_radians())
@@ -3549,16 +3543,6 @@ parameters that describes frustum volume:</p>
 <p>Here is a simple example of how to create a camera with perspective projection:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        camera::{CameraBuilder, PerspectiveProjection, Projection},
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Perspective(PerspectiveProjection {
@@ -3583,27 +3567,9 @@ projection defined by three parameters:</p>
 size by multiplying vertical size with aspect ratio.</p>
 <p>Here is a simple example of how to create a camera with orthographic projection:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        camera::{CameraBuilder, OrthographicProjection, Projection},
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
-    CameraBuilder::new(BaseBuilder::new())
-        .with_projection(Projection::Orthographic(OrthographicProjection {
-            vertical_size: 5.0,
-            z_near: 0.025,
-            z_far: 1024.0,
-        }))
-        .build(graph)
-}
-<span class="boring">}</span></code></pre></pre>
+</span>
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
 <h2 id="performance-5"><a class="header" href="#performance-5">Performance</a></h2>
 <p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
 operation.</p>
@@ -3617,28 +3583,15 @@ such objects can be pre-rendered and then applied to a huge cube around camera, 
 be the background of your scene. To create a Skybox and set it to a camera, you can use the following code:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    resource::texture::{Texture, TextureWrapMode},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        camera::{CameraBuilder, SkyBox, SkyBoxBuilder},
-</span><span class="boring">        node::Node,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
+</span>async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
     // Load skybox textures in parallel.
     let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request::&lt;Texture, _&gt;("path/to/front.jpg"),
-        resource_manager.request::&lt;Texture, _&gt;("path/to/back.jpg"),
-        resource_manager.request::&lt;Texture, _&gt;("path/to/left.jpg"),
-        resource_manager.request::&lt;Texture, _&gt;("path/to/right.jpg"),
-        resource_manager.request::&lt;Texture, _&gt;("path/to/up.jpg"),
-        resource_manager.request::&lt;Texture, _&gt;("path/to/down.jpg")
+        resource_manager.request::&lt;Texture&gt;("path/to/front.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/back.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/left.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/right.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/up.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/down.jpg")
     );
 
     // Unwrap everything.
@@ -3663,7 +3616,7 @@ async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
     skybox
 }
 
-fn create_camera(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+fn create_camera_with_skybox(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_skybox(block_on(create_skybox(resource_manager)))
         .build(&amp;mut scene.graph)
@@ -3682,27 +3635,12 @@ via color grading LUT effect. When used wisely, it can significantly improve per
 <p>To use color grading LUT you could do something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        camera::{CameraBuilder, ColorGradingLut},
-</span><span class="boring">        node::Node,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_camera_with_lut(
-    scene: &amp;mut Scene,
-    resource_manager: ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera_with_lut(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_color_grading_enabled(true)
         .with_color_grading_lut(
             block_on(ColorGradingLut::new(
-                resource_manager.request::&lt;Texture, _&gt;("path/to/lut.jpg"),
+                resource_manager.request::&lt;Texture&gt;("path/to/lut.jpg"),
             ))
             .unwrap(),
         )
@@ -3714,13 +3652,6 @@ fn create_camera_with_lut(
 a point on the screen to ray in the world. <code>Camera</code> has <code>make_ray</code> method exactly for that purpose:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector2, math::ray::Ray},
-</span><span class="boring">    renderer::Renderer,
-</span><span class="boring">    scene::camera::Camera,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn make_picking_ray(camera: &amp;Camera, point: Vector2&lt;f32&gt;, renderer: &amp;Renderer) -&gt; Ray {
     camera.make_ray(point, renderer.get_frame_bounds())
 }
@@ -3734,22 +3665,6 @@ use it.</p>
 ray intersection check:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::Vector3,
-</span><span class="boring">        algebra::{Matrix4, Point3},
-</span><span class="boring">        math::TriangleDefinition,
-</span><span class="boring">        math::{ray::Ray, Vector3Ext},
-</span><span class="boring">    },
-</span><span class="boring">    scene::node::Node,
-</span><span class="boring">    scene::mesh::{
-</span><span class="boring">        buffer::{VertexAttributeUsage, VertexReadTrait},
-</span><span class="boring">        surface::SurfaceData,
-</span><span class="boring">        Mesh,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn read_vertex_position(data: &amp;SurfaceData, i: u32) -&gt; Option&lt;Vector3&lt;f32&gt;&gt; {
     data.vertex_buffer
         .get(i as usize)
@@ -3794,8 +3709,7 @@ pub fn precise_ray_test(
                 if ignore_back_faces {
                     // If normal of the triangle is facing in the same direction as ray's direction,
                     // then we skip such triangle.
-                    let normal =
-                        (triangle[1] - triangle[0]).cross(&amp;(triangle[2] - triangle[0]));
+                    let normal = (triangle[1] - triangle[0]).cross(&amp;(triangle[2] - triangle[0]));
                     if normal.dot(&amp;ray.dir) &gt;= 0.0 {
                         continue;
                     }
