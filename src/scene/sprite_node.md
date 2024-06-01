@@ -4,44 +4,20 @@ Sprite is just a quad mesh that is always facing camera. It has size, color, rot
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.
 
 > ⚠️ It should be noted that **sprites are not meant to be used for 2D games**, they're only for 3D. 
-> Use [Rectangle node](./rectangle.md) if you need 2D sprites, they have optimized renderer which can handle tons
-> of sprites at once (sprite batching).
+> Use [Rectangle node](./rectangle.md) if you need 2D sprites.
 
 ## How to create
 
 A sprite instance could be created using `SpriteBuilder`:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{color::Color, pool::Handle}, resource::texture::Texture,
-#     scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
-# };
-
-fn create_sprite(scene: &mut Scene) -> Handle<Node> {
-    SpriteBuilder::new(BaseBuilder::new())
-        .with_size(2.0)
-        .with_rotation(45.0f32.to_radians())
-        .with_color(Color::RED)
-        .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/sprite.rs:create_sprite}}
 ```
 
 A sprite with a texture could be created by using `.with_texture` method of the builder:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-    core::pool::Handle,
-    asset::manager::ResourceManager, resource::texture::Texture,
-    scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
-};
-
-fn create_sprite(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
-    SpriteBuilder::new(BaseBuilder::new())
-        .with_texture(resource_manager.request::<Texture, _>("path/to/your/texture.png"))
-        .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/sprite.rs:create_sprite_with_texture}}
 ```
 
 ## Animation
@@ -54,12 +30,3 @@ Sprites **must not** be used to create any visual effects that involve many part
 [particle systems](particle_system_node.md) for that. Why so? Particles systems are very well optimized for managing
 huge amounts of particles at the same time, but sprites are not. Each sprite is quite heavy to be used as a particle in 
 particle systems, it has a lot of "useless" info that will eat a lot of memory.
-
-> ⚠️ Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should 
-> avoid creating lots of sprites.
-
-## Limitations
-
-Sprites are not supporting any sort of lighting, if you need lighted sprites, you need to create your own render
-pass and use `Mesh` node with custom shader that will orient all faces towards camera and will do lighting 
-calculations. 
