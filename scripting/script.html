@@ -187,7 +187,7 @@
                     <main>
                         <h1 id="scripts"><a class="header" href="#scripts">Scripts</a></h1>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting,
-so scripts are as fast as native code.</p>
+so scripts are as fast as native code. Every scene node can have any number of scripts assigned.</p>
 <h2 id="when-to-use-scripts-and-when-not"><a class="header" href="#when-to-use-scripts-and-when-not">When to Use Scripts and When Not</a></h2>
 <p>Scripts are meant to be used to add data and some logic to scene nodes. That being said, you should not use scripts
 to hold some global state of your game (use your game plugin for that). For example, use scripts for your game items,
@@ -199,31 +199,18 @@ components should be created and handled in the game plugin of your game.</p>
 <p>Typical script structure is something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{uuid::{Uuid, uuid}, visitor::prelude::*, reflect::prelude::*, TypeUuidProvider},
-</span><span class="boring">    event::Event, impl_component_provider,
-</span><span class="boring">    scene::{graph::map::NodeHandleMap},
-</span><span class="boring">    script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
-</span><span class="boring">};
-</span>#[derive(Visit, Reflect, Default, Debug, Clone)]
+</span>#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "bf0f9804-56cb-4a2e-beba-93d75371a568")]
+#[visit(optional)]
 struct MyScript {
     // Add fields here.
-}
-
-impl_component_provider!(MyScript);
-
-impl TypeUuidProvider for MyScript {
-    fn type_uuid() -&gt; Uuid {
-        uuid!("bf0f9804-56cb-4a2e-beba-93d75371a568")
-    }
 }
 
 impl ScriptTrait for MyScript {
     fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {
         // Put initialization logic here.
     }
-    
+
     fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
         // Put start logic - it is called when every other script is already initialized.
     }
@@ -240,9 +227,29 @@ impl ScriptTrait for MyScript {
         // Put object logic here.
     }
 
-    fn id(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
+    fn on_message(
+        &amp;mut self,
+        message: &amp;mut dyn ScriptMessagePayload,
+        ctx: &amp;mut ScriptMessageContext,
+    ) {
+        // See "message passing" section below.
     }
+}
+
+#[derive(Visit, Reflect, Debug)]
+struct MyPlugin;
+
+impl Plugin for MyPlugin {
+    fn register(&amp;self, context: PluginRegistrationContext) {
+        context
+            .serialization_context
+            .script_constructors
+            .add::&lt;MyScript&gt;("My Script");
+    }
+}
+
+fn add_my_script(node: &amp;mut Node) {
+    node.add_script(MyScript::default())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Each script must implement following traits:</p>
@@ -261,7 +268,9 @@ implementation if it's necessary for your script.</li>
 <li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script <strong>must</strong> have a unique ID, otherwise,
 the engine will not be able to save and load your scripts. To generate a new UUID, use
 <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or any other tool that can generate UUIDs.</li>
+<li><code>ComponentProvider</code> - gives access to inner fields of the script marked with <code>#[component(include)]</code> attribute.</li>
 </ul>
+<p><code>#[visit(optional)]</code> attribute is used to suppress serialization errors when some fields are missing or changed.</p>
 <h2 id="script-template-generator"><a class="header" href="#script-template-generator">Script Template Generator</a></h2>
 <p>You can use <code>fyrox-template</code> tool to generate all required boilerplate code for a new script, it makes adding new scripts
 much less tedious. To generate a new script use <code>script</code> command:</p>
@@ -286,87 +295,31 @@ to an object. <code>PluginConstructor</code> trait has <code>register</code> met
 you need to register it in the list of script constructors like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">        scene::Scene,
-</span><span class="boring">        plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
-</span><span class="boring">        core::{
-</span><span class="boring">            visitor::prelude::*,
-</span><span class="boring">            reflect::prelude::*,
-</span><span class="boring">            pool::Handle,
-</span><span class="boring">            uuid::Uuid, TypeUuidProvider
-</span><span class="boring">        },
-</span><span class="boring">        impl_component_provider,
-</span><span class="boring">        script::ScriptTrait,
-</span><span class="boring">    };
-</span><span class="boring">
-</span><span class="boring">    #[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
-</span><span class="boring">    struct MyScript;
-</span><span class="boring">
-</span><span class="boring">    impl TypeUuidProvider for MyScript {
-</span><span class="boring">        fn type_uuid() -&gt; Uuid {
-</span><span class="boring">            todo!()
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    impl_component_provider!(MyScript);
-</span><span class="boring">
-</span><span class="boring">    impl ScriptTrait for MyScript {
-</span><span class="boring">        fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">            todo!()
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    struct Constructor;
-</span><span class="boring">
-</span><span class="boring">    impl PluginConstructor for Constructor {
-</span>fn register(&amp;self, context: PluginRegistrationContext) {
-    context.serialization_context.script_constructors.add::&lt;MyScript&gt;("My Script");
+</span>#[derive(Visit, Reflect, Debug)]
+struct MyPlugin;
+
+impl Plugin for MyPlugin {
+    fn register(&amp;self, context: PluginRegistrationContext) {
+        context
+            .serialization_context
+            .script_constructors
+            .add::&lt;MyScript&gt;("My Script");
+    }
 }
-<span class="boring">
-</span><span class="boring">        fn create_instance(&amp;self, _scene_path: Option&lt;&amp;str&gt;, _context: PluginContext) -&gt; Box&lt;dyn Plugin&gt; {
-</span><span class="boring">            todo!()
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Every script type (<code>MyScript</code> in the code snippet above, you need to change it to your script type) must be registered using
 <a href="https://docs.rs/fyrox/latest/fyrox/script/constructor/struct.ScriptConstructorContainer.html#method.add">ScriptConstructorsContainer::add</a>
 method, which accepts a script type as a generic argument and its name, that will be shown in the editor. The name can be
 arbitrary, it is used only in the editor. You can also change it at any time, it won't break existing scenes.</p>
 <h2 id="script-attachment"><a class="header" href="#script-attachment">Script Attachment</a></h2>
-<p>To assign a script and see it in action, run the editor, select an object and find <code>Script</code> property in the Inspector.
-Select your script from the drop-down list. To see the script in action, click "Play/Stop" button. The editor will run
-your game in separate process with the scene active in the editor.</p>
+<p>To assign a script and see it in action, run the editor, select an object and find <code>Scripts</code> property in the Inspector.
+Click on a small <code>+</code> button and select your script from the drop-down list on the newly added entry. To see the script
+in action, click "Play/Stop" button. The editor will run your game in separate process with the scene active in the editor.</p>
 <p>The script can be attached to a scene node from code:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{reflect::prelude::*, uuid::Uuid, visitor::prelude::*, TypeUuidProvider},
-</span><span class="boring">    impl_component_provider,
-</span><span class="boring">    scene::node::{Node},
-</span><span class="boring">    script::{Script, ScriptTrait},
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">#[derive(Reflect, Visit, Default, Copy, Clone, Debug)]
-</span><span class="boring">struct MyScript;
-</span><span class="boring">
-</span><span class="boring">impl TypeUuidProvider for MyScript {
-</span><span class="boring">    fn type_uuid() -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl_component_provider!(MyScript);
-</span><span class="boring">
-</span><span class="boring">impl ScriptTrait for MyScript {
-</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span>fn set_script&lt;T: ScriptTrait&gt;(node: &amp;mut Node, script: T) {
-    node.set_script(Some(Script::new(script)))
+</span>fn add_my_script(node: &amp;mut Node) {
+    node.add_script(MyScript::default())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Initialization as well as update of newly assigned script will happen on next update tick of the engine.</p>
@@ -375,23 +328,20 @@ your game in separate process with the scene active in the editor.</p>
 content of the context is something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    engine::{ScriptMessageDispatcher},
-</span><span class="boring">    plugin::Plugin, asset::manager::ResourceManager,
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">    script::ScriptMessageSender
-</span><span class="boring">};
 </span>pub struct ScriptContext&lt;'a, 'b, 'c&gt; {
     pub dt: f32,
     pub elapsed_time: f32,
-    pub plugins: &amp;'a mut [Box&lt;dyn Plugin&gt;],
+    pub plugins: PluginsRefMut&lt;'a&gt;,
     pub handle: Handle&lt;Node&gt;,
     pub scene: &amp;'b mut Scene,
+    pub scene_handle: Handle&lt;Scene&gt;,
     pub resource_manager: &amp;'a ResourceManager,
     pub message_sender: &amp;'c ScriptMessageSender,
     pub message_dispatcher: &amp;'c mut ScriptMessageDispatcher,
+    pub task_pool: &amp;'a mut TaskPoolHandler,
+    pub graphics_context: &amp;'a mut GraphicsContext,
+    pub user_interfaces: &amp;'a mut UiContainer,
+    pub script_index: usize,
 }
 <span class="boring">}</span></code></pre></pre>
 <ul>
@@ -406,11 +356,17 @@ particular type using <code>context.plugins[0].cast::&lt;MyPlugin&gt;().unwrap()
 <code>context.scene.graph[handle]</code> call. Typecasting can be used to obtain a reference to a particular node type.</li>
 <li><code>scene</code> - a reference to parent scene of the script, it provides you full access to scene content, allowing you to
 add/modify/remove scene nodes.</li>
+<li><code>scene_handle</code> - a handle of a scene the script instance belongs to.</li>
 <li><code>resource_manager</code> - a reference to resource manager, you can use it to load and instantiate assets.</li>
 <li><code>message_sender</code> - a message sender. Every message sent via this sender will be then passed to every
 <code>ScriptTrait::on_message</code> method of every script.</li>
 <li><code>message_dispatcher</code> - a message dispatcher. If you need to receive messages of a particular type, you must subscribe
 to a type explicitly.</li>
+<li><code>task_pool</code> - task pool for asynchronous task management.</li>
+<li><code>graphics_context</code> - Current graphics context of the engine.</li>
+<li><code>user_interfaces</code> - a reference to user interface container of the engine. The engine guarantees that there's
+at least one user interface exists. Use <code>context.user_interfaces.first()/first_mut()</code> to get a reference to it.</li>
+<li><code>script_index</code> - index of the script. Never save this index, it is only valid while this context exists!</li>
 </ul>
 <h2 id="execution-order"><a class="header" href="#execution-order">Execution order</a></h2>
 <p>Scripts have strictly defined execution order for their methods (the order if execution is linear and <strong>do not</strong> depend
@@ -426,6 +382,8 @@ will be called once per 4 frames.</li>
 <li><code>on_os_event</code> - called once per incoming OS event.</li>
 <li><code>on_deinit</code> - called at the end of the update cycle once when the script (or parent node) is about to be deleted.</li>
 </ul>
+<p>If a scene node has multiple scripts assigned, then they will be processed as described above in the same order as they
+assigned to the scene node.</p>
 <h2 id="message-passing"><a class="header" href="#message-passing">Message passing</a></h2>
 <p>Script system of Fyrox supports message passing for scripts. Message passing is a mechanism that allows you to send some
 data (message) to a node, hierarchy of nodes or the entire graph. Each script can subscribe for a specific message type.
@@ -442,27 +400,19 @@ message and handle all incoming messages and compare <code>attacker</code> with 
 by <code>attacker</code> flash with some different color. In code this would like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{pool::Handle, reflect::prelude::*, uuid::Uuid, visitor::prelude::*},
-</span><span class="boring">    impl_component_provider,
-</span><span class="boring">    scene::node::Node,
-</span><span class="boring">    script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
-</span><span class="boring">    core::log::Log,
-</span><span class="boring">};
-</span><span class="boring">
-</span>enum Message {
+</span>#[derive(Debug)]
+enum Message {
     Damage {
         actor: Handle&lt;Node&gt;,
         attacker: Handle&lt;Node&gt;,
     },
 }
 
-#[derive(Default, Clone, Reflect, Visit, Debug)]
+#[derive(Default, Clone, Reflect, Visit, Debug, ComponentProvider, TypeUuidProvider)]
+#[type_uuid(id = "eb3c6354-eaf5-4e43-827d-0bb10d6d966b")]
+#[visit(optional)]
 struct Projectile;
-<span class="boring">
-</span><span class="boring">impl_component_provider!(Projectile);
-</span>
+
 impl ScriptTrait for Projectile {
     fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
         // Broadcast the message globally.
@@ -471,17 +421,13 @@ impl ScriptTrait for Projectile {
             attacker: ctx.handle,
         });
     }
-<span class="boring">
-</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span>}
+}
 
-#[derive(Default, Clone, Reflect, Visit, Debug)]
+#[derive(Default, Clone, Reflect, Visit, Debug, ComponentProvider, TypeUuidProvider)]
+#[type_uuid(id = "ede36945-5cba-41a1-9ef9-9b33b0f0db36")]
+#[visit(optional)]
 struct LaserSight;
-<span class="boring">
-</span><span class="boring">impl_component_provider!(LaserSight);
-</span>
+
 impl ScriptTrait for LaserSight {
     fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
         // Subscript to messages.
@@ -498,11 +444,7 @@ impl ScriptTrait for LaserSight {
             Log::info(format!("{actor} damaged {attacker}",))
         }
     }
-<span class="boring">
-</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span>}
+}
 <span class="boring">}</span></code></pre></pre>
 <p>There are few key parts:</p>
 <ul>
