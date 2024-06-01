@@ -13,28 +13,7 @@ As you can see it is a good basis for 2D games.
 Use the RectangleBuilder to create Rectangle nodes:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, color::Color, pool::Handle},
-#     asset::manager::ResourceManager, resource::texture::Texture,
-#     scene::{
-#         base::BaseBuilder, dim2::rectangle::RectangleBuilder, graph::Graph, node::Node,
-#         transform::TransformBuilder,
-#     },
-# };
-fn create_rect(graph: &mut Graph, resource_manager: ResourceManager) -> Handle<Node> {
-    RectangleBuilder::new(
-        BaseBuilder::new().with_local_transform(
-            TransformBuilder::new()
-                // Size of the rectangle is defined only by scale.
-                .with_local_scale(Vector3::new(0.4, 0.2, 1.0))
-                .build(),
-        ),
-    )
-    .with_color(Color::RED)
-    .with_texture(resource_manager.request::<Texture, _>("path/to/your_texture.jpg"))
-    .build(graph)
-}
+{{#include ../code/snippets/src/scene/rectangle.rs:create_rect}}
 ```
 
 ## Specifying image portion for rendering
@@ -45,17 +24,7 @@ of an image. It is possible to do by using `set_uv_rect` method of the Rectangle
 right-top quarter of an image to be used by a Rectangle node:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{core::math::Rect, scene::dim2::rectangle::Rectangle};
-# 
-fn set_2nd_quarter_image_portion(rectangle: &mut Rectangle) {
-    rectangle.set_uv_rect(Rect::new(
-        0.5, // Offset by 50% to the right
-        0.0, // No need to offset to bottom.
-        0.5, // Use half (50%) of width and height
-        0.5,
-    ));
-}
+{{#include ../code/snippets/src/scene/rectangle.rs:set_2nd_quarter_image_portion}}
 ```
 
 Keep in mind that every part of uv rectangle is proportional. For example 0.5 means 50%, 1.5 = 150% and so on. If width
@@ -69,64 +38,4 @@ See [Sprite Animation](../animation/spritesheet/spritesheet.md) chapter for more
 ## Performance
 
 Rectangles use specialized renderer that is heavily optimized to render tons of rectangles at once, so you can use 
-rectangles almost for everything in 2D games. 
-
-## Limitations
-
-Rectangle nodes does not support custom materials - it is a simplified version of a Mesh node that allows you draw a
-rectangle with a texture and a color. Its main purpose is to be able to start making games as quick as possible without
-diving too deep into details (shaders, render passes, etc.). You can still create a "rectangle" with custom material, use
-Mesh node with single rectangle surface:
-
-```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         algebra::{Matrix4, Vector3},
-#         parking_lot::Mutex,
-#         pool::Handle,
-#     },
-#     material::{Material, SharedMaterial},
-#     scene::{
-#         base::BaseBuilder,
-#         graph::Graph,
-#         mesh::{
-#             surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
-#             MeshBuilder, RenderPath,
-#         },
-#         node::Node,
-#         transform::TransformBuilder,
-#     },
-# };
-# use std::sync::Arc;
-
-fn create_rect_with_custom_material(
-    graph: &mut Graph,
-    material: SharedMaterial,
-) -> Handle<Node> {
-    MeshBuilder::new(
-        BaseBuilder::new().with_local_transform(
-            TransformBuilder::new()
-                .with_local_scale(Vector3::new(0.4, 0.2, 1.0))
-                .build(),
-        ),
-    )
-    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
-        SurfaceData::make_quad(&Matrix4::identity()),
-    ))
-    .with_material(material)
-    .build()])
-    .with_render_path(RenderPath::Forward)
-    .build(graph)
-}
-```
-
-This will effectively "mimic" the Rectangle node, but will allow you to use the full power of custom shaders. Keep in
-mind that Mesh nodes will be rendered via Deferred Renderer, while Rectangle nodes rendered with specialized renderer,
-that might result in some graphical artifacts.
-
-Rectangle nodes has limited lighting support, it means that they still will be lit by standard scene lights, but it will
-be a very simple diffuse lighting without any "physically correct" lighting. This is perfectly ok for 95% of 2D games,
-if you want to add custom lighting then you should use custom shader.
-
-Rectangle nodes works well with 2D physics nodes, check 2D physics section of the book for more info.
+rectangles almost for everything in 2D games.
