@@ -3218,24 +3218,6 @@ content.</p>
 <p>Terrain can always be created from code, here's comprehensive example of how to create and modify terrain from code:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::Vector2, algebra::Vector3, parking_lot::Mutex, pool::Handle,
-</span><span class="boring">        sstorage::ImmutableString,
-</span><span class="boring">    },
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
-</span><span class="boring">    rand::{thread_rng, Rng},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">        terrain::{Brush, BrushMode, BrushShape, Layer, TerrainBuilder},
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">use std::sync::Arc;
-</span><span class="boring">
 </span>fn setup_layer_material(
     material: &amp;mut Material,
     resource_manager: ResourceManager,
@@ -3246,7 +3228,7 @@ content.</p>
         .set_property(
             &amp;ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture, _&gt;(diffuse_texture)),
+                value: Some(resource_manager.request::&lt;Texture&gt;(diffuse_texture)),
                 fallback: SamplerFallback::White,
             },
         )
@@ -3255,7 +3237,7 @@ content.</p>
         .set_property(
             &amp;ImmutableString::new("normalTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture, _&gt;(normal_texture)),
+                value: Some(resource_manager.request::&lt;Texture&gt;(normal_texture)),
                 fallback: SamplerFallback::Normal,
             },
         )
@@ -3268,7 +3250,10 @@ content.</p>
         .unwrap();
 }
 
-fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp;ResourceManager) -&gt; Handle&lt;Node&gt; {
+fn create_random_two_layer_terrain(
+    graph: &amp;mut Graph,
+    resource_manager: &amp;ResourceManager,
+) -&gt; Handle&lt;Node&gt; {
     let terrain = TerrainBuilder::new(BaseBuilder::new())
         .with_layers(vec![
             Layer {
@@ -3280,9 +3265,9 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                         "examples/data/Grass_DiffuseColor.jpg",
                         "examples/data/Grass_NormalColor.jpg",
                     );
-                    SharedMaterial::new(material)
+                    MaterialResource::new_ok(ResourceKind::Embedded, material)
                 },
-                .. Default::default()
+                ..Default::default()
             },
             Layer {
                 material: {
@@ -3293,9 +3278,9 @@ fn create_random_two_layer_terrain(graph: &amp;mut Graph, resource_manager: &amp
                         "examples/data/Rock_DiffuseColor.jpg",
                         "examples/data/Rock_Normal.jpg",
                     );
-                    SharedMaterial::new(material)
+                    MaterialResource::new_ok(ResourceKind::Embedded, material)
                 },
-                .. Default::default()
+                ..Default::default()
             },
         ])
         .build(graph);

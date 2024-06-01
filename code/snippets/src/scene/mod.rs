@@ -9,6 +9,7 @@ pub mod mesh;
 pub mod particle_system;
 pub mod rectangle;
 pub mod sprite;
+pub mod terrain;
 
 use fyrox::core::color::Color;
 use fyrox::core::pool::Handle;
