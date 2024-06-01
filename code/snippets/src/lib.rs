@@ -3,6 +3,7 @@
 pub mod animation;
 pub mod borrowck;
 pub mod input;
+pub mod rendering;
 pub mod scene;
 pub mod script;
 pub mod ui;

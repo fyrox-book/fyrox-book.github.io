@@ -195,22 +195,6 @@ effects.</p>
 by experienced graphics programmers. Here's the simplest render pass that renders unit quad without any textures.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Matrix4, pool::Handle, sstorage::ImmutableString},
-</span><span class="boring">    renderer::{
-</span><span class="boring">        framework::{
-</span><span class="boring">            error::FrameworkError,
-</span><span class="boring">            framebuffer::{DrawParameters},
-</span><span class="boring">            geometry_buffer::{GeometryBuffer, ElementRange, GeometryBufferKind},
-</span><span class="boring">            gpu_program::{GpuProgram, UniformLocation},
-</span><span class="boring">        },
-</span><span class="boring">        RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext,
-</span><span class="boring">    },
-</span><span class="boring">    scene::{mesh::surface::SurfaceData, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::{cell::RefCell, rc::Rc};
-</span><span class="boring">
 </span>struct MyRenderPass {
     enabled: bool,
     shader: GpuProgram,
@@ -224,7 +208,7 @@ impl MyRenderPass {
         renderer: &amp;mut Renderer,
         target_scene: Handle&lt;Scene&gt;,
     ) -&gt; Result&lt;Self, FrameworkError&gt; {
-        let vs = r#"
+        let vs = r"
                 layout(location = 0) in vec3 vertexPosition;
                 
                 uniform mat4 c;
@@ -233,16 +217,16 @@ impl MyRenderPass {
                 {
                     gl_Position = worldViewProjectionMatrix * vertexPosition;
                 }
-            "#;
+            ";
 
-        let fs = r#"                
+        let fs = r"                
                 out vec4 FragColor;             
                 
                 void main()
                 {
                     FragColor = vec4(1.0, 0.0, 0.0, 1.0);
                 }
-            "#;
+            ";
 
         let shader = GpuProgram::from_source(&amp;mut renderer.state, "MyShader", vs, fs)?;
 
@@ -257,7 +241,7 @@ impl MyRenderPass {
                 &amp;SurfaceData::make_quad(&amp;Matrix4::identity()),
                 GeometryBufferKind::StaticDraw,
                 &amp;mut renderer.state,
-            ),
+            )?,
             shader,
         })
     }
@@ -287,6 +271,10 @@ impl SceneRenderPass for MyRenderPass {
 
         Ok(stats)
     }
+
+    fn source_type_id(&amp;self) -&gt; TypeId {
+        ().type_id()
+    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The code snippet shows how to create a shader, find its uniforms, and finally how to actually render something in
@@ -296,13 +284,6 @@ target frame buffer.</p>
 <code>add_render_pass</code> method of the <code>Renderer</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::renderer::{Renderer, SceneRenderPass};
-</span><span class="boring">use std::{cell::RefCell, rc::Rc};
-</span><span class="boring">
-</span><span class="boring">struct MyRenderPass;
-</span><span class="boring">impl SceneRenderPass for MyRenderPass {}
-</span><span class="boring">
 </span>fn usage_example(renderer: &amp;mut Renderer, render_pass: MyRenderPass) {
     let shared_pass = Rc::new(RefCell::new(render_pass));
     // You can share the pass across multiple places to be able to control it.

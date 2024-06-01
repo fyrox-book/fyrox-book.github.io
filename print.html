@@ -6057,26 +6057,8 @@ and the actual generation cancellation. When the generation is done, you should 
 <p>Now if you save the scene, it will remember the generated light map and will load it automatically for you.</p>
 <h3 id="from-code-4"><a class="header" href="#from-code-4">From code</a></h3>
 <p>The following example creates a simple scene and generates a light map for it, which is then saved to disk:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::ResourceData,
-</span><span class="boring">    core::algebra::{Matrix4, Vector3},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        light::{point::PointLightBuilder, BaseLightBuilder},
-</span><span class="boring">        mesh::{
-</span><span class="boring">            surface::SurfaceSharedData,
-</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData},
-</span><span class="boring">            MeshBuilder,
-</span><span class="boring">        },
-</span><span class="boring">        transform::TransformBuilder,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">    utils::lightmap::{Lightmap, LightmapInputData},
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
-</span><span class="boring">
 </span>fn generate_lightmap() {
     // Create a test scene first.
     let mut scene = Scene::new();
@@ -6105,17 +6087,12 @@ and the actual generation cancellation. When the generation is done, you should 
     .build(&amp;mut scene.graph);
 
     // Prepare the data for generation using the scene.
-    let data = LightmapInputData::from_scene(
-        &amp;scene,
-        |_, _| true,
-        Default::default(),
-        Default::default(),
-    )
-    .unwrap();
+    let data =
+        LightmapInputData::from_scene(&amp;scene, |_, _| true, Default::default(), Default::default())
+            .unwrap();
 
     // Generate the lightmap.
-    let lightmap =
-        Lightmap::new(data, 64, 0.005, Default::default(), Default::default()).unwrap();
+    let lightmap = Lightmap::new(data, 64, 0.005, Default::default(), Default::default()).unwrap();
 
     // Save each texture to disk.
     let mut counter = 0;
@@ -6134,8 +6111,6 @@ required connections to the generated light map, and it will be loaded automatic
 need to change the light maps on the fly, you can use the following code:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use fyrox::{asset::manager::ResourceManager, scene::Scene, utils::lightmap::Lightmap};
-</span><span class="boring">
 </span>fn change_light_map(scene: &amp;mut Scene, resource_manager: ResourceManager) {
     let light_map = fyrox::core::futures::executor::block_on(Lightmap::load(
         "a/path/to/lightmap.lmp",
@@ -6261,22 +6236,6 @@ effects.</p>
 by experienced graphics programmers. Here's the simplest render pass that renders unit quad without any textures.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Matrix4, pool::Handle, sstorage::ImmutableString},
-</span><span class="boring">    renderer::{
-</span><span class="boring">        framework::{
-</span><span class="boring">            error::FrameworkError,
-</span><span class="boring">            framebuffer::{DrawParameters},
-</span><span class="boring">            geometry_buffer::{GeometryBuffer, ElementRange, GeometryBufferKind},
-</span><span class="boring">            gpu_program::{GpuProgram, UniformLocation},
-</span><span class="boring">        },
-</span><span class="boring">        RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext,
-</span><span class="boring">    },
-</span><span class="boring">    scene::{mesh::surface::SurfaceData, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::{cell::RefCell, rc::Rc};
-</span><span class="boring">
 </span>struct MyRenderPass {
     enabled: bool,
     shader: GpuProgram,
@@ -6290,7 +6249,7 @@ impl MyRenderPass {
         renderer: &amp;mut Renderer,
         target_scene: Handle&lt;Scene&gt;,
     ) -&gt; Result&lt;Self, FrameworkError&gt; {
-        let vs = r#"
+        let vs = r"
                 layout(location = 0) in vec3 vertexPosition;
                 
                 uniform mat4 c;
@@ -6299,16 +6258,16 @@ impl MyRenderPass {
                 {
                     gl_Position = worldViewProjectionMatrix * vertexPosition;
                 }
-            "#;
+            ";
 
-        let fs = r#"                
+        let fs = r"                
                 out vec4 FragColor;             
                 
                 void main()
                 {
                     FragColor = vec4(1.0, 0.0, 0.0, 1.0);
                 }
-            "#;
+            ";
 
         let shader = GpuProgram::from_source(&amp;mut renderer.state, "MyShader", vs, fs)?;
 
@@ -6323,7 +6282,7 @@ impl MyRenderPass {
                 &amp;SurfaceData::make_quad(&amp;Matrix4::identity()),
                 GeometryBufferKind::StaticDraw,
                 &amp;mut renderer.state,
-            ),
+            )?,
             shader,
         })
     }
@@ -6353,6 +6312,10 @@ impl SceneRenderPass for MyRenderPass {
 
         Ok(stats)
     }
+
+    fn source_type_id(&amp;self) -&gt; TypeId {
+        ().type_id()
+    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The code snippet shows how to create a shader, find its uniforms, and finally how to actually render something in
@@ -6362,13 +6325,6 @@ target frame buffer.</p>
 <code>add_render_pass</code> method of the <code>Renderer</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::renderer::{Renderer, SceneRenderPass};
-</span><span class="boring">use std::{cell::RefCell, rc::Rc};
-</span><span class="boring">
-</span><span class="boring">struct MyRenderPass;
-</span><span class="boring">impl SceneRenderPass for MyRenderPass {}
-</span><span class="boring">
 </span>fn usage_example(renderer: &amp;mut Renderer, render_pass: MyRenderPass) {
     let shared_pass = Rc::new(RefCell::new(render_pass));
     // You can share the pass across multiple places to be able to control it.
