@@ -254,49 +254,48 @@ only practice matters here.</p>
 <p>You can also create particle systems from code (in case if you need some procedurally-generated effects):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::scene::particle_system::{
-</span><span class="boring">    emitter::sphere::SphereEmitter, ParticleSystemBuilder, emitter::Emitter,
-</span><span class="boring">    emitter::base::BaseEmitterBuilder, emitter::sphere::SphereEmitterBuilder
-</span><span class="boring">};
-</span><span class="boring">use fyrox::asset::manager::ResourceManager;
-</span><span class="boring">use fyrox::core::algebra::Vector3;
-</span><span class="boring">use fyrox::scene::graph::Graph;
-</span><span class="boring">use fyrox::scene::node::Node;
-</span><span class="boring">use fyrox::scene::transform::TransformBuilder;
-</span><span class="boring">use fyrox::core::color_gradient::{GradientPoint, ColorGradient};
-</span><span class="boring">use fyrox::scene::base::BaseBuilder;
-</span><span class="boring">use fyrox::core::color::Color;
-</span><span class="boring">use fyrox::resource::texture::Texture;
-</span><span class="boring">use std::path::Path;
-</span><span class="boring">use fyrox::resource::texture::TexturePixelKind;
 </span>fn create_smoke(graph: &amp;mut Graph, resource_manager: &amp;mut ResourceManager, pos: Vector3&lt;f32&gt;) {
-     ParticleSystemBuilder::new(BaseBuilder::new()
-        .with_lifetime(5.0)
-        .with_local_transform(TransformBuilder::new()
-            .with_local_position(pos)
-            .build()))
-        .with_acceleration(Vector3::new(0.0, 0.0, 0.0))
-        .with_color_over_lifetime_gradient({
-            let mut gradient = ColorGradient::new();
-            gradient.add_point(GradientPoint::new(0.00, Color::from_rgba(150, 150, 150, 0)));
-            gradient.add_point(GradientPoint::new(0.05, Color::from_rgba(150, 150, 150, 220)));
-            gradient.add_point(GradientPoint::new(0.85, Color::from_rgba(255, 255, 255, 180)));
-            gradient.add_point(GradientPoint::new(1.00, Color::from_rgba(255, 255, 255, 0)));
-            gradient
-        })
-        .with_emitters(vec![
-            SphereEmitterBuilder::new(BaseEmitterBuilder::new()
-                .with_max_particles(100)
-                .with_spawn_rate(50)
-                .with_x_velocity_range(-0.01..0.01)
-                .with_y_velocity_range(0.02..0.03)
-                .with_z_velocity_range(-0.01..0.01))
-                .with_radius(0.01)
-                .build()
-        ])
-        .with_texture(resource_manager.request::&lt;Texture, _&gt;(Path::new("data/particles/smoke_04.tga")))
-        .build(graph);
+    let mut material = Material::standard_particle_system();
+    material
+        .set_texture(
+            &amp;"diffuseTexture".into(),
+            Some(resource_manager.request::&lt;Texture&gt;("data/particles/smoke_04.tga")),
+        )
+        .unwrap();
+    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+
+    ParticleSystemBuilder::new(
+        BaseBuilder::new()
+            .with_lifetime(5.0)
+            .with_local_transform(TransformBuilder::new().with_local_position(pos).build()),
+    )
+    .with_acceleration(Vector3::new(0.0, 0.0, 0.0))
+    .with_color_over_lifetime_gradient({
+        let mut gradient = ColorGradient::new();
+        gradient.add_point(GradientPoint::new(0.00, Color::from_rgba(150, 150, 150, 0)));
+        gradient.add_point(GradientPoint::new(
+            0.05,
+            Color::from_rgba(150, 150, 150, 220),
+        ));
+        gradient.add_point(GradientPoint::new(
+            0.85,
+            Color::from_rgba(255, 255, 255, 180),
+        ));
+        gradient.add_point(GradientPoint::new(1.00, Color::from_rgba(255, 255, 255, 0)));
+        gradient
+    })
+    .with_emitters(vec![SphereEmitterBuilder::new(
+        BaseEmitterBuilder::new()
+            .with_max_particles(100)
+            .with_spawn_rate(50)
+            .with_x_velocity_range(-0.01..0.01)
+            .with_y_velocity_range(0.02..0.03)
+            .with_z_velocity_range(-0.01..0.01),
+    )
+    .with_radius(0.01)
+    .build()])
+    .with_material(material_resource)
+    .build(graph);
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code creates smoke effect with smooth dissolving (by using color-over-lifetime gradient). Please refer to

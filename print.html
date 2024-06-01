@@ -2606,13 +2606,9 @@ all instance will immediately sync their unmodified properties.</p>
 need is to wrap its value using <code>InheritableVariable</code> wrapper.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::core::variable::InheritableVariable;
-</span><span class="boring">use fyrox::core::visitor::prelude::*;
-</span><span class="boring">use fyrox::core::reflect::prelude::*;
 </span>#[derive(Reflect, Visit, Default, Clone, Debug)]
 struct MyScript {
-    foo: InheritableVariable&lt;f32&gt;
+    foo: InheritableVariable&lt;f32&gt;,
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The engine will automatically resolve the correct value for the property when a scene with the script is loaded. If your
@@ -2631,10 +2627,6 @@ have inheritable variables inside compound field, they won't be inherited correc
 following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::core::reflect::prelude::*;
-</span><span class="boring">use fyrox::core::variable::InheritableVariable;
-</span><span class="boring">
 </span>#[derive(Reflect, Clone, PartialEq, Eq, Debug)]
 struct SomeComplexData {
     foo: InheritableVariable&lt;u32&gt;,
@@ -2889,20 +2881,8 @@ scenes.</p>
 <p>A directional light source could be created like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        light::{directional::DirectionalLightBuilder, BaseLightBuilder},
-</span><span class="boring">        node::Node,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
-    DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
-        .build(&amp;mut scene.graph)
+</span>fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+    DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new())).build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>By default, the light source will be oriented to lit "the ground". In other words its direction will be faced towards
@@ -2910,22 +2890,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{UnitQuaternion, Vector3},
-</span><span class="boring">        pool::Handle,
-</span><span class="boring">    },
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        light::{directional::DirectionalLightBuilder, BaseLightBuilder},
-</span><span class="boring">        node::Node,
-</span><span class="boring">        transform::TransformBuilder,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_oriented_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     DirectionalLightBuilder::new(BaseLightBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
@@ -2944,18 +2909,7 @@ fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 An example of a point light source: light bulb.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        light::{point::PointLightBuilder, BaseLightBuilder},
-</span><span class="boring">        node::Node,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     PointLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_radius(5.0)
         .build(&amp;mut scene.graph)
@@ -2966,18 +2920,7 @@ fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 a spotlight source: flashlight.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        light::{spot::SpotLightBuilder, BaseLightBuilder},
-</span><span class="boring">        node::Node,
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     SpotLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_distance(5.0)
         .with_hotspot_cone_angle(50.0f32.to_radians())
@@ -2994,13 +2937,7 @@ it, you can do this either while building a light source or change light scatter
 Here is the small example of how to do that.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{node::Node, light::BaseLight, Scene},
-</span><span class="boring">};
-</span>
-fn disable_light_scatter(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;) {
+</span>fn disable_light_scatter(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;) {
     scene.graph[light_handle]
         .query_component_mut::&lt;BaseLight&gt;()
         .unwrap()
@@ -3011,13 +2948,7 @@ fn disable_light_scatter(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;
 <a href="https://en.wikipedia.org/wiki/Rayleigh_scattering">Rayleigh scattering</a>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{node::Node, light::BaseLight, Scene},
-</span><span class="boring">};
-</span>
-fn use_rayleigh_scattering(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;) {
+</span>fn use_rayleigh_scattering(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;) {
     scene.graph[light_handle]
         .query_component_mut::&lt;BaseLight&gt;()
         .unwrap()
@@ -3031,13 +2962,7 @@ light sources that can cast shadows at lowest possible amount to keep performanc
 on/off shadows when you need:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{node::Node, light::BaseLight, Scene},
-</span><span class="boring">};
-</span>
-fn switch_shadows(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;, cast_shadows: bool) {
+</span>fn switch_shadows(scene: &amp;mut Scene, light_handle: Handle&lt;Node&gt;, cast_shadows: bool) {
     scene.graph[light_handle]
         .query_component_mut::&lt;BaseLight&gt;()
         .unwrap()
@@ -3179,49 +3104,48 @@ only practice matters here.</p>
 <p>You can also create particle systems from code (in case if you need some procedurally-generated effects):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::scene::particle_system::{
-</span><span class="boring">    emitter::sphere::SphereEmitter, ParticleSystemBuilder, emitter::Emitter,
-</span><span class="boring">    emitter::base::BaseEmitterBuilder, emitter::sphere::SphereEmitterBuilder
-</span><span class="boring">};
-</span><span class="boring">use fyrox::asset::manager::ResourceManager;
-</span><span class="boring">use fyrox::core::algebra::Vector3;
-</span><span class="boring">use fyrox::scene::graph::Graph;
-</span><span class="boring">use fyrox::scene::node::Node;
-</span><span class="boring">use fyrox::scene::transform::TransformBuilder;
-</span><span class="boring">use fyrox::core::color_gradient::{GradientPoint, ColorGradient};
-</span><span class="boring">use fyrox::scene::base::BaseBuilder;
-</span><span class="boring">use fyrox::core::color::Color;
-</span><span class="boring">use fyrox::resource::texture::Texture;
-</span><span class="boring">use std::path::Path;
-</span><span class="boring">use fyrox::resource::texture::TexturePixelKind;
 </span>fn create_smoke(graph: &amp;mut Graph, resource_manager: &amp;mut ResourceManager, pos: Vector3&lt;f32&gt;) {
-     ParticleSystemBuilder::new(BaseBuilder::new()
-        .with_lifetime(5.0)
-        .with_local_transform(TransformBuilder::new()
-            .with_local_position(pos)
-            .build()))
-        .with_acceleration(Vector3::new(0.0, 0.0, 0.0))
-        .with_color_over_lifetime_gradient({
-            let mut gradient = ColorGradient::new();
-            gradient.add_point(GradientPoint::new(0.00, Color::from_rgba(150, 150, 150, 0)));
-            gradient.add_point(GradientPoint::new(0.05, Color::from_rgba(150, 150, 150, 220)));
-            gradient.add_point(GradientPoint::new(0.85, Color::from_rgba(255, 255, 255, 180)));
-            gradient.add_point(GradientPoint::new(1.00, Color::from_rgba(255, 255, 255, 0)));
-            gradient
-        })
-        .with_emitters(vec![
-            SphereEmitterBuilder::new(BaseEmitterBuilder::new()
-                .with_max_particles(100)
-                .with_spawn_rate(50)
-                .with_x_velocity_range(-0.01..0.01)
-                .with_y_velocity_range(0.02..0.03)
-                .with_z_velocity_range(-0.01..0.01))
-                .with_radius(0.01)
-                .build()
-        ])
-        .with_texture(resource_manager.request::&lt;Texture, _&gt;(Path::new("data/particles/smoke_04.tga")))
-        .build(graph);
+    let mut material = Material::standard_particle_system();
+    material
+        .set_texture(
+            &amp;"diffuseTexture".into(),
+            Some(resource_manager.request::&lt;Texture&gt;("data/particles/smoke_04.tga")),
+        )
+        .unwrap();
+    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+
+    ParticleSystemBuilder::new(
+        BaseBuilder::new()
+            .with_lifetime(5.0)
+            .with_local_transform(TransformBuilder::new().with_local_position(pos).build()),
+    )
+    .with_acceleration(Vector3::new(0.0, 0.0, 0.0))
+    .with_color_over_lifetime_gradient({
+        let mut gradient = ColorGradient::new();
+        gradient.add_point(GradientPoint::new(0.00, Color::from_rgba(150, 150, 150, 0)));
+        gradient.add_point(GradientPoint::new(
+            0.05,
+            Color::from_rgba(150, 150, 150, 220),
+        ));
+        gradient.add_point(GradientPoint::new(
+            0.85,
+            Color::from_rgba(255, 255, 255, 180),
+        ));
+        gradient.add_point(GradientPoint::new(1.00, Color::from_rgba(255, 255, 255, 0)));
+        gradient
+    })
+    .with_emitters(vec![SphereEmitterBuilder::new(
+        BaseEmitterBuilder::new()
+            .with_max_particles(100)
+            .with_spawn_rate(50)
+            .with_x_velocity_range(-0.01..0.01)
+            .with_y_velocity_range(0.02..0.03)
+            .with_z_velocity_range(-0.01..0.01),
+    )
+    .with_radius(0.01)
+    .build()])
+    .with_material(material_resource)
+    .build(graph);
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code creates smoke effect with smooth dissolving (by using color-over-lifetime gradient). Please refer to
