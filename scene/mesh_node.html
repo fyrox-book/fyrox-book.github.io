@@ -205,26 +205,15 @@ To load your 3D model in the game, you should do few simple steps (loading a 3D 
 instantiation):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>
-use fyrox::{
-    core::{futures::executor::block_on, pool::Handle},
-    asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
-    scene::{node::Node, Scene},
-};
-use std::path::Path;
-
-fn load_model_to_scene(
+</span>fn load_model_to_scene(
     scene: &amp;mut Scene,
     path: &amp;Path,
     resource_manager: ResourceManager,
 ) -&gt; Handle&lt;Node&gt; {
-    // Request model resource and block until it loading. 
-    let model_resource =
-        block_on(resource_manager.request::&lt;Model, _&gt;(path))
-            .unwrap();
+    // Request model resource and block until it loading.
+    let model_resource = block_on(resource_manager.request::&lt;Model&gt;(path)).unwrap();
 
-    // Create an instance of the resource in the scene. 
+    // Create an instance of the resource in the scene.
     model_resource.instantiate(scene)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -236,35 +225,7 @@ properly.</p>
 cannot create a mesh in 3D modelling software.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>
-use fyrox::{
-    core::{
-        algebra::{Matrix4, Vector3},
-        parking_lot::Mutex,
-        pool::Handle,
-        sstorage::ImmutableString,
-    },
-    asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
-    resource::texture::Texture,
-    material::{shader::SamplerFallback, Material, PropertyValue, SharedMaterial},
-    scene::{
-        base::BaseBuilder,
-        mesh::{
-            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
-            MeshBuilder,
-        },
-        node::Node,
-        transform::TransformBuilder,
-        Scene,
-    },
-};
-use std::sync::Arc;
-
-fn create_procedural_mesh(
-    scene: &amp;mut Scene,
-    resource_manager: ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
+</span>fn create_procedural_mesh(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     let mut material = Material::standard();
 
     // Material is completely optional, but here we'll demonstrate that it is possible to
@@ -273,7 +234,7 @@ fn create_procedural_mesh(
         .set_property(
             &amp;ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture, _&gt;("some_texture.jpg")),
+                value: Some(resource_manager.request::&lt;Texture&gt;("some_texture.jpg")),
                 fallback: SamplerFallback::White,
             },
         )
@@ -294,8 +255,8 @@ fn create_procedural_mesh(
             25.0, 0.25, 25.0,
         ))),
     ))
-        .with_material(SharedMaterial::new(material))
-        .build()])
+    .with_material(MaterialResource::new_ok(ResourceKind::Embedded, material))
+    .build()])
     .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -308,23 +269,12 @@ for more info.</p>
 For example, the following code extracts world-space positions of every vertex of an animated mesh:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::algebra::{Point3, Vector3},
-    scene::{
-        graph::Graph,
-        mesh::{
-            buffer::{VertexAttributeUsage, VertexReadTrait},
-            Mesh,
-        },
-    },
-};
-
-fn extract_world_space_vertices(mesh: &amp;Mesh, graph: &amp;Graph) -&gt; Vec&lt;Vector3&lt;f32&gt;&gt; {
+</span>fn extract_world_space_vertices(mesh: &amp;Mesh, graph: &amp;Graph) -&gt; Vec&lt;Vector3&lt;f32&gt;&gt; {
     let mut vertices = Vec::new();
 
     for surface in mesh.surfaces() {
-        let data = surface.data().lock();
+        let guard = surface.data();
+        let data = guard.lock();
 
         for vertex in data.vertex_buffer.iter() {
             let Ok(position) = vertex.read_3_f32(VertexAttributeUsage::Position) else {
