@@ -19,55 +19,31 @@ manually by instantiating respective prefabs at runtime.
 ### Using FyroxEd
 
 There is a [separate chapter](../beginning/editor_overview.md) in the book that should help you to create a
-scene. After a scene is created, you can load it as any other 3D model (or prefab) using the resource manager:
+scene. After a scene is created, you can load it using async scene loader:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{futures::executor::block_on, pool::Handle},
-#     asset::manager::{ResourceManager}, resource::model::{Model, ModelResourceExtension},
-#     scene::{node::Node, Scene},
-# };
-# use std::path::Path;
-
-fn load_scene(resource_manager: ResourceManager) -> Scene {
-    // Create parent scene.
-    let mut scene = Scene::new();
-
-    // Request child scene and block until it loading.
-    let scene_resource = block_on(
-        resource_manager
-            .request::<Model, _>("path/to/your/scene.rgs"),
-    )
-        .unwrap();
-
-    // Create an instance of the scene in the parent scene.
-    let child_scene = scene_resource.instantiate(&mut scene);
-
-    scene
-}
+{{#include ../code/snippets/src/scene/mod.rs:load_scene}}
 ```
 
-Please note that here we're creating an empty scene and only then instantiating another scene into it. Why is this
-needed? Child scene is considered as [prefab](./prefab.md), and it is "instantiated" in the parent scene. Considering
-it as prefab allows you modifying your scene separately and serialization/deserialization will be able to correctly
-apply any changes in the scene.
+The code is quite straightforward. At first, we're using async scene loader to create a scene loading request.
+This request will be processed in a separate thread, leaving your game fully responsible while the scene is loading.
+Next, when the scene is fully loaded and added to the engine, `on_scene_loaded` method is called. Usually there's 
+only one active scene, so we're removing the previous one and setting the new one as active.
+
+There are two additional methods:
+
+1) `on_scene_begin_loading` - is called when a scene is just began to load. Keep in mind, that async scene loader
+could load multiple scenes at once and this method is guaranteed to be called exactly before the scene is started
+to load.
+2) `on_scene_loading_failed` - is called when a scene is failed to load. This method could be useful if you're using
+non-verified scenes (i.e. from game mods) and want to react somehow when the scene is failed to load.
 
 ### Create scene manually
 
 A scene could also be created manually:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{core::pool::Handle, engine::Engine, scene::Scene};
-
-fn create_scene(engine: &mut Engine) -> Handle<Scene> {
-    let mut scene = Scene::new();
-
-    // Use node builders, create sounds, add physics, etc. here to fill the scene.
-
-    engine.scenes.add(scene)
-}
+{{#include ../code/snippets/src/scene/mod.rs:create_scene}}
 ```
 
 See respective node builders [docs](../scene/graph.md#using-node-builders) to populate the scene.
@@ -78,28 +54,7 @@ All scenes "lives" in the engine, the engine has ownership over your scene after
 You can borrow a scene at any time using its handle and do some changes:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     event_loop::ControlFlow,
-#     plugin::{Plugin, PluginContext},
-#     scene::Scene,
-# };
-#
-struct Game {
-    scene: Handle<Scene>,
-}
-
-impl Plugin for Game {
-    fn update(&mut self, context: &mut PluginContext, control_flow: &mut ControlFlow) {
-        // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
-        // use `try_get_mut`.
-        if let Some(scene) = context.scenes.try_get(self.scene) {
-            // Do something.
-            println!("{:?}", scene.graph.performance_statistics);
-        }
-    }
-}
+{{#include ../code/snippets/src/scene/mod.rs:scene_borrowing}}
 ```
 
 ## Building scene asynchronously
@@ -127,12 +82,7 @@ need to adjust it or even make it black (for horror games for instance), this ca
 line of code:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::scene::Scene;
-# use fyrox::core::color::Color;
-# let mut scene = Scene::default();
-#
-scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30);
+{{#include ../code/snippets/src/scene/mod.rs:set_ambient_lighting}}
 ```
 
 Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
