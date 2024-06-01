@@ -1,3 +1,5 @@
+use fyrox::graph::BaseSceneGraph;
+use fyrox::graph::SceneGraph;
 use fyrox::{
     core::{
         log::Log, pool::Handle, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*,
@@ -6,8 +8,6 @@ use fyrox::{
     scene::node::Node,
     script::{ScriptContext, ScriptTrait},
 };
-use fyrox::graph::SceneGraph;
-use fyrox::graph::BaseSceneGraph;
 
 // ANCHOR: access_other_1
 #[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]

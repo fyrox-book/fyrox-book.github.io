@@ -3,7 +3,7 @@ use fyrox::{
         pool::Handle, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*,
         TypeUuidProvider,
     },
-    scene::{graph::physics::RayCastOptions, graph::Graph, node::Node},
+    scene::{graph::Graph, node::Node},
     script::{ScriptContext, ScriptMessageContext, ScriptMessagePayload, ScriptTrait},
 };
 

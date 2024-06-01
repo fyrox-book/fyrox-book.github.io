@@ -2,10 +2,10 @@ pub mod keyboard;
 pub mod mouse;
 
 use fyrox::{
+    core::reflect::prelude::*,
+    core::visitor::prelude::*,
     event::{DeviceEvent, Event, WindowEvent},
     plugin::{Plugin, PluginContext},
-    core::reflect::prelude::*,
-    core::visitor::prelude::*
 };
 
 // ANCHOR: events_example

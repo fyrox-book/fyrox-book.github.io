@@ -1,7 +1,7 @@
 use fyrox::{
     core::log::Log,
-    core::visitor::prelude::*,
     core::reflect::prelude::*,
+    core::visitor::prelude::*,
     engine::GraphicsContext,
     plugin::{Plugin, PluginContext},
     window::{CursorGrabMode, Fullscreen},

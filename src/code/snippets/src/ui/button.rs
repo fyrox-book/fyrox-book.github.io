@@ -1,8 +1,8 @@
 use fyrox::{
     asset::manager::ResourceManager,
     core::pool::Handle,
-    core::visitor::prelude::*,
     core::reflect::prelude::*,
+    core::visitor::prelude::*,
     gui::image::ImageBuilder,
     gui::{
         button::ButtonBuilder, text::TextBuilder, widget::WidgetBuilder, HorizontalAlignment,
