@@ -16,21 +16,7 @@ scenes.
 A directional light source could be created like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{
-#         base::BaseBuilder,
-#         light::{directional::DirectionalLightBuilder, BaseLightBuilder},
-#         node::Node,
-#         Scene,
-#     },
-# };
-
-fn create_directional_light(scene: &mut Scene) -> Handle<Node> {
-    DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
-        .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/light.rs:create_directional_light}}
 ```
 
 By default, the light source will be oriented to lit "the ground". In other words its direction will be faced towards
@@ -38,34 +24,7 @@ By default, the light source will be oriented to lit "the ground". In other word
 like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         algebra::{UnitQuaternion, Vector3},
-#         pool::Handle,
-#     },
-#     scene::{
-#         base::BaseBuilder,
-#         light::{directional::DirectionalLightBuilder, BaseLightBuilder},
-#         node::Node,
-#         transform::TransformBuilder,
-#         Scene,
-#     },
-# };
-
-fn create_directional_light(scene: &mut Scene) -> Handle<Node> {
-    DirectionalLightBuilder::new(BaseLightBuilder::new(
-        BaseBuilder::new().with_local_transform(
-            TransformBuilder::new()
-                .with_local_rotation(UnitQuaternion::from_axis_angle(
-                    &Vector3::x_axis(),
-                    -45.0f32.to_radians(),
-                ))
-                .build(),
-        ),
-    ))
-    .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/light.rs:create_oriented_directional_light}}
 ```
 
 ### Point light
@@ -74,22 +33,7 @@ Point light is a light source that emits lights in all directions, it has a posi
 An example of a point light source: light bulb. 
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{
-#         base::BaseBuilder,
-#         light::{point::PointLightBuilder, BaseLightBuilder},
-#         node::Node,
-#         Scene,
-#     },
-# };
-
-fn create_point_light(scene: &mut Scene) -> Handle<Node> {
-    PointLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
-        .with_radius(5.0)
-        .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/light.rs:create_point_light}}
 ```
 
 ### Spotlight
@@ -98,24 +42,7 @@ Spotlight is a light source that emits lights in cone shape, it has a position a
 a spotlight source: flashlight.
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{
-#         base::BaseBuilder,
-#         light::{spot::SpotLightBuilder, BaseLightBuilder},
-#         node::Node,
-#         Scene,
-#     },
-# };
-
-fn create_spot_light(scene: &mut Scene) -> Handle<Node> {
-    SpotLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
-        .with_distance(5.0)
-        .with_hotspot_cone_angle(50.0f32.to_radians())
-        .with_falloff_angle_delta(10.0f32.to_radians())
-        .build(&mut scene.graph)
-}
+{{#include ../code/snippets/src/scene/light.rs:create_spot_light}}
 ```
 
 ## Light scattering
@@ -129,36 +56,14 @@ it, you can do this either while building a light source or change light scatter
 Here is the small example of how to do that.
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{node::Node, light::BaseLight, Scene},
-# };
-
-fn disable_light_scatter(scene: &mut Scene, light_handle: Handle<Node>) {
-    scene.graph[light_handle]
-        .query_component_mut::<BaseLight>()
-        .unwrap()
-        .enable_scatter(false);
-}
+{{#include ../code/snippets/src/scene/light.rs:disable_light_scatter}}
 ```
 
 You could also change the amount of scattering per each color channel, using this you could imitate the 
 [Rayleigh scattering](https://en.wikipedia.org/wiki/Rayleigh_scattering):
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, pool::Handle},
-#     scene::{node::Node, light::BaseLight, Scene},
-# };
-
-fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
-    scene.graph[light_handle]
-        .query_component_mut::<BaseLight>()
-        .unwrap()
-        .set_scatter(Vector3::new(0.03, 0.035, 0.055));
-}
+{{#include ../code/snippets/src/scene/light.rs:use_rayleigh_scattering}}
 ```
 
 ## Shadows
@@ -169,18 +74,7 @@ light sources that can cast shadows at lowest possible amount to keep performanc
 on/off shadows when you need:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{node::Node, light::BaseLight, Scene},
-# };
-
-fn switch_shadows(scene: &mut Scene, light_handle: Handle<Node>, cast_shadows: bool) {
-    scene.graph[light_handle]
-        .query_component_mut::<BaseLight>()
-        .unwrap()
-        .set_cast_shadows(cast_shadows);
-}
+{{#include ../code/snippets/src/scene/light.rs:switch_shadows}}
 ```
 
 Not every light should cast shadows, for example a small light that a player can see only in a distance can have
