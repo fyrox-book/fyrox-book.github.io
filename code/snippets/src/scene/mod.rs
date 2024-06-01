@@ -8,6 +8,7 @@ pub mod light;
 pub mod mesh;
 pub mod particle_system;
 pub mod rectangle;
+pub mod sprite;
 
 use fyrox::core::color::Color;
 use fyrox::core::pool::Handle;

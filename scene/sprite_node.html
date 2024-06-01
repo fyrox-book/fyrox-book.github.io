@@ -190,20 +190,13 @@
 Sprites are useful mostly for projectiles, like glowing plasma, and for things that should always face a camera.</p>
 <blockquote>
 <p>⚠️ It should be noted that <strong>sprites are not meant to be used for 2D games</strong>, they're only for 3D.
-Use <a href="./rectangle.html">Rectangle node</a> if you need 2D sprites, they have optimized renderer which can handle tons
-of sprites at once (sprite batching).</p>
+Use <a href="./rectangle.html">Rectangle node</a> if you need 2D sprites.</p>
 </blockquote>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>A sprite instance could be created using <code>SpriteBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{color::Color, pool::Handle}, resource::texture::Texture,
-</span><span class="boring">    scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
-</span><span class="boring">};
-</span>
-fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
     SpriteBuilder::new(BaseBuilder::new())
         .with_size(2.0)
         .with_rotation(45.0f32.to_radians())
@@ -214,16 +207,25 @@ fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
 <p>A sprite with a texture could be created by using <code>.with_texture</code> method of the builder:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::pool::Handle,
-    asset::manager::ResourceManager, resource::texture::Texture,
-    scene::{base::BaseBuilder, node::Node, sprite::SpriteBuilder, Scene},
-};
+</span>fn create_sprite_with_texture(
+    scene: &amp;mut Scene,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;Node&gt; {
+    let mut material = Material::standard_sprite();
+    material
+        .set_texture(
+            &amp;"diffuseTexture".into(),
+            Some(resource_manager.request::&lt;Texture&gt;("path/to/your_texture.jpg")),
+        )
+        .unwrap();
 
-fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+    // Material resources can be shared across multiple sprites (via simple `clone`).
+    // This significantly improves performance if you have multiple rectangles with the
+    // same material.
+    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+
     SpriteBuilder::new(BaseBuilder::new())
-        .with_texture(resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"))
+        .with_material(material_resource)
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -234,14 +236,6 @@ fn create_sprite(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt;
 <a href="particle_system_node.html">particle systems</a> for that. Why so? Particles systems are very well optimized for managing
 huge amounts of particles at the same time, but sprites are not. Each sprite is quite heavy to be used as a particle in
 particle systems, it has a lot of "useless" info that will eat a lot of memory.</p>
-<blockquote>
-<p>⚠️ Currently, the renderer will render each sprite in a separate draw call, which is very inefficient. So you should
-avoid creating lots of sprites.</p>
-</blockquote>
-<h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
-<p>Sprites are not supporting any sort of lighting, if you need lighted sprites, you need to create your own render
-pass and use <code>Mesh</code> node with custom shader that will orient all faces towards camera and will do lighting
-calculations.</p>
 
                     </main>
 
