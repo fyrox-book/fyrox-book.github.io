@@ -3639,16 +3639,20 @@ an orthographic camera:</p>
 <p>Use the RectangleBuilder to create Rectangle nodes:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, color::Color, pool::Handle},
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder, dim2::rectangle::RectangleBuilder, graph::Graph, node::Node,
-</span><span class="boring">        transform::TransformBuilder,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_rect(graph: &amp;mut Graph, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+    let mut material = Material::standard_2d();
+    material
+        .set_texture(
+            &amp;"diffuseTexture".into(),
+            Some(resource_manager.request::&lt;Texture&gt;("path/to/your_texture.jpg")),
+        )
+        .unwrap();
+
+    // Material resources can be shared across multiple rectangles (via simple `clone`).
+    // This significantly improves performance if you have multiple rectangles with the
+    // same material.
+    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+
     RectangleBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
@@ -3658,7 +3662,7 @@ an orthographic camera:</p>
         ),
     )
     .with_color(Color::RED)
-    .with_texture(resource_manager.request::&lt;Texture, _&gt;("path/to/your_texture.jpg"))
+    .with_material(material_resource)
     .build(graph)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -3669,9 +3673,6 @@ of an image. It is possible to do by using <code>set_uv_rect</code> method of th
 right-top quarter of an image to be used by a Rectangle node:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{core::math::Rect, scene::dim2::rectangle::Rectangle};
-</span><span class="boring">
 </span>fn set_2nd_quarter_image_portion(rectangle: &amp;mut Rectangle) {
     rectangle.set_uv_rect(Rect::new(
         0.5, // Offset by 50% to the right
@@ -3689,61 +3690,6 @@ across axes.</p>
 <h2 id="performance-7"><a class="header" href="#performance-7">Performance</a></h2>
 <p>Rectangles use specialized renderer that is heavily optimized to render tons of rectangles at once, so you can use
 rectangles almost for everything in 2D games.</p>
-<h2 id="limitations-2"><a class="header" href="#limitations-2">Limitations</a></h2>
-<p>Rectangle nodes does not support custom materials - it is a simplified version of a Mesh node that allows you draw a
-rectangle with a texture and a color. Its main purpose is to be able to start making games as quick as possible without
-diving too deep into details (shaders, render passes, etc.). You can still create a "rectangle" with custom material, use
-Mesh node with single rectangle surface:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{Matrix4, Vector3},
-</span><span class="boring">        parking_lot::Mutex,
-</span><span class="boring">        pool::Handle,
-</span><span class="boring">    },
-</span><span class="boring">    material::{Material, SharedMaterial},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        mesh::{
-</span><span class="boring">            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
-</span><span class="boring">            MeshBuilder, RenderPath,
-</span><span class="boring">        },
-</span><span class="boring">        node::Node,
-</span><span class="boring">        transform::TransformBuilder,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">use std::sync::Arc;
-</span>
-fn create_rect_with_custom_material(
-    graph: &amp;mut Graph,
-    material: SharedMaterial,
-) -&gt; Handle&lt;Node&gt; {
-    MeshBuilder::new(
-        BaseBuilder::new().with_local_transform(
-            TransformBuilder::new()
-                .with_local_scale(Vector3::new(0.4, 0.2, 1.0))
-                .build(),
-        ),
-    )
-    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
-        SurfaceData::make_quad(&amp;Matrix4::identity()),
-    ))
-    .with_material(material)
-    .build()])
-    .with_render_path(RenderPath::Forward)
-    .build(graph)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>This will effectively "mimic" the Rectangle node, but will allow you to use the full power of custom shaders. Keep in
-mind that Mesh nodes will be rendered via Deferred Renderer, while Rectangle nodes rendered with specialized renderer,
-that might result in some graphical artifacts.</p>
-<p>Rectangle nodes has limited lighting support, it means that they still will be lit by standard scene lights, but it will
-be a very simple diffuse lighting without any "physically correct" lighting. This is perfectly ok for 95% of 2D games,
-if you want to add custom lighting then you should use custom shader.</p>
-<p>Rectangle nodes works well with 2D physics nodes, check 2D physics section of the book for more info.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-scene-node"><a class="header" href="#custom-scene-node">Custom Scene Node</a></h1>
 <p>Sometimes there is a need to have custom scene nodes, it is possible to do, but it requires quite a lot of boilerplate
 code.</p>
@@ -3793,7 +3739,7 @@ impl NodeTrait for CustomNode {
     graph.add_node(Node::new(CustomNode::default()))
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="limitations-3"><a class="header" href="#limitations-3">Limitations</a></h2>
+<h2 id="limitations-2"><a class="header" href="#limitations-2">Limitations</a></h2>
 <p>Scene nodes have no access to outer context, this means that you cannot reference any data that is located outside
 graph easily. You still can define a global variable that <strong>will</strong> be accessible, but it is considered as a hack and
 should be avoided. If you want to add custom logic to scene nodes, then you should use scripts instead. Custom nodes
@@ -4777,7 +4723,7 @@ clicking the <code>Play/Pause</code> button:</p>
 by playing animation.</p>
 <h2 id="root-motion"><a class="header" href="#root-motion">Root Motion</a></h2>
 <p>See <a href="animation/root_motion/root_motion.html">Root Motion chapter</a> for more info.</p>
-<h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
+<h2 id="limitations-3"><a class="header" href="#limitations-3">Limitations</a></h2>
 <p>For now there's no dopesheet mode in the editor, you can edit only one numeric parameter at a time. Also, there's no
 capture mode - this is a special mode in which the editor automatically adds your changes in the scene to the animation.
 These limitations will be removed in the future versions.</p>
@@ -6211,7 +6157,7 @@ need to change the light maps on the fly, you can use the following code:</p>
     scene.graph.set_lightmap(light_map).unwrap();
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="limitations-5"><a class="header" href="#limitations-5">Limitations</a></h2>
+<h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
 <p>Fyrox uses CPU light map generator, which means that it is quite slow. Light sources that were baked into a light map
 will also light up any surface with light map on - this essentially means double lighting. To fix that you need to
 disable light sources that were baked into the light map explicitly.</p>
@@ -7150,7 +7096,7 @@ ButtonBuilder::new(WidgetBuilder::new())
 <span class="boring">}
 </span>// image now contains a handle of the Image widget 
 <span class="boring">}</span></code></pre></pre>
-<h2 id="limitations-6"><a class="header" href="#limitations-6">Limitations</a></h2>
+<h2 id="limitations-5"><a class="header" href="#limitations-5">Limitations</a></h2>
 <p>UI system uses completely different kind of scenes - UI scenes, which are fully decoupled from game scenes. This means
 that you can't incorporate UI widgets in a game scene. As a consequence, you don't have an ability to attach scripts to
 widgets - their logic is strictly defined in their backing code. This limitation is intentional, and it is here
@@ -9685,7 +9631,7 @@ fn serialize_with_environment() {
     my_object.visit("MyObject", &amp;mut visitor).unwrap();
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="limitations-7"><a class="header" href="#limitations-7">Limitations</a></h2>
+<h2 id="limitations-6"><a class="header" href="#limitations-6">Limitations</a></h2>
 <p>All fields of your structure must implement <code>Default</code> trait, this is essential limitation because deserialization must
 have a way to create an instance of an object for you.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="saved-games"><a class="header" href="#saved-games">Saved Games</a></h1>

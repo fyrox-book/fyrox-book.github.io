@@ -7,3 +7,4 @@ pub mod inheritance;
 pub mod light;
 pub mod mesh;
 pub mod particle_system;
+pub mod rectangle;
