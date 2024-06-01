@@ -194,16 +194,9 @@ bullet holes, blood splatter, dirt, cracks and so on. Here is the example of the
 <p>A decal instance can be created using DecalBuilder:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    scene::{base::BaseBuilder, decal::DecalBuilder, node::Node, Scene},
-</span><span class="boring">};
-</span>
-fn create_decal(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+</span>fn create_decal(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     DecalBuilder::new(BaseBuilder::new())
-        .with_diffuse_texture(resource_manager.request::&lt;Texture, _&gt;("path/to/your/decal.png"))
+        .with_diffuse_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/decal.png"))
         .build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre></pre>
