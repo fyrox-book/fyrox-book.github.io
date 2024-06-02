@@ -10,15 +10,7 @@ type.
 Use `NumericUpDownBuilder` to create a new instance of the `NumericUpDown` widget:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-# };
-fn create_numeric_widget(ctx: &mut BuildContext) -> Handle<UiNode> {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(123.0f32)
-     .build(ctx)
-}
+{{#include ../code/snippets/src/ui/numeric.rs:create_numeric_widget}}
 ```
 
 Keep in mind, that this widget is generic and can work with any numeric types. Sometimes you might get an "unknown type"
@@ -32,17 +24,7 @@ and `NumericUpDownBuilder::with_max_value` (or changed at runtime using `Numeric
 messages):
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-# };
-fn create_numeric_widget(ctx: &mut BuildContext) -> Handle<UiNode> {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(123.0f32)
-     .with_min_value(42.0)
-     .with_max_value(666.0)
-     .build(ctx)
-}
+{{#include ../code/snippets/src/ui/numeric.rs:create_numeric_widget_with_limits}}
 ```
 
 The default limits for min and max are `NumericType::min_value` and `NumericType::max_value` respectively.
@@ -53,16 +35,7 @@ Since the value of the widget can be changed via up/down arrow buttons (also by 
 provides a way to set the step of the value (for increment and decrement at the same time):
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-# };
-fn create_numeric_widget(ctx: &mut BuildContext) -> Handle<UiNode> {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(125.0f32)
-     .with_step(5.0)
-     .build(ctx)
-}
+{{#include ../code/snippets/src/ui/numeric.rs:create_numeric_widget_with_step}}
 ```
 
 The default value of the step is `NumericType::one`.
@@ -74,14 +47,5 @@ the actual value is rounded). For example, in some cases you might get irrationa
 but you interested in only first two decimal places. In this case you can set the precision to `2`:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-# };
-fn create_numeric_widget(ctx: &mut BuildContext) -> Handle<UiNode> {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(0.3333333f32)
-     .with_precision(2)
-     .build(ctx)
-}
+{{#include ../code/snippets/src/ui/numeric.rs:create_numeric_widget_with_precision}}
 ```

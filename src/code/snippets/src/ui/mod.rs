@@ -6,7 +6,9 @@ pub mod custom;
 pub mod font;
 pub mod grid;
 pub mod image;
+pub mod numeric;
 pub mod rendering;
+pub mod scroll_bar;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;

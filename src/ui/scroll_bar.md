@@ -12,40 +12,14 @@ value that lies within some range.
 A simple example of how to create a new `ScrollBar` could be something like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::gui::{
-#     core::pool::Handle, scroll_bar::ScrollBarBuilder, widget::WidgetBuilder, BuildContext,
-#     UiNode,
-# };
-fn create_scroll_bar(ctx: &mut BuildContext) -> Handle<UiNode> {
-    ScrollBarBuilder::new(WidgetBuilder::new())
-        .with_min(0.0)
-        .with_max(200.0)
-        .with_value(123.0)
-        .build(ctx)
-}
+{{#include ../code/snippets/src/ui/scroll_bar.rs:create_scroll_bar}}
 ```
 
 It creates a horizontal scroll bar with `123.0` value and a range of `[0.0..200.0]`. To fetch the new value
 of the scroll bar, use `ScrollBarMessage::Value` message:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::gui::{
-#     core::pool::Handle,
-#     message::{MessageDirection, UiMessage},
-#     scroll_bar::ScrollBarMessage,
-#     UiNode,
-# };
-# fn foo(scroll_bar: Handle<UiNode>, message: &mut UiMessage) {
-if message.destination() == scroll_bar
-    && message.direction() == MessageDirection::FromWidget
-{
-    if let Some(ScrollBarMessage::Value(value)) = message.data() {
-        println!("{}", value);
-    }
-}
-# }
+{{#include ../code/snippets/src/ui/scroll_bar.rs:usage_example}}
 ```
 
 Please note, that you need to explicitly filter messages by `MessageDirection::FromWidget`, because it's the only
