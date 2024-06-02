@@ -1,6 +1,7 @@
 pub mod context;
 pub mod example;
 pub mod plugin;
+pub mod tasks;
 
 use fyrox::graph::BaseSceneGraph;
 use fyrox::graph::SceneGraph;

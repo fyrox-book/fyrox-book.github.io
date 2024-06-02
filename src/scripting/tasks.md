@@ -36,146 +36,15 @@ a path from one corner to another). As the last argument to the `spawn_script_ta
 will be executed on the main thread when the task is complete. It just saves the computed path in the script's 
 field which is then used for visualization.
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         algebra::Vector3, log::Log, pool::Handle, reflect::prelude::*, uuid::Uuid,
-#         visitor::prelude::*,
-#     },
-#     impl_component_provider,
-#     scene::{debug::Line, navmesh::NavigationalMesh, node::Node},
-#     script::{ScriptContext, ScriptTrait},
-# };
-# 
-#[derive(Visit, Default, Reflect, Debug, Clone)]
-struct MyScript {
-    navmesh: Handle<Node>,
-    path: Option<Vec<Vector3<f32>>>,
-}
-
-# impl_component_provider!(MyScript);
-# 
-impl ScriptTrait for MyScript {
-    fn on_start(&mut self, ctx: &mut ScriptContext) {
-        // Borrow a navigational mesh scene node first.
-        if let Some(navmesh_node) = ctx
-            .scene
-            .graph
-            .try_get_of_type::<NavigationalMesh>(self.navmesh)
-        {
-            // Take a shared reference to the internal navigational mesh.
-            let shared_navmesh = navmesh_node.navmesh();
-
-            // Spawn a task, that will calculate a long path.
-            ctx.task_pool.spawn_script_task(
-                ctx.scene_handle,
-                ctx.handle,
-                async move {
-                    let navmesh = shared_navmesh.read();
-
-                    if let Some((_, begin_index)) =
-                        navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0))
-                    {
-                        if let Some((_, end_index)) =
-                            navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
-                        {
-                            let mut path = Vec::new();
-                            if navmesh
-                                .build_path(begin_index, end_index, &mut path)
-                                .is_ok()
-                            {
-                                return Some(path);
-                            }
-                        }
-                    }
-
-                    None
-                },
-                |path, this: &mut MyScript, _ctx| {
-                    this.path = path;
-
-                    Log::info("Path is calculated!");
-                },
-            );
-        }
-    }
-
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
-        // Draw the computed path.
-        if let Some(path) = self.path.as_ref() {
-            for segment in path.windows(2) {
-                ctx.scene.drawing_context.add_line(Line {
-                    begin: segment[0],
-                    end: segment[1],
-                    color: Default::default(),
-                })
-            }
-        }
-    }
-    # 
-    # fn id(&self) -> Uuid {
-    #     todo!()
-    # }
-}
+```rust,no_run
+{{#include ../code/snippets/src/scripting/tasks.rs:script_task}}
 ```
 
 Plugins could also spawn tasks, which operates on application scale basis, unlike script tasks which operates with
 separate script instances. A plugin task is a bit easier to use:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::plugin::{Plugin, PluginConstructor, PluginContext};
-# use std::{fs::File, io::Read};
-#
-struct MyGameConstructor;
-
-impl PluginConstructor for MyGameConstructor {
-    fn create_instance(
-        &self,
-        _scene_path: Option<&str>,
-        context: PluginContext,
-    ) -> Box<dyn Plugin> {
-        Box::new(MyGame::new(context))
-    }
-}
-
-struct MyGame {
-    data: Option<Vec<u8>>,
-}
-
-impl MyGame {
-    pub fn new(context: PluginContext) -> Self {
-        context.task_pool.spawn_plugin_task(
-            // Emulate heavy task by reading a potentially large file. The game will be fully
-            // responsive while it runs.
-            async move {
-                let mut file = File::open("some/file.txt").unwrap();
-                let mut data = Vec::new();
-                file.read_to_end(&mut data).unwrap();
-                data
-            },
-            // This closure is called when the future above has finished, but not immediately - on
-            // the next update iteration.
-            |data, game: &mut MyGame, _context| {
-                // Store the data in the game instance.
-                game.data = Some(data);
-            },
-        );
-
-        // Immediately return the new game instance with empty data.
-        Self { data: None }
-    }
-}
-
-impl Plugin for MyGame {
-    fn update(&mut self, _context: &mut PluginContext) {
-        // Do something with the data.
-        if let Some(data) = self.data.take() {
-            println!("The data is: {:?}", data);
-        }
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/scripting/tasks.rs:plugin_task}}
 ```
 
 ## Performance
