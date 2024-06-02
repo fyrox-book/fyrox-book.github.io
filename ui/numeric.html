@@ -193,14 +193,10 @@ type.</p>
 <p>Use <code>NumericUpDownBuilder</code> to create a new instance of the <code>NumericUpDown</code> widget:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
 </span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(123.0f32)
-     .build(ctx)
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(123.0f32)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that this widget is generic and can work with any numeric types. Sometimes you might get an "unknown type"
@@ -212,16 +208,12 @@ and <code>NumericUpDownBuilder::with_max_value</code> (or changed at runtime usi
 messages):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(123.0f32)
-     .with_min_value(42.0)
-     .with_max_value(666.0)
-     .build(ctx)
+</span>fn create_numeric_widget_with_limits(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(123.0f32)
+        .with_min_value(42.0)
+        .with_max_value(666.0)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The default limits for min and max are <code>NumericType::min_value</code> and <code>NumericType::max_value</code> respectively.</p>
@@ -230,15 +222,11 @@ messages):</p>
 provides a way to set the step of the value (for increment and decrement at the same time):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(125.0f32)
-     .with_step(5.0)
-     .build(ctx)
+</span>fn create_numeric_widget_with_step(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(125.0f32)
+        .with_step(5.0)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The default value of the step is <code>NumericType::one</code>.</p>
@@ -248,15 +236,11 @@ the actual value is rounded). For example, in some cases you might get irrationa
 but you interested in only first two decimal places. In this case you can set the precision to <code>2</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(0.3333333f32)
-     .with_precision(2)
-     .build(ctx)
+</span>fn create_numeric_widget_with_precision(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(0.3333333f32)
+        .with_precision(2)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 

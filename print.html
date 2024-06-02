@@ -7866,14 +7866,10 @@ type.</p>
 <p>Use <code>NumericUpDownBuilder</code> to create a new instance of the <code>NumericUpDown</code> widget:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
 </span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(123.0f32)
-     .build(ctx)
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(123.0f32)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that this widget is generic and can work with any numeric types. Sometimes you might get an "unknown type"
@@ -7885,16 +7881,12 @@ and <code>NumericUpDownBuilder::with_max_value</code> (or changed at runtime usi
 messages):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(123.0f32)
-     .with_min_value(42.0)
-     .with_max_value(666.0)
-     .build(ctx)
+</span>fn create_numeric_widget_with_limits(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(123.0f32)
+        .with_min_value(42.0)
+        .with_max_value(666.0)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The default limits for min and max are <code>NumericType::min_value</code> and <code>NumericType::max_value</code> respectively.</p>
@@ -7903,15 +7895,11 @@ messages):</p>
 provides a way to set the step of the value (for increment and decrement at the same time):</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(125.0f32)
-     .with_step(5.0)
-     .build(ctx)
+</span>fn create_numeric_widget_with_step(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(125.0f32)
+        .with_step(5.0)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The default value of the step is <code>NumericType::one</code>.</p>
@@ -7921,15 +7909,11 @@ the actual value is rounded). For example, in some cases you might get irrationa
 but you interested in only first two decimal places. In this case you can set the precision to <code>2</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, gui::{numeric::NumericUpDownBuilder, widget::WidgetBuilder, BuildContext, UiNode}
-</span><span class="boring">};
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
- NumericUpDownBuilder::new(WidgetBuilder::new())
-     .with_value(0.3333333f32)
-     .with_precision(2)
-     .build(ctx)
+</span>fn create_numeric_widget_with_precision(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    NumericUpDownBuilder::new(WidgetBuilder::new())
+        .with_value(0.3333333f32)
+        .with_precision(2)
+        .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="popup-wip"><a class="header" href="#popup-wip">Popup (WIP)</a></h1>
@@ -7949,11 +7933,6 @@ value that lies within some range.</p>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle, scroll_bar::ScrollBarBuilder, widget::WidgetBuilder, BuildContext,
-</span><span class="boring">    UiNode,
-</span><span class="boring">};
 </span>fn create_scroll_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollBarBuilder::new(WidgetBuilder::new())
         .with_min(0.0)
@@ -7966,23 +7945,25 @@ value that lies within some range.</p>
 of the scroll bar, use <code>ScrollBarMessage::Value</code> message:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    message::{MessageDirection, UiMessage},
-</span><span class="boring">    scroll_bar::ScrollBarMessage,
-</span><span class="boring">    UiNode,
-</span><span class="boring">};
-</span><span class="boring">fn foo(scroll_bar: Handle&lt;UiNode&gt;, message: &amp;mut UiMessage) {
-</span>if message.destination() == scroll_bar
-    &amp;&amp; message.direction() == MessageDirection::FromWidget
-{
-    if let Some(ScrollBarMessage::Value(value)) = message.data() {
-        println!("{}", value);
+</span>#[derive(Visit, Reflect, Debug, Default)]
+struct Game {
+    scroll_bar: Handle&lt;UiNode&gt;,
+}
+
+impl Plugin for Game {
+    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+        if let Some(ScrollBarMessage::Value(value)) = message.data() {
+            if message.destination() == self.scroll_bar
+                &amp;&amp; message.direction() == MessageDirection::FromWidget
+            {
+                //
+                // Insert handler code here.
+                //
+            }
+        }
     }
 }
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please note, that you need to explicitly filter messages by <code>MessageDirection::FromWidget</code>, because it's the only
 direction that is used as an "indicator" that the value was accepted by the scroll bar.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>

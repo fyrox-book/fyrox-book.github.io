@@ -195,11 +195,6 @@ value that lies within some range.</p>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle, scroll_bar::ScrollBarBuilder, widget::WidgetBuilder, BuildContext,
-</span><span class="boring">    UiNode,
-</span><span class="boring">};
 </span>fn create_scroll_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollBarBuilder::new(WidgetBuilder::new())
         .with_min(0.0)
@@ -212,23 +207,25 @@ value that lies within some range.</p>
 of the scroll bar, use <code>ScrollBarMessage::Value</code> message:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    message::{MessageDirection, UiMessage},
-</span><span class="boring">    scroll_bar::ScrollBarMessage,
-</span><span class="boring">    UiNode,
-</span><span class="boring">};
-</span><span class="boring">fn foo(scroll_bar: Handle&lt;UiNode&gt;, message: &amp;mut UiMessage) {
-</span>if message.destination() == scroll_bar
-    &amp;&amp; message.direction() == MessageDirection::FromWidget
-{
-    if let Some(ScrollBarMessage::Value(value)) = message.data() {
-        println!("{}", value);
+</span>#[derive(Visit, Reflect, Debug, Default)]
+struct Game {
+    scroll_bar: Handle&lt;UiNode&gt;,
+}
+
+impl Plugin for Game {
+    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+        if let Some(ScrollBarMessage::Value(value)) = message.data() {
+            if message.destination() == self.scroll_bar
+                &amp;&amp; message.direction() == MessageDirection::FromWidget
+            {
+                //
+                // Insert handler code here.
+                //
+            }
+        }
     }
 }
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Please note, that you need to explicitly filter messages by <code>MessageDirection::FromWidget</code>, because it's the only
 direction that is used as an "indicator" that the value was accepted by the scroll bar.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
