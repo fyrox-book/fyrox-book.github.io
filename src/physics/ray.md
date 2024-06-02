@@ -5,33 +5,7 @@ hit-scan weapons (weapons that shoots high-speed projectiles), AI collision avoi
 use physics world instance of a scene graph:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::algebra::{Point3, Vector3},
-#     scene::graph::{
-#         physics::{Intersection, RayCastOptions},
-#         Graph,
-#     },
-# };
-# 
-fn do_ray_cast(graph: &mut Graph, begin: Vector3<f32>, end: Vector3<f32>) -> Vec<Intersection> {
-    let mut buffer = Vec::new();
-
-    let ray_direction = end - begin;
-
-    graph.physics.cast_ray(
-        RayCastOptions {
-            ray_origin: Point3::from(begin),
-            ray_direction,
-            max_len: ray_direction.norm(),
-            groups: Default::default(),
-            sort_results: true,
-        },
-        &mut buffer,
-    );
-
-    buffer
-}
+{{#include ../code/snippets/src/scene/ray.rs:do_ray_cast}}
 ```
 
 The function above will return a collection of intersections that are sorted by intersection distance (a distance from
@@ -71,45 +45,7 @@ As you might've noticed, the function above return `Vec<Intersection>` which all
 relatively slow and could be sped up a lot by using static array on stack:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         algebra::{Point3, Vector3},
-#         arrayvec::ArrayVec,
-#     },
-#     scene::graph::{
-#         physics::{Intersection, RayCastOptions},
-#         Graph,
-#     },
-# };
-# 
-fn do_static_ray_cast<const N: usize>(
-    graph: &mut Graph,
-    begin: Vector3<f32>,
-    end: Vector3<f32>,
-) -> ArrayVec<Intersection, N> {
-    let mut buffer = ArrayVec::<Intersection, N>::new();
-
-    let ray_direction = end - begin;
-
-    graph.physics.cast_ray(
-        RayCastOptions {
-            ray_origin: Point3::from(begin),
-            ray_direction,
-            max_len: ray_direction.norm(),
-            groups: Default::default(),
-            sort_results: true,
-        },
-        &mut buffer,
-    );
-
-    buffer
-}
-
-fn usage_example(graph: &mut Graph, begin: Vector3<f32>, end: Vector3<f32>) {
-    // Fetch first 32 intersections.
-    dbg!(do_static_ray_cast::<32>(graph, begin, end));
-}
+{{#include ../code/snippets/src/scene/ray.rs:do_static_ray_cast}}
 ```
 
 `usage_example` shows how to use the `do_static_ray_cast` function - all you need to do is to specify maximum amount of

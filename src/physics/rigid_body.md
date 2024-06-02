@@ -9,28 +9,7 @@ your objects.
 Use RigidBodyBuilder to create a rigid body instance:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, pool::Handle},
-#     scene::{
-#         base::BaseBuilder,
-#         collider::{ColliderBuilder, ColliderShape},
-#         graph::Graph,
-#         node::Node,
-#         rigidbody::RigidBodyBuilder,
-#     },
-# };
-fn create_cube_rigid_body(graph: &mut Graph) -> Handle<Node> {
-    RigidBodyBuilder::new(BaseBuilder::new().with_children(&[
-            // Rigid body must have at least one collider
-            ColliderBuilder::new(BaseBuilder::new())
-                .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
-                .build(graph),
-        ]))
-    .with_mass(2.0)
-    .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
-    .build(graph)
-}
+{{#include ../code/snippets/src/scene/rigid_body.rs:create_cube_rigid_body}}
 ```
 
 ## Colliders
@@ -58,18 +37,7 @@ You can apply forces and torque to any rigid body, but only dynamic bodies will 
 applying force to a rigid body: at center of mass or at particular point at the body:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{core::algebra::Vector3, scene::rigidbody::RigidBody};
-fn apply_force_and_torque(rigid_body: &mut RigidBody) {
-    // Push rigid body forward at the center of mass.
-    rigid_body.apply_force(Vector3::new(0.0, 0.0, 1.0));
-
-    // Kick rigid body at the side (this will also make it rotate)
-    rigid_body.apply_force_at_point(Vector3::new(0.0, 0.0, 1.0), Vector3::new(1.0, 0.0, 0.0));
-
-    // Turn rigid body around center of mass.
-    rigid_body.apply_torque(Vector3::new(0.0, 3.0, 0.0));
-}
+{{#include ../code/snippets/src/scene/rigid_body.rs:apply_force_and_torque}}
 ```
 
 ## Kinematic rigid bodies
@@ -78,28 +46,7 @@ Sometimes you may want to have direct control over position/rotation of a rigid 
 do simulation for the body. This can be achieved by making the rigid body _kinematic_:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, pool::Handle},
-#     scene::{
-#         base::BaseBuilder,
-#         collider::{ColliderBuilder, ColliderShape},
-#         graph::Graph,
-#         node::Node,
-#         rigidbody::{RigidBodyBuilder, RigidBodyType},
-#     },
-# };
-
-fn create_kinematic_rigid_body(graph: &mut Graph) -> Handle<Node> {
-    RigidBodyBuilder::new(BaseBuilder::new().with_children(&[
-            // Rigid body must have at least one collider
-            ColliderBuilder::new(BaseBuilder::new())
-                .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
-                .build(graph),
-        ]))
-    .with_body_type(RigidBodyType::KinematicPositionBased)
-    .build(graph)
-}
+{{#include ../code/snippets/src/scene/rigid_body.rs:create_kinematic_rigid_body}}
 ```
 
 ## Continuous collision detection

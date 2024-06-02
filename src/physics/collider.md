@@ -41,22 +41,7 @@ rigid bodies.
 Use ColliderBuilder to create an instance of collider from code with any shape you want.
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{
-#         base::BaseBuilder,
-#         collider::{ColliderBuilder, ColliderShape},
-#         graph::Graph,
-#         node::Node,
-#     },
-# };
-fn create_capsule_collider(graph: &mut Graph) -> Handle<Node> {
-    ColliderBuilder::new(BaseBuilder::new())
-        .with_shape(ColliderShape::capsule_y(0.5, 0.2))
-        .with_friction(1.0)
-        .build(graph)
-}
+{{#include ../code/snippets/src/scene/collider.rs:create_capsule_collider}}
 ```
 
 In the editor you can use `MainMenu -> Create -> Physics -> Collider`, or right-click on a node in `World Viewer` and
