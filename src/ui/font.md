@@ -11,13 +11,8 @@ There are two ways to create font instance - either load font from file, or load
 
 Since every font in the engine is a resource, you can load fonts using standard resource manager like so:
 
-```rust ,no_run,edition2018
-# extern crate fyrox;
-# use fyrox::{asset::Resource, gui::font::Font, plugin::PluginContext};
-# 
-fn load_font_from_file(ctx: &PluginContext) -> Resource<Font> {
-    ctx.resource_manager.request::<Font>("path/to/my/font")
-}
+```rust,no_run
+{{#include ../code/snippets/src/ui/font.rs:load_font_from_file}}
 ```
 
 ### Creating Font From Memory
@@ -25,38 +20,15 @@ fn load_font_from_file(ctx: &PluginContext) -> Resource<Font> {
 This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is 
 very simple:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{asset::untyped::ResourceKind, asset::Resource, gui::font::Font};
-# 
-fn load_font_from_memory(data: Vec<u8>) -> Resource<Font> {
-    Resource::new_ok(
-        ResourceKind::Embedded,
-        Font::from_memory(data, 1024).unwrap(),
-    )
-}
+```rust,no_run
+{{#include ../code/snippets/src/ui/font.rs:load_font_from_memory}}
 ```
 
 `data` input parameter could be a buffer that contains any valid TTF/OTF font. For example, you can load TTF file into
 a data buffer and create font using the data buffer:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{asset::untyped::ResourceKind, asset::Resource, gui::font::Font};
-# use std::{fs::File, io::Read};
-# 
-fn load_font_from_memory() -> Resource<Font> {
-    let mut data = Vec::new();
-    File::open("path/to/your/font.ttf")
-        .unwrap()
-        .read_to_end(&mut data)
-        .unwrap();
-
-    Resource::new_ok(
-        ResourceKind::Embedded,
-        Font::from_memory(data, 1024).unwrap(),
-    )
-}
+{{#include ../code/snippets/src/ui/font.rs:load_font_from_file_memory}}
 ```
 
 ## Default Font
@@ -66,18 +38,7 @@ includes only ASCII characters, if you need extended character set, you can repl
 code snippet:
 
 ```rust ,no_run,edition2018
-# extern crate fyrox;
-# use fyrox::gui::{ttf::Font, UserInterface};
-async fn set_default_font(ui: &mut UserInterface) {
-    // Select character set.
-    let character_set = Font::korean_char_set();
-    // Load font.
-    let new_font = Font::from_file("path/to/your/font.ttf", 20.0, character_set)
-        .await
-        .unwrap();
-    // Set as default font.
-    ui.default_font.set(new_font)
-}
+{{#include ../code/snippets/src/ui/font.rs:set_default_font}}
 ```
 
 ## How to Change Font Size
@@ -85,34 +46,13 @@ async fn set_default_font(ui: &mut UserInterface) {
 All you need to do is to set font size in your Text or TextBox widgets like so: 
 
 ```rust ,no_run
-use fyrox::{
-    core::pool::Handle,
-    gui::{text::TextBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-};
-
-fn text(ctx: &mut BuildContext) -> Handle<UiNode> {
-    TextBuilder::new(WidgetBuilder::new())
-        .with_text("Some text")
-        .with_font_size(30.0) // Sets the desired font size.
-        .build(ctx)
-}
+{{#include ../code/snippets/src/ui/font.rs:text}}
 ```
 
 You can also change the font size at runtime using `TextMessage::FontSize` message like so:
 
 ```rust ,no_run
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{message::MessageDirection, text::TextMessage, UiNode, UserInterface},
-# };
-# 
-fn set_font_size(text: Handle<UiNode>, ui: &UserInterface, new_font_size: f32) {
-    ui.send_message(TextMessage::font_size(
-        text,
-        MessageDirection::ToWidget,
-        new_font_size,
-    ))
-}
+{{#include ../code/snippets/src/ui/font.rs:set_font_size}}
 ```
 
 ## Important notes
