@@ -8,7 +8,11 @@ pub mod grid;
 pub mod image;
 pub mod numeric;
 pub mod rendering;
+pub mod screen;
 pub mod scroll_bar;
+pub mod scroll_panel;
+pub mod scroll_viewer;
+pub mod stack_panel;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;

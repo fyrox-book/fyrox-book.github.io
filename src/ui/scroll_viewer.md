@@ -12,33 +12,7 @@ the content.
 A scroll viewer widget could be created using `ScrollViewerBuilder`:
 
 ```rust
-# extern crate fyrox;
-# use fyrox::gui::{
-#     button::ButtonBuilder, core::pool::Handle, scroll_viewer::ScrollViewerBuilder,
-#     stack_panel::StackPanelBuilder, text::TextBuilder, widget::WidgetBuilder, BuildContext,
-#     UiNode,
-# };
-#
-fn create_scroll_viewer(ctx: &mut BuildContext) -> Handle<UiNode> {
-    ScrollViewerBuilder::new(WidgetBuilder::new())
-        .with_content(
-            StackPanelBuilder::new(
-                WidgetBuilder::new()
-                    .with_child(
-                        ButtonBuilder::new(WidgetBuilder::new())
-                            .with_text("Click Me!")
-                            .build(ctx),
-                    )
-                    .with_child(
-                        TextBuilder::new(WidgetBuilder::new())
-                            .with_text("Some\nlong\ntext")
-                            .build(ctx),
-                    ),
-            )
-            .build(ctx),
-        )
-        .build(ctx)
-}
+{{#include ../code/snippets/src/ui/scroll_viewer.rs:create_scroll_viewer}}
 ```
 
 Keep in mind, that you can change the content of a scroll viewer at runtime using `ScrollViewerMessage::Content` message.
@@ -49,20 +23,7 @@ Scroll viewer can have an arbitrary scrolling speed for each axis. Scrolling is 
 scrolls vertical axis, which can be changed by holding `Shift` key. Scrolling speed can be set during the build phase:
 
 ```rust
-# extern crate fyrox;
-# use fyrox::gui::{
-#     core::pool::Handle, scroll_viewer::ScrollViewerBuilder, widget::WidgetBuilder,
-#     BuildContext, UiNode,
-# };
-#
-fn create_scroll_viewer(ctx: &mut BuildContext) -> Handle<UiNode> {
-    ScrollViewerBuilder::new(WidgetBuilder::new())
-        // Set vertical scrolling speed twice as fast as default scrolling speed.
-        .with_v_scroll_speed(60.0)
-        // Set horizontal scrolling speed slightly lower than the default value (30.0).
-        .with_h_scroll_speed(20.0)
-        .build(ctx)
-}
+{{#include ../code/snippets/src/ui/scroll_viewer.rs:create_scroll_viewer_with_speed}}
 ```
 
 Also, it could be set using `ScrollViewerMessage::HScrollSpeed` or `ScrollViewerMessage::VScrollSpeed` messages.
@@ -72,20 +33,5 @@ Also, it could be set using `ScrollViewerMessage::HScrollSpeed` or `ScrollViewer
 Calculates the scroll values to bring a desired child into view, it can be used for automatic navigation:
 
 ```rust
-# extern crate fyrox;
-# use fyrox::gui::{
-#     core::pool::Handle, message::MessageDirection, scroll_viewer::ScrollViewerMessage, UiNode,
-#     UserInterface,
-# };
-fn bring_child_into_view(
-    scroll_viewer: Handle<UiNode>,
-    child: Handle<UiNode>,
-    ui: &UserInterface,
-) {
-    ui.send_message(ScrollViewerMessage::bring_into_view(
-        scroll_viewer,
-        MessageDirection::ToWidget,
-        child,
-    ))
-}
+{{#include ../code/snippets/src/ui/scroll_viewer.rs:bring_child_into_view}}
 ```
