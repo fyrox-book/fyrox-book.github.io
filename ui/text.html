@@ -192,11 +192,6 @@ alignment, and so on.</p>
 <p>An instance of the Text widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
 </span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text(text)
@@ -209,34 +204,18 @@ alignment, and so on.</p>
 centered text could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        text::TextBuilder, widget::WidgetBuilder, HorizontalAlignment, UiNode, UserInterface,
-</span><span class="boring">        VerticalAlignment,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
-    .with_text(text)
-    .build(&amp;mut ui.build_ctx())
+        .with_text(text)
+        .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Long text is usually needs to wrap on available bounds, there are three possible options for word wrapping:
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        formatted_text::WrapMode, text::TextBuilder, widget::WidgetBuilder, UiNode,
-</span><span class="boring">        UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
@@ -249,15 +228,6 @@ centered text could be created like so:</p>
 text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <code>Text</code> widget!</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{color::Color, pool::Handle},
-</span><span class="boring">    gui::{
-</span><span class="boring">        border::BorderBuilder, brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode,
-</span><span class="boring">        UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     let text_widget =
         TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
@@ -277,12 +247,7 @@ position the border, not the text.</p>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{color::Color, pool::Handle},
-</span><span class="boring">    gui::{brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
-</span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_colored_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     //               vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
         .with_text(text)
@@ -292,57 +257,26 @@ position the border, not the text.</p>
 <p>By default, text is created with default font, however it is possible to set any custom font:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    gui::{
-</span><span class="boring">        text::TextBuilder,
-</span><span class="boring">        ttf::{Font, SharedFont},
-</span><span class="boring">        widget::WidgetBuilder,
-</span><span class="boring">        UiNode, UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn load_font() -&gt; SharedFont {
-    // Choose desired character set, default is Basic Latin + Latin Supplement.
-    // Character set is a set of ranges with Unicode code points.
-    let character_set = Font::default_char_set();
-
-    // Normally `block_on` should be avoided.
-    let font = block_on(Font::from_file(
-        "path/to/your/font.ttf",
-        24.0,
-        character_set,
-    ))
-    .unwrap();
-
-    SharedFont::new(font)
-}
-
-fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_font(
+    ui: &amp;mut UserInterface,
+    text: &amp;str,
+    resource_manager: &amp;ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
-        .with_font(load_font())
+        .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
+        // You can set any size as well.
+        .with_font_size(24.0)
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Please refer to <a href="font.html">Font</a> chapter to learn more about fonts.</p>
-<h3 id="font-size"><a class="header" href="#font-size">Font size</a></h3>
-<p>There is no way to change font size without changing the entire font used by Text, it is known issue and there is
-<a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Check <a href="font.html">Font</a> chapter to learn how
-to create fonts.</p>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
 <p>Text widget supports shadows effect to add contrast to your text, which could be useful to make text readable independent
 on the background colors. This effect could be used for subtitles. Shadows are pretty easy to add, all you need to do
 is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector2, color::Color, pool::Handle},
-</span><span class="boring">    gui::{brush::Brush, text::TextBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
         .with_text(text)
@@ -374,15 +308,6 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
 <p>An example of changing text at runtime could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        message::{MessageDirection},
-</span><span class="boring">        UiNode, UserInterface,
-</span><span class="boring">        text::TextMessage
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn request_change_text(ui: &amp;UserInterface, text_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
     ui.send_message(TextMessage::text(
         text_widget_handle,

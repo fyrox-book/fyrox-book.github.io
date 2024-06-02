@@ -192,14 +192,6 @@ header and the other representing the tab's contents.</p>
 <p>The following example makes a 2 tab, Tab Control containing some simple text widgets:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    tab_control::{TabControlBuilder, TabDefinition},
-</span><span class="boring">    text::TextBuilder,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    BuildContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_tab_control(ctx: &amp;mut BuildContext) {
     TabControlBuilder::new(WidgetBuilder::new())
         .with_tab(TabDefinition {
@@ -241,29 +233,18 @@ tab headers are scrunched when there are no margins provided to your text widget
 code example and you will get a decent look:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    text::TextBuilder,
-</span><span class="boring">    Thickness, 
-</span><span class="boring">    tab_control::{TabDefinition},
-</span><span class="boring">};
-</span>
-<span class="boring">fn build(ctx: &amp;mut BuildContext) {
-</span><span class="boring">TabDefinition{
-</span>header: TextBuilder::new(
-            WidgetBuilder::new()
-                .with_margin(Thickness::uniform(4.0))
-        )
+</span>fn create_tab_control_with_header(ctx: &amp;mut BuildContext) {
+    TabControlBuilder::new(WidgetBuilder::new()).with_tab(TabDefinition {
+        header: TextBuilder::new(WidgetBuilder::new().with_margin(Thickness::uniform(4.0)))
             .with_text("First")
             .build(ctx),
-<span class="boring">content: Default::default(),
-</span><span class="boring">can_be_closed: true,
-</span><span class="boring">user_data: None,
-</span><span class="boring">};
-</span><span class="boring">}
-</span>
+        content: TextBuilder::new(WidgetBuilder::new())
+            .with_text("First tab's contents!")
+            .build(ctx),
+        can_be_closed: true,
+        user_data: None,
+    });
+}
 <span class="boring">}</span></code></pre></pre>
 
                     </main>
