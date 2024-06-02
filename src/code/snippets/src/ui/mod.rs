@@ -3,6 +3,8 @@ pub mod button;
 pub mod canvas;
 pub mod check_box;
 pub mod custom;
+pub mod decorator;
+pub mod expander;
 pub mod font;
 pub mod grid;
 pub mod image;

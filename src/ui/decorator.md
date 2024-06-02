@@ -11,3 +11,9 @@ normal appearance:
 This element is widely used to provide some generic visual behaviour for various widgets. For example, it used in 
 buttons, tree items, dropdown list items, etc.; in other words - everywhere where a widget needs to give visual 
 feedback the user.
+
+## Example
+
+```rust
+{{#include ../code/snippets/src/ui/decorator.rs:create_decorator}}
+```
