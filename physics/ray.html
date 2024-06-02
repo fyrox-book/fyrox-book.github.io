@@ -214,14 +214,6 @@ use physics world instance of a scene graph:</p>
 beginning of the ray to an intersection point). Each intersection is represented by the following structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{Point3, Vector3},
-</span><span class="boring">        pool::Handle,
-</span><span class="boring">    },
-</span><span class="boring">    scene::{graph::physics::FeatureId, node::Node},
-</span><span class="boring">};
 </span>pub struct Intersection {
     pub collider: Handle&lt;Node&gt;,
     pub normal: Vector3&lt;f32&gt;,

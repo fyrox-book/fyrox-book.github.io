@@ -289,28 +289,16 @@ the shader to your material in the Material Editor:</p>
 <p>Alternatively, you can load the shader from code. To do this, you can use this code:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    material::shader::{Shader, ShaderResource},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn load_shader(resource_manager: &amp;ResourceManager) -&gt; ShaderResource {
-    resource_manager.request::&lt;Shader, _&gt;("path/to/my/cool.shader")
+    resource_manager.request::&lt;Shader&gt;("path/to/my/cool.shader")
 }
 <span class="boring">}</span></code></pre></pre>
 <p>After that you can use the shader to build a material from it:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    material::{shader::Shader, Material, SharedMaterial},
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn create_material(resource_manager: &amp;ResourceManager) -&gt; SharedMaterial {
-    let shader = resource_manager.request::&lt;Shader, _&gt;("path/to/my/cool.shader");
-    SharedMaterial::new(Material::from_shader(
+</span>fn create_material(resource_manager: &amp;ResourceManager) -&gt; MaterialResource {
+    let shader = resource_manager.request::&lt;Shader&gt;("path/to/my/cool.shader");
+    MaterialResource::new(Material::from_shader(
         shader,
         Some(resource_manager.clone()),
     ))

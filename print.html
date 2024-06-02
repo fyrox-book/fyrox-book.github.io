@@ -897,21 +897,13 @@ Note that the engine does try to reuse data across instances as much as possible
 <p>You can also instantiate assets dynamically from your code. Here's an example of that for a Model:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    resource::model::{Model, ModelResourceExtension},
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
 </span>async fn instantiate_model(
     path: &amp;Path,
     resource_manager: ResourceManager,
     scene: &amp;mut Scene,
 ) -&gt; Handle&lt;Node&gt; {
     // Load the model first. Alternatively, you can store the resource handle somewhere and use it for instantiation.
-    let model = resource_manager.request::&lt;Model, _&gt;(path).await.unwrap();
+    let model = resource_manager.request::&lt;Model&gt;(path).await.unwrap();
 
     model.instantiate(scene)
 }
@@ -3886,14 +3878,6 @@ use physics world instance of a scene graph:</p>
 beginning of the ray to an intersection point). Each intersection is represented by the following structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{Point3, Vector3},
-</span><span class="boring">        pool::Handle,
-</span><span class="boring">    },
-</span><span class="boring">    scene::{graph::physics::FeatureId, node::Node},
-</span><span class="boring">};
 </span>pub struct Intersection {
     pub collider: Handle&lt;Node&gt;,
     pub normal: Vector3&lt;f32&gt;,
@@ -4233,25 +4217,6 @@ other nodes. The node can be created from the editor, and you don't even need to
 Use the following example code as a guide <strong>only</strong> if you need to create procedural animations:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    animation::{
-</span><span class="boring">        container::{TrackDataContainer, TrackValueKind},
-</span><span class="boring">        track::Track,
-</span><span class="boring">        value::ValueBinding,
-</span><span class="boring">        Animation,
-</span><span class="boring">    },
-</span><span class="boring">    core::{
-</span><span class="boring">        curve::{Curve, CurveKey, CurveKeyKind},
-</span><span class="boring">        pool::Handle,
-</span><span class="boring">    },
-</span><span class="boring">    scene::{
-</span><span class="boring">        node::Node,
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        pivot::PivotBuilder
-</span><span class="boring">    }
-</span><span class="boring">};
 </span>fn create_animation(node: Handle&lt;Node&gt;) -&gt; Animation {
     let mut frames_container = TrackDataContainer::new(TrackValueKind::Vector3);
     // We'll animate only X coordinate (at index 0).
@@ -4270,15 +4235,18 @@ Use the following example code as a guide <strong>only</strong> if you need to c
     animation.set_enabled(true);
     animation
 }
-// Create a graph with a node.
-let mut graph = Graph::new();
-let some_node = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut graph);
-// Create the animation.
-let mut animation = create_animation(some_node);
-// Emulate some ticks (like it was updated from the main loop of your game).
-for _ in 0..10 {
-    animation.tick(1.0 / 60.0);
-    animation.pose().apply(&amp;mut graph);
+
+fn use_animation() {
+    // Create a graph with a node.
+    let mut graph = Graph::new();
+    let some_node = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut graph);
+    // Create the animation.
+    let mut animation = create_animation(some_node);
+    // Emulate some ticks (like it was updated from the main loop of your game).
+    for _ in 0..10 {
+        animation.tick(1.0 / 60.0);
+        animation.pose().apply(&amp;mut graph);
+    }
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The code above creates a simple animation that moves a node along X axis in various ways. The usage of the animation
@@ -4302,16 +4270,8 @@ the same as your 3D model (<code>agent.fbx</code> on the screenshot below):</p>
 <p><img src="animation/import_animation_4.png" alt="Step 4" /></p>
 <h3 id="from-code-1"><a class="header" href="#from-code-1">From Code</a></h3>
 <p>You can do the same as in the previous section, but from code:</p>
-<pre><pre class="playground"><code class="language-rust  edition2018 no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    resource::model::{Model, ModelResourceExtension},
-</span><span class="boring">    scene::{animation::AnimationPlayerBuilder, base::BaseBuilder, node::Node, Scene},
-</span><span class="boring">};
-</span><span class="boring">
 </span>async fn create_animated_character(
     scene: &amp;mut Scene,
     resource_manager: &amp;ResourceManager,
@@ -4326,8 +4286,7 @@ the same as your 3D model (<code>agent.fbx</code> on the screenshot below):</p>
     let character_instance = character_resource.instantiate(scene);
 
     // Create a new animation player.
-    let animation_player =
-        AnimationPlayerBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
+    let animation_player = AnimationPlayerBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
 
     // Load an animation.
     let animation_resource = resource_manager
@@ -4356,23 +4315,10 @@ asynchronous loading on all platforms.</p>
 <p>Animations will be played automatically if the respective animation player is has the property <code>Auto Apply</code> set to
 <code>true</code>. Since the animation player can contain multiple animations, all of them will be played at once. You can
 enable/disable animations when needed by finding them by name from code and switching <code>Enabled</code> property:</p>
-<pre><pre class="playground"><code class="language-rust  edition2018 no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{animation::AnimationPlayer, graph::Graph, node::Node},
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn enable_animation(
-    animation_player: Handle&lt;Node&gt;,
-    graph: &amp;mut Graph,
-    name: &amp;str,
-    enabled: bool,
-) {
-    if let Some(animation_player) =
-        graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player)
-    {
+</span>fn enable_animation(animation_player: Handle&lt;Node&gt;, graph: &amp;mut Graph, name: &amp;str, enabled: bool) {
+    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
         // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
         // chapter for more info).
         let animations = animation_player.animations_mut().get_value_mut_silent();
@@ -5532,28 +5478,16 @@ the shader to your material in the Material Editor:</p>
 <p>Alternatively, you can load the shader from code. To do this, you can use this code:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    material::shader::{Shader, ShaderResource},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn load_shader(resource_manager: &amp;ResourceManager) -&gt; ShaderResource {
-    resource_manager.request::&lt;Shader, _&gt;("path/to/my/cool.shader")
+    resource_manager.request::&lt;Shader&gt;("path/to/my/cool.shader")
 }
 <span class="boring">}</span></code></pre></pre>
 <p>After that you can use the shader to build a material from it:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    material::{shader::Shader, Material, SharedMaterial},
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn create_material(resource_manager: &amp;ResourceManager) -&gt; SharedMaterial {
-    let shader = resource_manager.request::&lt;Shader, _&gt;("path/to/my/cool.shader");
-    SharedMaterial::new(Material::from_shader(
+</span>fn create_material(resource_manager: &amp;ResourceManager) -&gt; MaterialResource {
+    let shader = resource_manager.request::&lt;Shader&gt;("path/to/my/cool.shader");
+    MaterialResource::new(Material::from_shader(
         shader,
         Some(resource_manager.clone()),
     ))
@@ -6030,7 +5964,7 @@ impl MyRenderPass {
             quad: GeometryBuffer::from_surface_data(
                 &amp;SurfaceData::make_quad(&amp;Matrix4::identity()),
                 GeometryBufferKind::StaticDraw,
-                &amp; renderer.state,
+                &amp;renderer.state,
             )?,
             shader,
         })
