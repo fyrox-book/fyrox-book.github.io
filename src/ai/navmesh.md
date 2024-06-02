@@ -40,41 +40,13 @@ It is possible to create a navigational mesh from an arbitrary mesh, which could
 something like this to build a navmesh from it:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::scene::Scene;
-# use fyrox::utils::navmesh::Navmesh;
-fn make_navmesh(scene: &Scene, navmesh_name: &str) -> Navmesh {
-    // Find mesh node in existing scene and create navigation mesh from it.
-    let navmesh_node_handle = scene.graph.find_by_name_from_root(navmesh_name).unwrap().0;
-    Navmesh::from_mesh(scene.graph[navmesh_node_handle].as_mesh())
-}
+{{#include ../code/snippets/src/ai/navmesh.rs:make_navmesh}}
 ```
 
 Alternatively, you can create a navmesh directly from code like so:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::utils::navmesh::Navmesh;
-let navmesh = Navmesh::new(
-    vec![
-        TriangleDefinition([0, 1, 3]),
-        TriangleDefinition([1, 2, 3]),
-        TriangleDefinition([2, 5, 3]),
-        TriangleDefinition([2, 4, 5]),
-        TriangleDefinition([4, 7, 5]),
-        TriangleDefinition([4, 6, 7]),
-    ],
-    vec![
-        Vector3::new(0.0, 0.0, 0.0),
-        Vector3::new(0.0, 0.0, 1.0),
-        Vector3::new(1.0, 0.0, 1.0),
-        Vector3::new(1.0, 0.0, 0.0),
-        Vector3::new(2.0, 0.0, 1.0),
-        Vector3::new(2.0, 0.0, 0.0),
-        Vector3::new(3.0, 0.0, 1.0),
-        Vector3::new(3.0, 0.0, 0.0),
-    ],
-);
+{{#include ../code/snippets/src/ai/navmesh.rs:make_navmesh_from_vertices}}
 ```
 
 The `Navmesh::new` method accepts a list of triangles and vertices, where triangles is a set of three indices of 
@@ -100,26 +72,7 @@ agent: NavmeshAgent
 After that, you need to update the agent every frame to make sure it will follow the target:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#    core::algebra::Vector3, scene::navmesh::NavigationalMesh, utils::navmesh::NavmeshAgent,
-# };
-fn update_agent(
-    agent: &mut NavmeshAgent,
-    target: Vector3<f32>,
-    dt: f32,
-    navmesh: &mut NavigationalMesh,
-) {
-    // Set the target to follow and the speed.
-    agent.set_target(target);
-    agent.set_speed(1.0);
-
-    // Update the agent.
-    agent.update(dt, navmesh.navmesh_mut()).unwrap();
-
-    // Print its position - you can use this position as target point of your game character.
-    println!("{}", agent.position());
-}
+{{#include ../code/snippets/src/ai/navmesh.rs:update_agent}}
 ```
 
 This method should be called in `on_update` of your script. It accepts four parameters: a reference to the agent, a 
@@ -127,12 +80,7 @@ target which it will follow, a time step (`context.dt`), and a reference to navi
 navigational mesh from the scene graph by its name:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::scene::{navmesh::NavigationalMesh, Scene};
-fn find_navmesh<'a>(scene: &'a mut Scene, name: &str) -> &'a mut NavigationalMesh {
-    let handle = scene.graph.find_by_name_from_root(name).unwrap().0;
-    scene.graph[handle].as_navigational_mesh_mut()
-}
+{{#include ../code/snippets/src/ai/navmesh.rs:find_navmesh}}
 ```
 
 ### Radius
