@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "2396589822b69a672cc0215d94dc6c5c4ba3b217" }
+fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "2396589822b69a672cc0215d94dc6c5c4ba3b217" }

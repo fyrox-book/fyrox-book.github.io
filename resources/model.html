@@ -198,13 +198,6 @@
 from Asset Browser in the editor or instantiate the model dynamically from code:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
-</span><span class="boring">    scene::{node::Node, Scene},
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
 </span>async fn instantiate_model(
     path: &amp;Path,
     resource_manager: ResourceManager,
@@ -212,7 +205,7 @@ from Asset Browser in the editor or instantiate the model dynamically from code:
 ) -&gt; Handle&lt;Node&gt; {
     // Load model first. Alternatively, you can store resource handle somewhere and use it for
     // instantiation.
-    let model = resource_manager.request::&lt;Model, _&gt;(path).await.unwrap();
+    let model = resource_manager.request::&lt;Model&gt;(path).await.unwrap();
 
     model.instantiate(scene)
 }

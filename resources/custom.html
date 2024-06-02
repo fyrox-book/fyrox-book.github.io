@@ -210,52 +210,17 @@ traits. Also, it must contain at least path to external file with the content. H
 contains some string data.</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::{
-</span><span class="boring">        event::ResourceEventBroadcaster,
-</span><span class="boring">        loader::{BoxedLoaderFuture, ResourceLoader},
-</span><span class="boring">        untyped::UntypedResource,
-</span><span class="boring">        ResourceData,
-</span><span class="boring">    },
-</span><span class="boring">    core::{
-</span><span class="boring">        io::{self},
-</span><span class="boring">        reflect::prelude::*,
-</span><span class="boring">        uuid::{uuid, Uuid},
-</span><span class="boring">        visitor::prelude::*,
-</span><span class="boring">        TypeUuidProvider,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">use std::{
-</span><span class="boring">    any::Any,
-</span><span class="boring">    borrow::Cow,
-</span><span class="boring">    path::{Path, PathBuf},
-</span><span class="boring">};
-</span><span class="boring">
-</span>#[derive(Debug, Visit, Reflect)]
+</span>#[derive(Default, Debug, Visit, Reflect, TypeUuidProvider)]
+// Every resource must provide a unique identifier, that is used for dynamic type
+// casting, serialization, etc.
+#[type_uuid(id = "15551157-651b-4f1d-a5fb-6874fbfe8637")]
 struct CustomResource {
     // You resource must store the path.
     path: PathBuf,
     some_data: String,
 }
 
-impl TypeUuidProvider for CustomResource {
-    // Every resource must provide a unique identifier, that is used for dynamic type
-    // casting, serialization, etc.
-    fn type_uuid() -&gt; Uuid {
-        uuid!("15551157-651b-4f1d-a5fb-6874fbfe8637")
-    }
-}
-
 impl ResourceData for CustomResource {
-    fn path(&amp;self) -&gt; Cow&lt;Path&gt; {
-        Cow::Borrowed(&amp;self.path)
-    }
-
-    fn set_path(&amp;mut self, path: PathBuf) {
-        self.path = path;
-    }
-
     fn as_any(&amp;self) -&gt; &amp;dyn Any {
         self
     }
@@ -267,9 +232,13 @@ impl ResourceData for CustomResource {
     fn type_uuid(&amp;self) -&gt; Uuid {
         &lt;Self as TypeUuidProvider&gt;::type_uuid()
     }
-    
-    fn is_procedural(&amp;self) -&gt; bool {
-        false
+
+    fn save(&amp;mut self, path: &amp;Path) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+        Ok(())
+    }
+
+    fn can_be_saved(&amp;self) -&gt; bool {
+        true
     }
 }
 
@@ -277,7 +246,7 @@ struct CustomResourceLoader;
 
 impl ResourceLoader for CustomResourceLoader {
     fn extensions(&amp;self) -&gt; &amp;[&amp;str] {
-        // An array of extensitions, supported by this loader. There could be any number of extensions
+        // An array of extensions, supported by this loader. There could be any number of extensions
         // since sometimes multiple extensions map to a single resource (for instance, jpg, png, bmp, are
         // all images).
         &amp;["my_resource"]
@@ -287,14 +256,8 @@ impl ResourceLoader for CustomResourceLoader {
         &lt;CustomResource as TypeUuidProvider&gt;::type_uuid()
     }
 
-    fn load(
-        &amp;self,
-        resource: UntypedResource,
-        event_broadcaster: ResourceEventBroadcaster,
-        reload: bool,
-    ) -&gt; BoxedLoaderFuture {
+    fn load(&amp;self, path: PathBuf, io: Arc&lt;dyn ResourceIo&gt;) -&gt; BoxedLoaderFuture {
         Box::pin(async move {
-            let path = resource.path();
             match io::load_file(&amp;path).await {
                 Ok(content) =&gt; {
                     let my_resource = CustomResource {
@@ -302,14 +265,9 @@ impl ResourceLoader for CustomResourceLoader {
                         some_data: String::from_utf8(content).unwrap(),
                     };
 
-                    resource.commit_ok(my_resource);
-
-                    // Notify potential subscribers that the resource was loader.
-                    event_broadcaster.broadcast_loaded_or_reloaded(resource, reload);
+                    Ok(LoaderPayload::new(my_resource))
                 }
-                Err(err) =&gt; {
-                    resource.commit_error(path, err);
-                }
+                Err(err) =&gt; Err(LoadError::new("Failed to load resource")),
             }
         })
     }
@@ -321,59 +279,18 @@ resource in the resource manager. This can be done by adding the following code 
 <code>impl PluginConstructor for GameConstructor</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    asset::{
-</span><span class="boring">        event::ResourceEventBroadcaster,
-</span><span class="boring">        loader::{BoxedLoaderFuture, ResourceLoader},
-</span><span class="boring">        untyped::UntypedResource,
-</span><span class="boring">    },
-</span><span class="boring">    core::{pool::Handle, uuid::Uuid},
-</span><span class="boring">    plugin::{Plugin, PluginConstructor, PluginContext, PluginRegistrationContext},
-</span><span class="boring">    scene::Scene,
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">struct CustomResourceLoader;
-</span><span class="boring">
-</span><span class="boring">impl ResourceLoader for CustomResourceLoader {
-</span><span class="boring">    fn extensions(&amp;self) -&gt; &amp;[&amp;str] {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn data_type_uuid(&amp;self) -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn load(
-</span><span class="boring">        &amp;self,
-</span><span class="boring">        resource: UntypedResource,
-</span><span class="boring">        event_broadcaster: ResourceEventBroadcaster,
-</span><span class="boring">        reload: bool,
-</span><span class="boring">    ) -&gt; BoxedLoaderFuture {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">pub struct GameConstructor;
-</span><span class="boring">
-</span>impl PluginConstructor for GameConstructor {
+</span>#[derive(Visit, Reflect, Debug)]
+struct MyGame {}
+
+impl Plugin for MyGame {
     fn register(&amp;self, context: PluginRegistrationContext) {
         context
             .resource_manager
             .state()
             .loaders
             .set(CustomResourceLoader);
-        // ...
     }
-<span class="boring">
-</span><span class="boring">    fn create_instance(
-</span><span class="boring">        &amp;self,
-</span><span class="boring">        scene_path: Option&lt;&amp;str&gt;,
-</span><span class="boring">        context: PluginContext,
-</span><span class="boring">    ) -&gt; Box&lt;dyn Plugin&gt; {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span>}
+}
 <span class="boring">}</span></code></pre></pre>
 <p>After doing so, any attempt to load a resource with <code>my_resource</code> extension will call the <code>load</code> method of your
 resource loader.</p>
@@ -382,19 +299,26 @@ resource loader.</p>
 any fields in your scripts that has <code>my_resource: Option&lt;Resource&lt;CustomResource&gt;&gt;</code> fields can be editable in the editor.
 Otherwise, you'll see an error message in the Inspector instead of resource selector field. To register a property editor,
 add the following lines to <code>editor/src/main.rs</code> file, somewhere after the editor instance is created:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>editor.inspector.property_editors.insert(
-    ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
-        Rc::new(|resource_manager, path| {
-            resource_manager
-                .try_request::&lt;CustomResource, _&gt;(path)
-                .map(|r| block_on(r))
-        }),
-        editor.message_sender.clone(),
-    ),
-);
-<span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust no_run">fn main() {
+    // Your editor initialization stuff.
+    let editor = Editor::new(None);
+
+    // Register property editor.
+    editor.inspector.property_editors.insert(
+        ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
+            Arc::new(Mutex::new(
+                |resource_manager: &amp;ResourceManager, path: &amp;Path| {
+                    resource_manager
+                        .try_request::&lt;CustomResource&gt;(path)
+                        .map(block_on)
+                },
+            )),
+            editor.message_sender.clone(),
+        ),
+    );
+
+    // ...
+}</code></pre></pre>
 <p>After this, the editor will create this property editor for <code>my_resource</code> field and will allow you to set its value by
 drag'n'dropping an asset from the Asset Browser.</p>
 
