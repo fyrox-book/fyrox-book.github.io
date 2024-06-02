@@ -6544,25 +6544,13 @@ UI, it would force you to wrap it in <code>Rc&lt;RefCell&lt;..&gt;&gt;</code>/<c
 <p>Message dispatcher is very easy to write, all you need to do is to handle UI messages in <code>Plugin::on_ui_message</code> method:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{pool::Handle},
-</span><span class="boring">    event_loop::ControlFlow,
-</span><span class="boring">    gui::{button::ButtonMessage, message::UiMessage, UiNode},
-</span><span class="boring">    plugin::{Plugin, PluginContext},
-</span><span class="boring">};
-</span><span class="boring">
-</span>struct MyPlugin {
+</span>#[derive(Visit, Reflect, Debug)]
+struct MyPlugin {
     button: Handle&lt;UiNode&gt;,
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(
-        &amp;mut self,
-        _context: &amp;mut PluginContext,
-        message: &amp;UiMessage,
-        _control_flow: &amp;mut ControlFlow,
-    ) {
+    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, message: &amp;UiMessage) {
         if let Some(ButtonMessage::Click) = message.data() {
             if message.destination() == self.button {
                 println!("The button was clicked!");
@@ -6612,30 +6600,25 @@ editor. See <a href="ui/basic_concepts/../editor/editor.html">Editor</a> chapter
 widget in series of nested call of other widget builders. In code, it looks something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle, resource::texture::Texture,
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    gui::{
-</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
-</span><span class="boring">        UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span><span class="boring">fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
-</span><span class="boring">let ctx = &amp;mut ui.build_ctx();
-</span>ButtonBuilder::new(WidgetBuilder::new())
-    .with_back(
-        ImageBuilder::new(WidgetBuilder::new())
-            .with_texture(into_gui_texture(
-                resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture"),
-            ))
-            .build(ctx),
-    )
-    .with_text("Click me!")
-    .build(ctx)
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>fn create_fancy_button(
+    ui: &amp;mut UserInterface,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
+    let ctx = &amp;mut ui.build_ctx();
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_back(
+            ImageBuilder::new(WidgetBuilder::new())
+                .with_texture(
+                    resource_manager
+                        .request::&lt;Texture&gt;("path/to/your/texture")
+                        .into(),
+                )
+                .build(ctx),
+        )
+        .with_text("Click me!")
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
 <p>This code snippet creates a button with an image and a text. Actually it creates <strong>three</strong> widgets, that forms
 complex hierarchy. The topmost widget in hierarchy is the <code>Button</code> widget itself, it has two children widgets:
 background image and a text. Background image is set explicitly by calling image widget builder with specific
@@ -6644,36 +6627,19 @@ the button. The structure of the button can contain <em>any</em> amount of nodes
 that contains text with some icon. To do that, replace <code>.with_text("My Button")</code> with this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{
-</span><span class="boring">        button::ButtonBuilder,
-</span><span class="boring">        grid::{Column, GridBuilder, Row},
-</span><span class="boring">        image::ImageBuilder,
-</span><span class="boring">        text::TextBuilder,
-</span><span class="boring">        widget::WidgetBuilder,
-</span><span class="boring">        UiNode, UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">fn create_fancy_button(
-</span><span class="boring">    ui: &amp;mut UserInterface,
-</span><span class="boring">    resource_manager: ResourceManager,
-</span><span class="boring">) -&gt; Handle&lt;UiNode&gt; {
-</span><span class="boring">    let ctx = &amp;mut ui.build_ctx();
-</span><span class="boring">
-</span><span class="boring">    ButtonBuilder::new(WidgetBuilder::new())
-</span>        .with_content(
+</span>fn create_fancy_button_with_text(
+    ui: &amp;mut UserInterface,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
+    let ctx = &amp;mut ui.build_ctx();
+
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_content(
             GridBuilder::new(
                 WidgetBuilder::new()
                     .with_child(
                         ImageBuilder::new(WidgetBuilder::new().on_column(0))
-                            .with_texture(into_gui_texture(
-                                resource_manager.request::&lt;Texture, _&gt;("your_icon"),
-                            ))
+                            .with_texture(resource_manager.request::&lt;Texture&gt;("your_icon").into())
                             .build(ctx),
                     )
                     .with_child(
@@ -6687,39 +6653,33 @@ that contains text with some icon. To do that, replace <code>.with_text("My Butt
             .add_column(Column::stretch())
             .build(ctx),
         )
-<span class="boring">      .build(ctx)
-</span><span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
 <p>Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{
-</span><span class="boring">        button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
-</span><span class="boring">        UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span><span class="boring">fn create_fancy_button(ui: &amp;mut UserInterface, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
-</span><span class="boring">let ctx = &amp;mut ui.build_ctx();
-</span>let image;
-ButtonBuilder::new(WidgetBuilder::new())
-    .with_back({
-        image = ImageBuilder::new(WidgetBuilder::new())
-            .with_texture(into_gui_texture(
-                resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture"),
-            ))
-            .build(ctx);
-        image
-    })
-    .with_text("Click me!")
-    .build(ctx)
-<span class="boring">}
-</span>// image now contains a handle of the Image widget 
+</span>fn create_fancy_button_with_shortcut(
+    ui: &amp;mut UserInterface,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
+    let ctx = &amp;mut ui.build_ctx();
+    let image;
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_back({
+            image = ImageBuilder::new(WidgetBuilder::new())
+                .with_texture(
+                    resource_manager
+                        .request::&lt;Texture&gt;("path/to/your/texture")
+                        .into(),
+                )
+                .build(ctx);
+            image
+        })
+        .with_text("Click me!")
+        .build(ctx)
+}
 <span class="boring">}</span></code></pre></pre>
 <h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
 <p>UI system uses completely different kind of scenes - UI scenes, which are fully decoupled from game scenes. This means
@@ -6764,76 +6724,61 @@ chapter covers these specific cases and rendering nuances in general.</p>
 <p>Offscreen rendering is used to render a UI into a texture, so it can be later used in your game scene. Here's a simple
 example - holographic inventory in sci-fi games:</p>
 <p><img src="ui/offscreen_ui.png" alt="offscreen ui" /></p>
-<p>Default engine's user interface instance (accessible in <code>context.user_interface</code> from plugin methods) can't be rendered
+<p>Default engine's user interface instance (accessible in <code>context.user_interfaces.first/first_mut()</code> from plugin methods) can't be rendered
 offscreen due to engine design. However, you can create a new user interface instance, populate it with widgets, and
 then render it to a texture. This could be done like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector2, log::Log, pool::Handle, sstorage::ImmutableString},
-</span><span class="boring">    engine::GraphicsContext,
-</span><span class="boring">    event::Event,
-</span><span class="boring">    event_loop::ControlFlow,
-</span><span class="boring">    gui::{button::ButtonBuilder, widget::WidgetBuilder, UserInterface},
-</span><span class="boring">    material::{Material, PropertyValue},
-</span><span class="boring">    plugin::{Plugin, PluginContext},
-</span><span class="boring">    resource::texture::{TextureResource, TextureResourceExtension},
-</span><span class="boring">    scene::Scene,
-</span><span class="boring">    utils,
-</span><span class="boring">};
-</span><span class="boring">
-</span>struct Game {
+</span>#[derive(Default, Visit, Reflect, Debug)]
+struct Game {
     // Add these fields to your game.
     my_ui: UserInterface,
     render_target: TextureResource,
     screen_size: Vector2&lt;f32&gt;,
 }
 
-impl Game {
-    pub fn new(override_scene: Handle&lt;Scene&gt;, context: PluginContext) -&gt; Self {
-        // Add this code to your Game::new
-        
+impl Plugin for Game {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+        // Add this code to your Plugin::init
+
         // Define the desired render target size.
         let width = 128;
         let height = 128;
 
         // Create render target and user interface.
-        let render_target = TextureResource::new_render_target(width, height);
-        let screen_size = Vector2::new(width as f32, height as f32);
-        let mut my_ui = UserInterface::new(screen_size);
+        self.render_target = TextureResource::new_render_target(width, height);
+        self.screen_size = Vector2::new(width as f32, height as f32);
+        self.my_ui = UserInterface::new(self.screen_size);
 
         // Create some widgets as usual.
         ButtonBuilder::new(WidgetBuilder::new())
             .with_text("Click Me!")
-            .build(&amp;mut my_ui.build_ctx());
+            .build(&amp;mut self.my_ui.build_ctx());
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
         let mut material = Material::standard();
         Log::verify(material.set_property(
             &amp;ImmutableString::new("diffuseTexture"),
             PropertyValue::Sampler {
-                value: Some(render_target.clone()),
+                value: Some(self.render_target.clone()),
                 fallback: Default::default(),
             },
         ));
         // This material **must** be assigned to some mesh in your scene!
+    }
 
-        Self {
-            my_ui,
-            render_target,
-            screen_size,
+    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+        // It is very important to update the UI every frame and process all events that
+        // comes from it.
+        self.my_ui
+            .update(self.screen_size, context.dt, &amp;Default::default());
+
+        while let Some(message) = self.my_ui.poll_message() {
+            // Do something with the events coming from the custom UI.
         }
     }
-}
 
-impl Plugin for Game {
-    fn on_os_event(
-        &amp;mut self,
-        event: &amp;Event&lt;()&gt;,
-        context: PluginContext,
-        control_flow: &amp;mut ControlFlow,
-    ) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) {
         // This is the tricky part. Event OS event handling will be different depending on the use case.
         // In cases if your UI just shows some information, this method can be fully removed. In case when
         // you need to interact with the UI, there are two different ways.
@@ -6849,25 +6794,16 @@ impl Plugin for Game {
         }
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext, control_flow: &amp;mut ControlFlow) {
-        // It is very important to update the UI every frame and process all events that
-        // comes from it.
-        self.my_ui.update(self.screen_size, context.dt);
-
-        while let Some(message) = self.my_ui.poll_message() {
-            // Do something with the events coming from the custom UI.
-        }
-    }
-
-    fn before_rendering(&amp;mut self, context: PluginContext, control_flow: &amp;mut ControlFlow) {
+    fn before_rendering(&amp;mut self, context: PluginContext) {
         // Render the UI before every other rendering operation, this way the texture will be ready for use immediately.
-        if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context
-        {
-            Log::verify(
-                graphics_context
-                    .renderer
-                    .render_ui_to_texture(self.render_target.clone(), &amp;mut self.my_ui),
-            );
+        if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context {
+            Log::verify(graphics_context.renderer.render_ui_to_texture(
+                self.render_target.clone(),
+                self.screen_size,
+                self.my_ui.draw(),
+                Color::TRANSPARENT,
+                PixelKind::RGBA8,
+            ));
         }
     }
 }
@@ -6883,16 +6819,6 @@ of CCTV, or to show 3D graphics in 2D user interface and so on. To do so, you ne
 scene and then use the texture (render target) in an <code>Image</code> widget.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, UiNode},
-</span><span class="boring">    plugin::PluginContext,
-</span><span class="boring">    resource::texture::{TextureResource, TextureResourceExtension},
-</span><span class="boring">    scene::Scene,
-</span><span class="boring">    utils,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn reroute_scene_rendering(
     width: u32,
     height: u32,
@@ -6911,8 +6837,8 @@ scene and then use the texture (render target) in an <code>Image</code> widget.<
             .with_width(width as f32)
             .with_height(height as f32),
     )
-    .with_texture(utils::into_gui_texture(render_target.clone()))
-    .build(&amp;mut context.user_interface.build_ctx())
+    .with_texture(render_target.clone().into())
+    .build(&amp;mut context.user_interfaces.first_mut().build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This function could be used as-is to re-route rendering of a scene to an <code>Image</code> widget. It creates a new render target
