@@ -4069,78 +4069,47 @@ audio processing could found <a href="sound/bus.html">here</a>.</li>
 <p>Audio files are loaded using the resource manager:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{engine::Engine, scene::Scene, scene::sound::SoundBuffer};
-</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
-</span>let sound = engine
-    .resource_manager
-    .request::&lt;SoundBuffer, _&gt;("/path/to/resource.ogg");
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>pub fn load_sound(path: &amp;Path, resource_manager: &amp;ResourceManager) -&gt; SoundBufferResource {
+    resource_manager.request::&lt;SoundBuffer&gt;(path)
+}
+<span class="boring">}</span></code></pre></pre>
 <p>Then, the node is built using the standard builder pattern:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    engine::Engine,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        sound::{SoundBuilder, Status, SoundBuffer},
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
-</span><span class="boring">let sound = engine
-</span><span class="boring">    .resource_manager
-</span><span class="boring">    .request::&lt;SoundBuffer, _&gt;("/path/to/resource.ogg");
-</span><span class="boring">
-</span>let sound_handle = SoundBuilder::new(BaseBuilder::new())
-    .with_buffer(Some(sound))
-    .with_status(Status::Playing)
-    .with_play_once(true)
-    .build(&amp;mut scene.graph);
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>fn build_sound_node(resource_manager: &amp;ResourceManager, scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+    let sound = resource_manager.request::&lt;SoundBuffer&gt;("/path/to/resource.ogg");
+
+    SoundBuilder::new(BaseBuilder::new())
+        .with_buffer(Some(sound))
+        .with_status(Status::Playing)
+        .with_play_once(true)
+        .build(&amp;mut scene.graph)
+}
+<span class="boring">}</span></code></pre></pre>
 <p>There are a few notable things in the example above.</p>
 <p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
 <p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways.
 One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    engine::Engine,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        sound::{SoundBuilder, Status},
-</span><span class="boring">        Scene,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
-</span>let sound_handle = SoundBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
+</span>fn update_sound(sound_handle: Handle&lt;Node&gt;, scene: &amp;mut Scene) {
+    let sound = scene.graph[sound_handle].as_sound();
 
-let sound = scene.graph[sound_handle].as_sound();
-
-if sound.status() == Status::Stopped {
-    scene.graph.remove_node(sound_handle);
+    if sound.status() == Status::Stopped {
+        scene.graph.remove_node(sound_handle);
+    }
 }
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>If we want to play background music (or anyway a repeated sound), we just set the <code>looping</code> property when building the node:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    engine::Engine,
-</span><span class="boring">    scene::{base::BaseBuilder, sound::SoundBuilder, Scene},
-</span><span class="boring">};
-</span><span class="boring">fn build_node(engine: Engine, scene: &amp;mut Scene) {
-</span>SoundBuilder::new(BaseBuilder::new())
-    .with_looping(true)
-    // etc.
-    .build(&amp;mut scene.graph);
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+</span>fn build_looping_sound(scene: &amp;mut Scene) {
+    SoundBuilder::new(BaseBuilder::new())
+        .with_looping(true)
+        // ...
+        .build(&amp;mut scene.graph);
+}
+<span class="boring">}</span></code></pre></pre>
 <p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a
 corresponding <code>.options</code> file, with the following content:</p>
 <pre><code class="language-ron">(
