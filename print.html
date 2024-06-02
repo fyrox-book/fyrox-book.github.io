@@ -4558,42 +4558,48 @@ you. After the last stage, you can apply the pose to a scene graph to make the r
 <p>You can always create an ABSM from code, a simple ABSM could be created like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-  animation::machine::{
-      Machine, State, Transition, PoseNode, node::blend::BlendPose,
-      Parameter, PlayAnimation, PoseWeight, node::blend::BlendAnimations
-  },
-  core::pool::Handle
-};
+</span>fn create_absm() -&gt; Machine {
+    // Assume that these are correct handles.
+    let idle_animation = Handle::default();
+    let walk_animation = Handle::default();
+    let aim_animation = Handle::default();
 
-// Assume that these are correct handles.
-let idle_animation = Handle::default();
-let walk_animation = Handle::default();
-let aim_animation = Handle::default();
+    let mut machine = Machine::new();
 
-let mut machine = Machine::new();
+    let root_layer = machine.layers_mut().first_mut().unwrap();
 
-let root_layer = machine.layers_mut().first_mut().unwrap();
+    let aim = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
+    let walk = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
 
-let aim = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
-let walk = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
+    // Blend two animations together
+    let blend_aim_walk =
+        root_layer.add_node(PoseNode::BlendAnimations(BlendAnimations::new(vec![
+            BlendPose::new(PoseWeight::Constant(0.75), aim),
+            BlendPose::new(PoseWeight::Constant(0.25), walk),
+        ])));
 
-// Blend two animations together
-let blend_aim_walk = root_layer.add_node(PoseNode::BlendAnimations(
-  BlendAnimations::new(vec![
-      BlendPose::new(PoseWeight::Constant(0.75), aim),
-      BlendPose::new(PoseWeight::Constant(0.25), walk)
-  ])
-));
+    let walk_state = root_layer.add_state(State::new("Walk", blend_aim_walk));
 
-let walk_state = root_layer.add_state(State::new("Walk", blend_aim_walk));
+    let idle = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
+    let idle_state = root_layer.add_state(State::new("Idle", idle));
 
-let idle = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
-let idle_state = root_layer.add_state(State::new("Idle", idle));
+    root_layer.add_transition(Transition::new(
+        "Walk-&gt;Idle",
+        walk_state,
+        idle_state,
+        1.0,
+        "WalkToIdle",
+    ));
+    root_layer.add_transition(Transition::new(
+        "Idle-&gt;Walk",
+        idle_state,
+        walk_state,
+        1.0,
+        "IdleToWalk",
+    ));
 
-root_layer.add_transition(Transition::new("Walk-&gt;Idle", walk_state, idle_state, 1.0, "WalkToIdle"));
-root_layer.add_transition(Transition::new("Idle-&gt;Walk", idle_state, walk_state, 1.0, "IdleToWalk"));
+    machine
+}
 <span class="boring">}</span></code></pre></pre>
 <p>Here we have Walk, Idle and Run states which use different sources of poses:</p>
 <ul>
@@ -4799,24 +4805,15 @@ code in your game. See <a href="animation/signal.html#reacting-to-signal-events"
 <h3 id="from-code-3"><a class="header" href="#from-code-3">From code</a></h3>
 <p>A signal could also be added from code, this requires knowing a handle of your animation player and a name/handle of
 your animation. Please note the comment about signal's uuid in the code below.</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    animation::AnimationSignal,
-</span><span class="boring">    core::{pool::Handle, uuid::uuid},
-</span><span class="boring">    scene::{animation::AnimationPlayer, graph::Graph, node::Node},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn add_signal(
     animation_player: Handle&lt;Node&gt;,
     animation_name: &amp;str,
     signal_name: &amp;str,
     graph: &amp;mut Graph,
 ) {
-    if let Some(animation_player) =
-        graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player)
-    {
+    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
         if let Some((_, animation)) = animations.find_by_name_mut(animation_name) {
             // This uuid should be unique, you could also use Uuid::new_v4() method, but it
@@ -4833,23 +4830,15 @@ your animation. Please note the comment about signal's uuid in the code below.</
 <h2 id="reacting-to-signal-events"><a class="header" href="#reacting-to-signal-events">Reacting to signal events</a></h2>
 <p>When you have your signals ready for use, all you need to do is to react to the signals somehow. This is very simple:
 just borrow your animation from the animation player and pop animation event one-by-one from internal queue:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{animation::AnimationPlayer, graph::Graph, node::Node},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn react_to_signal_events(
     animation_player: Handle&lt;Node&gt;,
     animation_name: &amp;str,
     signal_name: &amp;str,
     graph: &amp;mut Graph,
 ) {
-    if let Some(animation_player) =
-        graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player)
-    {
+    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
 
         // Ideally, animation fetching should be done via its handle (the first argument of the
@@ -4875,19 +4864,6 @@ different strategies. This ability prevents you from tedious manual animation ev
 of animations manually.</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    animation::machine::{
-</span><span class="boring">        layer::LayerAnimationEventsCollection, node::AnimationEventCollectionStrategy,
-</span><span class="boring">    },
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        animation::{absm::AnimationBlendingStateMachine, AnimationPlayer},
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">    script::ScriptContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn collect_events_from_absm(
     absm: Handle&lt;Node&gt;,
     strategy: AnimationEventCollectionStrategy,
@@ -4903,7 +4879,7 @@ of animations manually.</p>
             .graph
             .try_get_of_type::&lt;AnimationPlayer&gt;(absm.animation_player())
         {
-            // Fetch a layer first, it could be any layer of the ABMS, but for simplicity 
+            // Fetch a layer first, it could be any layer of the ABMS, but for simplicity
             // we'll use the first layer.
             if let Some(layer) = absm.machine().layers().first() {
                 return layer.collect_active_animations_events(
@@ -4954,16 +4930,8 @@ it is called like "hips" or similar:</p>
 <p>After that, you need to apply filters for axes - most of the locomotion animations "works" in oXZ plane, so Y axis should
 be ignored. Also, if you don't have any turns in your animation, you can also filter out the rotation part.</p>
 <p>Alternatively, you can do the same from code:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    animation::{Animation, RootMotionSettings},
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{animation::AnimationPlayer, node::Node},
-</span><span class="boring">    script::ScriptContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn setup_root_motion(
     animation_player: Handle&lt;Node&gt;,
     animation: Handle&lt;Animation&gt;,
@@ -5005,13 +4973,6 @@ is because animation blending state machine properly blends the root motion from
 In general, it could look something like this:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{animation::absm::AnimationBlendingStateMachine, node::Node, rigidbody::RigidBody},
-</span><span class="boring">    script::ScriptContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn fetch_and_apply_root_motion(
     absm: Handle&lt;Node&gt;,
     rigid_body: Handle&lt;Node&gt;,

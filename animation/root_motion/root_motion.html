@@ -212,16 +212,8 @@ it is called like "hips" or similar:</p>
 <p>After that, you need to apply filters for axes - most of the locomotion animations "works" in oXZ plane, so Y axis should
 be ignored. Also, if you don't have any turns in your animation, you can also filter out the rotation part.</p>
 <p>Alternatively, you can do the same from code:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    animation::{Animation, RootMotionSettings},
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{animation::AnimationPlayer, node::Node},
-</span><span class="boring">    script::ScriptContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn setup_root_motion(
     animation_player: Handle&lt;Node&gt;,
     animation: Handle&lt;Animation&gt;,
@@ -263,13 +255,6 @@ is because animation blending state machine properly blends the root motion from
 In general, it could look something like this:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{animation::absm::AnimationBlendingStateMachine, node::Node, rigidbody::RigidBody},
-</span><span class="boring">    script::ScriptContext,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn fetch_and_apply_root_motion(
     absm: Handle&lt;Node&gt;,
     rigid_body: Handle&lt;Node&gt;,
