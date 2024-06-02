@@ -1,4 +1,4 @@
-#![allow(dead_code, unused_variables, dead_code)]
+#![allow(dead_code, unused_variables, dead_code, clippy::unnecessary_to_owned)]
 
 pub mod ai;
 pub mod animation;
