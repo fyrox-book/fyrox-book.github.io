@@ -209,17 +209,6 @@ will always be centered in the current screen bounds. It creates something simil
 but not so fancy.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    button::ButtonBuilder,
-</span><span class="boring">    grid::{Column, GridBuilder, Row},
-</span><span class="boring">    screen::ScreenBuilder,
-</span><span class="boring">    stack_panel::StackPanelBuilder,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_always_centered_game_menu(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     // Screen widget will provide current screen size to its Grid widget as a layout constraint,
     // thus making it fit to the current screen bounds.

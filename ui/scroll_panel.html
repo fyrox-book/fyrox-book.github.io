@@ -194,16 +194,6 @@ scrolling functionality.</p>
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox_ui::{
-</span><span class="boring">    button::ButtonBuilder,
-</span><span class="boring">    core::{algebra::Vector2, pool::Handle},
-</span><span class="boring">    grid::{Column, GridBuilder, Row},
-</span><span class="boring">    scroll_panel::ScrollPanelBuilder,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_scroll_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollPanelBuilder::new(
         WidgetBuilder::new().with_child(
@@ -236,11 +226,7 @@ scrolling functionality.</p>
 <p>Scrolling value for both axes can be set via <code>ScrollPanelMessage::VerticalScroll</code> and <code>ScrollPanelMessage::HorizontalScroll</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use fyrox_ui::{
-    core::pool::Handle, message::MessageDirection, scroll_panel::ScrollPanelMessage, UiNode,
-    UserInterface,
-};
-fn set_scrolling_value(
+</span>fn set_scrolling_value(
     scroll_panel: Handle&lt;UiNode&gt;,
     horizontal: f32,
     vertical: f32,
@@ -262,15 +248,7 @@ fn set_scrolling_value(
 <p>Calculates the scroll values to bring a desired child into view, it can be used for automatic navigation:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use fyrox_ui::{
-</span><span class="boring">    core::pool::Handle, message::MessageDirection, scroll_panel::ScrollPanelMessage, UiNode,
-</span><span class="boring">    UserInterface,
-</span><span class="boring">};
-</span>fn bring_child_into_view(
-    scroll_panel: Handle&lt;UiNode&gt;,
-    child: Handle&lt;UiNode&gt;,
-    ui: &amp;UserInterface,
-) {
+</span>fn bring_child_into_view(scroll_panel: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
     ui.send_message(ScrollPanelMessage::bring_into_view(
         scroll_panel,
         MessageDirection::ToWidget,

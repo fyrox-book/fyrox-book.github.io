@@ -7986,16 +7986,6 @@ scrolling functionality.</p>
 <h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox_ui::{
-</span><span class="boring">    button::ButtonBuilder,
-</span><span class="boring">    core::{algebra::Vector2, pool::Handle},
-</span><span class="boring">    grid::{Column, GridBuilder, Row},
-</span><span class="boring">    scroll_panel::ScrollPanelBuilder,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_scroll_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollPanelBuilder::new(
         WidgetBuilder::new().with_child(
@@ -8028,11 +8018,7 @@ scrolling functionality.</p>
 <p>Scrolling value for both axes can be set via <code>ScrollPanelMessage::VerticalScroll</code> and <code>ScrollPanelMessage::HorizontalScroll</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use fyrox_ui::{
-    core::pool::Handle, message::MessageDirection, scroll_panel::ScrollPanelMessage, UiNode,
-    UserInterface,
-};
-fn set_scrolling_value(
+</span>fn set_scrolling_value(
     scroll_panel: Handle&lt;UiNode&gt;,
     horizontal: f32,
     vertical: f32,
@@ -8054,15 +8040,7 @@ fn set_scrolling_value(
 <p>Calculates the scroll values to bring a desired child into view, it can be used for automatic navigation:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use fyrox_ui::{
-</span><span class="boring">    core::pool::Handle, message::MessageDirection, scroll_panel::ScrollPanelMessage, UiNode,
-</span><span class="boring">    UserInterface,
-</span><span class="boring">};
-</span>fn bring_child_into_view(
-    scroll_panel: Handle&lt;UiNode&gt;,
-    child: Handle&lt;UiNode&gt;,
-    ui: &amp;UserInterface,
-) {
+</span>fn bring_child_into_view(scroll_panel: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
     ui.send_message(ScrollPanelMessage::bring_into_view(
         scroll_panel,
         MessageDirection::ToWidget,
@@ -8080,13 +8058,6 @@ the content.</p>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    button::ButtonBuilder, core::pool::Handle, scroll_viewer::ScrollViewerBuilder,
-</span><span class="boring">    stack_panel::StackPanelBuilder, text::TextBuilder, widget::WidgetBuilder, BuildContext,
-</span><span class="boring">    UiNode,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_scroll_viewer(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         .with_content(
@@ -8114,13 +8085,7 @@ the content.</p>
 scrolls vertical axis, which can be changed by holding <code>Shift</code> key. Scrolling speed can be set during the build phase:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle, scroll_viewer::ScrollViewerBuilder, widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode,
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn create_scroll_viewer(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_viewer_with_speed(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         // Set vertical scrolling speed twice as fast as default scrolling speed.
         .with_v_scroll_speed(60.0)
@@ -8134,16 +8099,7 @@ scrolls vertical axis, which can be changed by holding <code>Shift</code> key. S
 <p>Calculates the scroll values to bring a desired child into view, it can be used for automatic navigation:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle, message::MessageDirection, scroll_viewer::ScrollViewerMessage, UiNode,
-</span><span class="boring">    UserInterface,
-</span><span class="boring">};
-</span>fn bring_child_into_view(
-    scroll_viewer: Handle&lt;UiNode&gt;,
-    child: Handle&lt;UiNode&gt;,
-    ui: &amp;UserInterface,
-) {
+</span>fn bring_child_into_view(scroll_viewer: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
     ui.send_message(ScrollViewerMessage::bring_into_view(
         scroll_viewer,
         MessageDirection::ToWidget,
@@ -8175,17 +8131,6 @@ will always be centered in the current screen bounds. It creates something simil
 but not so fancy.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    button::ButtonBuilder,
-</span><span class="boring">    grid::{Column, GridBuilder, Row},
-</span><span class="boring">    screen::ScreenBuilder,
-</span><span class="boring">    stack_panel::StackPanelBuilder,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_always_centered_game_menu(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     // Screen widget will provide current screen size to its Grid widget as a layout constraint,
     // thus making it fit to the current screen bounds.
@@ -8232,69 +8177,65 @@ but not so fancy.</p>
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="stack-panel"><a class="header" href="#stack-panel">Stack Panel</a></h1>
 <p>Stack Panels are one of several methods to position multiple widgets in relation to each other. A Stack Panel Widget
-orders it's children widgets linerarly, aka in a stack of widgets, based on the order the widgets were added as children.
-So the first widget added will be at the top or left most position, while each additional widget will decend from top to
+orders its children widgets linearly, aka in a stack of widgets, based on the order the widgets were added as children.
+So the first widget added will be at the top or left most position, while each additional widget will descend from top to
 bottom or continue from left most to right most. The below example code places 3 text widgets into a vertical stack:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    UiNode,
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    text::TextBuilder,
-</span><span class="boring">    stack_panel::StackPanelBuilder,
-</span><span class="boring">};
-</span>
-fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
-
+</span>fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(
                 TextBuilder::new(WidgetBuilder::new())
                     .with_text("Top")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
                 TextBuilder::new(WidgetBuilder::new())
                     .with_text("Middle")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
                 TextBuilder::new(WidgetBuilder::new())
                     .with_text("Bottom")
-                    .build(ctx)
-            )
+                    .build(ctx),
+            ),
     )
-        .build(ctx)
-    
+    .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As you can see from the example, creating a Stack Panel uses the standard method for creating widgets. Create a new
-StackPanelBuilder and provide it with a new WidgetBuilder. Adding widgets to the stack is done by adding childeren to
+StackPanelBuilder and provide it with a new WidgetBuilder. Adding widgets to the stack is done by adding children to
 the StackBuilder's WidgetBuilder.</p>
 <h2 id="stack-panel-orientation"><a class="header" href="#stack-panel-orientation">Stack Panel Orientation</a></h2>
-<p>As has been indicated, Stack Panels can be oriented to order it's children either Vertical, from top to bottom, or
+<p>As has been indicated, Stack Panels can be oriented to order its children either Vertical, from top to bottom, or
 Horizontal, Left most to right most. This is done using the StackPanelBuilder's with_orientation function providing it
-with a gui::Orientation enum value. <strong>By default</strong> all Stack Panel's are Vertical.</p>
+with a gui::Orientation enum value. <strong>By default,</strong> all StackPanel's are Vertical.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    Orientation,
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    stack_panel::StackPanelBuilder,
-</span><span class="boring">};
-</span>
-<span class="boring">fn build(ctx: &amp;mut BuildContext) {
-</span>StackPanelBuilder::new(
-    WidgetBuilder::new()
-)
+</span>fn create_horizontal_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
+    StackPanelBuilder::new(
+        WidgetBuilder::new()
+            .with_child(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Left")
+                    .build(ctx),
+            )
+            .with_child(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Middle")
+                    .build(ctx),
+            )
+            .with_child(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Right")
+                    .build(ctx),
+            ),
+    )
     .with_orientation(Orientation::Horizontal)
-    .build(ctx);
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+    .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tab-control"><a class="header" href="#tab-control">Tab Control</a></h1>
 <p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the
 tab header buttons. Each tab is defined via a Tab Definition struct which takes two widgets, one representing the tab

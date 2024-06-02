@@ -195,13 +195,6 @@ the content.</p>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    button::ButtonBuilder, core::pool::Handle, scroll_viewer::ScrollViewerBuilder,
-</span><span class="boring">    stack_panel::StackPanelBuilder, text::TextBuilder, widget::WidgetBuilder, BuildContext,
-</span><span class="boring">    UiNode,
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_scroll_viewer(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         .with_content(
@@ -229,13 +222,7 @@ the content.</p>
 scrolls vertical axis, which can be changed by holding <code>Shift</code> key. Scrolling speed can be set during the build phase:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle, scroll_viewer::ScrollViewerBuilder, widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode,
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn create_scroll_viewer(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_viewer_with_speed(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         // Set vertical scrolling speed twice as fast as default scrolling speed.
         .with_v_scroll_speed(60.0)
@@ -249,16 +236,7 @@ scrolls vertical axis, which can be changed by holding <code>Shift</code> key. S
 <p>Calculates the scroll values to bring a desired child into view, it can be used for automatic navigation:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    core::pool::Handle, message::MessageDirection, scroll_viewer::ScrollViewerMessage, UiNode,
-</span><span class="boring">    UserInterface,
-</span><span class="boring">};
-</span>fn bring_child_into_view(
-    scroll_viewer: Handle&lt;UiNode&gt;,
-    child: Handle&lt;UiNode&gt;,
-    ui: &amp;UserInterface,
-) {
+</span>fn bring_child_into_view(scroll_viewer: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
     ui.send_message(ScrollViewerMessage::bring_into_view(
         scroll_viewer,
         MessageDirection::ToWidget,
