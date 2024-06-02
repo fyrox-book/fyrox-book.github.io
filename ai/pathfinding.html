@@ -194,22 +194,16 @@ used to find a path on arbitrary graph without cycles. It could be a simple grid
 strategies, and any other types of games that uses uniform grid for pathfinding.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::algebra::Vector3,
-    utils::astar::{PathFinder, PathVertex},
-};
-
-fn astar_on_uniform_grid() {
+</span>fn astar_on_uniform_grid() {
     // Create vertices.
     let size = 40;
     let mut vertices = Vec::new();
     for y in 0..size {
         for x in 0..size {
-            vertices.push(PathVertex::new(Vector3::new(x as f32, y as f32, 0.0)));
+            vertices.push(GraphVertex::new(Vector3::new(x as f32, y as f32, 0.0)));
         }
     }
-    let mut pathfinder = PathFinder::new();
+    let mut pathfinder = Graph::new();
     pathfinder.set_vertices(vertices);
 
     // Link vertices to form a uniform grid.
@@ -222,7 +216,7 @@ fn astar_on_uniform_grid() {
 
     // Build a path from vertex 0 to vertex 100.
     let mut path = Vec::new();
-    assert!(pathfinder.build(0, 100, &amp;mut path).is_ok());
+    assert!(pathfinder.build_positional_path(0, 100, &amp;mut path).is_ok());
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that the returned path is always reversed (its first point corresponds to an <code>end</code> point). You need either

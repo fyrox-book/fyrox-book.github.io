@@ -5278,22 +5278,16 @@ used to find a path on arbitrary graph without cycles. It could be a simple grid
 strategies, and any other types of games that uses uniform grid for pathfinding.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::algebra::Vector3,
-    utils::astar::{PathFinder, PathVertex},
-};
-
-fn astar_on_uniform_grid() {
+</span>fn astar_on_uniform_grid() {
     // Create vertices.
     let size = 40;
     let mut vertices = Vec::new();
     for y in 0..size {
         for x in 0..size {
-            vertices.push(PathVertex::new(Vector3::new(x as f32, y as f32, 0.0)));
+            vertices.push(GraphVertex::new(Vector3::new(x as f32, y as f32, 0.0)));
         }
     }
-    let mut pathfinder = PathFinder::new();
+    let mut pathfinder = Graph::new();
     pathfinder.set_vertices(vertices);
 
     // Link vertices to form a uniform grid.
@@ -5306,7 +5300,7 @@ fn astar_on_uniform_grid() {
 
     // Build a path from vertex 0 to vertex 100.
     let mut path = Vec::new();
-    assert!(pathfinder.build(0, 100, &amp;mut path).is_ok());
+    assert!(pathfinder.build_positional_path(0, 100, &amp;mut path).is_ok());
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that the returned path is always reversed (its first point corresponds to an <code>end</code> point). You need either
@@ -5347,9 +5341,6 @@ loops, use "Connect Edges" button in the "Navmesh" floating panel:</p>
 something like this to build a navmesh from it:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::scene::Scene;
-</span><span class="boring">use fyrox::utils::navmesh::Navmesh;
 </span>fn make_navmesh(scene: &amp;Scene, navmesh_name: &amp;str) -&gt; Navmesh {
     // Find mesh node in existing scene and create navigation mesh from it.
     let navmesh_node_handle = scene.graph.find_by_name_from_root(navmesh_name).unwrap().0;
@@ -5359,28 +5350,28 @@ something like this to build a navmesh from it:</p>
 <p>Alternatively, you can create a navmesh directly from code like so:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::utils::navmesh::Navmesh;
-</span>let navmesh = Navmesh::new(
-    vec![
-        TriangleDefinition([0, 1, 3]),
-        TriangleDefinition([1, 2, 3]),
-        TriangleDefinition([2, 5, 3]),
-        TriangleDefinition([2, 4, 5]),
-        TriangleDefinition([4, 7, 5]),
-        TriangleDefinition([4, 6, 7]),
-    ],
-    vec![
-        Vector3::new(0.0, 0.0, 0.0),
-        Vector3::new(0.0, 0.0, 1.0),
-        Vector3::new(1.0, 0.0, 1.0),
-        Vector3::new(1.0, 0.0, 0.0),
-        Vector3::new(2.0, 0.0, 1.0),
-        Vector3::new(2.0, 0.0, 0.0),
-        Vector3::new(3.0, 0.0, 1.0),
-        Vector3::new(3.0, 0.0, 0.0),
-    ],
-);
+</span>fn make_navmesh_from_vertices() -&gt; Navmesh {
+    Navmesh::new(
+        vec![
+            TriangleDefinition([0, 1, 3]),
+            TriangleDefinition([1, 2, 3]),
+            TriangleDefinition([2, 5, 3]),
+            TriangleDefinition([2, 4, 5]),
+            TriangleDefinition([4, 7, 5]),
+            TriangleDefinition([4, 6, 7]),
+        ],
+        vec![
+            Vector3::new(0.0, 0.0, 0.0),
+            Vector3::new(0.0, 0.0, 1.0),
+            Vector3::new(1.0, 0.0, 1.0),
+            Vector3::new(1.0, 0.0, 0.0),
+            Vector3::new(2.0, 0.0, 1.0),
+            Vector3::new(2.0, 0.0, 0.0),
+            Vector3::new(3.0, 0.0, 1.0),
+            Vector3::new(3.0, 0.0, 0.0),
+        ],
+    )
+}
 <span class="boring">}</span></code></pre></pre>
 <p>The <code>Navmesh::new</code> method accepts a list of triangles and vertices, where triangles is a set of three indices of
 vertices forming a triangle.</p>
@@ -5402,10 +5393,6 @@ agent: NavmeshAgent
 <p>After that, you need to update the agent every frame to make sure it will follow the target:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">   core::algebra::Vector3, scene::navmesh::NavigationalMesh, utils::navmesh::NavmeshAgent,
-</span><span class="boring">};
 </span>fn update_agent(
     agent: &amp;mut NavmeshAgent,
     target: Vector3&lt;f32&gt;,
@@ -5417,7 +5404,8 @@ agent: NavmeshAgent
     agent.set_speed(1.0);
 
     // Update the agent.
-    agent.update(dt, navmesh.navmesh_mut()).unwrap();
+    let navmesh = navmesh.navmesh();
+    agent.update(dt, &amp;navmesh.read()).unwrap();
 
     // Print its position - you can use this position as target point of your game character.
     println!("{}", agent.position());
@@ -5428,8 +5416,6 @@ target which it will follow, a time step (<code>context.dt</code>), and a refere
 navigational mesh from the scene graph by its name:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::scene::{navmesh::NavigationalMesh, Scene};
 </span>fn find_navmesh&lt;'a&gt;(scene: &amp;'a mut Scene, name: &amp;str) -&gt; &amp;'a mut NavigationalMesh {
     let handle = scene.graph.find_by_name_from_root(name).unwrap().0;
     scene.graph[handle].as_navigational_mesh_mut()
