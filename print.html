@@ -6855,11 +6855,8 @@ you can load pretty much any font from the internet and use it as is.</p>
 <p>There are two ways to create font instance - either load font from file, or load it directly from memory.</p>
 <h3 id="loading-font-from-file"><a class="header" href="#loading-font-from-file">Loading Font From File</a></h3>
 <p>Since every font in the engine is a resource, you can load fonts using standard resource manager like so:</p>
-<pre><pre class="playground"><code class="language-rust  no_run edition2018"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{asset::Resource, gui::font::Font, plugin::PluginContext};
-</span><span class="boring">
 </span>fn load_font_from_file(ctx: &amp;PluginContext) -&gt; Resource&lt;Font&gt; {
     ctx.resource_manager.request::&lt;Font&gt;("path/to/my/font")
 }
@@ -6867,11 +6864,8 @@ you can load pretty much any font from the internet and use it as is.</p>
 <h3 id="creating-font-from-memory"><a class="header" href="#creating-font-from-memory">Creating Font From Memory</a></h3>
 <p>This option could be useful, if you already have your font loaded into memory. Loading font from data buffer is
 very simple:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{asset::untyped::ResourceKind, asset::Resource, gui::font::Font};
-</span><span class="boring">
 </span>fn load_font_from_memory(data: Vec&lt;u8&gt;) -&gt; Resource&lt;Font&gt; {
     Resource::new_ok(
         ResourceKind::Embedded,
@@ -6883,11 +6877,7 @@ very simple:</p>
 a data buffer and create font using the data buffer:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{asset::untyped::ResourceKind, asset::Resource, gui::font::Font};
-</span><span class="boring">use std::{fs::File, io::Read};
-</span><span class="boring">
-</span>fn load_font_from_memory() -&gt; Resource&lt;Font&gt; {
+</span>fn load_font_from_file_memory() -&gt; Resource&lt;Font&gt; {
     let mut data = Vec::new();
     File::open("path/to/your/font.ttf")
         .unwrap()
@@ -6906,29 +6896,15 @@ includes only ASCII characters, if you need extended character set, you can repl
 code snippet:</p>
 <pre><pre class="playground"><code class="language-rust  no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{ttf::Font, UserInterface};
-</span>async fn set_default_font(ui: &amp;mut UserInterface) {
-    // Select character set.
-    let character_set = Font::korean_char_set();
-    // Load font.
-    let new_font = Font::from_file("path/to/your/font.ttf", 20.0, character_set)
-        .await
-        .unwrap();
-    // Set as default font.
-    ui.default_font.set(new_font)
+</span>fn set_default_font(ui: &amp;mut UserInterface, resource_manager: &amp;ResourceManager) {
+    ui.default_font = resource_manager.request::&lt;Font&gt;("path/to/my/font");
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-change-font-size"><a class="header" href="#how-to-change-font-size">How to Change Font Size</a></h2>
 <p>All you need to do is to set font size in your Text or TextBox widgets like so:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use fyrox::{
-    core::pool::Handle,
-    gui::{text::TextBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-};
-
-fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text("Some text")
         .with_font_size(30.0) // Sets the desired font size.
@@ -6938,11 +6914,6 @@ fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
 <p>You can also change the font size at runtime using <code>TextMessage::FontSize</code> message like so:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{message::MessageDirection, text::TextMessage, UiNode, UserInterface},
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn set_font_size(text: Handle&lt;UiNode&gt;, ui: &amp;UserInterface, new_font_size: f32) {
     ui.send_message(TextMessage::font_size(
         text,
