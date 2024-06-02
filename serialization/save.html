@@ -200,17 +200,10 @@ and references to external assets.</p>
 <p>Fyrox offers a built-in system for saved games. It does exactly what said in the section above - serializes a "diff" of
 your scene which can be loaded later as an ordinary scene and the engine will do all the magic for you. Typical usage of
 this system is very simple:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{pool::Handle, visitor::Visitor},
-</span><span class="boring">    plugin::{Plugin, PluginContext},
-</span><span class="boring">    scene::Scene,
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
-</span><span class="boring">
-</span>struct MyGame {
+</span>#[derive(Visit, Reflect, Debug, Default)]
+struct MyGame {
     scene: Handle&lt;Scene&gt;,
 }
 
@@ -281,20 +274,13 @@ respective methods for saving/loading. Also, these methods could be used when a 
 to do:</p>
 <pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{pool::Handle, visitor::prelude::*, visitor::Visitor},
-</span><span class="boring">    plugin::{Plugin, PluginContext},
-</span><span class="boring">    scene::Scene,
-</span><span class="boring">};
-</span><span class="boring">use std::path::Path;
-</span><span class="boring">
-</span>#[derive(Visit, Default)]
+</span>#[derive(Visit, Reflect, Debug, Default)]
 struct MyData {
     foo: String,
     bar: u32,
 }
 
+#[derive(Visit, Reflect, Debug, Default)]
 struct MyGame {
     scene: Handle&lt;Scene&gt;,
     data: MyData,
