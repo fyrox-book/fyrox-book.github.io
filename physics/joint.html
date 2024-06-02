@@ -208,16 +208,6 @@ can be initiated by moving the joint to some other position by changing local tr
 <p>To create a joint from code use <code>JointBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        joint::{BallJoint, JointBuilder, JointParams},
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_joint(graph: &amp;mut Graph, body1: Handle&lt;Node&gt;, body2: Handle&lt;Node&gt;) -&gt; Handle&lt;Node&gt; {
     JointBuilder::new(BaseBuilder::new())
         .with_body1(body1)

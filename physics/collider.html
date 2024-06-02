@@ -222,16 +222,6 @@ rigid bodies.</p>
 <p>Use ColliderBuilder to create an instance of collider from code with any shape you want.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_capsule_collider(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     ColliderBuilder::new(BaseBuilder::new())
         .with_shape(ColliderShape::capsule_y(0.5, 0.2))

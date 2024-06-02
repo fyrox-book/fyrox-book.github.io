@@ -191,15 +191,6 @@ hit-scan weapons (weapons that shoots high-speed projectiles), AI collision avoi
 use physics world instance of a scene graph:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::algebra::{Point3, Vector3},
-</span><span class="boring">    scene::graph::{
-</span><span class="boring">        physics::{Intersection, RayCastOptions},
-</span><span class="boring">        Graph,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn do_ray_cast(graph: &amp;mut Graph, begin: Vector3&lt;f32&gt;, end: Vector3&lt;f32&gt;) -&gt; Vec&lt;Intersection&gt; {
     let mut buffer = Vec::new();
 
@@ -255,18 +246,6 @@ triangle mesh from the value.</li>
 relatively slow and could be sped up a lot by using static array on stack:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{Point3, Vector3},
-</span><span class="boring">        arrayvec::ArrayVec,
-</span><span class="boring">    },
-</span><span class="boring">    scene::graph::{
-</span><span class="boring">        physics::{Intersection, RayCastOptions},
-</span><span class="boring">        Graph,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn do_static_ray_cast&lt;const N: usize&gt;(
     graph: &amp;mut Graph,
     begin: Vector3&lt;f32&gt;,

@@ -3660,24 +3660,15 @@ your objects.</p>
 <p>Use RigidBodyBuilder to create a rigid body instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">        rigidbody::RigidBodyBuilder,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_cube_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
-    RigidBodyBuilder::new(BaseBuilder::new().with_children(&amp;[
+    RigidBodyBuilder::new(
+        BaseBuilder::new().with_children(&amp;[
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]))
+        ]),
+    )
     .with_mass(2.0)
     .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
     .build(graph)
@@ -3702,8 +3693,6 @@ that should have physical representation, but move together with graphical node.
 applying force to a rigid body: at center of mass or at particular point at the body:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{core::algebra::Vector3, scene::rigidbody::RigidBody};
 </span>fn apply_force_and_torque(rigid_body: &amp;mut RigidBody) {
     // Push rigid body forward at the center of mass.
     rigid_body.apply_force(Vector3::new(0.0, 0.0, 1.0));
@@ -3720,25 +3709,15 @@ applying force to a rigid body: at center of mass or at particular point at the 
 do simulation for the body. This can be achieved by making the rigid body <em>kinematic</em>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{algebra::Vector3, pool::Handle},
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">        rigidbody::{RigidBodyBuilder, RigidBodyType},
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
-    RigidBodyBuilder::new(BaseBuilder::new().with_children(&amp;[
+</span>fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    RigidBodyBuilder::new(
+        BaseBuilder::new().with_children(&amp;[
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]))
+        ]),
+    )
     .with_body_type(RigidBodyType::KinematicPositionBased)
     .build(graph)
 }
@@ -3792,16 +3771,6 @@ rigid bodies.</p>
 <p>Use ColliderBuilder to create an instance of collider from code with any shape you want.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        collider::{ColliderBuilder, ColliderShape},
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_capsule_collider(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     ColliderBuilder::new(BaseBuilder::new())
         .with_shape(ColliderShape::capsule_y(0.5, 0.2))
@@ -3856,16 +3825,6 @@ can be initiated by moving the joint to some other position by changing local tr
 <p>To create a joint from code use <code>JointBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    scene::{
-</span><span class="boring">        base::BaseBuilder,
-</span><span class="boring">        graph::Graph,
-</span><span class="boring">        joint::{BallJoint, JointBuilder, JointParams},
-</span><span class="boring">        node::Node,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_joint(graph: &amp;mut Graph, body1: Handle&lt;Node&gt;, body2: Handle&lt;Node&gt;) -&gt; Handle&lt;Node&gt; {
     JointBuilder::new(BaseBuilder::new())
         .with_body1(body1)
@@ -3904,15 +3863,6 @@ hit-scan weapons (weapons that shoots high-speed projectiles), AI collision avoi
 use physics world instance of a scene graph:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::algebra::{Point3, Vector3},
-</span><span class="boring">    scene::graph::{
-</span><span class="boring">        physics::{Intersection, RayCastOptions},
-</span><span class="boring">        Graph,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn do_ray_cast(graph: &amp;mut Graph, begin: Vector3&lt;f32&gt;, end: Vector3&lt;f32&gt;) -&gt; Vec&lt;Intersection&gt; {
     let mut buffer = Vec::new();
 
@@ -3968,18 +3918,6 @@ triangle mesh from the value.</li>
 relatively slow and could be sped up a lot by using static array on stack:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::{Point3, Vector3},
-</span><span class="boring">        arrayvec::ArrayVec,
-</span><span class="boring">    },
-</span><span class="boring">    scene::graph::{
-</span><span class="boring">        physics::{Intersection, RayCastOptions},
-</span><span class="boring">        Graph,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn do_static_ray_cast&lt;const N: usize&gt;(
     graph: &amp;mut Graph,
     begin: Vector3&lt;f32&gt;,

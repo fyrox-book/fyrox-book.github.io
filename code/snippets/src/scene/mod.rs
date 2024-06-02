@@ -1,13 +1,17 @@
 pub mod base;
 pub mod camera;
+pub mod collider;
 pub mod custom;
 pub mod decal;
 pub mod graph;
 pub mod inheritance;
+pub mod joint;
 pub mod light;
 pub mod mesh;
 pub mod particle_system;
+pub mod ray;
 pub mod rectangle;
+pub mod rigid_body;
 pub mod sprite;
 pub mod terrain;
 
