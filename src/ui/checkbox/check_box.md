@@ -19,17 +19,7 @@ Checkbox in `Unchecked` state:
 To create a checkbox you should do something like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{check_box::CheckBoxBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-# };
-fn create_checkbox(ui: &mut UserInterface) -> Handle<UiNode> {
-    CheckBoxBuilder::new(WidgetBuilder::new())
-        // A custom value can be set during initialization.
-        .checked(Some(true))
-        .build(&mut ui.build_ctx())
-}
+{{#include ../../code/snippets/src/ui/check_box.rs:create_checkbox}}
 ```
 
 The above code will create a checkbox without any textual info, but usually checkboxes have some useful info
@@ -40,27 +30,7 @@ For checkbox with text, you could use `TextBuilder` to create textual content, f
 Here's an example of checkbox with textual content.
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{
-#         check_box::CheckBoxBuilder, text::TextBuilder, widget::WidgetBuilder, UiNode,
-#         UserInterface,
-#     },
-# };
-fn create_checkbox(ui: &mut UserInterface) -> Handle<UiNode> {
-    let ctx = &mut ui.build_ctx();
-
-    CheckBoxBuilder::new(WidgetBuilder::new())
-        // A custom value can be set during initialization.
-        .checked(Some(true))
-        .with_content(
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("This is a checkbox")
-                .build(ctx),
-        )
-        .build(ctx)
-}
+{{#include ../../code/snippets/src/ui/check_box.rs:create_checkbox_with_text}}
 ```
 
 ## Message handling
@@ -69,35 +39,7 @@ Checkboxes are not static widget and have multiple states. To handle a message f
 a `CheckBoxMessage::Check` message. To do so, you can do something like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     engine::Engine,
-#     event_loop::ControlFlow,
-#     gui::{check_box::CheckBoxMessage, message::UiMessage, UiNode},
-#     plugin::PluginContext,
-# };
-# 
-# struct Foo {
-#     checkbox: Handle<UiNode>,
-# }
-# 
-# impl Foo {
-fn on_ui_message(
-    &mut self,
-    context: &mut PluginContext,
-    message: &UiMessage,
-    control_flow: &mut ControlFlow,
-) {
-    if let Some(CheckBoxMessage::Check(value)) = message.data() {
-        if message.destination() == self.checkbox {
-            //
-            // Insert your clicking handling code here.
-            //
-        }
-    }
-}
-# }
+{{#include ../../code/snippets/src/ui/check_box.rs:usage_example}}
 ```
 
 Keep in mind that checkbox (as any other widget) generates `WidgetMessage` instances. You can catch them too and
