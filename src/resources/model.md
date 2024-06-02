@@ -15,24 +15,7 @@ Model must be instantiated in your scene, there is no other way of using it. To 
 from Asset Browser in the editor or instantiate the model dynamically from code:
 
 ```rust,no_run,edition2018
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     asset::manager::ResourceManager, resource::model::{Model, ModelResourceExtension},
-#     scene::{node::Node, Scene},
-# };
-# use std::path::Path;
-async fn instantiate_model(
-    path: &Path,
-    resource_manager: ResourceManager,
-    scene: &mut Scene,
-) -> Handle<Node> {
-    // Load model first. Alternatively, you can store resource handle somewhere and use it for
-    // instantiation.
-    let model = resource_manager.request::<Model, _>(path).await.unwrap();
-
-    model.instantiate(scene)
-}
+{{#include ../code/snippets/src/resource/model.rs:instantiate_model}}
 ```
 
 ## Material import
