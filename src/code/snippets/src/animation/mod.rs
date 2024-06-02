@@ -1,3 +1,7 @@
+pub mod blending;
+pub mod root_motion;
+pub mod signal;
+
 use fyrox::{
     core::{reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
     scene::{animation::spritesheet::SpriteSheetAnimation, dim2::rectangle::Rectangle},

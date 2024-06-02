@@ -51,44 +51,9 @@ Use [ABSM Editor](absm_editor.md) for to create animation blending state machine
 
 You can always create an ABSM from code, a simple ABSM could be created like this:
 
- ```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-   animation::machine::{
-       Machine, State, Transition, PoseNode, node::blend::BlendPose,
-       Parameter, PlayAnimation, PoseWeight, node::blend::BlendAnimations
-   },
-   core::pool::Handle
-};
-
-// Assume that these are correct handles.
-let idle_animation = Handle::default();
-let walk_animation = Handle::default();
-let aim_animation = Handle::default();
-
-let mut machine = Machine::new();
-
-let root_layer = machine.layers_mut().first_mut().unwrap();
-
-let aim = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(aim_animation)));
-let walk = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(walk_animation)));
-
-// Blend two animations together
-let blend_aim_walk = root_layer.add_node(PoseNode::BlendAnimations(
-   BlendAnimations::new(vec![
-       BlendPose::new(PoseWeight::Constant(0.75), aim),
-       BlendPose::new(PoseWeight::Constant(0.25), walk)
-   ])
-));
-
-let walk_state = root_layer.add_state(State::new("Walk", blend_aim_walk));
-
-let idle = root_layer.add_node(PoseNode::PlayAnimation(PlayAnimation::new(idle_animation)));
-let idle_state = root_layer.add_state(State::new("Idle", idle));
-
-root_layer.add_transition(Transition::new("Walk->Idle", walk_state, idle_state, 1.0, "WalkToIdle"));
-root_layer.add_transition(Transition::new("Idle->Walk", idle_state, walk_state, 1.0, "IdleToWalk"));
- ```
+```rust,no_run
+{{#include ../code/snippets/src/animation/blending.rs:create_absm}}
+```
 
 Here we have Walk, Idle and Run states which use different sources of poses:
 - Walk - is the most complicated here - it uses result of blending between `Aim` and `Walk` animations with different

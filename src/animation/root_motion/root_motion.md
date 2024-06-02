@@ -38,37 +38,8 @@ be ignored. Also, if you don't have any turns in your animation, you can also fi
 
 Alternatively, you can do the same from code:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     animation::{Animation, RootMotionSettings},
-#     core::pool::Handle,
-#     scene::{animation::AnimationPlayer, node::Node},
-#     script::ScriptContext,
-# };
-# 
-fn setup_root_motion(
-    animation_player: Handle<Node>,
-    animation: Handle<Animation>,
-    root_node: Handle<Node>,
-    ctx: &mut ScriptContext,
-) {
-    if let Some(animation_player) = ctx
-        .scene
-        .graph
-        .try_get_mut_of_type::<AnimationPlayer>(animation_player)
-    {
-        if let Some(animation) = animation_player.animations_mut().try_get_mut(animation) {
-            animation.set_root_motion_settings(Some(RootMotionSettings {
-                node: root_node,
-                ignore_x_movement: false,
-                ignore_y_movement: true,
-                ignore_z_movement: false,
-                ignore_rotations: true,
-            }))
-        }
-    }
-}
+```rust,no_run
+{{#include ../../code/snippets/src/animation/root_motion.rs:setup_root_motion}}
 ```
 
 This code does pretty much the same as the editor on the screenshots above. The arguments of this function are
@@ -90,41 +61,7 @@ is because animation blending state machine properly blends the root motion from
 In general, it could look something like this:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector3, pool::Handle},
-#     scene::{animation::absm::AnimationBlendingStateMachine, node::Node, rigidbody::RigidBody},
-#     script::ScriptContext,
-# };
-# 
-fn fetch_and_apply_root_motion(
-    absm: Handle<Node>,
-    rigid_body: Handle<Node>,
-    character_model: Handle<Node>,
-    ctx: &mut ScriptContext,
-) {
-    // Step 1. Fetch the velocity vector from the animation blending state machine.
-    let transform = ctx.scene.graph[character_model].global_transform();
-    let mut velocity = Vector3::default();
-    if let Some(state_machine) = ctx
-        .scene
-        .graph
-        .try_get(absm)
-        .and_then(|node| node.query_component_ref::<AnimationBlendingStateMachine>())
-    {
-        if let Some(root_motion) = state_machine.machine().pose().root_motion() {
-            velocity = transform
-                .transform_vector(&root_motion.delta_position)
-                .scale(1.0 / ctx.dt);
-        }
-    }
-
-    // Step 2. Apply the velocity to the rigid body and lock rotations.
-    if let Some(body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(rigid_body) {
-        body.set_ang_vel(Default::default());
-        body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
-    }
-}
+{{#include ../../code/snippets/src/animation/root_motion.rs:fetch_and_apply_root_motion}}
 ```
 
 This code extracts the current **local-space offset** for the current frame and then transforms the offset to
