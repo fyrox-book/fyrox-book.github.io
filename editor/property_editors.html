@@ -201,81 +201,50 @@ file, after editor's initialization.</p>
 editor will be <code>InspectablePropertyEditorDefinition</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::reflect::prelude::*,
-    gui::inspector::editors::{
-        inspectable::InspectablePropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-<span class="boring">
-</span><span class="boring">struct Editor {
-</span><span class="boring">    inspector: Inspector,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">struct Inspector {
-</span><span class="boring">    property_editors: PropertyEditorDefinitionContainer,
-</span><span class="boring">}
-</span>
-#[derive(Reflect, Debug)]
+</span>#[derive(Reflect, Debug)]
 struct MyStruct {
     foo: u32,
     bar: String,
 }
 
-<span class="boring">fn add_property_editor(editor: &amp;Editor) {
-</span>editor
-    .inspector
-    .property_editors
-    .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+fn add_property_editor(editor: &amp;Editor) {
+    editor
+        .inspector
+        .property_editors
+        .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
+}
+<span class="boring">}</span></code></pre></pre>
 <p>Keep in mind, that your structure must implement <code>Reflect</code> trait, otherwise you'll get a compilation error.</p>
 <h3 id="enumerations"><a class="header" href="#enumerations">Enumerations</a></h3>
 <p>Enumerations are a bit trickier to support, than simple structures, because they require a bit more traits to be
 implemented for your enumeration. At first, make sure that your <code>editor</code> project has the following dependencies:</p>
 <pre><code class="language-toml">#[dependencies]
-strum = "0.25.0"
-strum_macros = "0.25.0"
+strum = "0.26.0"
+strum_macros = "0.26.0"
 </code></pre>
 <p>These two crates responsible for enum to string (and vice versa) conversions which will be very useful for us. The
 following example shows a typical usage:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">extern crate strum_macros;
-</span><span class="boring">extern crate strum;
-</span>use fyrox::{
-    core::reflect::prelude::*,
-    gui::inspector::editors::{
-        enumeration::EnumPropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-use strum_macros::{AsRefStr, EnumString, EnumVariantNames};
-<span class="boring">
-</span><span class="boring">struct Editor {
-</span><span class="boring">    inspector: Inspector,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">struct Inspector {
-</span><span class="boring">    property_editors: PropertyEditorDefinitionContainer,
-</span><span class="boring">}
-</span>
-#[derive(Reflect, Default, Debug, AsRefStr, EnumString, EnumVariantNames, Clone)]
+</span>#[derive(Reflect, Default, Debug, AsRefStr, EnumString, VariantNames, TypeUuidProvider, Clone)]
+#[type_uuid(id = "31311d8b-f956-4ae9-a633-1e45b755f322")]
 enum MyEnum {
     #[default]
     Baz,
     Foo(u32),
-    Bar { baz: String, foobar: u32 },
+    Bar {
+        baz: String,
+        foobar: u32,
+    },
 }
 
-<span class="boring">fn add_property_editor(editor: &amp;Editor) {
-</span>editor
-    .inspector
-    .property_editors
-    .insert(EnumPropertyEditorDefinition::&lt;MyEnum&gt;::new());
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+fn add_enum_property_editor(editor: &amp;Editor) {
+    editor
+        .inspector
+        .property_editors
+        .insert(EnumPropertyEditorDefinition::&lt;MyEnum&gt;::new());
+}
+<span class="boring">}</span></code></pre></pre>
 <p>As you can see, your enumeration needs a decent amount of trait implementations, hopefully all of them can be derived.</p>
 <h3 id="inheritable-properties"><a class="header" href="#inheritable-properties">Inheritable Properties</a></h3>
 <p>If your structure or enumeration needs to be inheritable (see more info about <a href="../scene/inheritance.html">property inheritance</a>),
@@ -283,108 +252,70 @@ then you need one more step. In case of inheritable variables, your fields will 
 this fact requires you to register an appropriate property editor for this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::{reflect::prelude::*, variable::InheritableVariable},
-    gui::inspector::editors::{
-        inherit::InheritablePropertyEditorDefinition,
-        inspectable::InspectablePropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-<span class="boring">
-</span><span class="boring">struct Editor {
-</span><span class="boring">    inspector: Inspector,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">struct Inspector {
-</span><span class="boring">    property_editors: PropertyEditorDefinitionContainer,
-</span><span class="boring">}
-</span>
-#[derive(Reflect, Debug)]
-struct MyStruct {
+</span>#[derive(Reflect, Debug, TypeUuidProvider, Default, Clone)]
+#[type_uuid(id = "31311d8b-f956-4ae9-a633-1e45b755f323")]
+struct MyOtherStruct {
     foo: u32,
     bar: String,
 }
 
 // An example script with inheritable field of custom structure.
 struct MyScript {
-    inheritable: InheritableVariable&lt;MyStruct&gt;,
+    inheritable: InheritableVariable&lt;MyOtherStruct&gt;,
 }
 
-<span class="boring">fn add_property_editor(editor: &amp;Editor) {
-</span>editor
-    .inspector
-    .property_editors
-    .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
+fn add_inheritable_property_editor(editor: &amp;Editor) {
+    editor
+        .inspector
+        .property_editors
+        .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
-// This is responsible for supporting inheritable properties in scripts.
-editor
-    .inspector
-    .property_editors
-    .insert(InheritablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
+    // This is responsible for supporting inheritable properties in scripts.
+    editor
+        .inspector
+        .property_editors
+        .insert(InheritablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
-// Alternatively, the two previous insertions could be replaced by a single call of helper
-// method:
-editor
-    .inspector
-    .property_editors
-    .register_inheritable_inspectable::&lt;MyStruct&gt;();
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+    // Alternatively, the two previous insertions could be replaced by a single call of helper
+    // method:
+    editor
+        .inspector
+        .property_editors
+        .register_inheritable_inspectable::&lt;MyStruct&gt;();
+}
+<span class="boring">}</span></code></pre></pre>
 <h3 id="collections"><a class="header" href="#collections">Collections</a></h3>
 <p>If you have a vector of some custom structure (<code>Vec&lt;MyStruct&gt;</code>), then you also need to register a property editor for
 it:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::reflect::prelude::*,
-    gui::inspector::editors::{
-        collection::VecCollectionPropertyEditorDefinition,
-        inspectable::InspectablePropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-<span class="boring">
-</span><span class="boring">struct Editor {
-</span><span class="boring">    inspector: Inspector,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">struct Inspector {
-</span><span class="boring">    property_editors: PropertyEditorDefinitionContainer,
-</span><span class="boring">}
 </span>
-#[derive(Reflect, Clone, Debug, Default)]
-struct MyStruct {
-    foo: u32,
-    bar: String,
+<span class="boring">fn main() {
+</span>// An example script with Vec field of custom structure.
+struct MyOtherScript {
+    inheritable: Vec&lt;MyOtherStruct&gt;,
 }
 
-// An example script with Vec field of custom structure.
-struct MyScript {
-    inheritable: Vec&lt;MyStruct&gt;,
+fn add_collection_property_editor(editor: &amp;Editor) {
+    editor
+        .inspector
+        .property_editors
+        .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
+
+    // VecCollectionPropertyEditorDefinition is used to create a property editor for Vec&lt;MyStruct&gt;,
+    // internally it uses a registered property editor for its generic argument (MyStruct).
+    editor
+        .inspector
+        .property_editors
+        .insert(VecCollectionPropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
+
+    // Alternatively, you can use a special helper method to replace the two blocks above by a
+    // single one.
+    editor
+        .inspector
+        .property_editors
+        .register_inheritable_vec_collection::&lt;MyOtherStruct&gt;();
 }
-
-<span class="boring">fn add_property_editor(editor: &amp;Editor) {
-</span>editor
-    .inspector
-    .property_editors
-    .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
-
-// VecCollectionPropertyEditorDefinition is used to create a property editor for Vec&lt;MyStruct&gt;,
-// internally it uses a registered property editor for its generic argument (MyStruct).
-editor
-    .inspector
-    .property_editors
-    .insert(VecCollectionPropertyEditorDefinition::&lt;MyStruct&gt;::new());
-
-// Alternatively, you can use a special helper method to replace the two blocks above by a
-// single one.
-editor
-    .inspector
-    .property_editors
-    .register_inheritable_vec_collection::&lt;MyStruct&gt;();
-<span class="boring">}
-</span><span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="custom-property-editors"><a class="header" href="#custom-property-editors">Custom Property Editors</a></h2>
 <p>See <a href="../ui/inspector.html">Inspector</a> widget chapter to learn how to create custom property editors.</p>
 
