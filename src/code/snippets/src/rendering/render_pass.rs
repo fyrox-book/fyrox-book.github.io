@@ -48,7 +48,7 @@ impl MyRenderPass {
                 }
             ";
 
-        let shader = GpuProgram::from_source(&mut renderer.state, "MyShader", vs, fs)?;
+        let shader = GpuProgram::from_source(&renderer.state, "MyShader", vs, fs)?;
 
         Ok(Self {
             enabled: true,
@@ -60,7 +60,7 @@ impl MyRenderPass {
             quad: GeometryBuffer::from_surface_data(
                 &SurfaceData::make_quad(&Matrix4::identity()),
                 GeometryBufferKind::StaticDraw,
-                &mut renderer.state,
+                & renderer.state,
             )?,
             shader,
         })
