@@ -60,7 +60,7 @@ impl MyRenderPass {
             quad: GeometryBuffer::from_surface_data(
                 &SurfaceData::make_quad(&Matrix4::identity()),
                 GeometryBufferKind::StaticDraw,
-                & renderer.state,
+                &renderer.state,
             )?,
             shader,
         })

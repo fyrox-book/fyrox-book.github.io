@@ -113,33 +113,13 @@ the shader to your material in the Material Editor:
 Alternatively, you can load the shader from code. To do this, you can use this code:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     asset::manager::ResourceManager,
-#     material::shader::{Shader, ShaderResource},
-# };
-# 
-fn load_shader(resource_manager: &ResourceManager) -> ShaderResource {
-    resource_manager.request::<Shader, _>("path/to/my/cool.shader")
-}
+{{#include ../code/snippets/src/rendering/shader.rs:load_shader}}
 ```
 
 After that you can use the shader to build a material from it:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     asset::manager::ResourceManager,
-#     material::{shader::Shader, Material, SharedMaterial},
-# };
-# 
-fn create_material(resource_manager: &ResourceManager) -> SharedMaterial {
-    let shader = resource_manager.request::<Shader, _>("path/to/my/cool.shader");
-    SharedMaterial::new(Material::from_shader(
-        shader,
-        Some(resource_manager.clone()),
-    ))
-}
+{{#include ../code/snippets/src/rendering/shader.rs:create_material}}
 ```
 
 This material instance can be used for rendering. For example, you can assign it a surface of some mesh.

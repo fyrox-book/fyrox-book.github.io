@@ -48,24 +48,7 @@ Note that the engine does try to reuse data across instances as much as possible
 You can also instantiate assets dynamically from your code. Here's an example of that for a Model:
 
 ```rust,no_run,edition2018
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     asset::manager::ResourceManager,
-#     resource::model::{Model, ModelResourceExtension},
-#     scene::{node::Node, Scene},
-# };
-# use std::path::Path;
-async fn instantiate_model(
-    path: &Path,
-    resource_manager: ResourceManager,
-    scene: &mut Scene,
-) -> Handle<Node> {
-    // Load the model first. Alternatively, you can store the resource handle somewhere and use it for instantiation.
-    let model = resource_manager.request::<Model, _>(path).await.unwrap();
-
-    model.instantiate(scene)
-}
+{{#include ../code/snippets/src/resource/mod.rs:instantiate_model}}
 ```
 
 This is very useful with prefabs that you may want to instantiate in a scene at runtime. 

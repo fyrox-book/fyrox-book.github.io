@@ -76,53 +76,7 @@ other nodes. The node can be created from the editor, and you don't even need to
 Use the following example code as a guide **only** if you need to create procedural animations:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     animation::{
-#         container::{TrackDataContainer, TrackValueKind},
-#         track::Track,
-#         value::ValueBinding,
-#         Animation,
-#     },
-#     core::{
-#         curve::{Curve, CurveKey, CurveKeyKind},
-#         pool::Handle,
-#     },
-#     scene::{
-#         node::Node,
-#         base::BaseBuilder,
-#         graph::Graph,
-#         pivot::PivotBuilder
-#     }
-# };
-fn create_animation(node: Handle<Node>) -> Animation {
-    let mut frames_container = TrackDataContainer::new(TrackValueKind::Vector3);
-    // We'll animate only X coordinate (at index 0).
-    frames_container.curves_mut()[0] = Curve::from(vec![
-        CurveKey::new(0.5, 2.0, CurveKeyKind::Linear),
-        CurveKey::new(0.75, 1.0, CurveKeyKind::Linear),
-        CurveKey::new(1.0, 3.0, CurveKeyKind::Linear),
-    ]);
-    // Create a track that will animated the node using the curve above.
-    let mut track = Track::new(frames_container, ValueBinding::Position);
-    track.set_target(node);
-    // Finally create an animation and set its time slice and turn it on.
-    let mut animation = Animation::default();
-    animation.add_track(track);
-    animation.set_time_slice(0.0..1.0);
-    animation.set_enabled(true);
-    animation
-}
-// Create a graph with a node.
-let mut graph = Graph::new();
-let some_node = PivotBuilder::new(BaseBuilder::new()).build(&mut graph);
-// Create the animation.
-let mut animation = create_animation(some_node);
-// Emulate some ticks (like it was updated from the main loop of your game).
-for _ in 0..10 {
-    animation.tick(1.0 / 60.0);
-    animation.pose().apply(&mut graph);
-}
+{{#include ../code/snippets/src/animation/mod.rs:create_animation}}
 ```
 
 The code above creates a simple animation that moves a node along X axis in various ways. The usage of the animation
@@ -160,49 +114,8 @@ If everything is correct, you can preview your animation by clicking `Preview` c
 
 You can do the same as in the previous section, but from code:
 
-```rust ,edition2018,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     asset::manager::ResourceManager,
-#     core::pool::Handle,
-#     resource::model::{Model, ModelResourceExtension},
-#     scene::{animation::AnimationPlayerBuilder, base::BaseBuilder, node::Node, Scene},
-# };
-# 
-async fn create_animated_character(
-    scene: &mut Scene,
-    resource_manager: &ResourceManager,
-) -> (Handle<Node>, Handle<Node>) {
-    // Load a character model first.
-    let character_resource = resource_manager
-        .request::<Model>("path/to/my/character.fbx")
-        .await
-        .unwrap();
-
-    // Create its instance.
-    let character_instance = character_resource.instantiate(scene);
-
-    // Create a new animation player.
-    let animation_player =
-        AnimationPlayerBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
-
-    // Load an animation.
-    let animation_resource = resource_manager
-        .request::<Model>("path/to/my/animation.fbx")
-        .await
-        .unwrap();
-
-    // "Instantiate" an animation from the animation resource to the animation player.
-    // You can call this method multiple times with different animations, each time it
-    // will create a new animation instance and put it in the animation player.
-    let _animations = animation_resource.retarget_animations_to_player(
-        character_instance,
-        animation_player,
-        &mut scene.graph,
-    );
-
-    (character_instance, animation_player)
-}
+```rust,no_run
+{{#include ../code/snippets/src/animation/mod.rs:create_animated_character}}
 ```
 
 As you can see, at first this code creates an instance of a 3D model. Then it loads an animation and creates its
@@ -218,36 +131,8 @@ Animations will be played automatically if the respective animation player is ha
 `true`. Since the animation player can contain multiple animations, all of them will be played at once. You can 
 enable/disable animations when needed by finding them by name from code and switching `Enabled` property:
 
-```rust ,edition2018,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     scene::{animation::AnimationPlayer, graph::Graph, node::Node},
-# };
-# 
-fn enable_animation(
-    animation_player: Handle<Node>,
-    graph: &mut Graph,
-    name: &str,
-    enabled: bool,
-) {
-    if let Some(animation_player) =
-        graph.try_get_mut_of_type::<AnimationPlayer>(animation_player)
-    {
-        // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
-        // chapter for more info).
-        let animations = animation_player.animations_mut().get_value_mut_silent();
-
-        // Find an animation with the given name.
-        if let Some((_animation_handle, animation)) = animations.find_by_name_mut(name) {
-            // You could also store _animation_handle somewhere and use  animations.get_mut/get(handle)
-            // to fetch an animation faster.
-
-            // Turn the animation on/off.
-            animation.set_enabled(enabled);
-        }
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/animation/mod.rs:enable_animation}}
 ```
 
 This code could also be used to change animation properties at runtime. To do that, replace `set_enabled` with some

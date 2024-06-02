@@ -12,14 +12,6 @@ The function above will return a collection of intersections that are sorted by 
 beginning of the ray to an intersection point). Each intersection is represented by the following structure:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         algebra::{Point3, Vector3},
-#         pool::Handle,
-#     },
-#     scene::{graph::physics::FeatureId, node::Node},
-# };
 pub struct Intersection {
     pub collider: Handle<Node>,
     pub normal: Vector3<f32>,
