@@ -14,36 +14,7 @@ so users can do any of the following:
 As with other UI elements, you create and configure the window using the WindowBuilder.
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-    core::{pool::Handle, algebra::Vector2},
-    gui::{
-        window::{WindowBuilder, WindowTitle}, 
-        text::TextBuilder, 
-        widget::WidgetBuilder, 
-        UiNode, 
-        UserInterface
-    },
-};
-
-fn create_window(ui: &mut UserInterface) {
-    WindowBuilder::new(
-        WidgetBuilder::new()
-            .with_desired_position(Vector2::new(300.0, 0.0))
-            .with_width(300.0),
-    )
-    .with_content(
-        TextBuilder::new(WidgetBuilder::new())
-            .with_text("Example Window content.")
-            .build(&mut ui.build_ctx())
-    )
-    .with_title(WindowTitle::text("Window"))
-    .can_close(true)
-    .can_minimize(true)
-    .open(true)
-    .can_resize(false)
-    .build(&mut ui.build_ctx());
-}
+{{#include ../code/snippets/src/ui/window.rs:create_window}}
 ```
 
 You will likely want to constrain the initial size of the window to somethig as shown in the example by providing a set

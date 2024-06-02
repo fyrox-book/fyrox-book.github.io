@@ -10,19 +10,7 @@ that does not have enough space on current line, will automatically be placed on
 Use `WrapPanelBuilder` to create new wrap panel instance:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{
-#         widget::WidgetBuilder, wrap_panel::WrapPanelBuilder, BuildContext, Orientation, UiNode,
-#     },
-# };
-# 
-fn create_wrap_panel(ctx: &mut BuildContext) -> Handle<UiNode> {
-    WrapPanelBuilder::new(WidgetBuilder::new())
-        .with_orientation(Orientation::Horizontal)
-        .build(ctx)
-}
+{{#include ../code/snippets/src/ui/wrap_panel.rs:create_wrap_panel}}
 ```
 
 ## Orientation
