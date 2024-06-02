@@ -12,6 +12,7 @@ pub mod particle_system;
 pub mod ray;
 pub mod rectangle;
 pub mod rigid_body;
+pub mod sound;
 pub mod sprite;
 pub mod terrain;
 

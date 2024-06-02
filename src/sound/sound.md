@@ -48,38 +48,13 @@ audio processing could found [here](bus.md).
 Audio files are loaded using the resource manager:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{engine::Engine, scene::Scene, scene::sound::SoundBuffer};
-# fn build_node(engine: Engine, scene: &mut Scene) {
-let sound = engine
-    .resource_manager
-    .request::<SoundBuffer, _>("/path/to/resource.ogg");
-# }
+{{#include ../code/snippets/src/scene/sound.rs:load_sound}}
 ```
 
 Then, the node is built using the standard builder pattern:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     engine::Engine,
-#     scene::{
-#         base::BaseBuilder,
-#         sound::{SoundBuilder, Status, SoundBuffer},
-#         Scene,
-#     },
-# };
-# fn build_node(engine: Engine, scene: &mut Scene) {
-# let sound = engine
-#     .resource_manager
-#     .request::<SoundBuffer, _>("/path/to/resource.ogg");
-#
-let sound_handle = SoundBuilder::new(BaseBuilder::new())
-    .with_buffer(Some(sound))
-    .with_status(Status::Playing)
-    .with_play_once(true)
-    .build(&mut scene.graph);
-# }
+{{#include ../code/snippets/src/scene/sound.rs:build_sound_node}}
 ```
 
 There are a few notable things in the example above.
@@ -90,40 +65,13 @@ The second is that sound nodes are not dropped automatically after playback; dro
 One way is to use the convenient builder API `.with_play_once(true)`; another is to use the graph APIs:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     engine::Engine,
-#     scene::{
-#         base::BaseBuilder,
-#         sound::{SoundBuilder, Status},
-#         Scene,
-#     },
-# };
-# fn build_node(engine: Engine, scene: &mut Scene) {
-let sound_handle = SoundBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
-
-let sound = scene.graph[sound_handle].as_sound();
-
-if sound.status() == Status::Stopped {
-    scene.graph.remove_node(sound_handle);
-}
-# }
+{{#include ../code/snippets/src/scene/sound.rs:sound_removal}}
 ```
 
 If we want to play background music (or anyway a repeated sound), we just set the `looping` property when building the node:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     engine::Engine,
-#     scene::{base::BaseBuilder, sound::SoundBuilder, Scene},
-# };
-# fn build_node(engine: Engine, scene: &mut Scene) {
-SoundBuilder::new(BaseBuilder::new())
-    .with_looping(true)
-    // etc.
-    .build(&mut scene.graph);
-# }
+{{#include ../code/snippets/src/scene/sound.rs:looping}}
 ```
 
 In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a 
