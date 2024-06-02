@@ -12,113 +12,12 @@ example - holographic inventory in sci-fi games:
 
 ![offscreen ui](offscreen_ui.png)
 
-Default engine's user interface instance (accessible in `context.user_interface` from plugin methods) can't be rendered
+Default engine's user interface instance (accessible in `context.user_interfaces.first/first_mut()` from plugin methods) can't be rendered
 offscreen due to engine design. However, you can create a new user interface instance, populate it with widgets, and 
 then render it to a texture. This could be done like so:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{algebra::Vector2, log::Log, pool::Handle, sstorage::ImmutableString},
-#     engine::GraphicsContext,
-#     event::Event,
-#     event_loop::ControlFlow,
-#     gui::{button::ButtonBuilder, widget::WidgetBuilder, UserInterface},
-#     material::{Material, PropertyValue},
-#     plugin::{Plugin, PluginContext},
-#     resource::texture::{TextureResource, TextureResourceExtension},
-#     scene::Scene,
-#     utils,
-# };
-# 
-struct Game {
-    // Add these fields to your game.
-    my_ui: UserInterface,
-    render_target: TextureResource,
-    screen_size: Vector2<f32>,
-}
-
-impl Game {
-    pub fn new(override_scene: Handle<Scene>, context: PluginContext) -> Self {
-        // Add this code to your Game::new
-        
-        // Define the desired render target size.
-        let width = 128;
-        let height = 128;
-
-        // Create render target and user interface.
-        let render_target = TextureResource::new_render_target(width, height);
-        let screen_size = Vector2::new(width as f32, height as f32);
-        let mut my_ui = UserInterface::new(screen_size);
-
-        // Create some widgets as usual.
-        ButtonBuilder::new(WidgetBuilder::new())
-            .with_text("Click Me!")
-            .build(&mut my_ui.build_ctx());
-
-        // Use render_target as an ordinary texture - it could be applied to any material like so:
-        let mut material = Material::standard();
-        Log::verify(material.set_property(
-            &ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(render_target.clone()),
-                fallback: Default::default(),
-            },
-        ));
-        // This material **must** be assigned to some mesh in your scene!
-
-        Self {
-            my_ui,
-            render_target,
-            screen_size,
-        }
-    }
-}
-
-impl Plugin for Game {
-    fn on_os_event(
-        &mut self,
-        event: &Event<()>,
-        context: PluginContext,
-        control_flow: &mut ControlFlow,
-    ) {
-        // This is the tricky part. Event OS event handling will be different depending on the use case.
-        // In cases if your UI just shows some information, this method can be fully removed. In case when
-        // you need to interact with the UI, there are two different ways.
-        // 1) If your UI will be incorporated in 2D scene, you need to patch mouse events - mostly positions
-        // of the cursor so it will be in local coordinates.
-        // 2) In 3D, it is much more complex - you need to patch mouse events as well, but use mouse OS events
-        // to produce a picking ray and do an intersection test with a quad that will serve as a canvas for your
-        // UI to obtain the local mouse coordinates.
-        if let Event::WindowEvent { event, .. } = event {
-            if let Some(event) = utils::translate_event(event) {
-                self.my_ui.process_os_event(&event);
-            }
-        }
-    }
-
-    fn update(&mut self, context: &mut PluginContext, control_flow: &mut ControlFlow) {
-        // It is very important to update the UI every frame and process all events that
-        // comes from it.
-        self.my_ui.update(self.screen_size, context.dt);
-
-        while let Some(message) = self.my_ui.poll_message() {
-            // Do something with the events coming from the custom UI.
-        }
-    }
-
-    fn before_rendering(&mut self, context: PluginContext, control_flow: &mut ControlFlow) {
-        // Render the UI before every other rendering operation, this way the texture will be ready for use immediately.
-        if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context
-        {
-            Log::verify(
-                graphics_context
-                    .renderer
-                    .render_ui_to_texture(self.render_target.clone(), &mut self.my_ui),
-            );
-        }
-    }
-}
+{{#include ../code/snippets/src/ui/rendering.rs:rendering}}
 ```
 
 There's quite a lot of code, but it is quite simple and the comments should help you to understand which part does what.
@@ -134,37 +33,7 @@ of CCTV, or to show 3D graphics in 2D user interface and so on. To do so, you ne
 scene and then use the texture (render target) in an `Image` widget.
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{image::ImageBuilder, widget::WidgetBuilder, UiNode},
-#     plugin::PluginContext,
-#     resource::texture::{TextureResource, TextureResourceExtension},
-#     scene::Scene,
-#     utils,
-# };
-# 
-fn reroute_scene_rendering(
-    width: u32,
-    height: u32,
-    scene: &mut Scene,
-    context: &mut PluginContext,
-) -> Handle<UiNode> {
-    // Create render target first.
-    let render_target = TextureResource::new_render_target(width, height);
-
-    // Specify render target for the scene.
-    scene.rendering_options.render_target = Some(render_target.clone());
-
-    // The scene will be drawn in this image widget.
-    ImageBuilder::new(
-        WidgetBuilder::new()
-            .with_width(width as f32)
-            .with_height(height as f32),
-    )
-    .with_texture(utils::into_gui_texture(render_target.clone()))
-    .build(&mut context.user_interface.build_ctx())
-}
+{{#include ../code/snippets/src/ui/rendering.rs:reroute_scene_rendering}}
 ```
 
 This function could be used as-is to re-route rendering of a scene to an `Image` widget. It creates a new render target

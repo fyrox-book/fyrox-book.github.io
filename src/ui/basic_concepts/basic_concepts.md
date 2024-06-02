@@ -80,32 +80,7 @@ UI, it would force you to wrap it in `Rc<RefCell<..>>`/`Arc<Mutex<..>>`.
 Message dispatcher is very easy to write, all you need to do is to handle UI messages in `Plugin::on_ui_message` method:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{pool::Handle},
-#     event_loop::ControlFlow,
-#     gui::{button::ButtonMessage, message::UiMessage, UiNode},
-#     plugin::{Plugin, PluginContext},
-# };
-# 
-struct MyPlugin {
-    button: Handle<UiNode>,
-}
-
-impl Plugin for MyPlugin {
-    fn on_ui_message(
-        &mut self,
-        _context: &mut PluginContext,
-        message: &UiMessage,
-        _control_flow: &mut ControlFlow,
-    ) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                println!("The button was clicked!");
-            }
-        }
-    }
-}
+{{#include ../../code/snippets/src/ui/mod.rs:message_passing}}
 ```
 
 As you can see, all you need to do is to check type of incoming message and message destination, which is a node handle
@@ -155,29 +130,7 @@ In case of code-first approach you should prefer so-called _fluent syntax_: this
 widget in series of nested call of other widget builders. In code, it looks something like this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle, resource::texture::Texture,
-#     asset::manager::ResourceManager,
-#     gui::{
-#         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
-#         UserInterface,
-#     },
-#     utils::into_gui_texture,
-# };
-# fn create_fancy_button(ui: &mut UserInterface, resource_manager: ResourceManager) -> Handle<UiNode> {
-# let ctx = &mut ui.build_ctx();
-ButtonBuilder::new(WidgetBuilder::new())
-    .with_back(
-        ImageBuilder::new(WidgetBuilder::new())
-            .with_texture(into_gui_texture(
-                resource_manager.request::<Texture, _>("path/to/your/texture"),
-            ))
-            .build(ctx),
-    )
-    .with_text("Click me!")
-    .build(ctx)
-# }
+{{#include ../../code/snippets/src/ui/mod.rs:create_fancy_button}}
 ```
 
 This code snippet creates a button with an image and a text. Actually it creates **three** widgets, that forms
@@ -188,83 +141,14 @@ the button. The structure of the button can contain _any_ amount of nodes, for e
 that contains text with some icon. To do that, replace `.with_text("My Button")` with this:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     asset::manager::ResourceManager, resource::texture::Texture,
-#     gui::{
-#         button::ButtonBuilder,
-#         grid::{Column, GridBuilder, Row},
-#         image::ImageBuilder,
-#         text::TextBuilder,
-#         widget::WidgetBuilder,
-#         UiNode, UserInterface,
-#     },
-#     utils::into_gui_texture,
-# };
-# 
-# fn create_fancy_button(
-#     ui: &mut UserInterface,
-#     resource_manager: ResourceManager,
-# ) -> Handle<UiNode> {
-#     let ctx = &mut ui.build_ctx();
-# 
-#     ButtonBuilder::new(WidgetBuilder::new())
-        .with_content(
-            GridBuilder::new(
-                WidgetBuilder::new()
-                    .with_child(
-                        ImageBuilder::new(WidgetBuilder::new().on_column(0))
-                            .with_texture(into_gui_texture(
-                                resource_manager.request::<Texture, _>("your_icon"),
-                            ))
-                            .build(ctx),
-                    )
-                    .with_child(
-                        TextBuilder::new(WidgetBuilder::new().on_column(1))
-                            .with_text("My Button")
-                            .build(ctx),
-                    ),
-            )
-            .add_row(Row::stretch())
-            .add_column(Column::auto())
-            .add_column(Column::stretch())
-            .build(ctx),
-        )
-#       .build(ctx)
-# }
+{{#include ../../code/snippets/src/ui/mod.rs:create_fancy_button_with_text}}
 ```
 
 Quite often you need to store a handle to a widget in a variable, there is one neat trick to do that preserving
 the fluent syntax:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     asset::manager::ResourceManager, resource::texture::Texture,
-#     gui::{
-#         button::ButtonBuilder, image::ImageBuilder, widget::WidgetBuilder, UiNode,
-#         UserInterface,
-#     },
-#     utils::into_gui_texture,
-# };
-# fn create_fancy_button(ui: &mut UserInterface, resource_manager: ResourceManager) -> Handle<UiNode> {
-# let ctx = &mut ui.build_ctx();
-let image;
-ButtonBuilder::new(WidgetBuilder::new())
-    .with_back({
-        image = ImageBuilder::new(WidgetBuilder::new())
-            .with_texture(into_gui_texture(
-                resource_manager.request::<Texture, _>("path/to/your/texture"),
-            ))
-            .build(ctx);
-        image
-    })
-    .with_text("Click me!")
-    .build(ctx)
-# }
-// image now contains a handle of the Image widget 
+{{#include ../../code/snippets/src/ui/mod.rs:create_fancy_button_with_shortcut}}
 ```
 
 ## Limitations
