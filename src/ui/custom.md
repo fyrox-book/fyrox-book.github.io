@@ -10,43 +10,8 @@ a text, and it will also react to mouse events:
 
 A "skeleton" of such widget could be something like this (for now it does nothing):  
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{pool::Handle, reflect::prelude::*, visitor::prelude::*},
-#     gui::{
-#         message::UiMessage, widget::Widget, widget::WidgetMessage, Control, UiNode,
-#         UserInterface, define_widget_deref
-#     },
-# };
-# use std::{
-#     any::{Any, TypeId},
-#     ops::{Deref, DerefMut},
-# };
-# 
-#[derive(Clone, Debug, Reflect, Visit)]
-struct MyButton {
-    widget: Widget,
-    border: Handle<UiNode>,
-    text: Handle<UiNode>,
-}
-
-define_widget_deref!(MyButton);
-
-impl Control for MyButton {
-    fn query_component(&self, type_id: TypeId) -> Option<&dyn Any> {
-        if type_id == TypeId::of::<Self>() {
-            Some(self)
-        } else {
-            None
-        }
-    }
-
-    fn handle_routed_message(&mut self, ui: &mut UserInterface, message: &mut UiMessage) {
-        // Pass another message to the base widget first.
-        self.widget.handle_routed_message(ui, message);
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/ui/custom.rs:widget_skeleton}}
 ```
 
 Every widget in the engine must have an instance of `Widget` (`widget: Widget` field) type in them and implement the 
@@ -66,125 +31,7 @@ Now let's add some logic to the button, that will handle various mouse events. T
 logic will be like so:
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{
-#         color::{Color, Hsv},
-#         pool::Handle,
-#         reflect::prelude::*,
-#         visitor::prelude::*,
-#     },
-#     gui::{
-#         border::BorderBuilder,
-#         brush::Brush,
-#         define_constructor, define_widget_deref,
-#         message::{MessageDirection, UiMessage},
-#         text::TextBuilder,
-#         widget::{Widget, WidgetBuilder, WidgetMessage},
-#         BuildContext, Control, HorizontalAlignment, Thickness, UiNode, UserInterface,
-#         VerticalAlignment,
-#     },
-# };
-# use std::{
-#     any::{Any, TypeId},
-#     ops::{Deref, DerefMut},
-# };
-# 
-#[derive(Debug, Clone, PartialEq)]
-pub enum MyButtonMessage {
-    // A message, that will be emitted when our button is clicked.
-    Click,
-}
-
-impl MyButtonMessage {
-    // A constructor for `Click` message.
-    define_constructor!(
-        MyButtonMessage:Click => fn click(), layout: false
-    );
-}
-
-#[derive(Clone, Debug, Reflect, Visit)]
-struct MyButton {
-    widget: Widget,
-    border: Handle<UiNode>,
-    text: Handle<UiNode>,
-}
-
-define_widget_deref!(MyButton);
-
-impl MyButton {
-    fn set_colors(&self, ui: &UserInterface, text_color: Color, border_color: Color) {
-        for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send_message(WidgetMessage::foreground(
-                handle,
-                MessageDirection::ToWidget,
-                Brush::Solid(color),
-            ));
-        }
-
-        // Make the fill brush of the border slightly dimmer than the input value.
-        let mut border_color = Hsv::from(border_color);
-        border_color.set_brightness(border_color.brightness() - 20.0);
-        ui.send_message(WidgetMessage::background(
-            self.border,
-            MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()),
-        ));
-    }
-}
-
-impl Control for MyButton {
-    fn query_component(&self, type_id: TypeId) -> Option<&dyn Any> {
-        if type_id == TypeId::of::<Self>() {
-            Some(self)
-        } else {
-            None
-        }
-    }
-
-    fn handle_routed_message(&mut self, ui: &mut UserInterface, message: &mut UiMessage) {
-        // Pass another message to the base widget first.
-        self.widget.handle_routed_message(ui, message);
-
-        // Then process it in our widget.
-        if let Some(msg) = message.data::<WidgetMessage>() {
-            if message.destination() == self.handle()
-                || self.has_descendant(message.destination(), ui)
-            {
-                match msg {
-                    WidgetMessage::MouseUp { .. } => {
-                        // Send the message to outside world, saying that the button was clicked.
-                        ui.send_message(MyButtonMessage::click(
-                            self.handle(),
-                            MessageDirection::FromWidget,
-                        ));
-                        ui.release_mouse_capture();
-                    }
-                    WidgetMessage::MouseDown { .. } => {
-                        ui.capture_mouse(message.destination());
-                    }
-                    WidgetMessage::MouseEnter => {
-                        // Make both the border and text brighter when the mouse enter the bounds of our button.
-                        self.set_colors(
-                            ui,
-                            Color::opaque(220, 220, 220),
-                            Color::opaque(140, 140, 140),
-                        );
-                    }
-                    WidgetMessage::MouseLeave => {
-                        // Make both the border and text dimmer when the mouse leaves the bounds of our button.
-                        self.set_colors(
-                            ui,
-                            Color::opaque(120, 120, 120),
-                            Color::opaque(100, 100, 100),
-                        );
-                    }
-                    _ => (),
-                }
-            }
-        }
-    }
-}
+{{#include ../code/snippets/src/ui/custom.rs:my_button}}
 ```
 
 As you can see, the most of the code was placed in `handle_routed_message`, we using it to respond for four messages:
@@ -206,85 +53,8 @@ the outside world and "compiles" it into a finished widget. Usually, widgets con
 in their turn could have their own children and so on. In our case, the button will have two child widgets: a border and
 a text.
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{color::Color, pool::Handle, reflect::prelude::*, visitor::prelude::*},
-#     gui::{
-#         border::BorderBuilder,
-#         brush::Brush,
-#         define_constructor, define_widget_deref,
-#         message::{MessageDirection, UiMessage},
-#         text::TextBuilder,
-#         widget::{Widget, WidgetBuilder, WidgetMessage},
-#         BuildContext, Control, HorizontalAlignment, UiNode, UserInterface, VerticalAlignment,
-#     },
-# };
-# use std::{
-#     any::{Any, TypeId},
-#     ops::{Deref, DerefMut},
-# };
-# 
-# #[derive(Clone, Debug, Reflect, Visit)]
-# struct MyButton {
-#     widget: Widget,
-#     border: Handle<UiNode>,
-#     text: Handle<UiNode>,
-# }
-# 
-# define_widget_deref!(MyButton);
-# 
-# impl Control for MyButton {
-#     fn query_component(&self, type_id: TypeId) -> Option<&dyn Any> {
-#         unimplemented!()
-#     }
-# 
-#     fn handle_routed_message(&mut self, ui: &mut UserInterface, message: &mut UiMessage) {
-#         unimplemented!()
-#     }
-# }
-#
-pub struct MyButtonBuilder {
-    widget_builder: WidgetBuilder,
-    // Some text of our button.
-    text: String,
-}
-
-impl MyButtonBuilder {
-    pub fn new(widget_builder: WidgetBuilder) -> Self {
-        Self {
-            widget_builder,
-            text: Default::default(),
-        }
-    }
-
-    pub fn with_text(mut self, text: String) -> Self {
-        self.text = text;
-        self
-    }
-
-    pub fn build(self, ctx: &mut BuildContext) -> Handle<UiNode> {
-        let text = TextBuilder::new(
-            WidgetBuilder::new()
-                .with_vertical_alignment(VerticalAlignment::Center)
-                .with_horizontal_alignment(HorizontalAlignment::Center),
-        )
-            .with_text(self.text)
-            .build(ctx);
-
-        let border = BorderBuilder::new(WidgetBuilder::new().with_child(text))
-            .with_stroke_thickness(Thickness::uniform(2.0))
-            .build(ctx);
-
-        let button = MyButton {
-            widget: self.widget_builder.with_child(border).build(),
-            border,
-            text,
-        };
-
-        ctx.add_node(UiNode::new(button))
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/ui/custom.rs:my_button_builder}}
 ```
 
 This is how a button is created, at first we're creating a border widget instance with a text widget as a child of it.
@@ -296,14 +66,8 @@ the last step we're adding the widget to the user interface.
 
 The widget could be created using the builder we've just made like so:
 
-```rust ,no_run,compile_fail
-MyButtonBuilder::new(
-    WidgetBuilder::new()
-        .with_width(200.0)
-        .with_height(32.0)
-)
-.with_text("Click Me!".to_string())
-.build(ctx);
+```rust,no_run
+{{#include ../code/snippets/src/ui/custom.rs:my_button_builder_usage}}
 ```
 
 ## Reacting to Click Messages
@@ -312,32 +76,8 @@ Our button sends a `Click` message every time when it was pressed, and we can us
 in an application. All you need to do is to catch `MyButtonMessage::Click` in `Plugin::on_ui_message` and do something
 in response:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::pool::Handle,
-#     gui::{message::UiMessage, UiNode},
-#     plugin::{Plugin, PluginContext},
-# };
-# 
-# #[derive(Debug, PartialEq)]
-# enum MyButtonMessage {
-#     Click,
-# }
-# 
-struct MyPlugin {
-    my_button: Handle<UiNode>,
-}
-
-impl Plugin for MyPlugin {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
-        if message.destination() == self.my_button {
-            if let Some(MyButtonMessage::Click) = message.data() {
-                // Do something.
-            }
-        }
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/ui/custom.rs:reacting_to_click_messages}}
 ```
 
 ## Custom widget or composition of widgets. 
