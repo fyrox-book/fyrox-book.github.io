@@ -78,8 +78,7 @@ impl Plugin for Game {
         // Handle UI events here.
     }
 
-    fn on_scene_begin_loading(&mut self, path: &Path, context: &mut PluginContext) {-
-        context.window_target.unwrap().ex
+    fn on_scene_begin_loading(&mut self, path: &Path, context: &mut PluginContext) {
         // Handle started scene loading here.
     }
 

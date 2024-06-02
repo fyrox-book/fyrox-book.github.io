@@ -1469,8 +1469,7 @@ impl Plugin for Game {
         // Handle UI events here.
     }
 
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) {-
-        context.window_target.unwrap().ex
+    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) {
         // Handle started scene loading here.
     }
 
@@ -2046,28 +2045,16 @@ and calculates a long path, that could take a few frames to compute (imagine a h
 a path from one corner to another). As the last argument to the <code>spawn_script_task</code> method we pass a closure that
 will be executed on the main thread when the task is complete. It just saves the computed path in the script's
 field which is then used for visualization.</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{
-</span><span class="boring">        algebra::Vector3, log::Log, pool::Handle, reflect::prelude::*, uuid::Uuid,
-</span><span class="boring">        visitor::prelude::*,
-</span><span class="boring">    },
-</span><span class="boring">    impl_component_provider,
-</span><span class="boring">    scene::{debug::Line, navmesh::NavigationalMesh, node::Node},
-</span><span class="boring">    script::{ScriptContext, ScriptTrait},
-</span><span class="boring">};
-</span><span class="boring">
-</span>#[derive(Visit, Default, Reflect, Debug, Clone)]
+</span>#[derive(Visit, Default, Reflect, Debug, Clone, ComponentProvider, TypeUuidProvider)]
+#[type_uuid(id = "efc71c98-ecf1-4ec3-a08d-116e1656611b")]
 struct MyScript {
     navmesh: Handle&lt;Node&gt;,
     path: Option&lt;Vec&lt;Vector3&lt;f32&gt;&gt;&gt;,
 }
 
-<span class="boring">impl_component_provider!(MyScript);
-</span><span class="boring">
-</span>impl ScriptTrait for MyScript {
+impl ScriptTrait for MyScript {
     fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
         // Borrow a navigational mesh scene node first.
         if let Some(navmesh_node) = ctx
@@ -2082,6 +2069,7 @@ struct MyScript {
             ctx.task_pool.spawn_script_task(
                 ctx.scene_handle,
                 ctx.handle,
+                ctx.script_index,
                 async move {
                     let navmesh = shared_navmesh.read();
 
@@ -2124,32 +2112,13 @@ struct MyScript {
             }
         }
     }
-<span class="boring">    
-</span><span class="boring">    fn id(&amp;self) -&gt; Uuid {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span>}
+}
 <span class="boring">}</span></code></pre></pre>
 <p>Plugins could also spawn tasks, which operates on application scale basis, unlike script tasks which operates with
 separate script instances. A plugin task is a bit easier to use:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::plugin::{Plugin, PluginConstructor, PluginContext};
-</span><span class="boring">use std::{fs::File, io::Read};
-</span><span class="boring">
-</span>struct MyGameConstructor;
-
-impl PluginConstructor for MyGameConstructor {
-    fn create_instance(
-        &amp;self,
-        _scene_path: Option&lt;&amp;str&gt;,
-        context: PluginContext,
-    ) -&gt; Box&lt;dyn Plugin&gt; {
-        Box::new(MyGame::new(context))
-    }
-}
-
+</span>#[derive(Debug, Visit, Reflect)]
 struct MyGame {
     data: Option&lt;Vec&lt;u8&gt;&gt;,
 }
