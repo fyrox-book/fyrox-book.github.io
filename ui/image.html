@@ -192,24 +192,18 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>
-fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
     // You must explicitly set width and height of the image, otherwise it will collapse to a
     // point and you won't see anything.
     let width = 100.0;
     let height = 100.0;
-    ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))        
-        .with_texture(into_gui_texture(
+    ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))
+        .with_texture(
             // Ask resource manager to load a texture.
-            resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"),
-        ))
+            resource_manager
+                .request::&lt;Texture&gt;("path/to/your/texture.png")
+                .into(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -221,22 +215,13 @@ width and height, then putting it to some container like Grid' cell will stretch
 bounds first and then create an Image width these bounds:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">    resource::texture::TextureKind,
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>
-async fn create_image(
+</span>async fn create_image_equal_in_size_to_source(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
 ) -&gt; Handle&lt;UiNode&gt; {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
-        .request::&lt;Texture, _&gt;("path/to/your/texture.png")
+        .request::&lt;Texture&gt;("path/to/your/texture.png")
         .await
     {
         // A texture can be not only rectangular, so we must check that.
@@ -247,7 +232,7 @@ async fn create_image(
                     .with_width(width as f32)
                     .with_height(height as f32),
             )
-            .with_texture(into_gui_texture(texture))
+            .with_texture(texture.into())
             .build(ctx);
         }
     }
@@ -262,44 +247,31 @@ data we must wait it. If you don't want to use async, then use any executor to b
 promise immediately:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    gui::{BuildContext, UiNode},
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">async fn create_image(
-</span><span class="boring">    ctx: &amp;mut BuildContext&lt;'_&gt;,
-</span><span class="boring">    resource_manager: ResourceManager,
-</span><span class="boring">) -&gt; Handle&lt;UiNode&gt; {
-</span><span class="boring">    Handle::NONE
-</span><span class="boring">}
 </span>fn create_image_sync(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
 ) -&gt; Handle&lt;UiNode&gt; {
-    fyrox::core::futures::executor::block_on(create_image(ctx, resource_manager))
+    fyrox::core::futures::executor::block_on(create_image_equal_in_size_to_source(
+        ctx,
+        resource_manager,
+    ))
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="vertical-flip"><a class="header" href="#vertical-flip">Vertical Flip</a></h2>
 <p>In some rare cases you need to flip your source image before showing it, there is <code>.with_flip</code> option for that:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>
-fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_flipped_image(
+    ctx: &amp;mut BuildContext,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
-        .with_texture(into_gui_texture(
-            resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"),
-        ))
+        .with_texture(
+            resource_manager
+                .request::&lt;Texture&gt;("path/to/your/texture.png")
+                .into(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>

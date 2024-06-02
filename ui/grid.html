@@ -191,55 +191,35 @@ implies, is able to position children widgets into a grid of specifically sized 
 <p>Here is a simple example that positions several text widgets into a 2 by 2 grid:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    UiNode,
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    text::TextBuilder,
-</span><span class="boring">    grid::{GridBuilder, GridDimension},
-</span><span class="boring">};
-</span>
-fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
-
+</span>fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
     GridBuilder::new(
         WidgetBuilder::new()
             .with_child(
                 TextBuilder::new(WidgetBuilder::new())
                     .with_text("top left ")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new()
-                        .on_column(1)
-                )
+                TextBuilder::new(WidgetBuilder::new().on_column(1))
                     .with_text(" top right")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new()
-                        .on_row(1)
-                )
+                TextBuilder::new(WidgetBuilder::new().on_row(1))
                     .with_text("bottom left ")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new()
-                        .on_row(1)
-                        .on_column(1)
-                )
+                TextBuilder::new(WidgetBuilder::new().on_row(1).on_column(1))
                     .with_text(" bottom right")
-                    .build(ctx)
-            )
-        )
-            .add_row(GridDimension::auto())
-            .add_row(GridDimension::auto())
-            .add_column(GridDimension::auto())
-            .add_column(GridDimension::auto())
-            .build(ctx)
+                    .build(ctx),
+            ),
+    )
+    .add_row(GridDimension::auto())
+    .add_row(GridDimension::auto())
+    .add_column(GridDimension::auto())
+    .add_column(GridDimension::auto())
+    .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled
@@ -250,14 +230,14 @@ widget. By default, all children will be placed into row 0, column 0.</p>
 add_column functions while providing a GridDimension instance to the call. GridDimension can be constructed with the
 following functions:</p>
 <ul>
-<li>GridDimension::auto() - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
-<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or
+<li><code>GridDimension::auto()</code> - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
+<li><code>GridDimension::stretch()</code> - Stretches the row or column to fill the parent's available space, if multiple rows or
 columns have this option the size is evenly distributed between them.</li>
-<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only
+<li><code>GridDimension::strict(f32)</code> - Sets the row or column to be exactly the given value of pixels long. So a row will only
 be the given number of pixels wide, while a column will be that many pixels tall.</li>
 </ul>
 <p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget
-in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between
+in it to be valid. For example, you can add a column and set it to a specific size via strict to provide spacing between
 two other columns.</p>
 
                     </main>

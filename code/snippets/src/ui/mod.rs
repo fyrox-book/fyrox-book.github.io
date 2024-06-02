@@ -4,6 +4,8 @@ pub mod canvas;
 pub mod check_box;
 pub mod custom;
 pub mod font;
+pub mod grid;
+pub mod image;
 pub mod rendering;
 
 use fyrox::asset::manager::ResourceManager;

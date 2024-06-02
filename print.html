@@ -7706,55 +7706,35 @@ implies, is able to position children widgets into a grid of specifically sized 
 <p>Here is a simple example that positions several text widgets into a 2 by 2 grid:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::gui::{
-</span><span class="boring">    UiNode,
-</span><span class="boring">    BuildContext,
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    text::TextBuilder,
-</span><span class="boring">    grid::{GridBuilder, GridDimension},
-</span><span class="boring">};
-</span>
-fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
-
+</span>fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
     GridBuilder::new(
         WidgetBuilder::new()
             .with_child(
                 TextBuilder::new(WidgetBuilder::new())
                     .with_text("top left ")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new()
-                        .on_column(1)
-                )
+                TextBuilder::new(WidgetBuilder::new().on_column(1))
                     .with_text(" top right")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new()
-                        .on_row(1)
-                )
+                TextBuilder::new(WidgetBuilder::new().on_row(1))
                     .with_text("bottom left ")
-                    .build(ctx)
+                    .build(ctx),
             )
             .with_child(
-                TextBuilder::new(
-                    WidgetBuilder::new()
-                        .on_row(1)
-                        .on_column(1)
-                )
+                TextBuilder::new(WidgetBuilder::new().on_row(1).on_column(1))
                     .with_text(" bottom right")
-                    .build(ctx)
-            )
-        )
-            .add_row(GridDimension::auto())
-            .add_row(GridDimension::auto())
-            .add_column(GridDimension::auto())
-            .add_column(GridDimension::auto())
-            .build(ctx)
+                    .build(ctx),
+            ),
+    )
+    .add_row(GridDimension::auto())
+    .add_row(GridDimension::auto())
+    .add_column(GridDimension::auto())
+    .add_column(GridDimension::auto())
+    .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
 <p>As with other UI widgets, Grids are created via the GridBuilder struct. Each widget whose position should be controlled
@@ -7765,14 +7745,14 @@ widget. By default, all children will be placed into row 0, column 0.</p>
 add_column functions while providing a GridDimension instance to the call. GridDimension can be constructed with the
 following functions:</p>
 <ul>
-<li>GridDimension::auto() - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
-<li>GridDimension::stretch() - Stretches the row or column to fill the parent's available space, if multiple rows or
+<li><code>GridDimension::auto()</code> - Sizes the row or column so it's just large enough to fit the largest child's size.</li>
+<li><code>GridDimension::stretch()</code> - Stretches the row or column to fill the parent's available space, if multiple rows or
 columns have this option the size is evenly distributed between them.</li>
-<li>GridDimension::strict(f32) - Sets the row or column to be exactly the given value of pixels long. So a row will only
+<li><code>GridDimension::strict(f32)</code> - Sets the row or column to be exactly the given value of pixels long. So a row will only
 be the given number of pixels wide, while a column will be that many pixels tall.</li>
 </ul>
 <p>You can add any number of rows and columns to a grid widget, and each grid cell does <strong>not</strong> need to have a UI widget
-in it to be valid. For example you can add a column and set it to a specific size via strict to provide spacing between
+in it to be valid. For example, you can add a column and set it to a specific size via strict to provide spacing between
 two other columns.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="image"><a class="header" href="#image">Image</a></h1>
 <p><img src="ui/image.png" alt="image" /></p>
@@ -7781,24 +7761,18 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
 <h2 id="usage-3"><a class="header" href="#usage-3">Usage</a></h2>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>
-fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
     // You must explicitly set width and height of the image, otherwise it will collapse to a
     // point and you won't see anything.
     let width = 100.0;
     let height = 100.0;
-    ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))        
-        .with_texture(into_gui_texture(
+    ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))
+        .with_texture(
             // Ask resource manager to load a texture.
-            resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"),
-        ))
+            resource_manager
+                .request::&lt;Texture&gt;("path/to/your/texture.png")
+                .into(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -7810,22 +7784,13 @@ width and height, then putting it to some container like Grid' cell will stretch
 bounds first and then create an Image width these bounds:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">    resource::texture::TextureKind,
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>
-async fn create_image(
+</span>async fn create_image_equal_in_size_to_source(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
 ) -&gt; Handle&lt;UiNode&gt; {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
-        .request::&lt;Texture, _&gt;("path/to/your/texture.png")
+        .request::&lt;Texture&gt;("path/to/your/texture.png")
         .await
     {
         // A texture can be not only rectangular, so we must check that.
@@ -7836,7 +7801,7 @@ async fn create_image(
                     .with_width(width as f32)
                     .with_height(height as f32),
             )
-            .with_texture(into_gui_texture(texture))
+            .with_texture(texture.into())
             .build(ctx);
         }
     }
@@ -7851,44 +7816,31 @@ data we must wait it. If you don't want to use async, then use any executor to b
 promise immediately:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager,
-</span><span class="boring">    gui::{BuildContext, UiNode},
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">async fn create_image(
-</span><span class="boring">    ctx: &amp;mut BuildContext&lt;'_&gt;,
-</span><span class="boring">    resource_manager: ResourceManager,
-</span><span class="boring">) -&gt; Handle&lt;UiNode&gt; {
-</span><span class="boring">    Handle::NONE
-</span><span class="boring">}
 </span>fn create_image_sync(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
 ) -&gt; Handle&lt;UiNode&gt; {
-    fyrox::core::futures::executor::block_on(create_image(ctx, resource_manager))
+    fyrox::core::futures::executor::block_on(create_image_equal_in_size_to_source(
+        ctx,
+        resource_manager,
+    ))
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="vertical-flip"><a class="header" href="#vertical-flip">Vertical Flip</a></h2>
 <p>In some rare cases you need to flip your source image before showing it, there is <code>.with_flip</code> option for that:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    asset::manager::ResourceManager, resource::texture::Texture,
-</span><span class="boring">    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
-</span><span class="boring">    utils::into_gui_texture,
-</span><span class="boring">};
-</span>
-fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_flipped_image(
+    ctx: &amp;mut BuildContext,
+    resource_manager: ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
-        .with_texture(into_gui_texture(
-            resource_manager.request::&lt;Texture, _&gt;("path/to/your/texture.png"),
-        ))
+        .with_texture(
+            resource_manager
+                .request::&lt;Texture&gt;("path/to/your/texture.png")
+                .into(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
