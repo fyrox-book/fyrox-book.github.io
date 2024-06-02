@@ -1,6 +1,7 @@
 pub mod border;
 pub mod button;
 pub mod canvas;
+pub mod custom;
 pub mod font;
 pub mod rendering;
 
