@@ -991,6 +991,8 @@ version = "0.1.0"
 dependencies = [
  "fyrox",
  "fyroxed_base",
+ "strum",
+ "strum_macros",
 ]
 
 [[package]]

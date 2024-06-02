@@ -2,6 +2,7 @@
 
 pub mod animation;
 pub mod borrowck;
+mod editor;
 pub mod input;
 pub mod rendering;
 pub mod resource;

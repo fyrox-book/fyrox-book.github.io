@@ -19,34 +19,7 @@ This is the most common case when you need to associate your type with a propert
 editor will be `InspectablePropertyEditorDefinition`:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-    core::reflect::prelude::*,
-    gui::inspector::editors::{
-        inspectable::InspectablePropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-# 
-# struct Editor {
-#     inspector: Inspector,
-# }
-# 
-# struct Inspector {
-#     property_editors: PropertyEditorDefinitionContainer,
-# }
-
-#[derive(Reflect, Debug)]
-struct MyStruct {
-    foo: u32,
-    bar: String,
-}
-
-# fn add_property_editor(editor: &Editor) {
-editor
-    .inspector
-    .property_editors
-    .insert(InspectablePropertyEditorDefinition::<MyStruct>::new());
-# }
+{{#include ../code/snippets/src/editor/prop_editors.rs:add_property_editor}}
 ```
 
 Keep in mind, that your structure must implement `Reflect` trait, otherwise you'll get a compilation error.
@@ -58,47 +31,15 @@ implemented for your enumeration. At first, make sure that your `editor` project
 
 ```toml
 #[dependencies]
-strum = "0.25.0"
-strum_macros = "0.25.0"
+strum = "0.26.0"
+strum_macros = "0.26.0"
 ```
 
 These two crates responsible for enum to string (and vice versa) conversions which will be very useful for us. The 
 following example shows a typical usage:
 
 ```rust,no_run
-# extern crate fyrox;
-# extern crate strum_macros;
-# extern crate strum;
-use fyrox::{
-    core::reflect::prelude::*,
-    gui::inspector::editors::{
-        enumeration::EnumPropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-use strum_macros::{AsRefStr, EnumString, EnumVariantNames};
-# 
-# struct Editor {
-#     inspector: Inspector,
-# }
-# 
-# struct Inspector {
-#     property_editors: PropertyEditorDefinitionContainer,
-# }
-
-#[derive(Reflect, Default, Debug, AsRefStr, EnumString, EnumVariantNames, Clone)]
-enum MyEnum {
-    #[default]
-    Baz,
-    Foo(u32),
-    Bar { baz: String, foobar: u32 },
-}
-
-# fn add_property_editor(editor: &Editor) {
-editor
-    .inspector
-    .property_editors
-    .insert(EnumPropertyEditorDefinition::<MyEnum>::new());
-# }
+{{#include ../code/snippets/src/editor/prop_editors.rs:add_enum_property_editor}}
 ```
 
 As you can see, your enumeration needs a decent amount of trait implementations, hopefully all of them can be derived.
@@ -110,53 +51,7 @@ then you need one more step. In case of inheritable variables, your fields will 
 this fact requires you to register an appropriate property editor for this:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-    core::{reflect::prelude::*, variable::InheritableVariable},
-    gui::inspector::editors::{
-        inherit::InheritablePropertyEditorDefinition,
-        inspectable::InspectablePropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-# 
-# struct Editor {
-#     inspector: Inspector,
-# }
-# 
-# struct Inspector {
-#     property_editors: PropertyEditorDefinitionContainer,
-# }
-
-#[derive(Reflect, Debug)]
-struct MyStruct {
-    foo: u32,
-    bar: String,
-}
-
-// An example script with inheritable field of custom structure.
-struct MyScript {
-    inheritable: InheritableVariable<MyStruct>,
-}
-
-# fn add_property_editor(editor: &Editor) {
-editor
-    .inspector
-    .property_editors
-    .insert(InspectablePropertyEditorDefinition::<MyStruct>::new());
-
-// This is responsible for supporting inheritable properties in scripts.
-editor
-    .inspector
-    .property_editors
-    .insert(InheritablePropertyEditorDefinition::<MyStruct>::new());
-
-// Alternatively, the two previous insertions could be replaced by a single call of helper
-// method:
-editor
-    .inspector
-    .property_editors
-    .register_inheritable_inspectable::<MyStruct>();
-# }
+{{#include ../code/snippets/src/editor/prop_editors.rs:inheritable}}
 ```
 
 ### Collections
@@ -165,54 +60,7 @@ If you have a vector of some custom structure (`Vec<MyStruct>`), then you also n
 it:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::{
-    core::reflect::prelude::*,
-    gui::inspector::editors::{
-        collection::VecCollectionPropertyEditorDefinition,
-        inspectable::InspectablePropertyEditorDefinition, PropertyEditorDefinitionContainer,
-    },
-};
-# 
-# struct Editor {
-#     inspector: Inspector,
-# }
-# 
-# struct Inspector {
-#     property_editors: PropertyEditorDefinitionContainer,
-# }
-
-#[derive(Reflect, Clone, Debug, Default)]
-struct MyStruct {
-    foo: u32,
-    bar: String,
-}
-
-// An example script with Vec field of custom structure.
-struct MyScript {
-    inheritable: Vec<MyStruct>,
-}
-
-# fn add_property_editor(editor: &Editor) {
-editor
-    .inspector
-    .property_editors
-    .insert(InspectablePropertyEditorDefinition::<MyStruct>::new());
-
-// VecCollectionPropertyEditorDefinition is used to create a property editor for Vec<MyStruct>,
-// internally it uses a registered property editor for its generic argument (MyStruct).
-editor
-    .inspector
-    .property_editors
-    .insert(VecCollectionPropertyEditorDefinition::<MyStruct>::new());
-
-// Alternatively, you can use a special helper method to replace the two blocks above by a
-// single one.
-editor
-    .inspector
-    .property_editors
-    .register_inheritable_vec_collection::<MyStruct>();
-# }
+{{#include ../code/snippets/src/editor/prop_editors.rs:collections}}
 ```
 
 ## Custom Property Editors
