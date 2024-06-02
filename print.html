@@ -8438,11 +8438,6 @@ word wrapping, text alignment, and so on.</p>
 <p>An instance of the TextBox widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{text_box::TextBoxBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
 </span>fn create_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_text(text)
@@ -8455,34 +8450,18 @@ word wrapping, text alignment, and so on.</p>
 centered text could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        text_box::TextBoxBuilder, widget::WidgetBuilder, HorizontalAlignment, UiNode, UserInterface,
-</span><span class="boring">        VerticalAlignment,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
-    .with_text(text)
-    .build(&amp;mut ui.build_ctx())
+        .with_text(text)
+        .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Long text is usually needs to wrap on available bounds, there are three possible options for word wrapping:
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        formatted_text::WrapMode, text_box::TextBoxBuilder, widget::WidgetBuilder, UiNode,
-</span><span class="boring">        UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
@@ -8494,12 +8473,7 @@ centered text could be created like so:</p>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{color::Color, pool::Handle},
-</span><span class="boring">    gui::{brush::Brush, text_box::TextBoxBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
-</span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_colored_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     //                  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
         .with_text(text)
@@ -8509,45 +8483,20 @@ centered text could be created like so:</p>
 <p>By default, text is created with default font, however it is possible to set any custom font:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{futures::executor::block_on, pool::Handle},
-</span><span class="boring">    gui::{
-</span><span class="boring">        text_box::TextBoxBuilder,
-</span><span class="boring">        ttf::{Font, SharedFont},
-</span><span class="boring">        widget::WidgetBuilder,
-</span><span class="boring">        UiNode, UserInterface,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span>
-fn load_font() -&gt; SharedFont {
-    // Choose desired character set, default is Basic Latin + Latin Supplement.
-    // Character set is a set of ranges with Unicode code points.
-    let character_set = Font::default_char_set();
-
-    // Normally `block_on` should be avoided.
-    let font = block_on(Font::from_file(
-        "path/to/your/font.ttf",
-        24.0,
-        character_set,
-    ))
-    .unwrap();
-
-    SharedFont::new(font)
-}
-
-fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_font(
+    ui: &amp;mut UserInterface,
+    text: &amp;str,
+    resource_manager: &amp;ResourceManager,
+) -&gt; Handle&lt;UiNode&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
-        .with_font(load_font())
+        .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
+        // You can set any size as well.
+        .with_font_size(24.0)
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Please refer to <a href="ui/font.html">Font</a> chapter to learn more about fonts.</p>
-<h3 id="font-size"><a class="header" href="#font-size">Font size</a></h3>
-<p>There is no way to change font size without changing the entire font used by Text, it is known issue and there is
-<a href="https://github.com/FyroxEngine/Fyrox/issues/74">tracking issue</a> for that. Check <a href="ui/font.html">Font</a> chapter to learn how
-to create fonts.</p>
 <h2 id="messages-1"><a class="header" href="#messages-1">Messages</a></h2>
 <p>TextBox widget accepts the following list of messages:</p>
 <ul>
@@ -8561,15 +8510,6 @@ to create fonts.</p>
 example of changing text at runtime could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        message::{MessageDirection},
-</span><span class="boring">        UiNode, UserInterface,
-</span><span class="boring">        text::TextMessage
-</span><span class="boring">    },
-</span><span class="boring">};
 </span>fn request_change_text(ui: &amp;UserInterface, text_box_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
     ui.send_message(TextMessage::text(
         text_box_widget_handle,
@@ -8620,16 +8560,10 @@ This is <strong>default</strong> behavior. In case of multiline text box hitting
 phone number. A filter can be specified at build stage like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{text_box::TextBoxBuilder, widget::WidgetBuilder, UiNode, UserInterface},
-</span><span class="boring">};
-</span><span class="boring">use std::{cell::RefCell, rc::Rc};
-</span>fn create_text_box(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_box_with_filter(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         // Specify a filter that will pass only digits.
-        .with_filter(Rc::new(RefCell::new(|c: char| c.is_ascii_digit())))
+        .with_filter(Arc::new(Mutex::new(|c: char| c.is_ascii_digit())))
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
@@ -8653,18 +8587,7 @@ on the picture above there are two yellow lines forming a cross.</p>
 <p>The following example creates a cross shape with given size and thickness:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">use fyrox_ui::{
-</span><span class="boring">    core::{algebra::Vector2, pool::Handle},
-</span><span class="boring">    vector_image::{Primitive, VectorImageBuilder},
-</span><span class="boring">    widget::WidgetBuilder,
-</span><span class="boring">    BuildContext, UiNode, BRUSH_BRIGHT,
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn make_cross_vector_image(
-    ctx: &amp;mut BuildContext,
-    size: f32,
-    thickness: f32,
-) -&gt; Handle&lt;UiNode&gt; {
+</span>fn make_cross_vector_image(ctx: &amp;mut BuildContext, size: f32, thickness: f32) -&gt; Handle&lt;UiNode&gt; {
     VectorImageBuilder::new(
         WidgetBuilder::new()
             // Color of the image is defined by the foreground brush of the base widget.
@@ -8701,19 +8624,7 @@ so users can do any of the following:</p>
 <p>As with other UI elements, you create and configure the window using the WindowBuilder.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::{pool::Handle, algebra::Vector2},
-    gui::{
-        window::{WindowBuilder, WindowTitle}, 
-        text::TextBuilder, 
-        widget::WidgetBuilder, 
-        UiNode, 
-        UserInterface
-    },
-};
-
-fn create_window(ui: &amp;mut UserInterface) {
+</span>fn create_window(ui: &amp;mut UserInterface) {
     WindowBuilder::new(
         WidgetBuilder::new()
             .with_desired_position(Vector2::new(300.0, 0.0))
@@ -8722,7 +8633,7 @@ fn create_window(ui: &amp;mut UserInterface) {
     .with_content(
         TextBuilder::new(WidgetBuilder::new())
             .with_text("Example Window content.")
-            .build(&amp;mut ui.build_ctx())
+            .build(&amp;mut ui.build_ctx()),
     )
     .with_title(WindowTitle::text("Window"))
     .can_close(true)
@@ -8762,14 +8673,6 @@ that does not have enough space on current line, will automatically be placed on
 <p>Use <code>WrapPanelBuilder</code> to create new wrap panel instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::pool::Handle,
-</span><span class="boring">    gui::{
-</span><span class="boring">        widget::WidgetBuilder, wrap_panel::WrapPanelBuilder, BuildContext, Orientation, UiNode,
-</span><span class="boring">    },
-</span><span class="boring">};
-</span><span class="boring">
 </span>fn create_wrap_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     WrapPanelBuilder::new(WidgetBuilder::new())
         .with_orientation(Orientation::Horizontal)

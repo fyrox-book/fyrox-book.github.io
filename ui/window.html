@@ -199,19 +199,7 @@ so users can do any of the following:</p>
 <p>As with other UI elements, you create and configure the window using the WindowBuilder.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span>use fyrox::{
-    core::{pool::Handle, algebra::Vector2},
-    gui::{
-        window::{WindowBuilder, WindowTitle}, 
-        text::TextBuilder, 
-        widget::WidgetBuilder, 
-        UiNode, 
-        UserInterface
-    },
-};
-
-fn create_window(ui: &amp;mut UserInterface) {
+</span>fn create_window(ui: &amp;mut UserInterface) {
     WindowBuilder::new(
         WidgetBuilder::new()
             .with_desired_position(Vector2::new(300.0, 0.0))
@@ -220,7 +208,7 @@ fn create_window(ui: &amp;mut UserInterface) {
     .with_content(
         TextBuilder::new(WidgetBuilder::new())
             .with_text("Example Window content.")
-            .build(&amp;mut ui.build_ctx())
+            .build(&amp;mut ui.build_ctx()),
     )
     .with_title(WindowTitle::text("Window"))
     .can_close(true)

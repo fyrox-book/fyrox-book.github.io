@@ -15,6 +15,10 @@ pub mod scroll_viewer;
 pub mod stack_panel;
 pub mod tab;
 pub mod text;
+pub mod text_box;
+pub mod vector_image;
+pub mod window;
+pub mod wrap_panel;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;
