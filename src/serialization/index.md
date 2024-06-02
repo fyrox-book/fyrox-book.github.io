@@ -37,22 +37,7 @@ To use the macro, you must import all types related to `Visit` trait by `use fyr
 an example:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::core::visitor::prelude::*;
-
-#[derive(Visit)]
-struct MyStruct {
-    foo: u32,
-
-    #[visit(rename = "baz")]
-    foobar: f32,
-
-    #[visit(optional)]
-    optional: String,
-
-    #[visit(skip)]
-    ignored: usize,
-}
+{{#include ../code/snippets/src/serialization/mod.rs:my_struct}}
 ```
 
 ### Manual implementation
@@ -61,35 +46,7 @@ Manual implementation of the trait gives you an opportunity to fix compatibility
 during serialization (logging, for instance). Typical manual implementation could look like this:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::core::visitor::prelude::*;
-
-struct MyStruct {
-    foo: u32,
-    foobar: f32,
-    optional: String,
-    ignored: usize,
-}
-
-impl Visit for MyStruct {
-    fn visit(&mut self, name: &str, visitor: &mut Visitor) -> VisitResult {
-        // Create a region first.
-        let mut region = visitor.enter_region(name)?;
-
-        // Add fields to it.
-        self.foo.visit("Foo", &mut region)?;
-
-        // Manually rename the field for serialization.
-        self.foobar.visit("Baz", &mut region)?;
-
-        // Ignore result for option field.
-        let _ = self.optional.visit("Baz", &mut region);
-
-        // Ignore `self.ignored`
-
-        Ok(())
-    }
-}
+{{#include ../code/snippets/src/serialization/mod.rs:my_struct_with_manual_visit}}
 ```
 
 This code pretty much shows the result of macro expansion from the previous section. As you can see, proc-macro saves
@@ -103,42 +60,8 @@ the following section for more info.
 To serialize an object all you need to do is to create an instance of a Visitor in either read or write mode and use it
 like so:
 
-```rust,no_run,edition2021
-# extern crate fyrox;
-use fyrox::core::visitor::prelude::*;
-use std::path::Path;
-
-#[derive(Visit, Default)]
-struct MyStruct {
-    foo: u32,
-
-    #[visit(rename = "baz")]
-    foobar: f32,
-
-    #[visit(optional)]
-    optional: String,
-
-    #[visit(skip)]
-    ignored: usize,
-}
-
-async fn visit_my_structure(path: &Path, object: &mut MyStruct, write: bool) -> VisitResult {
-    if write {
-        let mut visitor = Visitor::new();
-        object.visit("MyObject", &mut visitor)?;
-
-        // Dump to the path.
-        visitor.save_binary(path)
-    } else {
-        let mut visitor = Visitor::load_binary(path).await?;
-
-        // Create default instance of an object.
-        let mut my_object = MyStruct::default();
-
-        // "Fill" it with contents from visitor.
-        my_object.visit("MyObject", &mut visitor)
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/serialization/mod.rs:visit_my_structure}}
 ```
 
 The key function here is `visit_my_structure` which works in both serialization and deserialization modes depending on
@@ -156,42 +79,7 @@ Sometimes there is a need to pass custom data to `visit` methods, one of the way
 of the visitor:
 
 ```rust,no_run
-# extern crate fyrox;
-use fyrox::core::visitor::prelude::*;
-use std::sync::Arc;
-
-struct MyStruct {
-    // Fields are intentionally omitted.
-}
-
-struct MyEnvironment {
-    some_data: String,
-}
-
-impl Visit for MyStruct {
-    fn visit(&mut self, name: &str, visitor: &mut Visitor) -> VisitResult {
-        if let Some(environment) = visitor
-            .blackboard
-            .get::<MyEnvironment>()            
-        {
-            println!("{}", environment.some_data);
-        }
-
-        Ok(())
-    }
-}
-
-fn serialize_with_environment() {
-    let mut my_object = MyStruct {};
-
-    let mut visitor = Visitor::new();
-
-    visitor.blackboard.register(Arc::new(MyEnvironment {
-        some_data: "Foobar".to_owned(),
-    }));
-
-    my_object.visit("MyObject", &mut visitor).unwrap();
-}
+{{#include ../code/snippets/src/serialization/mod.rs:environment}}
 ```
 
 ## Limitations

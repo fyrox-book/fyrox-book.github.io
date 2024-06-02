@@ -19,67 +19,8 @@ Fyrox offers a built-in system for saved games. It does exactly what said in the
 your scene which can be loaded later as an ordinary scene and the engine will do all the magic for you. Typical usage of
 this system is very simple:
 
-```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{pool::Handle, visitor::Visitor},
-#     plugin::{Plugin, PluginContext},
-#     scene::Scene,
-# };
-# use std::path::Path;
-# 
-struct MyGame {
-    scene: Handle<Scene>,
-}
-
-impl MyGame {
-    fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
-        // Load the scene as usual.
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
-    }
-
-    fn save_game(&mut self, context: &mut PluginContext) {
-        let mut visitor = Visitor::new();
-        // Serialize the current scene.
-        context.scenes[self.scene]
-            .save("Scene", &mut visitor)
-            .unwrap();
-        // Save it to a file.
-        visitor.save_binary(Path::new("save.rgs")).unwrap()
-    }
-
-    fn load_game(&mut self, context: &mut PluginContext) {
-        // Loading of a saved game is very easy - just ask the engine to load your save file.
-        // Note the difference with `Game::new` - here we use `request_raw` instead of
-        // `request` method. The main difference is that `request` creates a derived scene
-        // from a source scene, but `request_raw` loads the scene without any modifications.
-        context.async_scene_loader.request_raw("save.rgs");
-    }
-}
-
-impl Plugin for MyGame {
-    fn on_scene_begin_loading(&mut self, _path: &Path, context: &mut PluginContext) {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        _path: &Path,
-        scene: Handle<Scene>,
-        _data: &[u8],
-        _context: &mut PluginContext,
-    ) {
-        self.scene = scene;
-    }
-}
+```rust,no_run
+{{#include ../code/snippets/src/serialization/save.rs:save}}
 ```
 
 This is a typical structure of a game that supports saving and loading. As you can see, it is pretty much the same as
@@ -106,84 +47,7 @@ to do:
 
 
 ```rust ,no_run
-# extern crate fyrox;
-# use fyrox::{
-#     core::{pool::Handle, visitor::prelude::*, visitor::Visitor},
-#     plugin::{Plugin, PluginContext},
-#     scene::Scene,
-# };
-# use std::path::Path;
-# 
-#[derive(Visit, Default)]
-struct MyData {
-    foo: String,
-    bar: u32,
-}
-
-struct MyGame {
-    scene: Handle<Scene>,
-    data: MyData,
-}
-
-impl MyGame {
-    fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
-        // Load the scene as usual.
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-            data: Default::default(),
-        }
-    }
-
-    fn save_game(&mut self, context: &mut PluginContext) {
-        let mut visitor = Visitor::new();
-
-        // Serialize the current scene.
-        context.scenes[self.scene]
-            .save("Scene", &mut visitor)
-            .unwrap();
-
-        // Write additional data.
-        self.data.visit("Data", &mut visitor).unwrap();
-
-        // Save it to a file.
-        visitor.save_binary(Path::new("save.rgs")).unwrap()
-    }
-
-    pub fn load_game(&mut self, context: &mut PluginContext) {
-        // Loading of a saved game is very easy - just ask the engine to load your scene.
-        // Note the difference with `Game::new` - here we use `request_raw` instead of
-        // `request` method. The main difference is that `request` creates a derived scene
-        // from a source scene, but `request_raw` loads the scene without any modifications.
-        context.async_scene_loader.request_raw("save.rgs");
-    }
-}
-
-impl Plugin for MyGame {
-    fn on_scene_begin_loading(&mut self, _path: &Path, context: &mut PluginContext) {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        _path: &Path,
-        scene: Handle<Scene>,
-        data: &[u8],
-        _context: &mut PluginContext,
-    ) {
-        self.scene = scene;
-
-        // Restore the data when the scene was loaded.
-        if let Ok(mut visitor) = Visitor::load_from_memory(data) {
-            self.data.visit("Data", &mut visitor).unwrap();
-        }
-    }
-}
+{{#include ../code/snippets/src/serialization/save_custom.rs:save}}
 ```
 
 The main difference here with the code snippet from the previous section is that now we have `MyData` structure which
