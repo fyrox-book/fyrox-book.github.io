@@ -12,6 +12,4 @@ There are very simple contribution rules:
 
 ### Tests
 
-Every code snippet is tested for compilation, please run `test.bat` (or its analog on Linux) before submitting
-your work. Any fixes/improvements should be tested with version of the engine from engine's 
-[GitHub repo](https://github.com/FyroxEngine/Fyrox).
+Every code snippet is tested for compilation, please run `cd src/code/snippets && cargo check`.

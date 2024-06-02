@@ -26,16 +26,10 @@ jobs:
       - name: Install Dependencies
         run: sudo apt-get install libasound2-dev libudev-dev pkg-config xorg-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev
 
-      - name: Install fyrox
-        run: git clone https://github.com/FyroxEngine/Fyrox
-
-      - name: Build fyrox
-        run: cd Fyrox && cargo build && cd ../.
-
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
         with:
           mdbook-version: "latest"
 
       - name: Test Code
-        run: mdbook test -L ./target/debug/deps
+        run: cd src/code/snippets && cargo check
