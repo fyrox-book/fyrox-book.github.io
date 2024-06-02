@@ -7,38 +7,7 @@ header and the other representing the tab's contents.
 The following example makes a 2 tab, Tab Control containing some simple text widgets:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::gui::{
-#     tab_control::{TabControlBuilder, TabDefinition},
-#     text::TextBuilder,
-#     widget::WidgetBuilder,
-#     BuildContext,
-# };
-# 
-fn create_tab_control(ctx: &mut BuildContext) {
-    TabControlBuilder::new(WidgetBuilder::new())
-        .with_tab(TabDefinition {
-            header: TextBuilder::new(WidgetBuilder::new())
-                .with_text("First")
-                .build(ctx),
-            content: TextBuilder::new(WidgetBuilder::new())
-                .with_text("First tab's contents!")
-                .build(ctx),
-            can_be_closed: true,
-            user_data: None,
-        })
-        .with_tab(TabDefinition {
-            header: TextBuilder::new(WidgetBuilder::new())
-                .with_text("Second")
-                .build(ctx),
-            content: TextBuilder::new(WidgetBuilder::new())
-                .with_text("Second tab's contents!")
-                .build(ctx),
-            can_be_closed: true,
-            user_data: None,
-        })
-        .build(ctx);
-}
+{{#include ../code/snippets/src/ui/tab.rs:create_tab_control}}
 ```
 
 As usual, we create the widget via the builder TabControlBuilder. Tabs are added via the *with_tab* function in the 
@@ -61,27 +30,5 @@ tab headers are scrunched when there are no margins provided to your text widget
 code example and you will get a decent look:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::gui::{
-#     BuildContext,
-#     widget::WidgetBuilder,
-#     text::TextBuilder,
-#     Thickness, 
-#     tab_control::{TabDefinition},
-# };
-
-# fn build(ctx: &mut BuildContext) {
-# TabDefinition{
-header: TextBuilder::new(
-            WidgetBuilder::new()
-                .with_margin(Thickness::uniform(4.0))
-        )
-            .with_text("First")
-            .build(ctx),
-# content: Default::default(),
-# can_be_closed: true,
-# user_data: None,
-# };
-# }
-
+{{#include ../code/snippets/src/ui/tab.rs:create_tab_control_with_header}}
 ```

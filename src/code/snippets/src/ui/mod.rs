@@ -13,6 +13,8 @@ pub mod scroll_bar;
 pub mod scroll_panel;
 pub mod scroll_viewer;
 pub mod stack_panel;
+pub mod tab;
+pub mod text;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;
