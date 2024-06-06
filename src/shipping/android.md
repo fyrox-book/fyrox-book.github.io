@@ -41,4 +41,4 @@ cargo-apk apk build --target=armv7-linux-androideabi
 
 ## Automation
 
-Android builds are not yet automated, because of lots of preparation steps. 
+Use the [project exporter](shipping.md) for automated builds.
