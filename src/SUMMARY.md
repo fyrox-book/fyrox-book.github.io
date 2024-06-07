@@ -73,7 +73,7 @@
   - [Sound Buffers (WIP)](./resources/sound.md)
   - [Curves (WIP)](./resources/curve.md)
   - [Custom Resource](./resources/custom.md)
-  - [Hot Reloading (WIP)](./resources/hot_reloading.md)
+  - [Asset Hot Reloading](./resources/hot_reloading.md)
 - [Engine](./engine/engine.md)
   - [Window Management](./engine/windows.md)
   - [Graphics Context (WIP)](./engine/graphics_context.md)

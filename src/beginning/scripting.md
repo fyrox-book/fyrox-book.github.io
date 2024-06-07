@@ -56,9 +56,9 @@ cargo run --package editor --release
 
 ## Project Generator
 
-Fyrox plugins are static, this means that if the source code of the game changes one must recompile. This architecture
-requires some boilerplate code. Fyrox offers a special tiny tool - `fyrox-template` - that helps generate all this
-boilerplate with a single command. Install it by running the following command:
+Fyrox plugins are written in Rust, this means that if the source code of the game changes one must recompile. 
+This architecture requires some boilerplate code. Fyrox offers a special tiny command line tool - `fyrox-template`. It 
+helps generate all this boilerplate with a single command. Install it by running the following command:
 
 ```shell
 cargo install fyrox-template
@@ -111,7 +111,10 @@ There are three main variants for `--version` switch:
 
 - `nightly` - uses latest nightly version of the engine from GitHub directly. This is the preferable version if you want
 to use the latest changes and bug fixes as they release.
-- `latest` - uses latest stable version of the engine.
+- `latest` - uses latest stable version of the engine. This option also supports `--local` key, that sets the path to
+the engine to `../Fyrox/fyrox` and the editor to `../Fyrox/editor`. Obviously, such path requires the engine to be located
+in the parent directory of your project. This option could be useful if you want to use custom version of the engine 
+(for example, if you're developing a patch for the engine).
 - `major.minor.patch` - uses specific stable version from crates.io (`0.30.0` for example).
 
 ### Manual
