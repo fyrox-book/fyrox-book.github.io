@@ -26,7 +26,7 @@ is well documented, and you may find some functions useful for you job.
 
 Shader has rigid structure that could be described in this code snippet:
 
-```ron
+```json
 (
     // A set of properties, there could be any amount of properties.
     properties: [
@@ -136,18 +136,29 @@ a "global namespace", which means that every sub-shader has "access" to the prop
 There are number of built-in properties, that Fyrox will try to assign automatically if they're defined
 in your shader:
 
-| Name                       | Type         | Description                                                                                                       |
-|----------------------------|--------------|-------------------------------------------------------------------------------------------------------------------|
-| fyrox_worldMatrix          | `mat4`       | Local-to-world transformation.                                                                                    |
-| fyrox_worldViewProjection  | `mat4`       | Local-to-clip-space transform.                                                                                    |
-| fyrox_boneMatrices         | `sampler2D`  | Array of bone matrices packed into a texture. Use `S_FetchMatrix` built-in method to fetch a matrix by its index. |
-| fyrox_useSkeletalAnimation | `bool`       | Whether skinned meshes is rendering or not.                                                                       |
-| fyrox_cameraPosition       | `vec3`       | Position of the camera.                                                                                           |
-| fyrox_usePOM               | `bool`       | Whether to use parallax mapping or not.                                                                           |
-| fyrox_lightPosition        | `vec3`       | Light position.                                                                                                   |
-| fyrox_blendShapesStorage   | `sampler3D`  | 3D texture of layered blend shape storage. Use `S_FetchBlendShapeOffsets` built-in method to fetch info.          | 
-| fyrox_blendShapesWeights   | `float[128]` | Weights of all available blend shapes.                                                                            | 
-| fyrox_blendShapesCount     | `int`        | Total amount of blend shapes.                                                                                     | 
+| Name                       | Type         | Description                                                                                                                                                  |
+|----------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| fyrox_worldMatrix          | `mat4`       | Local-to-world transformation.                                                                                                                               |
+| fyrox_worldViewProjection  | `mat4`       | Local-to-clip-space transform.                                                                                                                               |
+| fyrox_boneMatrices         | `sampler2D`  | Array of bone matrices packed into a texture. Use `S_FetchMatrix` built-in method to fetch a matrix by its index.                                            |
+| fyrox_useSkeletalAnimation | `bool`       | Whether skinned meshes is rendering or not.                                                                                                                  |
+| fyrox_cameraPosition       | `vec3`       | Position of the camera in world coordinates.                                                                                                                 |
+| fyrox_cameraUpVector       | `vec3`       | Up vector of the camera in world coordinates.                                                                                                                |
+| fyrox_cameraSideVector     | `vec3`       | Side vector of the camera in world coordinates.                                                                                                              |
+| fyrox_zNear                | `float`      | Near clipping plane of the camera.                                                                                                                           |
+| fyrox_zFar                 | `float`      | Far clipping plane of the camera.                                                                                                                            |
+| fyrox_sceneDepth           | `sampler2D`  | 2D texture with the depth values of the scene. Available only after GBuffer pass.                                                                            |
+| fyrox_usePOM               | `bool`       | Whether to use parallax mapping or not.                                                                                                                      |
+| fyrox_blendShapesStorage   | `sampler3D`  | 3D texture of layered blend shape storage. Use `S_FetchBlendShapeOffsets` built-in method to fetch info.                                                     | 
+| fyrox_blendShapesWeights   | `float[128]` | Weights of all available blend shapes.                                                                                                                       | 
+| fyrox_blendShapesCount     | `int`        | Total amount of blend shapes.                                                                                                                                |
+| fyrox_lightPosition        | `vec3`       | Light position on world coordinates.                                                                                                                         |
+| fyrox_lightCount           | `int`        | Total light count participating in the rendering. Available in forward render pass only.                                                                     |
+| fyrox_lightsColorRadius    | `vec4[16]`   | `xyz` - RGB color of the light, `a` - effective radius of the light. Available in forward render pass only.                                                  |
+| fyrox_lightsPosition       | `vec3[16]`   | Array of world-space positions of the lights participating in the rendering. Available in forward render pass only.                                          |
+| fyrox_lightsDirection      | `vec3[16]`   | Array of directions (world-space) of the lights participating in the rendering. Available in forward render pass only.                                       |
+| fyrox_lightsParameters     | `vec2[16]`   | Array of parameters of lights participating in the rendering, where `x` - hotspot angle, `y` - full cone angle delta. Available in forward render pass only. |
+| fyrox_ambientLight         | `vec4`       | Ambient lighting.                                                                                                                                            |
 
 To use any of the properties, just define a uniform with an appropriate name:
 

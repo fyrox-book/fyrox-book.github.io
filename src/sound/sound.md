@@ -77,7 +77,7 @@ If we want to play background music (or anyway a repeated sound), we just set th
 In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a 
 corresponding `.options` file, with the following content:
 
-```ron
+```json
 (
   stream: true
 )

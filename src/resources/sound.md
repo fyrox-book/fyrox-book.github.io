@@ -16,7 +16,7 @@ Sound buffers could be loaded using standard resource manager methods:
 In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a
 corresponding `.options` file near the source file, with the following content:
 
-```ron
+```json
 (
   stream: true
 )
