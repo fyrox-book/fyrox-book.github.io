@@ -206,7 +206,7 @@ is well documented, and you may find some functions useful for you job.</li>
 </ol>
 <h2 id="structure"><a class="header" href="#structure">Structure</a></h2>
 <p>Shader has rigid structure that could be described in this code snippet:</p>
-<pre><code class="language-ron">(
+<pre><code class="language-json">(
     // A set of properties, there could be any amount of properties.
     properties: [
         (
@@ -318,12 +318,23 @@ in your shader:</p>
 <tr><td>fyrox_worldViewProjection</td><td><code>mat4</code></td><td>Local-to-clip-space transform.</td></tr>
 <tr><td>fyrox_boneMatrices</td><td><code>sampler2D</code></td><td>Array of bone matrices packed into a texture. Use <code>S_FetchMatrix</code> built-in method to fetch a matrix by its index.</td></tr>
 <tr><td>fyrox_useSkeletalAnimation</td><td><code>bool</code></td><td>Whether skinned meshes is rendering or not.</td></tr>
-<tr><td>fyrox_cameraPosition</td><td><code>vec3</code></td><td>Position of the camera.</td></tr>
+<tr><td>fyrox_cameraPosition</td><td><code>vec3</code></td><td>Position of the camera in world coordinates.</td></tr>
+<tr><td>fyrox_cameraUpVector</td><td><code>vec3</code></td><td>Up vector of the camera in world coordinates.</td></tr>
+<tr><td>fyrox_cameraSideVector</td><td><code>vec3</code></td><td>Side vector of the camera in world coordinates.</td></tr>
+<tr><td>fyrox_zNear</td><td><code>float</code></td><td>Near clipping plane of the camera.</td></tr>
+<tr><td>fyrox_zFar</td><td><code>float</code></td><td>Far clipping plane of the camera.</td></tr>
+<tr><td>fyrox_sceneDepth</td><td><code>sampler2D</code></td><td>2D texture with the depth values of the scene. Available only after GBuffer pass.</td></tr>
 <tr><td>fyrox_usePOM</td><td><code>bool</code></td><td>Whether to use parallax mapping or not.</td></tr>
-<tr><td>fyrox_lightPosition</td><td><code>vec3</code></td><td>Light position.</td></tr>
 <tr><td>fyrox_blendShapesStorage</td><td><code>sampler3D</code></td><td>3D texture of layered blend shape storage. Use <code>S_FetchBlendShapeOffsets</code> built-in method to fetch info.</td></tr>
 <tr><td>fyrox_blendShapesWeights</td><td><code>float[128]</code></td><td>Weights of all available blend shapes.</td></tr>
 <tr><td>fyrox_blendShapesCount</td><td><code>int</code></td><td>Total amount of blend shapes.</td></tr>
+<tr><td>fyrox_lightPosition</td><td><code>vec3</code></td><td>Light position on world coordinates.</td></tr>
+<tr><td>fyrox_lightCount</td><td><code>int</code></td><td>Total light count participating in the rendering. Available in forward render pass only.</td></tr>
+<tr><td>fyrox_lightsColorRadius</td><td><code>vec4[16]</code></td><td><code>xyz</code> - RGB color of the light, <code>a</code> - effective radius of the light. Available in forward render pass only.</td></tr>
+<tr><td>fyrox_lightsPosition</td><td><code>vec3[16]</code></td><td>Array of world-space positions of the lights participating in the rendering. Available in forward render pass only.</td></tr>
+<tr><td>fyrox_lightsDirection</td><td><code>vec3[16]</code></td><td>Array of directions (world-space) of the lights participating in the rendering. Available in forward render pass only.</td></tr>
+<tr><td>fyrox_lightsParameters</td><td><code>vec2[16]</code></td><td>Array of parameters of lights participating in the rendering, where <code>x</code> - hotspot angle, <code>y</code> - full cone angle delta. Available in forward render pass only.</td></tr>
+<tr><td>fyrox_ambientLight</td><td><code>vec4</code></td><td>Ambient lighting.</td></tr>
 </tbody></table>
 </div>
 <p>To use any of the properties, just define a uniform with an appropriate name:</p>
