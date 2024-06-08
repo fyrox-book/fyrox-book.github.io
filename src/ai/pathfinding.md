@@ -25,6 +25,5 @@ for some games (strategies for instance), but in FPS games it will look awful. I
 
 ## Performance
 
-Current A* implementation is not ideal and may hurt performance if you need to calculate a lot of paths on large 
-graphs. It will be optimized in the future (see [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/442) for 
-info).
+Current A* implementation is very well optimized, yet it still loses "some points" in comparison to other specialized 
+implementations of this algorithm.
