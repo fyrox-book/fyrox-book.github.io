@@ -182,6 +182,8 @@ support lighting, shadows, etc. It should be only used to render translucent obj
 - **SpotShadow** - A pass that emits depth values for an object, later this depth map will be used to render shadows.
 - **PointShadow** - A pass that emits distance from a fragment to a point light, later this depth map will be used
 to render shadows.
+- **DirectionalShadow** - A pass that emits depth values for an object, later this depth map will be used to render 
+shadows for directional light sources using cascaded shadow mapping.
 
 ## Drawing parameters
 
