@@ -5260,9 +5260,8 @@ and cannot build paths that are lying on a surface of arbitrary meshes. Simple p
 for some games (strategies for instance), but in FPS games it will look awful. In this case you should use
 <a href="ai/./navmesh.html">navigational meshes</a> which can build path on a surface of arbitrary meshes.</p>
 <h2 id="performance-9"><a class="header" href="#performance-9">Performance</a></h2>
-<p>Current A* implementation is not ideal and may hurt performance if you need to calculate a lot of paths on large
-graphs. It will be optimized in the future (see <a href="https://github.com/FyroxEngine/Fyrox/issues/442">tracking issue</a> for
-info).</p>
+<p>Current A* implementation is very well optimized, yet it still loses "some points" in comparison to other specialized
+implementations of this algorithm.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="navigational-meshes"><a class="header" href="#navigational-meshes">Navigational Meshes</a></h1>
 <p><img src="ai/./navmesh.gif" alt="navmesh" /></p>
 <p>Navigational mesh (navmesh for short) is a surface which can be used for path finding. Unlike

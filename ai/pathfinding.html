@@ -227,9 +227,8 @@ and cannot build paths that are lying on a surface of arbitrary meshes. Simple p
 for some games (strategies for instance), but in FPS games it will look awful. In this case you should use
 <a href="./navmesh.html">navigational meshes</a> which can build path on a surface of arbitrary meshes.</p>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
-<p>Current A* implementation is not ideal and may hurt performance if you need to calculate a lot of paths on large
-graphs. It will be optimized in the future (see <a href="https://github.com/FyroxEngine/Fyrox/issues/442">tracking issue</a> for
-info).</p>
+<p>Current A* implementation is very well optimized, yet it still loses "some points" in comparison to other specialized
+implementations of this algorithm.</p>
 
                     </main>
 
