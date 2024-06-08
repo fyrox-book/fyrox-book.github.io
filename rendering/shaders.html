@@ -354,6 +354,8 @@ support lighting, shadows, etc. It should be only used to render translucent obj
 <li><strong>SpotShadow</strong> - A pass that emits depth values for an object, later this depth map will be used to render shadows.</li>
 <li><strong>PointShadow</strong> - A pass that emits distance from a fragment to a point light, later this depth map will be used
 to render shadows.</li>
+<li><strong>DirectionalShadow</strong> - A pass that emits depth values for an object, later this depth map will be used to render
+shadows for directional light sources using cascaded shadow mapping.</li>
 </ul>
 <h2 id="drawing-parameters"><a class="header" href="#drawing-parameters">Drawing parameters</a></h2>
 <p>Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
