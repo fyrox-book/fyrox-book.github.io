@@ -1,5 +1,6 @@
 pub mod custom;
 pub mod model;
+pub mod sound;
 
 use fyrox::{
     asset::manager::ResourceManager,
