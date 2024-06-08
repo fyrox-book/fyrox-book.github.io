@@ -4,6 +4,7 @@ pub mod ai;
 pub mod animation;
 pub mod borrowck;
 pub mod editor;
+pub mod engine;
 pub mod input;
 pub mod rendering;
 pub mod resource;
