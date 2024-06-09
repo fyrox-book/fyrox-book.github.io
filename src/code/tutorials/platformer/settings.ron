@@ -469,15 +469,81 @@
         ),
     ),
     scene_settings: {
-        "data/scene.rgs": (
+        "data/characters/skeleton.rgs": (
             camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
+                position: (-0.24360192, 0.66141915, -3.0),
+                yaw: -1.290001,
+                pitch: -1.2107968,
             ),
             node_infos: {
                 (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "\\\\?\\D:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\platformer\\data\\characters\\skeleton.rgs": (
+            camera_settings: (
+                position: (0.0, 0.08333321, -3.0),
+                yaw: 0.4700005,
+                pitch: 1.5407964,
+            ),
+            node_infos: {
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/scene.rgs": (
+            camera_settings: (
+                position: (-4.484387, 0.320154, -3.0),
+                yaw: 0.00999962,
+                pitch: 0.01999978,
+            ),
+            node_infos: {
+                (
+                    index: 155,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 52,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 41,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 53,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -487,6 +553,7 @@
     },
     recent: (
         scenes: [
+            "data/characters/skeleton.rgs",
             "data/scene.rgs",
         ],
     ),

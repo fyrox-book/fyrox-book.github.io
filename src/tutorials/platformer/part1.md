@@ -1,12 +1,4 @@
-# 2D Platformer Tutorial
-
-## Source Code
-
-Source code for the entire tutorial is [available here](https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer).
-
-## Engine Version
-
-This tutorial is made using Fyrox 0.34.
+# Character Controller
 
 ## Table of Contents
 
@@ -21,7 +13,7 @@ This tutorial is made using Fyrox 0.34.
 
 ## Introduction
 
-In this tutorial, we'll make a 2D platformer. Here's what you'll get after finishing the tutorial:
+In this tutorial, we'll make a character controller for our 2D platformer. Here's what you'll get after finishing the tutorial:
 
 <iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
