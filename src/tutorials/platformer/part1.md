@@ -21,8 +21,7 @@ This tutorial is made using Fyrox 0.34.
 
 ## Introduction
 
-In this tutorial, we'll make a 2D platformer using the new plugin and scripting system that has become available in Fyrox 0.25 and
-improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:
+In this tutorial, we'll make a 2D platformer. Here's what you'll get after finishing the tutorial:
 
 <iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -72,7 +71,7 @@ assets all over the internet. Download assets from [here](assets.zip) and unpack
 your project.
 
 Let's start filling the scene. Run the editor and remove all content from the generated scene. Since we're making a 2D game, switch the editor's
-camera mode to `Orthographic` at the right top corner of the scene preview window. Now we need to populate the scene with some objects,
+camera mode to `2D` at the top toolbar of the scene preview window. Now we need to populate the scene with some objects,
 we'll start by adding a simple ground block. Right-click on `__ROOT__` of the scene in `World Viewer` and select
 `Add Child -> Physics2D -> Rigid Body`. This will create a rigid body for the ground block, select the rigid body, and
 set `Body Type` to `Static` in `Inspector`, by doing this we're telling the physics engine that our ground block should not move

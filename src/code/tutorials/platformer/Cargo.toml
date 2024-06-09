@@ -5,11 +5,11 @@ resolver = "2"
 
 [workspace.dependencies.fyrox]
 git = "https://github.com/FyroxEngine/Fyrox"
-rev = "2396589822b69a672cc0215d94dc6c5c4ba3b217"
+rev = "63017992a1fae61d88bd8cb0025ebf9ec727486d"
 
 [workspace.dependencies.fyroxed_base]
 git = "https://github.com/FyroxEngine/Fyrox"
-rev = "2396589822b69a672cc0215d94dc6c5c4ba3b217"
+rev = "63017992a1fae61d88bd8cb0025ebf9ec727486d"
 
 # Optimize the engine in debug builds, but leave project's code non-optimized.
 # By using this technique, you can still debug you code, but engine will be fully
