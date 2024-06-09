@@ -9827,19 +9827,20 @@ simple, but it is just the beginning. It is easy to add more scripts for enemies
 <p><strong>WORK IN PROGRESS - DO NOT USE</strong></p>
 <p>In this tutorial we'll add bots and a simple AI system to our 2D platformer.</p>
 <h2 id="bot-prefab"><a class="header" href="#bot-prefab">Bot Prefab</a></h2>
-<p>Let's start by creating a prefab for our bots. At first, we need a sprite sheet for the bot, we'll use
-<a href="https://astrobob.itch.io/animated-pixel-art-skeleton">this one</a>. It contains attack, hit, death, walk, idle animations
-exactly what we need:</p>
+<p>Let's start by creating a prefab for our bots. Prefab is a separate scene, that can be instantiated at any time in some
+other scene. It allows us to make reusable and well isolated parts of the game. At first, we need a sprite sheet for the
+bot, we'll use <a href="https://astrobob.itch.io/animated-pixel-art-skeleton">this one</a>. It contains attack, hit, death, walk,
+idle animations exactly what we need:</p>
 <p><img src="tutorials/platformer/skeleton.png" alt="skeleton" /></p>
 <p>Open the editor and create a new scene, right-lick on the <code>__ROOT__</code> scene node and do <code>Replace With -&gt; Physics 2D -&gt; Rigid Body</code>.
 Rename this node to <code>Skeleton</code> and then create a <code>Rectangle</code> child node by right-clicking on the <code>Skeleton</code> node and doing
 <code>Create Child -&gt; 2D -&gt; Rectangle</code>, select the new rectangle node and set its scale to <code>2.0, 2.0, 1.0</code> (default scale of 1.0 is too
-small and the skeleton will be half of the height of our player). Now let's apply the texture to the rectangle, find
+small and the skeleton will be half of the height of our player). Now let's apply a texture to the rectangle, find
 <code>skeleton.png</code> in the asset browser, select it, set its properties like on the screenshot below - all filtration modes
 to <code>Nearest</code> (to make its pixels sharp, not blurry) and wrapping to <code>Clamp To Edge</code> (to prevent potential seams on the
 edges). Find the <code>Material</code> property in the inspector and open the material editor, drag the <code>skeleton.png</code> texture from
 the asset browser to <code>diffuseTexture</code> property in the material editor. Set the <code>UV Rect -&gt; Size</code> property to <code>0.077; 0.2</code>
-and you should see something similar to this:</p>
+to select a single sprite from the sprite sheet, and you should see something similar to this:</p>
 <p><img src="tutorials/platformer/skeleton_prefab.png" alt="skeleton prefab" /></p>
 <p>If you look closely at the world viewer, you should notice a small warning sign near the rigid body - the editor tells
 us that we've forgotten to add a collider to the rigid body. Let's fix this by right-clicking on the rigid body, then
@@ -9887,7 +9888,8 @@ impl ScriptTrait for Bot {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Register the script by adding <code>script_constructors.add::&lt;Bot&gt;("Bot");</code> line near the <code>script_constructors.add::&lt;Player&gt;("Player");</code>
-line in <code>lib.rs</code> (as we did in the previous part of the tutorial).</p>
+line in <code>lib.rs</code> (as we did in the previous part of the tutorial). Open the skeleton prefab and assign the script to the
+root rigid body.</p>
 <h3 id="patrol"><a class="header" href="#patrol">Patrol</a></h3>
 <p>By default, when there's no target nearby the bot will patrol in available bounds. Basically, it will walk from one "wall"
 to another. Add the following fields to the <code>Bot</code> script:</p>
@@ -9895,12 +9897,97 @@ to another. Add the following fields to the <code>Bot</code> script:</p>
 </span><span class="boring">fn main() {
 </span>    speed: InheritableVariable&lt;f32&gt;,
 
-    #[visit(skip)]
-    #[reflect(hidden)]
+    obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+
     direction: f32,
 <span class="boring">}</span></code></pre></pre>
 <p><code>speed</code> field will define overall movement speed of the bot and <code>direction</code> will be used to alternate movement direction
-along X axis.</p>
+along X axis. Open the skeleton prefab and set the speed to <code>1.2</code> and the direction to <code>-1.0</code>. Add the movement handling
+code somewhere in the <code>impl Bot</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn do_move(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) else {
+            return;
+        };
+
+        let y_vel = rigid_body.lin_vel().y;
+
+        rigid_body.set_lin_vel(Vector2::new(*self.speed * self.direction, y_vel));
+
+        // Also, inverse the sprite along the X axis.
+        let Some(rectangle) = ctx.scene.graph.try_get_mut(*self.rectangle) else {
+            return;
+        };
+
+        rectangle
+            .local_transform_mut()
+            .set_scale(Vector3::new(-2.0 * self.direction, 2.0, 1.0));
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>And call this method in <code>on_update</code> like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        self.do_move(ctx);
+<span class="boring">}</span></code></pre></pre>
+<p>Open the main scene (<code>scene.rgs</code> by default) and find the skeleton prefab in the asset browser, drag'n'drop it in the
+scene and adjust its position to get something like this:</p>
+<p><img src="tutorials/platformer/skeleton_on_scene.png" alt="skeleton on scene" /></p>
+<p>Run the game, and you should see the skeleton moving away from the player to the right. Cool, but the bot will be stuck
+immediately when it hits a wall, so we also need a way of detecting obstacles along the way, so the bot could "understand"
+when it should change movement direction. We'll use sensor collider for this purpose. Open the skeleton prefab and create
+a new 2D collider under the root <code>Skeleton</code> node, adjust its size to be something similar to the following screenshot:</p>
+<p><img src="tutorials/platformer/obstacle_sensor.png" alt="obstacle sensor" /></p>
+<p>It is very important to have <code>Is Sensor</code> property checked, we don't need the collider to participate in actual collision
+detection - it will be used only in intersection checks with the environment. Do not forget to assign a handle of the
+<code>ObstacleSensor</code> to the respective field in the <code>Bot</code> script instance on the root rigid body.</p>
+<p>Now onto the movement algorithm, it is quite simple: move the bot horizontally in the current direction until the obstacle
+sensor intersects with an obstacle. In this case all we need to do is to switch the current direction to opposite (from 1.0
+to -1.0 and vice versa). This way the bot will patrol arbitrary level parts quite easily and reliably and there's no need
+to manually place any way points or create a navigation mesh.</p>
+<p>Add the following code in the <code>impl Bot</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn has_obstacles(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; bool {
+        let graph = &amp;ctx.scene.graph;
+
+        let Some(obstacle_sensor) = graph.try_get_of_type::&lt;Collider&gt;(*self.obstacle_sensor) else {
+            dbg!();
+            return false;
+        };
+
+        for intersection in obstacle_sensor
+            .intersects(&amp;ctx.scene.graph.physics2d)
+            .filter(|i| i.has_any_active_contact)
+        {
+            for collider_handle in [intersection.collider1, intersection.collider2] {
+                let Some(other_collider) = graph.try_get_of_type::&lt;Collider&gt;(collider_handle)
+                else {
+                    continue;
+                };
+
+                let Some(rigid_body) = graph.try_get_of_type::&lt;RigidBody&gt;(other_collider.parent())
+                else {
+                    continue;
+                };
+
+                if rigid_body.body_type() == RigidBodyType::Static {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>And the following code to the <code>on_update</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        if self.has_obstacles(ctx) {
+            self.direction = -self.direction;
+        }
+<span class="boring">}</span></code></pre></pre>
+<p>Run the game and the bot should change its direction when it detects an obstacle before it.</p>
 <h3 id="target-searching"><a class="header" href="#target-searching">Target Searching</a></h3>
 <p>When the bot is patrolling, it will search for a target to attack. Bots will be able to attack only the player, so we just
 need to check if the player is in front of a bot and close enough to it. We need a way to get player's handle, we could just
