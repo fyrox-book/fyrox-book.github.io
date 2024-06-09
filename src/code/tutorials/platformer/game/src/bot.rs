@@ -1,12 +1,17 @@
 use crate::Game;
+use fyrox::core::algebra::Vector3;
+use fyrox::scene::dim2::collider::Collider;
+use fyrox::scene::rigidbody::RigidBodyType;
 use fyrox::{
     core::{
         algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
         variable::InheritableVariable, visitor::prelude::*,
     },
     graph::BaseSceneGraph,
+    graph::SceneGraph,
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
+        dim2::rigidbody::RigidBody,
         dim2::{physics::RayCastOptions, rectangle::Rectangle},
         node::Node,
     },
@@ -25,8 +30,8 @@ pub struct Bot {
     // ANCHOR: movement_fields
     speed: InheritableVariable<f32>,
 
-    #[visit(skip)]
-    #[reflect(hidden)]
+    obstacle_sensor: InheritableVariable<Handle<Node>>,
+
     direction: f32,
     // ANCHOR_END: movement_fields
 
@@ -50,6 +55,7 @@ impl Default for Bot {
             ground_probe: Default::default(),
             ground_probe_distance: 2.0.into(),
             speed: 1.0.into(),
+            obstacle_sensor: Default::default(),
             direction: 1.0,
             target: Default::default(),
             rectangle: Default::default(),
@@ -119,22 +125,78 @@ impl Bot {
         }
     }
     // ANCHOR_END: search_target
+
+    // ANCHOR: do_move
+    fn do_move(&mut self, ctx: &mut ScriptContext) {
+        let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) else {
+            return;
+        };
+
+        let y_vel = rigid_body.lin_vel().y;
+
+        rigid_body.set_lin_vel(Vector2::new(*self.speed * self.direction, y_vel));
+
+        // Also, inverse the sprite along the X axis.
+        let Some(rectangle) = ctx.scene.graph.try_get_mut(*self.rectangle) else {
+            return;
+        };
+
+        rectangle
+            .local_transform_mut()
+            .set_scale(Vector3::new(-2.0 * self.direction, 2.0, 1.0));
+    }
+    // ANCHOR_END: do_move
+
+    // ANCHOR: has_obstacles
+    fn has_obstacles(&mut self, ctx: &mut ScriptContext) -> bool {
+        let graph = &ctx.scene.graph;
+
+        let Some(obstacle_sensor) = graph.try_get_of_type::<Collider>(*self.obstacle_sensor) else {
+            dbg!();
+            return false;
+        };
+
+        for intersection in obstacle_sensor
+            .intersects(&ctx.scene.graph.physics2d)
+            .filter(|i| i.has_any_active_contact)
+        {
+            for collider_handle in [intersection.collider1, intersection.collider2] {
+                let Some(other_collider) = graph.try_get_of_type::<Collider>(collider_handle)
+                else {
+                    continue;
+                };
+
+                let Some(rigid_body) = graph.try_get_of_type::<RigidBody>(other_collider.parent())
+                else {
+                    continue;
+                };
+
+                if rigid_body.body_type() == RigidBodyType::Static {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+    // ANCHOR_END: has_obstacles
 }
 
 impl ScriptTrait for Bot {
-    fn on_init(&mut self, context: &mut ScriptContext) {
-        // Put initialization logic here.
-    }
-
-    fn on_start(&mut self, context: &mut ScriptContext) {
-        // There should be a logic that depends on other scripts in scene.
-        // It is called right after **all** scripts were initialized.
-    }
-
     // ANCHOR: search_target_call
     fn on_update(&mut self, ctx: &mut ScriptContext) {
         self.search_target(ctx);
         // ANCHOR_END: search_target_call
+
+        // ANCHOR: check_for_obstacles
+        if self.has_obstacles(ctx) {
+            self.direction = -self.direction;
+        }
+        // ANCHOR_END: check_for_obstacles
+
+        // ANCHOR: do_move_call
+        self.do_move(ctx);
+        // ANCHOR_END: do_move_call
 
         // ANCHOR: applying_animation
         if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {

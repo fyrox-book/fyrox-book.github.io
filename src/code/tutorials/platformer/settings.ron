@@ -26,7 +26,7 @@
             use_ssao: true,
             ssao_radius: 0.5,
             light_scatter_enabled: true,
-            fxaa: true,
+            fxaa: false,
             use_parallax_mapping: true,
             use_bloom: true,
         ),
@@ -469,33 +469,6 @@
         ),
     ),
     scene_settings: {
-        "data/characters/skeleton.rgs": (
-            camera_settings: (
-                position: (-0.24360192, 0.66141915, -3.0),
-                yaw: -1.290001,
-                pitch: -1.2107968,
-            ),
-            node_infos: {
-                (
-                    index: 44,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
         "\\\\?\\D:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\platformer\\data\\characters\\skeleton.rgs": (
             camera_settings: (
                 position: (0.0, 0.08333321, -3.0),
@@ -517,15 +490,84 @@
                 ),
             },
         ),
-        "data/scene.rgs": (
+        "data/characters/skeleton.rgs": (
             camera_settings: (
-                position: (-4.484387, 0.320154, -3.0),
-                yaw: 0.00999962,
-                pitch: 0.01999978,
+                position: (-0.40856367, 0.46662086, -3.0),
+                yaw: -0.54000175,
+                pitch: 0.29920292,
             ),
             node_infos: {
                 (
-                    index: 155,
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/scene.rgs": (
+            camera_settings: (
+                position: (-4.06278, 0.31644008, -0.026636362),
+                yaw: -0.08000023,
+                pitch: 0.1499998,
+            ),
+            node_infos: {
+                (
+                    index: 40,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 164,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 127,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 123,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 50,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 53,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -537,13 +579,31 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 41,
+                    index: 45,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 53,
+                    index: 155,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 15,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 165,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 41,
                     generation: 1,
                 ): (
                     is_expanded: true,

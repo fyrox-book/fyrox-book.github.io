@@ -6,21 +6,22 @@ In this tutorial we'll add bots and a simple AI system to our 2D platformer.
 
 ## Bot Prefab
 
-Let's start by creating a prefab for our bots. At first, we need a sprite sheet for the bot, we'll use 
-[this one](https://astrobob.itch.io/animated-pixel-art-skeleton). It contains attack, hit, death, walk, idle animations 
-exactly what we need:
+Let's start by creating a prefab for our bots. Prefab is a separate scene, that can be instantiated at any time in some 
+other scene. It allows us to make reusable and well isolated parts of the game. At first, we need a sprite sheet for the 
+bot, we'll use [this one](https://astrobob.itch.io/animated-pixel-art-skeleton). It contains attack, hit, death, walk, 
+idle animations exactly what we need:
 
 ![skeleton](skeleton.png)
 
 Open the editor and create a new scene, right-lick on the `__ROOT__` scene node and do `Replace With -> Physics 2D -> Rigid Body`.
 Rename this node to `Skeleton` and then create a `Rectangle` child node by right-clicking on the `Skeleton` node and doing
 `Create Child -> 2D -> Rectangle`, select the new rectangle node and set its scale to `2.0, 2.0, 1.0` (default scale of 1.0 is too
-small and the skeleton will be half of the height of our player). Now let's apply the texture to the rectangle, find 
+small and the skeleton will be half of the height of our player). Now let's apply a texture to the rectangle, find 
 `skeleton.png` in the asset browser, select it, set its properties like on the screenshot below - all filtration modes 
 to `Nearest` (to make its pixels sharp, not blurry) and wrapping to `Clamp To Edge` (to prevent potential seams on the 
 edges). Find the `Material` property in the inspector and open the material editor, drag the `skeleton.png` texture from 
 the asset browser to `diffuseTexture` property in the material editor. Set the `UV Rect -> Size` property to `0.077; 0.2` 
-and you should see something similar to this:
+to select a single sprite from the sprite sheet, and you should see something similar to this:
 
 ![skeleton prefab](skeleton_prefab.png)
 
@@ -48,7 +49,8 @@ this:
 ```
 
 Register the script by adding `script_constructors.add::<Bot>("Bot");` line near the `script_constructors.add::<Player>("Player");`
-line in `lib.rs` (as we did in the previous part of the tutorial).
+line in `lib.rs` (as we did in the previous part of the tutorial). Open the skeleton prefab and assign the script to the
+root rigid body.
 
 ### Patrol
 
@@ -60,7 +62,53 @@ to another. Add the following fields to the `Bot` script:
 ```
 
 `speed` field will define overall movement speed of the bot and `direction` will be used to alternate movement direction
-along X axis.
+along X axis. Open the skeleton prefab and set the speed to `1.2` and the direction to `-1.0`. Add the movement handling 
+code somewhere in the `impl Bot`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:do_move}}
+```
+
+And call this method in `on_update` like so:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:do_move_call}}
+```
+
+Open the main scene (`scene.rgs` by default) and find the skeleton prefab in the asset browser, drag'n'drop it in the 
+scene and adjust its position to get something like this:
+
+![skeleton on scene](skeleton_on_scene.png)
+
+Run the game, and you should see the skeleton moving away from the player to the right. Cool, but the bot will be stuck 
+immediately when it hits a wall, so we also need a way of detecting obstacles along the way, so the bot could "understand" 
+when it should change movement direction. We'll use sensor collider for this purpose. Open the skeleton prefab and create 
+a new 2D collider under the root `Skeleton` node, adjust its size to be something similar to the following screenshot:
+
+![obstacle sensor](obstacle_sensor.png)
+
+It is very important to have `Is Sensor` property checked, we don't need the collider to participate in actual collision
+detection - it will be used only in intersection checks with the environment. Do not forget to assign a handle of the 
+`ObstacleSensor` to the respective field in the `Bot` script instance on the root rigid body.
+
+Now onto the movement algorithm, it is quite simple: move the bot horizontally in the current direction until the obstacle
+sensor intersects with an obstacle. In this case all we need to do is to switch the current direction to opposite (from 1.0 
+to -1.0 and vice versa). This way the bot will patrol arbitrary level parts quite easily and reliably and there's no need
+to manually place any way points or create a navigation mesh.
+
+Add the following code in the `impl Bot`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:has_obstacles}}
+```
+
+And the following code to the `on_update`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:check_for_obstacles}}
+```
+
+Run the game and the bot should change its direction when it detects an obstacle before it.
 
 ### Target Searching
 
