@@ -205,8 +205,7 @@
 </li>
 </ul>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
-<p>In this tutorial, we'll make a 2D platformer using the new plugin and scripting system that has become available in Fyrox 0.25 and
-improved in Fyrox 0.26. Here's what you'll get after finishing the tutorial:</p>
+<p>In this tutorial, we'll make a 2D platformer. Here's what you'll get after finishing the tutorial:</p>
 <iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <p>You can find the source code of the tutorial <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer">here</a>, you can
 test it yourself by cloning the repository and <code>cargo run --package editor --release</code> in the <code>platformer</code> directory.</p>
@@ -239,7 +238,7 @@ you through the process of scene creation, as a final result we'll get something
 assets all over the internet. Download assets from <a href="assets.zip">here</a> and unpack them in a <code>data</code> folder in the root folder of
 your project.</p>
 <p>Let's start filling the scene. Run the editor and remove all content from the generated scene. Since we're making a 2D game, switch the editor's
-camera mode to <code>Orthographic</code> at the right top corner of the scene preview window. Now we need to populate the scene with some objects,
+camera mode to <code>2D</code> at the top toolbar of the scene preview window. Now we need to populate the scene with some objects,
 we'll start by adding a simple ground block. Right-click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select
 <code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body, and
 set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we're telling the physics engine that our ground block should not move
