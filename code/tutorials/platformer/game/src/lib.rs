@@ -1,8 +1,10 @@
 //! Game project.
 
+mod bot;
 mod residuals;
 
 // ANCHOR: imports
+use crate::bot::Bot;
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
@@ -27,6 +29,9 @@ use fyrox::{
 #[derive(Visit, Reflect, Debug, Default)]
 pub struct Game {
     scene: Handle<Scene>,
+
+    // ANCHOR: player_field
+    player: Handle<Node>, // ANCHOR_END: player_field
 }
 
 // ANCHOR: register
@@ -34,9 +39,10 @@ impl Plugin for Game {
     fn register(&self, context: PluginRegistrationContext) {
         let script_constructors = &context.serialization_context.script_constructors;
         script_constructors.add::<Player>("Player");
+        // ...
+        // ANCHOR_END: register
+        script_constructors.add::<Bot>("Bot");
     }
-    // ...
-    // ANCHOR_END: register
 
     fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
         context
@@ -85,6 +91,12 @@ impl Default for Player {
 // ANCHOR_END: animation_fields_defaults_end
 
 impl ScriptTrait for Player {
+    // ANCHOR: set_player_field
+    fn on_start(&mut self, ctx: &mut ScriptContext) {
+        ctx.plugins.get_mut::<Game>().player = ctx.handle;
+    }
+    // ANCHOR_END: set_player_field
+
     // ANCHOR: on_os_event
     // Called everytime when there is an event from OS (mouse click, key press, etc.)
     fn on_os_event(&mut self, event: &Event<()>, _context: &mut ScriptContext) {
