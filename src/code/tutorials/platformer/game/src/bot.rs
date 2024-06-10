@@ -26,6 +26,10 @@ use fyrox::{
 #[type_uuid(id = "d2786d36-a0af-4e67-916a-438af62f818b")]
 #[visit(optional)]
 pub struct Bot {
+    // ANCHOR: visual_fields
+    rectangle: InheritableVariable<Handle<Node>>,
+    // ANCHOR_END: visual_fields
+
     // ANCHOR: ground_probe_fields
     ground_probe: InheritableVariable<Handle<Node>>,
     ground_probe_distance: InheritableVariable<f32>,
@@ -46,7 +50,6 @@ pub struct Bot {
     // ANCHOR_END: target_fields
 
     // ANCHOR: animation_fields
-    rectangle: InheritableVariable<Handle<Node>>,
     animations: Vec<SpriteSheetAnimation>,
     current_animation: InheritableVariable<u32>,
     // ANCHOR_END: animation_fields
