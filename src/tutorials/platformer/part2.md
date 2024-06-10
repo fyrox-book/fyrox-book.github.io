@@ -1,6 +1,4 @@
-# Bots and AI (WIP)
-
-**WORK IN PROGRESS - DO NOT USE**
+# Bots and AI
 
 In this tutorial we'll add bots and a simple AI system to our 2D platformer. 
 
@@ -49,8 +47,15 @@ this:
 ```
 
 Register the script by adding `script_constructors.add::<Bot>("Bot");` line near the `script_constructors.add::<Player>("Player");`
-line in `lib.rs` (as we did in the previous part of the tutorial). Open the skeleton prefab and assign the script to the
-root rigid body.
+line in `lib.rs` (as we did in the previous part of the tutorial). We also need to import all required types for the bot,
+replace all the imports at the beginning of the `bot.rs` with the following:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:imports}}
+```
+
+Before we start writing useful code, open the skeleton prefab and assign the script to the root rigid body. Great, now 
+let's begin with the bot's AI.
 
 ### Patrol
 
@@ -195,7 +200,7 @@ any other direction modifications - target following will have priority over any
 
 ## Animations
 
-Our bot can patrol, search and attack targets, but all of this is not properly visualized since we're not using any animations
+Our bot can patrol, search and follow targets, but all of this is not properly visualized since we're not using any animations
 for such actions. Let's fix this. Add the following fields to the `Bot` structure:
 
 ```rust
@@ -206,3 +211,28 @@ As with the player from the previous tutorial, we'll use sprite sheet animations
 body, add five animations and fill every slot. For example, attack animation will look like this:
 
 ![attack animation](attack_animation.png)
+
+If you have any issues with this, see previous part of the tutorial to learn how to use sprite sheet animations editor. Now
+onto animation switching. We need to handle just two animations for now - walking and attacking. Add the following code
+somewhere in the `on_update`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:animation_switching}}
+```
+
+Here we just switch current animation index. If the bot is moving, then movement animation is selected and if there's a
+target, and it is close enough, then the attack animation is selected. The last step is to apply the animation to the bot's
+sprite. Add the following code at the end of `on_update`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:applying_animation}}
+```
+
+Run the game and you should see something like this:
+
+![attack](attack.gif)
+
+## Conclusion
+
+In this tutorial we've learned how to create basic AI, that can patrol an area, search for a target, follow and attack it.
+In the next tutorial we'll add damage system and various items.

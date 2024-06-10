@@ -132,7 +132,7 @@
 - [Tutorials](./tutorials/tutorials.md)
   - [2D Platformer Tutorial](./tutorials/platformer/intro.md)
     - [Character Controller](./tutorials/platformer/part1.md)
-    - [Bots and AI (WIP)](./tutorials/platformer/part2.md)
+    - [Bots and AI](./tutorials/platformer/part2.md)
   - [RPG Tutorial](./tutorials/rpg/intro.md)
     - [Character Controller](./tutorials/rpg/tutorial-1/tutorial-part-1.md)
   - [FPS Tutorial](tutorials/fps/fps-intro.md)

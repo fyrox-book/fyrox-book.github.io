@@ -1,3 +1,4 @@
+// ANCHOR: imports
 use crate::Game;
 use fyrox::{
     core::{
@@ -19,6 +20,7 @@ use fyrox::{
     },
     script::{ScriptContext, ScriptTrait},
 };
+// ANCHOR_END: imports
 
 #[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "d2786d36-a0af-4e67-916a-438af62f818b")]
@@ -156,9 +158,11 @@ impl Bot {
             return;
         };
 
-        rectangle
-            .local_transform_mut()
-            .set_scale(Vector3::new(2.0 * self.direction, 2.0, 1.0));
+        rectangle.local_transform_mut().set_scale(Vector3::new(
+            2.0 * self.direction.signum(),
+            2.0,
+            1.0,
+        ));
     }
     // ANCHOR_END: do_move
 
@@ -231,12 +235,32 @@ impl ScriptTrait for Bot {
             let target_position = ctx.scene.graph[self.target].global_position();
             let self_position = ctx.scene.graph[ctx.handle].global_position();
             self.direction = (self_position.x - target_position.x).signum();
+
+            // Stand still while attacking.
+            if target_position.metric_distance(&self_position) > 1.1 {
+                self.speed.set_value_and_mark_modified(1.2);
+            } else {
+                self.speed.set_value_and_mark_modified(0.0);
+            }
         }
         // ANCHOR_END: move_to_target
 
         // ANCHOR: do_move_call
         self.do_move(ctx);
         // ANCHOR_END: do_move_call
+
+        // ANCHOR: animation_switching
+        if self.direction != 0.0 {
+            self.current_animation.set_value_and_mark_modified(2);
+        }
+        if self.target.is_some() {
+            let target_position = ctx.scene.graph[self.target].global_position();
+            let self_position = ctx.scene.graph[ctx.handle].global_position();
+            if target_position.metric_distance(&self_position) < 1.1 {
+                self.current_animation.set_value_and_mark_modified(0);
+            }
+        }
+        // ANCHOR_END: animation_switching
 
         // ANCHOR: applying_animation
         if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
@@ -245,8 +269,7 @@ impl ScriptTrait for Bot {
             if let Some(sprite) = ctx
                 .scene
                 .graph
-                .try_get_mut(*self.rectangle)
-                .and_then(|n| n.cast_mut::<Rectangle>())
+                .try_get_mut_of_type::<Rectangle>(*self.rectangle)
             {
                 // Set new frame to the sprite.
                 sprite
