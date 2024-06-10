@@ -185,7 +185,13 @@ the direction, the bot can see the player. As the last step, call this method in
 {{#include ../../code/tutorials/platformer/game/src/bot.rs:search_target_call}}
 ```
 
-If there's a target, then the bot will follow it and try to attack when it is close enough.
+If there's a target, then the bot will follow it and try to attack when it is close enough. To implement this, all we need
+to do is to alternate movement direction according to a target position. Add the following code in `on_update`, but after
+any other direction modifications - target following will have priority over any other actions.
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:move_to_target}}
+```
 
 ## Animations
 

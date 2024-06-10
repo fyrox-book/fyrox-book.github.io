@@ -471,25 +471,31 @@
     scene_settings: {
         "data/scene.rgs": (
             camera_settings: (
-                position: (-4.5174627, -1.3465655, 1.977849),
-                yaw: -0.030000258,
-                pitch: 0.2199998,
+                position: (-1.6185844, -2.9961283, 2.699286),
+                yaw: 0.009202803,
+                pitch: 0.13999991,
             ),
             node_infos: {
                 (
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 126,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 124,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 164,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 40,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -501,13 +507,49 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 15,
+                    index: 127,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 9,
+                    index: 165,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 122,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 164,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 170,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 129,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 172,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 155,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -525,58 +567,25 @@
                     is_expanded: true,
                 ),
                 (
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 52,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 170,
+                    index: 40,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 127,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 155,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 165,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "\\\\?\\D:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\platformer\\data\\characters\\skeleton.rgs": (
-            camera_settings: (
-                position: (0.0, 0.08333321, -3.0),
-                yaw: 0.4700005,
-                pitch: 1.5407964,
-            ),
-            node_infos: {
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
+                    index: 15,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -585,31 +594,19 @@
         ),
         "data/characters/skeleton.rgs": (
             camera_settings: (
-                position: (-0.30685258, 0.33142743, -2.965072),
-                yaw: 0.08999912,
-                pitch: 0.18920282,
+                position: (0.40135893, 0.38078198, 1.2874793),
+                yaw: 0.09999878,
+                pitch: -0.00079720095,
             ),
             node_infos: {
                 (
-                    index: 3,
+                    index: 48,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 44,
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -622,6 +619,18 @@
                 ),
                 (
                     index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 47,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -639,19 +648,40 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 47,
+                    index: 50,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 48,
+                    index: 44,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 1,
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "\\\\?\\D:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\platformer\\data\\characters\\skeleton.rgs": (
+            camera_settings: (
+                position: (0.0, 0.08333321, -3.0),
+                yaw: 0.4700005,
+                pitch: 1.5407964,
+            ),
+            node_infos: {
+                (
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -666,8 +696,8 @@
         ],
     ),
     windows: (
-        window_position: (203.0, 22.0),
-        window_size: (1426.0, 890.0),
+        window_position: (-8.0, -8.0),
+        window_size: (1920.0, 1017.0),
         layout: None,
     ),
 )

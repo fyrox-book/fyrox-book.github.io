@@ -135,10 +135,8 @@ impl Bot {
         let player_position = player.global_position();
 
         let signed_distance = player_position.x - self_position.x;
-        if signed_distance.abs() < 3.0 && signed_distance.signum() == self.direction.signum() {
+        if signed_distance.abs() < 3.0 && signed_distance.signum() != self.direction.signum() {
             self.target = game.player;
-        } else {
-            self.target = Handle::NONE;
         }
     }
     // ANCHOR_END: search_target
@@ -224,9 +222,17 @@ impl ScriptTrait for Bot {
             if !self.has_ground_in_front(ctx) {
                 self.direction = -self.direction;
             }
-            self.ground_probe_timeout = 1.0;
+            self.ground_probe_timeout = 0.3;
         }
         // ANCHOR_END: ground_checks
+
+        // ANCHOR: move_to_target
+        if self.target.is_some() {
+            let target_position = ctx.scene.graph[self.target].global_position();
+            let self_position = ctx.scene.graph[ctx.handle].global_position();
+            self.direction = (self_position.x - target_position.x).signum();
+        }
+        // ANCHOR_END: move_to_target
 
         // ANCHOR: do_move_call
         self.do_move(ctx);
