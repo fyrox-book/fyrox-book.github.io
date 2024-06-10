@@ -438,7 +438,7 @@ Now add the following code in the <code>impl Bot</code>:</p>
             if !self.has_ground_in_front(ctx) {
                 self.direction = -self.direction;
             }
-            self.ground_probe_timeout = 1.0;
+            self.ground_probe_timeout = 0.3;
         }
 <span class="boring">}</span></code></pre></pre>
 <p>Open the editor and add another skeleton somewhere, where it can easily fall off the ledge. Run the game and the skeleton
@@ -475,10 +475,8 @@ in the bot's target searching routine. Add the following code to the <code>impl 
         let player_position = player.global_position();
 
         let signed_distance = player_position.x - self_position.x;
-        if signed_distance.abs() &lt; 3.0 &amp;&amp; signed_distance.signum() == self.direction.signum() {
+        if signed_distance.abs() &lt; 3.0 &amp;&amp; signed_distance.signum() != self.direction.signum() {
             self.target = game.player;
-        } else {
-            self.target = Handle::NONE;
         }
     }
 <span class="boring">}</span></code></pre></pre>
@@ -492,7 +490,17 @@ the direction, the bot can see the player. As the last step, call this method in
 </span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
         self.search_target(ctx);
 <span class="boring">}</span></code></pre></pre>
-<p>If there's a target, then the bot will follow it and try to attack when it is close enough.</p>
+<p>If there's a target, then the bot will follow it and try to attack when it is close enough. To implement this, all we need
+to do is to alternate movement direction according to a target position. Add the following code in <code>on_update</code>, but after
+any other direction modifications - target following will have priority over any other actions.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        if self.target.is_some() {
+            let target_position = ctx.scene.graph[self.target].global_position();
+            let self_position = ctx.scene.graph[ctx.handle].global_position();
+            self.direction = (self_position.x - target_position.x).signum();
+        }
+<span class="boring">}</span></code></pre></pre>
 <h2 id="animations"><a class="header" href="#animations">Animations</a></h2>
 <p>Our bot can patrol, search and attack targets, but all of this is not properly visualized since we're not using any animations
 for such actions. Let's fix this. Add the following fields to the <code>Bot</code> structure:</p>
