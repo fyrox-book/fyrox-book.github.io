@@ -14,7 +14,6 @@ use fyrox::{
         visitor::prelude::*,
     },
     event::{ElementState, Event, WindowEvent},
-    graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
