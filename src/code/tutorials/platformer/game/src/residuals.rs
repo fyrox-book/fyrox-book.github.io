@@ -1,3 +1,5 @@
+#![allow(unused_variables)]
+
 // Tutorial code that does not do anything specific and serves as an intermediate step.
 // Ignore this code.
 

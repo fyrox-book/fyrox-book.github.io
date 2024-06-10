@@ -14,6 +14,7 @@ use fyrox::{
         visitor::prelude::*,
     },
     event::{ElementState, Event, WindowEvent},
+    graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
@@ -24,6 +25,7 @@ use fyrox::{
     },
     script::{ScriptContext, ScriptTrait},
 };
+use std::path::Path;
 // ANCHOR_END: imports
 
 #[derive(Visit, Reflect, Debug, Default)]
@@ -31,7 +33,8 @@ pub struct Game {
     scene: Handle<Scene>,
 
     // ANCHOR: player_field
-    player: Handle<Node>, // ANCHOR_END: player_field
+    player: Handle<Node>,
+    // ANCHOR_END: player_field
 }
 
 // ANCHOR: register
@@ -48,6 +51,27 @@ impl Plugin for Game {
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
+    }
+
+    fn on_scene_loaded(
+        &mut self,
+        _path: &Path,
+        scene: Handle<Scene>,
+        _data: &[u8],
+        context: &mut PluginContext,
+    ) {
+        if self.scene.is_some() {
+            context.scenes.remove(self.scene);
+        }
+
+        self.scene = scene;
+    }
+
+    fn update(&mut self, context: &mut PluginContext) {
+        if let Some(scene) = context.scenes.try_get_mut(self.scene) {
+            scene.drawing_context.clear_lines();
+            // scene.graph.physics2d.draw(&mut scene.drawing_context);
+        }
     }
 }
 

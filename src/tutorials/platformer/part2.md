@@ -83,34 +83,75 @@ scene and adjust its position to get something like this:
 Run the game, and you should see the skeleton moving away from the player to the right. Cool, but the bot will be stuck 
 immediately when it hits a wall, so we also need a way of detecting obstacles along the way, so the bot could "understand" 
 when it should change movement direction. We'll use sensor collider for this purpose. Open the skeleton prefab and create 
-a new 2D collider under the root `Skeleton` node, adjust its size to be something similar to the following screenshot:
+two new 2D colliders under the root `Skeleton` node, adjust their sizes to be something similar to the following screenshot:
 
 ![obstacle sensor](obstacle_sensor.png)
 
-It is very important to have `Is Sensor` property checked, we don't need the collider to participate in actual collision
-detection - it will be used only in intersection checks with the environment. Do not forget to assign a handle of the 
-`ObstacleSensor` to the respective field in the `Bot` script instance on the root rigid body.
+It is very important to have `Is Sensor` property checked on both colliders, we don't need the collider to participate 
+in actual collision detection - it will be used only in intersection checks with the environment. Do not forget to assign 
+handles of both `FrontObstacleSensor` and `BackObstacleSensor` to the respective fields in the `Bot` script instance on 
+the root rigid body.
 
-Now onto the movement algorithm, it is quite simple: move the bot horizontally in the current direction until the obstacle
-sensor intersects with an obstacle. In this case all we need to do is to switch the current direction to opposite (from 1.0 
-to -1.0 and vice versa). This way the bot will patrol arbitrary level parts quite easily and reliably and there's no need
-to manually place any way points or create a navigation mesh.
+Now onto the movement algorithm, it is quite simple: move the bot horizontally in the current direction until one of the 
+obstacle sensors intersects with an obstacle. In this case all we need to do is to switch the current direction to opposite 
+(from 1.0 to -1.0 and vice versa). This way the bot will patrol arbitrary level parts quite easily and reliably and 
+there's no need to manually place any way points or create a navigation mesh.
 
-Add the following code in the `impl Bot`:
+Obstacles checking algorithms is quite simple, add the following code in the `impl Bot`:
 
 ```rust
 {{#include ../../code/tutorials/platformer/game/src/bot.rs:has_obstacles}}
 ```
 
-And the following code to the `on_update`:
+At first, it selects the sensor using the current movement direction, then it fetches all intersection events from it
+and checks if there's at least one static rigid body intersected. Remember, that we've set static rigid bodies for our
+level tiles. 
+
+As the final step, add the following code to the `on_update`:
 
 ```rust
 {{#include ../../code/tutorials/platformer/game/src/bot.rs:check_for_obstacles}}
 ```
 
-Run the game and the bot should change its direction when it detects an obstacle before it.
+This code is very simple - if there's an obstacle, then change movement direction to opposite. Now run the game and the 
+bot should change its direction when it detects an obstacle before it. It should look like this:
 
-### Target Searching
+![obstacle checks](obstacle_checks.gif)
+
+There's no animations yet, but the basic movement works great. We'll add animations later in this tutorial.
+
+### Ground Checks
+
+At this moment, our bot can move, but it can easily fall of into "abyss" and die. Let's prevent that by adding ground 
+check, that will be used to switch movement direction also. How will we check for ground presence anyway? We'll do this 
+using simple ray casting. At first, add the following fields to the bot script:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:ground_probe_fields}}
+```
+
+`ground_probe` field will be used to store a handle of a point scene node, that will be used as a starting point for ray
+casting. `ground_probe_distance` field is used to define maximum distance, after which ray casting considered failed.
+Now add the following code in the `impl Bot`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:has_ground_in_front}}
+```
+
+Open the skeleton prefab and create the ground probe like so:
+
+![ground probe](ground_probe.png)
+
+Do not forget to assign its handle to the bot script as well. Add the final piece of code to `on_update`:
+
+```rust
+{{#include ../../code/tutorials/platformer/game/src/bot.rs:ground_checks}}
+```
+
+Open the editor and add another skeleton somewhere, where it can easily fall off the ledge. Run the game and the skeleton
+should avoid such place and walk back and forth on a platform.
+
+### Targets
 
 When the bot is patrolling, it will search for a target to attack. Bots will be able to attack only the player, so we just 
 need to check if the player is in front of a bot and close enough to it. We need a way to get player's handle, we could just
@@ -144,33 +185,7 @@ the direction, the bot can see the player. As the last step, call this method in
 {{#include ../../code/tutorials/platformer/game/src/bot.rs:search_target_call}}
 ```
 
-### Target Following
-
 If there's a target, then the bot will follow it and try to attack when it is close enough.
-
-### Ground Checks
-
-At this moment, our bot can move and follow targets, but it can easily fall of into "abyss" and die. Let's prevent that 
-by adding ground check, that will be used to switch movement direction also. How will we check for ground presence anyway?
-We'll do this using simple ray casting. At first, add the following fields to the bot script:
-
-```rust
-{{#include ../../code/tutorials/platformer/game/src/bot.rs:ground_probe_fields}}
-```
-
-`ground_probe` field will be used to store a handle of a point scene node, that will be used as a starting point for ray
-casting. `ground_probe_distance` field is used to define maximum distance, after which ray casting considered failed.
-Now add the following code in the `impl Bot`:
-
-```rust
-{{#include ../../code/tutorials/platformer/game/src/bot.rs:has_ground_in_front}}
-```
-
-Open the skeleton prefab and create the ground probe like so:
-
-![ground probe](ground_probe.png)
-
-Do not forget to assign its handle to the bot script as well.
 
 ## Animations
 
