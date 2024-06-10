@@ -9825,34 +9825,39 @@ correctly.</p>
 <p>In this tutorial, we've learned the basics of the new scripting system of the engine. The game we've built it very
 simple, but it is just the beginning. It is easy to add more scripts for enemies, weapons, collectible items, and so on.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bots-and-ai"><a class="header" href="#bots-and-ai">Bots and AI</a></h1>
-<p>In this tutorial we'll add bots and a simple AI system to our 2D platformer.</p>
+<p>In this tutorial we'll add bots and a simple AI system to our 2D platformer. In the end we'll get something like this:</p>
+<p><img src="tutorials/platformer/attack.gif" alt="attack" /></p>
 <h2 id="bot-prefab"><a class="header" href="#bot-prefab">Bot Prefab</a></h2>
 <p>Let's start by creating a prefab for our bots. Prefab is a separate scene, that can be instantiated at any time in some
 other scene. It allows us to make reusable and well isolated parts of the game. At first, we need a sprite sheet for the
-bot, we'll use <a href="https://astrobob.itch.io/animated-pixel-art-skeleton">this one</a>. It contains attack, hit, death, walk,
-idle animations exactly what we need:</p>
+bot, we'll use <a href="https://astrobob.itch.io/animated-pixel-art-skeleton">this one</a>. It contains attack, hit, death, walk, idle animations. In this tutorial we'll use only
+walk and attack animations, other animations will be used in the next tutorial. The sprite sheet looks like this - 13x5
+sprites where every sprite is 64x64px:</p>
 <p><img src="tutorials/platformer/skeleton.png" alt="skeleton" /></p>
-<p>Open the editor and create a new scene, right-lick on the <code>__ROOT__</code> scene node and do <code>Replace With -&gt; Physics 2D -&gt; Rigid Body</code>.
-Rename this node to <code>Skeleton</code> and then create a <code>Rectangle</code> child node by right-clicking on the <code>Skeleton</code> node and doing
-<code>Create Child -&gt; 2D -&gt; Rectangle</code>, select the new rectangle node and set its scale to <code>2.0, 2.0, 1.0</code> (default scale of 1.0 is too
-small and the skeleton will be half of the height of our player). Now let's apply a texture to the rectangle, find
-<code>skeleton.png</code> in the asset browser, select it, set its properties like on the screenshot below - all filtration modes
-to <code>Nearest</code> (to make its pixels sharp, not blurry) and wrapping to <code>Clamp To Edge</code> (to prevent potential seams on the
-edges). Find the <code>Material</code> property in the inspector and open the material editor, drag the <code>skeleton.png</code> texture from
-the asset browser to <code>diffuseTexture</code> property in the material editor. Set the <code>UV Rect -&gt; Size</code> property to <code>0.077; 0.2</code>
-to select a single sprite from the sprite sheet, and you should see something similar to this:</p>
+<p>Save this image in the <code>data/characters</code> folder as <code>skeleton.png</code>. Open the editor and create a new scene, right-click on
+the <code>__ROOT__</code> scene node and click on <code>Replace With -&gt; Physics 2D -&gt; Rigid Body</code>. Rename this node to <code>Skeleton</code> and then
+create a <code>Rectangle</code> child node by right-clicking on the <code>Skeleton</code> node and doing <code>Create Child -&gt; 2D -&gt; Rectangle</code>,
+select the new rectangle node and set its scale to <code>2.0, 2.0, 1.0</code> (default scale of 1.0 is too small and the skeleton
+will be half of the height of our player). Now let's apply a texture to the rectangle, find <code>skeleton.png</code> in the asset
+browser, select it, set its properties like on the screenshot below - all filtration modes to <code>Nearest</code> (to make its
+pixels sharp, not blurry) and wrapping to <code>Clamp To Edge</code> (to prevent potential seams on the edges). Find the <code>Material</code>
+property in the inspector and open the material editor, drag the <code>skeleton.png</code> texture from the asset browser to
+<code>diffuseTexture</code> property in the material editor. Set the <code>UV Rect -&gt; Size</code> property to <code>0.077; 0.2</code> to select a single
+sprite from the sprite sheet, and you should see something similar to this:</p>
 <p><img src="tutorials/platformer/skeleton_prefab.png" alt="skeleton prefab" /></p>
 <p>If you look closely at the world viewer, you should notice a small warning sign near the rigid body - the editor tells
 us that we've forgotten to add a collider to the rigid body. Let's fix this by right-clicking on the rigid body, then
 select <code>Create Child -&gt; Physics 2D -&gt; Collider</code>. Select the collider and set its shape to <code>Capsule</code> in the properties
 like so:</p>
 <p><img src="tutorials/platformer/capsule.png" alt="capsule" /></p>
-<p>We're almost finished with our prefab, the last step is to configure properties of the rigid body properly. Currently, we
-have a simple rigid body, that will rotate freely during collisions and will also "sleep" on inactivity. Let's fix this
-by selecting the rigid body in the inspector and disable rotational movement and prevent it from sleeping:</p>
+<p>We're almost finished with our prefab, the last step is to configure properties of the rigid body. Currently, we
+have a simple rigid body, that will rotate freely during collisions and will also "sleep" on inactivity, which will prevent
+the body from moving. Let's fix this by selecting the rigid body in the inspector and disable rotational movement and
+prevent it from sleeping:</p>
 <p><img src="tutorials/platformer/rigid_body.png" alt="rigid body" /></p>
+<p>The "skeleton" of our skeleton (pun intended) prefab is finished, and now we can start writing some code.</p>
 <h2 id="script"><a class="header" href="#script">Script</a></h2>
-<p>Now onto code part, run the following command in the root folder of your game: <code>fyrox-template script --name=bot</code> and add
+<p>Now on to the code part, run the following command in the root folder of your game: <code>fyrox-template script --name=bot</code> and add
 the <code>mod bot;</code> line at the beginning of <code>lib.rs</code> of the <code>game</code> package. The code for the script will look something like
 this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -9887,7 +9892,8 @@ impl ScriptTrait for Bot {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Register the script by adding <code>script_constructors.add::&lt;Bot&gt;("Bot");</code> line near the <code>script_constructors.add::&lt;Player&gt;("Player");</code>
+<p>We need only <code>on_update</code> method, and the rest methods can be removed. Register the script by adding
+<code>script_constructors.add::&lt;Bot&gt;("Bot");</code> line near the <code>script_constructors.add::&lt;Player&gt;("Player");</code>
 line in <code>lib.rs</code> (as we did in the previous part of the tutorial). We also need to import all required types for the bot,
 replace all the imports at the beginning of the <code>bot.rs</code> with the following:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -9914,8 +9920,13 @@ use fyrox::{
     script::{ScriptContext, ScriptTrait},
 };
 <span class="boring">}</span></code></pre></pre>
-<p>Before we start writing useful code, open the skeleton prefab and assign the script to the root rigid body. Great, now
-let's begin with the bot's AI.</p>
+<p>We need to store a handle to the sprite in our script, add the following field in the <code>Bot</code> struct:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    rectangle: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+<span class="boring">}</span></code></pre></pre>
+<p>Open the skeleton prefab and assign the script to the root rigid body. Set the <code>rectangle</code> field to <code>Sprite (2D)</code> and
+save the prefab. Great, now let's begin writing the actual AI code of the bot.</p>
 <h3 id="patrol"><a class="header" href="#patrol">Patrol</a></h3>
 <p>By default, when there's no target nearby the bot will patrol in available bounds. Basically, it will walk from one "wall"
 to another. Add the following fields to the <code>Bot</code> script:</p>
@@ -9952,7 +9963,10 @@ code somewhere in the <code>impl Bot</code>:</p>
         ));
     }
 <span class="boring">}</span></code></pre></pre>
-<p>And call this method in <code>on_update</code> like so:</p>
+<p>This code is quite straightforward - at first, we're doing a checked borrow of the node that contains the script. It must
+be of <code>dim2::RigidBody</code> type. Then we're setting horizontal speed of body using <code>speed</code> and <code>direction</code> variables we've
+added earlier. As the last step we're changing horizontal scale of the sprite using sign of the current direction. This
+way we're flipping the sprite in the current direction. Now we need to call <code>do_move</code> method in <code>on_update</code> like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        self.do_move(ctx);
@@ -9972,7 +9986,7 @@ the root rigid body.</p>
 <p>Now onto the movement algorithm, it is quite simple: move the bot horizontally in the current direction until one of the
 obstacle sensors intersects with an obstacle. In this case all we need to do is to switch the current direction to opposite
 (from 1.0 to -1.0 and vice versa). This way the bot will patrol arbitrary level parts quite easily and reliably and
-there's no need to manually place any way points or create a navigation mesh.</p>
+there's no need to manually place any way points.</p>
 <p>Obstacles checking algorithms is quite simple, add the following code in the <code>impl Bot</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10017,8 +10031,7 @@ there's no need to manually place any way points or create a navigation mesh.</p
 <span class="boring">}</span></code></pre></pre>
 <p>At first, it selects the sensor using the current movement direction, then it fetches all intersection events from it
 and checks if there's at least one static rigid body intersected. Remember, that we've set static rigid bodies for our
-level tiles.</p>
-<p>As the final step, add the following code to the <code>on_update</code>:</p>
+level tiles. As the final step, add the following code to the <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if self.has_obstacles(ctx) {
@@ -10028,11 +10041,11 @@ level tiles.</p>
 <p>This code is very simple - if there's an obstacle, then change movement direction to opposite. Now run the game and the
 bot should change its direction when it detects an obstacle before it. It should look like this:</p>
 <p><img src="tutorials/platformer/obstacle_checks.gif" alt="obstacle checks" /></p>
-<p>There's no animations yet, but the basic movement works great. We'll add animations later in this tutorial.</p>
+<p>There's no animations yet, but the basic movement works ok. We'll add animations later in this tutorial.</p>
 <h3 id="ground-checks"><a class="header" href="#ground-checks">Ground Checks</a></h3>
-<p>At this moment, our bot can move, but it can easily fall of into "abyss" and die. Let's prevent that by adding ground
-check, that will be used to switch movement direction also. How will we check for ground presence anyway? We'll do this
-using simple ray casting. At first, add the following fields to the bot script:</p>
+<p>At this moment, our bot can move, but it can easily fall off the ledge into "abyss" and die. Let's prevent that by adding
+ground check, that will be used to switch movement direction also. How will we check for ground presence anyway? We'll do
+this using simple ray casting. At first, add the following fields to the bot script:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    ground_probe: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
@@ -10149,8 +10162,8 @@ in the bot's target searching routine. Add the following code to the <code>impl 
 <p>This code is very straightforward - at first, we're fetching a reference to the plugin (in which we've just stored player's
 handle). Then we're getting self position of the bot and player's position. Finally, to check if the bot can "see" the
 player we're calculating horizontal distance between the player and the bot, checking its absolute value to be less than
-some sensible threshold and also checking the sign of the distance. If the sign of the distance equals with the sign of
-the direction, the bot can see the player. As the last step, call this method in the <code>on_update</code> method:</p>
+some sensible threshold and also checking the sign of the distance. If the sign of the distance is opposite to the sign of
+the direction, then the bot can see the player. As the last step, call this method in the <code>on_update</code> method:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
@@ -10176,19 +10189,19 @@ any other direction modifications - target following will have priority over any
 <span class="boring">}</span></code></pre></pre>
 <h2 id="animations"><a class="header" href="#animations">Animations</a></h2>
 <p>Our bot can patrol, search and follow targets, but all of this is not properly visualized since we're not using any animations
-for such actions. Let's fix this. Add the following fields to the <code>Bot</code> structure:</p>
+for such actions. Let's fix this, add the following fields to the <code>Bot</code> structure:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    rectangle: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-    animations: Vec&lt;SpriteSheetAnimation&gt;,
+</span>    animations: Vec&lt;SpriteSheetAnimation&gt;,
     current_animation: InheritableVariable&lt;u32&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>As with the player from the previous tutorial, we'll use sprite sheet animations. Open the bot prefab and select the rigid
 body, add five animations and fill every slot. For example, attack animation will look like this:</p>
 <p><img src="tutorials/platformer/attack_animation.png" alt="attack animation" /></p>
-<p>If you have any issues with this, see previous part of the tutorial to learn how to use sprite sheet animations editor. Now
-onto animation switching. We need to handle just two animations for now - walking and attacking. Add the following code
-somewhere in the <code>on_update</code>:</p>
+<p>If you have any issues with this, see previous part of the tutorial to learn how to use sprite sheet animations editor.
+Remember, that we have 5 animations and their indices are the following: 0 - attack, 1 - death, 2 - walk, 3 - idle, 4 - hit
+reaction. Now on to the animation switching. We need to handle just two animations for now - walking and attacking. Add
+the following code somewhere in the <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if self.direction != 0.0 {
@@ -10202,9 +10215,9 @@ somewhere in the <code>on_update</code>:</p>
             }
         }
 <span class="boring">}</span></code></pre></pre>
-<p>Here we just switch current animation index. If the bot is moving, then movement animation is selected and if there's a
-target, and it is close enough, then the attack animation is selected. The last step is to apply the animation to the bot's
-sprite. Add the following code at the end of <code>on_update</code>:</p>
+<p>Here we just switch current animation index. If the bot is moving, then movement animation is selected (with index 2) and
+if there's a target (and it is close enough), then the attack animation is selected (with index 0). The last step is to
+apply the animation to the bot's sprite. Add the following code at the end of <code>on_update</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
@@ -10231,9 +10244,13 @@ sprite. Add the following code at the end of <code>on_update</code>:</p>
 <span class="boring">}</span></code></pre></pre>
 <p>Run the game and you should see something like this:</p>
 <p><img src="tutorials/platformer/attack.gif" alt="attack" /></p>
+<p>You can create multiple instances of the skeleton and place them in different places on your level, to make the game more
+interesting. This tutorial teaches about technical details, not game design, so use your imagination and experiment with
+different approaches.</p>
 <h2 id="conclusion-1"><a class="header" href="#conclusion-1">Conclusion</a></h2>
 <p>In this tutorial we've learned how to create basic AI, that can patrol an area, search for a target, follow and attack it.
-In the next tutorial we'll add damage system and various items.</p>
+In the next tutorial we'll add damage system, ability to attack for the player and the bot and various items, such as
+healing potions.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="role-playing-game-tutorial"><a class="header" href="#role-playing-game-tutorial">Role-Playing Game Tutorial</a></h1>
 <p>This tutorial starts the series of tutorials about writing a role-playing game in Rust using Fyrox game engine. Strangely,
 but Fyrox has a reputation of an engine for 3D shooters. In this series I'll try to prove that it is a general purpose
