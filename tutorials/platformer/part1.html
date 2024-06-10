@@ -289,6 +289,7 @@ use fyrox::{
         visitor::prelude::*,
     },
     event::{ElementState, Event, WindowEvent},
+    graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
@@ -299,6 +300,7 @@ use fyrox::{
     },
     script::{ScriptContext, ScriptTrait},
 };
+use std::path::Path;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
 <p>Our scene has pretty much everything we need to start adding scripts, we'll start from the <code>Player</code> script and make our character

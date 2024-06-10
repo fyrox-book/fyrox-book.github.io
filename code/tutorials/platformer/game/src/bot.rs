@@ -1,19 +1,21 @@
 use crate::Game;
-use fyrox::core::algebra::Vector3;
-use fyrox::scene::dim2::collider::Collider;
-use fyrox::scene::rigidbody::RigidBodyType;
 use fyrox::{
     core::{
-        algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
-        variable::InheritableVariable, visitor::prelude::*,
+        algebra::{Vector2, Vector3},
+        pool::Handle,
+        reflect::prelude::*,
+        type_traits::prelude::*,
+        variable::InheritableVariable,
+        visitor::prelude::*,
     },
-    graph::BaseSceneGraph,
-    graph::SceneGraph,
+    graph::{BaseSceneGraph, SceneGraph},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
-        dim2::rigidbody::RigidBody,
-        dim2::{physics::RayCastOptions, rectangle::Rectangle},
+        dim2::{
+            collider::Collider, physics::RayCastOptions, rectangle::Rectangle, rigidbody::RigidBody,
+        },
         node::Node,
+        rigidbody::RigidBodyType,
     },
     script::{ScriptContext, ScriptTrait},
 };
@@ -25,14 +27,14 @@ pub struct Bot {
     // ANCHOR: ground_probe_fields
     ground_probe: InheritableVariable<Handle<Node>>,
     ground_probe_distance: InheritableVariable<f32>,
+    ground_probe_timeout: f32,
     // ANCHOR_END: ground_probe_fields
 
     // ANCHOR: movement_fields
     speed: InheritableVariable<f32>,
-
-    obstacle_sensor: InheritableVariable<Handle<Node>>,
-
     direction: f32,
+    front_obstacle_sensor: InheritableVariable<Handle<Node>>,
+    back_obstacle_sensor: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: movement_fields
 
     // ANCHOR: target_fields
@@ -54,9 +56,11 @@ impl Default for Bot {
         Self {
             ground_probe: Default::default(),
             ground_probe_distance: 2.0.into(),
+            ground_probe_timeout: 0.0,
             speed: 1.0.into(),
-            obstacle_sensor: Default::default(),
             direction: 1.0,
+            front_obstacle_sensor: Default::default(),
+            back_obstacle_sensor: Default::default(),
             target: Default::default(),
             rectangle: Default::default(),
             animations: Default::default(),
@@ -90,12 +94,25 @@ impl Bot {
             &mut intersections,
         );
 
-        if let Some(first_intersection) = intersections.first() {
-            if first_intersection
-                .position
-                .coords
-                .metric_distance(&ground_probe_position)
-                <= *self.ground_probe_distance
+        for intersection in intersections {
+            let Some(collider) = ctx.scene.graph.try_get(intersection.collider) else {
+                continue;
+            };
+
+            let Some(rigid_body) = ctx
+                .scene
+                .graph
+                .try_get_of_type::<RigidBody>(collider.parent())
+            else {
+                continue;
+            };
+
+            if rigid_body.body_type() == RigidBodyType::Static
+                && intersection
+                    .position
+                    .coords
+                    .metric_distance(&ground_probe_position)
+                    <= *self.ground_probe_distance
             {
                 return true;
             }
@@ -134,7 +151,7 @@ impl Bot {
 
         let y_vel = rigid_body.lin_vel().y;
 
-        rigid_body.set_lin_vel(Vector2::new(*self.speed * self.direction, y_vel));
+        rigid_body.set_lin_vel(Vector2::new(-*self.speed * self.direction, y_vel));
 
         // Also, inverse the sprite along the X axis.
         let Some(rectangle) = ctx.scene.graph.try_get_mut(*self.rectangle) else {
@@ -143,7 +160,7 @@ impl Bot {
 
         rectangle
             .local_transform_mut()
-            .set_scale(Vector3::new(-2.0 * self.direction, 2.0, 1.0));
+            .set_scale(Vector3::new(2.0 * self.direction, 2.0, 1.0));
     }
     // ANCHOR_END: do_move
 
@@ -151,8 +168,15 @@ impl Bot {
     fn has_obstacles(&mut self, ctx: &mut ScriptContext) -> bool {
         let graph = &ctx.scene.graph;
 
-        let Some(obstacle_sensor) = graph.try_get_of_type::<Collider>(*self.obstacle_sensor) else {
-            dbg!();
+        // Select the sensor using current walking direction.
+        let sensor_handle = if self.direction < 0.0 {
+            *self.back_obstacle_sensor
+        } else {
+            *self.front_obstacle_sensor
+        };
+
+        // Check if it intersects something.
+        let Some(obstacle_sensor) = graph.try_get_of_type::<Collider>(sensor_handle) else {
             return false;
         };
 
@@ -193,6 +217,16 @@ impl ScriptTrait for Bot {
             self.direction = -self.direction;
         }
         // ANCHOR_END: check_for_obstacles
+
+        // ANCHOR: ground_checks
+        self.ground_probe_timeout -= ctx.dt;
+        if self.ground_probe_timeout <= 0.0 {
+            if !self.has_ground_in_front(ctx) {
+                self.direction = -self.direction;
+            }
+            self.ground_probe_timeout = 1.0;
+        }
+        // ANCHOR_END: ground_checks
 
         // ANCHOR: do_move_call
         self.do_move(ctx);
