@@ -69,10 +69,6 @@ context is something like this:
 {{#include ../code/snippets/src/scripting/context.rs:plugin_context}}
 ```
 
-Amount of time (in seconds) that passed from creation of the engine. Keep in mind, that
-this value is **not** guaranteed to match real time. A user can change delta time with
-which the engine "ticks" and this delta time affects elapsed time.
-
 - `scenes` - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading 
 is given in the previous code snippet in `Game::new()` method.
 - `resource_manager` - is used to load external resources (scenes, models, textures, animations, sound buffers, etc.) from
