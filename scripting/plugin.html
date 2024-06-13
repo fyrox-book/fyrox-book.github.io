@@ -356,9 +356,6 @@ context is something like this:</p>
     pub task_pool: &amp;'a mut TaskPoolHandler,
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Amount of time (in seconds) that passed from creation of the engine. Keep in mind, that
-this value is <strong>not</strong> guaranteed to match real time. A user can change delta time with
-which the engine "ticks" and this delta time affects elapsed time.</p>
 <ul>
 <li><code>scenes</code> - a scene container, could be used to manage game scenes - add, remove, borrow. An example of scene loading
 is given in the previous code snippet in <code>Game::new()</code> method.</li>
