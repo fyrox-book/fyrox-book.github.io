@@ -52,6 +52,7 @@
     - [Signals](./animation/signal.md)
     - [Root Motion](./animation/root_motion/root_motion.md)
     - [Sprite Animation](./animation/spritesheet/spritesheet.md)
+  - [Debugging](./scene/debug.md)
 - [Input Handling](./input/input.md)
   - [Keyboard](./input/keyboard.md)
   - [Mouse](./input/mouse.md)
