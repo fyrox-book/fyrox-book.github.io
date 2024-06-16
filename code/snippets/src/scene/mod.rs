@@ -2,6 +2,7 @@ pub mod base;
 pub mod camera;
 pub mod collider;
 pub mod custom;
+pub mod debug;
 pub mod decal;
 pub mod graph;
 pub mod inheritance;
