@@ -1,6 +1,6 @@
 # First-Person Shooter Tutorial
 
-In this tutorial we'll create a first-person shooter game. 
+In this tutorial, we'll create a first-person shooter game. 
 
 Before we begin, make sure you know how to create projects and run the game and the editor. Read 
 [this chapter](../../../beginning/scripting.md) first and let's start by creating a new project by executing the following 
@@ -12,6 +12,12 @@ fyrox-template init --name=fps --style=3d
 
 This command will create a new cargo workspace with a few projects inside, we're interested only in `game` folder
 in this tutorial.
+
+We also need to add fyrox_ui to our .toml in the fps project. The simplest way is to do it like so: 
+
+```shell
+cargo add fyrox-ui --package fps
+```
 
 ```text
 fps
@@ -30,8 +36,8 @@ fps
 
 ## Player Prefab
 
-Let's start by creating a [prefab](../../../scene/prefab.md) for the player. First-person shooters uses quite simple 
-layout for characters - usually it is just a physical capsule with a camera on top of it. Run the editor using the 
+Let's start by creating a [prefab](../../../scene/prefab.md) for the player. First-person shooters use quite simple 
+layouts for characters - usually, it is just a physical capsule with a camera on top of it. Run the editor using the 
 following command:
 
 ```shell
@@ -43,15 +49,15 @@ cargo run --package editor
 By default, `scene.rgs` scene is loaded, and it is our main scene, but for our player prefab we need a separate scene.
 Go to `File` menu and click `New Scene`. Save the scene in `data/player` folder as `player.rgs`. 
 
-Great, now we ready to create the prefab. Right-click on the `__ROOT__` node in the World Viewer and find `Replace Node` 
+Great, now we are ready to create the prefab. Right-click on the `__ROOT__` node in the World Viewer and find `Replace Node` 
 and select `Physics -> Rigid Body` there. By doing this, we've replaced the root node of the scene to be a rigid body. 
-This is needed, because our player will be moving.
+This is needed because our player will be moving.
 
 ![replace node](editor_2.png)
 
 Select rigid body and set the `X/Y/Z Rotation Locked` properties to `true`, `Can Sleep` - to `false`. The first three
-properties prevents the rigid body from any undesired rotations and the last one prevents the rigid body to be excluded
-from simulation.s
+properties prevents the rigid body from any undesired rotations and the last one prevents the rigid body from being excluded
+from simulations.
 
 ![rigid body props](rigid_body_props.png)
 
@@ -68,7 +74,7 @@ Now let's change the size of the collider, because default values are disproport
 
 ![collider properties](editor_5.png)
 
-This way the capsule is thinner and taller, which roughly corresponds to a person of 1.8m tall. Now we need to add a 
+This way the capsule is thinner and taller, which roughly corresponds to a 1.8m tall person. Now we need to add a 
 [camera](../../../scene/camera_node.md), because without it, we couldn't see anything. 
 
 ![camera](editor_6.png)
@@ -89,11 +95,15 @@ Navigate to the `fps` directory and execute the following command there:
 fyrox-template script --name=player
 ```
 
-This command creates a new script for our player in `game/src` folder. All you need to do now is to add the new module
-to the `lib.rs` module by adding the `pub mod player;` after the imports:
+This command creates a new script for our player in `game/src` folder. Next, Replace the imports in the `lib.rs` with the ones below:
+```rust
+{{#include ../../../code/tutorials/fps/game/src/snips/lib.rs:player_imports}}
+```
+
+and then add the new module to the `lib.rs` module by adding the `pub mod player;` after the imports:
 
 ```rust
-{{#include ../../../code/tutorials/fps/game/src/lib.rs:player_mod_reg}}
+{{#include ../../../code/tutorials/fps/game/src/snips/lib.rs:player_mod_reg}}
 ```
 
 All scripts must be registered in the engine explicitly, otherwise they won't work. To do that, add the following
@@ -103,7 +113,15 @@ lines to the `register` method:
 {{#include ../../../code/tutorials/fps/game/src/lib.rs:player_script_reg}}
 ```
 
-Great, now the new script is registered, and we can start writing a basic character controller. Let's start by input
+Great, now the new script is registered, we can head over to the `player.rs` module and start writing a basic character controller.
+First replace the import to the following:
+
+```rust
+{{#include ../../../code/tutorials/fps/game/src/snips/player.rs:player_imports}}
+```
+
+
+ Let's start by input
 handling. At first, add the following fields to the `Player` struct:
 
 ```rust
@@ -155,6 +173,8 @@ this script is assigned to, then it checks if any of the WSAD keys are pressed, 
 the basis vectors of node. As the last step, it normalizes the vector (makes it unity length) and sets it to the rigid
 body velocity.
 
+
+
 Our script is almost ready, now all we need to do is to assign it to the player's prefab. Open the `player.rgs` prefab
 in the editor, select `Player` node and assign the Player script to it. Do not forget to set Camera handle (by clicking
 on the small green button and selecting Camera from the list):
@@ -163,7 +183,7 @@ on the small green button and selecting Camera from the list):
 
 Great, now we're done with the player movement. We can test it our main scene, but at first let's create a simple level.
 Open `scene.rgs` and create a rigid body with a collider. Add a cube as a child of the rigid body and squash it to some
-floor-like shape. Select the collider and set it's kind to `Trimesh`, add a geometry source there and point it to the 
+floor-like shape. Select the collider and set its `Shape` to `Trimesh`, add a geometry source there and point it to the 
 floor. Select the rigid body and set its type to `Static`. You can also add some texture to the cube to make it look
 much better.
 
