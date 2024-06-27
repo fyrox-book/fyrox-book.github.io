@@ -8,8 +8,9 @@ use fyrox::{
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
     event::Event,
+    gui::message::UiMessage,
 };
-use fyrox_ui::message::UiMessage;
+
 use std::path::Path;
 // ANCHOR_END: player_imports
 // ANCHOR: player_mod_reg

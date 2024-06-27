@@ -13,11 +13,6 @@ fyrox-template init --name=fps --style=3d
 This command will create a new cargo workspace with a few projects inside, we're interested only in `game` folder
 in this tutorial.
 
-We also need to add fyrox_ui to our .toml in the fps project. The simplest way is to do it like so: 
-
-```shell
-cargo add fyrox-ui --package fps
-```
 
 ```text
 fps
