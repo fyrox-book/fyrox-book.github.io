@@ -94,7 +94,77 @@ cause the brush's effect to be applied repeatedly since that is counted as multi
 
 ## Creating terrain from code
 
-Terrain can always be created from code, here's comprehensive example of how to create and modify terrain from code:
+Terrain brushes can also be used to edit terrain from code by using `fyrox::scene:terrain::Brush` and `fyrox::scene::terrain::BrushContext`.
+
+The `Brush` structure has fields for each of the brush options, and the `BrushContext` structure has methods for accepting a `Brush` and
+applying it to a terrain. BrushContext allows you to start a new stroke, perform stamps and smears during the stroke, then end the stroke
+to write the constructed brush stroke to the terrain. It is also possible to `flush` a partially finished stroke to the terrain, so that
+a brush stroke may be animated across multiple frames instead of appearing on the terrain all at once.
+
+Here is a list of methods provided by `BrushContext`:
+
+```rust,no_run
+fn start_stroke(&mut self, terrain: &Terrain, brush: Brush)
+```
+
+Call this to choose the brush that will be used for the rest of the stroke. At this point the `BrushContext` records which textures the
+terrain is using to represent the data for the given brush's target. and those textures are the ones that will finally be modified
+when `end_stroke` is eventually called.
+
+```rust,no_run
+fn stamp(&mut self, terrain: &Terrain, position: Vector3<f32>)
+```
+
+Call this to stamp the brush at a single point on the terrain. A stroke should already have been started, as this is potentially just
+one operation out of many that could make up a stroke.
+
+The terrain is not modified; it is only being used to translate the the given position from world space to terrain texture space.
+In order to actually see the results of this stamp in the terrain, `flush` or `end_stroke` must be called.
+
+The y-coordinate of the position is ignored as the position is projected onto the terrain.
+
+```rust,no_run
+fn smear(&mut self, terrain: &Terrain, start: Vector3<f32>, end: Vector3<f32>)
+```
+
+A smear is just like a stamp, except it continuously paints with the brush along a line from `start` to `end`.
+Again, a stroke should already have been started in order to select the brush to paint with, and the results will not
+appear immediately on the terrain.
+
+```rust,no_run
+fn flush(&mut self)
+```
+
+Call this to force the terrain to update to include the modifications due to a partially completed brush stroke.
+If a stroke is being drawn across multiple frames, it would make sense to call `flush` at the end of each frame.
+The `flush` method does not require the terrain to be passed in because `BrushContext` already knows which textures
+need to be modified in order to update the terrain.
+
+```rust,no_run
+fn end_stroke(&mut self)
+```
+
+Call this to update the terrain to include the modifications due to the stroke, and clear all data for that stroke
+so that the context is ready to begin a new stroke.
+
+```rust,no_run
+fn shape(&mut self) -> &mut BrushShape
+```
+
+This provides mutable access to the brush's shape, making it possible to change the shape without starting a new stroke.
+
+```rust,no_run
+fn hardness(&mut self) -> &mut f32
+```
+
+This provides mutable access to the brush's hardness, making it possible to change the hardness without starting a new stroke.
+
+There are also similiar methods for changing the brush's alpha and mode in the middle of a stroke, but these are unlikely to serve
+any practical use as brush strokes do not tend to react well to such changes. It is best to start a new stroke if a new brush mode
+is needed. It is particularly not possible to change the brush's target in the middle of a stroke, because that would require
+updating other details of the internal state of the `BrushContext`.
+
+Here is an example of `BrushContext` in use:
 
 ```rust,no_run
 {{#include ../code/snippets/src/scene/terrain.rs:create_random_two_layer_terrain}}

@@ -1,4 +1,6 @@
 use fyrox::asset::manager::ResourceManager;
+use fyrox::asset::untyped::ResourceKind;
+use fyrox::scene::mesh::surface::SurfaceResource;
 use fyrox::{
     asset::ResourceData,
     core::algebra::{Matrix4, Vector3},
@@ -6,7 +8,6 @@ use fyrox::{
         base::BaseBuilder,
         light::{point::PointLightBuilder, BaseLightBuilder},
         mesh::{
-            surface::SurfaceSharedData,
             surface::{SurfaceBuilder, SurfaceData},
             MeshBuilder,
         },
@@ -30,9 +31,11 @@ fn generate_lightmap() {
     );
 
     MeshBuilder::new(BaseBuilder::new())
-        .with_surfaces(vec![
-            SurfaceBuilder::new(SurfaceSharedData::new(data)).build()
-        ])
+        .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+            ResourceKind::Embedded,
+            data,
+        ))
+        .build()])
         .build(&mut scene.graph);
 
     PointLightBuilder::new(BaseLightBuilder::new(
