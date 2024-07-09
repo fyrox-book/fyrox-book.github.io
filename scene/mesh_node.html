@@ -249,7 +249,8 @@ cannot create a mesh in 3D modelling software.</p>
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+        ResourceKind::Embedded,
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited amount of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&amp;Vector3::new(
@@ -275,7 +276,7 @@ For example, the following code extracts world-space positions of every vertex o
 
     for surface in mesh.surfaces() {
         let guard = surface.data();
-        let data = guard.lock();
+        let data = guard.data_ref();
 
         for vertex in data.vertex_buffer.iter() {
             let Ok(position) = vertex.read_3_f32(VertexAttributeUsage::Position) else {

@@ -10,7 +10,7 @@ use fyrox::{
         base::BaseBuilder,
         graph::Graph,
         node::Node,
-        terrain::{Brush, BrushMode, BrushShape, Layer, TerrainBuilder},
+        terrain::{Brush, BrushContext, BrushMode, BrushShape, BrushTarget, Layer, TerrainBuilder},
     },
 };
 
@@ -47,7 +47,7 @@ fn setup_layer_material(
         .unwrap();
 }
 
-fn create_random_two_layer_terrain(
+pub fn create_random_two_layer_terrain(
     graph: &mut Graph,
     resource_manager: &ResourceManager,
 ) -> Handle<Node> {
@@ -83,6 +83,7 @@ fn create_random_two_layer_terrain(
         .build(graph);
 
     let terrain_ref = graph[terrain].as_terrain_mut();
+    let mut context = BrushContext::default();
 
     // Draw something on the terrain.
     for _ in 0..60 {
@@ -90,23 +91,52 @@ fn create_random_two_layer_terrain(
         let z = thread_rng().gen_range(4.0..60.00);
         let radius = thread_rng().gen_range(2.0..4.0);
         let height = thread_rng().gen_range(1.0..3.0);
+        let tail_x = thread_rng().gen_range(-5.0..=5.0);
+        let tail_z = thread_rng().gen_range(-5.0..=5.0);
 
         // Pull terrain.
-        terrain_ref.draw(&Brush {
-            center: Vector3::new(x, 0.0, z),
-            shape: BrushShape::Circle { radius },
-            mode: BrushMode::ModifyHeightMap { amount: height },
-        });
+        context.start_stroke(
+            terrain_ref,
+            Brush {
+                shape: BrushShape::Circle { radius },
+                mode: BrushMode::Raise { amount: height },
+                target: BrushTarget::HeightMap,
+                hardness: 0.0,
+                ..Brush::default()
+            },
+        );
+        context.stamp(terrain_ref, Vector3::new(x, 0.0, z));
+        *context.shape() = BrushShape::Circle {
+            radius: radius * 0.5,
+        };
+        context.smear(
+            terrain_ref,
+            Vector3::new(x, 0.0, z),
+            Vector3::new(x + tail_x, 0.0, z + tail_z),
+        );
+        context.end_stroke();
 
         // Draw rock texture on top.
-        terrain_ref.draw(&Brush {
-            center: Vector3::new(x, 0.0, z),
-            shape: BrushShape::Circle { radius },
-            mode: BrushMode::DrawOnMask {
-                layer: 1,
-                alpha: 1.0,
+        context.start_stroke(
+            terrain_ref,
+            Brush {
+                shape: BrushShape::Circle { radius },
+                mode: BrushMode::Assign { value: 1.0 },
+                target: BrushTarget::LayerMask { layer: 1 },
+                hardness: 0.0,
+                ..Brush::default()
             },
-        });
+        );
+        context.stamp(terrain_ref, Vector3::new(x, 0.0, z));
+        *context.shape() = BrushShape::Circle {
+            radius: radius * 0.5,
+        };
+        context.smear(
+            terrain_ref,
+            Vector3::new(x, 0.0, z),
+            Vector3::new(x + tail_x, 0.0, z + tail_z),
+        );
+        context.end_stroke();
     }
 
     terrain

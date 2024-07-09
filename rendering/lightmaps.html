@@ -239,9 +239,11 @@ and the actual generation cancellation. When the generation is done, you should 
     );
 
     MeshBuilder::new(BaseBuilder::new())
-        .with_surfaces(vec![
-            SurfaceBuilder::new(SurfaceSharedData::new(data)).build()
-        ])
+        .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+            ResourceKind::Embedded,
+            data,
+        ))
+        .build()])
         .build(&amp;mut scene.graph);
 
     PointLightBuilder::new(BaseLightBuilder::new(

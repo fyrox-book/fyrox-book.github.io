@@ -1,16 +1,13 @@
 use fyrox::{
-    asset::manager::ResourceManager,
-    asset::untyped::ResourceKind,
+    asset::{manager::ResourceManager, untyped::ResourceKind},
     core::{
-        algebra::Point3,
-        algebra::{Matrix4, Vector3},
+        algebra::{Matrix4, Point3, Vector3},
         futures::executor::block_on,
         pool::Handle,
         ImmutableString,
     },
     graph::BaseSceneGraph,
-    material::shader::SamplerFallback,
-    material::{Material, MaterialResource, PropertyValue},
+    material::{shader::SamplerFallback, Material, MaterialResource, PropertyValue},
     resource::{
         model::{Model, ModelResourceExtension},
         texture::Texture,
@@ -20,7 +17,7 @@ use fyrox::{
         graph::Graph,
         mesh::{
             buffer::{VertexAttributeUsage, VertexReadTrait},
-            surface::{SurfaceBuilder, SurfaceData, SurfaceSharedData},
+            surface::{SurfaceBuilder, SurfaceData, SurfaceResource},
             Mesh, MeshBuilder,
         },
         node::Node,
@@ -68,7 +65,8 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(SurfaceSharedData::new(
+    .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+        ResourceKind::Embedded,
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited amount of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&Vector3::new(
@@ -87,7 +85,7 @@ fn extract_world_space_vertices(mesh: &Mesh, graph: &Graph) -> Vec<Vector3<f32>>
 
     for surface in mesh.surfaces() {
         let guard = surface.data();
-        let data = guard.lock();
+        let data = guard.data_ref();
 
         for vertex in data.vertex_buffer.iter() {
             let Ok(position) = vertex.read_3_f32(VertexAttributeUsage::Position) else {
