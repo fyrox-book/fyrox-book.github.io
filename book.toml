@@ -6,6 +6,7 @@ src = "src"
 title = "Fyrox Book"
 
 [output.html]
+mathjax-support = true
 default-theme = "navy"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/fyrox-book/fyrox-book.github.io"
