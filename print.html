@@ -40,6 +40,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     </head>
     <body class="sidebar-visible no-js">
     <div id="body-container">
@@ -3123,7 +3125,7 @@ Masks are always clamped to be between 0 and 1, regardless of what brush mode is
 and 1 represents the layer being fully opaque.</li>
 <li><em>Transform:</em> This is a 2x2 matrix that is applied to the brush's shape, allowing linear transformations such as rotating
 a rectangular brush, or skewing, or stretching.
-For most purposes the identity matrix of $\begin{bmatrix}1&amp;0\0&amp;1\end{bmatrix}$ works well, since that is the default that applies no modification to the brush's shape.
+For most purposes the identity matrix of \(begin{bmatrix}1&amp;0\0&amp;1\end{bmatrix}\) works well, since that is the default that applies no modification to the brush's shape.
 If the matrix is not invertable, then it will be ignored.</li>
 <li><em>Hardness:</em> The effect of a brush does not need to be applied equally across its entire area. The <em>hardness</em>
 of a brush controls how much of a brush gets its full effect.
@@ -3131,11 +3133,11 @@ When hardness is 0, only the exact center of the brush receives the full effect,
 full effect to no effect at the edges.
 When hardness is 1 or greater, the entire brush gets the full effect.
 If the value is less than 0, then even the center of the brush does not receive the full effect.</li>
-<li><em>Alpha:</em> The $\alpha$ value linearlly interpolates between the current value of the terrain and the value that would be
+<li><em>Alpha:</em> The \(\alpha\) value linearlly interpolates between the current value of the terrain and the value that would be
 produced by the full effect of the brush.
 If $v_0$ is the current value of a point on the terrain and and $v_1$ is the full effect of the brush, then the actual
-effect that the brush will apply will be $(1 - \alpha) * v_0 + \alpha * v_1$.
-There is no requirement that $\alpha$ must be between 0 and 1. Values less than 0 will invert the effect of the brush,
+effect that the brush will apply will be \((1 - \alpha) * v_0 + \alpha * v_1\).
+There is no requirement that \(\alpha\) must be between 0 and 1. Values less than 0 will invert the effect of the brush,
 while values greater than 1 will exaggerate the effect of the brush.
 Values close to 0 can be used to make fine adjustments by applying an effect incrementally across multiple brush strokes.</li>
 </ul>
@@ -12069,7 +12071,9 @@ fn main() {
 
         <script>
         window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
         });
         </script>
 
