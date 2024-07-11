@@ -71,7 +71,7 @@ Masks are always clamped to be between 0 and 1, regardless of what brush mode is
 and 1 represents the layer being fully opaque.
 - *Transform:* This is a 2x2 matrix that is applied to the brush's shape, allowing linear transformations such as rotating
 a rectangular brush, or skewing, or stretching.
-For most purposes the identity matrix of \\(begin{bmatrix}1&0\\\\0&1\end{bmatrix}\\) works well, since that is the default that applies no modification to the brush's shape.
+For most purposes the identity matrix of \\(\begin{bmatrix}1&0\\\\0&1\end{bmatrix}\\) works well, since that is the default that applies no modification to the brush's shape.
 If the matrix is not invertable, then it will be ignored.
 - *Hardness:* The effect of a brush does not need to be applied equally across its entire area. The *hardness*
 of a brush controls how much of a brush gets its full effect.
