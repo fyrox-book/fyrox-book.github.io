@@ -34,6 +34,7 @@
   - [Camera Node](./scene/camera_node.md)
   - [Decal Node](./scene/decal_node.md)
   - [Rectangle Node](./scene/rectangle.md)
+  - [Tile Map](./scene/tilemap.md)
   - [Custom Node](./scene/custom_node.md)
   - [Physics](./physics/physics.md)
     - [Rigid Body](./physics/rigid_body.md)
