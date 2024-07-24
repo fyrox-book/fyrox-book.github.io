@@ -16,6 +16,7 @@ pub mod rigid_body;
 pub mod sound;
 pub mod sprite;
 pub mod terrain;
+pub mod tilemap;
 
 use fyrox::core::color::Color;
 use fyrox::core::pool::Handle;
