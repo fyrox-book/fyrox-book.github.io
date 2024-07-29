@@ -89,13 +89,40 @@ Select some tiles on the palette and start drawing:
 
 ![drawing](drawing.png)
 
-There are number of tools (apart from the drawing itself) that could be useful while editing tile maps:
+There are number of tools (apart from the drawing itself) that could be useful while editing tile maps. 
 
-1) Erase - erases tiles using the shape of the current brush, could be activated using `Shift` key or by clicking on the
+## Erase
+
+![erase](erase.gif)
+
+Erases tiles using the shape of the current brush, could be activated using `Shift` key or by clicking on the
 button with eraser icon.
-2) Flood fill - fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
+
+## Flood fill
+
+![flood fill](flood_fill.gif)
+
+Fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
 be activated using the button with paint bucket icon.
-3) Pick - picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
+
+## Pick
+
+![pick](pick.gif)
+
+Picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
 activated using `Alt` key or by clicking the button with pipette icon.
-4) Rectangular fill - fills a rectangular region with the tiles from the current brush. It tiles the given region using the
+
+## Rectangular fill
+
+![rect fill](rect_fill.gif)
+
+Fills a rectangular region with the tiles from the current brush. It tiles the given region using the
 tiles from current brush. Could be activated using `Ctrl` key of by clicking on the button with the tiles icon.
+
+## Nine slice 
+
+![nine slice](nine_slice.gif)
+
+Fills a rectangular region using a 3x3 brush (the size limitation could be dropped in the future). The
+corners of the brush will be placed at the corners of the selected region, the middle tiles between corners will be 
+duplicated from corner to corner. The center tile will be used to fill the rest of the rectangle.
