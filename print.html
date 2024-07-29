@@ -3808,17 +3808,28 @@ grid:</p>
 <p><img src="scene/grid.png" alt="grid" /></p>
 <p>Select some tiles on the palette and start drawing:</p>
 <p><img src="scene/drawing.png" alt="drawing" /></p>
-<p>There are number of tools (apart from the drawing itself) that could be useful while editing tile maps:</p>
-<ol>
-<li>Erase - erases tiles using the shape of the current brush, could be activated using <code>Shift</code> key or by clicking on the
-button with eraser icon.</li>
-<li>Flood fill - fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
-be activated using the button with paint bucket icon.</li>
-<li>Pick - picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
-activated using <code>Alt</code> key or by clicking the button with pipette icon.</li>
-<li>Rectangular fill - fills a rectangular region with the tiles from the current brush. It tiles the given region using the
-tiles from current brush. Could be activated using <code>Ctrl</code> key of by clicking on the button with the tiles icon.</li>
-</ol>
+<p>There are number of tools (apart from the drawing itself) that could be useful while editing tile maps.</p>
+<h2 id="erase"><a class="header" href="#erase">Erase</a></h2>
+<p><img src="scene/erase.gif" alt="erase" /></p>
+<p>Erases tiles using the shape of the current brush, could be activated using <code>Shift</code> key or by clicking on the
+button with eraser icon.</p>
+<h2 id="flood-fill"><a class="header" href="#flood-fill">Flood fill</a></h2>
+<p><img src="scene/flood_fill.gif" alt="flood fill" /></p>
+<p>Fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
+be activated using the button with paint bucket icon.</p>
+<h2 id="pick"><a class="header" href="#pick">Pick</a></h2>
+<p><img src="scene/pick.gif" alt="pick" /></p>
+<p>Picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
+activated using <code>Alt</code> key or by clicking the button with pipette icon.</p>
+<h2 id="rectangular-fill"><a class="header" href="#rectangular-fill">Rectangular fill</a></h2>
+<p><img src="scene/rect_fill.gif" alt="rect fill" /></p>
+<p>Fills a rectangular region with the tiles from the current brush. It tiles the given region using the
+tiles from current brush. Could be activated using <code>Ctrl</code> key of by clicking on the button with the tiles icon.</p>
+<h2 id="nine-slice"><a class="header" href="#nine-slice">Nine slice</a></h2>
+<p><img src="scene/nine_slice.gif" alt="nine slice" /></p>
+<p>Fills a rectangular region using a 3x3 brush (the size limitation could be dropped in the future). The
+corners of the brush will be placed at the corners of the selected region, the middle tiles between corners will be
+duplicated from corner to corner. The center tile will be used to fill the rest of the rectangle.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-scene-node"><a class="header" href="#custom-scene-node">Custom Scene Node</a></h1>
 <p>Sometimes there is a need to have custom scene nodes, it is possible to do, but it requires quite a lot of boilerplate
 code.</p>
