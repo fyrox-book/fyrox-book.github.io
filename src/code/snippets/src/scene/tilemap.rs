@@ -1,3 +1,6 @@
+use fyrox::scene::dim2::collider::{ColliderBuilder, ColliderShape, GeometrySource, TileMapShape};
+use fyrox::scene::dim2::rigidbody::RigidBodyBuilder;
+use fyrox::scene::rigidbody::RigidBodyType;
 use fyrox::{
     asset::untyped::ResourceKind,
     core::{algebra::Vector2, color::Color, math::Rect, pool::Handle},
@@ -62,3 +65,19 @@ fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
         .build(graph)
 }
 // ANCHOR_END: create_tile_map
+
+// ANCHOR: tile_map_physics
+fn add_tile_map_physics(tile_map: Handle<Node>, graph: &mut Graph) {
+    // Create a new collider with tile map shape.
+    let collider = ColliderBuilder::new(BaseBuilder::new())
+        .with_shape(ColliderShape::TileMap(TileMapShape {
+            tile_map: GeometrySource(tile_map),
+        }))
+        .build(graph);
+
+    // Create a static rigid body with the tile map collider.
+    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_children([collider]))
+        .with_body_type(RigidBodyType::Static)
+        .build(graph);
+}
+// ANCHOR_END: tile_map_physics

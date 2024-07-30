@@ -89,40 +89,60 @@ Select some tiles on the palette and start drawing:
 
 ![drawing](drawing.png)
 
+## Drawing Tools
+
 There are number of tools (apart from the drawing itself) that could be useful while editing tile maps. 
 
-## Erase
+### Erase
 
 ![erase](erase.gif)
 
 Erases tiles using the shape of the current brush, could be activated using `Shift` key or by clicking on the
 button with eraser icon.
 
-## Flood fill
+### Flood fill
 
 ![flood fill](flood_fill.gif)
 
 Fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
 be activated using the button with paint bucket icon.
 
-## Pick
+### Pick
 
 ![pick](pick.gif)
 
 Picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
 activated using `Alt` key or by clicking the button with pipette icon.
 
-## Rectangular fill
+### Rectangular fill
 
 ![rect fill](rect_fill.gif)
 
 Fills a rectangular region with the tiles from the current brush. It tiles the given region using the
 tiles from current brush. Could be activated using `Ctrl` key of by clicking on the button with the tiles icon.
 
-## Nine slice 
+### Nine slice 
 
 ![nine slice](nine_slice.gif)
 
 Fills a rectangular region using a 3x3 brush (the size limitation could be dropped in the future). The
 corners of the brush will be placed at the corners of the selected region, the middle tiles between corners will be 
 duplicated from corner to corner. The center tile will be used to fill the rest of the rectangle.
+
+## Physics
+
+Tile maps supports physics for tiles, and it could be enabled by using special collider shape called `TileMap`. In code
+it could be done something like this:
+
+```rust
+{{#include ../code/snippets/src/scene/tilemap.rs:tile_map_physics}}
+```
+
+In the editor it could be done by creating a static 2D rigid body with a 2D collider that has `TileMap` shape: 
+
+![tile map physics](tile_map_physics.png)
+
+## Layers
+
+Tile map does not support any layers on its own, but layers could be added very easy by simply creating another tile 
+map with its own tile set and shifting this new layer by Z axis towards camera on some small value. 
