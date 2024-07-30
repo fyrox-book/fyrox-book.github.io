@@ -307,16 +307,7 @@ add the following lines to <code>editor/src/main.rs</code> file, somewhere after
 
     // Register property editor.
     editor.inspector.property_editors.insert(
-        ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
-            Arc::new(Mutex::new(
-                |resource_manager: &amp;ResourceManager, path: &amp;Path| {
-                    resource_manager
-                        .try_request::&lt;CustomResource&gt;(path)
-                        .map(block_on)
-                },
-            )),
-            editor.message_sender.clone(),
-        ),
+        ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(editor.message_sender.clone()),
     );
 
     // ...

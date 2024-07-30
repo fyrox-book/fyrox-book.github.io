@@ -1,8 +1,6 @@
 use fyrox::asset::io::ResourceIo;
 use fyrox::asset::loader::LoaderPayload;
-use fyrox::asset::manager::ResourceManager;
 use fyrox::asset::state::LoadError;
-use fyrox::core::futures::executor::block_on;
 use fyrox::plugin::{Plugin, PluginRegistrationContext};
 use fyrox::{
     asset::{
@@ -11,7 +9,6 @@ use fyrox::{
     },
     core::{
         io::{self},
-        parking_lot::Mutex,
         reflect::prelude::*,
         type_traits::prelude::*,
         uuid::Uuid,
@@ -115,16 +112,7 @@ fn main() {
 
     // Register property editor.
     editor.inspector.property_editors.insert(
-        ResourceFieldPropertyEditorDefinition::<CustomResource>::new(
-            Arc::new(Mutex::new(
-                |resource_manager: &ResourceManager, path: &Path| {
-                    resource_manager
-                        .try_request::<CustomResource>(path)
-                        .map(block_on)
-                },
-            )),
-            editor.message_sender.clone(),
-        ),
+        ResourceFieldPropertyEditorDefinition::<CustomResource>::new(editor.message_sender.clone()),
     );
 
     // ...

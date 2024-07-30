@@ -298,28 +298,53 @@ grid:</p>
 <p><img src="grid.png" alt="grid" /></p>
 <p>Select some tiles on the palette and start drawing:</p>
 <p><img src="drawing.png" alt="drawing" /></p>
+<h2 id="drawing-tools"><a class="header" href="#drawing-tools">Drawing Tools</a></h2>
 <p>There are number of tools (apart from the drawing itself) that could be useful while editing tile maps.</p>
-<h2 id="erase"><a class="header" href="#erase">Erase</a></h2>
+<h3 id="erase"><a class="header" href="#erase">Erase</a></h3>
 <p><img src="erase.gif" alt="erase" /></p>
 <p>Erases tiles using the shape of the current brush, could be activated using <code>Shift</code> key or by clicking on the
 button with eraser icon.</p>
-<h2 id="flood-fill"><a class="header" href="#flood-fill">Flood fill</a></h2>
+<h3 id="flood-fill"><a class="header" href="#flood-fill">Flood fill</a></h3>
 <p><img src="flood_fill.gif" alt="flood fill" /></p>
 <p>Fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
 be activated using the button with paint bucket icon.</p>
-<h2 id="pick"><a class="header" href="#pick">Pick</a></h2>
+<h3 id="pick"><a class="header" href="#pick">Pick</a></h3>
 <p><img src="pick.gif" alt="pick" /></p>
 <p>Picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
 activated using <code>Alt</code> key or by clicking the button with pipette icon.</p>
-<h2 id="rectangular-fill"><a class="header" href="#rectangular-fill">Rectangular fill</a></h2>
+<h3 id="rectangular-fill"><a class="header" href="#rectangular-fill">Rectangular fill</a></h3>
 <p><img src="rect_fill.gif" alt="rect fill" /></p>
 <p>Fills a rectangular region with the tiles from the current brush. It tiles the given region using the
 tiles from current brush. Could be activated using <code>Ctrl</code> key of by clicking on the button with the tiles icon.</p>
-<h2 id="nine-slice"><a class="header" href="#nine-slice">Nine slice</a></h2>
+<h3 id="nine-slice"><a class="header" href="#nine-slice">Nine slice</a></h3>
 <p><img src="nine_slice.gif" alt="nine slice" /></p>
 <p>Fills a rectangular region using a 3x3 brush (the size limitation could be dropped in the future). The
 corners of the brush will be placed at the corners of the selected region, the middle tiles between corners will be
 duplicated from corner to corner. The center tile will be used to fill the rest of the rectangle.</p>
+<h2 id="physics"><a class="header" href="#physics">Physics</a></h2>
+<p>Tile maps supports physics for tiles, and it could be enabled by using special collider shape called <code>TileMap</code>. In code
+it could be done something like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn add_tile_map_physics(tile_map: Handle&lt;Node&gt;, graph: &amp;mut Graph) {
+    // Create a new collider with tile map shape.
+    let collider = ColliderBuilder::new(BaseBuilder::new())
+        .with_shape(ColliderShape::TileMap(TileMapShape {
+            tile_map: GeometrySource(tile_map),
+        }))
+        .build(graph);
+
+    // Create a static rigid body with the tile map collider.
+    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_children([collider]))
+        .with_body_type(RigidBodyType::Static)
+        .build(graph);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In the editor it could be done by creating a static 2D rigid body with a 2D collider that has <code>TileMap</code> shape:</p>
+<p><img src="tile_map_physics.png" alt="tile map physics" /></p>
+<h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
+<p>Tile map does not support any layers on its own, but layers could be added very easy by simply creating another tile
+map with its own tile set and shifting this new layer by Z axis towards camera on some small value.</p>
 
                     </main>
 
