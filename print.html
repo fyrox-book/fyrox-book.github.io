@@ -9934,8 +9934,9 @@ and be rock-solid. Every rigid body requires a collider, otherwise, the physics 
 right-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We've just added a new collider to the rigid
 body, by default it has a <code>Cuboid</code> shape with a <code>1.0</code> meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>. This adds a simple 2D sprite, select it and set a texture
-to it by drag'n'dropping it from the asset browser on the white field of the <code>Texture</code> field in the <code>Inspector</code>. For my scene, I'm gonna
-be using three sprites.</p>
+to it by finding the <code>Material</code> property in the Inspector, clicking <code>Edit</code> button near it and setting the <code>diffuseTexture</code>
+property by simply drag'n'dropping the texture from the asset browser to the property. For my scene, I'm gonna be using
+three sprites.</p>
 <ul>
 <li><code>data/tiles/13.png</code> - left ground block</li>
 <li><code>data/tiles/14.png</code> - center ground block</li>
