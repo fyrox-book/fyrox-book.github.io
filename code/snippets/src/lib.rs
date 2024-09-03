@@ -5,6 +5,7 @@ pub mod animation;
 pub mod borrowck;
 pub mod editor;
 pub mod engine;
+pub mod game;
 pub mod input;
 pub mod rendering;
 pub mod resource;
