@@ -76,7 +76,7 @@ fn add_tile_map_physics(tile_map: Handle<Node>, graph: &mut Graph) {
         .build(graph);
 
     // Create a static rigid body with the tile map collider.
-    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_children([collider]))
+    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_children(&[collider]))
         .with_body_type(RigidBodyType::Static)
         .build(graph);
 }

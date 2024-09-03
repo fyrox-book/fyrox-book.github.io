@@ -79,6 +79,7 @@
 - [Engine](./engine/engine.md)
   - [Graphics Context](./engine/graphics_context.md)
   - [Window Management](./engine/windows.md)
+  - [Manual Initialization](./engine/manual_initialization.md)
 - [User Interface](./ui/ui.md)
   - [Basic concepts](./ui/basic_concepts/basic_concepts.md)
   - [Editor](./ui/editor/editor.md)
@@ -144,5 +145,3 @@
   - [User Interface Tutorial (WIP)](tutorials/ui/ui-tutorial.md)
   - [Community Tutorials](tutorials/community.md)
 - [Performance](./performance/index.md)
-- [Obsolete](./obsolete/obsolete.md)
-  - [Custom game loop](./obsolete/custom_game_loop.md)
