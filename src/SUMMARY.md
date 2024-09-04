@@ -126,6 +126,7 @@
 - [Editor](./editor/index.md)
   - [Property Editors](./editor/property_editors.md)
   - [Settings](./editor/settings.md)
+  - [Plugins](./editor/plugins.md)
 - [Miscellaneous](./misc/misc.md)
   - [Log](./misc/log.md)
 - [Shipping](./shipping/shipping.md)
