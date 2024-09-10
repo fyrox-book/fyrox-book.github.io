@@ -46,6 +46,13 @@ about other methods. Typical plugin definition could look like this:
 {{#include ../code/snippets/src/editor/plugins.rs:plugin_impl_2}} 
 ```
 
+Every plugin must be registered in the editor, it could be done from `editor` crate of your project. Simply add the 
+following code after editor's initialization:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:plugin_registration}}
+```
+
 Our plugin will work with scene nodes that has particular script type, and we need to know a handle of object that is 
 suitable for editing via our plugin, this is where `on_message` could be useful:
 
@@ -62,12 +69,45 @@ one of them has our script. Once node selection is done, we can write our own in
 
 ## Interaction Modes and Visualization
 
-All interaction with scene nodes should be performed using interaction modes. Interaction mode is tiny abstraction layer,
-that re-routes input from the scene previewer to the modes. We'll create our own interaction mode that will allow
-us to move points of the line. Typical interaction mode looks like this:
+We need a way to show the points of the line in the scene previewer. The editor uses standard scene nodes for this, and
+they all live under a "secret" root node (it is hidden in World Viewer, that's why you can't see it there). The good
+approach for visualization is just a custom structure with a few methods:
 
 ```rust
-{{#include ../code/snippets/src/editor/plugins.rs:interaction_mode}}
+{{#include ../code/snippets/src/editor/plugins.rs:line_points_gizmo}}
+```
+
+`sync_to_model` method can be called on every frame in `update` method of the interaction mode (see below) - it tracks 
+the amount of scene nodes representing points of the line and if there's mismatch, it recreates the entire set. 
+`remove_points` should be used when the gizmo is about to be deleted (usually together with the interaction mode).
+
+All interaction with scene nodes should be performed using interaction modes. Interaction mode is a tiny abstraction layer,
+that re-routes input from the scene previewer to the modes. We'll create our own interaction mode that will allow
+us to move points of the line. Every interaction mode must implement `InteractionMode` 
+[trait](https://docs.rs/fyroxed_base/latest/fyroxed_base/interaction/trait.InteractionMode.html). Unfortunately, the
+editor's still mostly undocumented, due to its unstable API. There are quite a lot of methods in this trait:
+
+- `on_left_mouse_button_down` - called when left mouse button was pressed in the scene viewer.
+- `on_left_mouse_button_up` - called when left mouse button was released in the scene viewer.
+- `on_mouse_move` - called when mouse cursor moves in the scene viewer.
+- `update` - called every frame (only for active mode, inactive modes does are not updated).
+- `activate` - called when an interaction mode became active.
+- `deactivate` - called when an interaction mode became inactive (i.e. when you're switched to another mode).
+- `on_key_down` - called when a key was pressed.
+- `on_key_up` - called when a key was released.
+- `handle_ui_message` - called when the editor receives a UI message
+- `on_drop` - called on every interaction mode before the current scene is destroyed.
+- `on_hot_key_pressed` - called when a hotkey was pressed. Could be used to switch sub-modes of interaction mode.
+For example, tile map editor has single interaction mode, but the mode itself has draw/erase/pick/etc. sub modes which
+could be switched using `Ctrl`/`Alt`/etc. hotkeys.
+- `on_hot_key_released` - called when a hotkey was released.
+- `make_button` - used to create a button, that will be placed.
+- `uuid` - must return type UUID of the mode.
+
+Every method has its particular use case, but we'll use only a handful of them. Let's create a new interaction mode:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:interaction_mode_definition}}
 ```
 
 To create an interaction mode all that is needed is to add the following lines in `on_message`, right after 
@@ -83,7 +123,51 @@ The mode must be deleted when we deselect something else, it could be done on `M
 {{#include ../code/snippets/src/editor/plugins.rs:gizmo_destroy}}
 ```
 
-(TODO)
+Now onto the `InteractionMode` trait implementation, let's start by adding implementation for `make_button` method:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:make_button}}
+```
+
+There's nothing special about it - it uses built-in function, that creates a button with an image and a tooltip. You
+could use any UI widget here that sends `ButtonMessage::Click` messages on interaction. Now onto the `on_left_mouse_button_down`
+method:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:on_left_mouse_button_down}}
+```
+
+It is responsible for two things: it handles picking of scene nodes at the cursor position, and it is also changes 
+currently selected point. Additionally, it creates dragging context if one of the axes of the movement gizmo was clicked
+and there's some point selected.
+
+When there's something to drag, we must use new mouse position to determine new location for points in 3D space. There's
+`on_mouse_move` for that:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:on_mouse_move}}
+```
+
+The dragging could be finished simply by releasing the left mouse button:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:on_left_mouse_button_up}}
+```
+
+This is where the action must be "confirmed" - we're creating a new command and sending it for execution in the 
+command stack of the current scene. The command used in this method could be defined like so:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:command}}
+```
+
+See the next section for more info about commands and how they interact with the editor.
+
+The next step is to update the gizmo on each frame:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:update}}
+```
 
 ## Commands
 
