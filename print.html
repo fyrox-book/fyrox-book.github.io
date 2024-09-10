@@ -9908,6 +9908,12 @@ pub struct MyPlugin {
 impl EditorPlugin for MyPlugin { 
 } 
 <span class="boring">}</span></code></pre></pre>
+<p>Every plugin must be registered in the editor, it could be done from <code>editor</code> crate of your project. Simply add the
+following code after editor's initialization:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    editor.add_editor_plugin(MyPlugin::default());
+<span class="boring">}</span></code></pre></pre>
 <p>Our plugin will work with scene nodes that has particular script type, and we need to know a handle of object that is
 suitable for editing via our plugin, this is where <code>on_message</code> could be useful:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -9953,70 +9959,115 @@ selection type of to be graph selection (there are a number of selection types),
 game scene (there's also <code>UiScene</code>). All that is left to do is to iterate over selected scene nodes and check if
 one of them has our script. Once node selection is done, we can write our own interaction mode to</p>
 <h2 id="interaction-modes-and-visualization"><a class="header" href="#interaction-modes-and-visualization">Interaction Modes and Visualization</a></h2>
-<p>All interaction with scene nodes should be performed using interaction modes. Interaction mode is tiny abstraction layer,
-that re-routes input from the scene previewer to the modes. We'll create our own interaction mode that will allow
-us to move points of the line. Typical interaction mode looks like this:</p>
+<p>We need a way to show the points of the line in the scene previewer. The editor uses standard scene nodes for this, and
+they all live under a "secret" root node (it is hidden in World Viewer, that's why you can't see it there). The good
+approach for visualization is just a custom structure with a few methods:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(TypeUuidProvider)]
-#[type_uuid(id = "d7f56947-a106-408a-9c18-d0191ef89925")]
-pub struct MyInteractionMode {
-    move_gizmo: MoveGizmo,
-    drag_context: Option&lt;DragContext&gt;,
+</span>#[derive(Default)]
+struct LinePointsGizmo {
+    point_nodes: Vec&lt;Handle&lt;Node&gt;&gt;,
 }
 
-impl MyInteractionMode {
-    pub fn new(game_scene: &amp;GameScene, engine: &amp;mut Engine) -&gt; Self {
-        Self {
-            move_gizmo: MoveGizmo::new(game_scene, engine),
-            drag_context: None,
+impl LinePointsGizmo {
+    fn sync_to_model(
+        &amp;mut self,
+        node_handle: Handle&lt;Node&gt;,
+        game_scene: &amp;GameScene,
+        graph: &amp;mut Graph,
+    ) {
+        let Some(script) = graph.try_get_script_of::&lt;MyScript&gt;(node_handle) else {
+            return;
+        };
+        let points = script.points.clone();
+
+        if self.point_nodes.len() != points.len() {
+            self.remove_points(graph);
+            for point in points {
+                // Point could be represented via sprite - it will always be facing towards editor's
+                // camera.
+                let point_node = SpriteBuilder::new(BaseBuilder::new())
+                    .with_size(0.1)
+                    .build(graph);
+
+                self.point_nodes.push(point_node);
+
+                // Link the sprite with the special scene node - the name of it should clearly state
+                // its purpose.
+                graph.link_nodes(point_node, game_scene.editor_objects_root);
+            }
+        }
+    }
+
+    fn remove_points(&amp;mut self, graph: &amp;mut Graph) {
+        for handle in self.point_nodes.drain(..) {
+            graph.remove_node(handle);
         }
     }
 }
 
-impl InteractionMode for MyInteractionMode {
-    fn on_left_mouse_button_down(
-        &amp;mut self,
-        editor_selection: &amp;Selection,
-        controller: &amp;mut dyn SceneController,
+<span class="boring">}</span></code></pre></pre>
+<p><code>sync_to_model</code> method can be called on every frame in <code>update</code> method of the interaction mode (see below) - it tracks
+the amount of scene nodes representing points of the line and if there's mismatch, it recreates the entire set.
+<code>remove_points</code> should be used when the gizmo is about to be deleted (usually together with the interaction mode).</p>
+<p>All interaction with scene nodes should be performed using interaction modes. Interaction mode is a tiny abstraction layer,
+that re-routes input from the scene previewer to the modes. We'll create our own interaction mode that will allow
+us to move points of the line. Every interaction mode must implement <code>InteractionMode</code>
+<a href="https://docs.rs/fyroxed_base/latest/fyroxed_base/interaction/trait.InteractionMode.html">trait</a>. Unfortunately, the
+editor's still mostly undocumented, due to its unstable API. There are quite a lot of methods in this trait:</p>
+<ul>
+<li><code>on_left_mouse_button_down</code> - called when left mouse button was pressed in the scene viewer.</li>
+<li><code>on_left_mouse_button_up</code> - called when left mouse button was released in the scene viewer.</li>
+<li><code>on_mouse_move</code> - called when mouse cursor moves in the scene viewer.</li>
+<li><code>update</code> - called every frame (only for active mode, inactive modes does are not updated).</li>
+<li><code>activate</code> - called when an interaction mode became active.</li>
+<li><code>deactivate</code> - called when an interaction mode became inactive (i.e. when you're switched to another mode).</li>
+<li><code>on_key_down</code> - called when a key was pressed.</li>
+<li><code>on_key_up</code> - called when a key was released.</li>
+<li><code>handle_ui_message</code> - called when the editor receives a UI message</li>
+<li><code>on_drop</code> - called on every interaction mode before the current scene is destroyed.</li>
+<li><code>on_hot_key_pressed</code> - called when a hotkey was pressed. Could be used to switch sub-modes of interaction mode.
+For example, tile map editor has single interaction mode, but the mode itself has draw/erase/pick/etc. sub modes which
+could be switched using <code>Ctrl</code>/<code>Alt</code>/etc. hotkeys.</li>
+<li><code>on_hot_key_released</code> - called when a hotkey was released.</li>
+<li><code>make_button</code> - used to create a button, that will be placed.</li>
+<li><code>uuid</code> - must return type UUID of the mode.</li>
+</ul>
+<p>Every method has its particular use case, but we'll use only a handful of them. Let's create a new interaction mode:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct DragContext {
+    point_index: usize,
+    initial_position: Vector3&lt;f32&gt;,
+    plane_kind: PlaneKind,
+}
+
+#[derive(TypeUuidProvider)]
+#[type_uuid(id = "d7f56947-a106-408a-9c18-d0191ef89925")]
+pub struct MyInteractionMode {
+    move_gizmo: MoveGizmo,
+    node_handle: Handle&lt;Node&gt;,
+    drag_context: Option&lt;DragContext&gt;,
+    message_sender: MessageSender,
+    line_points_gizmo: LinePointsGizmo,
+    selected_point_index: Option&lt;usize&gt;,
+}
+
+impl MyInteractionMode {
+    pub fn new(
+        game_scene: &amp;GameScene,
         engine: &amp;mut Engine,
-        mouse_pos: Vector2&lt;f32&gt;,
-        frame_size: Vector2&lt;f32&gt;,
-        settings: &amp;Settings,
-    ) {
-    }
-
-    fn on_left_mouse_button_up(
-        &amp;mut self,
-        editor_selection: &amp;Selection,
-        controller: &amp;mut dyn SceneController,
-        engine: &amp;mut Engine,
-        mouse_pos: Vector2&lt;f32&gt;,
-        frame_size: Vector2&lt;f32&gt;,
-        settings: &amp;Settings,
-    ) {
-    }
-
-    fn on_mouse_move(
-        &amp;mut self,
-        mouse_offset: Vector2&lt;f32&gt;,
-        mouse_position: Vector2&lt;f32&gt;,
-        editor_selection: &amp;Selection,
-        controller: &amp;mut dyn SceneController,
-        engine: &amp;mut Engine,
-        frame_size: Vector2&lt;f32&gt;,
-        settings: &amp;Settings,
-    ) {
-    }
-
-    fn deactivate(&amp;mut self, controller: &amp;dyn SceneController, engine: &amp;mut Engine) {}
-
-    fn make_button(&amp;mut self, ctx: &amp;mut BuildContext, selected: bool) -&gt; Handle&lt;UiNode&gt; {
-        make_interaction_mode_button(ctx, include_bytes!("icon.png"), "Line Edit Mode", selected)
-    }
-
-    fn uuid(&amp;self) -&gt; Uuid {
-        Self::type_uuid()
+        message_sender: MessageSender,
+        node_handle: Handle&lt;Node&gt;,
+    ) -&gt; Self {
+        Self {
+            move_gizmo: MoveGizmo::new(game_scene, engine),
+            node_handle,
+            drag_context: None,
+            message_sender,
+            line_points_gizmo: LinePointsGizmo::default(),
+            selected_point_index: None,
+        }
     }
 }
 <span class="boring">}</span></code></pre></pre>
@@ -10024,12 +10075,12 @@ impl InteractionMode for MyInteractionMode {
 <code>self.node_handle = *node_handle;</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>                    let move_gizmo = MoveGizmo::new(game_scene, &amp;mut editor.engine);
-
-                    entry.interaction_modes.add(MyInteractionMode {
-                        move_gizmo,
-                        drag_context: None,
-                    });
+</span>                    entry.interaction_modes.add(MyInteractionMode::new(
+                        game_scene,
+                        &amp;mut editor.engine,
+                        editor.message_sender.clone(),
+                        *node_handle,
+                    ));
 <span class="boring">}</span></code></pre></pre>
 <p>The mode must be deleted when we deselect something else, it could be done on <code>Message::SelectionChanged</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -10040,7 +10091,212 @@ impl InteractionMode for MyInteractionMode {
                 mode.move_gizmo.destroy(&amp;mut scene.graph);
             }
 <span class="boring">}</span></code></pre></pre>
-<p>(TODO)</p>
+<p>Now onto the <code>InteractionMode</code> trait implementation, let's start by adding implementation for <code>make_button</code> method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn make_button(&amp;mut self, ctx: &amp;mut BuildContext, selected: bool) -&gt; Handle&lt;UiNode&gt; {
+        make_interaction_mode_button(ctx, include_bytes!("icon.png"), "Line Edit Mode", selected)
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>There's nothing special about it - it uses built-in function, that creates a button with an image and a tooltip. You
+could use any UI widget here that sends <code>ButtonMessage::Click</code> messages on interaction. Now onto the <code>on_left_mouse_button_down</code>
+method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_left_mouse_button_down(
+        &amp;mut self,
+        editor_selection: &amp;Selection,
+        controller: &amp;mut dyn SceneController,
+        engine: &amp;mut Engine,
+        mouse_pos: Vector2&lt;f32&gt;,
+        frame_size: Vector2&lt;f32&gt;,
+        settings: &amp;Settings,
+    ) {
+        let Some(game_scene) = controller.downcast_mut::&lt;GameScene&gt;() else {
+            return;
+        };
+
+        let scene = &amp;mut engine.scenes[game_scene.scene];
+
+        // Pick scene entity at the cursor position.
+        if let Some(result) = game_scene.camera_controller.pick(
+            &amp;scene.graph,
+            PickingOptions {
+                cursor_pos: mouse_pos,
+                editor_only: true,
+                filter: Some(&amp;mut |handle, _| handle != self.move_gizmo.origin),
+                ..Default::default()
+            },
+        ) {
+            // The gizmo needs to be fed with input events as well, so it can react to the cursor.
+            if let Some(plane_kind) = self.move_gizmo.handle_pick(result.node, &amp;mut scene.graph) {
+                // Start point dragging if there's any point selected.
+                if let Some(selected_point_index) = self.selected_point_index {
+                    self.drag_context = Some(DragContext {
+                        point_index: selected_point_index,
+                        initial_position: scene.graph
+                            [self.line_points_gizmo.point_nodes[selected_point_index]]
+                            .global_position(),
+                        plane_kind,
+                    })
+                }
+            } else {
+                // Handle point picking and remember a selected point.
+                for (index, point_handle) in self.line_points_gizmo.point_nodes.iter().enumerate() {
+                    if result.node == *point_handle {
+                        self.selected_point_index = Some(index);
+                    }
+                }
+            }
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>It is responsible for two things: it handles picking of scene nodes at the cursor position, and it is also changes
+currently selected point. Additionally, it creates dragging context if one of the axes of the movement gizmo was clicked
+and there's some point selected.</p>
+<p>When there's something to drag, we must use new mouse position to determine new location for points in 3D space. There's
+<code>on_mouse_move</code> for that:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_mouse_move(
+        &amp;mut self,
+        mouse_offset: Vector2&lt;f32&gt;,
+        mouse_position: Vector2&lt;f32&gt;,
+        editor_selection: &amp;Selection,
+        controller: &amp;mut dyn SceneController,
+        engine: &amp;mut Engine,
+        frame_size: Vector2&lt;f32&gt;,
+        settings: &amp;Settings,
+    ) {
+        let Some(game_scene) = controller.downcast_mut::&lt;GameScene&gt;() else {
+            return;
+        };
+
+        let scene = &amp;mut engine.scenes[game_scene.scene];
+
+        if let Some(drag_context) = self.drag_context.as_ref() {
+            let global_offset = self.move_gizmo.calculate_offset(
+                &amp;scene.graph,
+                game_scene.camera_controller.camera,
+                mouse_offset,
+                mouse_position,
+                frame_size,
+                drag_context.plane_kind,
+            );
+
+            if let Some(script) = scene
+                .graph
+                .try_get_script_of_mut::&lt;MyScript&gt;(self.node_handle)
+            {
+                script.points[drag_context.point_index] =
+                    drag_context.initial_position + global_offset;
+            }
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>The dragging could be finished simply by releasing the left mouse button:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_left_mouse_button_up(
+        &amp;mut self,
+        editor_selection: &amp;Selection,
+        controller: &amp;mut dyn SceneController,
+        engine: &amp;mut Engine,
+        mouse_pos: Vector2&lt;f32&gt;,
+        frame_size: Vector2&lt;f32&gt;,
+        settings: &amp;Settings,
+    ) {
+        let Some(game_scene) = controller.downcast_mut::&lt;GameScene&gt;() else {
+            return;
+        };
+
+        let scene = &amp;mut engine.scenes[game_scene.scene];
+
+        if let Some(drag_context) = self.drag_context.take() {
+            if let Some(script) = scene
+                .graph
+                .try_get_script_of_mut::&lt;MyScript&gt;(self.node_handle)
+            {
+                // Restore the position of the point and use its new position as the value for
+                // the command below.
+                let new_position = std::mem::replace(
+                    &amp;mut script.points[drag_context.point_index],
+                    drag_context.initial_position,
+                );
+
+                // Confirm the action by creating respective command.
+                self.message_sender.do_command(SetPointPositionCommand {
+                    node_handle: self.node_handle,
+                    point_index: drag_context.point_index,
+                    point_position: new_position,
+                });
+            }
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>This is where the action must be "confirmed" - we're creating a new command and sending it for execution in the
+command stack of the current scene. The command used in this method could be defined like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug)]
+struct SetPointPositionCommand {
+    node_handle: Handle&lt;Node&gt;,
+    point_index: usize,
+    point_position: Vector3&lt;f32&gt;,
+}
+
+impl SetPointPositionCommand {
+    fn swap(&amp;mut self, context: &amp;mut dyn CommandContext) {
+        // Get typed version of the context, it could also be UiSceneContext for
+        // UI scenes.
+        let context = context.get_mut::&lt;GameSceneContext&gt;();
+        // Get a reference to the script instance.
+        let script = context.scene.graph[self.node_handle]
+            .try_get_script_mut::&lt;MyScript&gt;()
+            .unwrap();
+        // Swap the position of the point with the one stored in the command.
+        std::mem::swap(
+            &amp;mut script.points[self.point_index],
+            &amp;mut self.point_position,
+        );
+    }
+}
+
+impl CommandTrait for SetPointPositionCommand {
+    fn name(&amp;mut self, context: &amp;dyn CommandContext) -&gt; String {
+        "Set Point Position".to_owned()
+    }
+
+    fn execute(&amp;mut self, context: &amp;mut dyn CommandContext) {
+        self.swap(context)
+    }
+
+    fn revert(&amp;mut self, context: &amp;mut dyn CommandContext) {
+        self.swap(context)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>See the next section for more info about commands and how they interact with the editor.</p>
+<p>The next step is to update the gizmo on each frame:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn update(
+        &amp;mut self,
+        editor_selection: &amp;Selection,
+        controller: &amp;mut dyn SceneController,
+        engine: &amp;mut Engine,
+        settings: &amp;Settings,
+    ) {
+        let Some(game_scene) = controller.downcast_mut::&lt;GameScene&gt;() else {
+            return;
+        };
+
+        let scene = &amp;mut engine.scenes[game_scene.scene];
+
+        self.line_points_gizmo
+            .sync_to_model(self.node_handle, game_scene, &amp;mut scene.graph);
+    }
+<span class="boring">}</span></code></pre></pre>
 <h2 id="commands"><a class="header" href="#commands">Commands</a></h2>
 <p>As was mentioned previously, any modification to scene node's content (including scripts) must be done using commands.
 There are two ways of using commands: use reflection-based command, or use custom command. Reflection-based commands
