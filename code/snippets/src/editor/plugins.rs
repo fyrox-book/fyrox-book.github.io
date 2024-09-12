@@ -12,6 +12,9 @@ use fyrox::{
     scene::{base::BaseBuilder, graph::Graph, node::Node, sprite::SpriteBuilder},
     script::ScriptTrait,
 };
+use fyroxed_base::command::{
+    AddCollectionItemCommand, Command, RemoveCollectionItemCommand, SetPropertyCommand,
+};
 use fyroxed_base::{
     camera::PickingOptions,
     command::{CommandContext, CommandTrait},
@@ -400,3 +403,87 @@ impl CommandTrait for SetPointPositionCommand {
     }
 }
 // ANCHOR_END: command
+
+// ANCHOR: set_point_1
+fn set_point_1(node_handle: Handle<Node>, message_sender: &MessageSender) {
+    message_sender.do_command(SetPropertyCommand::new(
+        "points[1]".to_string(),
+        Box::new(Vector3::new(1.0, 2.0, 3.0)),
+        // Entity getter supplies a reference to the base object, which will be used
+        // to search on for the property with the specified name.
+        move |ctx| {
+            ctx.get_mut::<GameSceneContext>()
+                .scene
+                .graph
+                .node_mut(node_handle)
+                .try_get_script_mut::<MyScript>()
+                .unwrap()
+        },
+    ))
+}
+// ANCHOR_END: set_point_1
+
+// ANCHOR: add_collection_element
+fn add_collection_element(node_handle: Handle<Node>, message_sender: &MessageSender) {
+    message_sender.do_command(AddCollectionItemCommand::new(
+        "points".to_string(),
+        Box::new(Vector3::new(1.0, 2.0, 3.0)),
+        // Entity getter supplies a reference to the base object, which will be used
+        // to search on for the property with the specified name.
+        move |ctx| {
+            ctx.get_mut::<GameSceneContext>()
+                .scene
+                .graph
+                .node_mut(node_handle)
+                .try_get_script_mut::<MyScript>()
+                .unwrap()
+        },
+    ))
+}
+// ANCHOR_END: add_collection_element
+
+// ANCHOR: remove_collection_element
+fn remove_collection_element(node_handle: Handle<Node>, message_sender: &MessageSender) {
+    message_sender.do_command(RemoveCollectionItemCommand::new(
+        "points".to_string(),
+        1,
+        // Entity getter supplies a reference to the base object, which will be used
+        // to search on for the property with the specified name.
+        move |ctx| {
+            ctx.get_mut::<GameSceneContext>()
+                .scene
+                .graph
+                .node_mut(node_handle)
+                .try_get_script_mut::<MyScript>()
+                .unwrap()
+        },
+    ))
+}
+// ANCHOR_END: remove_collection_element
+
+// ANCHOR: command_trait
+#[derive(Debug)]
+struct ExampleCommand {}
+
+impl CommandTrait for ExampleCommand {
+    fn name(&mut self, context: &dyn CommandContext) -> String {
+        // This method is called to get a name for the command which it will show
+        // in the command stack viewer.
+        "Command".to_string()
+    }
+
+    fn execute(&mut self, context: &mut dyn CommandContext) {
+        // This method is called when the editor executes the command.
+    }
+
+    fn revert(&mut self, context: &mut dyn CommandContext) {
+        // This method is called when the editor undo the command.
+    }
+
+    fn finalize(&mut self, _: &mut dyn CommandContext) {
+        // This method is called when the command is about to be destroyed.
+        // Its main use case is mark some resources as free when they were previously
+        // reserved by `execute` or `revert`. Usually it is for reserved handles in Pool.
+    }
+}
+// ANCHOR_END: command_trait
