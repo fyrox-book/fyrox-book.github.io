@@ -531,6 +531,63 @@ your scene by using the following code:</p>
 <span class="boring">}</span></code></pre></pre>
 <p>This code searches for a node with <code>SomeName</code> and assigns its handle to the <code>second_node</code> variable in the script
 for later use.</p>
+<h2 id="accessing-plugins-from-scripts"><a class="header" href="#accessing-plugins-from-scripts">Accessing Plugins From Scripts</a></h2>
+<p>Sometimes there's a need to access plugin data from scripts, there may be various reasons for that, for example
+you may need to register a bot in the list of bots. This list could then be used for AI to search targets without
+searching in the entire scene graph at every frame.</p>
+<p>Accessing plugins from scripts is very easy, all you need to do is to call <code>get/get_mut</code> method from <code>ctx.plugins</code>:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Default, Debug, Reflect, Visit)]
+struct GamePlugin {
+    bots: Vec&lt;Handle&lt;Node&gt;&gt;,
+}
+
+impl Plugin for GamePlugin {
+    // ..
+}
+
+#[derive(Clone, Debug, Default, Visit, Reflect, ComponentProvider, TypeUuidProvider)]
+#[type_uuid(id = "460cd09f-8768-4f38-8799-5e9c0c08b8fd")]
+struct Bot {
+    // ..
+}
+
+impl ScriptTrait for Bot {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        // Get a reference to the plugin.
+        let plugin = ctx.plugins.get_mut::&lt;GamePlugin&gt;();
+        // Register self in the "global" list of bots.
+        plugin.bots.push(ctx.handle);
+    }
+
+    fn on_deinit(&amp;mut self, ctx: &amp;mut ScriptDeinitContext) {
+        let plugin = ctx.plugins.get_mut::&lt;GamePlugin&gt;();
+        // Unregister the bot from the list.
+        if let Some(index) = plugin
+            .bots
+            .iter()
+            .position(|handle| *handle == ctx.node_handle)
+        {
+            plugin.bots.remove(index);
+        }
+    }
+
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        let plugin = ctx.plugins.get::&lt;GamePlugin&gt;();
+        for bot in plugin.bots.iter() {
+            if *bot != ctx.handle {
+                // Search for target.
+            }
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In this example the Bot script registers itself in a global list of bots on start, and unregisters on destruction.
+<code>update</code> is then used to search for targets in that list.</p>
+<p>In multiplayer games, plugin could store server/client instances and scripts could easily access them to send messages
+across the network for other players. In general, you could use plugins as an arbitrary, global data storage for your
+scripts.</p>
 
                     </main>
 
