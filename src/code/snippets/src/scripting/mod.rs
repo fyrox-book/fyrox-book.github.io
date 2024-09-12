@@ -5,7 +5,8 @@ pub mod tasks;
 
 use fyrox::graph::BaseSceneGraph;
 use fyrox::graph::SceneGraph;
-use fyrox::script::{ScriptMessageContext, ScriptMessagePayload};
+use fyrox::plugin::Plugin;
+use fyrox::script::{ScriptDeinitContext, ScriptMessageContext, ScriptMessagePayload};
 use fyrox::{
     core::{
         log::Log, pool::Handle, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*,
@@ -125,3 +126,50 @@ impl ScriptTrait for LaserSight {
     }
 }
 // ANCHOR_END: message_passing
+
+// ANCHOR: access_plugin
+#[derive(Default, Debug, Reflect, Visit)]
+struct GamePlugin {
+    bots: Vec<Handle<Node>>,
+}
+
+impl Plugin for GamePlugin {
+    // ..
+}
+
+#[derive(Clone, Debug, Default, Visit, Reflect, ComponentProvider, TypeUuidProvider)]
+#[type_uuid(id = "460cd09f-8768-4f38-8799-5e9c0c08b8fd")]
+struct Bot {
+    // ..
+}
+
+impl ScriptTrait for Bot {
+    fn on_start(&mut self, ctx: &mut ScriptContext) {
+        // Get a reference to the plugin.
+        let plugin = ctx.plugins.get_mut::<GamePlugin>();
+        // Register self in the "global" list of bots.
+        plugin.bots.push(ctx.handle);
+    }
+
+    fn on_deinit(&mut self, ctx: &mut ScriptDeinitContext) {
+        let plugin = ctx.plugins.get_mut::<GamePlugin>();
+        // Unregister the bot from the list.
+        if let Some(index) = plugin
+            .bots
+            .iter()
+            .position(|handle| *handle == ctx.node_handle)
+        {
+            plugin.bots.remove(index);
+        }
+    }
+
+    fn on_update(&mut self, ctx: &mut ScriptContext) {
+        let plugin = ctx.plugins.get::<GamePlugin>();
+        for bot in plugin.bots.iter() {
+            if *bot != ctx.handle {
+                // Search for target.
+            }
+        }
+    }
+}
+// ANCHOR_END: access_plugin

@@ -201,3 +201,22 @@ your scene by using the following code:
 
 This code searches for a node with `SomeName` and assigns its handle to the `second_node` variable in the script
 for later use.
+
+## Accessing Plugins From Scripts
+
+Sometimes there's a need to access plugin data from scripts, there may be various reasons for that, for example 
+you may need to register a bot in the list of bots. This list could then be used for AI to search targets without 
+searching in the entire scene graph at every frame.
+
+Accessing plugins from scripts is very easy, all you need to do is to call `get/get_mut` method from `ctx.plugins`:
+
+```rust,no_run
+{{#include ../code/snippets/src/scripting/mod.rs:access_plugin}}
+```
+
+In this example the Bot script registers itself in a global list of bots on start, and unregisters on destruction.
+`update` is then used to search for targets in that list. 
+
+In multiplayer games, plugin could store server/client instances and scripts could easily access them to send messages
+across the network for other players. In general, you could use plugins as an arbitrary, global data storage for your
+scripts.
