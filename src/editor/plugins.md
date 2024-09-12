@@ -172,11 +172,83 @@ The next step is to update the gizmo on each frame:
 ## Commands
 
 As was mentioned previously, any modification to scene node's content (including scripts) must be done using commands.
+Commands encapsulates an "atomic" action, this could be simple property or collection modification or something complex,
+that involves heavy calculations and so on. The editor has a command stack that executes incoming commands and saves them
+for potential undo. The stack has a top command, when new command is added to the stack, it removes all command prior the
+top and makes the new command the top one. Every removed command is finalized (see below).
+
 There are two ways of using commands: use reflection-based command, or use custom command. Reflection-based commands
 usually used when you need to set a new value to some property. On the other hand, custom commands could perform complex
-actions, that cannot be done using reflection-based command. In our case we'll be using both command types.  
+actions, that cannot be done using reflection-based command. The previous section contains an example of custom command,
+they're quite verbose and require decent amount of boilerplate code. 
 
-(TODO)
+### Custom Commands
+
+Custom commands is the best way to get better understanding of command system and how it works. This section explains
+how to create custom commands and how they're executed. Each command must implement `Command` trait which looks like
+this:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:command_trait}}
+```
+
+This chapter already showed an example of a custom command:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:command}}
+```
+
+The main idea is very simple, `execute` must do the required change and `revert` must undo it. There's one special 
+method that has very limited use, but it cannot be avoided. `finalize` is used to return reserved resources back to 
+where they were obtained from. Typically, it is pool handles that can be reserved for further use. If they won't be
+returned, pool will have empty unused entries forever. 
+
+### Reflection-based Commands
+
+There are three main types of reflection-based commands that can be used to manipulate scene objects:
+
+#### `SetPropertyCommand` 
+
+Sets a new value for a property at the given path. This command cannot change the size of collections (add or remove 
+items), the next two commands are exactly for this (see next subsections). This is how you could use this command to
+change position of a point at index 1: 
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:set_point_1}}
+```
+
+The first argument is a path to variable, it could be any "depth" and support enum variants, indices, etc: 
+`foo.bar.baz@Some.collection[123].stuff`. Enum variants are marked by `@` sign. The second argument is a new value for
+the property. It could be any object that implements `Reflect` trait, in our case it is `Vector3<f32>`. The last argument
+is entity getter function. Its purpose is to provide a reference to an object in which the reflection system will search
+for the property with the given name.
+
+#### `AddCollectionItemCommand`
+
+Adds a new collection item command at the given path. The collection could be anything that implements `ReflectList` 
+trait (`Vec`, `ArrayVec`, custom types) or `ReflectHashMap` trait (`HashMap`, `FxHashMap`, custom types). Typical usage
+is something like this:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:add_collection_element}}
+```
+
+The meaning of each argument is the same as in `SetPropertyCommand` command. 
+
+#### `RemoveCollectionItemCommand` 
+
+Removes an item from a collection by the given index. The collection could be anything that implements `ReflectList` 
+trait (`Vec`, `ArrayVec`, custom types) or `ReflectHashMap` trait (`HashMap`, `FxHashMap`, custom types). In case of 
+hash maps, the index cannot be used reliably, because hash maps do not have an ability to be randomly indexed. To remove
+the exact element at the index, you must ensure that `hash_map.iter().nth(index)` corresponds to the item and only then 
+use this index in the command. Typical usage is something like this:
+
+```rust
+{{#include ../code/snippets/src/editor/plugins.rs:remove_collection_element}}
+```
+
+The first argument in this command a name of the collection property, the second - item index, and the third is the
+entity getter. See `SetPropertyCommand` for more info.
 
 ## Contextual Panels
 
