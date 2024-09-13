@@ -7,4 +7,8 @@ plugin.
 Fyrox uses scripts to create custom game logic, scripts can be written only in Rust which ensures that your game will
 be crash-free, fast and easy to refactor.
 
+The overall structure of plugins and scripts could be described in this diagram:
+
+![structure](structure.svg)
+
 Next chapters will cover all parts and will help you to learn how to use plugins + scripts correctly.
