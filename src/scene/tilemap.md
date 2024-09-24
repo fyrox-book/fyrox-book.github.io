@@ -146,3 +146,21 @@ In the editor it could be done by creating a static 2D rigid body with a 2D coll
 
 Tile map does not support any layers on its own, but layers could be added very easy by simply creating another tile 
 map with its own tile set and shifting this new layer by Z axis towards camera on some small value. 
+
+## Tile Properties
+
+Tile set could contain custom properties for each tile, these properties could be used to attach additional information
+to the tiles in your game. This could include surface type (water, lava, dirt, etc.), physics properties (friction, 
+restitution, etc.) and any other you need. This is how it could be used in a game:
+
+```rust
+{{#include ../code/snippets/src/scene/tilemap.rs:create_tile_map_with_props}}
+```
+
+Here we have two types of tiles - soil and slime, soil does not have any effect on player's movement speed, while the
+slime slows down the player by 30%. This code does not actually use any physical contact information and just uses tile
+position, but it could be fixed pretty easily - supply physical contact position to it, and it will return correct results. 
+
+Tile custom properties could be edited in the tile set editor:
+
+![tile map properties](tile_map_properties.PNG)
