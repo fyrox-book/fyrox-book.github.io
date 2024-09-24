@@ -217,12 +217,16 @@ lays grass on top of it.</p>
         uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
         collider: TileCollider::Rectangle,
         color: Color::BROWN,
+        position: Default::default(),
+        properties: vec![],
     });
     let grass_tile = tile_set.add_tile(TileDefinition {
         material,
         uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
         collider: TileCollider::Rectangle,
         color: Color::GREEN,
+        position: Default::default(),
+        properties: vec![],
     });
     let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
 
@@ -345,6 +349,81 @@ it could be done something like this:</p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
 <p>Tile map does not support any layers on its own, but layers could be added very easy by simply creating another tile
 map with its own tile set and shifting this new layer by Z axis towards camera on some small value.</p>
+<h2 id="tile-properties"><a class="header" href="#tile-properties">Tile Properties</a></h2>
+<p>Tile set could contain custom properties for each tile, these properties could be used to attach additional information
+to the tiles in your game. This could include surface type (water, lava, dirt, etc.), physics properties (friction,
+restitution, etc.) and any other you need. This is how it could be used in a game:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>const SOIL: u8 = 1;
+const SLIME: u8 = 2;
+
+fn create_tile_map_with_props(graph: &amp;mut Graph) {
+    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_2d());
+
+    let mut tile_set = TileSet::default();
+    let stone_tile = tile_set.add_tile(TileDefinition {
+        material: material.clone(),
+        uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
+        collider: TileCollider::Rectangle,
+        color: Color::BROWN,
+        position: Default::default(),
+        properties: vec![Property {
+            name: "SurfaceType".to_string(),
+            value: PropertyValue::U8(SOIL),
+        }],
+    });
+    let slime_tile = tile_set.add_tile(TileDefinition {
+        material,
+        uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
+        collider: TileCollider::Rectangle,
+        color: Color::GREEN,
+        position: Default::default(),
+        properties: vec![Property {
+            name: "SurfaceType".to_string(),
+            value: PropertyValue::U8(SLIME),
+        }],
+    });
+    let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
+
+    // ..
+}
+
+fn calculate_speed_factor(tile_map: &amp;TileMap, player_position: Vector3&lt;f32&gt;) -&gt; f32 {
+    let grid_position = tile_map.world_to_grid(player_position);
+
+    if let Some(tile) = tile_map.tiles.get(&amp;grid_position) {
+        if let Some(tile_set) = tile_map.tile_set() {
+            if let Some(tile_set_data) = tile_set.data_ref().as_loaded_ref() {
+                let tile_definition = &amp;tile_set_data.tiles[tile.definition_handle];
+
+                if let Some(property) = tile_definition
+                    .properties
+                    .iter()
+                    .find(|p| p.name == "SurfaceType")
+                {
+                    if let PropertyValue::U8(surface_type) = property.value {
+                        return match surface_type {
+                            SOIL =&gt; 1.0,
+                            // Green slime tile slows down the player.
+                            SLIME =&gt; 0.7,
+                            _ =&gt; 1.0,
+                        };
+                    }
+                }
+            }
+        }
+    }
+
+    1.0
+}
+
+<span class="boring">}</span></code></pre></pre>
+<p>Here we have two types of tiles - soil and slime, soil does not have any effect on player's movement speed, while the
+slime slows down the player by 30%. This code does not actually use any physical contact information and just uses tile
+position, but it could be fixed pretty easily - supply physical contact position to it, and it will return correct results.</p>
+<p>Tile custom properties could be edited in the tile set editor:</p>
+<p><img src="tile_map_properties.PNG" alt="tile map properties" /></p>
 
                     </main>
 
