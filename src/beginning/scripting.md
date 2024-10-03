@@ -130,37 +130,33 @@ This will ensure you're using the latest project/script template generator, whic
 of the template generator will most likely generate outdated code, no longer be compatible with the engine.
 
 To switch existing projects to the latest version of the engine, you need to specify paths pointing to the remote repository 
-for the `fyrox` and `fyroxed_base` dependencies. You need to do this in the `game`, `executor`, and `editor` projects. First,
-open `game/Cargo.toml` and change the `fyrox` dependency to the following:
+for the `fyrox` and `fyroxed_base` dependencies. All you need to do is to change paths to these dependencies in the 
+root `Cargo.toml`:
 
 ```toml
-[dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
+[workspace.dependencies.fyrox]
+version = { git = "https://github.com/FyroxEngine/Fyrox" }
+default-features = false
+[workspace.dependencies.fyroxed_base]
+version = { git = "https://github.com/FyroxEngine/Fyrox" }
 ```
 
-Do the same for `executor/Cargo.toml`. The `editor` has two dependencies we need to change: `fyrox` and `fyroxed_base`.
-Open the `editor/Cargo.toml` and set both dependencies to the following:
+Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid 
+these by specifying a particular commit, just add `rev = "desired_commit_hash"` to every dependency like so:
 
 ```toml
 [dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox" }
-```
-
-Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid these by 
-specifying a particular commit, just add `rev = "desired_commit_hash"` to every dependency like so:
-
-```toml
-[dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+[workspace.dependencies.fyrox]
+version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+default-features = false
+[workspace.dependencies.fyroxed_base]
+version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
 ```
 
 To bring a local git repository of the engine to being up-to-date, just call `cargo update` at the root of the project's
 workspace. This will pull the latest changes from the remote, unless there is no `rev` specified.
 
-Learn more about dependency paths on the official `cargo` documentation, 
-[here](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories).
+Learn more about dependency paths on the official `cargo` documentation, [here](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories).
 
 ## Adding Game Logic
 
