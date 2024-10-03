@@ -40,6 +40,13 @@ in the editor to be `Debug (HR)`:
 
 ![img.png](build_profile.png)
 
+> ⚠️ Also the Editor can be run manually without using the `cargo run` command. The `cargo run` command do some stuff which is described at [page](https://doc.rust-lang.org/cargo/reference/environment-variables.html#dynamic-library-paths). Run the command `rustc --print=sysroot` and remember its result. The "bin" folder at this path must be in the system's `PATH` variable to help to find a dynamically built `rust-std` library at startup of the Editor.
+> Example for Windows:
+> ```powershell
+> ${env:PATH} = "${env:PATH};${env:USERPROFILE}\.rustup\toolchains\stable-x86_64-pc-windows-msvc\bin"
+> start .\target\dev-hot-reload\editor.exe
+> ```
+
 Once that's done you can run your game by clicking on the green `Play` button. You can switch between CHR and normal mode
 (static linking) at any time. Keep in mind, that if you run the editor in CHR mode, it will also reload all changed plugins.
 
