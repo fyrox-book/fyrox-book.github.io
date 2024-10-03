@@ -608,27 +608,26 @@ with a single <code>cargo</code> command:</p>
 <p>This will ensure you're using the latest project/script template generator, which is important, since old versions
 of the template generator will most likely generate outdated code, no longer be compatible with the engine.</p>
 <p>To switch existing projects to the latest version of the engine, you need to specify paths pointing to the remote repository
-for the <code>fyrox</code> and <code>fyroxed_base</code> dependencies. You need to do this in the <code>game</code>, <code>executor</code>, and <code>editor</code> projects. First,
-open <code>game/Cargo.toml</code> and change the <code>fyrox</code> dependency to the following:</p>
-<pre><code class="language-toml">[dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
+for the <code>fyrox</code> and <code>fyroxed_base</code> dependencies. All you need to do is to change paths to these dependencies in the
+root <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">[workspace.dependencies.fyrox]
+version = { git = "https://github.com/FyroxEngine/Fyrox" }
+default-features = false
+[workspace.dependencies.fyroxed_base]
+version = { git = "https://github.com/FyroxEngine/Fyrox" }
 </code></pre>
-<p>Do the same for <code>executor/Cargo.toml</code>. The <code>editor</code> has two dependencies we need to change: <code>fyrox</code> and <code>fyroxed_base</code>.
-Open the <code>editor/Cargo.toml</code> and set both dependencies to the following:</p>
+<p>Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid
+these by specifying a particular commit, just add <code>rev = "desired_commit_hash"</code> to every dependency like so:</p>
 <pre><code class="language-toml">[dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox" }
-</code></pre>
-<p>Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid these by
-specifying a particular commit, just add <code>rev = "desired_commit_hash"</code> to every dependency like so:</p>
-<pre><code class="language-toml">[dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+[workspace.dependencies.fyrox]
+version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+default-features = false
+[workspace.dependencies.fyroxed_base]
+version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
 </code></pre>
 <p>To bring a local git repository of the engine to being up-to-date, just call <code>cargo update</code> at the root of the project's
 workspace. This will pull the latest changes from the remote, unless there is no <code>rev</code> specified.</p>
-<p>Learn more about dependency paths on the official <code>cargo</code> documentation,
-<a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
+<p>Learn more about dependency paths on the official <code>cargo</code> documentation, <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
 <p>Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
 executed by the engine. Read the <a href="beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
