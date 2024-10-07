@@ -19,7 +19,7 @@ get correct version automatically. Preprocessing is needed because the same shad
 and WebGL (OpenGL ES) which have some differences.
 2) There is a "standard" library of useful methods which is automatically included in every shader source
 at preprocessing stage. The library source could be found
-[here](https://github.com/FyroxEngine/Fyrox/blob/master/fyrox-impl/src/renderer/framework/shaders/shared.glsl).
+[here](https://github.com/FyroxEngine/Fyrox/blob/1b886caf831b87fb17958bac7f38a6b2d305646c/fyrox-graphics/src/gl/shaders/shared.glsl).
 It is well documented, and you may find some functions useful for you job.
 
 ## Structure
