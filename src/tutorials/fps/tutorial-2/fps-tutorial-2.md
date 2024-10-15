@@ -92,7 +92,7 @@ The next thing we need to do is to create a prefab for projectile, that will be 
 
 ## Projectile
 
-You mask ask - why we need a prefab for projectiles, why not just make a ray-based shooting? The answer is very simple -
+You may ask - why we need a prefab for projectiles, why not just make a ray-based shooting? The answer is very simple -
 flexibility. Once we'll finish with this "complex" system, we'll get very flexible weapon system that will allow you 
 to create weapons of any kind - it could be simple bullets, grenades, rockets, plasma, etc. 
 
