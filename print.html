@@ -6622,7 +6622,8 @@ resources used by it are loaded too.</li>
 </ol>
 <p>This can be achieved by adding a respective field in your script. For example, you may a have a weapon script that
 shoots some projectiles. In this case all you need to add a <code>projectile: Option&lt;ModelResource&gt;</code> field in your script,
-assign it to some prefab in the editor and then <a href="resources/model.html#instantiation">instantiate</a> it from code when shooting. Storing
+assign it to some prefab in the editor and then <a href="resources/model.html#instantiation">instantiate</a> it from code when shooting.
+Storing
 resource handle directly in your script helps the engine to gather all resources used by parent scene and preload them
 too while loading the scene itself. Such approach prevent lags when doing actual shooting, which is especially important
 if you're targeting a WebAssembly platform. On WebAssembly all the files accessed over network API which could work with
@@ -6656,6 +6657,72 @@ Asset Browser.</p>
 <p>Check next chapters to learn how to manage specific asset types and what their import does what.</p>
 <h2 id="api-docs"><a class="header" href="#api-docs">API Docs</a></h2>
 <p>Please read API docs <a href="https://docs.rs/fyrox/latest/fyrox/asset/manager/struct.ResourceManager.html">here</a></p>
+<h2 id="internal-state-and-access-to-data"><a class="header" href="#internal-state-and-access-to-data">Internal State and Access to Data</a></h2>
+<p>Resource itself is a small state machine that is used in asynchronous loading. When you've requested a resource from
+a resource manager, at first it looks for loaded instance and if it is found - shares a handle to the resource with you.
+If there's no such resource, it creates a new instance with <code>Pending</code> state and immediately returns it to you.
+All pending resources are placed in some sort of queue which is then processed by a set of worker threads that does
+the loading. When a worker thread finished loading of a resource, it marks the resource either as <code>Ok</code> or <code>LoadError</code>,
+depending on whether the loading was successful or not respectively. This process makes access to the data more
+convoluted.</p>
+<p>In simple cases when you don't need the data immediately after request, you can use checked access to resource data:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn checked_access(texture_resource: &amp;Resource&lt;Texture&gt;) {
+    let mut state = texture_resource.state();
+    if let Some(texture) = state.data() {
+        println!("Kind: {:?}", texture.kind());
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This is relatively cheap, it tries to block a mutex and checks the actual state of the resource. If it is loaded,
+the reference is returned to you. In some cases you know for sure that a resource is loaded and its data can be
+obtained like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn unchecked_access(texture_resource: &amp;Resource&lt;Texture&gt;) {
+    let texture = texture_resource.data_ref();
+    println!("Kind: {:?}", texture.kind());
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind that <code>data_ref</code> call will panic if the resource isn't loaded. Try to avoid using this method everywhere,
+especially if you aren't sure about the state of the resource. Never use it in combination with <code>request</code> method of
+resource manager, because it most likely will panic randomly, because of async loading.</p>
+<p>Every resource implements <code>Future</code> trait and can be awaited in async functions and multiple resources could be
+awaited simultaneously:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn await_resource(texture_resource: Resource&lt;Texture&gt;) {
+    if let Ok(result) = texture_resource.await {
+        // `data_ref` will never panic after the above check.
+        let texture = result.data_ref();
+        println!("Kind: {:?}", texture.kind());
+    };
+}
+<span class="boring">}</span></code></pre></pre>
+<p>When the data is needed right after the <code>request</code> call, you need to block current thread until the resources is fully
+loaded. Depending on the platform, you can use <code>futures::block_on</code> to block current thread in-place and get the resource
+data:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn block_and_wait(texture_resource: Resource&lt;Texture&gt;) {
+    // Block the current thread and wait until the resource is loaded.
+    if let Ok(result) = futures::executor::block_on(texture_resource) {
+        // `data_ref` will never panic after the above check.
+        let texture = result.data_ref();
+        println!("Kind: {:?}", texture.kind());
+    };
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This approach has its disadvantages, the most notable one is lack of proper support on WebAssembly. In short:
+main thread cannot be blocked in JS to let any background tasks to finish because of micro-task system which
+works in the same thread. All of this complicates even more because of async nature of resource loading in JS.
+Internally Fyrox relies on <code>fetch</code> API, which is async by design and non-blocking. All these problems could be
+avoided by embedding resources directly in the binary of your game using <code>include_bytes!</code> macro:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="model-resources"><a class="header" href="#model-resources">Model resources</a></h1>
 <h2 id="supported-formats"><a class="header" href="#supported-formats">Supported formats</a></h2>
 <p>Fyrox supports these file formats for 3D models:</p>
