@@ -305,9 +305,19 @@ works in the same thread. All of this complicates even more because of async nat
 Internally Fyrox relies on <code>fetch</code> API, which is async by design and non-blocking. All these problems could be
 avoided by embedding resources directly in the binary of your game using <code>include_bytes!</code> macro:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>
-<span class="boring">fn main() {
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">fn main() {
+</span>fn embedded_resource() -&gt; Option&lt;Resource&lt;Texture&gt;&gt; {
+    let data = include_bytes!("texture.png");
+    TextureResource::load_from_memory(
+        Default::default(),
+        data,
+        TextureImportOptions::default()
+            .with_compression(CompressionOptions::NoCompression)
+            .with_minification_filter(TextureMinificationFilter::Linear),
+    )
+    .ok()
+}
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 

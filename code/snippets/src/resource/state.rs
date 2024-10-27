@@ -42,7 +42,7 @@ fn block_and_wait(texture_resource: Resource<Texture>) {
 }
 // ANCHOR_END: block_and_wait
 
-// ANCHOR: embedded_resource
+// ANCHOR: embedded_texture
 fn embedded_resource() -> Option<Resource<Texture>> {
     let data = include_bytes!("texture.png");
     TextureResource::load_from_memory(
@@ -54,4 +54,4 @@ fn embedded_resource() -> Option<Resource<Texture>> {
     )
     .ok()
 }
-// ANCHOR_END: embedded_resource
+// ANCHOR_END: embedded_texture
