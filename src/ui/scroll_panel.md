@@ -1,9 +1,9 @@
-# Scroll panel 
+# Scroll panel
 
 Scroll panel widget does the same as [Scroll Viewer](scroll_viewer.md) widget, but it does not have any additional
-widgets and does not have any graphics. It is a panel widget that provides basic scrolling functionality and 
-[Scroll Viewer](scroll_viewer.md) is built on top of it. Strictly speaking, scroll panel widget is used to arrange its 
-children widgets, so they can be offset by a certain amount of units from top-left corner. It is used to provide basic 
+widgets and does not have any graphics. It is a panel widget that provides basic scrolling functionality and
+[Scroll Viewer](scroll_viewer.md) is built on top of it. Strictly speaking, scroll panel widget is used to arrange its
+children widgets, so they can be offset by a certain number of units from top-left corner. It is used to provide basic
 scrolling functionality.
 
 ## Examples

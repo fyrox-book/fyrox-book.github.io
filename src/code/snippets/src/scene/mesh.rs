@@ -68,7 +68,7 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
     .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
         ResourceKind::Embedded,
         // Our procedural mesh will have a form of squashed cube.
-        // A mesh can have unlimited amount of surfaces.
+        // A mesh can have unlimited number of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&Vector3::new(
             25.0, 0.25, 25.0,
         ))),

@@ -2,19 +2,19 @@
 
 Shader is a set of programs that run directly on graphics adapter. Each program from the set is called
 _sub-shader_. Sub-shaders linked with render pass, each render pass defines "where" to draw an object.
-"where" means that you can set up your own render pass and the renderer will use the sub-shader with 
+"where" means that you can set up your own render pass and the renderer will use the sub-shader with
 your render pass. For the ease of use there are a number of [predefined render passes](#predefined-render-passes).
 
-Shaders have properties of various types that can be used together with materials to draw an object. 
+Shaders have properties of various types that can be used together with materials to draw an object.
 
 ## Shaders language
 
-The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the 
+The engine uses GLSL shading language for every sub-shader. There are numerous GLSL guides over the
 internet, so there is no need to "re-post" the well documented info again.
 
 There are very few differences:
 
-1) No need to define a version of the shader. Every shader source will be pre-processed, and it will 
+1) No need to define a version of the shader. Every shader source will be pre-processed, and it will
 get correct version automatically. Preprocessing is needed because the same shader could run on OpenGL
 and WebGL (OpenGL ES) which have some differences.
 2) There is a "standard" library of useful methods which is automatically included in every shader source
@@ -28,7 +28,7 @@ Shader has rigid structure that could be described in this code snippet:
 
 ```json
 (
-    // A set of properties, there could be any amount of properties.
+    // A set of properties, there could be any number of properties.
     properties: [
         (
             // Each property must have a name. This name must match with respective
@@ -128,7 +128,7 @@ This material instance can be used for rendering. For example, you can assign it
 
 Property is a named variable of some type. Properties are directly tied with the uniforms in the sub-shaders,
 for each you can have a property called `time`, and then you can define `uniform float time;` in your sub-shader
-and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in 
+and the engine will pass a property value to that uniform for you before drawing an object. Properties placed in
 a "global namespace", which means that every sub-shader has "access" to the properties.
 
 ## Built-in properties
@@ -171,25 +171,25 @@ This list will be extended in future releases.
 
 ## Predefined render passes
 
-Predefined render passes helps you to create your own shader without a need to create your own render pass 
+Predefined render passes helps you to create your own shader without a need to create your own render pass
 and to quickly start writing your shaders.
 
-- **GBuffer** - A pass that fills a set with render target sized textures with various data about each rendered 
-object. These textures then are used for physically-based lighting. Use this pass when you want the standard 
+- **GBuffer** - A pass that fills a set with render target sized textures with various data about each rendered
+object. These textures then are used for physically-based lighting. Use this pass when you want the standard
 lighting to work with your objects.
-- **Forward** - A pass that draws an object directly in render target. This pass is very limiting, it does not 
+- **Forward** - A pass that draws an object directly in render target. This pass is very limiting, it does not
 support lighting, shadows, etc. It should be only used to render translucent objects.
 - **SpotShadow** - A pass that emits depth values for an object, later this depth map will be used to render shadows.
 - **PointShadow** - A pass that emits distance from a fragment to a point light, later this depth map will be used
 to render shadows.
-- **DirectionalShadow** - A pass that emits depth values for an object, later this depth map will be used to render 
+- **DirectionalShadow** - A pass that emits depth values for an object, later this depth map will be used to render
 shadows for directional light sources using cascaded shadow mapping.
 
 ## Drawing parameters
 
 Drawing parameters defines which GPU functions to use and at which state. For example, to render transparent
 objects you need to enable blending with specific blending rules. Or you need to disable culling to draw objects
-from both sides. This is when draw parameters come in handy. 
+from both sides. This is when draw parameters come in handy.
 
 There are relatively large list of drawing parameters, and it could confuse a person who didn't get
 used to work with graphics. The following list should help you to use drawing parameters correctly.

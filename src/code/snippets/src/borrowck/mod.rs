@@ -32,7 +32,7 @@ impl ScriptTrait for MyScript {
         let some_other_node_ref = mbc.try_get_mut(self.some_other_node).unwrap();
         let yet_another_node_ref = mbc.try_get_mut(self.yet_another_node).unwrap();
 
-        // We can borrow the same node immutably pretty much infinite amount of times, if it wasn't
+        // We can borrow the same node immutably pretty much infinite number of times, if it wasn't
         // borrowed mutably.
         let some_node_ref_2 = mbc.try_get(self.some_node).unwrap();
     }
