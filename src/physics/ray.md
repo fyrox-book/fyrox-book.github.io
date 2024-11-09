@@ -26,8 +26,8 @@ the `collider` and fetch its `parent` field: `graph[collider].parent()`.
 - `normal` - a normal at the intersection position in world coordinates.
 - `position` - a position of the intersection in world coordinates.
 - `feature` - additional data that contains a kind of the feature with which intersection was detected as well as its
-index. FeatureId::Face might have index that is greater than amount of triangles in a triangle mesh, this means that 
-intersection was detected from "back" side of a face. To "fix" that index, simply subtract amount of triangles of a 
+index. FeatureId::Face might have index that is greater than number of triangles in a triangle mesh, this means that
+intersection was detected from "back" side of a face. To "fix" that index, simply subtract number of triangles of a
 triangle mesh from the value.
 - `toi` - (`time of impact`) a distance from ray's origin to `position`.
 
@@ -40,5 +40,5 @@ relatively slow and could be sped up a lot by using static array on stack:
 {{#include ../code/snippets/src/scene/ray.rs:do_static_ray_cast}}
 ```
 
-`usage_example` shows how to use the `do_static_ray_cast` function - all you need to do is to specify maximum amount of
+`usage_example` shows how to use the `do_static_ray_cast` function - all you need to do is to specify maximum number of
 intersections you're interested in as a generic parameter.

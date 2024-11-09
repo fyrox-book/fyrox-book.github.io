@@ -42,7 +42,7 @@ following example shows a typical usage:
 {{#include ../code/snippets/src/editor/prop_editors.rs:add_enum_property_editor}}
 ```
 
-As you can see, your enumeration needs a decent amount of trait implementations, hopefully all of them can be derived.
+As you can see, your enumeration needs a decent number of trait implementations, hopefully all of them can be derived.
 
 ### Inheritable Properties
 

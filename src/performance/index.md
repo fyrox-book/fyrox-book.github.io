@@ -8,7 +8,7 @@ For the vast majority of cases, standard engine approaches are perfectly fine.
 Theoretically, the ECS approach _can_ give you better performance, but lets at first see where ECS is beneficial,
 and why classic approach is still viable. The ECS is beneficial _only_ in cases where you have to process
 **ten or hundreds thousands** objects every frame, the performance gain of cache friendliness can be significant
-in such cases. But let's stop for a second and ask ourselves again: how _often_ games have such huge amount of objects
+in such cases. But let's stop for a second and ask ourselves again: how _often_ games have such huge number of objects
 that has to be processed every frame? There are very few examples of such games:
 
 - Strategy games - at some extent, because there are very few games that allows you to control tens of thousands
@@ -20,7 +20,7 @@ Note that the list does not include games with vast worlds, why so? The reason i
 process every tiny object in the world at once, instead they split the world in small chunks and process only
 few chunks at once, those where the player is present.
 
-The rest of genres operate on a tiny amount of object compared to those up above, maybe a few hundreds at max.
+The rest of genres operate on a tiny number of objects compared to those up above, maybe a few hundreds at max.
 One might say - hey, each object could contain lots of tiny "moving parts", what's about them? Usually each
 object contains up to 10-15 sub-parts, which leads us to few thousands of "atomic" object. Is it much? Not really.
 

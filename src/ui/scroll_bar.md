@@ -1,4 +1,4 @@
-# Scroll bar 
+# Scroll bar
 
 ![scroll bar](scroll_bar.gif)
 
@@ -35,7 +35,7 @@ enum there.
 
 By default, scroll bar does not show its actual value, you can turn it on using `ScrollBarBuilder::show_value`
 method with `true` as the first argument. To change rounding of the value, use `ScrollBarBuilder::with_value_precision`
-and provide the desired amount of decimal places there.
+and provide the desired number of decimal places there.
 
 ## Step
 

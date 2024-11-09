@@ -19,6 +19,6 @@ rigid bodies in the world.
 
 There is a very few differences between 3D and 2D physics, the most obvious is that 2D physics does simulation only in 
 oXY plane (the plane of the screen). 2D physics has less collider shapes available since some 3D shapes degenerate in
-2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser amount of joints available in 2D, 
+2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser number of joints available in 2D, 
 there is no revolute joint for example. Unlike 3D physics entities, 2D physics entities exist in the separate
 `scene::dim2` module.

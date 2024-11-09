@@ -78,7 +78,7 @@ approach for visualization is just a custom structure with a few methods:
 ```
 
 `sync_to_model` method can be called on every frame in `update` method of the interaction mode (see below) - it tracks 
-the amount of scene nodes representing points of the line and if there's mismatch, it recreates the entire set. 
+the number of scene nodes representing points of the line and if there's mismatch, it recreates the entire set. 
 `remove_points` should be used when the gizmo is about to be deleted (usually together with the interaction mode).
 
 All interaction with scene nodes should be performed using interaction modes. Interaction mode is a tiny abstraction layer,

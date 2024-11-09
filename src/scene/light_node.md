@@ -1,6 +1,6 @@
 # Light node
 
-The engine offers complex lighting system with various types of light sources. 
+The engine offers complex lighting system with various types of light sources.
 
 ## Light types
 
@@ -10,7 +10,7 @@ There are three main types of light sources: directional, point, and spotlights.
 
 Directional light does not have a position, its rays are always parallel, and it has a particular direction in space.
 An example of directional light in real-life could be our Sun. Even if it is a point light, it is so far away from
-the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor 
+the Earth, so we can assume that its rays are always parallel. Directional light sources are suitable for outdoor
 scenes.
 
 A directional light source could be created like this:
@@ -30,7 +30,7 @@ like this:
 ### Point light
 
 Point light is a light source that emits lights in all directions, it has a position, but does not have an orientation.
-An example of a point light source: light bulb. 
+An example of a point light source: light bulb.
 
 ```rust,no_run
 {{#include ../code/snippets/src/scene/light.rs:create_point_light}}
@@ -38,7 +38,7 @@ An example of a point light source: light bulb.
 
 ### Spotlight
 
-Spotlight is a light source that emits lights in cone shape, it has a position and orientation. An example of 
+Spotlight is a light source that emits lights in cone shape, it has a position and orientation. An example of
 a spotlight source: flashlight.
 
 ```rust,no_run
@@ -51,7 +51,7 @@ a spotlight source: flashlight.
 
 Spot and point lights support light scattering effect. Imagine you're walking with a flashlight in a foggy weather,
 the fog will scatter the light from your flashlight making it, so you'll see the "light volume". Light scattering is
-**enabled by default**, so you don't have to do anything to enable it. However, in some cases you might want to disable 
+**enabled by default**, so you don't have to do anything to enable it. However, in some cases you might want to disable
 it, you can do this either while building a light source or change light scattering options on existing light source.
 Here is the small example of how to do that.
 
@@ -59,7 +59,7 @@ Here is the small example of how to do that.
 {{#include ../code/snippets/src/scene/light.rs:disable_light_scatter}}
 ```
 
-You could also change the amount of scattering per each color channel, using this you could imitate the 
+You could also change the amount of scattering per each color channel, using this you could imitate the
 [Rayleigh scattering](https://en.wikipedia.org/wiki/Rayleigh_scattering):
 
 ```rust,no_run
@@ -69,8 +69,8 @@ You could also change the amount of scattering per each color channel, using thi
 ## Shadows
 
 By default, light sources cast shadows. You can change this by using `set_cast_shadows` method of a light source. You
-should carefully manage shadows: shadows giving the most significant performance impact, you should keep the amount of 
-light sources that can cast shadows at lowest possible amount to keep performance at good levels. You can also turn 
+should carefully manage shadows: shadows giving the most significant performance impact, you should keep the number of
+light sources that can cast shadows at lowest possible to keep performance at good levels. You can also turn
 on/off shadows when you need:
 
 ```rust,no_run
@@ -80,7 +80,7 @@ on/off shadows when you need:
 Not every light should cast shadows, for example a small light that a player can see only in a distance can have
 shadows disabled. You should set the appropriate values depending on your scene, just remember: the fewer the shadows
 the better the performance. The most expensive shadows are from point lights, the less, from spotlights and directional
-lights. 
+lights.
 
 ## Performance
 

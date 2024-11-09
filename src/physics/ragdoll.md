@@ -36,7 +36,7 @@ scene nodes in the world viewer, located under a `Ragdoll` scene node:
 
 ![ragdoll result](ragdoll2.png)
 
-As you can see, the amount of entities you'd have to create and configure manually is quite high. Keep in mind, that 
+As you can see, the number of entities you'd have to create and configure manually is quite high. Keep in mind, that 
 ragdoll wizard can't generate perfect ragdoll, because of lack of information. The generated ragdoll will most likely
 require some minor tweaks (mostly joint angular limits).
 
