@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="navy" dir="ltr">
+<html lang="en" class="navy sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -42,15 +42,17 @@
 
         <!-- MathJax -->
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    </head>
-    <body class="sidebar-visible no-js">
-    <div id="body-container">
+
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
         </script>
-
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -72,19 +74,16 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
+            const html = document.documentElement;
             html.classList.remove('navy')
             html.classList.add(theme);
-            var body = document.querySelector('body');
-            body.classList.remove('no-js')
-            body.classList.add('js');
+            html.classList.add("js");
         </script>
 
         <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var body = document.querySelector('body');
             var sidebar = null;
             var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
@@ -94,45 +93,25 @@
                 sidebar = 'hidden';
             }
             sidebar_toggle.checked = sidebar === 'visible';
-            body.classList.remove('sidebar-visible');
-            body.classList.add("sidebar-" + sidebar);
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> About the Book</a></li><li class="chapter-item expanded "><a href="introduction/index.html"><strong aria-hidden="true">2.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="introduction/introduction.html"><strong aria-hidden="true">2.1.</strong> Introduction to Fyrox</a></li><li class="chapter-item expanded "><a href="introduction/requirements.html"><strong aria-hidden="true">2.2.</strong> System Requirements and Supported Platforms</a></li><li class="chapter-item expanded "><a href="introduction/basic_concepts.html"><strong aria-hidden="true">2.3.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="introduction/philosophy_and_goals.html"><strong aria-hidden="true">2.4.</strong> Design Philosophy and Goals</a></li><li class="chapter-item expanded "><a href="introduction/faq.html"><strong aria-hidden="true">2.5.</strong> Frequently Asked Questions</a></li></ol></li><li class="chapter-item expanded "><a href="beginning/getting_started.html"><strong aria-hidden="true">3.</strong> Getting started</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="beginning/scripting.html"><strong aria-hidden="true">3.1.</strong> Editor, Plugins and Scripts</a></li><li class="chapter-item expanded "><a href="beginning/hot_reloading.html"><strong aria-hidden="true">3.2.</strong> Hot Reloading</a></li><li class="chapter-item expanded "><a href="beginning/editor_overview.html"><strong aria-hidden="true">3.3.</strong> Editor Overview</a></li><li class="chapter-item expanded "><a href="beginning/scene_and_scene_graph.html"><strong aria-hidden="true">3.4.</strong> Scene and Scene Graph</a></li><li class="chapter-item expanded "><a href="beginning/assets.html"><strong aria-hidden="true">3.5.</strong> Assets</a></li><li class="chapter-item expanded "><a href="beginning/data_management.html"><strong aria-hidden="true">3.6.</strong> Data Management</a></li><li class="chapter-item expanded "><a href="beginning/borrow_checker.html"><strong aria-hidden="true">3.7.</strong> Borrow Checker</a></li></ol></li><li class="chapter-item expanded "><a href="scripting/scripting.html"><strong aria-hidden="true">4.</strong> Scripting</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scripting/plugin.html"><strong aria-hidden="true">4.1.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="scripting/executor.html"><strong aria-hidden="true">4.2.</strong> Executor</a></li><li class="chapter-item expanded "><a href="scripting/script.html"><strong aria-hidden="true">4.3.</strong> Scripts</a></li><li class="chapter-item expanded "><a href="scripting/tasks.html"><strong aria-hidden="true">4.4.</strong> Tasks</a></li></ol></li><li class="chapter-item expanded "><a href="scene/scene.html"><strong aria-hidden="true">5.</strong> Scene</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene/graph.html"><strong aria-hidden="true">5.1.</strong> Graph</a></li><li class="chapter-item expanded "><a href="scene/transform.html"><strong aria-hidden="true">5.2.</strong> Transformation</a></li><li class="chapter-item expanded "><a href="scene/prefab.html"><strong aria-hidden="true">5.3.</strong> Prefabs</a></li><li class="chapter-item expanded "><a href="scene/inheritance.html"><strong aria-hidden="true">5.4.</strong> Property Inheritance</a></li><li class="chapter-item expanded "><a href="scene/base_node.html"><strong aria-hidden="true">5.5.</strong> Base Node</a></li><li class="chapter-item expanded "><a href="scene/mesh_node.html"><strong aria-hidden="true">5.6.</strong> Mesh Node</a></li><li class="chapter-item expanded "><a href="scene/light_node.html"><strong aria-hidden="true">5.7.</strong> Light Node</a></li><li class="chapter-item expanded "><a href="scene/sprite_node.html"><strong aria-hidden="true">5.8.</strong> Sprite Node</a></li><li class="chapter-item expanded "><a href="scene/particle_system_node.html"><strong aria-hidden="true">5.9.</strong> Particle System Node</a></li><li class="chapter-item expanded "><a href="scene/terrain_node.html"><strong aria-hidden="true">5.10.</strong> Terrain Node</a></li><li class="chapter-item expanded "><a href="scene/camera_node.html"><strong aria-hidden="true">5.11.</strong> Camera Node</a></li><li class="chapter-item expanded "><a href="scene/decal_node.html"><strong aria-hidden="true">5.12.</strong> Decal Node</a></li><li class="chapter-item expanded "><a href="scene/rectangle.html"><strong aria-hidden="true">5.13.</strong> Rectangle Node</a></li><li class="chapter-item expanded "><a href="scene/tilemap.html"><strong aria-hidden="true">5.14.</strong> Tile Map</a></li><li class="chapter-item expanded "><a href="scene/custom_node.html"><strong aria-hidden="true">5.15.</strong> Custom Node</a></li><li class="chapter-item expanded "><a href="physics/physics.html"><strong aria-hidden="true">5.16.</strong> Physics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="physics/rigid_body.html"><strong aria-hidden="true">5.16.1.</strong> Rigid Body</a></li><li class="chapter-item expanded "><a href="physics/collider.html"><strong aria-hidden="true">5.16.2.</strong> Collider</a></li><li class="chapter-item expanded "><a href="physics/joint.html"><strong aria-hidden="true">5.16.3.</strong> Joint</a></li><li class="chapter-item expanded "><a href="physics/ray.html"><strong aria-hidden="true">5.16.4.</strong> Ray Casting</a></li><li class="chapter-item expanded "><a href="physics/ragdoll.html"><strong aria-hidden="true">5.16.5.</strong> Ragdoll</a></li></ol></li><li class="chapter-item expanded "><a href="sound/index.html"><strong aria-hidden="true">5.17.</strong> Sound</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sound/bus.html"><strong aria-hidden="true">5.17.1.</strong> Audio Bus</a></li><li class="chapter-item expanded "><a href="sound/sound.html"><strong aria-hidden="true">5.17.2.</strong> Sound Node</a></li><li class="chapter-item expanded "><a href="sound/hrtf.html"><strong aria-hidden="true">5.17.3.</strong> HRTF</a></li></ol></li><li class="chapter-item expanded "><a href="animation/animation.html"><strong aria-hidden="true">5.18.</strong> Animation</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="animation/anim_editor.html"><strong aria-hidden="true">5.18.1.</strong> Animation Editor</a></li><li class="chapter-item expanded "><a href="animation/blending.html"><strong aria-hidden="true">5.18.2.</strong> Animation Blending</a></li><li class="chapter-item expanded "><a href="animation/absm_editor.html"><strong aria-hidden="true">5.18.3.</strong> ABSM Editor</a></li><li class="chapter-item expanded "><a href="animation/signal.html"><strong aria-hidden="true">5.18.4.</strong> Signals</a></li><li class="chapter-item expanded "><a href="animation/root_motion/root_motion.html"><strong aria-hidden="true">5.18.5.</strong> Root Motion</a></li><li class="chapter-item expanded "><a href="animation/spritesheet/spritesheet.html"><strong aria-hidden="true">5.18.6.</strong> Sprite Animation</a></li></ol></li><li class="chapter-item expanded "><a href="scene/debug.html"><strong aria-hidden="true">5.19.</strong> Debugging</a></li></ol></li><li class="chapter-item expanded "><a href="input/input.html"><strong aria-hidden="true">6.</strong> Input Handling</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="input/keyboard.html"><strong aria-hidden="true">6.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="input/mouse.html"><strong aria-hidden="true">6.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="input/text.html"><strong aria-hidden="true">6.3.</strong> Raw Text Input (WIP)</a></li></ol></li><li class="chapter-item expanded "><a href="ai/ai.html"><strong aria-hidden="true">7.</strong> Artificial Intelligence (WIP)</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ai/beh_tree.html"><strong aria-hidden="true">7.1.</strong> Behaviour Trees (WIP)</a></li><li class="chapter-item expanded "><a href="ai/pathfinding.html"><strong aria-hidden="true">7.2.</strong> Path Finding</a></li><li class="chapter-item expanded "><a href="ai/navmesh.html"><strong aria-hidden="true">7.3.</strong> Navigational Meshes</a></li></ol></li><li class="chapter-item expanded "><a href="rendering/rendering.html"><strong aria-hidden="true">8.</strong> Rendering</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="rendering/shaders.html"><strong aria-hidden="true">8.1.</strong> Shaders</a></li><li class="chapter-item expanded "><a href="rendering/materials.html"><strong aria-hidden="true">8.2.</strong> Materials</a></li><li class="chapter-item expanded "><a href="rendering/lightmaps.html"><strong aria-hidden="true">8.3.</strong> Light Maps</a></li><li class="chapter-item expanded "><a href="rendering/settings.html"><strong aria-hidden="true">8.4.</strong> Settings</a></li><li class="chapter-item expanded "><a href="rendering/render_pass.html"><strong aria-hidden="true">8.5.</strong> Render Pass</a></li><li class="chapter-item expanded "><a href="rendering/normal_maps.html"><strong aria-hidden="true">8.6.</strong> Normal Maps</a></li></ol></li><li class="chapter-item expanded "><a href="resources/resources.html"><strong aria-hidden="true">9.</strong> Resource Management</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="resources/model.html"><strong aria-hidden="true">9.1.</strong> Models</a></li><li class="chapter-item expanded "><a href="resources/texture.html"><strong aria-hidden="true">9.2.</strong> Textures</a></li><li class="chapter-item expanded "><a href="resources/sound.html"><strong aria-hidden="true">9.3.</strong> Sound Buffers</a></li><li class="chapter-item expanded "><a href="resources/curve.html"><strong aria-hidden="true">9.4.</strong> Curves (WIP)</a></li><li class="chapter-item expanded "><a href="resources/custom.html"><strong aria-hidden="true">9.5.</strong> Custom Resource</a></li><li class="chapter-item expanded "><a href="resources/hot_reloading.html"><strong aria-hidden="true">9.6.</strong> Asset Hot Reloading</a></li></ol></li><li class="chapter-item expanded "><a href="engine/engine.html"><strong aria-hidden="true">10.</strong> Engine</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="engine/graphics_context.html"><strong aria-hidden="true">10.1.</strong> Graphics Context</a></li><li class="chapter-item expanded "><a href="engine/windows.html"><strong aria-hidden="true">10.2.</strong> Window Management</a></li><li class="chapter-item expanded "><a href="engine/manual_initialization.html"><strong aria-hidden="true">10.3.</strong> Manual Initialization</a></li></ol></li><li class="chapter-item expanded "><a href="ui/ui.html"><strong aria-hidden="true">11.</strong> User Interface</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ui/basic_concepts/basic_concepts.html"><strong aria-hidden="true">11.1.</strong> Basic concepts</a></li><li class="chapter-item expanded "><a href="ui/editor/editor.html"><strong aria-hidden="true">11.2.</strong> Editor</a></li><li class="chapter-item expanded "><a href="ui/rendering.html"><strong aria-hidden="true">11.3.</strong> Rendering</a></li><li class="chapter-item expanded "><a href="ui/font.html"><strong aria-hidden="true">11.4.</strong> Fonts</a></li><li class="chapter-item expanded "><a href="ui/style.html"><strong aria-hidden="true">11.5.</strong> Style</a></li><li class="chapter-item expanded "><a href="ui/widgets.html"><strong aria-hidden="true">11.6.</strong> Widgets</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ui/custom.html"><strong aria-hidden="true">11.6.1.</strong> Custom widget</a></li><li class="chapter-item expanded "><a href="ui/button.html"><strong aria-hidden="true">11.6.2.</strong> Button</a></li><li class="chapter-item expanded "><a href="ui/border.html"><strong aria-hidden="true">11.6.3.</strong> Border</a></li><li class="chapter-item expanded "><a href="ui/canvas.html"><strong aria-hidden="true">11.6.4.</strong> Canvas</a></li><li class="chapter-item expanded "><a href="ui/checkbox/check_box.html"><strong aria-hidden="true">11.6.5.</strong> Check box</a></li><li class="chapter-item expanded "><a href="ui/curve_editor.html"><strong aria-hidden="true">11.6.6.</strong> Curve editor (WIP)</a></li><li class="chapter-item expanded "><a href="ui/decorator.html"><strong aria-hidden="true">11.6.7.</strong> Decorator</a></li><li class="chapter-item expanded "><a href="ui/dock.html"><strong aria-hidden="true">11.6.8.</strong> Docking manager (WIP)</a></li><li class="chapter-item expanded "><a href="ui/dropdown_list.html"><strong aria-hidden="true">11.6.9.</strong> Dropdown list (WIP)</a></li><li class="chapter-item expanded "><a href="ui/expander.html"><strong aria-hidden="true">11.6.10.</strong> Expander</a></li><li class="chapter-item expanded "><a href="ui/file_browser.html"><strong aria-hidden="true">11.6.11.</strong> File browser (WIP)</a></li><li class="chapter-item expanded "><a href="ui/grid.html"><strong aria-hidden="true">11.6.12.</strong> Grid</a></li><li class="chapter-item expanded "><a href="ui/image.html"><strong aria-hidden="true">11.6.13.</strong> Image</a></li><li class="chapter-item expanded "><a href="ui/inspector.html"><strong aria-hidden="true">11.6.14.</strong> Inspector (WIP)</a></li><li class="chapter-item expanded "><a href="ui/list_view.html"><strong aria-hidden="true">11.6.15.</strong> List view (WIP)</a></li><li class="chapter-item expanded "><a href="ui/menu.html"><strong aria-hidden="true">11.6.16.</strong> Menu (WIP)</a></li><li class="chapter-item expanded "><a href="ui/message_box.html"><strong aria-hidden="true">11.6.17.</strong> Message box (WIP)</a></li><li class="chapter-item expanded "><a href="ui/numeric.html"><strong aria-hidden="true">11.6.18.</strong> Numeric field</a></li><li class="chapter-item expanded "><a href="ui/popup.html"><strong aria-hidden="true">11.6.19.</strong> Popup (WIP)</a></li><li class="chapter-item expanded "><a href="ui/progress_bar.html"><strong aria-hidden="true">11.6.20.</strong> Progress bar (WIP)</a></li><li class="chapter-item expanded "><a href="ui/range.html"><strong aria-hidden="true">11.6.21.</strong> Range (WIP)</a></li><li class="chapter-item expanded "><a href="ui/rect.html"><strong aria-hidden="true">11.6.22.</strong> Rect (WIP)</a></li><li class="chapter-item expanded "><a href="ui/scroll_bar.html"><strong aria-hidden="true">11.6.23.</strong> Scroll bar</a></li><li class="chapter-item expanded "><a href="ui/scroll_panel.html"><strong aria-hidden="true">11.6.24.</strong> Scroll panel</a></li><li class="chapter-item expanded "><a href="ui/scroll_viewer.html"><strong aria-hidden="true">11.6.25.</strong> Scroll viewer</a></li><li class="chapter-item expanded "><a href="ui/screen.html"><strong aria-hidden="true">11.6.26.</strong> Screen</a></li><li class="chapter-item expanded "><a href="ui/stack_panel.html"><strong aria-hidden="true">11.6.27.</strong> Stack panel</a></li><li class="chapter-item expanded "><a href="ui/tab_control.html"><strong aria-hidden="true">11.6.28.</strong> Tab control</a></li><li class="chapter-item expanded "><a href="ui/text.html"><strong aria-hidden="true">11.6.29.</strong> Text</a></li><li class="chapter-item expanded "><a href="ui/text_box.html"><strong aria-hidden="true">11.6.30.</strong> Text box</a></li><li class="chapter-item expanded "><a href="ui/tree.html"><strong aria-hidden="true">11.6.31.</strong> Tree (WIP)</a></li><li class="chapter-item expanded "><a href="ui/vector_image.html"><strong aria-hidden="true">11.6.32.</strong> Vector image</a></li><li class="chapter-item expanded "><a href="ui/window.html"><strong aria-hidden="true">11.6.33.</strong> Window</a></li><li class="chapter-item expanded "><a href="ui/wrap_panel.html"><strong aria-hidden="true">11.6.34.</strong> Wrap panel</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="serialization/index.html"><strong aria-hidden="true">12.</strong> Serialization</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="serialization/save.html"><strong aria-hidden="true">12.1.</strong> Saved Games</a></li></ol></li><li class="chapter-item expanded "><a href="editor/index.html"><strong aria-hidden="true">13.</strong> Editor</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="editor/property_editors.html"><strong aria-hidden="true">13.1.</strong> Property Editors</a></li><li class="chapter-item expanded "><a href="editor/settings.html"><strong aria-hidden="true">13.2.</strong> Settings</a></li><li class="chapter-item expanded "><a href="editor/plugins.html"><strong aria-hidden="true">13.3.</strong> Plugins</a></li></ol></li><li class="chapter-item expanded "><a href="misc/misc.html"><strong aria-hidden="true">14.</strong> Miscellaneous</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="misc/log.html"><strong aria-hidden="true">14.1.</strong> Log</a></li></ol></li><li class="chapter-item expanded "><a href="shipping/shipping.html"><strong aria-hidden="true">15.</strong> Shipping</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="shipping/pc.html"><strong aria-hidden="true">15.1.</strong> PC</a></li><li class="chapter-item expanded "><a href="shipping/wasm.html"><strong aria-hidden="true">15.2.</strong> WebAssembly</a></li><li class="chapter-item expanded "><a href="shipping/android.html"><strong aria-hidden="true">15.3.</strong> Android</a></li></ol></li><li class="chapter-item expanded "><a href="tutorials/tutorials.html"><strong aria-hidden="true">16.</strong> Tutorials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorials/platformer/intro.html"><strong aria-hidden="true">16.1.</strong> 2D Platformer Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorials/platformer/part1.html"><strong aria-hidden="true">16.1.1.</strong> Character Controller</a></li><li class="chapter-item expanded "><a href="tutorials/platformer/part2.html"><strong aria-hidden="true">16.1.2.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="tutorials/rpg/intro.html"><strong aria-hidden="true">16.2.</strong> RPG Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorials/rpg/tutorial-1/tutorial-part-1.html"><strong aria-hidden="true">16.2.1.</strong> Character Controller</a></li></ol></li><li class="chapter-item expanded "><a href="tutorials/fps/fps-intro.html"><strong aria-hidden="true">16.3.</strong> FPS Tutorial</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorials/fps/tutorial-1/fps-tutorial.html"><strong aria-hidden="true">16.3.1.</strong> Character Controller</a></li><li class="chapter-item expanded "><a href="tutorials/fps/tutorial-2/fps-tutorial-2.html"><strong aria-hidden="true">16.3.2.</strong> Weapons</a></li><li class="chapter-item expanded "><a href="tutorials/fps/tutorial-3/fps-tutorial-3.html"><strong aria-hidden="true">16.3.3.</strong> Bots and AI</a></li></ol></li><li class="chapter-item expanded "><a href="tutorials/ui/ui-tutorial.html"><strong aria-hidden="true">16.4.</strong> User Interface Tutorial (WIP)</a></li><li class="chapter-item expanded "><a href="tutorials/community.html"><strong aria-hidden="true">16.5.</strong> Community Tutorials</a></li></ol></li><li class="chapter-item expanded "><a href="performance/index.html"><strong aria-hidden="true">17.</strong> Performance</a></li></ol>
-            </div>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <!-- Track and set sidebar scroll position -->
-        <script>
-            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
-            sidebarScrollbox.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
-                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
-                }
-            }, { passive: true });
-            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
-            sessionStorage.removeItem('sidebar-scroll');
-            if (sidebarScrollTop) {
-                // preserve sidebar scroll position when navigating via links within sidebar
-                sidebarScrollbox.scrollTop = sidebarScrollTop;
-            } else {
-                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
-                var activeSection = document.querySelector('#sidebar .active');
-                if (activeSection) {
-                    activeSection.scrollIntoView({ block: 'center' });
-                }
-            }
-        </script>
-
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -705,7 +684,7 @@ that helps you build your game from start to finish with relatively low effort.<
 <p>You'll be spending a lot of time in the editor, so you should get familiar with it and learn how to use its basic functionalities.
 This chapter will guide you through the basics, advanced topics will be covered in their respective chapters.</p>
 <h2 id="windows"><a class="header" href="#windows">Windows</a></h2>
-<p>When you open the editor for the first time you may be confused by the amount of windows, buttons, lists, etc. you'll be presented
+<p>When you open the editor for the first time you may be confused by the number of windows, buttons, lists, etc. you'll be presented
 with. Each window serves a different purpose, but all of them work together to help you make your game. Let's take a look at a
 screenshot of the editor and learn what each part of it is responsible for (please note that this can change over time, because
 development is quite fast and images can easily become outdated):</p>
@@ -896,7 +875,7 @@ what each import option is for.</p>
 is done by simply dragging the model you want to instantiate and dropping it on the <code>Scene Preview</code>. While dragging it,
 you'll also see a preview of the model.</p>
 <p><img src="beginning/preview.gif" alt="preview" /></p>
-<p>The maximum amount of asset instances is not limited by the engine but it is by the memory and CPU resources of your PC.
+<p>The maximum number of asset instances is not limited by the engine but it is by the memory and CPU resources of your PC.
 Note that the engine does try to reuse data across instances as much as possible.</p>
 <p>You can also instantiate assets dynamically from your code. Here's an example of that for a Model:</p>
 <pre><pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
@@ -1131,7 +1110,7 @@ impl ScriptTrait for MyScript {
         let some_other_node_ref = mbc.try_get_mut(self.some_other_node).unwrap();
         let yet_another_node_ref = mbc.try_get_mut(self.yet_another_node).unwrap();
 
-        // We can borrow the same node immutably pretty much infinite amount of times, if it wasn't
+        // We can borrow the same node immutably pretty much infinite number of times, if it wasn't
         // borrowed mutably.
         let some_node_ref_2 = mbc.try_get(self.some_node).unwrap();
     }
@@ -2762,7 +2741,7 @@ cannot create a mesh in 3D modelling software.</p>
     .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
         ResourceKind::Embedded,
         // Our procedural mesh will have a form of squashed cube.
-        // A mesh can have unlimited amount of surfaces.
+        // A mesh can have unlimited number of surfaces.
         SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&amp;Vector3::new(
             25.0, 0.25, 25.0,
         ))),
@@ -2912,8 +2891,8 @@ Here is the small example of how to do that.</p>
 <span class="boring">}</span></code></pre></pre>
 <h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
 <p>By default, light sources cast shadows. You can change this by using <code>set_cast_shadows</code> method of a light source. You
-should carefully manage shadows: shadows giving the most significant performance impact, you should keep the amount of
-light sources that can cast shadows at lowest possible amount to keep performance at good levels. You can also turn
+should carefully manage shadows: shadows giving the most significant performance impact, you should keep the number of
+light sources that can cast shadows at lowest possible to keep performance at good levels. You can also turn
 on/off shadows when you need:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -2989,7 +2968,7 @@ huge amounts of particles at the same time, but sprites are not. Each sprite is 
 particle systems, it has a lot of "useless" info that will eat a lot of memory.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="particle-system"><a class="header" href="#particle-system">Particle system</a></h1>
 <p>Particle system is a scene node that is used to create complex visual effects (VFX). It operates on huge amount
-of particles at once allowing you to do complex simulation that involves large amount of particles. Typically,
+of particles at once allowing you to do complex simulation that involves large number of particles. Typically,
 particle systems are used to create following visual effects: smoke, sparks, blood splatters, steam, etc.</p>
 <p><img src="scene/./particle_system_example.png" alt="smoke" /></p>
 <h2 id="basic-concepts-1"><a class="header" href="#basic-concepts-1">Basic Concepts</a></h2>
@@ -3026,7 +3005,7 @@ parameters of particles. Particle system must have at least one emitter to gener
 <ul>
 <li><code>Position</code> - emitter have its own <em>local</em> position (position relative to parent particle system node), this helps you
 to create complex particle systems that may spawn particles from multiple zones in space at once.</li>
-<li><code>Max Particles</code> - maximum amount of particles available for spawn. By default, it is <code>None</code>, which says that there is
+<li><code>Max Particles</code> - maximum number of particles available for spawn. By default, it is <code>None</code>, which says that there is
 no limit.</li>
 <li><code>Spawn Rate</code> - rate (in units per second) defines how fast the emitter will spawn particles.</li>
 <li><code>Lifetime Range</code> - numeric range (in seconds) for particle lifetime values. The lower the beginning of the range
@@ -3045,7 +3024,7 @@ ensure that generated values will be different each time.</p>
 <p>There are multiple ways of creating a particle system, pick one that best suits your current needs.</p>
 <h3 id="using-the-editor"><a class="header" href="#using-the-editor">Using the editor</a></h3>
 <p>The best way to create a particle system is to configure it in the editor, creating from code is possible too (see below),
-but way harder and may be not intuitive, because of the large amount of parameters. The editor allows you see the result
+but way harder and may be not intuitive, because of the large number of parameters. The editor allows you see the result
 and tweak it very fast. Create a particle system by <code>Create -&gt; Particle System</code> and then you can start editing its
 properties. By default, new particle system has one Sphere particle emitter, you can add new emitters by clicking <code>+</code>
 button at the right of <code>Emitters</code> property in the Inspector (or remove by clicking <code>-</code>). Here's a simple example:</p>
@@ -3163,9 +3142,9 @@ radius appears. When a rectangular brush is select, controls for its width and l
 rectangle changes to reflect the size of the brush based on these controls.</li>
 <li><em>Mode:</em> Select the terrain editing operation that the brush should perform.
 <ul>
-<li><em>Raise or Lower:</em> Modifies the existing value by a fixed amount. When the amount is positive, the value is
-increased. When the amount is negative, the value is decreased. When the brush target is "Height Map", this can be
-to raise or lower the terrain. When the <code>Shift</code> key is held at the start of a brush stroke, the amount of raising or lowering
+<li><em>Raise or Lower:</em> Modifies the existing value by a fixed amount. When the number is positive, the value is
+increased. When the number is negative, the value is decreased. When the brush target is "Height Map", this can be
+to raise or lower the terrain. When the <code>Shift</code> key is held at the start of a brush stroke, the number of raising or lowering
 is negated, so a raise operation becomes a lowering operation.</li>
 <li><em>Assign Value:</em> Replaces the existing value with a given value. For example, if you want to create a plateau
 with land of a specific height, you can select this mode and type in the height you want as the brush value.</li>
@@ -3403,13 +3382,13 @@ the terrain to match its physical representation. Enable physics visualization i
 and move terrain. Now to move the terrain you should move the body, instead of the terrain (because of parent-child
 <a href="scene/../beginning/scene_and_scene_graph.html#local-and-global-coordinates">relations</a>).</p>
 <h2 id="performance-4"><a class="header" href="#performance-4">Performance</a></h2>
-<p>Terrain rendering complexity have linear dependency with the amount of layers terrain have. Each layer forces the engine
-to re-render terrain's geometry with different textures and mask. Typical amount of layers is from 4 to 8. For example,
+<p>Terrain rendering complexity have linear dependency with the number of layers terrain have. Each layer forces the engine
+to re-render terrain's geometry with different textures and mask. Typical number of layers is from 4 to 8. For example,
 a terrain could have the following layers: dirt, grass, rock, snow. This is a relatively lightweight scheme. In any case,
 you should measure frame time to understand how each new layer affects performance in your case.</p>
 <h2 id="chunking"><a class="header" href="#chunking">Chunking</a></h2>
 <p>Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
-chunk could be considered as a "sub-terrain". You can "stack" any amount of chunks from any side of the terrain. To do
+chunk could be considered as a "sub-terrain". You can "stack" any number of chunks from any side of the terrain. To do
 that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular
 direction. Imagine that you've created a terrain with just one chunk (<code>0..1</code> range on both axes), but suddenly you found
 that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at
@@ -3693,7 +3672,7 @@ allows you to create environment damage decals, and they won't affect dynamic ob
 different layers.</p>
 <h2 id="performance-6"><a class="header" href="#performance-6">Performance</a></h2>
 <p>Current implementation of decals is relatively cheap, this allows you to create many decals on scene. However, you
-should keep the amount of decals at a reasonable level.</p>
+should keep the number of decals at a reasonable level.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rectangle-node"><a class="header" href="#rectangle-node">Rectangle node</a></h1>
 <p>Rectangle is the simplest "2D" node, it can be used to create "2D" graphics. 2D is in quotes here because the node
 is actually a 3D node, like everything else in the engine. Here is an example scene made with the rectangle nodes and
@@ -4067,7 +4046,7 @@ rigid bodies in the world.</li>
 <h2 id="differences-between-3d-and-2d"><a class="header" href="#differences-between-3d-and-2d">Differences between 3D and 2D</a></h2>
 <p>There is a very few differences between 3D and 2D physics, the most obvious is that 2D physics does simulation only in
 oXY plane (the plane of the screen). 2D physics has less collider shapes available since some 3D shapes degenerate in
-2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser amount of joints available in 2D,
+2D, for example cylinder 3D shape in 2D is just a rectangle. There is also lesser number of joints available in 2D,
 there is no revolute joint for example. Unlike 3D physics entities, 2D physics entities exist in the separate
 <code>scene::dim2</code> module.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rigid-body-node"><a class="header" href="#rigid-body-node">Rigid body node</a></h1>
@@ -4318,8 +4297,8 @@ the <code>collider</code> and fetch its <code>parent</code> field: <code>graph[c
 <li><code>normal</code> - a normal at the intersection position in world coordinates.</li>
 <li><code>position</code> - a position of the intersection in world coordinates.</li>
 <li><code>feature</code> - additional data that contains a kind of the feature with which intersection was detected as well as its
-index. FeatureId::Face might have index that is greater than amount of triangles in a triangle mesh, this means that
-intersection was detected from "back" side of a face. To "fix" that index, simply subtract amount of triangles of a
+index. FeatureId::Face might have index that is greater than number of triangles in a triangle mesh, this means that
+intersection was detected from "back" side of a face. To "fix" that index, simply subtract number of triangles of a
 triangle mesh from the value.</li>
 <li><code>toi</code> - (<code>time of impact</code>) a distance from ray's origin to <code>position</code>.</li>
 </ul>
@@ -4356,7 +4335,7 @@ fn usage_example(graph: &amp;mut Graph, begin: Vector3&lt;f32&gt;, end: Vector3&
     dbg!(do_static_ray_cast::&lt;32&gt;(graph, begin, end));
 }
 <span class="boring">}</span></code></pre></pre>
-<p><code>usage_example</code> shows how to use the <code>do_static_ray_cast</code> function - all you need to do is to specify maximum amount of
+<p><code>usage_example</code> shows how to use the <code>do_static_ray_cast</code> function - all you need to do is to specify maximum number of
 intersections you're interested in as a generic parameter.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ragdoll"><a class="header" href="#ragdoll">Ragdoll</a></h1>
 <p>Ragdoll physics is a sort of procedural animation, that allows you to create naturally looking death animations and
@@ -4388,7 +4367,7 @@ this case body parts must ignore physical capsule (and vice versa), otherwise yo
 <p>After everything is filled in, you can click <code>OK</code> button and if everything is correct, you should see a bunch of new
 scene nodes in the world viewer, located under a <code>Ragdoll</code> scene node:</p>
 <p><img src="physics/ragdoll2.png" alt="ragdoll result" /></p>
-<p>As you can see, the amount of entities you'd have to create and configure manually is quite high. Keep in mind, that
+<p>As you can see, the number of entities you'd have to create and configure manually is quite high. Keep in mind, that
 ragdoll wizard can't generate perfect ragdoll, because of lack of information. The generated ragdoll will most likely
 require some minor tweaks (mostly joint angular limits).</p>
 <h2 id="video-tutorials"><a class="header" href="#video-tutorials">Video Tutorials</a></h2>
@@ -4576,7 +4555,7 @@ it in the Audio Context panel:</p>
 <span class="boring">}</span></code></pre></pre>
 <h2 id="performance-8"><a class="header" href="#performance-8">Performance</a></h2>
 <p>HRTF is heavy. It is 5-6 times slower than the simple spatialization, so use it only on middle-end or high-end hardware.
-HRTF performance is linearly dependent on the amount of sound sources: the more sound sources use HRTF, the worse performance
+HRTF performance is linearly dependent on the number of sound sources: the more sound sources use HRTF, the worse performance
 will be and vice versa.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="animation-4"><a class="header" href="#animation-4">Animation</a></h1>
 <p>Animation allows you to change properties of scene nodes at runtime using a set of key frames. Animation
@@ -5945,7 +5924,7 @@ It is well documented, and you may find some functions useful for you job.</li>
 <h2 id="structure-1"><a class="header" href="#structure-1">Structure</a></h2>
 <p>Shader has rigid structure that could be described in this code snippet:</p>
 <pre><code class="language-json">(
-    // A set of properties, there could be any amount of properties.
+    // A set of properties, there could be any number of properties.
     properties: [
         (
             // Each property must have a name. This name must match with respective
@@ -6192,7 +6171,7 @@ multiple cubes using the same shader, but with different textures.</p>
 <p>Material itself can be shared across multiple places as well as the shader. This gives you the ability to render
 multiple objects with the same material efficiently.</p>
 <h2 id="performance-10"><a class="header" href="#performance-10">Performance</a></h2>
-<p>It is very important re-use materials as much as possible, because the amount of materials used per frame
+<p>It is very important re-use materials as much as possible, because the number of materials used per frame
 significantly correlates with performance. The more unique materials you have per frame, the more work
 the renderer and video driver need in order to render a frame and more time the frame will require for
 rendering, thus lowering your FPS.</p>
@@ -6987,7 +6966,7 @@ engine will automatically reload it and the changes will reflect in the game (an
 explains how asset hot reloading works for specific asset types and what to expect from it.</p>
 <h2 id="textures-2"><a class="header" href="#textures-2">Textures</a></h2>
 <p>Content of textures will be automatically reloaded when their source files are changed. Textures loading is usually quite
-fast and even large amount of changed textures shouldn't cause significant lags.</p>
+fast and even large number of changed textures shouldn't cause significant lags.</p>
 <h2 id="sound-2"><a class="header" href="#sound-2">Sound</a></h2>
 <p>Content of sound buffers will be automatically reloaded when their source files are changed. There might be a "pop" sound
 when a buffer is reloaded, this happens because of a sudden change of amplitude of the signal. Reloading of sound buffers
@@ -7378,7 +7357,7 @@ widget in series of nested call of other widget builders. In code, it looks some
 complex hierarchy. The topmost widget in hierarchy is the <code>Button</code> widget itself, it has two children widgets:
 background image and a text. Background image is set explicitly by calling image widget builder with specific
 texture. The text is created implicitly, the button builder creates <code>Text</code> widget for you and attaches it to
-the button. The structure of the button can contain <em>any</em> amount of nodes, for example you can create a button
+the button. The structure of the button can contain <em>any</em> number of nodes, for example you can create a button
 that contains text with some icon. To do that, replace <code>.with_text("My Button")</code> with this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -8847,7 +8826,7 @@ enum there.</p>
 <h2 id="show-values"><a class="header" href="#show-values">Show values</a></h2>
 <p>By default, scroll bar does not show its actual value, you can turn it on using <code>ScrollBarBuilder::show_value</code>
 method with <code>true</code> as the first argument. To change rounding of the value, use <code>ScrollBarBuilder::with_value_precision</code>
-and provide the desired amount of decimal places there.</p>
+and provide the desired number of decimal places there.</p>
 <h2 id="step-1"><a class="header" href="#step-1">Step</a></h2>
 <p>Scroll bar provides arrows to change the current value using a fixed step value. You can change it using
 <code>ScrollBarBuilder::with_step</code> method.</p>
@@ -8855,7 +8834,7 @@ and provide the desired amount of decimal places there.</p>
 <p>Scroll panel widget does the same as <a href="ui/scroll_viewer.html">Scroll Viewer</a> widget, but it does not have any additional
 widgets and does not have any graphics. It is a panel widget that provides basic scrolling functionality and
 <a href="ui/scroll_viewer.html">Scroll Viewer</a> is built on top of it. Strictly speaking, scroll panel widget is used to arrange its
-children widgets, so they can be offset by a certain amount of units from top-left corner. It is used to provide basic
+children widgets, so they can be offset by a certain number of units from top-left corner. It is used to provide basic
 scrolling functionality.</p>
 <h2 id="examples-3"><a class="header" href="#examples-3">Examples</a></h2>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -9942,7 +9921,7 @@ fn add_enum_property_editor(editor: &amp;Editor) {
         .insert(EnumPropertyEditorDefinition::&lt;MyEnum&gt;::new());
 }
 <span class="boring">}</span></code></pre></pre>
-<p>As you can see, your enumeration needs a decent amount of trait implementations, hopefully all of them can be derived.</p>
+<p>As you can see, your enumeration needs a decent number of trait implementations, hopefully all of them can be derived.</p>
 <h3 id="inheritable-properties"><a class="header" href="#inheritable-properties">Inheritable Properties</a></h3>
 <p>If your structure or enumeration needs to be inheritable (see more info about <a href="editor/../scene/inheritance.html">property inheritance</a>),
 then you need one more step. In case of inheritable variables, your fields will be wrapped in <code>InheritableVariable&lt;&gt;</code> and
@@ -10222,7 +10201,7 @@ impl LinePointsGizmo {
 
 <span class="boring">}</span></code></pre></pre>
 <p><code>sync_to_model</code> method can be called on every frame in <code>update</code> method of the interaction mode (see below) - it tracks
-the amount of scene nodes representing points of the line and if there's mismatch, it recreates the entire set.
+the number of scene nodes representing points of the line and if there's mismatch, it recreates the entire set.
 <code>remove_points</code> should be used when the gizmo is about to be deleted (usually together with the interaction mode).</p>
 <p>All interaction with scene nodes should be performed using interaction modes. Interaction mode is a tiny abstraction layer,
 that re-routes input from the scene previewer to the modes. We'll create our own interaction mode that will allow
@@ -12946,7 +12925,7 @@ For the vast majority of cases, standard engine approaches are perfectly fine.</
 <p>Theoretically, the ECS approach <em>can</em> give you better performance, but lets at first see where ECS is beneficial,
 and why classic approach is still viable. The ECS is beneficial <em>only</em> in cases where you have to process
 <strong>ten or hundreds thousands</strong> objects every frame, the performance gain of cache friendliness can be significant
-in such cases. But let's stop for a second and ask ourselves again: how <em>often</em> games have such huge amount of objects
+in such cases. But let's stop for a second and ask ourselves again: how <em>often</em> games have such huge number of objects
 that has to be processed every frame? There are very few examples of such games:</p>
 <ul>
 <li>Strategy games - at some extent, because there are very few games that allows you to control tens of thousands
@@ -12957,7 +12936,7 @@ units at the same time. More often you have a range from five hundreds up to few
 <p>Note that the list does not include games with vast worlds, why so? The reason is that such games does <strong>not</strong>
 process every tiny object in the world at once, instead they split the world in small chunks and process only
 few chunks at once, those where the player is present.</p>
-<p>The rest of genres operate on a tiny amount of object compared to those up above, maybe a few hundreds at max.
+<p>The rest of genres operate on a tiny number of objects compared to those up above, maybe a few hundreds at max.
 One might say - hey, each object could contain lots of tiny "moving parts", what's about them? Usually each
 object contains up to 10-15 sub-parts, which leads us to few thousands of "atomic" object. Is it much? Not really.</p>
 <h3 id="architecture"><a class="header" href="#architecture">Architecture</a></h3>
