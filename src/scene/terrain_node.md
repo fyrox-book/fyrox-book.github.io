@@ -23,7 +23,7 @@ while Y is stored in a separate array which is then used to modify heights of ce
 
 Layer is a material + mask applied to terrain's mesh. Mask is a separate, greyscale texture that defines in which parts
 of the terrain the material should be visible or not. White pixels in the mask makes the material to be visible, black -
-completely transparent, everything between helps you to create smooth transitions between layers. Here's a simple 
+completely transparent, everything between helps you to create smooth transitions between layers. Here's a simple
 example of multiple layers:
 
 ![terrain layers layout](./terrain_layers_layout.png)
@@ -37,14 +37,14 @@ Each layer uses separate material, which can be edited from respective property 
 
 ## Creating terrain in the editor
 
-You can create a terrain node by clicking `Create -> Terrain`. It will create a terrain with fixed width, height, 
+You can create a terrain node by clicking `Create -> Terrain`. It will create a terrain with fixed width, height,
 and resolution (see [limitations](./terrain_node.md#limitations-and-known-issues)). Once the terrain is created, select
-it in the World Viewer and click on Hill icon on the toolbar. This will enable terrain editing, brush options panel 
+it in the World Viewer and click on Hill icon on the toolbar. This will enable terrain editing, brush options panel
 should also appear. See the picture below with all the steps:
 
 ![terrain editing](./terrain_editing.png)
 
-The green rectangle on the terrain under the cursor represents current brush. You can edit brush options in the 
+The green rectangle on the terrain under the cursor represents current brush. You can edit brush options in the
 `Brush Options` window:
 
 ![brush options](./brush_options.png)
@@ -53,9 +53,9 @@ The green rectangle on the terrain under the cursor represents current brush. Yo
 radius appears. When a rectangular brush is select, controls for its width and length appear. The size of the green
 rectangle changes to reflect the size of the brush based on these controls.
 - *Mode:* Select the terrain editing operation that the brush should perform.
-    - *Raise or Lower:* Modifies the existing value by a fixed amount. When the amount is positive, the value is
-    increased. When the amount is negative, the value is decreased. When the brush target is "Height Map", this can be
-    to raise or lower the terrain. When the `Shift` key is held at the start of a brush stroke, the amount of raising or lowering
+    - *Raise or Lower:* Modifies the existing value by a fixed amount. When the number is positive, the value is
+    increased. When the number is negative, the value is decreased. When the brush target is "Height Map", this can be
+    to raise or lower the terrain. When the `Shift` key is held at the start of a brush stroke, the number of raising or lowering
     is negated, so a raise operation becomes a lowering operation.
     - *Assign Value:* Replaces the existing value with a given value. For example, if you want to create a plateau
     with land of a specific height, you can select this mode and type in the height you want as the brush value.
@@ -171,36 +171,36 @@ Here is an example of `BrushContext` in use:
 ```
 
 As you can see there is quite a lot of code, ideally you should use editor all the times, because handling everything
-from code could be very tedious. The result of its execution (if all textures are set correctly) could be something 
+from code could be very tedious. The result of its execution (if all textures are set correctly) could be something
 like this (keep in mind that terrain will be random everytime you run the code):
 
 ![terrain from code](./terrain_random.png)
 
 ## Physics
 
-By default, terrains does not have respective physical body and shape, it should be added manually. Create a static 
+By default, terrains does not have respective physical body and shape, it should be added manually. Create a static
 rigid body node with a collider with Heightmap shape ([learn more about colliders](../physics/collider.md)). Then attach
-the terrain to the rigid body. Keep in mind that terrain's origin differs from Heightmap rigid body, so you need to offset 
-the terrain to match its physical representation. Enable physics visualization in editor settings to see physical shapes 
-and move terrain. Now to move the terrain you should move the body, instead of the terrain (because of parent-child 
+the terrain to the rigid body. Keep in mind that terrain's origin differs from Heightmap rigid body, so you need to offset
+the terrain to match its physical representation. Enable physics visualization in editor settings to see physical shapes
+and move terrain. Now to move the terrain you should move the body, instead of the terrain (because of parent-child
 [relations](../beginning/scene_and_scene_graph.md#local-and-global-coordinates)).
 
-## Performance 
+## Performance
 
-Terrain rendering complexity have linear dependency with the amount of layers terrain have. Each layer forces the engine
-to re-render terrain's geometry with different textures and mask. Typical amount of layers is from 4 to 8. For example,
+Terrain rendering complexity have linear dependency with the number of layers terrain have. Each layer forces the engine
+to re-render terrain's geometry with different textures and mask. Typical number of layers is from 4 to 8. For example,
 a terrain could have the following layers: dirt, grass, rock, snow. This is a relatively lightweight scheme. In any case,
 you should measure frame time to understand how each new layer affects performance in your case.
 
 ## Chunking
 
 Terrain itself does not define any geometry or rendering data, instead it uses one or more chunks for that purpose. Each
-chunk could be considered as a "sub-terrain". You can "stack" any amount of chunks from any side of the terrain. To do 
-that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular 
+chunk could be considered as a "sub-terrain". You can "stack" any number of chunks from any side of the terrain. To do
+that, you define a range of chunks along each axis. This is very useful if you need to extend your terrain in a particular
 direction. Imagine that you've created a terrain with just one chunk (`0..1` range on both axes), but suddenly you found
-that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at 
-the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should 
-change `width_chunks` range to `0..2` and leave `length_chunks` as is (`0..1`). This way terrain will be extended, and 
+that you need to extend the terrain to add some new game locations. In this case you can change the range of chunks at
+the desired axis. For instance, if you want to add a new location to the right from your single chunk, then you should
+change `width_chunks` range to `0..2` and leave `length_chunks` as is (`0..1`). This way terrain will be extended, and
 you can start shaping the new location.
 
 ## Level-of-detail
@@ -210,18 +210,18 @@ possible quality (defined by the resolution of height map and masks), while the 
 rendered with the lowest quality. This effectively balances GPU load and allows you to render huge terrains with
 low overhead.
 
-The main parameter that affects LOD system is `block_size` (`Terrain::set_block_size`), which defines size of the patch 
-that will be used for rendering. It is used to divide the size of the height map into a fixed set of blocks using 
+The main parameter that affects LOD system is `block_size` (`Terrain::set_block_size`), which defines size of the patch
+that will be used for rendering. It is used to divide the size of the height map into a fixed set of blocks using
 quad-tree algorithm.
 
-Current implementation uses modified version of CDLOD algorithm without patch morphing. Apparently it is not needed, 
+Current implementation uses modified version of CDLOD algorithm without patch morphing. Apparently it is not needed,
 since bilinear filtration in vertex shader prevents seams to occur.
 
-Current implementation makes it possible to render huge terrains (64x64 km) with 4096x4096 heightmap resolution in about a 
+Current implementation makes it possible to render huge terrains (64x64 km) with 4096x4096 heightmap resolution in about a
 millisecond on average low-to-middle-end GPU.
 
 ## Limitations and known issues
 
-There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create 
+There is no way to cut holes in the terrain yet, it makes impossible to create caves. There is also no way to create
 ledges, use separate meshes to imitate this. See [tracking issue](https://github.com/FyroxEngine/Fyrox/issues/351) for
 more info.

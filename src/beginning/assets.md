@@ -42,7 +42,7 @@ you'll also see a preview of the model.
 
 ![preview](preview.gif)
 
-The maximum amount of asset instances is not limited by the engine but it is by the memory and CPU resources of your PC. 
+The maximum number of asset instances is not limited by the engine but it is by the memory and CPU resources of your PC. 
 Note that the engine does try to reuse data across instances as much as possible.
 
 You can also instantiate assets dynamically from your code. Here's an example of that for a Model:

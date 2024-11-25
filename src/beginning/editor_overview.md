@@ -8,7 +8,7 @@ This chapter will guide you through the basics, advanced topics will be covered 
 
 ## Windows
 
-When you open the editor for the first time you may be confused by the amount of windows, buttons, lists, etc. you'll be presented 
+When you open the editor for the first time you may be confused by the number of windows, buttons, lists, etc. you'll be presented 
 with. Each window serves a different purpose, but all of them work together to help you make your game. Let's take a look at a 
 screenshot of the editor and learn what each part of it is responsible for (please note that this can change over time, because
 development is quite fast and images can easily become outdated):
