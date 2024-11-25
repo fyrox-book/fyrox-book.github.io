@@ -52,7 +52,7 @@ size by multiplying vertical size with aspect ratio.
 Here is a simple example of how to create a camera with orthographic projection:
 
 ```rust,no_run
-
+{{#include ../code/snippets/src/scene/camera.rs:create_orthographic_camera}}
 ```
 
 ## Performance
