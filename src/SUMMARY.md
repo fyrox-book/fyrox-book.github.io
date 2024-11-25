@@ -76,6 +76,7 @@
   - [Curves (WIP)](./resources/curve.md)
   - [Custom Resource](./resources/custom.md)
   - [Asset Hot Reloading](./resources/hot_reloading.md)
+  - [Events](./resources/events.md)
 - [Engine](./engine/engine.md)
   - [Graphics Context](./engine/graphics_context.md)
   - [Window Management](./engine/windows.md)
