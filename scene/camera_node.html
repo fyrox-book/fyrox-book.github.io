@@ -225,9 +225,17 @@ projection defined by three parameters:</p>
 size by multiplying vertical size with aspect ratio.</p>
 <p>Here is a simple example of how to create a camera with orthographic projection:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span>
-<span class="boring">fn main() {
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">fn main() {
+</span>fn create_orthographic_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    CameraBuilder::new(BaseBuilder::new())
+        .with_projection(Projection::Orthographic(OrthographicProjection {
+            vertical_size: 5.0,
+            z_near: 0.025,
+            z_far: 1024.0,
+        }))
+        .build(graph)
+}
+<span class="boring">}</span></code></pre></pre>
 <h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>Each camera forces engine to re-render scene one more time, which can be very resource-intensive (both CPU and GPU)
 operation.</p>
