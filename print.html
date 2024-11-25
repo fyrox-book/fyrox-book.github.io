@@ -6995,6 +6995,35 @@ objects to be always alive.</p>
 words, if you have a level with a room prefab, and this room prefab has chair prefab instances in it then any change in the
 chair prefab source file will be applied to the chair prefab itself, then its instances in the room prefab. See
 <a href="resources/../scene/inheritance.html">property inheritance</a> chapter for more info.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="events"><a class="header" href="#events">Events</a></h1>
+<p>Resource manager is able to notify its subscribers about specific events of resources. There are four kinds of resource
+events:</p>
+<ol>
+<li><code>Loaded</code> - occurs when a resource was fully loaded without any errors.</li>
+<li><code>Reloaded</code> - occurs when a resource was already fully loaded, but was reloaded by an explicit request.</li>
+<li><code>Added</code> - occurs when a resource was just added to the resource manager. This event is fired right after a resource
+was requested from the manager.</li>
+<li><code>Removed</code> - occurs when a resource was removed from the resource manager. This event is fired when the resource
+manager removes and unloads an unused resource.</li>
+</ol>
+<p>To subscribe for resource events use the event broadcaster:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn subscribe_to_events(resource_manager: &amp;ResourceManager) {
+    let (sender, receiver) = channel();
+    resource_manager.state().event_broadcaster.add(sender);
+
+    while let Ok(event) = receiver.try_recv() {
+        match event {
+            ResourceEvent::Loaded(_) =&gt; {}
+            ResourceEvent::Reloaded(_) =&gt; {}
+            ResourceEvent::Added(_) =&gt; {}
+            ResourceEvent::Removed(_) =&gt; {}
+        }
+    }
+}
+
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="engine"><a class="header" href="#engine">Engine</a></h1>
 <p>This chapter of the book contains detailed description for the engine parts, such as graphics context, window
 management, etc.</p>

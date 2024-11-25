@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Engine - Fyrox Book</title>
+        <title>Events - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -140,7 +140,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/engine/engine.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/resources/events.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -169,19 +169,45 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="engine"><a class="header" href="#engine">Engine</a></h1>
-<p>This chapter of the book contains detailed description for the engine parts, such as graphics context, window
-management, etc.</p>
+                        <h1 id="events"><a class="header" href="#events">Events</a></h1>
+<p>Resource manager is able to notify its subscribers about specific events of resources. There are four kinds of resource
+events:</p>
+<ol>
+<li><code>Loaded</code> - occurs when a resource was fully loaded without any errors.</li>
+<li><code>Reloaded</code> - occurs when a resource was already fully loaded, but was reloaded by an explicit request.</li>
+<li><code>Added</code> - occurs when a resource was just added to the resource manager. This event is fired right after a resource
+was requested from the manager.</li>
+<li><code>Removed</code> - occurs when a resource was removed from the resource manager. This event is fired when the resource
+manager removes and unloads an unused resource.</li>
+</ol>
+<p>To subscribe for resource events use the event broadcaster:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn subscribe_to_events(resource_manager: &amp;ResourceManager) {
+    let (sender, receiver) = channel();
+    resource_manager.state().event_broadcaster.add(sender);
+
+    while let Ok(event) = receiver.try_recv() {
+        match event {
+            ResourceEvent::Loaded(_) =&gt; {}
+            ResourceEvent::Reloaded(_) =&gt; {}
+            ResourceEvent::Added(_) =&gt; {}
+            ResourceEvent::Removed(_) =&gt; {}
+        }
+    }
+}
+
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../resources/events.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../resources/hot_reloading.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../engine/graphics_context.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../engine/engine.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -191,11 +217,11 @@ management, etc.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../resources/events.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../resources/hot_reloading.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../engine/graphics_context.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../engine/engine.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
