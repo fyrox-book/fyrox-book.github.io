@@ -173,15 +173,15 @@ shows approximately what the tiles should look like when they are drawn.
 
 ![erase](erase.gif)
 
-Erases tiles using the shape of the current brush, could be activated using `2` key or by clicking on the
+Erases tiles using the shape of the current brush. Activate it using the `2` key or by clicking on the
 button with eraser icon.
 
 ### Flood Fill Tool
 
 ![flood fill](flood_fill.gif)
 
-Fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
-be activated using the button with paint bucket icon.
+Fills a region with the same tile kind (or empty space) using the tiles of the current brush.
+Activate it using the button with paint bucket icon.
 
 ### Pick Tool
 
@@ -190,7 +190,7 @@ be activated using the button with paint bucket icon.
 Picks a rectangular region of tiles from the tile map itself and turns them into the current brush.
 Hold shift to add additional rectangular regions to the brush.
 Hold alt to drag the currently selected tiles and move them to a different location in the tile map.
-Could be activated using `1` key or by clicking the button with pipette icon.
+Activate it using the `1` key or by clicking the button with pipette icon.
 
 ### Rectangular Fill Tool
 
@@ -209,14 +209,23 @@ of the selected reation, and the center of the brush will fill the center of the
 
 ## Physics
 
-Tile maps supports physics for tiles, and it could be enabled by using special collider shape called `TileMap`. In code
-it could be done something like this:
+Tile maps support physics for tiles, if collision shape data is included in the tile set. Start by opening the
+tile set editor, then click on the "Collison" tab at the top of the window. This will allow you to edit
+the list of collision layers of the tile set. Each layer allows a collision shape to be added to the tiles,
+so with multiple layers a tile may have multiple collison shapes.
+
+Each layer has a name and a color, and in code it can be identified by a UUID. The color is cosmetic, and
+controls how the shapes on that layer appear when they are visible. The name is used to identify the layer
+for a 2D rigid body.
+
+Enable physics for a tile map by using the collider shape called `TileMap` and specifying the name of the layer.
+In code it could be done something like this:
 
 ```rust
 {{#include ../code/snippets/src/scene/tilemap.rs:tile_map_physics}}
 ```
 
-In the editor it could be done by creating a static 2D rigid body with a 2D collider that has `TileMap` shape: 
+In the editor it could be done by creating a static 2D rigid body with a 2D collider that has the `TileMap` shape: 
 
 ![tile map physics](tile_map_physics.png)
 
@@ -229,7 +238,18 @@ map with its own tile set and shifting this new layer by Z axis towards camera o
 
 Tile set could contain custom properties for each tile, these properties could be used to attach additional information
 to the tiles in your game. This could include surface type (water, lava, dirt, etc.), physics properties (friction, 
-restitution, etc.) and any other you need. This is how it could be used in a game:
+restitution, etc.) and any other you need.
+
+In the tile set editor, create properties using the "Properties" tab which gives you access to a list of property layers.
+Each property layer has a data type, and the type must be chosen when the layer is created, since changing the type of
+an already existing layer could cause tiles to have the wrong type of value for the property.
+
+Each property may also have a list of pre-defined values. Each pre-defined value has a name and a color to help the user
+visualize which tiles have that value for the property and to help keep track of the meaning of that value.
+Once a property has been created in the Properties tab, the value for that property can be set for each tile in the
+Tiles tab.
+
+In code, properties can be created, set, and accessed like this:
 
 ```rust
 {{#include ../code/snippets/src/scene/tilemap.rs:create_tile_map_with_props}}
@@ -237,8 +257,4 @@ restitution, etc.) and any other you need. This is how it could be used in a gam
 
 Here we have two types of tiles - soil and slime, soil does not have any effect on player's movement speed, while the
 slime slows down the player by 30%. This code does not actually use any physical contact information and just uses tile
-position, but it could be fixed pretty easily - supply physical contact position to it, and it will return correct results. 
-
-Tile custom properties could be edited in the tile set editor:
-
-![tile map properties](tile_map_properties.PNG)
+position, but it could be fixed pretty easily - supply physical contact position to it, and it will return correct results.
