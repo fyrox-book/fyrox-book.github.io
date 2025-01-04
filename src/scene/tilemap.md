@@ -13,6 +13,40 @@ An example of a tile map could be something like this:
 
 ## How to Create
 
+A tile map comes in two pieces: A `TileMap` node that can be added to a scene, and a `TileSet` resource that holds the
+data required to render each tile.
+
+Tiles in a tile set are organized into pages. Each page has a position on a 2D grid along with all the other pages in the
+tile set, and each page contains another 2D grid where the tiles are arranged. Pages and tiles can be positioned anywhere
+on their grids according to whatever organizational principles you please. The chosen position for each tile becomes its
+handle, called a `TileDefinitionHandle`, and this handle is what will be stored in the tile map to determine how to render
+the tiles.
+
+Here is an example handle: `(0,2):(-3,5)`. This handle means that the tile is on the page at coordinates
+(0,2) and the tile data is at (-3,5) within that page's grid.
+
+Tile set pages come in multiple varieties depending on what data will be stored in each grid cell of the page.
+
+* **Atlas:** An atlas page renders all of its tiles using a single shared material that acts as a sprite sheet.
+  The material starts at the upper-left corner of tile (0,-1) and extends down into negative-y cells and right
+  into positive-x cells. Any tiles that you add to an atlas page will be rendered with their UV-coordinates based
+  on their position on the page
+  relative to the material.
+* **Freeform:** A freeform page is a collection of tiles with their own independent materials and UV-coordinate positions.
+  Unlike an atlas page, the positions of tiles in a freeform page does not matter, but each tile needs to have its
+  material and UV-coordinates specified manually. Tile UV-coordinates are measured in pixels of the texture, not
+  from 0.0 to 1.0.
+* **Transform:** A transform set page stores handles to tiles on other pages and represents how tiles may be flipped
+  or rotated. The page is divided into 2x4 sets of cells. Within each set, the left 2x2 cells hold tiles that may be
+  transformed into each other by 90-degree rotations. The right 2x2 cells represent same tiles horizontally mirrored.
+  The tile set resource can search its transform pages to convert any handle into the handle of a flipped or rotated
+  version of the tile.
+* **Animation:** In the future there may be animation pages that store sequences of handles that will cause the tile
+  map to animate by moving through the sequences over time.
+
+Once we have a tile set resource, we can create a tile map node and set its `tile_set` field to point to our resource.
+Then we can fill the tile map node with the handles for whatever tiles we want to render.
+
 As usual, there are two major ways of creating a tile map - via code or via the editor. Code-based approach is ideal for
 procedural worlds, while the editor-based approach is good for hand-crafted worlds.
 
@@ -29,41 +63,76 @@ Please refer to the API docs for more info about each method.
 
 ### Editor
 
-Editor-based approach requires a bit of preparation, yet it is still simple. At first, create a scene, then you need a 
-tile set, something like this:
+Editor-based approach requires a bit of preparation, yet it is still simple. First you need a tile set, something like this:
 
 ![tile set](tileset.png)
 
 It is a 11x11 sprite sheet for a top-down game. Now you need to create a tile set resource from this tile set. Navigate
 the asset browser and click on `+` button near the search bar. Select `TileSet` resource and click `OK`. Find the resource
-you've just created in the asset browser, double-click on it, and you should see something like this:
+you've just created in the asset browser, then double-click on it to open the tile set editor.
 
 ![tile set editor](tile_set_editor.png)
 
-At this point you could add tiles individually, or import them all at once from a sprite sheet. Keep in mind, that unlike 
-other game engine, Fyrox allows you to specify not just textures, but materials for each tile. This is much more flexible
-solution, since it allows you to have custom shaders for each tile. To sum everything up there are three ways of adding
-tiles to the tile set:
+#### Creating an Atlas Page
 
-1) Import from a sprite sheet - this way the engine will create a unique embedded material (based on standard 2D shader), 
-that will use the sprite sheet as diffuse texture. Sprite sheet will be split into a number of tiles and each tile will
-have its own portion (texture coordinates) of the sprite sheet.
-2) Drag and drop a texture to the tile set - almost the same as the previous option, but the texture coordinates will 
-take the entire image.
-3) Drag and drop a material to the tile set - the most flexible way, since it allows you to specify your own material for
-tile.
+Now it is time to create the first page for our new tile set. Click anywhere in the upper grid to select the position for
+the page, then click the "Tile Atlas" button under "Create New Page" on the right side of the editor.
 
-For simplicity, we'll use the sprite sheet. Click on `Import` button and drop the sprite sheet to the region with 
-checkerboard, set the appropriate number of rows and columns:
+Because the selected page position is no longer empty, the "Create New Page" menu is replaced by an inspector for the
+properties of the new atlas page. Here you can edit the material for the tiles and change the size of the tiles as measured
+in texture pixels. These properties can be changed at any time, and the resulting changes will affect all the tiles of the page.
 
-![import tile set](import_tile_set.png)
+Once you have set your sprite sheet as the texture for the material, the texture will become visible in the lower grid of the
+editor. Use the scroll wheel to zoom and pan if necessary to see all of it. This is only a *preview* of what the tiles might
+look like; the tiles have not yet been created, and the texture is faded to distinguish it from actual tiles.
+You can adjust the fade using the "Material Tint" color field in the top-right of the editor. This has no affect on the tile
+set resource; it is purely cosmetic within the editor.
 
-Now click `Import` and you should see something like this:
+To actually create some tiles, left-click and drag on the lower grid to select whatever areas of the material should have
+tiles. Holding shift will allow you to select multiple areas at once. Once you are satisfied with your selection,
+press the "Create Tile" button on the right side of the editor. This will fill any empty selected cells with new tiles,
+covering the faded material preview with the full-color of actual tiles.
 
-![imported tile set](imported_tile_set.png)
+#### Creating a Freeform Page
 
-At this point you can select desired tiles and edit their properties in the inspector on the right side. As you can see
-you can change tile's material, texture coordinates, collider (more on this below), color.
+Select any empty cell in the upper grid to cause the "Create New Page" menu to appear. Click "Free Tiles" button to
+start creating freeform tiles on your tile set's new page. Unlike the atlas page, a freeform page has very few properties
+to edit in the inspector. This is because each tile has its own material and size fields.
+
+Select any empty cell in the lower grid and click "Create Tile" to begin editing the properties for a new freeform tile.
+At the top is a field for choosing the material for the tile. It will initially be a blank material with the
+standard tile shader. Below that are four pairs of coordinates that represent for points on the material's texture as
+measured in texture pixels. The left-top point represents the left-top corner of the tile, and so on around all four
+corners of the tile.
+
+Below the tile corners are four buttons for performing flips and rotations on the corner coordinates. By changing the
+coordinates of the corners of the tile, the tile can be rotated by 90 degrees and flipped horizontally and vertically.
+
+Next there is the tile's color which can be used to apply tinting or transparency to the tile.
+
+It is also possible to add tiles to a freeform page by painting them with tools on the Tile Map Control Panel which will
+be discussed later.
+
+#### Creating a Transform Page
+
+Once you have prepared a library of tiles with your tile set, you may want to specify which tiles are mirrored or rotated
+versions of other tiles. This will allow the tile set produce a flipped or rotated version of a tile just by giving it
+the handle of the tile and the desired transformation. Start by selecting an empty page cell and clicking "Transform"
+under "Create New Page."
+
+In the lower grid area you should see that the cells have been divided into 2x4 groups. Each cell of these groups can store
+a `TileDefinitionHandle` and the eight handles together will specify all possible combinations of flips and 90-degree rotations
+that may be needed for a tile.
+
+In order to fill this page with tile handles, click the "Palette" button in the upper-right to open the "Tile Map Control Panel" window,
+if it is not already open. This is the same window that you will use to edit a tile map, and so it has tools designed for selecting
+tile handles and putting them wherever you want them. The panel should already be showing the grid of pages from your tile set.
+If the panel is showing something else, then find your tile set in the asset browser and drag it onto the panel.
+
+Use the panel to select a page from your tile set, and then select a tile that you want to put into your transform page.
+Click the button with the paint brush icon to activate the brush tool, then click in the tile set editor to paint the handle
+for the selected tile into a cell of the transform page. The tools available for painting, moving, copying, and deleting
+tile handles will be discussed in more detail later.
 
 Now we have the tile set, and we can start creating a tile map using it. Click `Create -> 2D -> Tile Map` and you should
 see something like this:
@@ -91,43 +160,52 @@ Select some tiles on the palette and start drawing:
 
 ## Drawing Tools
 
-There are number of tools (apart from the drawing itself) that could be useful while editing tile maps. 
+There are number of tools that could be useful while editing tile maps when in the tile map interaction mode.
 
-### Erase
+### Brush Tool
+
+The brush tool takes whatever tiles are selected and puts the handles for those tiles wherever you click on the selected tile map.
+You can select any number of tiles and their handles will be drawn in the same relative positions where you click, or you can use
+the flip and rotation buttons to flip and rotate the selected tiles before drawing them. The preview area of the Tile Map Control Panel
+shows approximately what the tiles should look like when they are drawn.
+
+### Erase Tool
 
 ![erase](erase.gif)
 
-Erases tiles using the shape of the current brush, could be activated using `Shift` key or by clicking on the
+Erases tiles using the shape of the current brush, could be activated using `2` key or by clicking on the
 button with eraser icon.
 
-### Flood fill
+### Flood Fill Tool
 
 ![flood fill](flood_fill.gif)
 
 Fills a region with the same tile kind (or empty space) using random tiles from the current brush. Could
 be activated using the button with paint bucket icon.
 
-### Pick
+### Pick Tool
 
 ![pick](pick.gif)
 
-Picks a rectangular region of tiles from the tile map itself and turns them into the current brush. Could be
-activated using `Alt` key or by clicking the button with pipette icon.
+Picks a rectangular region of tiles from the tile map itself and turns them into the current brush.
+Hold shift to add additional rectangular regions to the brush.
+Hold alt to drag the currently selected tiles and move them to a different location in the tile map.
+Could be activated using `1` key or by clicking the button with pipette icon.
 
-### Rectangular fill
+### Rectangular Fill Tool
 
 ![rect fill](rect_fill.gif)
 
 Fills a rectangular region with the tiles from the current brush. It tiles the given region using the
-tiles from current brush. Could be activated using `Ctrl` key of by clicking on the button with the tiles icon.
+tiles from current brush. Could be activated using `3` key or by clicking on the button with the tiles icon.
 
-### Nine slice 
+### Nine Slice Tool
 
 ![nine slice](nine_slice.gif)
 
-Fills a rectangular region using a 3x3 brush (the size limitation could be dropped in the future). The
-corners of the brush will be placed at the corners of the selected region, the middle tiles between corners will be 
-duplicated from corner to corner. The center tile will be used to fill the rest of the rectangle.
+Fills a rectangular region using a rectangluer brush divided into nine sections: four corners, four sides, and the center.
+The corners of the brush will be placed at the corners of the selected region. The sides of the brush will fill the sides
+of the selected reation, and the center of the brush will fill the center of the selected region.
 
 ## Physics
 
