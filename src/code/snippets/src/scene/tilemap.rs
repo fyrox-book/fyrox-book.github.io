@@ -32,9 +32,13 @@ fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
 
     // Create a tile set - it is a data source for the tile map. Tile map will reference the tiles
     // stored in the tile set by handles. We'll create two tile types with different colors.
+    // In order to create a tile set, we must first create a tile set page.
     let mut tiles = TileGridMap::default();
+    // Now we decide where we want our tiles to live on that page by creating TileDefinitionHandles for our tiles.
+    // Each tile definition handle has four numbers: the (x,y) of the page, and the (x,y) of the tile within the page.
     let stone_tile = TileDefinitionHandle::new(0, 0, 0, 0);
     let grass_tile = TileDefinitionHandle::new(0, 0, 1, 0);
+    // Now we insert tile data for each tile in our new page.
     tiles.insert(
         stone_tile.tile(),
         TileDefinition {
@@ -73,15 +77,21 @@ fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
             },
         },
     );
+    // Finish creating the page.
     let source = TileSetPageSource::Freeform(tiles);
     let page = TileSetPage {
-        icon: TileDefinitionHandle::new(0, 0, 0, 0),
+        // The icon is the handle of a tile that would represent the page in the editor.
+        icon: stone_tile,
+        // The tiles that we've created.
         source,
     };
+    // Finally we create our tile set and add our page to it at position (0,0).
     let mut tile_set = TileSet::default();
     tile_set.insert_page(Vector2::new(0, 0), page);
     let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
 
+    // This positions of all the tiles in our tile map using their TileDefinitionHandle
+    // to find the tiles in the tile set.
     let mut tiles = Tiles::default();
 
     // Create stone foundation.
