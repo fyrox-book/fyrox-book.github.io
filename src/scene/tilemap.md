@@ -134,27 +134,52 @@ Click the button with the paint brush icon to activate the brush tool, then clic
 for the selected tile into a cell of the transform page. The tools available for painting, moving, copying, and deleting
 tile handles will be discussed in more detail later.
 
+#### Creating the Tile Map Node
+
 Now we have the tile set, and we can start creating a tile map using it. Click `Create -> 2D -> Tile Map` and you should
 see something like this:
 
 ![empty tile map](empty_tile_map.png)
 
 If you look closely, the editor warns us about missing tile set. Find the tile set you've just made and drag'n'drop it 
-from the asset browser to the `Tile Set` field in the inspector. There's one more step before we can start editing the
-tile map - we need a brush to paint on the tile map. Click `+` button in the asset browser and select `TileMapBrush`,
-set a name for it and click `OK`. Now select the tile map scene node and click on `+` sign in the `Brushes` field, drag'n'drop
-the brush you've just created to the newly created property. Navigate to the `Tile Map Control Panel` and select the
-brush from the dropdown list. For now the brush is empty, the simplest way to fill it is to just drag'n'drop the tile set
-to it:
+from the asset browser to the `Tile Set` field in the inspector.
 
-![brush](brush.png)
+## Tile Map Brush
 
-At this point everything is ready for painting, click `Edit` button on the `Tile Map Control Panel` and you should see the
-grid:
+There's one more step before we start editing the tile map - we need a brush to paint on the tile map.
+Click `+` button in the asset browser and select `TileMapBrush`, set a name for it and click `OK`.
+Now select the tile map scene node and drag'n'drop the brush you've just created to "Active Brush" property.
+This will make it the default brush whenever you edit this tile map node.
+
+Double-click the brush asset in the asset browser to open the tile set editor again. This time the editor will be
+in brush-editing mode, which is simpler because a brush has only one kind of page and it has no tabs for properties
+or collision. The purpose of a brush is just to create convenient arrangements of tile handles from some tile set
+to streamline the process of tile map editing.
+
+Drag the tile set asset from the asset browser into the "Tile Set" field in the upper-right of the tile set editor to
+store a reference to the tile set in the brush asset. The brush needs to know which tile set its tile handles refer to.
+
+Click some empty cell in the upper grid of the editor and then click "Add Page" to add your first page to the brush.
+
+Next, press the "Palette" button to open the Tile Map Control Panel so that you can paint some tile handles into the
+new brush. Initially the control panel will show the tiles and pages of the brush you are currently editing, which
+is no help when the brush is empty, so click the "Tile Set" button in the control panel to switch to showing the pages
+and tiles of the tile set. Select some tiles and paint them into the brush in whatever arrangement is most convenient
+for editing.
+
+Unlike a tile set resource, the content of a brush resource is only used in the editor, so you can re-arrange the pages
+and tiles of your brush or even delete your brush without any consequences for your tile map or for the running game.
+While you can draw tiles to the tile map directly from the tile set, using a brush offers far more flexibility in
+how you arrange your tiles, allowing you to create multiple copies of tiles and arrange tiles in convient groups that
+gather your most-often-used tiles.
+
+At this point everything is ready for painting. Select the tile map node and click tile map interaction mode button
+at the top of the Scene Preview window. You should now see the tile map grid in the Scene Preview. The Tile Map Control Panel
+should automatically open if it is not already open, and it should be showing the pages and tiles of your brush.
 
 ![grid](grid.png)
 
-Select some tiles on the palette and start drawing:
+Select some tiles on the control panel and start drawing:
 
 ![drawing](drawing.png)
 
@@ -165,47 +190,57 @@ There are number of tools that could be useful while editing tile maps when in t
 ### Brush Tool
 
 The brush tool takes whatever tiles are selected and puts the handles for those tiles wherever you click on the selected tile map.
+The selected tiles are called the stamp, and the stamp will be used in one way or another by each of the drawing tools.
 You can select any number of tiles and their handles will be drawn in the same relative positions where you click, or you can use
-the flip and rotation buttons to flip and rotate the selected tiles before drawing them. The preview area of the Tile Map Control Panel
+the flip and rotation buttons to flip and rotate the stamp before drawing it. The preview area of the Tile Map Control Panel
 shows approximately what the tiles should look like when they are drawn.
 
 ### Erase Tool
 
 ![erase](erase.gif)
 
-Erases tiles using the shape of the current brush. Activate it using the `2` key or by clicking on the
+Erases tiles using the shape of the current stamp. Activate it using the `2` key or by clicking on the
 button with eraser icon.
 
 ### Flood Fill Tool
 
 ![flood fill](flood_fill.gif)
 
-Fills a region with the same tile kind (or empty space) using the tiles of the current brush.
+Fills a region with the same tile kind (or empty space) using the tiles of the current stamp.
 Activate it using the button with paint bucket icon.
+
+Unlike the other tools, the flood fill tool is not implemented for use in the Tile Set Editor,
+so in the Tile Set Editor the flood tool will just act like the brush tool.
 
 ### Pick Tool
 
 ![pick](pick.gif)
 
-Picks a rectangular region of tiles from the tile map itself and turns them into the current brush.
-Hold shift to add additional rectangular regions to the brush.
-Hold alt to drag the currently selected tiles and move them to a different location in the tile map.
+Picks a rectangular region of tiles from the tile map itself and turns them into the current stamp.
+Hold shift to add additional rectangular regions to the stamp.
 Activate it using the `1` key or by clicking the button with pipette icon.
+
+Hold alt to drag the currently selected tiles and move them to a different location in the tile map,
+or tile set editor page. You can also use this to change the position of a page in the tile set editor,
+but beware that the position of a tile set page is part of a tile's handle, so moving a page can invalidate
+any handle that refers to a tile on that page. Handles are not destroyed when they are invalidated this way;
+they merely fail to render correctly until a page is added to the tile set with a tile where the handle
+is expecting to find tile data.
 
 ### Rectangular Fill Tool
 
 ![rect fill](rect_fill.gif)
 
-Fills a rectangular region with the tiles from the current brush. It tiles the given region using the
-tiles from current brush. Could be activated using `3` key or by clicking on the button with the tiles icon.
+Fills a rectangular region with the tiles from the current stamp. It tiles the given region using the
+tiles from current stamp. Could be activated using `3` key or by clicking on the button with the tiles icon.
 
 ### Nine Slice Tool
 
 ![nine slice](nine_slice.gif)
 
-Fills a rectangular region using a rectangluer brush divided into nine sections: four corners, four sides, and the center.
-The corners of the brush will be placed at the corners of the selected region. The sides of the brush will fill the sides
-of the selected reation, and the center of the brush will fill the center of the selected region.
+Fills a rectangular region using a rectangluer stamp divided into nine sections: four corners, four sides, and the center.
+The corners of the stamp will be placed at the corners of the selected region. The sides of the stamp will fill the sides
+of the selected reation, and the center of the stamp will fill the center of the selected region.
 
 ## Physics
 
