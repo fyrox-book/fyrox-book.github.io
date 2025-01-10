@@ -113,6 +113,8 @@ Next there is the tile's color which can be used to apply tinting or transparenc
 It is also possible to add tiles to a freeform page by painting them with tools on the Tile Map Control Panel which will
 be discussed later.
 
+![Transform page](tile_map_rotate.png)
+
 #### Creating a Transform Page
 
 Once you have prepared a library of tiles with your tile set, you may want to specify which tiles are mirrored or rotated
@@ -189,6 +191,8 @@ There are number of tools that could be useful while editing tile maps when in t
 
 ### Brush Tool
 
+![Brush tool](tile_map_tools/brush_tool.png)
+
 The brush tool takes whatever tiles are selected and puts the handles for those tiles wherever you click on the selected tile map.
 The selected tiles are called the stamp, and the stamp will be used in one way or another by each of the drawing tools.
 You can select any number of tiles and their handles will be drawn in the same relative positions where you click, or you can use
@@ -197,14 +201,16 @@ shows approximately what the tiles should look like when they are drawn.
 
 ### Erase Tool
 
-![erase](erase.gif)
+![Erase tool](tile_map_tools/erase_tool.png)
 
 Erases tiles using the shape of the current stamp. Activate it using the `2` key or by clicking on the
 button with eraser icon.
 
+![erase](erase.gif)
+
 ### Flood Fill Tool
 
-![flood fill](flood_fill.gif)
+![Flood fill tool](tile_map_tools/floor_tool.png)
 
 Fills a region with the same tile kind (or empty space) using the tiles of the current stamp.
 Activate it using the button with paint bucket icon.
@@ -212,9 +218,11 @@ Activate it using the button with paint bucket icon.
 Unlike the other tools, the flood fill tool is not implemented for use in the Tile Set Editor,
 so in the Tile Set Editor the flood tool will just act like the brush tool.
 
+![flood fill](tile_map_tools/flood_fill.png)
+
 ### Pick Tool
 
-![pick](pick.gif)
+![Pick tool](tile_map_tools/pick_tool.png)
 
 Picks a rectangular region of tiles from the tile map itself and turns them into the current stamp.
 Hold shift to add additional rectangular regions to the stamp.
@@ -229,18 +237,32 @@ is expecting to find tile data.
 
 ### Rectangular Fill Tool
 
-![rect fill](rect_fill.gif)
+![Rect fill tool](tile_map_tools/rect_tool.png)
 
 Fills a rectangular region with the tiles from the current stamp. It tiles the given region using the
 tiles from current stamp. Could be activated using `3` key or by clicking on the button with the tiles icon.
 
+To randomize the order of the tiles within the rectangle, toggle the on the dice button.
+
+![rect fill](rect_fill.gif)
+
 ### Nine Slice Tool
 
-![nine slice](nine_slice.gif)
+![Nine slice tool](tile_map_tools/nine_tool.png)
 
 Fills a rectangular region using a rectangluer stamp divided into nine sections: four corners, four sides, and the center.
 The corners of the stamp will be placed at the corners of the selected region. The sides of the stamp will fill the sides
 of the selected reation, and the center of the stamp will fill the center of the selected region.
+
+To randomize the order of the tiles within the rectangle, toggle the on the dice button.
+
+![nine slice](nine_slice.gif)
+
+### Line Tool
+
+![Nine slice tool](tile_map_tools/line_tool.png)
+
+Drag the mouse from one cell to another to draw a line of tiles between the two cells using the tiles of the current brush.
 
 ## Physics
 
