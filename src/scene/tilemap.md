@@ -41,8 +41,14 @@ Tile set pages come in multiple varieties depending on what data will be stored 
   transformed into each other by 90-degree rotations. The right 2x2 cells represent same tiles horizontally mirrored.
   The tile set resource can search its transform pages to convert any handle into the handle of a flipped or rotated
   version of the tile.
-* **Animation:** In the future there may be animation pages that store sequences of handles that will cause the tile
-  map to animate by moving through the sequences over time.
+* **Animation:** An animation page stores handles to tiles on other pages and represents how tiles change their appearance
+  over time. Each animation on the page is represented by a horizontal sequence of tile handles. Any tile whose handle
+  is on an animation page becomes an animated tile, and its appearance will cycle from left-to-right along its row
+  until it comes to an empty cell, then it will will start again from the first non-empty cell to its left.
+  When tiles animate through an animation page, the tile map data does not actually change over time; only the rendering changes.
+
+  If the same handle appears in more than one cell on an animation page, then the animation starts at the first occurrence
+  of the handle, when reading the page from left-to-right and top-to-bottom, as one would read a book.
 
 Once we have a tile set resource, we can create a tile map node and set its `tile_set` field to point to our resource.
 Then we can fill the tile map node with the handles for whatever tiles we want to render.
@@ -137,6 +143,25 @@ Use the panel to select a page from your tile set, and then select a tile that y
 Click the button with the paint brush icon to activate the brush tool, then click in the tile set editor to paint the handle
 for the selected tile into a cell of the transform page. The tools available for painting, moving, copying, and deleting
 tile handles will be discussed in more detail later.
+
+#### Creating an Animation Page
+
+In order to make your tiles move over time, first create a sequence of animation frames for your tile, and make a tile
+for each from using an atlas page or a freeform page. Now we are ready to create an animation page.
+
+![Animation page](tile_map_animation.png)
+
+While the animation page is selected, choose the frame rate for animations on this page, measured in frames per second.
+All animations on the same page share the same frame rate.
+
+Editing an animation page is just like editing a transform page, but instead of organizing the tile handles in groups of eight,
+we are creating horizontal sequences of tiles. These sequences can start and end anywhere on the page, so long as there is an
+empty cell immediately to the left and right of the sequence to indicate where the sequence begins and ends. The editor will
+draw a mark in the empty cells to confirm where the animation starts and ends. When an animation reaches the end of the sequence
+it automatically repeats.
+
+As soon as you have finished making your animation page, your tile set will already be animating. The editor may not draw frames
+as smoothly as a running game, so put some animated tiles in your tile map and then run your game to see the full effect of the animation.
 
 #### Creating the Tile Map Node
 
