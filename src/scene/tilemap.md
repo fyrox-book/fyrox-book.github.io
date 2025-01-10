@@ -99,6 +99,8 @@ Select any empty cell in the upper grid to cause the "Create New Page" menu to a
 start creating freeform tiles on your tile set's new page. Unlike the atlas page, a freeform page has very few properties
 to edit in the inspector. This is because each tile has its own material and size fields.
 
+![Freeform tile edit](freeform_tile_edit.png)
+
 Select any empty cell in the lower grid and click "Create Tile" to begin editing the properties for a new freeform tile.
 At the top is a field for choosing the material for the tile. It will initially be a blank material with the
 standard tile shader. Below that are four pairs of coordinates that represent for points on the material's texture as
@@ -113,8 +115,6 @@ Next there is the tile's color which can be used to apply tinting or transparenc
 It is also possible to add tiles to a freeform page by painting them with tools on the Tile Map Control Panel which will
 be discussed later.
 
-![Transform page](tile_map_rotate.png)
-
 #### Creating a Transform Page
 
 Once you have prepared a library of tiles with your tile set, you may want to specify which tiles are mirrored or rotated
@@ -125,6 +125,8 @@ under "Create New Page."
 In the lower grid area you should see that the cells have been divided into 2x4 groups. Each cell of these groups can store
 a `TileDefinitionHandle` and the eight handles together will specify all possible combinations of flips and 90-degree rotations
 that may be needed for a tile.
+
+![Transform page](tile_map_rotate.png)
 
 In order to fill this page with tile handles, click the "Palette" button in the upper-right to open the "Tile Map Control Panel" window,
 if it is not already open. This is the same window that you will use to edit a tile map, and so it has tools designed for selecting
@@ -210,7 +212,7 @@ button with eraser icon.
 
 ### Flood Fill Tool
 
-![Flood fill tool](tile_map_tools/floor_tool.png)
+![Flood fill tool](tile_map_tools/flood_tool.png)
 
 Fills a region with the same tile kind (or empty space) using the tiles of the current stamp.
 Activate it using the button with paint bucket icon.
@@ -300,6 +302,8 @@ restitution, etc.) and any other you need.
 In the tile set editor, create properties using the "Properties" tab which gives you access to a list of property layers.
 Each property layer has a data type, and the type must be chosen when the layer is created, since changing the type of
 an already existing layer could cause tiles to have the wrong type of value for the property.
+
+![Tile map properties editor](tile_map_properties.png)
 
 Each property may also have a list of pre-defined values. Each pre-defined value has a name and a color to help the user
 visualize which tiles have that value for the property and to help keep track of the meaning of that value.
