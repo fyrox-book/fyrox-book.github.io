@@ -23,8 +23,10 @@ fn create_sprite_with_texture(
     resource_manager: ResourceManager,
 ) -> Handle<Node> {
     let mut material = Material::standard_sprite();
-    material.texture_mut("diffuseTexture").unwrap().value =
-        Some(resource_manager.request::<Texture>("path/to/your_texture.jpg"));
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::<Texture>("path/to/your_texture.jpg")),
+    );
 
     // Material resources can be shared across multiple sprites (via simple `clone`).
     // This significantly improves performance if you have multiple rectangles with the

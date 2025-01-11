@@ -56,9 +56,7 @@ impl ScriptTrait for Player {
             sprite
                 .material()
                 .data_ref()
-                .texture_mut("diffuseTexture")
-                .unwrap()
-                .value = self.animation.texture();
+                .bind("diffuseTexture", self.animation.texture());
 
             // Set the current animation's UV rect to the sprite.
             sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());

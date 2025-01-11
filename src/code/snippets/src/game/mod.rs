@@ -11,7 +11,7 @@ use fyrox::{
     },
     event::{Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
-    gui::constructor::WidgetConstructorContainer,
+    gui::constructor::new_widget_constructor_container,
     utils::translate_event,
     window::WindowAttributes,
 };
@@ -37,7 +37,7 @@ fn main() {
         resource_manager: ResourceManager::new(task_pool.clone()),
         serialization_context,
         task_pool,
-        widget_constructors: Arc::new(WidgetConstructorContainer::default()),
+        widget_constructors: Arc::new(new_widget_constructor_container()),
     })
     .unwrap();
 

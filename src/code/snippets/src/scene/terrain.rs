@@ -21,10 +21,14 @@ fn setup_layer_material(
     diffuse_texture: &str,
     normal_texture: &str,
 ) {
-    material.texture_mut("diffuseTexture").unwrap().value =
-        Some(resource_manager.request::<Texture>(diffuse_texture));
-    material.texture_mut("normalTexture").unwrap().value =
-        Some(resource_manager.request::<Texture>(normal_texture));
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::<Texture>(diffuse_texture)),
+    );
+    material.bind(
+        "normalTexture",
+        Some(resource_manager.request::<Texture>(normal_texture)),
+    );
     material.set_property("texCoordScale", Vector2::new(10.0, 10.0));
 }
 

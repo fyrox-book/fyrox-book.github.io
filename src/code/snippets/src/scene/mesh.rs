@@ -46,8 +46,10 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
 
     // Material is completely optional, but here we'll demonstrate that it is possible to
     // create procedural meshes with any material you want.
-    material.texture_mut("diffuseTexture").unwrap().value =
-        Some(resource_manager.request::<Texture>("some_texture.jpg"));
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::<Texture>("some_texture.jpg")),
+    );
 
     // Notice the MeshBuilder.
     MeshBuilder::new(
