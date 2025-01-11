@@ -1,11 +1,13 @@
 use fyrox::{
-    core::{algebra::Matrix4, pool::Handle, sstorage::ImmutableString},
+    core::{algebra::Matrix4, pool::Handle},
     renderer::{
         framework::{
+            buffer::BufferUsage,
             error::FrameworkError,
-            framebuffer::DrawParameters,
-            geometry_buffer::{ElementRange, GeometryBuffer, GeometryBufferKind},
+            geometry_buffer::GeometryBuffer,
+            gl::{program::GlProgram, server::GlGraphicsServer},
             gpu_program::{GpuProgram, UniformLocation},
+            DrawParameters, ElementRange, GeometryBufferExt,
         },
         RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext,
     },
@@ -17,9 +19,9 @@ use std::{cell::RefCell, rc::Rc};
 // ANCHOR: render_pass
 struct MyRenderPass {
     enabled: bool,
-    shader: GpuProgram,
+    shader: GlProgram,
     target_scene: Handle<Scene>,
-    quad: GeometryBuffer,
+    quad: Box<dyn GeometryBuffer>,
     world_view_proj: UniformLocation,
 }
 
@@ -48,19 +50,21 @@ impl MyRenderPass {
                 }
             ";
 
-        let shader = GpuProgram::from_source(&renderer.state, "MyShader", vs, fs)?;
+        let server = renderer
+            .server
+            .as_any()
+            .downcast_ref::<GlGraphicsServer>()
+            .unwrap();
+        let shader = GlProgram::from_source(server, "MyShader", vs, fs)?;
 
         Ok(Self {
             enabled: true,
-            world_view_proj: shader.uniform_location(
-                &renderer.state,
-                &ImmutableString::new("worldViewProjectionMatrix"),
-            )?,
+            world_view_proj: shader.uniform_location(&"worldViewProjectionMatrix".into())?,
             target_scene,
-            quad: GeometryBuffer::from_surface_data(
+            quad: <(dyn GeometryBuffer + 'static) as GeometryBufferExt>::from_surface_data(
                 &SurfaceData::make_quad(&Matrix4::identity()),
-                GeometryBufferKind::StaticDraw,
-                &renderer.state,
+                BufferUsage::StaticDraw,
+                renderer.server.as_ref(),
             )?,
             shader,
         })
@@ -76,16 +80,14 @@ impl SceneRenderPass for MyRenderPass {
 
         // Make sure to render only to target scene.
         if self.enabled && ctx.scene_handle == self.target_scene {
+            let resource_binding_groups = &[];
             stats += ctx.framebuffer.draw(
-                &self.quad,
-                ctx.pipeline_state,
+                self.quad.as_ref(),
                 ctx.viewport,
                 &self.shader,
                 &DrawParameters::default(),
+                resource_binding_groups,
                 ElementRange::Full,
-                |mut program| {
-                    program.set_matrix4(&self.world_view_proj, &Matrix4::identity());
-                },
             )?;
         }
 

@@ -65,11 +65,7 @@ fn create_fancy_button(
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(
-                    resource_manager
-                        .request::<Texture>("path/to/your/texture")
-                        .into(),
-                )
+                .with_texture(resource_manager.request::<Texture>("path/to/your/texture"))
                 .build(ctx),
         )
         .with_text("Click me!")
@@ -90,7 +86,7 @@ fn create_fancy_button_with_text(
                 WidgetBuilder::new()
                     .with_child(
                         ImageBuilder::new(WidgetBuilder::new().on_column(0))
-                            .with_texture(resource_manager.request::<Texture>("your_icon").into())
+                            .with_texture(resource_manager.request::<Texture>("your_icon"))
                             .build(ctx),
                     )
                     .with_child(
@@ -118,11 +114,7 @@ fn create_fancy_button_with_shortcut(
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back({
             image = ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(
-                    resource_manager
-                        .request::<Texture>("path/to/your/texture")
-                        .into(),
-                )
+                .with_texture(resource_manager.request::<Texture>("path/to/your/texture"))
                 .build(ctx);
             image
         })

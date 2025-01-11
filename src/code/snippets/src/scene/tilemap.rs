@@ -9,7 +9,7 @@ use fyrox::scene::tilemap::tileset::{
     TileBounds, TileData, TileMaterialBounds, TileSetPage, TileSetPageSource, TileSetPropertyLayer,
     TileSetPropertyType, TileSetPropertyValue,
 };
-use fyrox::scene::tilemap::{TileDefinitionHandle, TileGridMap, TileMap, TilePropertyError};
+use fyrox::scene::tilemap::{TileDefinitionHandle, TileGridMap, TileMap};
 use fyrox::{
     asset::untyped::ResourceKind,
     core::{algebra::Vector2, color::Color, pool::Handle},

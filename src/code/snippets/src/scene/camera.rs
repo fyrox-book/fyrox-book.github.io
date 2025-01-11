@@ -4,6 +4,7 @@ use fyrox::core::futures::executor::block_on;
 use fyrox::core::math::ray::Ray;
 use fyrox::core::math::{TriangleDefinition, Vector3Ext};
 use fyrox::core::pool::Handle;
+use fyrox::graph::SceneGraphNode;
 use fyrox::renderer::Renderer;
 use fyrox::resource::texture::{Texture, TextureWrapMode};
 use fyrox::scene::base::BaseBuilder;
@@ -144,7 +145,7 @@ pub fn precise_ray_test(
     let mut closest_distance = f32::MAX;
     let mut closest_point = None;
 
-    if let Some(mesh) = node.query_component_ref::<Mesh>() {
+    if let Some(mesh) = node.component_ref::<Mesh>() {
         let transform = mesh.global_transform();
 
         for surface in mesh.surfaces().iter() {

@@ -13,7 +13,7 @@ use fyrox::{
     script::ScriptTrait,
 };
 use fyroxed_base::command::{
-    AddCollectionItemCommand, Command, RemoveCollectionItemCommand, SetPropertyCommand,
+    AddCollectionItemCommand, RemoveCollectionItemCommand, SetPropertyCommand,
 };
 use fyroxed_base::{
     camera::PickingOptions,

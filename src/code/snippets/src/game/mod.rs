@@ -6,7 +6,8 @@ use fyrox::{
         task::TaskPool,
     },
     engine::{
-        Engine, EngineInitParams, GraphicsContext, GraphicsContextParams, SerializationContext,
+        Engine, EngineInitParams, GraphicsContext, GraphicsContextParams,
+        GraphicsServerConstructor, SerializationContext,
     },
     event::{Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -31,11 +32,12 @@ fn main() {
             window_attributes,
             vsync: true,
             msaa_sample_count: None,
+            graphics_server_constructor: GraphicsServerConstructor::default(),
         },
         resource_manager: ResourceManager::new(task_pool.clone()),
         serialization_context,
         task_pool,
-        widget_constructors: Arc::new(WidgetConstructorContainer::new()),
+        widget_constructors: Arc::new(WidgetConstructorContainer::default()),
     })
     .unwrap();
 

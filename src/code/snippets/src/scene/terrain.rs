@@ -2,8 +2,8 @@ use fyrox::asset::untyped::ResourceKind;
 use fyrox::material::MaterialResource;
 use fyrox::{
     asset::manager::ResourceManager,
-    core::{algebra::Vector2, algebra::Vector3, pool::Handle, sstorage::ImmutableString},
-    material::{shader::SamplerFallback, Material, PropertyValue},
+    core::{algebra::Vector2, algebra::Vector3, pool::Handle},
+    material::Material,
     rand::{thread_rng, Rng},
     resource::texture::Texture,
     scene::{
@@ -21,30 +21,11 @@ fn setup_layer_material(
     diffuse_texture: &str,
     normal_texture: &str,
 ) {
-    material
-        .set_property(
-            &ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(resource_manager.request::<Texture>(diffuse_texture)),
-                fallback: SamplerFallback::White,
-            },
-        )
-        .unwrap();
-    material
-        .set_property(
-            &ImmutableString::new("normalTexture"),
-            PropertyValue::Sampler {
-                value: Some(resource_manager.request::<Texture>(normal_texture)),
-                fallback: SamplerFallback::Normal,
-            },
-        )
-        .unwrap();
-    material
-        .set_property(
-            &ImmutableString::new("texCoordScale"),
-            PropertyValue::Vector2(Vector2::new(10.0, 10.0)),
-        )
-        .unwrap();
+    material.texture_mut("diffuseTexture").unwrap().value =
+        Some(resource_manager.request::<Texture>(diffuse_texture));
+    material.texture_mut("normalTexture").unwrap().value =
+        Some(resource_manager.request::<Texture>(normal_texture));
+    material.set_property("texCoordScale", Vector2::new(10.0, 10.0));
 }
 
 pub fn create_random_two_layer_terrain(

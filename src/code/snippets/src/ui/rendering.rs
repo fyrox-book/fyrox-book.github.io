@@ -3,12 +3,12 @@ use fyrox::gui::image::ImageBuilder;
 use fyrox::gui::UiNode;
 use fyrox::renderer::framework::gpu_texture::PixelKind;
 use fyrox::{
-    core::{algebra::Vector2, log::Log, pool::Handle, sstorage::ImmutableString},
+    core::{algebra::Vector2, log::Log, pool::Handle},
     core::{reflect::prelude::*, visitor::prelude::*},
     engine::GraphicsContext,
     event::Event,
     gui::{button::ButtonBuilder, widget::WidgetBuilder, UserInterface},
-    material::{Material, PropertyValue},
+    material::Material,
     plugin::{Plugin, PluginContext},
     resource::texture::{TextureResource, TextureResourceExtension},
     scene::Scene,
@@ -44,13 +44,7 @@ impl Plugin for Game {
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
         let mut material = Material::standard();
-        Log::verify(material.set_property(
-            &ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(self.render_target.clone()),
-                fallback: Default::default(),
-            },
-        ));
+        material.texture_mut("diffuseTexture").unwrap().value = Some(self.render_target.clone());
         // This material **must** be assigned to some mesh in your scene!
     }
 
@@ -115,7 +109,7 @@ fn reroute_scene_rendering(
             .with_width(width as f32)
             .with_height(height as f32),
     )
-    .with_texture(render_target.clone().into())
+    .with_texture(render_target.clone())
     .build(&mut context.user_interfaces.first_mut().build_ctx())
 }
 // ANCHOR_END: reroute_scene_rendering
