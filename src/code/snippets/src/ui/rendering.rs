@@ -44,7 +44,7 @@ impl Plugin for Game {
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
         let mut material = Material::standard();
-        material.texture_mut("diffuseTexture").unwrap().value = Some(self.render_target.clone());
+        material.bind("diffuseTexture", Some(self.render_target.clone()));
         // This material **must** be assigned to some mesh in your scene!
     }
 
