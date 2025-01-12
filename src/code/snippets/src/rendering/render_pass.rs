@@ -6,7 +6,7 @@ use fyrox::{
             error::FrameworkError,
             framebuffer::{BufferDataUsage, BufferLocation, ResourceBindGroup, ResourceBinding},
             geometry_buffer::GeometryBuffer,
-            gpu_program::{GpuProgram, UniformLocation},
+            gpu_program::GpuProgram,
             uniform::StaticUniformBuffer,
             DrawParameters, ElementRange, GeometryBufferExt,
         },
@@ -23,8 +23,8 @@ struct MyRenderPass {
     shader: Box<dyn GpuProgram>,
     target_scene: Handle<Scene>,
     quad: Box<dyn GeometryBuffer>,
-    world_view_proj_location: UniformLocation,
-    world_view_proj: Box<dyn Buffer>,
+    uniform_location: usize,
+    uniform_buffer: Box<dyn Buffer>,
 }
 
 impl MyRenderPass {
@@ -34,8 +34,10 @@ impl MyRenderPass {
     ) -> Result<Self, FrameworkError> {
         let vs = r"
                 layout(location = 0) in vec3 vertexPosition;
-                
-                uniform mat4 worldViewProjectionMatrix;
+
+                layout(std140) uniform Uniforms {
+                    mat4 worldViewProjectionMatrix;
+                }                
                          
                 void main()
                 {
@@ -53,12 +55,12 @@ impl MyRenderPass {
             ";
 
         let shader = renderer.server.create_program("MyShader", vs, fs)?;
-        let world_view_proj =
+        let uniform_buffer =
             renderer
                 .server
                 .create_buffer(256, BufferKind::Uniform, BufferUsage::DynamicDraw)?;
 
-        world_view_proj.write_data_of_type(
+        uniform_buffer.write_data_of_type(
             &StaticUniformBuffer::<256>::new()
                 .with(&Matrix4::identity())
                 .finish(),
@@ -66,9 +68,8 @@ impl MyRenderPass {
 
         Ok(Self {
             enabled: true,
-            world_view_proj_location: shader
-                .uniform_location(&"worldViewProjectionMatrix".into())?,
-            world_view_proj,
+            uniform_location: shader.uniform_block_index(&"Uniforms".into())?,
+            uniform_buffer,
             target_scene,
             quad: <dyn GeometryBuffer as GeometryBufferExt>::from_surface_data(
                 &SurfaceData::make_quad(&Matrix4::identity()),
@@ -91,9 +92,9 @@ impl SceneRenderPass for MyRenderPass {
         if self.enabled && ctx.scene_handle == self.target_scene {
             let resources = ResourceBindGroup {
                 bindings: &[ResourceBinding::Buffer {
-                    buffer: self.world_view_proj.as_ref(),
-                    binding: BufferLocation::Explicit {
-                        binding: self.world_view_proj_location.id.0 as usize,
+                    buffer: self.uniform_buffer.as_ref(),
+                    binding: BufferLocation::Auto {
+                        shader_location: self.uniform_location,
                     },
                     data_usage: BufferDataUsage::default(),
                 }],
