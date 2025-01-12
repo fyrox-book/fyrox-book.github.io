@@ -302,6 +302,36 @@ Each layer has a name and a color, and in code it can be identified by a UUID. T
 controls how the shapes on that layer appear when they are visible. The name is used to identify the layer
 for a 2D rigid body.
 
+There are currently three different ways to set the collision shape for each tile:
+
+-None: The tile has no collision shape, the default.
+-Full: The tile's full square is covered by a collision shape.
+-Custom: The user supplies a list of triangles to construct a collision shape.
+
+In code, custom collision shapes are created using a `fyrox::scene::tilemap::CustomTileCollider` which is a simple struct like so:
+
+```rust
+pub struct CustomTileCollider {
+    /// The vertices of the triangles, with the boundaries of the tile being between (0,0) and (1,1).
+    pub vertices: Vec<Vector2<f32>>,
+    /// The indices of the vertices of each triangle
+    pub triangles: Vec<TriangleDefinition>,
+}
+```
+
+To create a custom tile collider in the editor, it is currently required that the user manually types in the information
+as a list of vertices and triangle indices, such as "(0,0) (1,1) (1,0) \[0,1,2\]". This would create a triangle covering the
+bottom right half of the tile. The parentheses and brackets are optional and are ignored; only the numbers and commas are parsed
+to understand the user's intended triangles.
+
+![Tile with custom collision shape](tile_collider_edit.png)
+
+Click the eye button next to the collision layer to toggle visibility of collision shapes for that layer.
+Collisions shapes will be drawn over the tiles in the color you have chosen for that collision layer,
+so it is best to choose an alpha value with some transparency.
+
+### Adding a 2D Rigid Body
+
 Enable physics for a tile map by using the collider shape called `TileMap` and specifying the name of the layer.
 In code it could be done something like this:
 
@@ -309,7 +339,8 @@ In code it could be done something like this:
 {{#include ../code/snippets/src/scene/tilemap.rs:tile_map_physics}}
 ```
 
-In the editor it could be done by creating a static 2D rigid body with a 2D collider that has the `TileMap` shape: 
+In the editor it could be done by creating a static 2D rigid body with a 2D collider that has the `TileMap` shape.
+Give the shape the tile map and the name of the collision layer that the rigid body is supposed to represent.
 
 ![tile map physics](tile_map_physics.png)
 
