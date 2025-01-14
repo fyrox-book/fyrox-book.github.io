@@ -360,7 +360,7 @@ pub fn precise_ray_test(
     let mut closest_distance = f32::MAX;
     let mut closest_point = None;
 
-    if let Some(mesh) = node.query_component_ref::&lt;Mesh&gt;() {
+    if let Some(mesh) = node.component_ref::&lt;Mesh&gt;() {
         let transform = mesh.global_transform();
 
         for surface in mesh.surfaces().iter() {

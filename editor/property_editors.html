@@ -193,7 +193,8 @@ struct MyStruct {
 
 fn add_property_editor(editor: &amp;Editor) {
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
 }
@@ -224,7 +225,8 @@ enum MyEnum {
 
 fn add_enum_property_editor(editor: &amp;Editor) {
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(EnumPropertyEditorDefinition::&lt;MyEnum&gt;::new());
 }
@@ -250,20 +252,23 @@ struct MyScript {
 
 fn add_inheritable_property_editor(editor: &amp;Editor) {
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // This is responsible for supporting inheritable properties in scripts.
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InheritablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // Alternatively, the two previous insertions could be replaced by a single call of helper
     // method:
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .register_inheritable_inspectable::&lt;MyStruct&gt;();
 }
@@ -281,21 +286,24 @@ struct MyOtherScript {
 
 fn add_collection_property_editor(editor: &amp;Editor) {
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // VecCollectionPropertyEditorDefinition is used to create a property editor for Vec&lt;MyStruct&gt;,
     // internally it uses a registered property editor for its generic argument (MyStruct).
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(VecCollectionPropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // Alternatively, you can use a special helper method to replace the two blocks above by a
     // single one.
     editor
-        .inspector
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .register_inheritable_vec_collection::&lt;MyOtherStruct&gt;();
 }

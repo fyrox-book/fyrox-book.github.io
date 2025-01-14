@@ -211,13 +211,7 @@ impl Plugin for Game {
 
         // Use render_target as an ordinary texture - it could be applied to any material like so:
         let mut material = Material::standard();
-        Log::verify(material.set_property(
-            &amp;ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(self.render_target.clone()),
-                fallback: Default::default(),
-            },
-        ));
+        material.bind("diffuseTexture", Some(self.render_target.clone()));
         // This material **must** be assigned to some mesh in your scene!
     }
 
@@ -291,7 +285,7 @@ scene and then use the texture (render target) in an <code>Image</code> widget.<
             .with_width(width as f32)
             .with_height(height as f32),
     )
-    .with_texture(render_target.clone().into())
+    .with_texture(render_target.clone())
     .build(&amp;mut context.user_interfaces.first_mut().build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>

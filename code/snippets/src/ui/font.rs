@@ -49,7 +49,7 @@ fn set_default_font(ui: &mut UserInterface, resource_manager: &ResourceManager) 
 fn text(ctx: &mut BuildContext) -> Handle<UiNode> {
     TextBuilder::new(WidgetBuilder::new())
         .with_text("Some text")
-        .with_font_size(30.0) // Sets the desired font size.
+        .with_font_size(30.0.into()) // Sets the desired font size.
         .build(ctx)
 }
 // ANCHOR_END: text
@@ -59,7 +59,7 @@ fn set_font_size(text: Handle<UiNode>, ui: &UserInterface, new_font_size: f32) {
     ui.send_message(TextMessage::font_size(
         text,
         MessageDirection::ToWidget,
-        new_font_size,
+        new_font_size.into(),
     ))
 }
 // ANCHOR_END: set_font_size

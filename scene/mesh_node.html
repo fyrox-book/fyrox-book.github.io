@@ -215,15 +215,10 @@ cannot create a mesh in 3D modelling software.</p>
 
     // Material is completely optional, but here we'll demonstrate that it is possible to
     // create procedural meshes with any material you want.
-    material
-        .set_property(
-            &amp;ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture&gt;("some_texture.jpg")),
-                fallback: SamplerFallback::White,
-            },
-        )
-        .unwrap();
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::&lt;Texture&gt;("some_texture.jpg")),
+    );
 
     // Notice the MeshBuilder.
     MeshBuilder::new(

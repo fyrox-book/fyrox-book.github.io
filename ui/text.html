@@ -214,13 +214,13 @@ text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <c
 </span><span class="boring">fn main() {
 </span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     let text_widget =
-        TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+        TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
             .with_text(text)
             .build(&amp;mut ui.build_ctx());
     BorderBuilder::new(
         WidgetBuilder::new()
             .with_child(text_widget) // &lt;-- Text is now a child of the border
-            .with_background(Brush::Solid(Color::opaque(50, 50, 50))),
+            .with_background(Brush::Solid(Color::opaque(50, 50, 50)).into()),
     )
     .build(&amp;mut ui.build_ctx())
 }
@@ -233,7 +233,7 @@ position the border, not the text.</p>
 </span><span class="boring">fn main() {
 </span>fn create_colored_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     //               vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
@@ -250,7 +250,7 @@ position the border, not the text.</p>
         .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
         // You can set any size as well.
-        .with_font_size(24.0)
+        .with_font_size(24.0.into())
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
@@ -262,7 +262,7 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
-    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
         .with_shadow(true)

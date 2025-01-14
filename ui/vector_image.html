@@ -188,7 +188,7 @@ on the picture above there are two yellow lines forming a cross.</p>
     VectorImageBuilder::new(
         WidgetBuilder::new()
             // Color of the image is defined by the foreground brush of the base widget.
-            .with_foreground(BRUSH_BRIGHT),
+            .with_foreground(ctx.style.property(Style::BRUSH_BRIGHT)),
     )
     .with_primitives(vec![
         Primitive::Line {

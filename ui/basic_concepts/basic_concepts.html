@@ -295,11 +295,7 @@ widget in series of nested call of other widget builders. In code, it looks some
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(
-                    resource_manager
-                        .request::&lt;Texture&gt;("path/to/your/texture")
-                        .into(),
-                )
+                .with_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/texture"))
                 .build(ctx),
         )
         .with_text("Click me!")
@@ -326,7 +322,7 @@ that contains text with some icon. To do that, replace <code>.with_text("My Butt
                 WidgetBuilder::new()
                     .with_child(
                         ImageBuilder::new(WidgetBuilder::new().on_column(0))
-                            .with_texture(resource_manager.request::&lt;Texture&gt;("your_icon").into())
+                            .with_texture(resource_manager.request::&lt;Texture&gt;("your_icon"))
                             .build(ctx),
                     )
                     .with_child(
@@ -356,11 +352,7 @@ the fluent syntax:</p>
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back({
             image = ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(
-                    resource_manager
-                        .request::&lt;Texture&gt;("path/to/your/texture")
-                        .into(),
-                )
+                .with_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/texture"))
                 .build(ctx);
             image
         })

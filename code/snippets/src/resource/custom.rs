@@ -16,7 +16,8 @@ use fyrox::{
         TypeUuidProvider,
     },
 };
-use fyroxed_base::inspector::editors::resource::ResourceFieldPropertyEditorDefinition;
+use fyroxed_base::plugins::inspector::editors::resource::ResourceFieldPropertyEditorDefinition;
+use fyroxed_base::plugins::inspector::InspectorPlugin;
 use fyroxed_base::Editor;
 use std::error::Error;
 use std::sync::Arc;
@@ -111,9 +112,15 @@ fn main() {
     let editor = Editor::new(None);
 
     // Register property editor.
-    editor.inspector.property_editors.insert(
-        ResourceFieldPropertyEditorDefinition::<CustomResource>::new(editor.message_sender.clone()),
-    );
+    editor
+        .plugins
+        .get::<InspectorPlugin>()
+        .property_editors
+        .insert(
+            ResourceFieldPropertyEditorDefinition::<CustomResource>::new(
+                editor.message_sender.clone(),
+            ),
+        );
 
     // ...
 }

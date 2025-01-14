@@ -228,7 +228,7 @@ code snippet:</p>
 </span>fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text("Some text")
-        .with_font_size(30.0) // Sets the desired font size.
+        .with_font_size(30.0.into()) // Sets the desired font size.
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
@@ -239,7 +239,7 @@ code snippet:</p>
     ui.send_message(TextMessage::font_size(
         text,
         MessageDirection::ToWidget,
-        new_font_size,
+        new_font_size.into(),
     ))
 }
 <span class="boring">}</span></code></pre></pre>

@@ -213,7 +213,7 @@ centered text could be created like so:</p>
 </span><span class="boring">fn main() {
 </span>fn create_colored_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
     //                  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+    TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
 }
@@ -230,7 +230,7 @@ centered text could be created like so:</p>
         .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
         // You can set any size as well.
-        .with_font_size(24.0)
+        .with_font_size(24.0.into())
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>

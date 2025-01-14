@@ -183,12 +183,15 @@ thick border around a button widget:</p>
         ),
     )
     //You can also use Thickness::uniform(1.0)
-    .with_stroke_thickness(Thickness {
-        left: 1.0,
-        right: 1.0,
-        top: 1.0,
-        bottom: 1.0,
-    })
+    .with_stroke_thickness(
+        Thickness {
+            left: 1.0,
+            right: 1.0,
+            top: 1.0,
+            bottom: 1.0,
+        }
+        .into(),
+    )
     .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
@@ -204,20 +207,23 @@ the border. Below is an example of a blue border and a red background with white
 </span>fn create_blue_border_with_red_background(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
     BorderBuilder::new(
         WidgetBuilder::new()
-            .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)))
-            .with_background(Brush::Solid(Color::opaque(200, 0, 0)))
+            .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)).into())
+            .with_background(Brush::Solid(Color::opaque(200, 0, 0)).into())
             .with_child(
                 TextBuilder::new(WidgetBuilder::new())
                     .with_text("I'm boxed in Blue and backed in Red!")
                     .build(&amp;mut ui.build_ctx()),
             ),
     )
-    .with_stroke_thickness(Thickness {
-        left: 2.0,
-        right: 2.0,
-        top: 2.0,
-        bottom: 2.0,
-    })
+    .with_stroke_thickness(
+        Thickness {
+            left: 2.0,
+            right: 2.0,
+            top: 2.0,
+            bottom: 2.0,
+        }
+        .into(),
+    )
     .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>

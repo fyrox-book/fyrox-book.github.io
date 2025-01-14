@@ -174,7 +174,7 @@
 code.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Clone, Reflect, Visit, Debug)]
+</span>#[derive(Default, Clone, Reflect, Visit, Debug, ComponentProvider)]
 pub struct CustomNode {
     base: Base,
 }
@@ -194,8 +194,6 @@ impl DerefMut for CustomNode {
 }
 
 impl NodeTrait for CustomNode {
-    fyrox::impl_query_component!();
-
     fn local_bounding_box(&amp;self) -&gt; AxisAlignedBoundingBox {
         self.base.local_bounding_box()
     }

@@ -15,9 +15,7 @@ fn create_image(ctx: &mut BuildContext, resource_manager: ResourceManager) -> Ha
     ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))
         .with_texture(
             // Ask resource manager to load a texture.
-            resource_manager
-                .request::<Texture>("path/to/your/texture.png")
-                .into(),
+            resource_manager.request::<Texture>("path/to/your/texture.png"),
         )
         .build(ctx)
 }
@@ -41,7 +39,7 @@ async fn create_image_equal_in_size_to_source(
                     .with_width(width as f32)
                     .with_height(height as f32),
             )
-            .with_texture(texture.into())
+            .with_texture(texture)
             .build(ctx);
         }
     }
@@ -70,11 +68,7 @@ fn create_flipped_image(
 ) -> Handle<UiNode> {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
-        .with_texture(
-            resource_manager
-                .request::<Texture>("path/to/your/texture.png")
-                .into(),
-        )
+        .with_texture(resource_manager.request::<Texture>("path/to/your/texture.png"))
         .build(ctx)
 }
 // ANCHOR_END: create_flipped_image

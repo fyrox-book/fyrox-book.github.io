@@ -243,11 +243,10 @@ Use the following example code as a guide <strong>only</strong> if you need to c
         CurveKey::new(1.0, 3.0, CurveKeyKind::Linear),
     ]);
     // Create a track that will animated the node using the curve above.
-    let mut track = Track::new(frames_container, ValueBinding::Position);
-    track.set_target(node);
+    let track = Track::new(frames_container, ValueBinding::Position);
     // Finally create an animation and set its time slice and turn it on.
     let mut animation = Animation::default();
-    animation.add_track(track);
+    animation.add_track_with_binding(TrackBinding::new(node), track);
     animation.set_time_slice(0.0..1.0);
     animation.set_enabled(true);
     animation

@@ -184,9 +184,7 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
     ImageBuilder::new(WidgetBuilder::new().with_width(width).with_height(height))
         .with_texture(
             // Ask resource manager to load a texture.
-            resource_manager
-                .request::&lt;Texture&gt;("path/to/your/texture.png")
-                .into(),
+            resource_manager.request::&lt;Texture&gt;("path/to/your/texture.png"),
         )
         .build(ctx)
 }
@@ -216,7 +214,7 @@ bounds first and then create an Image width these bounds:</p>
                     .with_width(width as f32)
                     .with_height(height as f32),
             )
-            .with_texture(texture.into())
+            .with_texture(texture)
             .build(ctx);
         }
     }
@@ -251,11 +249,7 @@ promise immediately:</p>
 ) -&gt; Handle&lt;UiNode&gt; {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
-        .with_texture(
-            resource_manager
-                .request::&lt;Texture&gt;("path/to/your/texture.png")
-                .into(),
-        )
+        .with_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/texture.png"))
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>

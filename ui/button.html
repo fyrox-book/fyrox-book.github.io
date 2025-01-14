@@ -210,11 +210,7 @@ right aligned):</p>
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(
-                    resource_manager
-                        .request::&lt;Texture&gt;("path/to/your/texture")
-                        .into(),
-                )
+                .with_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/texture"))
                 .build(ctx),
         )
         .with_text("Click me!")

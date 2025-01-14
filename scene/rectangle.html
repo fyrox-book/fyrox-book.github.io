@@ -181,12 +181,10 @@ an orthographic camera:</p>
 </span><span class="boring">fn main() {
 </span>fn create_rect(graph: &amp;mut Graph, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
     let mut material = Material::standard_2d();
-    material
-        .set_texture(
-            &amp;"diffuseTexture".into(),
-            Some(resource_manager.request::&lt;Texture&gt;("path/to/your_texture.jpg")),
-        )
-        .unwrap();
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::&lt;Texture&gt;("path/to/your_texture.jpg")),
+    );
 
     // Material resources can be shared across multiple rectangles (via simple `clone`).
     // This significantly improves performance if you have multiple rectangles with the

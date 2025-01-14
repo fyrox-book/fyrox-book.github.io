@@ -1,6 +1,6 @@
 use fyrox::core::algebra::Vector3;
 use fyrox::generic_animation::RootMotionSettings;
-use fyrox::graph::{BaseSceneGraph, SceneGraph};
+use fyrox::graph::{BaseSceneGraph, SceneGraph, SceneGraphNode};
 use fyrox::scene::animation::absm::AnimationBlendingStateMachine;
 use fyrox::scene::rigidbody::RigidBody;
 use fyrox::{
@@ -49,7 +49,7 @@ fn fetch_and_apply_root_motion(
         .scene
         .graph
         .try_get(absm)
-        .and_then(|node| node.query_component_ref::<AnimationBlendingStateMachine>())
+        .and_then(|node| node.component_ref::<AnimationBlendingStateMachine>())
     {
         if let Some(root_motion) = state_machine.machine().pose().root_motion() {
             velocity = transform

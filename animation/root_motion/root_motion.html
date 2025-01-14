@@ -252,7 +252,7 @@ In general, it could look something like this:</p>
         .scene
         .graph
         .try_get(absm)
-        .and_then(|node| node.query_component_ref::&lt;AnimationBlendingStateMachine&gt;())
+        .and_then(|node| node.component_ref::&lt;AnimationBlendingStateMachine&gt;())
     {
         if let Some(root_motion) = state_machine.machine().pose().root_motion() {
             velocity = transform

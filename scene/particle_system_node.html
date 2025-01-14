@@ -240,12 +240,10 @@ only practice matters here.</p>
 </span><span class="boring">fn main() {
 </span>fn create_smoke(graph: &amp;mut Graph, resource_manager: &amp;mut ResourceManager, pos: Vector3&lt;f32&gt;) {
     let mut material = Material::standard_particle_system();
-    material
-        .set_texture(
-            &amp;"diffuseTexture".into(),
-            Some(resource_manager.request::&lt;Texture&gt;("data/particles/smoke_04.tga")),
-        )
-        .unwrap();
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::&lt;Texture&gt;("data/particles/smoke_04.tga")),
+    );
     let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
 
     ParticleSystemBuilder::new(

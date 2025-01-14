@@ -15,12 +15,10 @@ use fyrox::scene::transform::TransformBuilder;
 // ANCHOR: create_smoke
 fn create_smoke(graph: &mut Graph, resource_manager: &mut ResourceManager, pos: Vector3<f32>) {
     let mut material = Material::standard_particle_system();
-    material
-        .set_texture(
-            &"diffuseTexture".into(),
-            Some(resource_manager.request::<Texture>("data/particles/smoke_04.tga")),
-        )
-        .unwrap();
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::<Texture>("data/particles/smoke_04.tga")),
+    );
     let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
 
     ParticleSystemBuilder::new(

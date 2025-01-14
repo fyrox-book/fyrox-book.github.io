@@ -314,30 +314,15 @@ updating other details of the internal state of the <code>BrushContext</code>.</
     diffuse_texture: &amp;str,
     normal_texture: &amp;str,
 ) {
-    material
-        .set_property(
-            &amp;ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture&gt;(diffuse_texture)),
-                fallback: SamplerFallback::White,
-            },
-        )
-        .unwrap();
-    material
-        .set_property(
-            &amp;ImmutableString::new("normalTexture"),
-            PropertyValue::Sampler {
-                value: Some(resource_manager.request::&lt;Texture&gt;(normal_texture)),
-                fallback: SamplerFallback::Normal,
-            },
-        )
-        .unwrap();
-    material
-        .set_property(
-            &amp;ImmutableString::new("texCoordScale"),
-            PropertyValue::Vector2(Vector2::new(10.0, 10.0)),
-        )
-        .unwrap();
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::&lt;Texture&gt;(diffuse_texture)),
+    );
+    material.bind(
+        "normalTexture",
+        Some(resource_manager.request::&lt;Texture&gt;(normal_texture)),
+    );
+    material.set_property("texCoordScale", Vector2::new(10.0, 10.0));
 }
 
 pub fn create_random_two_layer_terrain(

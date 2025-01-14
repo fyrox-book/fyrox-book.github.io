@@ -288,9 +288,15 @@ add the following lines to <code>editor/src/main.rs</code> file, somewhere after
     let editor = Editor::new(None);
 
     // Register property editor.
-    editor.inspector.property_editors.insert(
-        ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(editor.message_sender.clone()),
-    );
+    editor
+        .plugins
+        .get::&lt;InspectorPlugin&gt;()
+        .property_editors
+        .insert(
+            ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
+                editor.message_sender.clone(),
+            ),
+        );
 
     // ...
 }</code></pre></pre>

@@ -1,8 +1,9 @@
 use fyrox::gui::{
     core::{algebra::Vector2, pool::Handle},
+    style::{resource::StyleResourceExt, Style},
     vector_image::{Primitive, VectorImageBuilder},
     widget::WidgetBuilder,
-    BuildContext, UiNode, BRUSH_BRIGHT,
+    BuildContext, UiNode,
 };
 
 // ANCHOR: make_cross_vector_image
@@ -10,7 +11,7 @@ fn make_cross_vector_image(ctx: &mut BuildContext, size: f32, thickness: f32) ->
     VectorImageBuilder::new(
         WidgetBuilder::new()
             // Color of the image is defined by the foreground brush of the base widget.
-            .with_foreground(BRUSH_BRIGHT),
+            .with_foreground(ctx.style.property(Style::BRUSH_BRIGHT)),
     )
     .with_primitives(vec![
         Primitive::Line {

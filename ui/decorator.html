@@ -186,7 +186,7 @@ feedback the user.</p>
 </span><span class="boring">fn main() {
 </span>fn create_decorator(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
     DecoratorBuilder::new(BorderBuilder::new(WidgetBuilder::new()))
-        .with_hover_brush(Brush::Solid(Color::opaque(0, 255, 0)))
+        .with_hover_brush(Brush::Solid(Color::opaque(0, 255, 0)).into())
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>

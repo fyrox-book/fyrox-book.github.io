@@ -5,6 +5,7 @@ use fyrox::scene::light::BaseLight;
 use fyrox::scene::transform::TransformBuilder;
 use fyrox::{
     core::pool::Handle,
+    graph::SceneGraphNode,
     scene::{
         base::BaseBuilder,
         light::{directional::DirectionalLightBuilder, BaseLightBuilder},
@@ -56,7 +57,7 @@ fn create_spot_light(scene: &mut Scene) -> Handle<Node> {
 // ANCHOR: disable_light_scatter
 fn disable_light_scatter(scene: &mut Scene, light_handle: Handle<Node>) {
     scene.graph[light_handle]
-        .query_component_mut::<BaseLight>()
+        .component_mut::<BaseLight>()
         .unwrap()
         .enable_scatter(false);
 }
@@ -65,7 +66,7 @@ fn disable_light_scatter(scene: &mut Scene, light_handle: Handle<Node>) {
 // ANCHOR: use_rayleigh_scattering
 fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
     scene.graph[light_handle]
-        .query_component_mut::<BaseLight>()
+        .component_mut::<BaseLight>()
         .unwrap()
         .set_scatter(Vector3::new(0.03, 0.035, 0.055));
 }
@@ -74,7 +75,7 @@ fn use_rayleigh_scattering(scene: &mut Scene, light_handle: Handle<Node>) {
 // ANCHOR: switch_shadows
 fn switch_shadows(scene: &mut Scene, light_handle: Handle<Node>, cast_shadows: bool) {
     scene.graph[light_handle]
-        .query_component_mut::<BaseLight>()
+        .component_mut::<BaseLight>()
         .unwrap()
         .set_cast_shadows(cast_shadows);
 }

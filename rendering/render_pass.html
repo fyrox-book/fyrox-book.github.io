@@ -181,10 +181,11 @@ by experienced graphics programmers. Here's the simplest render pass that render
 </span><span class="boring">fn main() {
 </span>struct MyRenderPass {
     enabled: bool,
-    shader: GpuProgram,
+    shader: Box&lt;dyn GpuProgram&gt;,
     target_scene: Handle&lt;Scene&gt;,
-    quad: GeometryBuffer,
-    world_view_proj: UniformLocation,
+    quad: Box&lt;dyn GeometryBuffer&gt;,
+    uniform_location: usize,
+    uniform_buffer: Box&lt;dyn Buffer&gt;,
 }
 
 impl MyRenderPass {
@@ -194,8 +195,10 @@ impl MyRenderPass {
     ) -&gt; Result&lt;Self, FrameworkError&gt; {
         let vs = r"
                 layout(location = 0) in vec3 vertexPosition;
-                
-                uniform mat4 c;
+
+                layout(std140) uniform Uniforms {
+                    mat4 worldViewProjectionMatrix;
+                }                
                          
                 void main()
                 {
@@ -212,19 +215,27 @@ impl MyRenderPass {
                 }
             ";
 
-        let shader = GpuProgram::from_source(&amp;renderer.state, "MyShader", vs, fs)?;
+        let shader = renderer.server.create_program("MyShader", vs, fs)?;
+        let uniform_buffer =
+            renderer
+                .server
+                .create_buffer(256, BufferKind::Uniform, BufferUsage::DynamicDraw)?;
+
+        uniform_buffer.write_data_of_type(
+            &amp;StaticUniformBuffer::&lt;256&gt;::new()
+                .with(&amp;Matrix4::identity())
+                .finish(),
+        )?;
 
         Ok(Self {
             enabled: true,
-            world_view_proj: shader.uniform_location(
-                &amp;renderer.state,
-                &amp;ImmutableString::new("worldViewProjectionMatrix"),
-            )?,
+            uniform_location: shader.uniform_block_index(&amp;"Uniforms".into())?,
+            uniform_buffer,
             target_scene,
-            quad: GeometryBuffer::from_surface_data(
+            quad: &lt;dyn GeometryBuffer as GeometryBufferExt&gt;::from_surface_data(
                 &amp;SurfaceData::make_quad(&amp;Matrix4::identity()),
-                GeometryBufferKind::StaticDraw,
-                &amp;renderer.state,
+                BufferUsage::StaticDraw,
+                renderer.server.as_ref(),
             )?,
             shader,
         })
@@ -240,16 +251,22 @@ impl SceneRenderPass for MyRenderPass {
 
         // Make sure to render only to target scene.
         if self.enabled &amp;&amp; ctx.scene_handle == self.target_scene {
+            let resources = ResourceBindGroup {
+                bindings: &amp;[ResourceBinding::Buffer {
+                    buffer: self.uniform_buffer.as_ref(),
+                    binding: BufferLocation::Auto {
+                        shader_location: self.uniform_location,
+                    },
+                    data_usage: BufferDataUsage::default(),
+                }],
+            };
             stats += ctx.framebuffer.draw(
-                &amp;self.quad,
-                ctx.pipeline_state,
+                self.quad.as_ref(),
                 ctx.viewport,
-                &amp;self.shader,
+                self.shader.as_ref(),
                 &amp;DrawParameters::default(),
+                &amp;[resources],
                 ElementRange::Full,
-                |mut program| {
-                    program.set_matrix4(&amp;self.world_view_proj, &amp;Matrix4::identity());
-                },
             )?;
         }
 
