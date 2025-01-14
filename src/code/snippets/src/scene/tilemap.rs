@@ -1,20 +1,26 @@
 use fyrox::core::algebra::Vector3;
-use fyrox::scene::base::{Property, PropertyValue};
+use fyrox::core::log::Log;
+use fyrox::core::{uuid, Uuid};
+use fyrox::fxhash::FxHashMap;
 use fyrox::scene::dim2::collider::{ColliderBuilder, ColliderShape, GeometrySource, TileMapShape};
 use fyrox::scene::dim2::rigidbody::RigidBodyBuilder;
 use fyrox::scene::rigidbody::RigidBodyType;
-use fyrox::scene::tilemap::TileMap;
+use fyrox::scene::tilemap::tileset::{
+    TileBounds, TileData, TileMaterialBounds, TileSetPage, TileSetPageSource, TileSetPropertyLayer,
+    TileSetPropertyType, TileSetPropertyValue,
+};
+use fyrox::scene::tilemap::{TileDefinitionHandle, TileGridMap, TileMap};
 use fyrox::{
     asset::untyped::ResourceKind,
-    core::{algebra::Vector2, color::Color, math::Rect, pool::Handle},
+    core::{algebra::Vector2, color::Color, pool::Handle},
     material::{Material, MaterialResource},
     scene::{
         base::BaseBuilder,
         graph::Graph,
         node::Node,
         tilemap::{
-            tileset::{TileCollider, TileDefinition, TileSet, TileSetResource},
-            Tile, TileMapBuilder, Tiles,
+            tileset::{TileDefinition, TileSet, TileSetResource},
+            TileMapBuilder, Tiles,
         },
     },
 };
@@ -22,47 +28,82 @@ use fyrox::{
 // ANCHOR: create_tile_map
 fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
     // Each tile could have its own material, for simplicity it is just a standard 2D material.
-    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_2d());
+    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_tile());
 
     // Create a tile set - it is a data source for the tile map. Tile map will reference the tiles
     // stored in the tile set by handles. We'll create two tile types with different colors.
+    // In order to create a tile set, we must first create a tile set page.
+    let mut tiles = TileGridMap::default();
+    // Now we decide where we want our tiles to live on that page by creating TileDefinitionHandles for our tiles.
+    // Each tile definition handle has four numbers: the (x,y) of the page, and the (x,y) of the tile within the page.
+    let stone_tile = TileDefinitionHandle::new(0, 0, 0, 0);
+    let grass_tile = TileDefinitionHandle::new(0, 0, 1, 0);
+    // Now we insert tile data for each tile in our new page.
+    tiles.insert(
+        stone_tile.tile(),
+        TileDefinition {
+            material_bounds: TileMaterialBounds {
+                material: material.clone(),
+                bounds: TileBounds {
+                    left_top_corner: Vector2::new(0, 0),
+                    right_top_corner: Vector2::new(16, 0),
+                    left_bottom_corner: Vector2::new(0, 16),
+                    right_bottom_corner: Vector2::new(16, 16),
+                },
+            },
+            data: TileData {
+                color: Color::BROWN,
+                properties: FxHashMap::default(),
+                colliders: FxHashMap::default(),
+            },
+        },
+    );
+    tiles.insert(
+        grass_tile.tile(),
+        TileDefinition {
+            material_bounds: TileMaterialBounds {
+                material: material.clone(),
+                bounds: TileBounds {
+                    left_top_corner: Vector2::new(0, 0),
+                    right_top_corner: Vector2::new(16, 0),
+                    left_bottom_corner: Vector2::new(0, 16),
+                    right_bottom_corner: Vector2::new(16, 16),
+                },
+            },
+            data: TileData {
+                color: Color::GREEN,
+                properties: FxHashMap::default(),
+                colliders: FxHashMap::default(),
+            },
+        },
+    );
+    // Finish creating the page.
+    let source = TileSetPageSource::Freeform(tiles);
+    let page = TileSetPage {
+        // The icon is the handle of a tile that would represent the page in the editor.
+        icon: stone_tile,
+        // The tiles that we've created.
+        source,
+    };
+    // Finally we create our tile set and add our page to it at position (0,0).
     let mut tile_set = TileSet::default();
-    let stone_tile = tile_set.add_tile(TileDefinition {
-        material: material.clone(),
-        uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
-        collider: TileCollider::Rectangle,
-        color: Color::BROWN,
-        position: Default::default(),
-        properties: vec![],
-    });
-    let grass_tile = tile_set.add_tile(TileDefinition {
-        material,
-        uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
-        collider: TileCollider::Rectangle,
-        color: Color::GREEN,
-        position: Default::default(),
-        properties: vec![],
-    });
+    tile_set.insert_page(Vector2::new(0, 0), page);
     let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
 
+    // This positions of all the tiles in our tile map using their TileDefinitionHandle
+    // to find the tiles in the tile set.
     let mut tiles = Tiles::default();
 
     // Create stone foundation.
     for x in 0..10 {
         for y in 0..2 {
-            tiles.insert(Tile {
-                position: Vector2::new(x, y),
-                definition_handle: stone_tile,
-            });
+            tiles.insert(Vector2::new(x, y), stone_tile);
         }
     }
 
     // Add grass on top of it.
     for x in 0..10 {
-        tiles.insert(Tile {
-            position: Vector2::new(x, 2),
-            definition_handle: grass_tile,
-        });
+        tiles.insert(Vector2::new(x, 2), grass_tile);
     }
 
     // Finally create the tile map.
@@ -79,6 +120,7 @@ fn add_tile_map_physics(tile_map: Handle<Node>, graph: &mut Graph) {
     let collider = ColliderBuilder::new(BaseBuilder::new())
         .with_shape(ColliderShape::TileMap(TileMapShape {
             tile_map: GeometrySource(tile_map),
+            layer_name: "MainColliders".into(),
         }))
         .build(graph);
 
@@ -90,34 +132,70 @@ fn add_tile_map_physics(tile_map: Handle<Node>, graph: &mut Graph) {
 // ANCHOR_END: tile_map_physics
 
 // ANCHOR: create_tile_map_with_props
-const SOIL: u8 = 1;
-const SLIME: u8 = 2;
+const SOIL: i32 = 1;
+const SLIME: i32 = 2;
+const SURFACE_TYPE_UUID: Uuid = uuid!("a70a754b-eed5-4e60-bf8a-3239f0b6004b");
 
 fn create_tile_map_with_props(graph: &mut Graph) {
     let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_2d());
 
+    let mut tiles = TileGridMap::default();
+    let stone_tile = TileDefinitionHandle::new(0, 0, 0, 0);
+    let grass_tile = TileDefinitionHandle::new(0, 0, 1, 0);
+    tiles.insert(
+        stone_tile.tile(),
+        TileDefinition {
+            material_bounds: TileMaterialBounds {
+                material: material.clone(),
+                bounds: TileBounds {
+                    left_top_corner: Vector2::new(0, 0),
+                    right_top_corner: Vector2::new(16, 0),
+                    left_bottom_corner: Vector2::new(0, 16),
+                    right_bottom_corner: Vector2::new(16, 16),
+                },
+            },
+            data: TileData {
+                color: Color::BROWN,
+                properties: [(SURFACE_TYPE_UUID, TileSetPropertyValue::I32(SLIME))]
+                    .into_iter()
+                    .collect(),
+                colliders: FxHashMap::default(),
+            },
+        },
+    );
+    tiles.insert(
+        grass_tile.tile(),
+        TileDefinition {
+            material_bounds: TileMaterialBounds {
+                material: material.clone(),
+                bounds: TileBounds {
+                    left_top_corner: Vector2::new(0, 0),
+                    right_top_corner: Vector2::new(16, 0),
+                    left_bottom_corner: Vector2::new(0, 16),
+                    right_bottom_corner: Vector2::new(16, 16),
+                },
+            },
+            data: TileData {
+                color: Color::GREEN,
+                properties: [(SURFACE_TYPE_UUID, TileSetPropertyValue::I32(SOIL))]
+                    .into_iter()
+                    .collect(),
+                colliders: FxHashMap::default(),
+            },
+        },
+    );
+    let source = TileSetPageSource::Freeform(tiles);
+    let page = TileSetPage {
+        icon: TileDefinitionHandle::new(0, 0, 0, 0),
+        source,
+    };
     let mut tile_set = TileSet::default();
-    let stone_tile = tile_set.add_tile(TileDefinition {
-        material: material.clone(),
-        uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
-        collider: TileCollider::Rectangle,
-        color: Color::BROWN,
-        position: Default::default(),
-        properties: vec![Property {
-            name: "SurfaceType".to_string(),
-            value: PropertyValue::U8(SOIL),
-        }],
-    });
-    let slime_tile = tile_set.add_tile(TileDefinition {
-        material,
-        uv_rect: Rect::new(0.0, 0.0, 1.0, 1.0),
-        collider: TileCollider::Rectangle,
-        color: Color::GREEN,
-        position: Default::default(),
-        properties: vec![Property {
-            name: "SurfaceType".to_string(),
-            value: PropertyValue::U8(SLIME),
-        }],
+    tile_set.insert_page(Vector2::new(0, 0), page);
+    tile_set.properties.push(TileSetPropertyLayer {
+        name: "SurfaceType".into(),
+        uuid: SURFACE_TYPE_UUID,
+        prop_type: TileSetPropertyType::F32,
+        named_values: Vec::default(),
     });
     let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
 
@@ -127,30 +205,19 @@ fn create_tile_map_with_props(graph: &mut Graph) {
 fn calculate_speed_factor(tile_map: &TileMap, player_position: Vector3<f32>) -> f32 {
     let grid_position = tile_map.world_to_grid(player_position);
 
-    if let Some(tile) = tile_map.tiles.get(&grid_position) {
-        if let Some(tile_set) = tile_map.tile_set() {
-            if let Some(tile_set_data) = tile_set.data_ref().as_loaded_ref() {
-                let tile_definition = &tile_set_data.tiles[tile.definition_handle];
-
-                if let Some(property) = tile_definition
-                    .properties
-                    .iter()
-                    .find(|p| p.name == "SurfaceType")
-                {
-                    if let PropertyValue::U8(surface_type) = property.value {
-                        return match surface_type {
-                            SOIL => 1.0,
-                            // Green slime tile slows down the player.
-                            SLIME => 0.7,
-                            _ => 1.0,
-                        };
-                    }
-                }
-            }
+    match tile_map.tile_property_value(grid_position, SURFACE_TYPE_UUID) {
+        Ok(SOIL) => 1.0,
+        Ok(SLIME) => 0.7,
+        Ok(_) => {
+            Log::err("Unknown surface type");
+            1.0
+        }
+        // See fyrox::scene::tilemap::TilePropertyError for a list of possible errors.
+        Err(err) => {
+            Log::err(err.to_string());
+            1.0
         }
     }
-
-    1.0
 }
 
 // ANCHOR_END: create_tile_map_with_props

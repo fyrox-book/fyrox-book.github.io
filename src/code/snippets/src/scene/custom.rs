@@ -1,4 +1,5 @@
 use fyrox::core::pool::Handle;
+use fyrox::core::ComponentProvider;
 use fyrox::graph::BaseSceneGraph;
 use fyrox::scene::graph::Graph;
 use fyrox::scene::node::Node;
@@ -14,7 +15,7 @@ use fyrox::{
 use std::ops::{Deref, DerefMut};
 
 // ANCHOR: custom_node
-#[derive(Default, Clone, Reflect, Visit, Debug)]
+#[derive(Default, Clone, Reflect, Visit, Debug, ComponentProvider)]
 pub struct CustomNode {
     base: Base,
 }
@@ -34,8 +35,6 @@ impl DerefMut for CustomNode {
 }
 
 impl NodeTrait for CustomNode {
-    fyrox::impl_query_component!();
-
     fn local_bounding_box(&self) -> AxisAlignedBoundingBox {
         self.base.local_bounding_box()
     }

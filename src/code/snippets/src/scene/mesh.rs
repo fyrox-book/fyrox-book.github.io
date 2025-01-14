@@ -4,10 +4,9 @@ use fyrox::{
         algebra::{Matrix4, Point3, Vector3},
         futures::executor::block_on,
         pool::Handle,
-        ImmutableString,
     },
     graph::BaseSceneGraph,
-    material::{shader::SamplerFallback, Material, MaterialResource, PropertyValue},
+    material::{Material, MaterialResource},
     resource::{
         model::{Model, ModelResourceExtension},
         texture::Texture,
@@ -47,15 +46,10 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
 
     // Material is completely optional, but here we'll demonstrate that it is possible to
     // create procedural meshes with any material you want.
-    material
-        .set_property(
-            &ImmutableString::new("diffuseTexture"),
-            PropertyValue::Sampler {
-                value: Some(resource_manager.request::<Texture>("some_texture.jpg")),
-                fallback: SamplerFallback::White,
-            },
-        )
-        .unwrap();
+    material.bind(
+        "diffuseTexture",
+        Some(resource_manager.request::<Texture>("some_texture.jpg")),
+    );
 
     // Notice the MeshBuilder.
     MeshBuilder::new(

@@ -4,18 +4,32 @@ pub mod signal;
 
 use fyrox::{
     asset::manager::ResourceManager,
-    core::math::curve::{Curve, CurveKey, CurveKeyKind},
-    core::pool::Handle,
-    core::{reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
-    generic_animation::container::{TrackDataContainer, TrackValueKind},
-    generic_animation::value::ValueBinding,
+    core::{
+        math::curve::{Curve, CurveKey, CurveKeyKind},
+        pool::Handle,
+        reflect::prelude::*,
+        type_traits::prelude::*,
+        visitor::prelude::*,
+    },
+    generic_animation::{
+        container::{TrackDataContainer, TrackValueKind},
+        track::TrackBinding,
+        value::ValueBinding,
+    },
     graph::SceneGraph,
     resource::model::{Model, ModelResourceExtension},
-    scene::animation::{Animation, AnimationPlayer, AnimationPoseExt, Track},
-    scene::graph::Graph,
-    scene::pivot::PivotBuilder,
-    scene::{animation::spritesheet::SpriteSheetAnimation, dim2::rectangle::Rectangle},
-    scene::{animation::AnimationPlayerBuilder, base::BaseBuilder, node::Node, Scene},
+    scene::{
+        animation::{
+            spritesheet::SpriteSheetAnimation, Animation, AnimationPlayer, AnimationPlayerBuilder,
+            AnimationPoseExt, Track,
+        },
+        base::BaseBuilder,
+        dim2::rectangle::Rectangle,
+        graph::Graph,
+        node::Node,
+        pivot::PivotBuilder,
+        Scene,
+    },
     script::{ScriptContext, ScriptTrait},
 };
 
@@ -42,8 +56,7 @@ impl ScriptTrait for Player {
             sprite
                 .material()
                 .data_ref()
-                .set_texture(&"diffuseTexture".into(), self.animation.texture())
-                .unwrap();
+                .bind("diffuseTexture", self.animation.texture());
 
             // Set the current animation's UV rect to the sprite.
             sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
@@ -62,11 +75,10 @@ fn create_animation(node: Handle<Node>) -> Animation {
         CurveKey::new(1.0, 3.0, CurveKeyKind::Linear),
     ]);
     // Create a track that will animated the node using the curve above.
-    let mut track = Track::new(frames_container, ValueBinding::Position);
-    track.set_target(node);
+    let track = Track::new(frames_container, ValueBinding::Position);
     // Finally create an animation and set its time slice and turn it on.
     let mut animation = Animation::default();
-    animation.add_track(track);
+    animation.add_track_with_binding(TrackBinding::new(node), track);
     animation.set_time_slice(0.0..1.0);
     animation.set_enabled(true);
     animation

@@ -43,13 +43,13 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 // ANCHOR: create_text_with_background
 fn create_text_with_background(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
     let text_widget =
-        TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+        TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
             .with_text(text)
             .build(&mut ui.build_ctx());
     BorderBuilder::new(
         WidgetBuilder::new()
             .with_child(text_widget) // <-- Text is now a child of the border
-            .with_background(Brush::Solid(Color::opaque(50, 50, 50))),
+            .with_background(Brush::Solid(Color::opaque(50, 50, 50)).into()),
     )
     .build(&mut ui.build_ctx())
 }
@@ -58,7 +58,7 @@ fn create_text_with_background(ui: &mut UserInterface, text: &str) -> Handle<UiN
 // ANCHOR: create_colored_text
 fn create_colored_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
     //               vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         .build(&mut ui.build_ctx())
 }
@@ -74,14 +74,14 @@ fn create_text_with_font(
         .with_font(resource_manager.request::<Font>("path/to/your/font.ttf"))
         .with_text(text)
         // You can set any size as well.
-        .with_font_size(24.0)
+        .with_font_size(24.0.into())
         .build(&mut ui.build_ctx())
 }
 // ANCHOR_END: create_text_with_font
 
 // ANCHOR: create_red_text_with_black_shadows
 fn create_red_text_with_black_shadows(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
-    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+    TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
         .with_shadow(true)

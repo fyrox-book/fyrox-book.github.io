@@ -45,11 +45,7 @@ fn create_fancy_button(
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
             ImageBuilder::new(WidgetBuilder::new())
-                .with_texture(
-                    resource_manager
-                        .request::<Texture>("path/to/your/texture")
-                        .into(),
-                )
+                .with_texture(resource_manager.request::<Texture>("path/to/your/texture"))
                 .build(ctx),
         )
         .with_text("Click me!")

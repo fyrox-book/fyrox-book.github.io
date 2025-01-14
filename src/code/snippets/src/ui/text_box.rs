@@ -43,7 +43,7 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 // ANCHOR: create_colored_text_box
 fn create_colored_text_box(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
     //                  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED)))
+    TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         .build(&mut ui.build_ctx())
 }
@@ -59,7 +59,7 @@ fn create_text_with_font(
         .with_font(resource_manager.request::<Font>("path/to/your/font.ttf"))
         .with_text(text)
         // You can set any size as well.
-        .with_font_size(24.0)
+        .with_font_size(24.0.into())
         .build(&mut ui.build_ctx())
 }
 // ANCHOR_END: create_text_box_with_font

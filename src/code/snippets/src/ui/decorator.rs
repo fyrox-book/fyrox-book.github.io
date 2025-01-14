@@ -10,7 +10,7 @@ use fyrox::gui::{
 // ANCHOR: create_decorator
 fn create_decorator(ctx: &mut BuildContext) -> Handle<UiNode> {
     DecoratorBuilder::new(BorderBuilder::new(WidgetBuilder::new()))
-        .with_hover_brush(Brush::Solid(Color::opaque(0, 255, 0)))
+        .with_hover_brush(Brush::Solid(Color::opaque(0, 255, 0)).into())
         .build(ctx)
 }
 // ANCHOR_END: create_decorator

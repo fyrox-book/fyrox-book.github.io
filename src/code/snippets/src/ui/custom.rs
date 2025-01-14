@@ -66,7 +66,7 @@ impl MyButton {
             ui.send_message(WidgetMessage::foreground(
                 handle,
                 MessageDirection::ToWidget,
-                Brush::Solid(color),
+                Brush::Solid(color).into(),
             ));
         }
 
@@ -76,7 +76,7 @@ impl MyButton {
         ui.send_message(WidgetMessage::background(
             self.border,
             MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()),
+            Brush::Solid(border_color.into()).into(),
         ));
     }
 }
@@ -157,11 +157,11 @@ impl MyButtonBuilder {
         .build(ctx);
 
         let border = BorderBuilder::new(WidgetBuilder::new().with_child(text))
-            .with_stroke_thickness(Thickness::uniform(2.0))
+            .with_stroke_thickness(Thickness::uniform(2.0).into())
             .build(ctx);
 
         let button = MyButton {
-            widget: self.widget_builder.with_child(border).build(),
+            widget: self.widget_builder.with_child(border).build(ctx),
             border,
             text,
         };

@@ -1,11 +1,14 @@
 use fyrox::{
-    core::{algebra::Matrix4, pool::Handle, sstorage::ImmutableString},
+    core::{algebra::Matrix4, pool::Handle},
     renderer::{
         framework::{
+            buffer::{Buffer, BufferKind, BufferUsage},
             error::FrameworkError,
-            framebuffer::DrawParameters,
-            geometry_buffer::{ElementRange, GeometryBuffer, GeometryBufferKind},
-            gpu_program::{GpuProgram, UniformLocation},
+            framebuffer::{BufferDataUsage, BufferLocation, ResourceBindGroup, ResourceBinding},
+            geometry_buffer::GeometryBuffer,
+            gpu_program::GpuProgram,
+            uniform::StaticUniformBuffer,
+            DrawParameters, ElementRange, GeometryBufferExt,
         },
         RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext,
     },
@@ -17,10 +20,11 @@ use std::{cell::RefCell, rc::Rc};
 // ANCHOR: render_pass
 struct MyRenderPass {
     enabled: bool,
-    shader: GpuProgram,
+    shader: Box<dyn GpuProgram>,
     target_scene: Handle<Scene>,
-    quad: GeometryBuffer,
-    world_view_proj: UniformLocation,
+    quad: Box<dyn GeometryBuffer>,
+    uniform_location: usize,
+    uniform_buffer: Box<dyn Buffer>,
 }
 
 impl MyRenderPass {
@@ -30,8 +34,10 @@ impl MyRenderPass {
     ) -> Result<Self, FrameworkError> {
         let vs = r"
                 layout(location = 0) in vec3 vertexPosition;
-                
-                uniform mat4 c;
+
+                layout(std140) uniform Uniforms {
+                    mat4 worldViewProjectionMatrix;
+                }                
                          
                 void main()
                 {
@@ -48,19 +54,27 @@ impl MyRenderPass {
                 }
             ";
 
-        let shader = GpuProgram::from_source(&renderer.state, "MyShader", vs, fs)?;
+        let shader = renderer.server.create_program("MyShader", vs, fs)?;
+        let uniform_buffer =
+            renderer
+                .server
+                .create_buffer(256, BufferKind::Uniform, BufferUsage::DynamicDraw)?;
+
+        uniform_buffer.write_data_of_type(
+            &StaticUniformBuffer::<256>::new()
+                .with(&Matrix4::identity())
+                .finish(),
+        )?;
 
         Ok(Self {
             enabled: true,
-            world_view_proj: shader.uniform_location(
-                &renderer.state,
-                &ImmutableString::new("worldViewProjectionMatrix"),
-            )?,
+            uniform_location: shader.uniform_block_index(&"Uniforms".into())?,
+            uniform_buffer,
             target_scene,
-            quad: GeometryBuffer::from_surface_data(
+            quad: <dyn GeometryBuffer as GeometryBufferExt>::from_surface_data(
                 &SurfaceData::make_quad(&Matrix4::identity()),
-                GeometryBufferKind::StaticDraw,
-                &renderer.state,
+                BufferUsage::StaticDraw,
+                renderer.server.as_ref(),
             )?,
             shader,
         })
@@ -76,16 +90,22 @@ impl SceneRenderPass for MyRenderPass {
 
         // Make sure to render only to target scene.
         if self.enabled && ctx.scene_handle == self.target_scene {
+            let resources = ResourceBindGroup {
+                bindings: &[ResourceBinding::Buffer {
+                    buffer: self.uniform_buffer.as_ref(),
+                    binding: BufferLocation::Auto {
+                        shader_location: self.uniform_location,
+                    },
+                    data_usage: BufferDataUsage::default(),
+                }],
+            };
             stats += ctx.framebuffer.draw(
-                &self.quad,
-                ctx.pipeline_state,
+                self.quad.as_ref(),
                 ctx.viewport,
-                &self.shader,
+                self.shader.as_ref(),
                 &DrawParameters::default(),
+                &[resources],
                 ElementRange::Full,
-                |mut program| {
-                    program.set_matrix4(&self.world_view_proj, &Matrix4::identity());
-                },
             )?;
         }
 
