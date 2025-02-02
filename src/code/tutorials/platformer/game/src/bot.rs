@@ -278,8 +278,7 @@ impl ScriptTrait for Bot {
                 sprite
                     .material()
                     .data_ref()
-                    .set_texture(&"diffuseTexture".into(), current_animation.texture())
-                    .unwrap();
+                    .bind("diffuseTexture", current_animation.texture());
                 sprite.set_uv_rect(
                     current_animation
                         .current_frame_uv_rect()

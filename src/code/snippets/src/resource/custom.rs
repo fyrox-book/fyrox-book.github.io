@@ -20,11 +20,8 @@ use fyroxed_base::plugins::inspector::editors::resource::ResourceFieldPropertyEd
 use fyroxed_base::plugins::inspector::InspectorPlugin;
 use fyroxed_base::Editor;
 use std::error::Error;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
-use std::{
-    any::Any,
-    path::{Path, PathBuf},
-};
 
 // ANCHOR: custom_resource
 #[derive(Default, Debug, Visit, Reflect, TypeUuidProvider)]
@@ -38,14 +35,6 @@ struct CustomResource {
 }
 
 impl ResourceData for CustomResource {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
-    }
-
     fn type_uuid(&self) -> Uuid {
         <Self as TypeUuidProvider>::type_uuid()
     }

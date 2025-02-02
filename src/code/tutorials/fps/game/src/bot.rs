@@ -1,6 +1,6 @@
 use crate::player::Player;
 use fyrox::core::algebra::UnitQuaternion;
-use fyrox::graph::{BaseSceneGraph, SceneGraph};
+use fyrox::graph::{BaseSceneGraph, SceneGraph, SceneGraphNode};
 use fyrox::{
     core::{
         algebra::{Matrix4, Point3, Vector3},
@@ -125,7 +125,7 @@ impl ScriptTrait for Bot {
             .scene
             .graph
             .try_get_mut(*self.absm)
-            .and_then(|node| node.query_component_mut::<AnimationBlendingStateMachine>())
+            .and_then(|node| node.component_mut::<AnimationBlendingStateMachine>())
         {
             // ANCHOR_END: root_motion_1
             if let Some(root_motion) = state_machine.machine().pose().root_motion() {
