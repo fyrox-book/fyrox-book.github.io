@@ -20,23 +20,18 @@ use fyrox::{
 
 // ANCHOR: player_struct
 #[derive(Visit, Reflect, Default, Debug, Clone)]
+#[visit(optional)]
 pub struct Player {
-    #[visit(optional)]
     camera_pivot: InheritableVariable<Handle<Node>>,
 
-    #[visit(optional)]
     camera_hinge: InheritableVariable<Handle<Node>>,
 
-    #[visit(optional)]
     state_machine: InheritableVariable<Handle<Node>>,
 
-    #[visit(optional)]
     model_pivot: InheritableVariable<Handle<Node>>,
 
-    #[visit(optional)]
     model: InheritableVariable<Handle<Node>>,
 
-    #[visit(optional)]
     model_yaw: InheritableVariable<SmoothAngle>,
 
     #[reflect(hidden)]

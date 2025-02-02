@@ -20,41 +20,32 @@ use fyrox::{
 #[visit(optional)]
 pub struct Player {
     // ANCHOR: input_fields
-    #[visit(optional)]
     #[reflect(hidden)]
     move_forward: bool,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     move_backward: bool,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     move_left: bool,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     move_right: bool,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     yaw: f32,
 
-    #[visit(optional)]
     #[reflect(hidden)]
     pitch: f32,
     // ANCHOR_END: input_fields
 
     // ANCHOR: camera_field
-    #[visit(optional)]
     camera: Handle<Node>,
     // ANCHOR_END: camera_field
 
     // ANCHOR: current_weapon_field
-    #[visit(optional)]
     current_weapon: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: current_weapon_field
-    #[visit(optional)]
     #[reflect(hidden)]
     shoot: bool,
 }
