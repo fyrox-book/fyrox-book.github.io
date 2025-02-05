@@ -5,12 +5,11 @@ editor and be able to edit the game entities in it. A game can define any number
 to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its platform-
 specific dependencies, how to use the plugins and scripting system, how to run the editor.
 
-
 ## Platform-specific Dependencies
 
 Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If 
-using Windows or macOS, no additional dependencies are required other than the latest Rust installed with appropriate 
-toolchain for your platform.
+using Windows or macOS, no additional dependencies are required other than the [latest Rust installed](https://rustup.rs)
+with appropriate toolchain for your platform.
 
 ### Linux
 
@@ -43,7 +42,19 @@ pkgs.mkShell rec {
 }
 ```
 
-## Quick Start
+## Project Manager
+
+![project manager](https://fyrox.rs/assets/0.36/project_manager.png)
+
+Project manager is a part of the engine that allows you to manage multiple projects made with the engine at once.
+It allows you to create a new project or import an existing one, run the project or edit it in the editor, 
+upgrade the project to a selected version of the engine, and many more. 
+
+[Download the project manager](https://fyrox.rs/download.html) for your OS and run it. Then click to `+Create`
+button, select the path where you want the project to be located and click `Create`. Select the new project
+in the list and click `Edit` button to run the editor.
+
+## Quick Start Using Console Commands
 
 Run the following commands to start using the editor as quickly as possible.
 
@@ -55,6 +66,9 @@ cargo run --package editor --release
 ```
 
 ## Project Generator
+
+> ⚠️ This section is mostly for console users and those who like building their software from source code.
+> Prefer using Project Manager whenever possible, it does the same as `fyrox-template` but with GUI.
 
 Fyrox plugins are written in Rust, this means that if the source code of the game changes one must recompile. 
 This architecture requires some boilerplate code. Fyrox offers a special tiny command line tool - `fyrox-template`. It 
