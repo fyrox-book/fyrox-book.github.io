@@ -19,6 +19,10 @@ jobs:
         with:
           mdbook-version: 'latest'
 
+      - name: Update Rust
+        run: sudo apt update && sudo apt install libc6
+
+      - name: Build the book
       - run: mdbook build
 
       - name: Deploy
