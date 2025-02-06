@@ -23,7 +23,7 @@ jobs:
         run: sudo apt update && sudo apt install libc6
 
       - name: Build the book
-      - run: mdbook build
+        run: mdbook build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
