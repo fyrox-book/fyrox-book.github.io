@@ -205,14 +205,6 @@ struct CustomResource {
 }
 
 impl ResourceData for CustomResource {
-    fn as_any(&amp;self) -&gt; &amp;dyn Any {
-        self
-    }
-
-    fn as_any_mut(&amp;mut self) -&gt; &amp;mut dyn Any {
-        self
-    }
-
     fn type_uuid(&amp;self) -&gt; Uuid {
         &lt;Self as TypeUuidProvider&gt;::type_uuid()
     }

@@ -313,7 +313,7 @@ lays grass on top of it.</p>
     // Finally create the tile map.
     TileMapBuilder::new(BaseBuilder::new())
         .with_tile_set(tile_set)
-        .with_tiles(tiles)
+        .with_tiles(&amp;tiles)
         .build(graph)
 }
 <span class="boring">}</span></code></pre></pre>

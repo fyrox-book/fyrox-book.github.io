@@ -499,8 +499,7 @@ apply the texture from the current animation to the player's sprite, and add the
                 sprite
                     .material()
                     .data_ref()
-                    .set_texture(&amp;"diffuseTexture".into(), current_animation.texture())
-                    .unwrap();
+                    .bind("diffuseTexture", current_animation.texture());
                 sprite.set_uv_rect(
                     current_animation
                         .current_frame_uv_rect()

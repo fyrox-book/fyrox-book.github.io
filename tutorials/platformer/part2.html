@@ -577,8 +577,7 @@ apply the animation to the bot's sprite. Add the following code at the end of <c
                 sprite
                     .material()
                     .data_ref()
-                    .set_texture(&amp;"diffuseTexture".into(), current_animation.texture())
-                    .unwrap();
+                    .bind("diffuseTexture", current_animation.texture());
                 sprite.set_uv_rect(
                     current_animation
                         .current_frame_uv_rect()

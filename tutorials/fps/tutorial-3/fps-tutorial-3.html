@@ -368,7 +368,7 @@ this vector to the rigid body of the bot:</p>
             .scene
             .graph
             .try_get_mut(*self.absm)
-            .and_then(|node| node.query_component_mut::&lt;AnimationBlendingStateMachine&gt;())
+            .and_then(|node| node.component_mut::&lt;AnimationBlendingStateMachine&gt;())
         {
         }
 <span class="boring">}</span></code></pre></pre>

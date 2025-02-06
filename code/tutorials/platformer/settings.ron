@@ -29,6 +29,8 @@
             fxaa: false,
             use_parallax_mapping: true,
             use_bloom: true,
+            use_occlusion_culling: false,
+            use_light_occlusion_culling: false,
         ),
         z_near: 0.025,
         z_far: 128.0,
@@ -182,6 +184,8 @@
         script_editor: SystemDefault,
         max_history_entries: 512,
         generate_previews: true,
+        max_log_entries: 256,
+        style: Dark,
     ),
     debugging: (
         show_physics: true,
@@ -210,8 +214,6 @@
     ),
     camera: (
         speed: 10.0,
-        invert_dragging: false,
-        drag_speed: 0.01,
         zoom_speed: 0.5,
         zoom_range: (
             start: 0.0,
@@ -307,6 +309,24 @@
             code: KeyS,
             modifiers: (
                 alt: false,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        save_scene_as: Some(
+            code: KeyS,
+            modifiers: (
+                alt: false,
+                shift: true,
+                control: true,
+                system: false,
+            ),
+        ),
+        save_all_scenes: Some(
+            code: KeyS,
+            modifiers: (
+                alt: true,
                 shift: false,
                 control: true,
                 system: false,
@@ -469,86 +489,16 @@
         ),
     ),
     scene_settings: {
-        "data/characters/skeleton.rgs": (
-            camera_settings: (
-                position: (0.40135893, 0.38078198, 1.2874793),
-                yaw: 0.09999878,
-                pitch: -0.00079720095,
-            ),
-            node_infos: {
-                (
-                    index: 44,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 47,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 48,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 5,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
         "\\\\?\\D:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\platformer\\data\\characters\\skeleton.rgs": (
             camera_settings: (
                 position: (0.0, 0.08333321, -3.0),
                 yaw: 0.4700005,
                 pitch: 1.5407964,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 2048.0,
+                )),
             ),
             node_infos: {
                 (
@@ -565,27 +515,32 @@
                 ),
             },
         ),
-        "data/scene.rgs": (
+        "data/characters/skeleton.rgs": (
             camera_settings: (
-                position: (-1.7239449, -2.8284836, -0.89434147),
-                yaw: 0.009202758,
-                pitch: 0.53999996,
+                position: (0.40135893, 0.38078198, 1.2874793),
+                yaw: 0.09999878,
+                pitch: -0.00079720095,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 2048.0,
+                )),
             ),
             node_infos: {
                 (
-                    index: 53,
+                    index: 47,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 170,
+                    index: 44,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 124,
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -597,37 +552,63 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 123,
+                    index: 45,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
+                (
+                    index: 2,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 48,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 5,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/scene.rgs": (
+            camera_settings: (
+                position: (-1.7239449, -2.8284836, -0.89434147),
+                yaw: 0.009202758,
+                pitch: 0.53999996,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 128.0,
+                )),
+            ),
+            node_infos: {
                 (
                     index: 127,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 164,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 129,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 165,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -639,13 +620,31 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 45,
+                    index: 155,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 15,
+                    index: 172,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 123,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 164,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -657,19 +656,25 @@
                     is_expanded: true,
                 ),
                 (
+                    index: 170,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 15,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 50,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 40,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 126,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 172,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -687,7 +692,37 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 155,
+                    index: 165,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 124,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 53,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 129,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 126,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -704,6 +739,7 @@
     windows: (
         window_position: (-8.0, -8.0),
         window_size: (1920.0, 1017.0),
+        window_maximized: false,
         layout: None,
     ),
 )

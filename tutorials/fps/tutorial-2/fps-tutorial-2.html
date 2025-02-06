@@ -370,8 +370,7 @@ need to know to which weapon we'll send a request to shoot. It is very easy to d
 the following field to the <code>Player</code> struct:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    #[visit(optional)]
-    current_weapon: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    current_weapon: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre></pre>
 <p>We'll send a request to shoot in reaction to left mouse button clicks. To do that, go to <code>player.rs</code> and add the
 following code to the <code>on_os_event</code>:</p>
