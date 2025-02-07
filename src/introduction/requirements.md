@@ -18,6 +18,7 @@ have rudimentary support for graphics APIs which won't let you run the editor.
 | macOS       | ✅¹     | ✅      |
 | WebAssembly | ✅      | ❌²     |
 | Android     | ✅      | ❌²     |
+| iOS         | ✅      | ❌²     |
 
 - ✅ - first-class support
 - ❌ - not supported
