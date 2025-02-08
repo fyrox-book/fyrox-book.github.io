@@ -20,8 +20,8 @@ To create a new project simply click on `+Create` button, and you should see the
 
 This window contains four major options for your project:
 
-- `Path` - specifies a directory in which a new directory for the new project will be created and the filled with
-the project's files.
+- `Path` - specifies a parent directory in which a project's directory will be created and then filled with the
+project's files.
 - `Name` - project name, it must follow specific rules. The name must start either from a letter or underscore (`_`),
 the rest of the characters must be letters, numbers, hyphens (`-`), underscore (`_`). The project manager performs 
 name validation for you:
@@ -52,7 +52,7 @@ are the following:
 - `Hot Reloading` - allows you to enable or disable code hot reloading. Code hot reloading is a handy feature
 for rapid prototyping. See [the respective chapter](./hot_reloading.md) for more info.
 - `Edit` - builds and runs the editor.
-- `Run` - builds and runs the game. Final builds of the game should be produced using project exported tool of the
+- `Run` - builds and runs the game. Final builds of the game should be produced using the project exporter tool of the
 editor. See [the respective chapter](../shipping/shipping.md) for more info. 
 - `Open IDE` - opens the specified IDE to edit the project's source code. 
 - `Upgrade` - opens a separate tool that allows you to select a desired engine version. See 
@@ -83,4 +83,4 @@ option—an IDE that can be used to edit source code of your project.
 
 All that you need to is to specify a name of the executable of your IDE. The image above uses `RustRover` IDE. Keep in
 mind, that you must modify your `PATH` environment variable to include full path to the specified executable, otherwise
-this option will not work correctly!.
+this option will not work correctly!
