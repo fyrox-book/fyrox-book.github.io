@@ -9,6 +9,7 @@
   - [Frequently Asked Questions](./introduction/faq.md)
 - [Getting started](./beginning/getting_started.md)
   - [Editor, Plugins and Scripts](./beginning/scripting.md)
+  - [Project Manager](./beginning/project_manager.md)
   - [Hot Reloading](./beginning/hot_reloading.md)
   - [Editor Overview](./beginning/editor_overview.md)
   - [Scene and Scene Graph](./beginning/scene_and_scene_graph.md)
