@@ -624,6 +624,76 @@ workspace. This will pull the latest changes from the remote, unless there is no
 <p>Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
 executed by the engine. Read the <a href="beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts in
 your game.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="project-manager-1"><a class="header" href="#project-manager-1">Project Manager</a></h1>
+<p>This chapter explains how to use various parts of the project manager, what it can do in general, and why you should
+prefer it over good ol' console commands.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p><img src="beginning/project_manager.png" alt="project manager" /></p>
+<p>Project manager is a tool that is able to create projects, import existing projects, configure and build them, etc. Its
+main purpose is to reduce the complexity of project management to the minimum. For example, a new project can be created
+and built in a few clicks. While the same is possible to be done manually, it requires some juggling with console commands
+that in some cases (code hot reloading) contains a lot of unexpected parts.</p>
+<h2 id="creating-a-new-project"><a class="header" href="#creating-a-new-project">Creating a New Project</a></h2>
+<p>To create a new project simply click on <code>+Create</code> button, and you should see the following window:</p>
+<p><img src="beginning/pm_create_project.png" alt="project manager wizard" /></p>
+<p>This window contains four major options for your project:</p>
+<ul>
+<li><code>Path</code> - specifies a directory in which a new directory for the new project will be created and the filled with
+the project's files.</li>
+<li><code>Name</code> - project name, it must follow specific rules. The name must start either from a letter or underscore (<code>_</code>),
+the rest of the characters must be letters, numbers, hyphens (<code>-</code>), underscore (<code>_</code>). The project manager performs
+name validation for you:</li>
+</ul>
+<p><img src="beginning/pm_validation.png" alt="project manager name validation" /></p>
+<ul>
+<li><code>Style</code> - defines initial content of the default scene. In general, it does not restrict you to a specific number
+of dimensions—you can still use both 2D and 3D or mix them.</li>
+<li><code>Version Control</code> - allows you to select a desired version control system (VCS) for your project. It is Git by default,
+but you can select any VCS you like or disable it completely by selecting <code>None</code> option.</li>
+</ul>
+<p>Every project has its own item in the list of projects, it shows important information about the project:</p>
+<p><img src="beginning/pm_project_info.png" alt="project info" /></p>
+<ol>
+<li>Project name.</li>
+<li>Full path to the project.</li>
+<li>Version of the engine the project uses.</li>
+<li>Code hot reloading marker.</li>
+</ol>
+<h2 id="project-management"><a class="header" href="#project-management">Project Management</a></h2>
+<p><img src="beginning/pm_management.png" alt="project management" /></p>
+<p>When a project is selected, it is possible to manage it using the toolbar on the right side. The available options
+are the following:</p>
+<ul>
+<li><code>Hot Reloading</code> - allows you to enable or disable code hot reloading. Code hot reloading is a handy feature
+for rapid prototyping. See <a href="beginning/./hot_reloading.html">the respective chapter</a> for more info.</li>
+<li><code>Edit</code> - builds and runs the editor.</li>
+<li><code>Run</code> - builds and runs the game. Final builds of the game should be produced using project exported tool of the
+editor. See <a href="beginning/../shipping/shipping.html">the respective chapter</a> for more info.</li>
+<li><code>Open IDE</code> - opens the specified IDE to edit the project's source code.</li>
+<li><code>Upgrade</code> - opens a separate tool that allows you to select a desired engine version. See
+<a href="beginning/project_manager.html#project-upgrade">the section below</a> for more info.</li>
+<li><code>Clean</code> - removes all build artifacts from the project. Essentially it just runs <code>cargo clean</code> command for your project.</li>
+<li><code>Locate</code> - opens the project directory in the file system explorer.</li>
+<li><code>Delete</code> - deletes the project. This is a destructive operation, and it is "gated" with a separate confirmation dialog.</li>
+<li><code>Exclude</code> - removes the project from the list of projects.</li>
+</ul>
+<h2 id="project-upgrade"><a class="header" href="#project-upgrade">Project Upgrade</a></h2>
+<p><img src="beginning/pm_upgrade.png" alt="project manager upgrade" /></p>
+<p>This tiny tool allows you to select a desired version of the engine in a few clicks. Available options are the following:</p>
+<ul>
+<li><code>Specific</code> - specific version of the engine. The version must comply with semver rules (for example - <code>0.36.0</code>).</li>
+<li><code>Nightly</code> - latest possible <em>potentially unstable</em> version of the engine directly from the development branch (<code>master</code>)
+of the <a href="https://github.com/FyroxEngine/Fyrox">GitHub repo</a>. Use it if you need latest features and bugfixes.</li>
+<li><code>Local</code> - special option that allows you to switch the engine to local copy of the engine repository. The engine must
+be located in the parent folder of your project's directory.</li>
+</ul>
+<h2 id="settings"><a class="header" href="#settings">Settings</a></h2>
+<p><img src="beginning/pm_settings.png" alt="project manager settings" /></p>
+<p>Project manager has its own settings, it is not much for now, but it will grow over time. Currently, there's only one
+option—an IDE that can be used to edit source code of your project.</p>
+<p>All that you need to is to specify a name of the executable of your IDE. The image above uses <code>RustRover</code> IDE. Keep in
+mind, that you must modify your <code>PATH</code> environment variable to include full path to the specified executable, otherwise
+this option will not work correctly!.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="code-hot-reloading"><a class="header" href="#code-hot-reloading">Code Hot Reloading</a></h1>
 <p>Fyrox supports code hot reloading (CHR for short), which allows you to recompile the game code while the game is running.
 This functionality significantly reduces iteration times and allows rapid prototyping. This way, Rust becomes a sort of
@@ -638,7 +708,7 @@ specific project structure and a small mistake in it could lead to incorrect beh
 <p>CHR is quite simple to use - a project generated by the project manager or <code>fyrox-template</code> already has all that is
 needed for hot reloading. There are two ways of enabling hot reloading support—using the project manager and doing
 the same manually using console commands.</p>
-<h3 id="project-manager-1"><a class="header" href="#project-manager-1">Project Manager</a></h3>
+<h3 id="project-manager-2"><a class="header" href="#project-manager-2">Project Manager</a></h3>
 <p>The easiest way of enabling hot reloading support is to simply click on <code>Hot Reloading</code> checkbox in the project
 manager and click <code>Edit</code> or <code>Run</code>:</p>
 <p><img src="beginning/project_manager_hot_reloading.png" alt="project manager hot reloading" /></p>
@@ -6751,7 +6821,7 @@ need to change the light maps on the fly, you can use the following code:</p>
 <p>Fyrox uses CPU light map generator, which means that it is quite slow. Light sources that were baked into a light map
 will also light up any surface with light map on - this essentially means double lighting. To fix that you need to
 disable light sources that were baked into the light map explicitly.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="settings"><a class="header" href="#settings">Settings</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="settings-1"><a class="header" href="#settings-1">Settings</a></h1>
 <p>Renderer has a large set of settings, that allows you to tweak graphics quality to find optimal balance between
 rendering quality and performance. Quality settings are represented by the following structure:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -10429,7 +10499,7 @@ fn add_collection_property_editor(editor: &amp;Editor) {
 <span class="boring">}</span></code></pre></pre>
 <h2 id="custom-property-editors"><a class="header" href="#custom-property-editors">Custom Property Editors</a></h2>
 <p>See <a href="editor/../ui/inspector.html">Inspector</a> widget chapter to learn how to create custom property editors.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="settings-1"><a class="header" href="#settings-1">Settings</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="settings-2"><a class="header" href="#settings-2">Settings</a></h1>
 <p>This chapter should help you to have better understanding of how to configure the editor and which settings
 are responsible for what.</p>
 <p><img src="editor/settings.png" alt="settings" /></p>
