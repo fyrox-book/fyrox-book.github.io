@@ -180,9 +180,9 @@ using Windows or macOS, no additional dependencies are required other than the <
 with appropriate toolchain for your platform.</p>
 <h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
 <p>On Linux, Fyrox needs the following libraries for development: <code>libxcb-shape0</code>, <code>libxcb-xfixes0</code>, <code>libxcb1</code>,
-<code>libxkbcommon</code>, <code>libasound2</code> and the <code>build-essential</code> package group.</p>
+<code>libxkbcommon</code>, <code>libasound2</code>, <code>libegl-mesa0</code> and the <code>build-essential</code> package group.</p>
 <p>For Debian based distros like Ubuntu, they can be installed like below:</p>
-<pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev build-essential
+<pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 </code></pre>
 <p>For NixOS, you can use a <code>shell.nix</code> like below:</p>
 <pre><code class="language-nix">{ pkgs ? import &lt;nixpkgs&gt; { } }:
