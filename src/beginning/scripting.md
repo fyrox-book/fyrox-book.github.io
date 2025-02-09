@@ -14,12 +14,12 @@ with appropriate toolchain for your platform.
 ### Linux
 
 On Linux, Fyrox needs the following libraries for development: `libxcb-shape0`, `libxcb-xfixes0`, `libxcb1`, 
-`libxkbcommon`, `libasound2` and the `build-essential` package group.
+`libxkbcommon`, `libasound2`, `libegl-mesa0` and the `build-essential` package group.
 
 For Debian based distros like Ubuntu, they can be installed like below:
 
 ```shell
-sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev build-essential
+sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 ```
 
 For NixOS, you can use a `shell.nix` like below:
