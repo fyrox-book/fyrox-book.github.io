@@ -30,6 +30,8 @@ Shader has a rigid structure that could be described in this code snippet:
 
 ```json
 (
+	name: "MyShader",
+
     // A set of resources, the maximum amount of resources is limited by your GPU. The engine
     // guarantees, that there could at least 16 textures and 16 resource groups per shader.
     resources: [
@@ -38,11 +40,20 @@ Shader has a rigid structure that could be described in this code snippet:
             name: "diffuseTexture",
 
             // Value has limited set of possible variants.
-            value: Texture(kind: Sampler2D, fallback: White),
+            kind: Texture(kind: Sampler2D, fallback: White),
 
             binding: 0
         ),
-
+		(
+            name: "properties",
+            kind: PropertyGroup([
+                (
+                    name: "diffuseColor",
+                    kind: Color(r: 255, g: 255, b: 255, a: 255),
+                ),
+            ]),
+            binding: 0
+        ),
         // The following property groups are built-in and provides useful data for each shader.
         (
             name: "fyrox_instanceData",
@@ -133,13 +144,15 @@ Shader has a rigid structure that could be described in this code snippet:
                     write_mask: 0xFFFF_FFFF,
                 ),
 
-                // Scissor box
-                scissor_box: Some(ScissorBox(
-                    x: 10,
-                    y: 20,
-                    width: 100,
-                    height: 30
-                ))
+                // Scissor box. Could be something like this:
+				//
+				// scissor_box: Some(ScissorBox(
+                //    x: 10,
+                //    y: 20,
+                //    width: 100,
+                //    height: 30
+                // ))
+                scissor_box: None
             ),
 
             // Vertex shader code.
@@ -153,12 +166,12 @@ Shader has a rigid structure that could be described in this code snippet:
                 void main()
                 {
                     texCoord = vertexTexCoord;
-                    gl_Position = fyrox_instanceData.worldViewProjection * vertexPosition;
+                    gl_Position = fyrox_instanceData.worldViewProjection * vec4(vertexPosition, 1.0);
                 }
-                "#;
+                "#,
 
-            // Pixel shader code.
-            pixel_shader:
+            // Fragment shader code.
+            fragment_shader:
                 r#"
                 out vec4 FragColor;
 
@@ -166,9 +179,9 @@ Shader has a rigid structure that could be described in this code snippet:
 
                 void main()
                 {
-                    FragColor = diffuseColor * texture(diffuseTexture, texCoord);
+                    FragColor = properties.diffuseColor * texture(diffuseTexture, texCoord);
                 }
-                "#;
+                "#,
         )
     ],
 )
