@@ -24,12 +24,12 @@ are enforced at runtime. They're the same as standard Rust borrowing rules:
 2) You can have only one mutable reference to the same object.
 
 Multi-borrow context provides detailed error messages for cases when borrowing has failed. For example, it will 
-tell you if you're trying to mutably borrow an object, that was already borrowed as immutable (and vice versa).
-It also provides handle validation and will tell you what's wrong with it. It could be either invalid index of it,
-or the generation. The latter means that the object at the handle was changed and the handle is invalid.
+tell you if you're trying to mutably borrow an object that is already borrowed as immutable (and vice versa).
+It also provides handle validation and will tell you what's wrong with it. It could be either an invalid index
+or generation. The latter means that the object at the handle was changed and therefore the handle is invalid.
 
 The previous example looks kinda synthetic and does not show the real-world code that could lead to borrowing 
-issues. Let's fix this. Imagine that you're making a shooter, and you have bots, that can follow and attack 
+issues. Let's fix this. Imagine that you're making a shooter, and that you have bots that can follow and attack 
 targets. Then the code could look like this: 
 
 ```rust
@@ -55,14 +55,14 @@ multi-borrowing context checks borrowing rules at runtime.
 
 ## Message Passing
 
-Sometimes the code becomes so convoluted, so it is simply hard to maintain and understand what it is doing. 
-This happens when code coupling get to a certain point, which requires very broad context for the code to
+Sometimes the code becomes so convoluted that it is hard to maintain and understand what it is doing. 
+This happens when code coupling gets to a certain point, which requires very broad context for the code to
 be executed. For example, if bots in your game have weapons it is so tempting to just borrow the weapon 
-and call something like `weapon.shoot(..)`. When your weapon is simple then it might work fine, however when 
-your game gets bigger and weapons get new features simple `weapon.shoot(..)` could be not enough. It could be
-because `shoot` method get more and more arguments or by some other reason. This is quite common case and in
-general when your code become tightly coupled it becomes hard to maintain it and what's more important - it
-could easily result in compilation errors, that comes from borrow checker. To illustrate this, let's look at
+and call something like `weapon.shoot(..)`. When your weapon is simple then it might work fine. However, when 
+your game gets bigger and weapons get new features, a simple `weapon.shoot(..)` might be not enough. It could be
+because the `shoot` method gets more and more arguments or some other reason. This is quite common. In
+general, when your code becomes tightly coupled it becomes hard to maintain it, and, more importantly, can
+easily result in issues with the borrow checker. To illustrate this, let's look at
 this code:
 
 ```rust
@@ -70,9 +70,9 @@ this code:
 ```
 
 This is probably one of the typical implementations of shooting in games - you cast a ray from the weapon
-and if it hits a bot, you're applying some damage to it. In this case bots can also shoot, and this is where
+and if it hits a bot, you apply some damage to it. In this case bots can also shoot, and this is where
 borrow checker again gets in our way. If you try to uncomment the 
-`// weapon.shoot(ctx.handle, &mut ctx.scene.graph);` line you'll get a compilation error, that tells you that 
+`// weapon.shoot(ctx.handle, &mut ctx.scene.graph);` line, you'll get a compilation error that tells you that 
 `ctx.scene.graph` is already borrowed. It seems that we've stuck, and we need to somehow fix this issue.
 We can't use multi-borrowing in this case, because it still enforces borrowing rules and instead of compilation
 error, you'll runtime error.
