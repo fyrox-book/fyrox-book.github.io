@@ -1,9 +1,9 @@
 # Borrow Checker
 
-Rust has a [famous borrow checker](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html), that became a 
-sort of horror story for newcomers. It usually treated like an enemy, that prevents your from writing anything 
-useful as you may get used in other languages. In fact, it is a very useful part of Rust that proves correctness
-of your program and does not let you doing nasty things like memory corruption, data races, etc. This chapter 
+Rust has a [famous borrow checker](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html), which has become a 
+sort of horror story for newcomers. It is often treated like an enemy that prevents you from writing anything 
+useful in the ways you may be used to in other languages. In fact, it is a very useful part of Rust that proves correctness
+of your program and prevents you from doing nasty things like memory corruption, data races, etc. This chapter 
 explains how Fyrox solves the most common borrowing issues and makes game development as easy as in any other 
 game engine.
 
