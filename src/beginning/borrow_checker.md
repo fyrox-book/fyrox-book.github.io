@@ -40,7 +40,7 @@ As you can see, for this code to compile we need to borrow at least two nodes si
 script and the `target` node. This is because we're calculating distance between the two nodes to switch 
 animations accordingly (attack if the target is close enough).
 
-As pretty much any approach, this one is not ideal and comes with its own pros and cons. The pros are quite 
+As with pretty much any approach, this one is not ideal and comes with its own pros and cons. The pros are quite 
 simple:
 
 - No compilation errors - sometimes Rust is too strict about borrowing rules, and valid code does not pass its
@@ -73,11 +73,11 @@ This is probably one of the typical implementations of shooting in games - you c
 and if it hits a bot, you apply some damage to it. In this case bots can also shoot, and this is where
 borrow checker again gets in our way. If you try to uncomment the 
 `// weapon.shoot(ctx.handle, &mut ctx.scene.graph);` line, you'll get a compilation error that tells you that 
-`ctx.scene.graph` is already borrowed. It seems that we've stuck, and we need to somehow fix this issue.
+`ctx.scene.graph` is already borrowed. It seems like we are stuck, and we need to somehow fix this issue.
 We can't use multi-borrowing in this case, because it still enforces borrowing rules and instead of compilation
 error, you'll runtime error.
 
-To solve this, you can use well-known message passing mechanism. The core idea of it is to not call methods
+To solve this, you can use the well-known message passing mechanism. The core idea is to not call methods
 immediately, but to collect all the needed data for the call and send it an object, so it can do the call later.
 Here's how it will look:
 
@@ -95,11 +95,11 @@ This approach with messages has its own pros and cons. The pros are quite signif
 - Decoupling - coupling is now very loose and done mostly on message side.
 - Easy to refactor - since the coupling is loose, you can refactor the internals with low chance of breaking
 existing code, that could otherwise be done because of intertwined and convoluted code.
-- No borrowing issues - the method calls are done in different places and there's no lifetime collisions.
+- No borrowing issues - the method calls are done in different places and thus there are no lifetime collisions.
 - Easy to write unit and integration tests - this comes from loose coupling. 
 
 The cons are the following: 
 
 - Message passing is slightly slower than direct method calls (~1-7% depending on your use case) - you should 
-keep message granularity at a reasonable level. Do not use message passing for tiny changes, it will most likely make 
+keep message granularity at a reasonable level. Do not use message passing for tiny changes, as it will most likely make 
 your game slower.
