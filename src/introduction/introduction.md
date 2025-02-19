@@ -26,7 +26,7 @@ that can be used to create game worlds, manage assets, edit game objects, script
 ## Programming languages
 
 Everything of your game can be written entirely in Rust, utilizing its safety guarantees as well as speed. However, it
-is possible to use any scripting language you want, but that's have no built-in support, and you need to implement this
+is possible to use any scripting language that you want, but other languages may have no built-in support, and you will need to implement this
 manually.
 
 ## Engine Features
