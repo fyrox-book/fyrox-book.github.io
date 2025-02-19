@@ -230,7 +230,7 @@ handles to animations from an animation player in a scene.</p>
 efficiently and fearlessly use Fyrox.</p>
 <h2 id="borrowing"><a class="header" href="#borrowing">Borrowing</a></h2>
 <p>Once an object is placed in a pool, you have to use its respective handle to get a reference to it. This can
-be done with either <code>pool.borrow(handle)</code> or <code>pool.borrow_mute(handle)</code>, or by using the <code>Index</code> trait: <code>pool[handle]</code>. Note that
+be done with either <code>pool.borrow(handle)</code> or <code>pool.borrow_mut(handle)</code>, or by using the <code>Index</code> trait: <code>pool[handle]</code>. Note that
 these methods panic when the handle given is invalid. If you want to be safe, use the <code>try_borrow(handle)</code> or
 <code>try_borrow_mut(handle)</code> method.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
