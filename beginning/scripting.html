@@ -170,10 +170,9 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="editor-plugins-and-scripts"><a class="header" href="#editor-plugins-and-scripts">Editor, Plugins and Scripts</a></h1>
-<p>Every Fyrox game is just a plugin for both the engine and the editor, such approach allows the game to run from the
-editor and be able to edit the game entities in it. A game can define any number of scripts, which can be assigned
-to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its platform-
-specific dependencies, how to use the plugins and scripting system, how to run the editor.</p>
+<p>Every Fyrox game is just a plugin for both the engine and the editor, this approach allows the game to run from the
+editor and enables editing of the game entities from within it. A game can define any number of scripts, which can be assigned
+to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its platform-specific dependencies, how to use the plugins and scripting system, and how to run the editor.</p>
 <h2 id="platform-specific-dependencies"><a class="header" href="#platform-specific-dependencies">Platform-specific Dependencies</a></h2>
 <p>Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If
 using Windows or macOS, no additional dependencies are required other than the <a href="https://rustup.rs">latest Rust installed</a>
@@ -203,10 +202,10 @@ pkgs.mkShell rec {
 </code></pre>
 <h2 id="project-manager"><a class="header" href="#project-manager">Project Manager</a></h2>
 <p><img src="https://fyrox.rs/assets/0.36/project_manager.png" alt="project manager" /></p>
-<p>Project manager is a part of the engine that allows you to manage multiple projects made with the engine at once.
+<p>Project manager is a part of the engine that allows you to manage multiple projects made with the engine all at once.
 It allows you to create a new project or import an existing one, run the project or edit it in the editor,
-upgrade the project to a selected version of the engine, and many more.</p>
-<p><a href="https://fyrox.rs/download.html">Download the project manager</a> for your OS and run it. Then click to <code>+Create</code>
+upgrade the project to a selected version of the engine, and many more options.</p>
+<p><a href="https://fyrox.rs/download.html">Download the project manager</a> for your OS and run it. Then click the <code>+Create</code>
 button, select the path where you want the project to be located and click <code>Create</code>. Select the new project
 in the list and click <code>Edit</code> button to run the editor.</p>
 <h2 id="quick-start-using-console-commands"><a class="header" href="#quick-start-using-console-commands">Quick Start Using Console Commands</a></h2>
@@ -219,11 +218,11 @@ cargo run --package editor --release
 <h2 id="project-generator"><a class="header" href="#project-generator">Project Generator</a></h2>
 <blockquote>
 <p>⚠️ This section is mostly for console users and those who like building their software from source code.
-Prefer using Project Manager whenever possible, it does the same as <code>fyrox-template</code> but with GUI.</p>
+If you prefer to use Project Manager you can, it does the same as <code>fyrox-template</code> but with the benefits of a GUI.</p>
 </blockquote>
-<p>Fyrox plugins are written in Rust, this means that if the source code of the game changes one must recompile.
-This architecture requires some boilerplate code. Fyrox offers a special tiny command line tool - <code>fyrox-template</code>. It
-helps generate all this boilerplate with a single command. Install it by running the following command:</p>
+<p>Fyrox plugins are written in Rust, this means that if the source code of the game changes you will need to recompile.
+The architecture requires some boilerplate code. Fyrox offers a special tiny command line tool - <code>fyrox-template</code>. This
+helps generate all the boilerplate code with a single command. Install it by running the following command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
 <p><em>Note for Linux:</em> This installs it in <code>$user/.cargo/bin</code>. If receiving errors about the <code>fyrox-template</code> command not<br />
@@ -233,49 +232,48 @@ being found, add this hidden cargo bin folder to the operating systems <code>$PA
 </code></pre>
 <p>Note that unlike <code>cargo init</code>, this will create a new folder with the given name.</p>
 <p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>), which defines the contents of the default
-scene. After initializing the project, go to <code>game/src/lib.rs</code> - this is where the game logic is located, as you can
-see, the <code>fyrox-template</code> generated quite a bit of code for you. There are comments explaining what each place is for. For
+scene. After initializing the project, go to <code>game/src/lib.rs</code> - this is where the game logic is located, as you will
+see, the <code>fyrox-template</code> generates quite a bit of code for you. The code is decorated with comments explaining what each place is for. For
 more info about each method, please refer <a href="https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
-<p>Once the project is generated, memorize the two commands that will help run your game in different modes:</p>
+<p>Once the project is generated, two commands can be used to run your game in different modes:</p>
 <ul>
 <li><code>cargo run --package editor --release</code> - launches the editor with your game attached. The editor allows you to run your game
-from it and edit its game entities. It is intended to be used only for development.</li>
-<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game, which can be shipped (for
-example - to a store).</li>
+from it and edit its game entities. This is intended to be used only for development purposes.</li>
+<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game. This command generates executables which can be shipped (for example - to a store).</li>
 </ul>
-<p>Navigate to your project's directory and run <code>cargo run --package editor --release</code>, after some time you should see the
+<p>Navigate to your project's directory and run <code>cargo run --package editor --release</code>, after a short while, you should see the
 editor:</p>
 <p><img src="editor.png" alt="editor" /></p>
 <p>In the editor you can start building your game scene. <strong>Important note:</strong> your scene must have at least one camera,
 otherwise you won't see a thing. Read the next chapter to learn how to use the editor.</p>
 <h2 id="using-the-latest-engine-version"><a class="header" href="#using-the-latest-engine-version">Using the Latest Engine Version</a></h2>
-<p>Due to the nature of the software development, some bugs will inevitably sneak into the major releases, due to this,
-you may want to use the latest engine version from the repository on GitHub, since it is the most likely to have bugs fixed
+<p>Due to the nature of software development, bugs will inevitably sneak into the major releases, due to this,
+it is recommended to always use the latest engine version from the repository on GitHub. This is most likely to have bugs fixed
 (you can also contribute by fixing any bugs you find or at least, by <a href="https://github.com/FyroxEngine/Fyrox/issues">filing an issue</a>).</p>
 <h3 id="automatic"><a class="header" href="#automatic">Automatic</a></h3>
 <blockquote>
-<p>⚠️ <code>fyrox-template</code> has special sub-command - <code>upgrade</code> to quickly upgrade to desired engine version. To upgrade to
+<p>⚠️ <code>fyrox-template</code> has a special sub-command - <code>upgrade</code> to quickly upgrade to a desired engine version. To upgrade to
 the latest version (<code>nightly</code>) you should execute <code>fyrox-template upgrade --version nightly</code> command in your game's
 directory.</p>
 </blockquote>
 <p>There are three main variants for <code>--version</code> switch:</p>
 <ul>
 <li><code>nightly</code> - uses latest nightly version of the engine from GitHub directly. This is the preferable version if you want
-to use the latest changes and bug fixes as they release.</li>
+to use the latest changes and bug fixes as they are released.</li>
 <li><code>latest</code> - uses latest stable version of the engine. This option also supports <code>--local</code> key, that sets the path to
-the engine to <code>../Fyrox/fyrox</code> and the editor to <code>../Fyrox/editor</code>. Obviously, such path requires the engine to be located
-in the parent directory of your project. This option could be useful if you want to use custom version of the engine
+the engine to <code>../Fyrox/fyrox</code> and the editor to <code>../Fyrox/editor</code>. Obviously, this path requires the engine to be located
+in the parent directory of your project. This option could be useful if you want to use a custom version of the engine
 (for example, if you're developing a patch for the engine).</li>
-<li><code>major.minor.patch</code> - uses specific stable version from crates.io (<code>0.30.0</code> for example).</li>
+<li><code>major.minor.patch</code> - uses a specific stable version from crates.io (<code>0.30.0</code> for example).</li>
 </ul>
 <h3 id="manual"><a class="header" href="#manual">Manual</a></h3>
-<p>Engine version can also be updated manually. The first step to take is to install the latest <code>fyrox-template</code>, this can be done
+<p>The Engine version can also be updated manually. The first step is to install the latest <code>fyrox-template</code>, this can be done
 with a single <code>cargo</code> command:</p>
 <pre><code class="language-shell">cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
 </code></pre>
-<p>This will ensure you're using the latest project/script template generator, which is important, since old versions
-of the template generator will most likely generate outdated code, no longer be compatible with the engine.</p>
-<p>To switch existing projects to the latest version of the engine, you need to specify paths pointing to the remote repository
+<p>This will ensure you're using the latest project/script template generator, which is very important; old versions
+of the template generator will most likely generate outdated code, which is no longer compatible with the engine.</p>
+<p>To switch existing projects to the latest version of the engine, you will need to specify paths pointing to the remote repository
 for the <code>fyrox</code> and <code>fyroxed_base</code> dependencies. All you need to do is to change paths to these dependencies in the
 root <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[workspace.dependencies.fyrox]
@@ -284,7 +282,7 @@ default-features = false
 [workspace.dependencies.fyroxed_base]
 version = { git = "https://github.com/FyroxEngine/Fyrox" }
 </code></pre>
-<p>Now your game will use the latest engine and editor, but beware - new commits could bring some API breaks. You can avoid
+<p>Now your game will use the latest engine and editor, but beware - new commits may surface some API mis-matches. You can avoid
 these by specifying a particular commit, just add <code>rev = "desired_commit_hash"</code> to every dependency like so:</p>
 <pre><code class="language-toml">[dependencies]
 [workspace.dependencies.fyrox]
@@ -293,7 +291,7 @@ default-features = false
 [workspace.dependencies.fyroxed_base]
 version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
 </code></pre>
-<p>To bring a local git repository of the engine to being up-to-date, just call <code>cargo update</code> at the root of the project's
+<p>To bring a local git repository of the engine to the latest version, just call <code>cargo update</code> at the root of the project's
 workspace. This will pull the latest changes from the remote, unless there is no <code>rev</code> specified.</p>
 <p>Learn more about dependency paths on the official <code>cargo</code> documentation, <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
