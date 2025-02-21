@@ -21,23 +21,54 @@ For Debian based distros like Ubuntu, they can be installed like below:
 sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 ```
 
-For NixOS, you can use a `shell.nix` like below:
+For NixOS, add a file named `flake.nix` to the root of your repository with the following contents, add it to the git index (e.g., with `git add flake.nix`), and then run `nix develop` to open a shell with all of the required dependencies.
 
 ```nix
-{ pkgs ? import <nixpkgs> { } }:
-pkgs.mkShell rec {
-  nativeBuildInputs = with pkgs.buildPackages; [
-    pkg-config
-    xorg.libxcb
-    alsa-lib
-    wayland
-    libxkbcommon
-    libGL
-  ];
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
-  shellHook = with pkgs.lib; ''
-    export LD_LIBRARY_PATH=${makeLibraryPath nativeBuildInputs}:/run/opengl-driver/lib:$LD_LIBRARY_PATH
-  '';
+  outputs = {
+    nixpkgs,
+    rust-overlay,
+    ...
+  }:
+  let
+    overlays = [
+      (import rust-overlay)
+    ];
+
+    systems = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+
+    forAllSystems = f:
+      nixpkgs.lib.genAttrs systems
+      (system: f { pkgs = import nixpkgs { inherit system overlays; }; });
+  in
+  {
+    devShells = forAllSystems ({ pkgs }: with pkgs; {
+      default = mkShell rec {
+        buildInputs = [
+          rust-bin.stable.latest.default
+
+          pkg-config
+          xorg.libxcb
+          alsa-lib
+          wayland
+          libxkbcommon
+          libGL
+        ];
+        LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
+      };
+    });
+  };
 }
 ```
 
