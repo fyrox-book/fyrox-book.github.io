@@ -8,3 +8,4 @@ fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "1d7d5a9ad237425ef
 fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "1d7d5a9ad237425eff23796a18d8e0f40256c527" }
 strum = "0.26.0"
 strum_macros = "0.26.0"
+serde = "1"

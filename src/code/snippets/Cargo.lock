@@ -1144,6 +1144,7 @@ version = "0.1.0"
 dependencies = [
  "fyrox",
  "fyroxed_base",
+ "serde",
  "strum",
  "strum_macros",
 ]

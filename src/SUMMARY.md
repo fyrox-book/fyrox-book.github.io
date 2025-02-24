@@ -82,6 +82,8 @@
   - [Graphics Context](./engine/graphics_context.md)
   - [Window Management](./engine/windows.md)
   - [Manual Initialization](./engine/manual_initialization.md)
+- [Network](./net/net.md)
+  - [Basics](./net/basics.md)
 - [User Interface](./ui/ui.md)
   - [Basic concepts](./ui/basic_concepts/basic_concepts.md)
   - [Editor](./ui/editor/editor.md)

@@ -7,6 +7,7 @@ pub mod editor;
 pub mod engine;
 pub mod game;
 pub mod input;
+pub mod net;
 pub mod rendering;
 pub mod resource;
 pub mod scene;
