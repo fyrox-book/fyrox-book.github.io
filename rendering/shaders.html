@@ -350,7 +350,7 @@ more info).</li>
 )
 </code></pre>
 <p>Shader should contain at least one render pass to actually do some job. A shader could not have properties at all.
-Currently only vertex and fragment programs are supported. Each program mush be written in GLSL. Comprehensive
+Currently only vertex and fragment programs are supported. Each program must be written in GLSL. Comprehensive
 GLSL documentation can be found <a href="https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)">here</a></p>
 <p>The engine can load such shaders if you save it in a file with <code>.shader</code> extension. After that, you can assign
 the shader to your material in the Material Editor:</p>
@@ -592,13 +592,9 @@ used to work with graphics. The following list should help you to use drawing pa
 <p>Vertex shader operates on single vertices, it must provide at least the position of the vertex
 in clipping space. In other words, it has to do at least this:</p>
 <pre><code class="language-glsl">layout(location = 0) in vec3 vertexPosition;
-layout(location = 1) in vec2 vertexTexCoord;
-
-out vec2 texCoord;
 
 void main()
 {
-    texCoord = vertexTexCoord;
     gl_Position = fyrox_instanceData.worldViewProjection * vertexPosition;
 }
 </code></pre>
