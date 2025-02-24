@@ -7791,6 +7791,7 @@ the same application), which is the easiest kind of server to implement. Its imp
 </span>// Implements listen server.
 #[derive(Default, Reflect, Debug)]
 pub struct Game {
+    scene: Handle&lt;Scene&gt;,
     server: Option&lt;Server&gt;,
     client: Option&lt;Client&gt;,
 }
@@ -7810,6 +7811,24 @@ impl Plugin for Game {
             client.read_messages();
         }
     }
+
+    fn on_scene_loaded(
+        &amp;mut self,
+        path: &amp;Path,
+        scene: Handle&lt;Scene&gt;,
+        data: &amp;[u8],
+        context: &amp;mut PluginContext,
+    ) {
+        self.scene = scene;
+
+        if self.server.is_none() {
+            context.scenes[scene]
+                .graph
+                .physics
+                .enabled
+                .set_value_and_mark_modified(false);
+        }
+    }
 }
 
 #[derive(Reflect)]
@@ -7818,6 +7837,7 @@ pub struct Server {
     listener: NetListener,
     #[reflect(hidden)]
     connections: Vec&lt;NetStream&gt;,
+    prev_node_states: FxHashMap&lt;Handle&lt;Node&gt;, NodeState&gt;,
 }
 
 impl Server {
@@ -7916,6 +7936,7 @@ this:</p>
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ServerMessage {
     LoadLevel { path: PathBuf },
+    Sync { entity_states: Vec&lt;NodeState&gt; },
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -8064,13 +8085,99 @@ pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &am
     );
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="synchronization"><a class="header" href="#synchronization">Synchronization</a></h2>
-<p>If your game has a lot of moving objects, you may want to synchronize their state across all the clients so their
-state matches the server state.</p>
-<p><strong>TODO</strong></p>
 <h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
 <p>There's one quite large multiplayer game built with Fyrox - <a href="https://github.com/mrDIMAS/FishFolly">Fish Folly</a>. It is
 a "Fall Guys"-like platformer.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="synchronization"><a class="header" href="#synchronization">Synchronization</a></h1>
+<p>Pretty much every game has dozens of changing objects, and you need to synchronize their state across all the clients,
+so their state matches the server state. In the simplest case, all that you need is to collect information about node
+positions and rotations and send them to the clients:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct NodeState {
+    pub node: SceneNodeId,
+    pub position: Vector3&lt;f32&gt;,
+    pub rotation: UnitQuaternion&lt;f32&gt;,
+}
+
+impl Server {
+    pub fn sync(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
+        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
+        for (handle, node) in scene.graph.pair_iter() {
+            entity_states.push(NodeState {
+                node: node.instance_id(),
+                position: **node.local_transform().position(),
+                rotation: **node.local_transform().rotation(),
+            });
+        }
+        self.send_message_to_clients(ServerMessage::Sync { entity_states });
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>If the number of objects is low, it will work fine on most machines and network connections. However, this algorithm
+is somewhat dumb, because it gathers a ton of useless information. For example, most of the scene objects remain
+static, and thus their "new" position and rotation can be ignored because it is not new at all—it's the same
+as in the previous frame.</p>
+<h2 id="delta-compression"><a class="header" href="#delta-compression">Delta Compression</a></h2>
+<p>Delta compression is used to minimize the amount of data being sent from the server to clients and vice versa. It is
+a simple, yet very efficient way of reducing the required network bandwidth and performance requirements of your game.</p>
+<p>The simplest delta compression could be implemented like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Server {
+    pub fn sync_with_delta_compression(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
+        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
+        for (handle, node) in scene.graph.pair_iter() {
+            let current_state = NodeState {
+                node: node.instance_id(),
+                position: **node.local_transform().position(),
+                rotation: **node.local_transform().rotation(),
+            };
+
+            // Simple delta compression.
+            let prev_state = self
+                .prev_node_states
+                .entry(handle)
+                .or_insert(current_state.clone());
+
+            if *prev_state != current_state {
+                entity_states.push(current_state.clone());
+                *prev_state = current_state;
+            }
+        }
+
+        self.send_message_to_clients(ServerMessage::Sync { entity_states });
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="physics-5"><a class="header" href="#physics-5">Physics</a></h2>
+<p>Client-server model assumes that the server has the priority in calculations and its state has the top priority
+than clients. This applies to physics simulation as well, no need to run expensive physics simulation if its state
+is overwritten by the server state anyway. That being said, the client must have physics simulation disabled. This can
+be done like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    fn on_scene_loaded(
+        &amp;mut self,
+        path: &amp;Path,
+        scene: Handle&lt;Scene&gt;,
+        data: &amp;[u8],
+        context: &amp;mut PluginContext,
+    ) {
+        self.scene = scene;
+
+        if self.server.is_none() {
+            context.scenes[scene]
+                .graph
+                .physics
+                .enabled
+                .set_value_and_mark_modified(false);
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="user-interface"><a class="header" href="#user-interface">User Interface</a></h1>
 <p>Fyrox features an extremely powerful and flexible node-based user interface system. Power and flexibility comes with
 a certain price: it has a steep learning curve. This chapter will cover user interface usage in the engine, explain

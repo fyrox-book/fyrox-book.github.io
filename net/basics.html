@@ -195,6 +195,7 @@ the same application), which is the easiest kind of server to implement. Its imp
 </span>// Implements listen server.
 #[derive(Default, Reflect, Debug)]
 pub struct Game {
+    scene: Handle&lt;Scene&gt;,
     server: Option&lt;Server&gt;,
     client: Option&lt;Client&gt;,
 }
@@ -214,6 +215,24 @@ impl Plugin for Game {
             client.read_messages();
         }
     }
+
+    fn on_scene_loaded(
+        &amp;mut self,
+        path: &amp;Path,
+        scene: Handle&lt;Scene&gt;,
+        data: &amp;[u8],
+        context: &amp;mut PluginContext,
+    ) {
+        self.scene = scene;
+
+        if self.server.is_none() {
+            context.scenes[scene]
+                .graph
+                .physics
+                .enabled
+                .set_value_and_mark_modified(false);
+        }
+    }
 }
 
 #[derive(Reflect)]
@@ -222,6 +241,7 @@ pub struct Server {
     listener: NetListener,
     #[reflect(hidden)]
     connections: Vec&lt;NetStream&gt;,
+    prev_node_states: FxHashMap&lt;Handle&lt;Node&gt;, NodeState&gt;,
 }
 
 impl Server {
@@ -320,6 +340,7 @@ this:</p>
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ServerMessage {
     LoadLevel { path: PathBuf },
+    Sync { entity_states: Vec&lt;NodeState&gt; },
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -468,10 +489,6 @@ pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &am
     );
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="synchronization"><a class="header" href="#synchronization">Synchronization</a></h2>
-<p>If your game has a lot of moving objects, you may want to synchronize their state across all the clients so their
-state matches the server state.</p>
-<p><strong>TODO</strong></p>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>There's one quite large multiplayer game built with Fyrox - <a href="https://github.com/mrDIMAS/FishFolly">Fish Folly</a>. It is
 a "Fall Guys"-like platformer.</p>
@@ -484,7 +501,7 @@ a "Fall Guys"-like platformer.</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../ui/ui.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../net/sync.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -498,7 +515,7 @@ a "Fall Guys"-like platformer.</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../ui/ui.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../net/sync.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
