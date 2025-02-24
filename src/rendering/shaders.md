@@ -188,7 +188,7 @@ Shader has a rigid structure that could be described in this code snippet:
 ```
 
 Shader should contain at least one render pass to actually do some job. A shader could not have properties at all.
-Currently only vertex and fragment programs are supported. Each program mush be written in GLSL. Comprehensive 
+Currently only vertex and fragment programs are supported. Each program must be written in GLSL. Comprehensive 
 GLSL documentation can be found [here](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL))
 
 The engine can load such shaders if you save it in a file with `.shader` extension. After that, you can assign
@@ -319,7 +319,7 @@ Property group. Available only in shadow passes.
 Property group. Information about visible light sources
 
 | Name              | Type       | Description                                             |
-|------------------ |------------|---------------------------------------------------------|
+|-------------------|------------|---------------------------------------------------------|
 | lightCount        | `int`      | Total amount of light sources visible on screen.        |
 | lightsColorRadius | `vec4[16]` | Color (xyz) and radius (w) of light source              |
 | lightsParameters  | `vec2[16]` | Hot-spot cone angle cos (x) and half cone angle cos (y) |
@@ -445,13 +445,9 @@ in clipping space. In other words, it has to do at least this:
 
 ```glsl
 layout(location = 0) in vec3 vertexPosition;
-layout(location = 1) in vec2 vertexTexCoord;
-
-out vec2 texCoord;
 
 void main()
 {
-    texCoord = vertexTexCoord;
     gl_Position = fyrox_instanceData.worldViewProjection * vertexPosition;
 }
 ```
