@@ -1,17 +1,23 @@
+use fyrox::fxhash::FxHashMap;
+use fyrox::scene::node::Node;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
         info,
         net::{NetListener, NetStream},
+        pool::Handle,
         reflect::prelude::*,
+        some_or_return,
         visitor::prelude::*,
     },
+    graph::SceneGraph,
     plugin::{Plugin, PluginContext},
-    scene::base::SceneNodeId,
+    scene::{base::SceneNodeId, Scene},
 };
 use serde::{Deserialize, Serialize};
 use std::{
     fmt::{Debug, Formatter},
+    path::Path,
     path::PathBuf,
 };
 
@@ -20,6 +26,7 @@ use std::{
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ServerMessage {
     LoadLevel { path: PathBuf },
+    Sync { entity_states: Vec<NodeState> },
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -29,17 +36,11 @@ pub enum ClientMessage {
 }
 // ANCHOR_END: messages
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct NodeState {
-    pub node: SceneNodeId,
-    pub position: Vector3<f32>,
-    pub rotation: UnitQuaternion<f32>,
-}
-
 // ANCHOR: client_server
 // Implements listen server.
 #[derive(Default, Reflect, Debug)]
 pub struct Game {
+    scene: Handle<Scene>,
     server: Option<Server>,
     client: Option<Client>,
 }
@@ -61,6 +62,26 @@ impl Plugin for Game {
         }
     }
     // ANCHOR_END: update_loop
+
+    // ANCHOR: disable_physics
+    fn on_scene_loaded(
+        &mut self,
+        path: &Path,
+        scene: Handle<Scene>,
+        data: &[u8],
+        context: &mut PluginContext,
+    ) {
+        self.scene = scene;
+
+        if self.server.is_none() {
+            context.scenes[scene]
+                .graph
+                .physics
+                .enabled
+                .set_value_and_mark_modified(false);
+        }
+    }
+    // ANCHOR_END: disable_physics
 }
 
 #[derive(Reflect)]
@@ -69,6 +90,7 @@ pub struct Server {
     listener: NetListener,
     #[reflect(hidden)]
     connections: Vec<NetStream>,
+    prev_node_states: FxHashMap<Handle<Node>, NodeState>,
 }
 
 impl Server {
@@ -152,6 +174,59 @@ impl Game {
     }
 }
 // ANCHOR_END: send_test_messages
+
+// ANCHOR: simple_syncing
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct NodeState {
+    pub node: SceneNodeId,
+    pub position: Vector3<f32>,
+    pub rotation: UnitQuaternion<f32>,
+}
+
+impl Server {
+    pub fn sync(&mut self, scene: Handle<Scene>, ctx: &mut PluginContext) {
+        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
+        for (handle, node) in scene.graph.pair_iter() {
+            entity_states.push(NodeState {
+                node: node.instance_id(),
+                position: **node.local_transform().position(),
+                rotation: **node.local_transform().rotation(),
+            });
+        }
+        self.send_message_to_clients(ServerMessage::Sync { entity_states });
+    }
+}
+// ANCHOR_END: simple_syncing
+
+// ANCHOR: syncing_with_delta_compression
+impl Server {
+    pub fn sync_with_delta_compression(&mut self, scene: Handle<Scene>, ctx: &mut PluginContext) {
+        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
+        for (handle, node) in scene.graph.pair_iter() {
+            let current_state = NodeState {
+                node: node.instance_id(),
+                position: **node.local_transform().position(),
+                rotation: **node.local_transform().rotation(),
+            };
+
+            // Simple delta compression.
+            let prev_state = self
+                .prev_node_states
+                .entry(handle)
+                .or_insert(current_state.clone());
+
+            if *prev_state != current_state {
+                entity_states.push(current_state.clone());
+                *prev_state = current_state;
+            }
+        }
+
+        self.send_message_to_clients(ServerMessage::Sync { entity_states });
+    }
+}
+// ANCHOR_END: syncing_with_delta_compression
 
 impl Debug for Server {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

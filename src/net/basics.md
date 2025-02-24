@@ -123,13 +123,6 @@ lags during this process.
 {{#include ../code/snippets/src/net/mod.rs:on_prefab_message_received_async}}
 ```
 
-## Synchronization
-
-If your game has a lot of moving objects, you may want to synchronize their state across all the clients so their
-state matches the server state.
-
-**TODO**
-
 ## Example
 
 There's one quite large multiplayer game built with Fyrox - [Fish Folly](https://github.com/mrDIMAS/FishFolly). It is
