@@ -90,6 +90,7 @@ pub struct Server {
     listener: NetListener,
     #[reflect(hidden)]
     connections: Vec<NetStream>,
+    #[reflect(hidden)]
     prev_node_states: FxHashMap<Handle<Node>, NodeState>,
 }
 
@@ -100,6 +101,7 @@ impl Server {
         Self {
             listener: NetListener::bind(Self::ADDRESS).unwrap(),
             connections: Default::default(),
+            prev_node_states: Default::default(),
         }
     }
 
