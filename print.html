@@ -7766,6 +7766,166 @@ executor crates. If the built-in executor do not have features you need, or have
 can create custom executor. All you need to do is to copy <a href="https://github.com/FyroxEngine/Fyrox/blob/master/fyrox-impl/src/engine/executor.rs">the built-in one</a>,
 add it your module tree and modify as you like. Then you need to replace all usages of built-in one with your custom one
 and that's pretty much it - now you have full control in engine initialization and game loop.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="network"><a class="header" href="#network">Network</a></h1>
+<p>This part of the book explains how to make a multiplayer game with Fyrox and which functionality it has for this
+purpose. In general, network support in the engine is quite basic and some features might be missing.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="basics"><a class="header" href="#basics">Basics</a></h1>
+<p>This chapter explains what the engine offers for making multiplayer games.</p>
+<h2 id="protocols"><a class="header" href="#protocols">Protocols</a></h2>
+<p>Fyrox has basic support for simple network operations using TCP. This reliable network protocol with guaranteed
+delivery, but it may suffer from large latency, thus it may not be suitable for some applications. In particular,
+in high pace shooters TCP will result in quite noticeable lag. Such games should use mixed approach of UDP+TCP, where
+UDP should be used for "insignificant" data and TCP to send important data. Insignificant data can include the data
+that changes every frame (position, rotation, etc.). On the other hand, important data can include player connection
+data.</p>
+<h2 id="client-server-architecture"><a class="header" href="#client-server-architecture">Client-Server Architecture</a></h2>
+<p>Multiplayer games are usually based on client-server architecture. As stated in the title, it consists of a server
+and any number of clients. There's also a subdivision for the server side—it could be a dedicated server or a listen
+server.</p>
+<p>Dedicated server is an application that is responsible only for game logic and interaction with clients; it does
+not render anything on screen, does not accept any input from a player.</p>
+<p>Listen server is a combination of a dedicated server and the client running in the same process (application). In most
+cases, this is the most preferable option for typical players, since it allows them to start a server and play as
+a "client" and allow other players to join their server.</p>
+<p>Typical structure is quite simple for TCP connections, and it is recommended if you've never ever made a multiplayer
+game. It could look like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Server {
+    listener: NetListener,
+    connections: Vec&lt;NetStream&gt;,
+}
+
+pub struct Client {
+    connection: NetStream,
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
+<p>Network interaction is usually based on some kind of messages. Message is a simple data storage that contains some
+data to perform specific actions. There could be server and client messages, each serves different purpose. For example,
+a server message is sent by a server and interpreted on a client side. It could include commands to load specific level,
+add other players, synchronize the state of objects, and so on. A client message is sent by a client to a server and
+interpreted on a server side. It could include player input state.</p>
+<h2 id="stable-ids"><a class="header" href="#stable-ids">Stable IDs</a></h2>
+<p>When it comes to game entities (scene nodes), it is essential to have unique IDs for them, to be able to synchronize their
+states across multiple clients. The engine uses UUID for this purpose. Why can't we just use node handles for this? The
+main reason is that it is unreliable, because scene node handles are basically just an index + generation id. The index
+part could be different for different clients for the same scene node. Usually it happens when relatively heavy prefabs
+are instantiated in a separate async task (see the respective section below). If we assign a unique id for the scene node
+across all clients, and it will make client-server synchronization reliable, since we can use this id to find the entity.</p>
+<p>There are a number of ways to assign unique ids for scene nodes. The easiest is to use <code>.with_id</code> method when building
+a scene node:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn create_node_with_id(scene: &amp;mut Scene, id: Uuid) -&gt; Handle&lt;Node&gt; {
+    PivotBuilder::new(BaseBuilder::new().with_instance_id(SceneNodeId(id))).build(&amp;mut scene.graph)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>What if we want to instantiate a prefab on all clients, how can we ensure that the ids of the entire hierarchy will
+be the same? The easiest way to do this is to use a pair of built-in methods - <code>Model::generate_ids</code> and <code>.with_ids()</code>.
+Typical structure could look like this. At first, define a new message type:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct InstantiatePrefabMessage {
+    pub path: PathBuf,
+    pub position: Vector3&lt;f32&gt;,
+    pub rotation: UnitQuaternion&lt;f32&gt;,
+    pub ids: FxHashMap&lt;Handle&lt;Node&gt;, SceneNodeId&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>It contains all that is needed to instantiate a new prefab on the client side. The server side needs the following
+function:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This function is called on the server side.
+pub fn create_prefab_message(ctx: &amp;mut PluginContext) -&gt; InstantiatePrefabMessage {
+    let path = PathBuf::from("data/models/bot.rgs");
+
+    let bot_prefab =
+        fyrox::core::futures::executor::block_on(ctx.resource_manager.request::&lt;Model&gt;(&amp;path))
+            .unwrap();
+
+    InstantiatePrefabMessage {
+        path,
+        position: Vector3::new(1.0, 2.0, 3.0),
+        rotation: Default::default(),
+        ids: bot_prefab.generate_ids(),
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>At first, it loads the desired prefab, then generates ids for all its sub-nodes and creates a new message with this
+information. This message is then can be sent over the network to all clients. When a client receives such a message,
+it could handle it like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This function is called on the client side.
+pub fn on_prefab_message_received(
+    desc: InstantiatePrefabMessage,
+    game: &amp;mut Game,
+    ctx: &amp;mut PluginContext,
+) {
+    let result =
+        fyrox::core::futures::executor::block_on(ctx.resource_manager.request::&lt;Model&gt;(&amp;desc.path));
+
+    match result {
+        Ok(model) =&gt; {
+            let scene = &amp;mut ctx.scenes[game.scene];
+            model
+                .begin_instantiation(scene)
+                .with_position(desc.position)
+                .with_rotation(desc.rotation)
+                .with_ids(&amp;desc.ids)
+                .finish();
+        }
+        Err(err) =&gt; {
+            Log::err(format!(
+                "Unable to instantiate {} prefab. Reason: {:?}",
+                desc.path.display(),
+                err
+            ));
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The crucial part here is <code>.with_ids(..)</code> call, which forces the prefab's sub-nodes to have the provided set of ids.
+This way all the nodes across all clients will have the same unique id per node.</p>
+<h2 id="dealing-with-async"><a class="header" href="#dealing-with-async">Dealing with Async</a></h2>
+<p>Leaving your game responsive while performing some computationally heavy work is crucial for smooth gameplay. Some of
+the heaviest tasks in pretty much any game is loading an asset. The engine has a built-in task system to help avoid
+lags during this process.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This function is called on the client side.
+pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &amp;mut PluginContext) {
+    ctx.task_pool.spawn_plugin_task(
+        // The resource itself could be used as a task.
+        ctx.resource_manager.request::&lt;Model&gt;(&amp;desc.path),
+        // This closure will be called when the task (resource loading) is completed.
+        move |result, game: &amp;mut Game, ctx| match result {
+            Ok(model) =&gt; {
+                let scene = &amp;mut ctx.scenes[game.scene];
+                model
+                    .begin_instantiation(scene)
+                    .with_position(desc.position)
+                    .with_rotation(desc.rotation)
+                    .with_ids(&amp;desc.ids)
+                    .finish();
+            }
+            Err(err) =&gt; {
+                Log::err(format!(
+                    "Unable to instantiate {} prefab. Reason: {:?}",
+                    desc.path.display(),
+                    err
+                ));
+            }
+        },
+    );
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<p>There's one quite large multiplayer game built with Fyrox - <a href="https://github.com/mrDIMAS/FishFolly">Fish Folly</a>. It is
+a "Fall Guys"-like platformer.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="user-interface"><a class="header" href="#user-interface">User Interface</a></h1>
 <p>Fyrox features an extremely powerful and flexible node-based user interface system. Power and flexibility comes with
 a certain price: it has a steep learning curve. This chapter will cover user interface usage in the engine, explain
@@ -8987,7 +9147,7 @@ normal appearance:</p>
 <p>This element is widely used to provide some generic visual behaviour for various widgets. For example, it used in
 buttons, tree items, dropdown list items, etc.; in other words - everywhere where a widget needs to give visual
 feedback the user.</p>
-<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<h2 id="example-2"><a class="header" href="#example-2">Example</a></h2>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_decorator(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
@@ -9068,7 +9228,7 @@ For example, you can set the new check box with image check marks, which will us
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
+<h2 id="messages-1"><a class="header" href="#messages-1">Messages</a></h2>
 <p>Use <code>ExpanderMessage::Expand</code> message to catch the moment when its state changes:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9321,7 +9481,7 @@ but you interested in only first two decimal places. In this case you can set th
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-2"><a class="header" href="#example-2">Example</a></h2>
+<h2 id="example-3"><a class="header" href="#example-3">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9446,7 +9606,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="ui/window.html">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-3"><a class="header" href="#example-3">Example</a></h2>
+<h2 id="example-4"><a class="header" href="#example-4">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -9795,7 +9955,7 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="messages-1"><a class="header" href="#messages-1">Messages</a></h2>
+<h2 id="messages-2"><a class="header" href="#messages-2">Messages</a></h2>
 <p>Text widget can accept the following list of messages at runtime (respective constructors are name with small letter -
 <code>TextMessage::Text -&gt; TextMessage::text(widget_handle, direction, text)</code>):</p>
 <ul>
@@ -9889,7 +10049,7 @@ centered text could be created like so:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Please refer to <a href="ui/font.html">Font</a> chapter to learn more about fonts.</p>
-<h2 id="messages-2"><a class="header" href="#messages-2">Messages</a></h2>
+<h2 id="messages-3"><a class="header" href="#messages-3">Messages</a></h2>
 <p>TextBox widget accepts the following list of messages:</p>
 <ul>
 <li><code>TextBoxMessage::SelectionBrush</code> - change the brush that is used to highlight selection.</li>
