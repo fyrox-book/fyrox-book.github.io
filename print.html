@@ -7840,6 +7840,12 @@ impl Server {
                 .process_input::&lt;ClientMessage&gt;(|msg| info!("Received client message: {msg:?}"));
         }
     }
+
+    pub fn send_message_to_clients(&amp;mut self, message: ServerMessage) {
+        for connection in self.connections.iter_mut() {
+            connection.send_message(&amp;message).unwrap();
+        }
+    }
 }
 
 #[derive(Reflect)]
@@ -7858,6 +7864,10 @@ impl Client {
     pub fn read_messages(&amp;mut self) {
         self.connection
             .process_input::&lt;ServerMessage&gt;(|msg| info!("Received server message: {msg:?}"));
+    }
+
+    pub fn send_message_to_server(&amp;mut self, message: ClientMessage) {
+        self.connection.send_message(&amp;message).unwrap();
     }
 }
 
@@ -7912,6 +7922,29 @@ pub enum ServerMessage {
 // Client messages are meant to be sent to a server.
 pub enum ClientMessage {
     PlayerInput { left: bool, right: bool },
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Sending a message (from either side) is very straightforward:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Game {
+    fn send_test_messages(&amp;mut self) {
+        // Send the server message to the clients.
+        if let Some(server) = self.server.as_mut() {
+            // Force clients to load a level.
+            server.send_message_to_clients(ServerMessage::LoadLevel {
+                path: PathBuf::from("data/scenes/scene.rgs"),
+            })
+        }
+        // Send the client message.
+        if let Some(client) = self.client.as_mut() {
+            client.send_message_to_server(ClientMessage::PlayerInput {
+                // Player's moving left.
+                left: true,
+                right: false,
+            })
+        }
+    }
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="stable-ids"><a class="header" href="#stable-ids">Stable IDs</a></h2>
