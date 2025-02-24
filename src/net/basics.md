@@ -65,6 +65,12 @@ this:
 {{#include ../code/snippets/src/net/client_server.rs:messages}}
 ```
 
+Sending a message (from either side) is very straightforward:
+
+```rust,no_run
+{{#include ../code/snippets/src/net/client_server.rs:send_test_messages}}
+```
+
 ## Stable IDs
 
 When it comes to game entities (scene nodes), it is essential to have unique IDs for them, to be able to synchronize their

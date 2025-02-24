@@ -91,6 +91,12 @@ impl Server {
                 .process_input::<ClientMessage>(|msg| info!("Received client message: {msg:?}"));
         }
     }
+
+    pub fn send_message_to_clients(&mut self, message: ServerMessage) {
+        for connection in self.connections.iter_mut() {
+            connection.send_message(&message).unwrap();
+        }
+    }
 }
 
 #[derive(Reflect)]
@@ -110,6 +116,10 @@ impl Client {
         self.connection
             .process_input::<ServerMessage>(|msg| info!("Received server message: {msg:?}"));
     }
+
+    pub fn send_message_to_server(&mut self, message: ClientMessage) {
+        self.connection.send_message(&message).unwrap();
+    }
 }
 
 impl Visit for Game {
@@ -120,6 +130,28 @@ impl Visit for Game {
     }
 }
 // ANCHOR_END: client_server
+
+// ANCHOR: send_test_messages
+impl Game {
+    fn send_test_messages(&mut self) {
+        // Send the server message to the clients.
+        if let Some(server) = self.server.as_mut() {
+            // Force clients to load a level.
+            server.send_message_to_clients(ServerMessage::LoadLevel {
+                path: PathBuf::from("data/scenes/scene.rgs"),
+            })
+        }
+        // Send the client message.
+        if let Some(client) = self.client.as_mut() {
+            client.send_message_to_server(ClientMessage::PlayerInput {
+                // Player's moving left.
+                left: true,
+                right: false,
+            })
+        }
+    }
+}
+// ANCHOR_END: send_test_messages
 
 impl Debug for Server {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
