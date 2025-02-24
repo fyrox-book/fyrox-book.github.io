@@ -9,7 +9,7 @@ delivery, but it may suffer from large latency, thus it may not be suitable for 
 in high pace shooters TCP will result in quite noticeable lag. Such games should use mixed approach of UDP+TCP, where
 UDP should be used for "insignificant" data and TCP to send important data. Insignificant data can include the data
 that changes every frame (position, rotation, etc.). On the other hand, important data can include player connection
-data.
+data. Everything related to TCP-based network entities is located in `fyrox::core::net` module.
 
 ## Client-Server Architecture
 
@@ -25,11 +25,32 @@ cases, this is the most preferable option for typical players, since it allows t
 a "client" and allow other players to join their server.
 
 Typical structure is quite simple for TCP connections, and it is recommended if you've never ever made a multiplayer
-game. It could look like this:
+game. The following example implements a listen server (where you have both the server and the client part running in
+the same application), which is the easiest kind of server to implement. Its implementation could look like this:
 
 ```rust,no_run
 {{#include ../code/snippets/src/net/client_server.rs:client_server}}
 ```
+
+There's a lot of code, but it is very straightforward. There are two main entities here: `Server` and `Client`. 
+The server holds a TCP listener, which internally handles handshake network operations that allows to establish 
+a reliable connection between the listener and any number of clients. Each such connection is called stream.
+
+The client holds a connection to the server (read: stream). The next interesting part is how the game update loop
+is structured:
+
+```rust,no_run
+{{#include ../code/snippets/src/net/client_server.rs:update_loop}}
+```
+
+At first, the server tries to accept all incoming connections and only then tries to read all the incoming messages.
+The client is also trying to read all the incoming messages. The server side will be `None` for other players (non-host).
+
+The listen server could be quite confusing because it has both the server and the client at the same time. If you've
+never implemented multiplayer games, it will be even more confusing. The main question that arises very often—how
+to manage the server and client at the same time? The answer to this is very simple—the same as with dedicated 
+servers: all interaction must be done via messages. The client must never access the server side directly and vice 
+versa.
 
 ## Messages
 
@@ -37,7 +58,12 @@ Network interaction is usually based on some kind of messages. Message is a simp
 data to perform specific actions. There could be server and client messages, each serves different purpose. For example,
 a server message is sent by a server and interpreted on a client side. It could include commands to load specific level, 
 add other players, synchronize the state of objects, and so on. A client message is sent by a client to a server and 
-interpreted on a server side. It could include player input state.
+interpreted on a server side. For example, it could include player input state. A typical set of messages could look like
+this:
+
+```rust,no_run
+{{#include ../code/snippets/src/net/client_server.rs:messages}}
+```
 
 ## Stable IDs
 
@@ -90,6 +116,13 @@ lags during this process.
 ```rust,no_run
 {{#include ../code/snippets/src/net/mod.rs:on_prefab_message_received_async}}
 ```
+
+## Synchronization
+
+If your game has a lot of moving objects, you may want to synchronize their state across all the clients so their
+state matches the server state.
+
+**TODO**
 
 ## Example
 
