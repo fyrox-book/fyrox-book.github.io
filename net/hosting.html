@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Synchronization - Fyrox Book</title>
+        <title>Hosting - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -140,7 +140,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/net/sync.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/net/hosting.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -169,106 +169,31 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="synchronization"><a class="header" href="#synchronization">Synchronization</a></h1>
-<p>Pretty much every game has dozens of changing objects, and you need to synchronize their state across all the clients,
-so their state matches the server state. In the simplest case, all that you need is to collect information about node
-positions and rotations and send them to the clients:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct NodeState {
-    pub node: SceneNodeId,
-    pub position: Vector3&lt;f32&gt;,
-    pub rotation: UnitQuaternion&lt;f32&gt;,
-}
-
-impl Server {
-    pub fn sync(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
-        let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
-        for (handle, node) in scene.graph.pair_iter() {
-            entity_states.push(NodeState {
-                node: node.instance_id(),
-                position: **node.local_transform().position(),
-                rotation: **node.local_transform().rotation(),
-            });
-        }
-        self.send_message_to_clients(ServerMessage::Sync { entity_states });
-    }
-}
-<span class="boring">}</span></code></pre></pre>
-<p>If the number of objects is low, it will work fine on most machines and network connections. However, this algorithm
-is somewhat dumb, because it gathers a ton of useless information. For example, most of the scene objects remain
-static, and thus their "new" position and rotation can be ignored because it is not new at all—it's the same
-as in the previous frame.</p>
-<h2 id="delta-compression"><a class="header" href="#delta-compression">Delta Compression</a></h2>
-<p>Delta compression is used to minimize the amount of data being sent from the server to clients and vice versa. It is
-a simple, yet very efficient way of reducing the required network bandwidth and performance requirements of your game.</p>
-<p>The simplest delta compression could be implemented like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>impl Server {
-    pub fn sync_with_delta_compression(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
-        let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
-        for (handle, node) in scene.graph.pair_iter() {
-            let current_state = NodeState {
-                node: node.instance_id(),
-                position: **node.local_transform().position(),
-                rotation: **node.local_transform().rotation(),
-            };
-
-            // Simple delta compression.
-            let prev_state = self
-                .prev_node_states
-                .entry(handle)
-                .or_insert(current_state.clone());
-
-            if *prev_state != current_state {
-                entity_states.push(current_state.clone());
-                *prev_state = current_state;
-            }
-        }
-
-        self.send_message_to_clients(ServerMessage::Sync { entity_states });
-    }
-}
-<span class="boring">}</span></code></pre></pre>
-<h2 id="physics"><a class="header" href="#physics">Physics</a></h2>
-<p>Client-server model assumes that the server has the priority in calculations and its state has the top priority
-than clients. This applies to physics simulation as well, no need to run expensive physics simulation if its state
-is overwritten by the server state anyway. That being said, the client must have physics simulation disabled. This can
-be done like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    fn on_scene_loaded(
-        &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) {
-        self.scene = scene;
-
-        if self.server.is_none() {
-            context.scenes[scene]
-                .graph
-                .physics
-                .enabled
-                .set_value_and_mark_modified(false);
-        }
-    }
-<span class="boring">}</span></code></pre></pre>
+                        <h1 id="game-server-hosting"><a class="header" href="#game-server-hosting">Game Server Hosting</a></h1>
+<p>The main issue with today's Internet is that it is mostly based on very old IPv4, which supports around 4 billion
+IP addresses and pretty much all of them are already allocated between companies and individuals. Nowadays, internet
+connection relies on network address translation (NAT) to be able to have multiple devices with their own IP addresses.
+This fact makes it impossible to connect two devices directly to each other, because the devices simply do not
+have a stable IP address anymore (it is defined by NAT). This could be solved by IPv6, which essentially has almost
+unlimited number of addresses, yet its adoption is quite slow.</p>
+<p>Unfortunately, there is no easy way to connect two or more devices directly. One of the simplest ways is to rent a
+virtual personal server (VPS) with a stable IP address and use it as a sort of "proxy" server that will be able to
+handle connections between the devices. This process is called <a href="https://en.wikipedia.org/wiki/Hole_punching_(networking)">hole punching</a>.
+It is used all the time in modern internet, but sometimes it isn't enough and the only solution is to host
+a dedicated game server on a VPS (or a more powerful, yet costly, real web server).</p>
+<p>To bypass all these issues once and for all, your game should be able to run a dedicated game server, which should be
+deployed on a VPS/real server. The rule of thumb here is to develop and test your game in your local network, and only
+when its minimal valuable version is ready, rent a server and test it with players across the globe.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../net/basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../net/sync.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../net/hosting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../ui/ui.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -278,11 +203,11 @@ be done like this:</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../net/basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../net/sync.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../net/hosting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../ui/ui.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
