@@ -10390,8 +10390,179 @@ phone number. A filter can be specified at build stage like so:</p>
 <h2 id="style"><a class="header" href="#style">Style</a></h2>
 <p>You can change brush of caret by using <code>.with_caret_brush</code> and also selection brush by using <code>.with_selection_brush</code>,
 it could be useful if you don't like default colors.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tree-wip"><a class="header" href="#tree-wip">Tree (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tree"><a class="header" href="#tree">Tree</a></h1>
 <p><img src="ui/tree.gif" alt="tree" /></p>
+<p>Tree widget allows you to create views for hierarchical data. It could be used to show file
+system entries, graphs, and anything else that could be represented as a tree.</p>
+<h2 id="examples-4"><a class="header" href="#examples-4">Examples</a></h2>
+<p>A simple tree with one root and two children items could be created like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox_ui::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    text::TextBuilder,
+</span><span class="boring">    tree::{TreeBuilder, TreeRootBuilder},
+</span><span class="boring">    widget::WidgetBuilder,
+</span><span class="boring">    BuildContext, UiNode,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn create_tree(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    // Note, that `TreeRoot` widget is mandatory here. Otherwise some functionality of
+    // descendant trees won't work.
+    TreeRootBuilder::new(WidgetBuilder::new())
+        .with_items(vec![TreeBuilder::new(WidgetBuilder::new())
+            .with_content(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Root Item 0")
+                    .build(ctx),
+            )
+            .with_items(vec![
+                TreeBuilder::new(WidgetBuilder::new())
+                    .with_content(
+                        TextBuilder::new(WidgetBuilder::new())
+                            .with_text("Child Item 0")
+                            .build(ctx),
+                    )
+                    .build(ctx),
+                TreeBuilder::new(WidgetBuilder::new())
+                    .with_content(
+                        TextBuilder::new(WidgetBuilder::new())
+                            .with_text("Child Item 1")
+                            .build(ctx),
+                    )
+                    .build(ctx),
+            ])
+            .build(ctx)])
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Note, that <code>TreeRoot</code> widget is mandatory here. Otherwise, some functionality of descendant trees
+won't work (primarily - selection). See <code>TreeRoot</code> docs for more detailed explanation.</p>
+<h2 id="built-in-controls"><a class="header" href="#built-in-controls">Built-in controls</a></h2>
+<p>Tree widget is a rich control element, which has its own set of controls:</p>
+<p><code>Any Mouse Button</code> - select.
+<code>Ctrl+Click</code> - enables multi-selection.
+<code>Alt+Click</code> - prevents selection allowing you to use drag'n'drop.
+<code>Shift+Click</code> - selects a span of items.
+<code>ArrowUp</code> - navigate up from the topmost selection.
+<code>ArrowDown</code> - navigate down from the lowermost selection.
+<code>ArrowRight</code> - expand the selected item (first from the selection) or (if it is expanded), go
+down the tree.
+<code>ArrowLeft</code> - collapse the selected item or (if it is collapsed), go up the tree.</p>
+<h2 id="adding-items"><a class="header" href="#adding-items">Adding Items</a></h2>
+<p>An item could be added to a tree using <code>TreeMessage::AddItem</code> message like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox_ui::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    message::MessageDirection,
+</span><span class="boring">    text::TextBuilder,
+</span><span class="boring">    tree::{TreeBuilder, TreeMessage},
+</span><span class="boring">    widget::WidgetBuilder,
+</span><span class="boring">    UiNode, UserInterface,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn add_item(tree: Handle&lt;UiNode&gt;, ui: &amp;mut UserInterface) {
+    let ctx = &amp;mut ui.build_ctx();
+
+    let item = TreeBuilder::new(WidgetBuilder::new())
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Some New Item")
+                .build(ctx),
+        )
+        .build(ctx);
+
+    ui.send_message(TreeMessage::add_item(
+        tree,
+        MessageDirection::ToWidget,
+        item,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="removing-items"><a class="header" href="#removing-items">Removing Items</a></h2>
+<p>An item could be removed from a tree using <code>TreeMessage::RemoveItem</code> message like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox_ui::{
+</span><span class="boring">    core::pool::Handle, message::MessageDirection, tree::TreeMessage, UiNode, UserInterface,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn remove_item(tree: Handle&lt;UiNode&gt;, item_to_remove: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    // Note that the `ui` is borrowed as immutable here, which means that the item will **not**
+    // be removed immediately, but on the next update call.
+    ui.send_message(TreeMessage::remove_item(
+        tree,
+        MessageDirection::ToWidget,
+        item_to_remove,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="setting-new-items"><a class="header" href="#setting-new-items">Setting New Items</a></h2>
+<p>Tree's items could be changed all at once using the <code>TreeMessage::SetItems</code> message like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox_ui::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    message::MessageDirection,
+</span><span class="boring">    text::TextBuilder,
+</span><span class="boring">    tree::{TreeBuilder, TreeMessage},
+</span><span class="boring">    widget::WidgetBuilder,
+</span><span class="boring">    UiNode, UserInterface,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn set_items(tree: Handle&lt;UiNode&gt;, ui: &amp;mut UserInterface) {
+    let ctx = &amp;mut ui.build_ctx();
+
+    let items = vec![
+        TreeBuilder::new(WidgetBuilder::new())
+            .with_content(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item 0")
+                    .build(ctx),
+            )
+            .build(ctx),
+        TreeBuilder::new(WidgetBuilder::new())
+            .with_content(
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item 1")
+                    .build(ctx),
+            )
+            .build(ctx),
+    ];
+
+    // A flag, that tells that the UI system must destroy previous items first.
+    let remove_previous = true;
+    ui.send_message(TreeMessage::set_items(
+        tree,
+        MessageDirection::ToWidget,
+        items,
+        remove_previous,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="expanding-items"><a class="header" href="#expanding-items">Expanding Items</a></h2>
+<p>It is possible to expand/collapse trees at runtime using <code>TreeMessage::Expand</code> message. It provides
+different expansion strategies, see docs for <code>TreeExpansionStrategy</code> for more info. Tree expansion
+could useful to highlight something visually.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use fyrox_ui::{
+</span><span class="boring">    core::pool::Handle,
+</span><span class="boring">    message::MessageDirection,
+</span><span class="boring">    tree::{TreeExpansionStrategy, TreeMessage},
+</span><span class="boring">    UiNode, UserInterface,
+</span><span class="boring">};
+</span><span class="boring">
+</span>fn expand_tree(tree: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(TreeMessage::expand(
+        tree,
+        MessageDirection::ToWidget,
+        true,
+        TreeExpansionStrategy::RecursiveAncestors,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="vector-image"><a class="header" href="#vector-image">Vector image</a></h1>
 <p>Vector image is used to create images, that consists from a fixed set of basic primitives, such as lines,
 triangles, rectangles, etc. It could be used to create simple images that can be infinitely scaled without
