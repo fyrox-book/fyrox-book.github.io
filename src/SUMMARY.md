@@ -122,7 +122,7 @@
     - [Tab control](./ui/tab_control.md)        
     - [Text](./ui/text.md)        
     - [Text box](./ui/text_box.md)        
-    - [Tree (WIP)](./ui/tree.md)        
+    - [Tree](./ui/tree.md)        
     - [Vector image](./ui/vector_image.md)        
     - [Window](./ui/window.md)        
     - [Wrap panel](./ui/wrap_panel.md)        
