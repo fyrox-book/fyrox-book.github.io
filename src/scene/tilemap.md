@@ -1,13 +1,7 @@
 # Tile Map
 
 Tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used in 2D games to build game worlds 
-quickly and easily. 
-
-> ⚠️ This functionality is available only on nightly version of the engine and will be a part of the next stable release.
-> If you want to use it, read [this chapter](../beginning/scripting.md#using-the-latest-engine-version) to learn how to
-> switch to the nightly version of the engine.
-
-An example of a tile map could be something like this:
+quickly and easily. An example of a tile map could be something like this:
 
 ![tile map](tile_map.png)
 
