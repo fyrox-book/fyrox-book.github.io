@@ -239,7 +239,7 @@ Activate it using the button with paint bucket icon.
 Unlike the other tools, the flood fill tool is not implemented for use in the Tile Set Editor,
 so in the Tile Set Editor the flood tool will just act like the brush tool.
 
-![flood fill](tile_map_tools/flood_fill.gif)
+![flood fill](flood_fill.gif)
 
 ### Pick Tool
 
