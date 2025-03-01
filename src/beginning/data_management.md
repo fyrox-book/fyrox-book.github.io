@@ -73,7 +73,7 @@ efficiently and fearlessly use Fyrox.
 ## Borrowing
 
 Once an object is placed in a pool, you have to use its respective handle to get a reference to it. This can
-be done with either `pool.borrow(handle)` or `pool.borrow_mute(handle)`, or by using the `Index` trait: `pool[handle]`. Note that 
+be done with either `pool.borrow(handle)` or `pool.borrow_mut(handle)`, or by using the `Index` trait: `pool[handle]`. Note that 
 these methods panic when the handle given is invalid. If you want to be safe, use the `try_borrow(handle)` or 
 `try_borrow_mut(handle)` method.
 

@@ -109,7 +109,7 @@ fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
     // Finally create the tile map.
     TileMapBuilder::new(BaseBuilder::new())
         .with_tile_set(tile_set)
-        .with_tiles(tiles)
+        .with_tiles(&tiles)
         .build(graph)
 }
 // ANCHOR_END: create_tile_map

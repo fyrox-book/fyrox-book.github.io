@@ -1,13 +1,7 @@
 # Tile Map
 
 Tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used in 2D games to build game worlds 
-quickly and easily. 
-
-> ⚠️ This functionality is available only on nightly version of the engine and will be a part of the next stable release.
-> If you want to use it, read [this chapter](../beginning/scripting.md#using-the-latest-engine-version) to learn how to
-> switch to the nightly version of the engine.
-
-An example of a tile map could be something like this:
+quickly and easily. An example of a tile map could be something like this:
 
 ![tile map](tile_map.png)
 
@@ -245,7 +239,7 @@ Activate it using the button with paint bucket icon.
 Unlike the other tools, the flood fill tool is not implemented for use in the Tile Set Editor,
 so in the Tile Set Editor the flood tool will just act like the brush tool.
 
-![flood fill](tile_map_tools/flood_fill.png)
+![flood fill](flood_fill.gif)
 
 ### Pick Tool
 

@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
@@ -19,7 +19,8 @@ jobs:
         with:
           mdbook-version: 'latest'
 
-      - run: mdbook build
+      - name: Build the book
+        run: mdbook build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
