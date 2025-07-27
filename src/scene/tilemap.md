@@ -17,7 +17,14 @@ handle, called a `TileDefinitionHandle`, and this handle is what will be stored 
 the tiles.
 
 Here is an example handle: `(0,2):(-3,5)`. This handle means that the tile is on the page at coordinates
-(0,2) and the tile data is at (-3,5) within that page's grid.
+(0,2) and the tile data is at (-3,5) within that page's grid. Once a handle like this has been put into a tile map cell,
+the tile map rendering process will look for a page at that position and a tile at that position within the page.
+If it fails to find a page at that position, or the tile position is empty in the page, then a pink texture will be
+rendered to indicate a missing tile texture. Be aware of this if you are considering changing the position of
+pages or tiles in the tile set.
+
+**Warning:** If you change the position of a page, tile maps *will not be automatically updated to find the
+page at its new position.* It may be best to choose the positions of pages carefully and never change them.
 
 Tile set pages come in multiple varieties depending on what data will be stored in each grid cell of the page.
 
@@ -118,13 +125,14 @@ be discussed later.
 #### Creating a Transform Page
 
 Once you have prepared a library of tiles with your tile set, you may want to specify which tiles are mirrored or rotated
-versions of other tiles. This will allow the tile set produce a flipped or rotated version of a tile just by giving it
+versions of other tiles. This will allow the tile set to produce a flipped or rotated version of a tile just by giving it
 the handle of the tile and the desired transformation. Start by selecting an empty page cell and clicking "Transform"
 under "Create New Page."
 
 In the lower grid area you should see that the cells have been divided into 2x4 groups. Each cell of these groups can store
 a `TileDefinitionHandle` and the eight handles together will specify all possible combinations of flips and 90-degree rotations
-that may be needed for a tile.
+that may be needed for a tile. The left 2x2 tiles are supposed to be a horizontal reflection of the right 2x2 tiles,
+and within each 2x2 the tiles are supposed to rotate as you look clockwise or counter-clockwise around the square, as illustrated below.
 
 ![Transform page](tile_map_rotate.png)
 
@@ -164,12 +172,12 @@ see something like this:
 
 ![empty tile map](empty_tile_map.png)
 
-If you look closely, the editor warns us about missing tile set. Find the tile set you've just made and drag'n'drop it 
+If you look closely, the editor warns us about a missing tile set. Find the tile set you've just made and drag'n'drop it 
 from the asset browser to the `Tile Set` field in the inspector.
 
 ## Tile Map Brush
 
-There's one more step before we start editing the tile map - we need a brush to paint on the tile map.
+There's one more step before we start editing the tile map—we may want a brush to paint on the tile map.
 Click `+` button in the asset browser and select `TileMapBrush`, set a name for it and click `OK`.
 Now select the tile map scene node and drag'n'drop the brush you've just created to "Active Brush" property.
 This will make it the default brush whenever you edit this tile map node.
@@ -298,9 +306,11 @@ for a 2D rigid body.
 
 There are currently three different ways to set the collision shape for each tile:
 
--None: The tile has no collision shape, the default.
--Full: The tile's full square is covered by a collision shape.
--Custom: The user supplies a list of triangles to construct a collision shape.
+* **None:** The tile has no collision shape, the default.
+
+* **Full:** The tile's full square is covered by a collision shape.
+
+* **Custom:** The user supplies a list of triangles to construct a collision shape.
 
 In code, custom collision shapes are created using a `fyrox::scene::tilemap::CustomTileCollider` which is a simple struct like so:
 
@@ -340,8 +350,8 @@ Give the shape the tile map and the name of the collision layer that the rigid b
 
 ## Layers
 
-Tile map does not support any layers on its own, but layers could be added very easy by simply creating another tile 
-map with its own tile set and shifting this new layer by Z axis towards camera on some small value. 
+Tile map does not support any layers on its own, but layers can be added very easily by simply creating another tile 
+map with its own tile set and shifting this new layer by Z axis towards camera by some small value. 
 
 ## Tile Properties
 
