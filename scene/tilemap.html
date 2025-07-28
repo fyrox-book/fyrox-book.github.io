@@ -33,30 +33,43 @@
         <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../highlight.css">
-        <link rel="stylesheet" href="../tomorrow-night.css">
-        <link rel="stylesheet" href="../ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
         <!-- MathJax -->
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-        <!-- Provide site root to javascript -->
+        <!-- Provide site root and default themes to javascript -->
         <script>
-            var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+            const path_to_root = "../";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc.js"></script>
     </head>
     <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
     <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -70,7 +83,8 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             const html = document.documentElement;
@@ -83,17 +97,20 @@
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -120,13 +137,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -140,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/tilemap.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/tilemap.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -149,7 +167,12 @@
 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -182,7 +205,13 @@ on their grids according to whatever organizational principles you please. The c
 handle, called a <code>TileDefinitionHandle</code>, and this handle is what will be stored in the tile map to determine how to render
 the tiles.</p>
 <p>Here is an example handle: <code>(0,2):(-3,5)</code>. This handle means that the tile is on the page at coordinates
-(0,2) and the tile data is at (-3,5) within that page's grid.</p>
+(0,2) and the tile data is at (-3,5) within that page's grid. Once a handle like this has been put into a tile map cell,
+the tile map rendering process will look for a page at that position and a tile at that position within the page.
+If it fails to find a page at that position, or the tile position is empty in the page, then a pink texture will be
+rendered to indicate a missing tile texture. Be aware of this if you are considering changing the position of
+pages or tiles in the tile set.</p>
+<p><strong>Warning:</strong> If you change the position of a page, tile maps <em>will not be automatically updated to find the
+page at its new position.</em> It may be best to choose the positions of pages carefully and never change them.</p>
 <p>Tile set pages come in multiple varieties depending on what data will be stored in each grid cell of the page.</p>
 <ul>
 <li>
@@ -351,12 +380,13 @@ coordinates of the corners of the tile, the tile can be rotated by 90 degrees an
 be discussed later.</p>
 <h4 id="creating-a-transform-page"><a class="header" href="#creating-a-transform-page">Creating a Transform Page</a></h4>
 <p>Once you have prepared a library of tiles with your tile set, you may want to specify which tiles are mirrored or rotated
-versions of other tiles. This will allow the tile set produce a flipped or rotated version of a tile just by giving it
+versions of other tiles. This will allow the tile set to produce a flipped or rotated version of a tile just by giving it
 the handle of the tile and the desired transformation. Start by selecting an empty page cell and clicking "Transform"
 under "Create New Page."</p>
 <p>In the lower grid area you should see that the cells have been divided into 2x4 groups. Each cell of these groups can store
 a <code>TileDefinitionHandle</code> and the eight handles together will specify all possible combinations of flips and 90-degree rotations
-that may be needed for a tile.</p>
+that may be needed for a tile. The left 2x2 tiles are supposed to be a horizontal reflection of the right 2x2 tiles,
+and within each 2x2 the tiles are supposed to rotate as you look clockwise or counter-clockwise around the square, as illustrated below.</p>
 <p><img src="tile_map_rotate.png" alt="Transform page" /></p>
 <p>In order to fill this page with tile handles, click the "Palette" button in the upper-right to open the "Tile Map Control Panel" window,
 if it is not already open. This is the same window that you will use to edit a tile map, and so it has tools designed for selecting
@@ -383,10 +413,10 @@ as smoothly as a running game, so put some animated tiles in your tile map and t
 <p>Now we have the tile set, and we can start creating a tile map using it. Click <code>Create -&gt; 2D -&gt; Tile Map</code> and you should
 see something like this:</p>
 <p><img src="empty_tile_map.png" alt="empty tile map" /></p>
-<p>If you look closely, the editor warns us about missing tile set. Find the tile set you've just made and drag'n'drop it
+<p>If you look closely, the editor warns us about a missing tile set. Find the tile set you've just made and drag'n'drop it
 from the asset browser to the <code>Tile Set</code> field in the inspector.</p>
 <h2 id="tile-map-brush"><a class="header" href="#tile-map-brush">Tile Map Brush</a></h2>
-<p>There's one more step before we start editing the tile map - we need a brush to paint on the tile map.
+<p>There's one more step before we start editing the tile map—we may want a brush to paint on the tile map.
 Click <code>+</code> button in the asset browser and select <code>TileMapBrush</code>, set a name for it and click <code>OK</code>.
 Now select the tile map scene node and drag'n'drop the brush you've just created to "Active Brush" property.
 This will make it the default brush whenever you edit this tile map node.</p>
@@ -470,9 +500,17 @@ so with multiple layers a tile may have multiple collison shapes.</p>
 controls how the shapes on that layer appear when they are visible. The name is used to identify the layer
 for a 2D rigid body.</p>
 <p>There are currently three different ways to set the collision shape for each tile:</p>
-<p>-None: The tile has no collision shape, the default.
--Full: The tile's full square is covered by a collision shape.
--Custom: The user supplies a list of triangles to construct a collision shape.</p>
+<ul>
+<li>
+<p><strong>None:</strong> The tile has no collision shape, the default.</p>
+</li>
+<li>
+<p><strong>Full:</strong> The tile's full square is covered by a collision shape.</p>
+</li>
+<li>
+<p><strong>Custom:</strong> The user supplies a list of triangles to construct a collision shape.</p>
+</li>
+</ul>
 <p>In code, custom collision shapes are created using a <code>fyrox::scene::tilemap::CustomTileCollider</code> which is a simple struct like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -515,8 +553,8 @@ In code it could be done something like this:</p>
 Give the shape the tile map and the name of the collision layer that the rigid body is supposed to represent.</p>
 <p><img src="tile_map_physics.png" alt="tile map physics" /></p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
-<p>Tile map does not support any layers on its own, but layers could be added very easy by simply creating another tile
-map with its own tile set and shifting this new layer by Z axis towards camera on some small value.</p>
+<p>Tile map does not support any layers on its own, but layers can be added very easily by simply creating another tile
+map with its own tile set and shifting this new layer by Z axis towards camera by some small value.</p>
 <h2 id="tile-properties"><a class="header" href="#tile-properties">Tile Properties</a></h2>
 <p>Tile set could contain custom properties for each tile, these properties could be used to attach additional information
 to the tiles in your game. This could include surface type (water, lava, dirt, etc.), physics properties (friction,
@@ -665,8 +703,8 @@ position, but it could be fixed pretty easily - supply physical contact position
         </script>
 
         <script src="../ace.js"></script>
-        <script src="../editor.js"></script>
         <script src="../mode-rust.js"></script>
+        <script src="../editor.js"></script>
         <script src="../theme-dawn.js"></script>
         <script src="../theme-tomorrow_night.js"></script>
 
@@ -679,6 +717,7 @@ position, but it could be fixed pretty easily - supply physical contact position
         <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
+
 
 
     </div>
