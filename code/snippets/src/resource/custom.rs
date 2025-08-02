@@ -64,7 +64,7 @@ impl ResourceLoader for CustomResourceLoader {
 
     fn load(&self, path: PathBuf, io: Arc<dyn ResourceIo>) -> BoxedLoaderFuture {
         Box::pin(async move {
-            match io::load_file(&path).await {
+            match io.load_file(&path).await {
                 Ok(content) => {
                     let my_resource = CustomResource {
                         path,
