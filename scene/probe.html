@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Mesh Node - Fyrox Book</title>
+        <title>Reflection Probe - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -158,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/mesh_node.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/probe.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -192,128 +192,49 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="mesh-node"><a class="header" href="#mesh-node">Mesh node</a></h1>
-<p>Mesh is a scene node that represents a 3D model. This one of the most commonly used nodes in almost every game.
-Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
-and loaded in your scene.</p>
-<h2 id="surfaces"><a class="header" href="#surfaces">Surfaces</a></h2>
-<p>Surface is a set of triangles that uses the same <a href="../rendering/materials.html">material</a>. Mesh node could contain zero of
-more surfaces; each surface contains a set of vertices and indices that binds vertices with triangles. Mesh nodes split
-into surfaces to be rendered effectively by modern GPUs.</p>
-<h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
-<p>There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
-the way to go, especially with tons and tons of free 3D models available online.</p>
-<blockquote>
-<p>⚠️ The engine supports <em>only</em> FBX and GLTF file format for 3D models!
-To use GLTF, specify <code>gltf</code> feature of the engine in your root Cargo.toml</p>
-</blockquote>
-<h3 id="using-a-3d-modelling-software"><a class="header" href="#using-a-3d-modelling-software">Using a 3D modelling software</a></h3>
-<p>To create a 3D model, you could use <a href="https://www.blender.org/">Blender</a> and then export it to <code>FBX</code> file format.
-To load your 3D model in the game, you should do few simple steps (loading a 3D model does not differ from a prefab
-instantiation):</p>
+                        <h1 id="reflection-probe"><a class="header" href="#reflection-probe">Reflection Probe</a></h1>
+<p>Reflection probe is an object that allows "capturing" a scene content in a cube texture, that
+can later be used to render reflections and be used as a source of ambient lighting for a scene.</p>
+<h2 id="update-mode"><a class="header" href="#update-mode">Update Mode</a></h2>
+<p>Reflection probe can be updated either once or every frame. The default mode is [<code>UpdateMode::Once</code>].
+If you need dynamic reflections, then use [<code>UpdateMode::EachFrame</code>] mode. However, it may lead
+to performance issues.</p>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
+<p>Reflection probe renders the scene six times which is quite slow. In most cases, it does not matter
+because most of the probes can be updated just once (static probes). Such probes can have
+increased resolution.</p>
+<p>Dynamic probes are the heaviest and require careful performance tweaking. There should be a balance
+between the resolution and the speed. Reflection probes does frustum culling, so some part of
+the scene geometry can be excluded. This functionality can be tweaked by setting the far clipping
+plane distance to lower values to prevent the probe to render distant objects.</p>
+<h2 id="interaction-with-cameras"><a class="header" href="#interaction-with-cameras">Interaction With Cameras</a></h2>
+<p>When rendering, the engine will automatically pick a reflection probe for a camera. It is done
+by a simple point-box intersection test. This reflection probe will then be used for rendering
+using the camera.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>The following example creates a new reflection probe 20 units wide in all directions, centered
+at (0.0, 10.0, 0.0) point with a rendering position offset by 10 units along X axis.</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn load_model_to_scene(
-    scene: &amp;mut Scene,
-    path: &amp;Path,
-    resource_manager: ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
-    // Request model resource and block until it loading.
-    let model_resource = block_on(resource_manager.request::&lt;Model&gt;(path)).unwrap();
-
-    // Create an instance of the resource in the scene.
-    model_resource.instantiate(scene)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>This code snippet intentionally omits proper <code>async/await</code> usage (instead it just blocks current thread until
-model is loading) and error handling. In the real game you should carefully handle all errors and use <code>async/await</code>
-properly.</p>
-<h3 id="creating-a-procedural-mesh"><a class="header" href="#creating-a-procedural-mesh">Creating a procedural mesh</a></h3>
-<p>A mesh instance could be created from code, such meshes are called "procedural". They're suitable for cases when you
-cannot create a mesh in 3D modelling software.</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn create_procedural_mesh(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
-    let mut material = Material::standard();
-
-    // Material is completely optional, but here we'll demonstrate that it is possible to
-    // create procedural meshes with any material you want.
-    material.bind(
-        "diffuseTexture",
-        Some(resource_manager.request::&lt;Texture&gt;("some_texture.jpg")),
-    );
-
-    // Notice the MeshBuilder.
-    MeshBuilder::new(
+</span>fn create_probe(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+    ReflectionProbeBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
-                .with_local_position(Vector3::new(0.0, -0.25, 0.0))
+                // The center of the probe's bounding box is located 10 units above the ground.
+                .with_local_position(Vector3::new(0.0, 10.0, 0.0))
+                // The size of the probe's bounding box is 20 units.
+                .with_local_scale(Vector3::repeat(20.0))
                 .build(),
         ),
     )
-    .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
-        ResourceKind::Embedded,
-        // Our procedural mesh will have a form of squashed cube.
-        // A mesh can have unlimited number of surfaces.
-        SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&amp;Vector3::new(
-            25.0, 0.25, 25.0,
-        ))),
-    ))
-    .with_material(MaterialResource::new_ok(ResourceKind::Embedded, material))
-    .build()])
-    .build(&amp;mut scene.graph)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>As you can see, creating a mesh procedurally requires lots of manual work and not so easy.</p>
-<h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
-<p>Mesh node supports bone-based animation (skinning) and blend shapes. See <a href="./../animation/animation.html">Animation chapter</a>
-for more info.</p>
-<h2 id="data-buffers"><a class="header" href="#data-buffers">Data Buffers</a></h2>
-<p>It is possible to access vertex buffer and index buffer of a mesh to either read or write some data there.
-For example, the following code extracts world-space positions of every vertex of an animated mesh:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn extract_world_space_vertices(mesh: &amp;Mesh, graph: &amp;Graph) -&gt; Vec&lt;Vector3&lt;f32&gt;&gt; {
-    let mut vertices = Vec::new();
-
-    for surface in mesh.surfaces() {
-        let guard = surface.data();
-        let data = guard.data_ref();
-
-        for vertex in data.vertex_buffer.iter() {
-            let Ok(position) = vertex.read_3_f32(VertexAttributeUsage::Position) else {
-                continue;
-            };
-
-            let Ok(weights) = vertex.read_4_f32(VertexAttributeUsage::BoneWeight) else {
-                continue;
-            };
-
-            let Ok(indices) = vertex.read_4_u8(VertexAttributeUsage::BoneIndices) else {
-                continue;
-            };
-
-            let mut world_space_vertex = Vector3::default();
-            for (weight, index) in weights.iter().zip(indices.iter()) {
-                if let Some(bone_node) = surface
-                    .bones()
-                    .get(*index as usize)
-                    .and_then(|bone_handle| graph.try_get(*bone_handle))
-                {
-                    let bone_transform =
-                        bone_node.global_transform() * bone_node.inv_bind_pose_transform();
-                    world_space_vertex += bone_transform
-                        .transform_point(&amp;Point3::from(position))
-                        .coords
-                        .scale(*weight);
-                }
-            }
-
-            vertices.push(world_space_vertex);
-        }
-    }
-
-    vertices
+    // Set resolution of the probe.
+    .with_resolution(256)
+    // The probe will capture the scene once it is created.
+    .with_update_mode(UpdateMode::Once)
+    // Set the capture point slightly off-center. The probe will capture the scene at
+    // (10.0, 10.0, 0.0) point.
+    .with_rendering_local_position(Vector3::new(10.0, 0.0, 0.0))
+    .build(graph)
 }
 <span class="boring">}</span></code></pre></pre>
 
@@ -321,11 +242,11 @@ For example, the following code extracts world-space positions of every vertex o
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../scene/base_node.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../scene/light_node.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../scene/lighting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../scene/sprite_node.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -335,11 +256,11 @@ For example, the following code extracts world-space positions of every vertex o
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../scene/base_node.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../scene/light_node.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../scene/lighting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../scene/sprite_node.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

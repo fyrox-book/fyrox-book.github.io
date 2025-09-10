@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Mesh Node - Fyrox Book</title>
+        <title>Lighting - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -158,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/mesh_node.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/lighting.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -192,140 +192,87 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="mesh-node"><a class="header" href="#mesh-node">Mesh node</a></h1>
-<p>Mesh is a scene node that represents a 3D model. This one of the most commonly used nodes in almost every game.
-Meshes could be easily created either programmatically or be made in some 3D modelling software (like Blender)
-and loaded in your scene.</p>
-<h2 id="surfaces"><a class="header" href="#surfaces">Surfaces</a></h2>
-<p>Surface is a set of triangles that uses the same <a href="../rendering/materials.html">material</a>. Mesh node could contain zero of
-more surfaces; each surface contains a set of vertices and indices that binds vertices with triangles. Mesh nodes split
-into surfaces to be rendered effectively by modern GPUs.</p>
-<h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
-<p>There are basically two ways, how to pick one depends on your needs. In general, using a 3D modelling software is
-the way to go, especially with tons and tons of free 3D models available online.</p>
-<blockquote>
-<p>⚠️ The engine supports <em>only</em> FBX and GLTF file format for 3D models!
-To use GLTF, specify <code>gltf</code> feature of the engine in your root Cargo.toml</p>
-</blockquote>
-<h3 id="using-a-3d-modelling-software"><a class="header" href="#using-a-3d-modelling-software">Using a 3D modelling software</a></h3>
-<p>To create a 3D model, you could use <a href="https://www.blender.org/">Blender</a> and then export it to <code>FBX</code> file format.
-To load your 3D model in the game, you should do few simple steps (loading a 3D model does not differ from a prefab
-instantiation):</p>
+                        <h1 id="lighting"><a class="header" href="#lighting">Lighting</a></h1>
+<p>This chapter explains how the lighting works in the engine and which methods of lighting it uses. Fyrox uses
+industry-standard physically based rendering pipeline by default.</p>
+<h2 id="ambient-lighting"><a class="header" href="#ambient-lighting">Ambient lighting</a></h2>
+<p>The engine uses PBR pipeline which supports two major ways of applying ambient lighting.</p>
+<h3 id="environment-lighting-via-ibl"><a class="header" href="#environment-lighting-via-ibl">Environment lighting (via IBL)</a></h3>
+<p>Physically correct ambient image-based lighting (IBL). It uses an environment map as a source of lighting for the
+entire scene. By default, every scene has an environment map with bright-blue sky, and this bright lighting is
+used to light the scene. To change it, use the following code snippet:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn load_model_to_scene(
-    scene: &amp;mut Scene,
-    path: &amp;Path,
-    resource_manager: ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
-    // Request model resource and block until it loading.
-    let model_resource = block_on(resource_manager.request::&lt;Model&gt;(path)).unwrap();
-
-    // Create an instance of the resource in the scene.
-    model_resource.instantiate(scene)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>This code snippet intentionally omits proper <code>async/await</code> usage (instead it just blocks current thread until
-model is loading) and error handling. In the real game you should carefully handle all errors and use <code>async/await</code>
-properly.</p>
-<h3 id="creating-a-procedural-mesh"><a class="header" href="#creating-a-procedural-mesh">Creating a procedural mesh</a></h3>
-<p>A mesh instance could be created from code, such meshes are called "procedural". They're suitable for cases when you
-cannot create a mesh in 3D modelling software.</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn create_procedural_mesh(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
-    let mut material = Material::standard();
-
-    // Material is completely optional, but here we'll demonstrate that it is possible to
-    // create procedural meshes with any material you want.
-    material.bind(
-        "diffuseTexture",
-        Some(resource_manager.request::&lt;Texture&gt;("some_texture.jpg")),
+</span>async fn create_skybox(resource_manager: ResourceManager) -&gt; SkyBox {
+    // Load skybox textures in parallel.
+    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
+        resource_manager.request::&lt;Texture&gt;("path/to/front.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/back.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/left.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/right.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/up.jpg"),
+        resource_manager.request::&lt;Texture&gt;("path/to/down.jpg")
     );
 
-    // Notice the MeshBuilder.
-    MeshBuilder::new(
-        BaseBuilder::new().with_local_transform(
-            TransformBuilder::new()
-                .with_local_position(Vector3::new(0.0, -0.25, 0.0))
-                .build(),
-        ),
-    )
-    .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
-        ResourceKind::Embedded,
-        // Our procedural mesh will have a form of squashed cube.
-        // A mesh can have unlimited number of surfaces.
-        SurfaceData::make_cube(Matrix4::new_nonuniform_scaling(&amp;Vector3::new(
-            25.0, 0.25, 25.0,
-        ))),
-    ))
-    .with_material(MaterialResource::new_ok(ResourceKind::Embedded, material))
-    .build()])
-    .build(&amp;mut scene.graph)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>As you can see, creating a mesh procedurally requires lots of manual work and not so easy.</p>
-<h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
-<p>Mesh node supports bone-based animation (skinning) and blend shapes. See <a href="./../animation/animation.html">Animation chapter</a>
-for more info.</p>
-<h2 id="data-buffers"><a class="header" href="#data-buffers">Data Buffers</a></h2>
-<p>It is possible to access vertex buffer and index buffer of a mesh to either read or write some data there.
-For example, the following code extracts world-space positions of every vertex of an animated mesh:</p>
-<pre><pre class="playground"><code class="language-rust  no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn extract_world_space_vertices(mesh: &amp;Mesh, graph: &amp;Graph) -&gt; Vec&lt;Vector3&lt;f32&gt;&gt; {
-    let mut vertices = Vec::new();
-
-    for surface in mesh.surfaces() {
-        let guard = surface.data();
-        let data = guard.data_ref();
-
-        for vertex in data.vertex_buffer.iter() {
-            let Ok(position) = vertex.read_3_f32(VertexAttributeUsage::Position) else {
-                continue;
-            };
-
-            let Ok(weights) = vertex.read_4_f32(VertexAttributeUsage::BoneWeight) else {
-                continue;
-            };
-
-            let Ok(indices) = vertex.read_4_u8(VertexAttributeUsage::BoneIndices) else {
-                continue;
-            };
-
-            let mut world_space_vertex = Vector3::default();
-            for (weight, index) in weights.iter().zip(indices.iter()) {
-                if let Some(bone_node) = surface
-                    .bones()
-                    .get(*index as usize)
-                    .and_then(|bone_handle| graph.try_get(*bone_handle))
-                {
-                    let bone_transform =
-                        bone_node.global_transform() * bone_node.inv_bind_pose_transform();
-                    world_space_vertex += bone_transform
-                        .transform_point(&amp;Point3::from(position))
-                        .coords
-                        .scale(*weight);
-                }
-            }
-
-            vertices.push(world_space_vertex);
-        }
+    // Unwrap everything.
+    let skybox = SkyBoxBuilder {
+        front: Some(front.unwrap()),
+        back: Some(back.unwrap()),
+        left: Some(left.unwrap()),
+        right: Some(right.unwrap()),
+        top: Some(top.unwrap()),
+        bottom: Some(bottom.unwrap()),
     }
+    .build()
+    .unwrap();
 
-    vertices
+    // Set S and T coordinate wrap mode, ClampToEdge will remove any possible seams on edges
+    // of the skybox.
+    let skybox_texture = skybox.cubemap().unwrap();
+    let mut data = skybox_texture.data_ref();
+    data.set_s_wrap_mode(TextureWrapMode::ClampToEdge);
+    data.set_t_wrap_mode(TextureWrapMode::ClampToEdge);
+
+    skybox
+}
+
+fn set_scene_skybox(scene: &amp;mut Scene, resource_manager: ResourceManager) {
+    scene.set_skybox(create_skybox(resource_manager));
 }
 <span class="boring">}</span></code></pre></pre>
+<p>This, however, may still produce weird lighting inside indoor scenes - all objects will be equally lit from
+the respective side of the skybox. The engine has a special mechanism to solve this issue called reflection
+probes. See the <a href="probe.html">respective chapter for more info</a>.</p>
+<h3 id="single-color-lighting"><a class="header" href="#single-color-lighting">Single-color lighting</a></h3>
+<p>Simplest possible lighting, but not physically correct. Every scene has default ambient lighting setting, it is
+defined by a single RGB color. By default, every scene has some pre-defined ambient lighting, it is bright enough,
+so you can see your objects. In some cases, you may need to adjust it or even make it black (for horror games for
+instance), this can be achieved by a few lines of code:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn set_ambient_lighting(scene: &amp;mut Scene) {
+    scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30);
+    scene.rendering_options.environment_lighting_source = EnvironmentLightingSource::AmbientColor;
+<span class="boring">}</span></code></pre></pre>
+<p>Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
+which is not available in the engine yet.</p>
+<h2 id="light-sources"><a class="header" href="#light-sources">Light Sources</a></h2>
+<p>There are number of built-in light sources:</p>
+<ol>
+<li>Directional Light</li>
+<li>Point Light</li>
+<li>Spot Light</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../scene/base_node.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../scene/mesh_node.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../scene/lighting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../scene/light_node.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -335,11 +282,11 @@ For example, the following code extracts world-space positions of every vertex o
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../scene/base_node.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../scene/mesh_node.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../scene/lighting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../scene/light_node.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

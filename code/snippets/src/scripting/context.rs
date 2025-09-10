@@ -1,16 +1,18 @@
-use fyrox::asset::manager::ResourceManager;
-use fyrox::core::pool::Handle;
-use fyrox::engine::task::TaskPoolHandler;
-use fyrox::engine::{
-    AsyncSceneLoader, GraphicsContext, PerformanceStatistics, ScriptMessageDispatcher,
-    ScriptProcessor, SerializationContext,
+use fyrox::{
+    asset::manager::ResourceManager,
+    core::pool::Handle,
+    engine::task::TaskPoolHandler,
+    engine::ApplicationLoopController,
+    engine::{
+        AsyncSceneLoader, GraphicsContext, PerformanceStatistics, ScriptMessageDispatcher,
+        ScriptProcessor, SerializationContext,
+    },
+    gui::constructor::WidgetConstructorContainer,
+    gui::UiContainer,
+    scene::node::Node,
+    scene::{Scene, SceneContainer},
+    script::{PluginsRefMut, ScriptMessageSender},
 };
-use fyrox::event_loop::EventLoopWindowTarget;
-use fyrox::gui::constructor::WidgetConstructorContainer;
-use fyrox::gui::UiContainer;
-use fyrox::scene::node::Node;
-use fyrox::scene::{Scene, SceneContainer};
-use fyrox::script::{PluginsRefMut, ScriptMessageSender};
 use std::sync::Arc;
 
 // ANCHOR: context
@@ -45,7 +47,7 @@ pub struct PluginContext<'a, 'b> {
     pub elapsed_time: f32,
     pub script_processor: &'a ScriptProcessor,
     pub async_scene_loader: &'a mut AsyncSceneLoader,
-    pub window_target: Option<&'b EventLoopWindowTarget<()>>,
+    pub loop_controller: ApplicationLoopController<'b>,
     pub task_pool: &'a mut TaskPoolHandler,
 }
 // ANCHOR_END: plugin_context

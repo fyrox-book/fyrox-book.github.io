@@ -359,7 +359,7 @@ context is something like this:</p>
     pub elapsed_time: f32,
     pub script_processor: &amp;'a ScriptProcessor,
     pub async_scene_loader: &amp;'a mut AsyncSceneLoader,
-    pub window_target: Option&lt;&amp;'b EventLoopWindowTarget&lt;()&gt;&gt;,
+    pub loop_controller: ApplicationLoopController&lt;'b&gt;,
     pub task_pool: &amp;'a mut TaskPoolHandler,
 }
 <span class="boring">}</span></code></pre></pre>
