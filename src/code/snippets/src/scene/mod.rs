@@ -10,6 +10,7 @@ pub mod joint;
 pub mod light;
 pub mod mesh;
 pub mod particle_system;
+pub mod probe;
 pub mod ray;
 pub mod rectangle;
 pub mod rigid_body;
@@ -18,7 +19,6 @@ pub mod sprite;
 pub mod terrain;
 pub mod tilemap;
 
-use fyrox::core::color::Color;
 use fyrox::core::pool::Handle;
 use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::{core::reflect::prelude::*, core::visitor::prelude::*, scene::Scene};
@@ -92,8 +92,3 @@ fn create_scene(ctx: &mut PluginContext) -> Handle<Scene> {
     ctx.scenes.add(scene)
 }
 // ANCHOR_END: create_scene
-
-// ANCHOR: set_ambient_lighting
-fn set_ambient_lighting(scene: &mut Scene) {
-    scene.rendering_options.ambient_lighting_color = Color::opaque(30, 30, 30);
-} // ANCHOR_END: set_ambient_lighting

@@ -8,11 +8,7 @@ use fyrox::{
         ResourceData,
     },
     core::{
-        io::{self},
-        reflect::prelude::*,
-        type_traits::prelude::*,
-        uuid::Uuid,
-        visitor::prelude::*,
+        reflect::prelude::*, type_traits::prelude::*, uuid::Uuid, visitor::prelude::*,
         TypeUuidProvider,
     },
 };

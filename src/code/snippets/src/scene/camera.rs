@@ -1,23 +1,25 @@
-use fyrox::asset::manager::ResourceManager;
-use fyrox::core::algebra::{Matrix4, Point3, Vector2, Vector3};
-use fyrox::core::futures::executor::block_on;
-use fyrox::core::math::ray::Ray;
-use fyrox::core::math::{TriangleDefinition, Vector3Ext};
-use fyrox::core::pool::Handle;
-use fyrox::graph::SceneGraphNode;
-use fyrox::renderer::Renderer;
-use fyrox::resource::texture::{Texture, TextureWrapMode};
-use fyrox::scene::base::BaseBuilder;
-use fyrox::scene::camera::{
-    Camera, CameraBuilder, ColorGradingLut, OrthographicProjection, PerspectiveProjection,
-    Projection, SkyBox, SkyBoxBuilder,
+use fyrox::{
+    asset::manager::ResourceManager,
+    core::algebra::{Matrix4, Point3, Vector2, Vector3},
+    core::futures::executor::block_on,
+    core::math::ray::Ray,
+    core::math::{TriangleDefinition, Vector3Ext},
+    core::pool::Handle,
+    graph::SceneGraphNode,
+    renderer::Renderer,
+    resource::texture::Texture,
+    scene::base::BaseBuilder,
+    scene::camera::{
+        Camera, CameraBuilder, ColorGradingLut, OrthographicProjection, PerspectiveProjection,
+        Projection,
+    },
+    scene::graph::Graph,
+    scene::mesh::buffer::{VertexAttributeUsage, VertexReadTrait},
+    scene::mesh::surface::SurfaceData,
+    scene::mesh::Mesh,
+    scene::node::Node,
+    scene::Scene,
 };
-use fyrox::scene::graph::Graph;
-use fyrox::scene::mesh::buffer::{VertexAttributeUsage, VertexReadTrait};
-use fyrox::scene::mesh::surface::SurfaceData;
-use fyrox::scene::mesh::Mesh;
-use fyrox::scene::node::Node;
-use fyrox::scene::Scene;
 
 // ANCHOR: create_camera
 fn create_camera(scene: &mut Scene) -> Handle<Node> {
@@ -53,47 +55,6 @@ fn create_orthographic_camera(graph: &mut Graph) -> Handle<Node> {
         .build(graph)
 }
 // ANCHOR_END: create_orthographic_camera
-
-// ANCHOR: create_camera_with_skybox
-async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
-    // Load skybox textures in parallel.
-    let (front, back, left, right, top, bottom) = fyrox::core::futures::join!(
-        resource_manager.request::<Texture>("path/to/front.jpg"),
-        resource_manager.request::<Texture>("path/to/back.jpg"),
-        resource_manager.request::<Texture>("path/to/left.jpg"),
-        resource_manager.request::<Texture>("path/to/right.jpg"),
-        resource_manager.request::<Texture>("path/to/up.jpg"),
-        resource_manager.request::<Texture>("path/to/down.jpg")
-    );
-
-    // Unwrap everything.
-    let skybox = SkyBoxBuilder {
-        front: Some(front.unwrap()),
-        back: Some(back.unwrap()),
-        left: Some(left.unwrap()),
-        right: Some(right.unwrap()),
-        top: Some(top.unwrap()),
-        bottom: Some(bottom.unwrap()),
-    }
-    .build()
-    .unwrap();
-
-    // Set S and T coordinate wrap mode, ClampToEdge will remove any possible seams on edges
-    // of the skybox.
-    let skybox_texture = skybox.cubemap().unwrap();
-    let mut data = skybox_texture.data_ref();
-    data.set_s_wrap_mode(TextureWrapMode::ClampToEdge);
-    data.set_t_wrap_mode(TextureWrapMode::ClampToEdge);
-
-    skybox
-}
-
-fn create_camera_with_skybox(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
-    CameraBuilder::new(BaseBuilder::new())
-        .with_skybox(block_on(create_skybox(resource_manager)))
-        .build(&mut scene.graph)
-}
-// ANCHOR_END: create_camera_with_skybox
 
 // ANCHOR: create_camera_with_lut
 fn create_camera_with_lut(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {

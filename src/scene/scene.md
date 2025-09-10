@@ -7,14 +7,14 @@ Scene is a container for game entities. Currently, scenes in the engine manage f
 3) Physics (rigid bodies, colliders, joints)
 4) Sound
 
-Scene allows you to create isolated "world" which won't interact with other scenes, it is very useful for many
+Scene allows you to create an isolated "world" which won't interact with other scenes, it is very useful for many
 more or less complex games.
 
 ## How to create
 
 A scene could be created either in FyroxEd or programmatically. You can also combine both approaches, where
 you build all "static" content in the editor and adding rest of the entities (bots, interactive objects, etc.)
-manually by instantiating respective prefabs at runtime.
+manually by instantiating the respective prefabs at runtime.
 
 ### Using FyroxEd
 
@@ -59,31 +59,19 @@ You can borrow a scene at any time using its handle and do some changes:
 
 ## Building scene asynchronously
 
-You can create your scene in separate thread and then pass it to main thread to insert it in the engine. Why this
-is needed? Remember the last time you've played a relatively large game, you've probably noticed that it have
+You can create your scene in a separate thread and then pass it to main thread to insert it in the engine. Why this
+is needed? Remember the last time you've played a relatively large game, you've probably noticed that it has 
 loading screens and loading screen has some fancy interactive stuff with progress bar. Loading screen is fully
-responsive while the game doing hard job loading the world for you. Got it already? Asynchronous scene loading is
-needed to create/load large scenes with tons of resources without blocking main thread, thus leaving the game
+responsive while the game is doing a hard job loading the world for you. Got it already? Asynchronous scene loading is
+needed to create/load large scenes with tons of resources without blocking the main thread, thus leaving the game
 fully responsive.
 
 ## Managing multiple scenes
 
 Usually you should have only one scene active (unless you're making something very special), you should use
 `.enabled` flag of a scene to turn it off or on. Deactivated scenes won't be rendered, the physics won't be
-updated, the sound will stop, and so on. In other words the scene will be frozen. This is useful for situations
-when you often need to switch between scenes, leaving other scene in frozen state. One of the examples where this
+updated, the sound will stop, and so on. In other words, the scene will be frozen. This is useful for situations
+when you often need to switch between scenes, leaving other scenes in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused.
 
-## Ambient lighting
 
-Every scene has default ambient lighting, it is defined by a single RGB color. By default, every scene has
-some pre-defined ambient lighting, it is bright enough, so you can see your objects. In some cases you may
-need to adjust it or even make it black (for horror games for instance), this can be achieved by a single
-line of code:
-
-```rust,no_run
-{{#include ../code/snippets/src/scene/mod.rs:set_ambient_lighting}}
-```
-
-Please keep in mind that ambient lighting does not mean global illumination, it is a different lighting technique
-which is not available in the engine yet.
