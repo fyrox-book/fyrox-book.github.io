@@ -7305,6 +7305,25 @@ map, if its top contains green-ish colors then you have <code>OpenGL Y+</code> n
 the green-ish colors is at the bottom, while on the right side green-ish colors is at the top. You could also check the
 lighting results on your 3D model and see if they're correct (looks the same as in the 3D modelling software, for
 instance) while moving a light source around.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="graphics-server"><a class="header" href="#graphics-server">Graphics Server</a></h1>
+<p>Graphics server is an abstraction that hides low-level graphics API (such as DirectX, OpenGL, Vulkan, etc.)
+calls under a higher level interface that consists of a number of "building blocks" that allows you to
+render computer graphics in an easier way.</p>
+<h2 id="opengl-graphics-server"><a class="header" href="#opengl-graphics-server">OpenGL Graphics Server</a></h2>
+<p>The default graphics server is the OpenGL-based one (<code>GlGraphicsServer</code>). Why using a deprecated API in the
+modern world? The answer is simple: OpenGL is wide-spread, runs on pretty much all mainstream platforms
+(except consoles). Fyrox has a small developers team, which can't maintain a number of different GAPIs for
+different platforms. Foreseeing the next potential question - why not just use wgpu? The answer is again
+simple: legacy. Fyrox is a relatively old game engine (compared to the entire Rust ecosystem, of course)
+and when its development was started, there was no such thing as wgpu. Transition to it nowadays is a
+challenging task, since the renderer of the engine is quite big. Anyway, the engine is still evolving and
+more support for other GAPIs will be added in the future.</p>
+<h2 id="custom-graphics-server"><a class="header" href="#custom-graphics-server">Custom Graphics Server</a></h2>
+<p>It is possible to write a graphics server with pretty much any API, since a graphics server
+(<code>GraphicsServer</code> trait) has quite a small number of functions. If you're familiar with other GAPIs, then
+it should be relatively straightforward for you to implement your own server.</p>
+<h2 id="usage-3"><a class="header" href="#usage-3">Usage</a></h2>
+<p>Typical use of the graphics server is shown extensively in the <a href="rendering/render_pass.html">render pass section</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="asset-management-2"><a class="header" href="#asset-management-2">Asset Management</a></h1>
 <p>This chapter covers asset management in the engine. Asset management is performed by <code>Asset Browser</code> in the editor
 and by <code>ResourceManager</code> from API.</p>
@@ -9780,7 +9799,7 @@ two other columns.</p>
 <p><img src="ui/image.png" alt="image" /></p>
 <p>Image widget is a rectangle with a texture, it is used draw custom bitmaps. The UI in the engine is vector-based, Image
 widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
-<h2 id="usage-3"><a class="header" href="#usage-3">Usage</a></h2>
+<h2 id="usage-4"><a class="header" href="#usage-4">Usage</a></h2>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
@@ -10881,7 +10900,7 @@ set of bytes. Serialization often used to make save/load functionality in games.
 design pattern.</p>
 <p>Serialization and deserialization itself is handled by <code>Visitor</code>, it can be created in two modes: read and write. See
 mode info in respective sections below.</p>
-<h2 id="usage-4"><a class="header" href="#usage-4">Usage</a></h2>
+<h2 id="usage-5"><a class="header" href="#usage-5">Usage</a></h2>
 <p>There are two main ways to implement <code>Visit</code> trait, each way serves for specific cases. Let's understand which one to
 use when.</p>
 <h3 id="proc-macro-derivevisit"><a class="header" href="#proc-macro-derivevisit">Proc-macro <code>#[derive(Visit)]</code></a></h3>
@@ -11033,7 +11052,7 @@ is quite easy to get a full picture: to make a save all you need to do is to ser
 other data and just "dump" it to a file. You might ask: is this efficient to serialize the entire scene? In short: yes.
 A bit more detailed answer: when you serialize a scene, it does not store everything, it only stores <em>changed</em> fields
 and references to external assets.</p>
-<h2 id="usage-5"><a class="header" href="#usage-5">Usage</a></h2>
+<h2 id="usage-6"><a class="header" href="#usage-6">Usage</a></h2>
 <p>Fyrox offers a built-in system for saved games. It does exactly what said in the section above - serializes a "diff" of
 your scene which can be loaded later as an ordinary scene and the engine will do all the magic for you. Typical usage of
 this system is very simple:</p>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Normal Maps - Fyrox Book</title>
+        <title>Graphics Server - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -158,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/rendering/normal_maps.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/rendering/server.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -192,41 +192,35 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="normal-maps"><a class="header" href="#normal-maps">Normal Maps</a></h1>
-<p>This chapter explains how to use normal maps in the engine correctly and how to solve common issues with normal maps as
-well.</p>
-<h2 id="format"><a class="header" href="#format">Format</a></h2>
-<p>Fyrox uses so-called <code>DirectX Y-</code> normal maps, which means that it expects the origin of local coordinate system of a
-normal map to be at the left-top corner of the map, instead of <code>OpenGL Y+</code> normal maps where the origin is at the
-left-bottom corner of the map. <code>DirectX Y-</code> normal maps are much more prevalent nowadays, especially when it comes to
-game-ready 3D models. Some software (like Substance Painter), by default has exporting settings to be set to <code>DirectX Y-</code>
-style normal maps.</p>
-<p>The difference between the two is quite obvious if you look at the lighting with both normal maps:</p>
-<p><img src="normal_map_difference.png" alt="difference" /></p>
-<p>The left one is <code>DirectX Y-</code> and the right one is <code>OpenGL Y+</code>. As you can see, the left one looks correctly - the
-screw head is convex as in reality and the lighting is also correct. On the other side, however, the screw head look to
-be concave and the lighting is opposite.</p>
-<h2 id="solving-issues"><a class="header" href="#solving-issues">Solving Issues</a></h2>
-<p>If you have these sort of issues in your project, all you need to do is to flip (<code>G = 1 - G</code>) green channel of you
-normal map. For now, this should be done manually in some pictures editor, future versions of the engine will have a
-switch to flip green channel for you automatically.</p>
-<p>A simple trick of how to understand which type of normal map you have: look at any obvious bump (convex part) on the normal
-map, if its top contains green-ish colors then you have <code>OpenGL Y+</code> normal maps and its green channel should be flipped:</p>
-<p><img src="normal_map_y_difference.png" alt="y difference" /></p>
-<p>On the image above, the screw head (in the red circle) is an obviously convex and on the left side you can see, that
-the green-ish colors is at the bottom, while on the right side green-ish colors is at the top. You could also check the
-lighting results on your 3D model and see if they're correct (looks the same as in the 3D modelling software, for
-instance) while moving a light source around.</p>
+                        <h1 id="graphics-server"><a class="header" href="#graphics-server">Graphics Server</a></h1>
+<p>Graphics server is an abstraction that hides low-level graphics API (such as DirectX, OpenGL, Vulkan, etc.)
+calls under a higher level interface that consists of a number of "building blocks" that allows you to
+render computer graphics in an easier way.</p>
+<h2 id="opengl-graphics-server"><a class="header" href="#opengl-graphics-server">OpenGL Graphics Server</a></h2>
+<p>The default graphics server is the OpenGL-based one (<code>GlGraphicsServer</code>). Why using a deprecated API in the
+modern world? The answer is simple: OpenGL is wide-spread, runs on pretty much all mainstream platforms
+(except consoles). Fyrox has a small developers team, which can't maintain a number of different GAPIs for
+different platforms. Foreseeing the next potential question - why not just use wgpu? The answer is again
+simple: legacy. Fyrox is a relatively old game engine (compared to the entire Rust ecosystem, of course)
+and when its development was started, there was no such thing as wgpu. Transition to it nowadays is a
+challenging task, since the renderer of the engine is quite big. Anyway, the engine is still evolving and
+more support for other GAPIs will be added in the future.</p>
+<h2 id="custom-graphics-server"><a class="header" href="#custom-graphics-server">Custom Graphics Server</a></h2>
+<p>It is possible to write a graphics server with pretty much any API, since a graphics server
+(<code>GraphicsServer</code> trait) has quite a small number of functions. If you're familiar with other GAPIs, then
+it should be relatively straightforward for you to implement your own server.</p>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<p>Typical use of the graphics server is shown extensively in the <a href="render_pass.html">render pass section</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../rendering/render_pass.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rendering/normal_maps.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../rendering/server.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../resources/resources.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -236,11 +230,11 @@ instance) while moving a light source around.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../rendering/render_pass.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rendering/normal_maps.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../rendering/server.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../resources/resources.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
