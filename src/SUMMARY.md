@@ -73,6 +73,7 @@
   - [Settings](./rendering/settings.md)
   - [Render Pass](./rendering/render_pass.md)
   - [Normal Maps](./rendering/normal_maps.md)
+  - [Graphics Server](./rendering/server.md)
 - [Resource Management](./resources/resources.md)
   - [Models](./resources/model.md)
   - [Textures](./resources/texture.md)
