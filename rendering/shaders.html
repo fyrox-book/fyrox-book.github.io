@@ -610,6 +610,14 @@ used to work with graphics. The following list should help you to use drawing pa
 <li><strong>Possible values:</strong> <code>StencilOp { .. } </code></li>
 </ul>
 </li>
+<li><code>scissor_box</code>:
+<ul>
+<li>A rectangle that is used for clipping (screen-space). This value can be redefined when issuing a drawing
+command.</li>
+<li><code>None</code></li>
+<li><code>Some(ScissorBox(x: 10, y: 20, width: 100, height: 30))</code></li>
+</ul>
+</li>
 </ul>
 <h2 id="vertex-shader"><a class="header" href="#vertex-shader">Vertex shader</a></h2>
 <p>Vertex shader operates on single vertices, it must provide at least the position of the vertex
@@ -634,6 +642,35 @@ void main()
 }
 </code></pre>
 <p>This is the simplest pixel shader, it just fills the render target with red color.</p>
+<h2 id="compute-shaders"><a class="header" href="#compute-shaders">Compute Shaders</a></h2>
+<p>Compute shaders aren't supported yet due to the platform limitations (WebGL2 on WebAssembly). However,
+if you don't need to support such platforms, you can access the underlying graphics API directly and
+use compute shaders as you want:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn use_gl_compute_shader(ctx: &amp;PluginContext) {
+    let GraphicsContext::Initialized(initialized_context) = ctx.graphics_context else {
+        return;
+    };
+    let Some(gl_server) = initialized_context
+        .renderer
+        .server
+        .as_any()
+        .downcast_ref::&lt;GlGraphicsServer&gt;()
+    else {
+        return;
+    };
+
+    use glow::HasContext;
+    unsafe {
+        // Create a compute shader program and use it.
+        // ...
+        gl_server.gl.dispatch_compute(3, 3, 3);
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind, that this code snippet uses OpenGL, but it can be pretty much any GAPI for which the
+<code>GraphicsServer</code> trait is implemented.</p>
 
                     </main>
 
