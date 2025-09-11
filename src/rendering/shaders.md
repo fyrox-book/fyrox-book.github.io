@@ -443,6 +443,11 @@ used to work with graphics. The following list should help you to use drawing pa
 - `stencil_op`:
   - Stencil options.
   - **Possible values:** `StencilOp { .. } `
+- `scissor_box`:
+  - A rectangle that is used for clipping (screen-space). This value can be redefined when issuing a drawing
+    command.
+  - `None`
+  - `Some(ScissorBox(x: 10, y: 20, width: 100, height: 30))`
 
 ## Vertex shader
 
@@ -476,3 +481,16 @@ void main()
 ```
 
 This is the simplest pixel shader, it just fills the render target with red color.
+
+## Compute Shaders
+
+Compute shaders aren't supported yet due to the platform limitations (WebGL2 on WebAssembly). However,
+if you don't need to support such platforms, you can access the underlying graphics API directly and 
+use compute shaders as you want:
+
+```rust,no_run
+{{#include ../code/snippets/src/rendering/shader.rs:use_gl_compute_shader}}
+```
+
+Keep in mind, that this code snippet uses OpenGL, but it can be pretty much any GAPI for which the 
+`GraphicsServer` trait is implemented.
