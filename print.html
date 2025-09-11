@@ -6694,6 +6694,24 @@ rendered (read - G-Buffer is filled). Typical usage is something like this:</p>
     binding: 1
 ),
 </code></pre>
+<h3 id="fyrox_widgetdata"><a class="header" href="#fyrox_widgetdata"><code>fyrox_widgetData</code></a></h3>
+<p>Property group. Contains UI widget-specific data, that can be used in UI shaders.</p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>worldViewProjection</td><td><code>mat4</code></td><td>World-to-clip-space transformation matrix.</td></tr>
+<tr><td>solidColor</td><td><code>vec4</code></td><td>RGBA color.</td></tr>
+<tr><td>gradientColors</td><td><code>vec4[16]</code></td><td>A set of gradient colors.</td></tr>
+<tr><td>gradientStops</td><td><code>float[16]</code></td><td>A set of normalized (0.0-1.0) stops along the axis.</td></tr>
+<tr><td>gradientOrigin</td><td><code>vec2</code></td><td>Origin position of the gradient (local coordinates).</td></tr>
+<tr><td>gradientEnd</td><td><code>vec2</code></td><td>End position of the gradient (local coordinates).</td></tr>
+<tr><td>gradientPointCount</td><td><code>int</code></td><td>Total number of gradient points.</td></tr>
+<tr><td>resolution</td><td><code>vec2</code></td><td>Frame buffer size to which the widget is drawn to.</td></tr>
+<tr><td>boundsMin</td><td><code>vec2</code></td><td>Top-left point of the screen space bounding rectangle.</td></tr>
+<tr><td>boundsMax</td><td><code>vec2</code></td><td>Right-bottom point of the screen space bounding rectangle.</td></tr>
+<tr><td>isFont</td><td><code>bool</code></td><td><code>true</code> if the widget is a text, <code>false</code> - otherwise.</td></tr>
+<tr><td>opacity</td><td><code>float</code></td><td>Opacity (0.0-1.0 range).</td></tr>
+<tr><td>brushType</td><td><code>int</code></td><td>Brush type (0 solid, 1-linear gradient, 2-radial gradient</td></tr>
+</tbody></table>
+</div>
 <h2 id="code-generation"><a class="header" href="#code-generation">Code generation</a></h2>
 <p>Fyrox automatically generates code for resource bindings. This is made specifically to prevent
 subtle mistakes. For example, when you define this set of resources:</p>
