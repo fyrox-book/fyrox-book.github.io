@@ -6,7 +6,9 @@ design decisions made in the engine.
 ## Classic OOP
 
 The engine uses somewhat classic OOP with composition over inheritance - complex objects in the engine can be constructed
-using simpler objects.
+using simpler objects. It is also possible to use ECS approach, but you need to manually synchronize ECS entities with 
+the engine entities. This approach is recommended for games with a high number of entities. There's no built-in ECS
+framework, but there are plenty of them in the Rust ecosystem.
 
 ## Scenes
 
@@ -16,8 +18,8 @@ parts. A Scene in Fyrox also plays the role of a prefab, there's pretty much no 
 
 ## Nodes and Scene Graph
 
-A scene is made of one or more nodes (every scene must have at least one root node, to which everything else is attached).
-A scene node contains specific set of properties as well as _one_ optional script instance which is responsible for custom
+A scene is made of one or more nodes. Every scene must have at least one root node, to which everything else is attached.
+A scene node contains specific set of properties as well as a number of scripts which are responsible for custom
 game logic. 
 
 The typical structure of a scene node can be represented by the following example. The base object for every scene node is 
@@ -25,7 +27,7 @@ a `Base` node, it contains a transform, a list of children, etc. A more complex 
 node stores an instance of `Base` inside it, i.e. composition. For example, a `Mesh` node is a `Base` node _plus_ some specific info 
 (a list of surfaces, material, etc.). The "hierarchy" depth is unlimited e.g. a `Light` node in the engine is an enumeration 
 of three possible types of light source: `Directional`, `Point`, and `Spot`. All three of these light sources all contain a `BaseLight` node,
-which in turn contains a `Base` node. Graphically it can be represented like so:
+which in turn contains a `Base` node. Graphically, it can be represented like so:
 
 ```text
 `Point`
@@ -42,7 +44,7 @@ scene nodes, it gives you the full power of building an object of any complexity
 ## Plugins
 
 Plugin is a container for "global" game data and logic, its main usage is to provide scripts with some data and to 
-manage global game state.
+manage global game state. Your game can have multiple plugins, but usually only one acts as an "entry point".
 
 ## Scripts
 

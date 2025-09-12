@@ -8,6 +8,7 @@ video card does not support OpenGL 3.3+. Do **not** try to run the editor on vir
 have rudimentary support for graphics APIs which won't let you run the editor.
 - **RAM** - at least 1 Gb of RAM. The more is better.
 - **VRAM** - at least 256 Mb of video memory. It highly depends on your game. 
+- **Monitor** - 1920x1080 or higher resolution, lower resolutions may work as well.
 
 ## Supported Platforms
 
