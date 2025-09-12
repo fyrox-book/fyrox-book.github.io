@@ -1,10 +1,9 @@
 # Introduction to Fyrox
 
-Fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
+Fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable of power
 games with small- or medium-sized worlds, large-sized world most likely will require some manual work. 
 
-Games made with the engine are capable to run on desktop platforms (PC, Mac, Linux) and Web (WebAssembly). Mobile is
-planned for future releases.
+Games made with the engine are capable of run on desktop platforms (PC, Mac, Linux), Web (WebAssembly), Android and iOS. 
 
 ## What can the engine do?
 
@@ -19,15 +18,15 @@ do:
 
 The engine consists of two parts that you'll be actively using: the framework and the editor. The framework is a 
 foundation of the engine, it manages rendering, sound, scripts, plugins, etc. While the editor contains lots of tools 
-that can be used to create game worlds, manage assets, edit game objects, scripts and more.
+that can be used to create game worlds, manage assets, edit game objects, scripts, and more.
 
-![Fish Folly](editor.png)
+![Fish Folly](editor.jpg)
 
 ## Programming languages
 
 Everything of your game can be written entirely in Rust, utilizing its safety guarantees as well as speed. However, it
-is possible to use any scripting language that you want, but other languages may have no built-in support, and you will need to implement this
-manually.
+is possible to use any scripting language that you want, but other languages may have no built-in support, and you will 
+need to implement this manually.
 
 ## Engine Features
 
@@ -36,21 +35,19 @@ This is a more or less complete (yet, it can be outdated) list of engine feature
 ### General
 
 - Exceptional safety, reliability, and speed.
-- PC (Windows, Linux, macOS), Android, [Web (WebAssembly) support](https://fyrox.rs/examples).
+- PC (Windows, Linux, macOS), Android, iOS, [Web (WebAssembly) support](https://fyrox.rs/examples).
 - Modern, PBR rendering pipeline.
 - Comprehensive [documentation](https://docs.rs/Fyrox).
-- [Guide book](https://fyrox-book.github.io)
 - 2D support.
 - Integrated editor.
-- Fast iterative compilation.
-- Classic object-oriented design.
+- Fast iterative compilation with native code hot-reloading support.
+- Classic object-oriented design with an ability to be extended with ECS.
 - Lots of examples.
 
 ### Rendering
 
 - Custom shaders, materials, and rendering techniques.
-- Physically-based rendering.
-- Metallic workflow.
+- Physically-based rendering with metallic workflow by default.
 - High dynamic range (HDR) rendering.
 - Tone mapping.
 - Color grading.
@@ -97,6 +94,11 @@ This is a more or less complete (yet, it can be outdated) list of engine feature
     - Rigid body + Rigid Body 2D
     - Collider + Collider 2D
     - Joint + Joint 2D
+    - Tile map
+    - Navigation mesh
+    - Ragdoll
+    - Sound + Sound Listener
+    - Various light sources    
 
 ### Sound
 
@@ -104,28 +106,32 @@ This is a more or less complete (yet, it can be outdated) list of engine feature
 - Generic and spatial sound sources.
 - Built-in streaming for large sounds.
 - Raw samples playback support.
-- WAV/OGG format support.
+- Wide variety of supported formats.
 - HRTF support for excellent positioning and binaural effects.
 - Reverb effect.
+- Audio processing graph.
+- Various filters.
 
 ### Serialization
 
 - Powerful serialization system
-- Almost every entity of the engine can be serialized
+- Almost every entity of the engine can be serialized.
 - No need to write your own serialization.
 
 ### Animation
 
 - Animation blending state machine - similar to Mecanim in Unity Engine.
 - Animation retargetting - allows you to remap animation from one model to another.
+- Blend space
+- Root motion
 
 ### Asset management
 
 - Advanced asset manager.
 - Fully asynchronous asset loading.
 - PNG, JPG, TGA, DDS, etc. textures.
-- FBX models loader.
-- WAV, OGG sound formats.
+- FBX/GLTF/GLB models loader.
+- WAV, OGG, MP3, etc. sound formats.
 - Compressed textures support (DXT1, DXT3, DTX5).
 
 ### Artificial Intelligence (AI)
@@ -185,5 +191,6 @@ This is a more or less complete (yet, it can be outdated) list of engine feature
 - Rich set of various colliders.
 - Joints.
 - Ray cast.
-- Many other useful features.
+- Joints motor.
 - 2D support.
+- Many other useful features.
