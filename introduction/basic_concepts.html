@@ -197,21 +197,23 @@
 design decisions made in the engine.</p>
 <h2 id="classic-oop"><a class="header" href="#classic-oop">Classic OOP</a></h2>
 <p>The engine uses somewhat classic OOP with composition over inheritance - complex objects in the engine can be constructed
-using simpler objects.</p>
+using simpler objects. It is also possible to use ECS approach, but you need to manually synchronize ECS entities with
+the engine entities. This approach is recommended for games with a high number of entities. There's no built-in ECS
+framework, but there are plenty of them in the Rust ecosystem.</p>
 <h2 id="scenes"><a class="header" href="#scenes">Scenes</a></h2>
 <p>In Fyrox, you break down your game in a set of reusable scenes. Pretty much anything can be a scene: a player, a weapon,
 a bot, level parts, etc. Scenes can be nested one into another, this helps you to break down complex scenes into reusable
 parts. A Scene in Fyrox also plays the role of a prefab, there's pretty much no difference between them.</p>
 <h2 id="nodes-and-scene-graph"><a class="header" href="#nodes-and-scene-graph">Nodes and Scene Graph</a></h2>
-<p>A scene is made of one or more nodes (every scene must have at least one root node, to which everything else is attached).
-A scene node contains specific set of properties as well as <em>one</em> optional script instance which is responsible for custom
+<p>A scene is made of one or more nodes. Every scene must have at least one root node, to which everything else is attached.
+A scene node contains specific set of properties as well as a number of scripts which are responsible for custom
 game logic.</p>
 <p>The typical structure of a scene node can be represented by the following example. The base object for every scene node is
 a <code>Base</code> node, it contains a transform, a list of children, etc. A more complex node, that <em>extends</em> functionality of the <code>Base</code>
 node stores an instance of <code>Base</code> inside it, i.e. composition. For example, a <code>Mesh</code> node is a <code>Base</code> node <em>plus</em> some specific info
 (a list of surfaces, material, etc.). The "hierarchy" depth is unlimited e.g. a <code>Light</code> node in the engine is an enumeration
 of three possible types of light source: <code>Directional</code>, <code>Point</code>, and <code>Spot</code>. All three of these light sources all contain a <code>BaseLight</code> node,
-which in turn contains a <code>Base</code> node. Graphically it can be represented like so:</p>
+which in turn contains a <code>Base</code> node. Graphically, it can be represented like so:</p>
 <pre><code class="language-text">`Point`
 |__ Point Light Properties (radius, etc.)
 |__`BaseLight`
@@ -223,7 +225,7 @@ which in turn contains a <code>Base</code> node. Graphically it can be represent
 scene nodes, it gives you the full power of building an object of any complexity.</p>
 <h2 id="plugins"><a class="header" href="#plugins">Plugins</a></h2>
 <p>Plugin is a container for "global" game data and logic, its main usage is to provide scripts with some data and to
-manage global game state.</p>
+manage global game state. Your game can have multiple plugins, but usually only one acts as an "entry point".</p>
 <h2 id="scripts"><a class="header" href="#scripts">Scripts</a></h2>
 <p>Script - is a separate piece of data and logic, that can be attached to scene nodes. This is the primary (but not only)
 way of adding custom game logic.</p>
