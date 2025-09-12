@@ -221,10 +221,9 @@ otherwise the book will probably be very hard for you.</p>
 your needs and will it be easy enough for you to use. Following chapters takes you into a tour over engine's features,
 its editor, basic concepts and design philosophy.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-to-fyrox"><a class="header" href="#introduction-to-fyrox">Introduction to Fyrox</a></h1>
-<p>Fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable to power
+<p>Fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable of power
 games with small- or medium-sized worlds, large-sized world most likely will require some manual work.</p>
-<p>Games made with the engine are capable to run on desktop platforms (PC, Mac, Linux) and Web (WebAssembly). Mobile is
-planned for future releases.</p>
+<p>Games made with the engine are capable of run on desktop platforms (PC, Mac, Linux), Web (WebAssembly), Android and iOS.</p>
 <h2 id="what-can-the-engine-do"><a class="header" href="#what-can-the-engine-do">What can the engine do?</a></h2>
 <p>You can create pretty much any kind of game or interactive applications. Here's some examples of what the engine can
 do:</p>
@@ -234,32 +233,30 @@ do:</p>
 <h2 id="how-does-the-engine-work"><a class="header" href="#how-does-the-engine-work">How does the engine work?</a></h2>
 <p>The engine consists of two parts that you'll be actively using: the framework and the editor. The framework is a
 foundation of the engine, it manages rendering, sound, scripts, plugins, etc. While the editor contains lots of tools
-that can be used to create game worlds, manage assets, edit game objects, scripts and more.</p>
-<p><img src="introduction/editor.png" alt="Fish Folly" /></p>
+that can be used to create game worlds, manage assets, edit game objects, scripts, and more.</p>
+<p><img src="introduction/editor.jpg" alt="Fish Folly" /></p>
 <h2 id="programming-languages"><a class="header" href="#programming-languages">Programming languages</a></h2>
 <p>Everything of your game can be written entirely in Rust, utilizing its safety guarantees as well as speed. However, it
-is possible to use any scripting language that you want, but other languages may have no built-in support, and you will need to implement this
-manually.</p>
+is possible to use any scripting language that you want, but other languages may have no built-in support, and you will
+need to implement this manually.</p>
 <h2 id="engine-features"><a class="header" href="#engine-features">Engine Features</a></h2>
 <p>This is a more or less complete (yet, it can be outdated) list of engine features:</p>
 <h3 id="general"><a class="header" href="#general">General</a></h3>
 <ul>
 <li>Exceptional safety, reliability, and speed.</li>
-<li>PC (Windows, Linux, macOS), Android, <a href="https://fyrox.rs/examples">Web (WebAssembly) support</a>.</li>
+<li>PC (Windows, Linux, macOS), Android, iOS, <a href="https://fyrox.rs/examples">Web (WebAssembly) support</a>.</li>
 <li>Modern, PBR rendering pipeline.</li>
 <li>Comprehensive <a href="https://docs.rs/Fyrox">documentation</a>.</li>
-<li><a href="https://fyrox-book.github.io">Guide book</a></li>
 <li>2D support.</li>
 <li>Integrated editor.</li>
-<li>Fast iterative compilation.</li>
-<li>Classic object-oriented design.</li>
+<li>Fast iterative compilation with native code hot-reloading support.</li>
+<li>Classic object-oriented design with an ability to be extended with ECS.</li>
 <li>Lots of examples.</li>
 </ul>
 <h3 id="rendering"><a class="header" href="#rendering">Rendering</a></h3>
 <ul>
 <li>Custom shaders, materials, and rendering techniques.</li>
-<li>Physically-based rendering.</li>
-<li>Metallic workflow.</li>
+<li>Physically-based rendering with metallic workflow by default.</li>
 <li>High dynamic range (HDR) rendering.</li>
 <li>Tone mapping.</li>
 <li>Color grading.</li>
@@ -307,6 +304,11 @@ manually.</p>
 <li>Rigid body + Rigid Body 2D</li>
 <li>Collider + Collider 2D</li>
 <li>Joint + Joint 2D</li>
+<li>Tile map</li>
+<li>Navigation mesh</li>
+<li>Ragdoll</li>
+<li>Sound + Sound Listener</li>
+<li>Various light sources</li>
 </ul>
 </li>
 </ul>
@@ -316,28 +318,32 @@ manually.</p>
 <li>Generic and spatial sound sources.</li>
 <li>Built-in streaming for large sounds.</li>
 <li>Raw samples playback support.</li>
-<li>WAV/OGG format support.</li>
+<li>Wide variety of supported formats.</li>
 <li>HRTF support for excellent positioning and binaural effects.</li>
 <li>Reverb effect.</li>
+<li>Audio processing graph.</li>
+<li>Various filters.</li>
 </ul>
 <h3 id="serialization"><a class="header" href="#serialization">Serialization</a></h3>
 <ul>
 <li>Powerful serialization system</li>
-<li>Almost every entity of the engine can be serialized</li>
+<li>Almost every entity of the engine can be serialized.</li>
 <li>No need to write your own serialization.</li>
 </ul>
 <h3 id="animation"><a class="header" href="#animation">Animation</a></h3>
 <ul>
 <li>Animation blending state machine - similar to Mecanim in Unity Engine.</li>
 <li>Animation retargetting - allows you to remap animation from one model to another.</li>
+<li>Blend space</li>
+<li>Root motion</li>
 </ul>
 <h3 id="asset-management"><a class="header" href="#asset-management">Asset management</a></h3>
 <ul>
 <li>Advanced asset manager.</li>
 <li>Fully asynchronous asset loading.</li>
 <li>PNG, JPG, TGA, DDS, etc. textures.</li>
-<li>FBX models loader.</li>
-<li>WAV, OGG sound formats.</li>
+<li>FBX/GLTF/GLB models loader.</li>
+<li>WAV, OGG, MP3, etc. sound formats.</li>
 <li>Compressed textures support (DXT1, DXT3, DTX5).</li>
 </ul>
 <h3 id="artificial-intelligence-ai"><a class="header" href="#artificial-intelligence-ai">Artificial Intelligence (AI)</a></h3>
@@ -397,8 +403,9 @@ manually.</p>
 <li>Rich set of various colliders.</li>
 <li>Joints.</li>
 <li>Ray cast.</li>
-<li>Many other useful features.</li>
+<li>Joints motor.</li>
 <li>2D support.</li>
+<li>Many other useful features.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="system-requirements"><a class="header" href="#system-requirements">System Requirements</a></h1>
 <p>As any other software, Fyrox has its own system requirements that will provide the best user experience.</p>
