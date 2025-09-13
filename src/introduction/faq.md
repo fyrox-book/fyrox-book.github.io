@@ -6,8 +6,7 @@ This chapter contains answers for frequently asked questions.
 
 Fyrox uses OpenGL 3.3 on PC and OpenGL ES 3.0 on WebAssembly. Why? Mainly due to historical reasons. Back in the day 
 (Q4 of 2018), there weren't any good alternatives to it with a wide range of supported platforms. For example, `wgpu` 
-[didn't even exist](https://crates.io/crates/wgpu/0.1.0), as its first version was released in January 2019. Other c
-rates were taking their first baby steps and weren't ready for production.
+[didn't even exist](https://crates.io/crates/wgpu/0.1.0), as its first version was released in January 2019. Other crates were taking their first baby steps and weren't ready for production.
 
 ### Why not use alternatives now?
 
