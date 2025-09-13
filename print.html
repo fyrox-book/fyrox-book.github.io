@@ -546,8 +546,10 @@ the <a href="https://rustup.rs">latest Rust installed</a> with the appropriate t
 <p>For Debian based distros like Ubuntu, they can be installed like below:</p>
 <pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 </code></pre>
-<p>For NixOS, add a file named <code>flake.nix</code> to the root of your repository with the following contents, add it to the git
-index (e.g., with <code>git add flake.nix</code>), and then run <code>nix develop</code> to open a shell with all the required dependencies.</p>
+<p>For NixOS, run <code>nix develop</code> from the root of your project to open a shell with all the required dependencies.
+<code>flake.nix</code> is included in the generated project for you. It's content is the following:</p>
+<details>
+<summary>flake.nix</summary>
 <pre><code class="language-nix">{
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -595,6 +597,7 @@ index (e.g., with <code>git add flake.nix</code>), and then run <code>nix develo
   };
 }
 </code></pre>
+</details>
 <h2 id="project-manager"><a class="header" href="#project-manager">Project Manager</a></h2>
 <p><img src="https://fyrox.rs/assets/0.36/project_manager.png" alt="project manager" /></p>
 <p>Project manager is a part of the engine that allows you to manage multiple projects made with the engine all at once.
