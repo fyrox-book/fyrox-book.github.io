@@ -528,21 +528,24 @@ game worlds, manage assets, and much more. By the end this section, you will hav
 engine entities, understand how they are structured and have basic knowledge of data management in the engine.</p>
 <p>The next chapter will guide you through the major setup of the engine - creating a game project using the special project generator
 tool.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="editor-plugins-and-scripts"><a class="header" href="#editor-plugins-and-scripts">Editor, Plugins and Scripts</a></h1>
-<p>Every Fyrox game is just a plugin for both the engine and the editor, this approach allows the game to run from the
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation-and-project-creation"><a class="header" href="#installation-and-project-creation">Installation and Project Creation</a></h1>
+<p>Fyrox is a compiled game engine, this means that your game needs to be compiled to native code before it can be run. Every
+Fyrox game is just a plugin for both the engine and the editor.  This approach allows the game to run from the
 editor and enables editing of the game entities from within it. A game can define any number of scripts, which can be assigned
-to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its platform-specific dependencies, how to use the plugins and scripting system, and how to run the editor.</p>
+to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its
+platform-specific dependencies, how to use the plugins and scripting system, and how to run the editor.</p>
 <h2 id="platform-specific-dependencies"><a class="header" href="#platform-specific-dependencies">Platform-specific Dependencies</a></h2>
 <p>Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If
 using Windows or macOS, no additional dependencies are required other than the <a href="https://rustup.rs">latest Rust installed</a>
-with appropriate toolchain for your platform.</p>
+with the appropriate toolchain for your platform.</p>
 <h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
 <p>On Linux, Fyrox needs the following libraries for development: <code>libxcb-shape0</code>, <code>libxcb-xfixes0</code>, <code>libxcb1</code>,
 <code>libxkbcommon</code>, <code>libasound2</code>, <code>libegl-mesa0</code> and the <code>build-essential</code> package group.</p>
 <p>For Debian based distros like Ubuntu, they can be installed like below:</p>
 <pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 </code></pre>
-<p>For NixOS, add a file named <code>flake.nix</code> to the root of your repository with the following contents, add it to the git index (e.g., with <code>git add flake.nix</code>), and then run <code>nix develop</code> to open a shell with all of the required dependencies.</p>
+<p>For NixOS, add a file named <code>flake.nix</code> to the root of your repository with the following contents, add it to the git
+index (e.g., with <code>git add flake.nix</code>), and then run <code>nix develop</code> to open a shell with all the required dependencies.</p>
 <pre><code class="language-nix">{
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
