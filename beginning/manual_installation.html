@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Installation and Project Creation - Fyrox Book</title>
+        <title>Manual Installation - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -158,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/beginning/scripting.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/beginning/manual_installation.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -192,99 +192,109 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="installation-and-project-creation"><a class="header" href="#installation-and-project-creation">Installation and Project Creation</a></h1>
-<p>Fyrox is a compiled game engine, this means that your game needs to be compiled to native code before it can be run.
-This fact requires a specific project structure which is generated when you're making a new project. This project
-consists of a few Rust crates (game, editor, executors for each platform). Every Fyrox game is just a plugin for both
-the engine and the editor crates. This approach allows the game to run from the editor and enables editing of the game
-entities from within it, or just run the game without the editor (since not every game needs an editor). This chapter
-will cover how to install the engine with its platform-specific dependencies, how to use the plugins and scripting
-system, and how to run the editor.</p>
-<h2 id="platform-specific-dependencies"><a class="header" href="#platform-specific-dependencies">Platform-specific Dependencies</a></h2>
-<p>Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If
-using Windows or macOS, no additional dependencies are required other than
-the <a href="https://rustup.rs">latest Rust installed</a> with the appropriate toolchain for your platform.</p>
-<h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
-<p>On Linux, Fyrox needs the following libraries for development: <code>libxcb-shape0</code>, <code>libxcb-xfixes0</code>, <code>libxcb1</code>,
-<code>libxkbcommon</code>, <code>libasound2</code>, <code>libegl-mesa0</code> and the <code>build-essential</code> package group.</p>
-<p>For Debian based distros like Ubuntu, they can be installed like below:</p>
-<pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
+                        <h1 id="manual-installation"><a class="header" href="#manual-installation">Manual Installation</a></h1>
+<blockquote>
+<p>⚠️ This section is mostly for console users and those who like building their software from source code.
+This section relies on using <code>fyrox-template</code> CLI tool, Project Manager uses it as well, but with the benefits of a
+GUI.</p>
+</blockquote>
+<h2 id="quick-start-using-console-commands"><a class="header" href="#quick-start-using-console-commands">Quick Start Using Console Commands</a></h2>
+<p>Run the following commands to start using the editor as quickly as possible.</p>
+<pre><code class="language-sh">cargo install fyrox-template
+fyrox-template init --name fyrox_test --style 2d
+cd fyrox_test
+cargo run --package editor --release
 </code></pre>
-<p>For NixOS, add a file named <code>flake.nix</code> to the root of your repository with the following contents, add it to the git
-index (e.g., with <code>git add flake.nix</code>), and then run <code>nix develop</code> to open a shell with all the required dependencies.</p>
-<pre><code class="language-nix">{
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
-
-  outputs = {
-    nixpkgs,
-    rust-overlay,
-    ...
-  }:
-  let
-    overlays = [
-      (import rust-overlay)
-    ];
-
-    systems = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-
-    forAllSystems = f:
-      nixpkgs.lib.genAttrs systems
-      (system: f { pkgs = import nixpkgs { inherit system overlays; }; });
-  in
-  {
-    devShells = forAllSystems ({ pkgs }: with pkgs; {
-      default = mkShell rec {
-        buildInputs = [
-          rust-bin.stable.latest.default
-
-          pkg-config
-          xorg.libxcb
-          alsa-lib
-          wayland
-          libxkbcommon
-          libGL
-        ];
-        LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
-      };
-    });
-  };
-}
+<h2 id="project-generator-cli"><a class="header" href="#project-generator-cli">Project Generator CLI</a></h2>
+<p>Fyrox offers a special tiny command line tool - <code>fyrox-template</code>, the project manager uses its core functionality as
+well. This helps generate all the boilerplate code with a single command. Install it by running the following command:</p>
+<pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
-<h2 id="project-manager"><a class="header" href="#project-manager">Project Manager</a></h2>
-<p><img src="https://fyrox.rs/assets/0.36/project_manager.png" alt="project manager" /></p>
-<p>Project manager is a part of the engine that allows you to manage multiple projects made with the engine all at once.
-It allows you to create a new project or import an existing one, run the project or edit it in the editor,
-upgrade the project to a selected version of the engine, and many more options.</p>
-<p><a href="https://fyrox.rs/download.html">Download the project manager</a> for your OS from the website or install it using
-<code>cargo install fyrox-project-manager</code> and run it.
-Then click the <code>+Create</code> button, select the path where you want the project to be located and click <code>Create</code>. Select the
-new project in the list and click <code>Edit</code> button to run the editor.</p>
-<p>You project needs to be compiled from scratch before it can be run, it may take some time, usually it takes up to 10
-minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minutes or so). Next runs of the editor will
-only compile your game, which usually takes a few seconds.</p>
-<h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
-<p>Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
-executed by the engine. Read the <a href="../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts
-in your game.</p>
+<p><em>Note for Linux:</em> This installs it in <code>$user/.cargo/bin</code>. If receiving errors about the <code>fyrox-template</code> command not<br />
+being found, add this hidden cargo bin folder to the operating systems <code>$PATH</code> environment variable.</p>
+<p>Now, navigate to the desired project folder and run the following command:</p>
+<pre><code class="language-shell">fyrox-template init --name my_game --style 3d
+</code></pre>
+<p>Note that unlike <code>cargo init</code>, this will create a new folder with the given name.</p>
+<p>The tool accepts two arguments - a project name (<code>--name</code>) and a style (<code>--style</code>), which defines the contents of the
+default scene. After initializing the project, go to <code>game/src/lib.rs</code> - this is where the game logic is located, as you
+will see, the <code>fyrox-template</code> generates quite a bit of code for you. The code is decorated with comments explaining
+what each place is for. For more info about each method, please
+refer <a href="https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
+<p>Once the project is generated, two commands can be used to run your game in different modes:</p>
+<ul>
+<li><code>cargo run --package editor --release</code> - launches the editor with your game attached. The editor allows you to run
+your game
+from it and edit its game entities. This is intended to be used only for development purposes.</li>
+<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game. This command generates
+executables which can be shipped (for example - to a store).</li>
+</ul>
+<p>Navigate to your project's directory and run <code>cargo run --package editor --release</code>, after a short while, you should see
+the
+editor:</p>
+<p><img src="editor.png" alt="editor" /></p>
+<p>In the editor you can start building your game scene. <strong>Important note:</strong> your scene must have at least one camera,
+otherwise you won't see a thing. Read the next chapter to learn how to use the editor.</p>
+<h2 id="using-the-latest-engine-version"><a class="header" href="#using-the-latest-engine-version">Using the Latest Engine Version</a></h2>
+<p>Due to the nature of software development, bugs will inevitably sneak into the major releases, due to this,
+it is recommended to always use the latest engine version from the repository on GitHub. This is most likely to have
+bugs fixed (you can also contribute by fixing any bugs you find or at least,
+by <a href="https://github.com/FyroxEngine/Fyrox/issues">filing an issue</a>).</p>
+<h3 id="automatic"><a class="header" href="#automatic">Automatic</a></h3>
+<blockquote>
+<p>⚠️ <code>fyrox-template</code> has a special sub-command - <code>upgrade</code> to quickly upgrade to a desired engine version. To upgrade
+to the latest version (<code>nightly</code>) you should execute <code>fyrox-template upgrade --version nightly</code> command in your game's
+directory.</p>
+</blockquote>
+<p>There are three main variants for <code>--version</code> switch:</p>
+<ul>
+<li><code>nightly</code> - uses latest nightly version of the engine from GitHub directly. This is the preferable version if you want
+to use the latest changes and bug fixes as they are released.</li>
+<li><code>latest</code> - uses latest stable version of the engine. This option also supports <code>--local</code> key, that sets the path to
+the engine to <code>../Fyrox/fyrox</code> and the editor to <code>../Fyrox/editor</code>. Obviously, this path requires the engine to be
+located in the parent directory of your project. This option could be useful if you want to use a custom version of
+the engine (for example, if you're developing a patch for the engine).</li>
+<li><code>major.minor.patch</code> - uses a specific stable version from crates.io (<code>0.30.0</code> for example).</li>
+</ul>
+<h3 id="manual"><a class="header" href="#manual">Manual</a></h3>
+<p>The Engine version can also be updated manually. The first step is to install the latest <code>fyrox-template</code>, this can be
+done with a single <code>cargo</code> command:</p>
+<pre><code class="language-shell">cargo install fyrox-template --force --git https://github.com/FyroxEngine/Fyrox
+</code></pre>
+<p>This will ensure you're using the latest project/script template generator, which is very important; old versions
+of the template generator will most likely generate outdated code, which is no longer compatible with the engine.</p>
+<p>To switch existing projects to the latest version of the engine, you will need to specify paths pointing to the remote
+repository for the <code>fyrox</code> and <code>fyroxed_base</code> dependencies. All you need to do is to change paths to these dependencies
+in the root <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">[workspace.dependencies.fyrox]
+version = { git = "https://github.com/FyroxEngine/Fyrox" }
+default-features = false
+[workspace.dependencies.fyroxed_base]
+version = { git = "https://github.com/FyroxEngine/Fyrox" }
+</code></pre>
+<p>Now your game will use the latest engine and editor, but beware - new commits may surface some API mis-matches. You can
+avoid these by specifying a particular commit, just add <code>rev = "desired_commit_hash"</code> to every dependency like so:</p>
+<pre><code class="language-toml">[dependencies]
+[workspace.dependencies.fyrox]
+version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+default-features = false
+[workspace.dependencies.fyroxed_base]
+version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1961a9808be38b5e5715da43af" }
+</code></pre>
+<p>To bring a local git repository of the engine to the latest version, just call <code>cargo update</code> at the root of the
+project's workspace. This will pull the latest changes from the remote, unless there is no <code>rev</code> specified.</p>
+<p>Learn more about dependency paths on the official <code>cargo</code>
+documentation, <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../beginning/getting_started.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../beginning/scripting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../beginning/manual_installation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../beginning/project_manager.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -294,11 +304,11 @@ in your game.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../beginning/getting_started.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../beginning/scripting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../beginning/manual_installation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../beginning/project_manager.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
