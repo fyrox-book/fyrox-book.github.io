@@ -34,7 +34,7 @@ pub struct Weapon {
 }
 
 // ANCHOR: shoot_message
-#[derive(Debug)]
+#[derive(Debug, ScriptMessagePayload)]
 pub struct ShootWeaponMessage {}
 // ANCHOR_END: shoot_message
 
