@@ -506,8 +506,7 @@ reveal weak spots in the design and fix them.</p>
 <h2 id="which-graphics-api-does-the-engine-use"><a class="header" href="#which-graphics-api-does-the-engine-use">Which graphics API does the engine use?</a></h2>
 <p>Fyrox uses OpenGL 3.3 on PC and OpenGL ES 3.0 on WebAssembly. Why? Mainly due to historical reasons. Back in the day
 (Q4 of 2018), there weren't any good alternatives to it with a wide range of supported platforms. For example, <code>wgpu</code>
-<a href="https://crates.io/crates/wgpu/0.1.0">didn't even exist</a>, as its first version was released in January 2019. Other c
-rates were taking their first baby steps and weren't ready for production.</p>
+<a href="https://crates.io/crates/wgpu/0.1.0">didn't even exist</a>, as its first version was released in January 2019. Other crates were taking their first baby steps and weren't ready for production.</p>
 <h3 id="why-not-use-alternatives-now"><a class="header" href="#why-not-use-alternatives-now">Why not use alternatives now?</a></h3>
 <p>There is no need for it. The current implementation works and is more than good enough. So instead of focusing on
 replacing something that works for little to no benefit, the current focus is on adding features that are missing as
