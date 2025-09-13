@@ -8,7 +8,7 @@
   - [Design Philosophy and Goals](./introduction/philosophy_and_goals.md)
   - [Frequently Asked Questions](./introduction/faq.md)
 - [Getting started](./beginning/getting_started.md)
-  - [Editor, Plugins and Scripts](./beginning/scripting.md)
+  - [Installation and Project Creation](./beginning/scripting.md)
   - [Project Manager](./beginning/project_manager.md)
   - [Hot Reloading](./beginning/hot_reloading.md)
   - [Editor Overview](./beginning/editor_overview.md)

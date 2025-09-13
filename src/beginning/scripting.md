@@ -1,14 +1,16 @@
-# Editor, Plugins and Scripts
+# Installation and Project Creation
 
-Every Fyrox game is just a plugin for both the engine and the editor, this approach allows the game to run from the 
+Fyrox is a compiled game engine, this means that your game needs to be compiled to native code before it can be run. Every 
+Fyrox game is just a plugin for both the engine and the editor.  This approach allows the game to run from the 
 editor and enables editing of the game entities from within it. A game can define any number of scripts, which can be assigned 
-to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its platform-specific dependencies, how to use the plugins and scripting system, and how to run the editor.
+to scene objects to run custom game logic on them. This chapter will cover how to install the engine with its 
+platform-specific dependencies, how to use the plugins and scripting system, and how to run the editor.
 
 ## Platform-specific Dependencies
 
 Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If 
 using Windows or macOS, no additional dependencies are required other than the [latest Rust installed](https://rustup.rs)
-with appropriate toolchain for your platform.
+with the appropriate toolchain for your platform.
 
 ### Linux
 
@@ -21,7 +23,8 @@ For Debian based distros like Ubuntu, they can be installed like below:
 sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 ```
 
-For NixOS, add a file named `flake.nix` to the root of your repository with the following contents, add it to the git index (e.g., with `git add flake.nix`), and then run `nix develop` to open a shell with all of the required dependencies.
+For NixOS, add a file named `flake.nix` to the root of your repository with the following contents, add it to the git 
+index (e.g., with `git add flake.nix`), and then run `nix develop` to open a shell with all the required dependencies.
 
 ```nix
 {
