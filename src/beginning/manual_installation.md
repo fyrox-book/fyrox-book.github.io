@@ -50,8 +50,7 @@ Once the project is generated, two commands can be used to run your game in diff
   executables which can be shipped (for example - to a store).
 
 Navigate to your project's directory and run `cargo run --package editor --release`, after a short while, you should see
-the
-editor:
+the editor:
 
 ![editor](editor.png)
 

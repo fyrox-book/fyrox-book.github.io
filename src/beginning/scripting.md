@@ -88,11 +88,14 @@ upgrade the project to a selected version of the engine, and many more options.
 [Download the project manager](https://fyrox.rs/download.html) for your OS from the website or install it using
 `cargo install fyrox-project-manager` and run it.
 Then click the `+Create` button, select the path where you want the project to be located and click `Create`. Select the
-new project in the list and click `Edit` button to run the editor.
+new project in the list and click `Edit` button to run the editor. Learn more about
+the [project manager here](project_manager.md).
 
 You project needs to be compiled from scratch before it can be run, it may take some time, usually it takes up to 10
 minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minutes or so). Next runs of the editor will
-only compile your game, which usually takes a few seconds.
+only compile your game, which usually takes a few seconds. Anyway, after some time you should see the editor window.
+
+![editor](editor.png)
 
 ## Adding Game Logic
 
