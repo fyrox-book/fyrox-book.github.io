@@ -25,8 +25,11 @@ For Debian based distros like Ubuntu, they can be installed like below:
 sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
 ```
 
-For NixOS, add a file named `flake.nix` to the root of your repository with the following contents, add it to the git
-index (e.g., with `git add flake.nix`), and then run `nix develop` to open a shell with all the required dependencies.
+For NixOS, run `nix develop` from the root of your project to open a shell with all the required dependencies.
+`flake.nix` is included in the generated project for you. It's content is the following:
+
+<details>
+<summary>flake.nix</summary>
 
 ```nix
 {
@@ -76,6 +79,8 @@ index (e.g., with `git add flake.nix`), and then run `nix develop` to open a she
   };
 }
 ```
+
+</details>
 
 ## Project Manager
 
