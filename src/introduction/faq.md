@@ -26,3 +26,9 @@ to manually synchronize the state of your entities with respective engine entiti
 
 Pretty much any kind of games, except maybe games with vast open-worlds (since there's no built-in world streaming).
 In general, it depends on your game development experience.
+
+## What if I don't need the editor?
+
+You can completely ignore the editor if you need, you can even delete it from your project without any consequences.
+It is also possible to initialize the engine manually, as an ordinary Rust crate. See 
+[this chapter](../engine/manual_initialization.md) for more info.
