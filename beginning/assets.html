@@ -193,18 +193,19 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="assets"><a class="header" href="#assets">Assets</a></h1>
-<p>Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own assets
-pipeline made to make your life easier.</p>
+<p>Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own
+assets pipeline made to make your life easier.</p>
 <h2 id="asset-types"><a class="header" href="#asset-types">Asset Types</a></h2>
 <p>The engine offers a set of assets that should cover all of your needs:</p>
 <ul>
 <li><a href="../resources/model.html">Models</a> - are a set of objects. They can be a simple 3D model (barrels, bushes, weapons,
-etc.) or complex scenes with lots of objects and possibly other model instances. Fyrox supports two main formats:
-FBX - which can be used to import 3D models, RGS - which are scenes made in FyroxEd. RGS models are special, as they can be
-used as <em>hierarchical prefabs</em>.</li>
+etc.) or complex scenes with lots of objects and possibly other model instances. Fyrox supports a number main formats:
+FBX and GLTF - which can be used to import 3D models, RGS - which are scenes made in FyroxEd. RGS models are
+special, as they can be used as <a href="../scene/prefab.html">hierarchical prefabs</a>.</li>
 <li><a href="../resources/texture.html">Textures</a> - are images used to add graphical details to objects. The
 engine supports multiple texture formats, such as PNG, JPG, BMP, etc. Compressed textures in DDS format are also supported.</li>
-<li><a href="../resources/sound.html">Sound buffers</a> - are data buffers for sound sources. Fyrox supports WAV and OGG formats.</li>
+<li><a href="../resources/sound.html">Sound buffers</a> - are data buffers for sound sources. Fyrox supports a number of sound formats,
+such as WAV, OGG, MP3, etc. formats.</li>
 <li><a href="../resources/curve.html">Curves</a> - are parametric curves. They're used to create complex functions for numeric parameters.
 They can be made in the <code>Curve Editor</code> (<code>Utils -&gt; Curve Editor</code>)</li>
 <li><a href="../sound/hrtf.html">HRIR Spheres</a> - head-related impulse response collection used for head-related transfer function
@@ -212,11 +213,15 @@ in the HRTF sound rendering.</li>
 <li><a href="../ui/font.html">Fonts</a> - arbitrary TTF/OTF fonts.</li>
 <li><a href="../rendering/materials.html">Materials</a> - materials for rendering.</li>
 <li><a href="../rendering/shaders.html">Shaders</a> - shaders for rendering.</li>
+<li>UI Style - a set of named variables that can be used to alternate the look of widgets, all at once.</li>
+<li>Tile Set - a set of descriptions for tiles used in <a href="../scene/tilemap.html">tile maps</a>.</li>
+<li>Animation Tracks Container - a special container for shared data of <a href="../animation/animation.html">animations</a>.</li>
 <li>It is also possible to create custom assets. See <a href="../resources/custom.html">respective chapter</a> for more info.</li>
+<li>Many more very specific asset types.</li>
 </ul>
 <h2 id="asset-management"><a class="header" href="#asset-management">Asset Management</a></h2>
 <p>Asset management is performed from the <code>Asset Browser</code> window in the editor, you can select an asset, preview it, and edit
-its import options. Here's a screenshot of the asset browser with a texture selected:</p>
+its import options.</p>
 <p><img src="assets.png" alt="asset browser" /></p>
 <p>The most interesting part here is the import options section under the previewer. It allows you to set asset-specific import options
 and apply them. Every asset has its own set of import options. See their respective asset page from the section above to learn
