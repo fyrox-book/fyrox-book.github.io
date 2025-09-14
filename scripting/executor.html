@@ -197,6 +197,15 @@
 The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant
 difference between running the game from the editor, or running it as a separate application. The main difference is that
 the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<p>Why there's a need for such a thing like executor? The first reason was already highlighted - game process isolation
+during the game development. The next major reason is the fact that your game can be run on a number of different platforms.
+If you <a href="../introduction/requirements.html#supported-platforms">check the list of supported platforms</a>, you'll understand
+why there's such a need. Each platform has its own way of how the native code is processed. For example, on WebAssembly
+the game code is compiled into an WASM module which is then loaded by a web browser and executed. This platform requires
+the native code to be compiled into a "dynamic library", while, for instance, the PC builds can be compiled directly
+into an executable file. Android, for instance, requires the game to be compiled into a shared library (<code>.so</code>) and then
+loaded by a bunch of "glue" code and executed.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>Executor is meant to be a part of your project's workspace, its typical look could something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
@@ -254,11 +263,11 @@ to engine instance.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../scripting/plugin.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../scripting/tasks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../scripting/script.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../scene/scene.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -268,11 +277,11 @@ to engine instance.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../scripting/plugin.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../scripting/tasks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../scripting/script.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../scene/scene.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

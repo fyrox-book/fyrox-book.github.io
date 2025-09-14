@@ -614,6 +614,14 @@ only compile your game, which usually takes a few seconds. Anyway, after some ti
 <p><img src="beginning/editor.png" alt="editor" /></p>
 <p>To cut down iteration times, you may want to use a powerful-yet-dangerous tool called native code hot reloading.
 Learn more about it in <a href="beginning/hot_reloading.html">this chapter</a>.</p>
+<h2 id="usage-modes"><a class="header" href="#usage-modes">Usage Modes</a></h2>
+<p>There are a number of ways in which you can use the engine. For example, if you don't need the editor, just don't
+use it. You can still compile your game to a desired platform. Even the project manager and the projects it
+generates aren't mandatory at all.</p>
+<p>If you want to manually initialize the engine without all these fancy bells and whistles, read
+<a href="beginning/../engine/manual_initialization.html">the respective chapter</a>. Keep in mind, however, that this book is written
+in assumption that you're using the engine in the recommended way and all non-standard usage may result in
+unexpected behavior. The recommended approach does all the "heavy lifting" for you.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
 <p>Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
 executed by the engine. Read the <a href="beginning/../scripting/scripting.html">respective chapter</a> to learn how to create, edit, and use scripts
@@ -1555,7 +1563,7 @@ then this object must be deleted before the plugin is unloaded.</p>
 <h3 id="non-serializable-entities"><a class="header" href="#non-serializable-entities">Non-serializable Entities</a></h3>
 <p>Not every object can be serialized, and in this case, the current plugin system calls a special method to restore such
 non-serializable entities after hot reloading. Such entities could include server connections, job queues, etc.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="scripting"><a class="header" href="#scripting">Scripting</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="game-logic"><a class="header" href="#game-logic">Game Logic</a></h1>
 <p>A game based on Fyrox is a plugin to the engine and the editor. The plugin defines global application logic and can provide
 a set of scripts, that can be used to assign custom logic to scene nodes. Every script can be attached to only one
 plugin. All of these entities "live" in the engine, which is initialized from one of platform-specific executors. It
@@ -1788,63 +1796,6 @@ in the editor, it tells the game instance to load it on startup. Let's look clos
 need to load a currently selected scene of the editor in your game. However, it is not strictly necessary - you may
 desire to start your game from a specific scene all the time, even when the game starts from the editor. If the parameter
 is <code>None</code>, then there is no scene loaded in the editor or the game was run outside the editor.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
-<p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant
-difference between running the game from the editor, or running it as a separate application. The main difference is that
-the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
-<h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
-<p>Executor is meant to be a part of your project's workspace, its typical look could something like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::{
-</span><span class="boring">    core::{pool::Handle, uuid::Uuid},
-</span><span class="boring">    engine::executor::Executor,
-</span><span class="boring">    plugin::{Plugin, PluginConstructor, PluginContext},
-</span><span class="boring">    scene::{Scene},
-</span><span class="boring">};
-</span><span class="boring">struct GameConstructor;
-</span><span class="boring">impl PluginConstructor for GameConstructor {
-</span><span class="boring">    fn create_instance(
-</span><span class="boring">        &amp;self,
-</span><span class="boring">        _scene_path: Option&lt;&amp;str&gt;,
-</span><span class="boring">        _context: PluginContext,
-</span><span class="boring">    ) -&gt; Box&lt;dyn Plugin&gt; {
-</span><span class="boring">        todo!()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span>fn main() {
-    let mut executor = Executor::new();
-    // Register your game constructor here.
-    executor.add_plugin_constructor(GameConstructor);
-    executor.run()
-}</code></pre></pre>
-<p>Executor has full access to the engine, and through it to the main application window. You can freely change desired
-parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an "alias"
-to engine instance.</p>
-<p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
-<code>PluginConstructor</code> traits.</p>
-<h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
-<p>This section covers typical use cases for the <code>Executor</code>.</p>
-<h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
-<p>You can set window title when creating executor instance:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::engine::executor::Executor;
-</span><span class="boring">use fyrox::window::WindowAttributes;
-</span><span class="boring">use fyrox::engine::GraphicsContextParams;
-</span><span class="boring">use fyrox::event_loop::EventLoop;
-</span>let executor = Executor::from_params(
-    EventLoop::new().unwrap(),
-    GraphicsContextParams {
-        window_attributes: WindowAttributes {
-            title: "My Game".to_string(),
-            ..Default::default()
-        },
-        vsync: true,
-    },
-);
-<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripts-2"><a class="header" href="#scripts-2">Scripts</a></h1>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting,
 so scripts are as fast as native code. Every scene node can have any number of scripts assigned.</p>
@@ -2400,6 +2351,72 @@ for instance, a procedurally generated world that should be generated on the fly
 dungeon crawler with infinite world. Tasks are also very useful for large games with loads of content and activities.
 You could off-thread AI, world manipulation (for example if you have a destructible world), etc. In other words -
 do not use a sledgehammer to hammer nails, unless you have a <em>huge</em> nail.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
+<p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
+The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant
+difference between running the game from the editor, or running it as a separate application. The main difference is that
+the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
+<h2 id="motivation-1"><a class="header" href="#motivation-1">Motivation</a></h2>
+<p>Why there's a need for such a thing like executor? The first reason was already highlighted - game process isolation
+during the game development. The next major reason is the fact that your game can be run on a number of different platforms.
+If you <a href="scripting/../introduction/requirements.html#supported-platforms">check the list of supported platforms</a>, you'll understand
+why there's such a need. Each platform has its own way of how the native code is processed. For example, on WebAssembly
+the game code is compiled into an WASM module which is then loaded by a web browser and executed. This platform requires
+the native code to be compiled into a "dynamic library", while, for instance, the PC builds can be compiled directly
+into an executable file. Android, for instance, requires the game to be compiled into a shared library (<code>.so</code>) and then
+loaded by a bunch of "glue" code and executed.</p>
+<h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
+<p>Executor is meant to be a part of your project's workspace, its typical look could something like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::{
+</span><span class="boring">    core::{pool::Handle, uuid::Uuid},
+</span><span class="boring">    engine::executor::Executor,
+</span><span class="boring">    plugin::{Plugin, PluginConstructor, PluginContext},
+</span><span class="boring">    scene::{Scene},
+</span><span class="boring">};
+</span><span class="boring">struct GameConstructor;
+</span><span class="boring">impl PluginConstructor for GameConstructor {
+</span><span class="boring">    fn create_instance(
+</span><span class="boring">        &amp;self,
+</span><span class="boring">        _scene_path: Option&lt;&amp;str&gt;,
+</span><span class="boring">        _context: PluginContext,
+</span><span class="boring">    ) -&gt; Box&lt;dyn Plugin&gt; {
+</span><span class="boring">        todo!()
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>fn main() {
+    let mut executor = Executor::new();
+    // Register your game constructor here.
+    executor.add_plugin_constructor(GameConstructor);
+    executor.run()
+}</code></pre></pre>
+<p>Executor has full access to the engine, and through it to the main application window. You can freely change desired
+parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an "alias"
+to engine instance.</p>
+<p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
+<code>PluginConstructor</code> traits.</p>
+<h2 id="typical-use-cases"><a class="header" href="#typical-use-cases">Typical Use Cases</a></h2>
+<p>This section covers typical use cases for the <code>Executor</code>.</p>
+<h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
+<p>You can set window title when creating executor instance:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate fyrox;
+</span><span class="boring">use fyrox::engine::executor::Executor;
+</span><span class="boring">use fyrox::window::WindowAttributes;
+</span><span class="boring">use fyrox::engine::GraphicsContextParams;
+</span><span class="boring">use fyrox::event_loop::EventLoop;
+</span>let executor = Executor::from_params(
+    EventLoop::new().unwrap(),
+    GraphicsContextParams {
+        window_attributes: WindowAttributes {
+            title: "My Game".to_string(),
+            ..Default::default()
+        },
+        vsync: true,
+    },
+);
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene-1"><a class="header" href="#scene-1">Scene</a></h1>
 <p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
 <ol>
