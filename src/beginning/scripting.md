@@ -88,7 +88,8 @@ For NixOS, run `nix develop` from the root of your project to open a shell with 
 
 [Project manager](https://fyrox.rs/download.html) is a part of the engine that allows you to manage multiple projects made with the engine all at once.
 It allows you to create a new project or import an existing one, run the project or edit it in the editor,
-upgrade the project to a selected version of the engine, and many more options.
+upgrade the project to a selected version of the engine, and many more options. If you want to learn more about
+the project manager, read [this chapter](project_manager.md).
 
 [Download the project manager](https://fyrox.rs/download.html) for your OS from the website or install it using
 `cargo install fyrox-project-manager` and run it.
@@ -101,6 +102,9 @@ minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minu
 only compile your game, which usually takes a few seconds. Anyway, after some time you should see the editor window.
 
 ![editor](editor.png)
+
+To cut down iteration times, you may want to use a powerful-yet-dangerous tool called native code hot reloading.
+Learn more about it in [this chapter](hot_reloading.md).
 
 ## Adding Game Logic
 

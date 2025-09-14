@@ -1,7 +1,8 @@
 # Assets
 
-Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own 
-assets pipeline made to make your life easier.
+Asset (or resource) is a shared container for some data that is usually stored in an external storage (a disk,
+a web server, etc.). Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc.
+Fyrox has its own assets pipeline made to make your life easier.
 
 ## Asset Types
 
