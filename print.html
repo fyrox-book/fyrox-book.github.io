@@ -616,7 +616,7 @@ only compile your game, which usually takes a few seconds. Anyway, after some ti
 Learn more about it in <a href="beginning/hot_reloading.html">this chapter</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
 <p>Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
-executed by the engine. Read the <a href="beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts
+executed by the engine. Read the <a href="beginning/../scripting/scripting.html">respective chapter</a> to learn how to create, edit, and use scripts
 in your game.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="manual-installation"><a class="header" href="#manual-installation">Manual Installation</a></h1>
 <blockquote>
@@ -880,11 +880,14 @@ relative to its origin, its scale as a percentage, and its rotation around any a
 The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going
 back to the example of the character and the sword, if the character moves, and by extension the sword, the global
 transform of the sword will reflect the changes made to the character position, yet its local transform will not, since
-that represents the sword's position's relative to the character's, which didn't change.</p>
+that represents the sword's position relative to the character's, which didn't change.</p>
 <p>This mechanism is very simple, yet powerful. The full grace of it unfolds when you're working with 3D models with
 skeletons. Each bone in a skeleton has its parent and a set of children, which allows you to rotate, translate, or scale
 them to
 animate your entire character.</p>
+<h2 id="scripts-1"><a class="header" href="#scripts-1">Scripts</a></h2>
+<p>Scene node can have zero or more scripts assigned to it to execute some logic associated with the node. Scripting
+is a separate large topic, and it is described in the <a href="beginning/../scripting/scripting.html">respective chapter</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="assets"><a class="header" href="#assets">Assets</a></h1>
 <p>Asset (or resource) is a shared container for some data that is usually stored in an external storage (a disk,
 a web server, etc.). Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc.
@@ -1553,14 +1556,15 @@ then this object must be deleted before the plugin is unloaded.</p>
 <p>Not every object can be serialized, and in this case, the current plugin system calls a special method to restore such
 non-serializable entities after hot reloading. Such entities could include server connections, job queues, etc.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripting"><a class="header" href="#scripting">Scripting</a></h1>
-<p>A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and can provide
+<p>A game based on Fyrox is a plugin to the engine and the editor. The plugin defines global application logic and can provide
 a set of scripts, that can be used to assign custom logic to scene nodes. Every script can be attached to only one
-plugin.</p>
+plugin. All of these entities "live" in the engine, which is initialized from one of platform-specific executors. It
+is some sort of OS-dependent entry point of your game. Read the <a href="scripting/executor.html">respective chapter</a> for more info.</p>
 <p>Fyrox uses scripts to create custom game logic, scripts can be written only in Rust which ensures that your game will
 be crash-free, fast and easy to refactor.</p>
 <p>The overall structure of plugins and scripts could be described in this diagram:</p>
 <p><img src="scripting/structure.svg" alt="structure" /></p>
-<p>Next chapters will cover all parts and will help you to learn how to use plugins + scripts correctly.</p>
+<p>The next chapters will cover all parts and will help you to learn how to use plugins and scripts correctly.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="plugins-1"><a class="header" href="#plugins-1">Plugins</a></h1>
 <p>A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and provides
 a set of scripts, that can be used to assign custom logic to scene nodes.</p>
@@ -1841,7 +1845,7 @@ to engine instance.</p>
     },
 );
 <span class="boring">}</span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="scripts-1"><a class="header" href="#scripts-1">Scripts</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scripts-2"><a class="header" href="#scripts-2">Scripts</a></h1>
 <p>Script - is a container for game data and logic that can be assigned to a scene node. Fyrox uses Rust for scripting,
 so scripts are as fast as native code. Every scene node can have any number of scripts assigned.</p>
 <h2 id="when-to-use-scripts-and-when-not"><a class="header" href="#when-to-use-scripts-and-when-not">When to Use Scripts and When Not</a></h2>
