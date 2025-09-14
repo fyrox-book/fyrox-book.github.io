@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Sound Node - Fyrox Book</title>
+        <title>Listener - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -158,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/sound/sound.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/sound/listener.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -192,116 +192,20 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sound"><a class="header" href="#sound">Sound</a></h1>
-<p>In Fyrox, sounds are nodes of type <code>Sound</code>, with all the consequent properties and workflows.</p>
-<h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
-<p>There are two major ways to create sound sources: from the editor and from code.</p>
-<h3 id="from-editor"><a class="header" href="#from-editor">From Editor</a></h3>
-<p>A sound source could be created from <code>Create</code> menu (or from the same menu by right-clicking on a node in the world viewer):</p>
-<p><img src="create.png" alt="create" /></p>
-<p>After the source is created, you can select it and start editing its properties:</p>
-<p><img src="sound.png" alt="sound" /></p>
-<ul>
-<li><code>Buffer</code> - a sound buffer resource, that will be used as a source of samples. If it is empty, then no sound will be
-played. Drag'n'drop a sound resource from the Asset Browser here to assign it to the source.</li>
-<li><code>Play Once</code> - a flag, that defines whether the engine should automatically delete the sound source node from the scene
-when it is finished playing. Could be useful for one-shot sounds.</li>
-<li><code>Gain</code> - a numeric value in <code>[0..1]</code> range, that defines total volume of the sound source. Keep in mind, that this
-value sets the volume in <em>linear</em> scale, while physically-correct approach would be to use logarithmic scale. This
-will be fixed in future versions.</li>
-<li><code>Panning</code> - a numeric value in <code>[-1..1]</code> range, that defines how loud audio channels will be. <code>-1</code> - all the sound
-will be routed to the left channel, <code>1</code> - to the right channel. This option works only with 2D sounds (whose spatial
-blend factor is <code>0.0</code>)</li>
-<li><code>Status</code> - a switch with three possible states: <code>Stopped</code>, <code>Playing</code>, <code>Paused</code>. By default, every sound source is
-in stopped state, do not forget to switch it to the <code>Playing</code> state, otherwise you won't hear anything.</li>
-<li><code>Looping</code> - a flag, that defines whether the sound source should be playing infinitely, or not. Looping sound source
-will never switch their status to <code>Stopped</code>.</li>
-<li><code>Pitch</code> - playback speed multiplier. By default, it is <code>1.0</code> which means default speed.</li>
-<li><code>Max Distance</code> - maximum distance, at which the sound source is affected by distance attenuation (for 3D sounds).
-By default, it set to max possible value. Lower values could be used to prevent sound source from be silent at certain
-distance.</li>
-<li><code>Rolloff Factor</code> - a numeric value, that defines how fast the volume of the sound source will decay with increasing
-distance to a listener.</li>
-<li><code>Playback Time</code> - desired time from which the playback should start (in seconds).</li>
-<li><code>Spatial Blend</code> - a numeric value, that defines blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is
-fully 2D, <code>1.0</code> - the sound is fully 3D. By default, the value is <code>1.0</code>.</li>
-<li><code>Audio Bus</code> - a name of an audio bus, that will be used to process the samples from the sound source. By default, it
-is set to <code>Primary</code>. It should match the name of some audio bus, that will be used in your scene. More info about
-audio processing could found <a href="bus.html">here</a>.</li>
-</ul>
-<h3 id="from-code"><a class="header" href="#from-code">From Code</a></h3>
-<p>Audio files are loaded using the resource manager:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>pub fn load_sound(path: &amp;Path, resource_manager: &amp;ResourceManager) -&gt; SoundBufferResource {
-    resource_manager.request::&lt;SoundBuffer&gt;(path)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>Then, the node is built using the standard builder pattern:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn build_sound_node(resource_manager: &amp;ResourceManager, scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
-    let sound = resource_manager.request::&lt;SoundBuffer&gt;("/path/to/resource.ogg");
-
-    SoundBuilder::new(BaseBuilder::new())
-        .with_buffer(Some(sound))
-        .with_status(Status::Playing)
-        .with_play_once(true)
-        .build(&amp;mut scene.graph)
-}
-<span class="boring">}</span></code></pre></pre>
-<p>There are a few notable things in the example above.</p>
-<p>The first is that sounds don't play automatically; in order to do so, we need to invoke <code>.with_status(Status::Playing)</code>.</p>
-<p>The second is that sound nodes are not dropped automatically after playback; dropping it can be performed in two ways.
-One way is to use the convenient builder API <code>.with_play_once(true)</code>; another is to use the graph APIs:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn update_sound(sound_handle: Handle&lt;Node&gt;, scene: &amp;mut Scene) {
-    let sound = scene.graph[sound_handle].as_sound();
-
-    if sound.status() == Status::Stopped {
-        scene.graph.remove_node(sound_handle);
-    }
-}
-<span class="boring">}</span></code></pre></pre>
-<p>If we want to play background music (or anyway a repeated sound), we just set the <code>looping</code> property when building the node:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn build_looping_sound(scene: &amp;mut Scene) {
-    SoundBuilder::new(BaseBuilder::new())
-        .with_looping(true)
-        // ...
-        .build(&amp;mut scene.graph);
-}
-<span class="boring">}</span></code></pre></pre>
-<p>In order to stream large audio files, instead of loading them entirely in memory, the simplest strategy is to create a
-corresponding <code>.options</code> file, with the following content:</p>
-<pre><code class="language-json">(
-  stream: true
-)
-</code></pre>
-<p>If the audio file is called, for example, <code>/path/to/background.ogg</code>, call this <code>/path/to/background.ogg.options</code>.</p>
-<h2 id="2d-and-3d"><a class="header" href="#2d-and-3d">2D and 3D</a></h2>
-<p>There's no strict separation between 2D and 3D sound sources. The same source could be switched from 2D to 3D (and vice
-versa) at runtime, by just adjusting <code>Spatial Blend</code> property. Spatial blend factor is a numeric value, that defines
-blending factor between 2D and 3D sound, where <code>0.0</code> - the sound is fully 2D, <code>1.0</code> - the sound is fully 3D. By default,
-the value is <code>1.0</code> which makes it 3D. Intermediate values could be used to create "ambisonic" sound sources - when the
-source sounds like it is placed at some position in the world, but some part of it is just 2D and does not depend on
-positioning.</p>
-<h2 id="audio-bus"><a class="header" href="#audio-bus">Audio bus</a></h2>
-<p>It is possible to specify target audio bus to which the sound will output its audio samples. Audio bus is responsible
-for various audio processing, such as filtering, reverb, etc. To specify output audio bus, just use the <code>set_audio_bus</code>
-method and set the name of an audio bus.</p>
+                        <h1 id="listener"><a class="header" href="#listener">Listener</a></h1>
+<p>An audio receiver that captures the sound at a particular point in your scene and sends it to an audio context for
+processing and outputting to an audio playback device. Every game scene has only one listener. There's nothing specific
+in listener's API, in general it is just an oriented point in 3D space. "Ear" axis is the local X axis.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../sound/bus.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../sound/sound.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../sound/listener.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../sound/hrtf.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -311,11 +215,11 @@ method and set the name of an audio bus.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../sound/bus.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../sound/sound.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../sound/listener.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../sound/hrtf.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
