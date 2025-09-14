@@ -269,10 +269,37 @@ It allows you to create a new project or import an existing one, run the project
 upgrade the project to a selected version of the engine, and many more options. If you want to learn more about
 the project manager, read <a href="project_manager.html">this chapter</a>.</p>
 <p><a href="https://fyrox.rs/download.html">Download the project manager</a> for your OS from the website or install it using
-<code>cargo install fyrox-project-manager</code> and run it.
-Then click the <code>+Create</code> button, select the path where you want the project to be located and click <code>Create</code>. Select the
-new project in the list and click <code>Edit</code> button to run the editor. Learn more about
-the <a href="project_manager.html">project manager here</a>.</p>
+<code>cargo install fyrox-project-manager</code> and run it. Then click the <code>+Create</code> button, select the path where you want the
+project to be located and click <code>Create</code>. The project manager will create a new directory for your project with the
+following structure (some files are omitted to be less verbose):</p>
+<pre><code class="language-text">YourProject
+├───Cargo.toml
+├───data
+│       scene.rgs
+├───game
+│   │   Cargo.toml
+│   └───src
+│           lib.rs
+├───editor
+├───executor
+├───executor-android
+├───executor-wasm
+└───game-dylib
+</code></pre>
+<p>The most important parts in this structure:</p>
+<ul>
+<li><code>Cargo.toml</code> - the workspace of your project.</li>
+<li><code>game</code> - your game code.</li>
+<li><code>data</code> - the folder where all the assets must be located (subfolders allowed).</li>
+<li><code>editor</code> - the editor for your project (can be deleted if not needed).</li>
+<li><code>executor</code> - entry point for PC (can be deleted if not needed).</li>
+<li><code>executor-android</code> - entry point for Android (can be deleted if not needed).</li>
+<li><code>executor-wasm</code> - entry point for WebAssembly (can be deleted if not needed).</li>
+<li><code>game-dylib</code> - special "bridge" for native code hot reloading functionality (can be deleted if not needed).</li>
+</ul>
+<p>To run the project, select the new project in the list and click <code>Edit</code> button to run the editor, or <code>Run</code> to run
+the game without the editor (the game can also be run from the editor). Learn more about the
+<a href="project_manager.html">project manager here</a>.</p>
 <p>Your project needs to be compiled from scratch before it can be run, it may take some time, usually it takes up to 10
 minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minutes or so). Next runs of the editor will
 only compile your game, which usually takes a few seconds. Anyway, after some time you should see the editor window.</p>
