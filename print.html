@@ -601,7 +601,8 @@ the <a href="https://rustup.rs">latest Rust installed</a> with the appropriate t
 <p><a href="https://fyrox.rs/download.html"><img src="https://fyrox.rs/assets/0.36/project_manager.png" alt="project manager" /></a></p>
 <p><a href="https://fyrox.rs/download.html">Project manager</a> is a part of the engine that allows you to manage multiple projects made with the engine all at once.
 It allows you to create a new project or import an existing one, run the project or edit it in the editor,
-upgrade the project to a selected version of the engine, and many more options.</p>
+upgrade the project to a selected version of the engine, and many more options. If you want to learn more about
+the project manager, read <a href="beginning/project_manager.html">this chapter</a>.</p>
 <p><a href="https://fyrox.rs/download.html">Download the project manager</a> for your OS from the website or install it using
 <code>cargo install fyrox-project-manager</code> and run it.
 Then click the <code>+Create</code> button, select the path where you want the project to be located and click <code>Create</code>. Select the
@@ -611,6 +612,8 @@ the <a href="beginning/project_manager.html">project manager here</a>.</p>
 minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minutes or so). Next runs of the editor will
 only compile your game, which usually takes a few seconds. Anyway, after some time you should see the editor window.</p>
 <p><img src="beginning/editor.png" alt="editor" /></p>
+<p>To cut down iteration times, you may want to use a powerful-yet-dangerous tool called native code hot reloading.
+Learn more about it in <a href="beginning/hot_reloading.html">this chapter</a>.</p>
 <h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
 <p>Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
 executed by the engine. Read the <a href="beginning/../scripting/script.html">Scripts</a> chapter to learn how to create, edit, and use scripts
@@ -707,152 +710,6 @@ version = { git = "https://github.com/FyroxEngine/Fyrox", rev = "0195666b30562c1
 project's workspace. This will pull the latest changes from the remote, unless there is no <code>rev</code> specified.</p>
 <p>Learn more about dependency paths on the official <code>cargo</code>
 documentation, <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories">here</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="project-manager-1"><a class="header" href="#project-manager-1">Project Manager</a></h1>
-<p>This chapter explains how to use various parts of the project manager, what it can do in general, and why you should
-prefer it over good ol' console commands.</p>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p><img src="beginning/project_manager.png" alt="project manager" /></p>
-<p>Project manager is a tool that is able to create projects, import existing projects, configure and build them, etc. Its
-main purpose is to reduce the complexity of project management to the minimum. For example, a new project can be created
-and built in a few clicks. While the same is possible to be done manually, it requires some juggling with console commands
-that in some cases (code hot reloading) contains a lot of unexpected parts.</p>
-<h2 id="creating-a-new-project"><a class="header" href="#creating-a-new-project">Creating a New Project</a></h2>
-<p>To create a new project simply click on <code>+Create</code> button, and you should see the following window:</p>
-<p><img src="beginning/pm_create_project.png" alt="project manager wizard" /></p>
-<p>This window contains four major options for your project:</p>
-<ul>
-<li><code>Path</code> - specifies a parent directory in which a project's directory will be created and then filled with the
-project's files.</li>
-<li><code>Name</code> - project name, it must follow specific rules. The name must start either from a letter or underscore (<code>_</code>),
-the rest of the characters must be letters, numbers, hyphens (<code>-</code>), underscore (<code>_</code>). The project manager performs
-name validation for you:</li>
-</ul>
-<p><img src="beginning/pm_validation.png" alt="project manager name validation" /></p>
-<ul>
-<li><code>Style</code> - defines initial content of the default scene. In general, it does not restrict you to a specific number
-of dimensions—you can still use both 2D and 3D or mix them.</li>
-<li><code>Version Control</code> - allows you to select a desired version control system (VCS) for your project. It is Git by default,
-but you can select any VCS you like or disable it completely by selecting <code>None</code> option.</li>
-</ul>
-<p>Every project has its own item in the list of projects, it shows important information about the project:</p>
-<p><img src="beginning/pm_project_info.png" alt="project info" /></p>
-<ol>
-<li>Project name.</li>
-<li>Full path to the project.</li>
-<li>Version of the engine the project uses.</li>
-<li>Code hot reloading marker.</li>
-</ol>
-<h2 id="project-management"><a class="header" href="#project-management">Project Management</a></h2>
-<p><img src="beginning/pm_management.png" alt="project management" /></p>
-<p>When a project is selected, it is possible to manage it using the toolbar on the right side. The available options
-are the following:</p>
-<ul>
-<li><code>Hot Reloading</code> - allows you to enable or disable code hot reloading. Code hot reloading is a handy feature
-for rapid prototyping. See <a href="beginning/./hot_reloading.html">the respective chapter</a> for more info.</li>
-<li><code>Edit</code> - builds and runs the editor.</li>
-<li><code>Run</code> - builds and runs the game. Final builds of the game should be produced using the project exporter tool of the
-editor. See <a href="beginning/../shipping/shipping.html">the respective chapter</a> for more info.</li>
-<li><code>Open IDE</code> - opens the specified IDE to edit the project's source code.</li>
-<li><code>Upgrade</code> - opens a separate tool that allows you to select a desired engine version. See
-<a href="beginning/project_manager.html#project-upgrade">the section below</a> for more info.</li>
-<li><code>Clean</code> - removes all build artifacts from the project. Essentially it just runs <code>cargo clean</code> command for your project.</li>
-<li><code>Locate</code> - opens the project directory in the file system explorer.</li>
-<li><code>Delete</code> - deletes the project. This is a destructive operation, and it is "gated" with a separate confirmation dialog.</li>
-<li><code>Exclude</code> - removes the project from the list of projects.</li>
-</ul>
-<h2 id="project-upgrade"><a class="header" href="#project-upgrade">Project Upgrade</a></h2>
-<p><img src="beginning/pm_upgrade.png" alt="project manager upgrade" /></p>
-<p>This tiny tool allows you to select a desired version of the engine in a few clicks. Available options are the following:</p>
-<ul>
-<li><code>Specific</code> - specific version of the engine. The version must comply with semver rules (for example - <code>0.36.0</code>).</li>
-<li><code>Nightly</code> - latest possible <em>potentially unstable</em> version of the engine directly from the development branch (<code>master</code>)
-of the <a href="https://github.com/FyroxEngine/Fyrox">GitHub repo</a>. Use it if you need latest features and bugfixes.</li>
-<li><code>Local</code> - special option that allows you to switch the engine to local copy of the engine repository. The engine must
-be located in the parent folder of your project's directory.</li>
-</ul>
-<h2 id="settings"><a class="header" href="#settings">Settings</a></h2>
-<p><img src="beginning/pm_settings.png" alt="project manager settings" /></p>
-<p>Project manager has its own settings, it is not much for now, but it will grow over time. Currently, there's only one
-option—an IDE that can be used to edit source code of your project.</p>
-<p>All that you need to is to specify a name of the executable of your IDE. The image above uses <code>RustRover</code> IDE. Keep in
-mind, that you must modify your <code>PATH</code> environment variable to include full path to the specified executable, otherwise
-this option will not work correctly!</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="code-hot-reloading"><a class="header" href="#code-hot-reloading">Code Hot Reloading</a></h1>
-<p>Fyrox supports code hot reloading (CHR for short), which allows you to recompile the game code while the game is running.
-This functionality significantly reduces iteration times and allows rapid prototyping. This way, Rust becomes a sort of
-"scripting" language, but with all Rust safety and performance guarantees. CHR in action looks like this:</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/vq6P3Npydmw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<h2 id="how-to-use"><a class="header" href="#how-to-use">How To Use</a></h2>
-<blockquote>
-<p>⚠️ If you have an existing project from one of the previous versions of the engine, the best way to add support for
-CHR is to re-generate the entire project and copy all the assets and game code in the new project. CHR requires very
-specific project structure and a small mistake in it could lead to incorrect behavior.</p>
-</blockquote>
-<p>CHR is quite simple to use - a project generated by the project manager or <code>fyrox-template</code> already has all that is
-needed for hot reloading. There are two ways of enabling hot reloading support—using the project manager and doing
-the same manually using console commands.</p>
-<h3 id="project-manager-2"><a class="header" href="#project-manager-2">Project Manager</a></h3>
-<p>The easiest way of enabling hot reloading support is to simply click on <code>Hot Reloading</code> checkbox in the project
-manager and click <code>Edit</code> or <code>Run</code>:</p>
-<p><img src="beginning/project_manager_hot_reloading.png" alt="project manager hot reloading" /></p>
-<p>Note the small "fire" icon, it means that the project has this feature turned on. You can enable or disable it at any
-time.</p>
-<h3 id="console-commands"><a class="header" href="#console-commands">Console Commands</a></h3>
-<p>Doing the same via console commands requires some bootstrapping. At first, you need to compile your game plugin using the following
-command:</p>
-<pre><code class="language-shell">RUSTFLAGS="-C prefer-dynamic=yes" cargo build --package game_dylib --no-default-features --features="dylib-engine" --profile dev-hot-reload
-</code></pre>
-<p>This command will compile the engine DLL (<code>fyrox_dylib.dll/so</code>) and the plugin DLL (<code>game_dylib.dll/so</code>). Please note the
-mandatory environment variable <code>RUSTFLAGS="-C prefer-dynamic=yes"</code>. It forces the compiler to link the standard library
-dynamically. It is crucial because if not set, the standard library will be duplicated in game plugin and engine,
-which will lead to subtle bugs.</p>
-<blockquote>
-<p>⚠️ Environment variables can be set in a different ways, depending on your OS. On Linux it simply prepends the actual
-command, on Windows it requires a <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/set_1#examples">separate command</a>.
-Other OSes can have their own ways of setting environment variables.</p>
-</blockquote>
-<p>The next step is to compile the editor in CHR mode. To do that, run the following command:</p>
-<pre><code class="language-shell">RUSTFLAGS="-C prefer-dynamic=yes" cargo run --package editor --no-default-features --features="dylib" --profile dev-hot-reload
-</code></pre>
-<p>This command will compile the editor in CHR mode and run it. After this, all you need to do is to select build profile
-in the editor to be <code>Debug (HR)</code>:</p>
-<p><img src="beginning/build_profile.png" alt="img.png" /></p>
-<p>Once that's done you can run your game by clicking on the green <code>Play</code> button. You can switch between CHR and normal mode
-(static linking) at any time. Keep in mind that if you run the editor in CHR mode, it will also reload all changed plugins.</p>
-<h2 id="build-profiles"><a class="header" href="#build-profiles">Build Profiles</a></h2>
-<p>CHR uses separate build profiles: <code>dev-hot-reload</code> (no optimizations) and <code>release-hot-reload</code> (with optimizations).
-Separate build profiles allow you to quickly switch between statically linked plugins and code hot reloading. This could
-be useful if you're experiencing some issues with hot reloading (see next section for more info).</p>
-<h2 id="stability"><a class="header" href="#stability">Stability</a></h2>
-<p>CHR is a very new and experimental feature of the engine. It is based on wildly unsafe functionality which could result
-in memory corruption, subtle bugs, etc. If you experience weird behavior of your game after hot reloading, run the
-game in normal (static linking) mode instead. Please report any bugs in the <a href="https://github.com/FyroxEngine/Fyrox/issues">issue tracker</a>
-of the engine. CHR was tested on two relatively large games - <a href="https://github.com/mrDIMAS/FishFolly">Fish Folly</a> and
-<a href="https://github.com/mrDIMAS/StationIapetus">Station Iapetus</a>. You can download these projects and try CHR yourself.</p>
-<h2 id="technical-details-and-limitations"><a class="header" href="#technical-details-and-limitations">Technical Details and Limitations</a></h2>
-<p>CHR is using the standard operating system (OS) mechanism of shared libraries (DLL for short). Pretty much any OS can load
-native code into a running process dynamically from a DLL. Any dynamically loaded library can then be unloaded from the
-process memory. This gives a perfect opportunity to reload game code in runtime. It may sound quite easy, but in practice,
-there are a lot of issues.</p>
-<h3 id="plugin-entities-and-reloading"><a class="header" href="#plugin-entities-and-reloading">Plugin Entities and Reloading</a></h3>
-<p>Plugins can supply the engine with a predefined set of entities (such as scripts, etc.). These entities are serialized into
-a memory blob before the plugin itself is unloaded. When all plugins are reloaded, this memory blob is used to restore
-the state of plugin entities. That being said, pretty much all the plugin entities must be serializable (implement <code>Visit</code> trait).</p>
-<h3 id="trait-objects"><a class="header" href="#trait-objects">Trait Objects</a></h3>
-<p>Trait objects are very problematic with hot reloading, because internally trait objects contain vtable with function
-pointers. These pointers can be easily invalidated if the plugin is unloaded. This applies even to engine trait objects
-if they're created directly from the plugin side. The only way to bypass this issue is to use special methods from the
-engine to create its trait objects. It is possible to add a lint to clippy to check for such cases (see the respective
-<a href="https://github.com/rust-lang/rust-clippy/issues/12819">issue</a>).</p>
-<h3 id="dangling-objects"><a class="header" href="#dangling-objects">Dangling Objects</a></h3>
-<p>The current plugin system tries its best to remove all plugin entities from the engine internals before reloading plugins.
-However, some objects could be overlooked by this system, which could result in crash or memory corruption. The current<br />
-approach of preventing from having dangling objects is based on the built-in reflection system—the plugin system iterates
-across all fields of every object and checks its assembly name. If the assembly name matches the plugin's assembly name,
-then this object must be deleted before the plugin is unloaded.</p>
-<h3 id="non-serializable-entities"><a class="header" href="#non-serializable-entities">Non-serializable Entities</a></h3>
-<p>Not every object can be serialized, and in this case, the current plugin system calls a special method to restore such
-non-serializable entities after hot reloading. Such entities could include server connections, job queues, etc.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="fyroxed-overview"><a class="header" href="#fyroxed-overview">FyroxEd Overview</a></h1>
 <p>FyroxEd - is the native editor of Fyrox, it is made with one purpose - to be an integrated game development environment
 that helps you build your game from start to finish with relatively low effort.</p>
@@ -1029,8 +886,9 @@ skeletons. Each bone in a skeleton has its parent and a set of children, which a
 them to
 animate your entire character.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="assets"><a class="header" href="#assets">Assets</a></h1>
-<p>Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc. Fyrox has its own
-assets pipeline made to make your life easier.</p>
+<p>Asset (or resource) is a shared container for some data that is usually stored in an external storage (a disk,
+a web server, etc.). Pretty much every game depends on various assets, such as 3D models, textures, sounds, etc.
+Fyrox has its own assets pipeline made to make your life easier.</p>
 <h2 id="asset-types"><a class="header" href="#asset-types">Asset Types</a></h2>
 <p>The engine offers a set of assets that should cover all of your needs:</p>
 <ul>
@@ -1548,6 +1406,152 @@ existing code, that could otherwise be done because of intertwined and convolute
 keep message granularity at a reasonable level. Do not use message passing for tiny changes, as it will most likely make
 your game slower.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="project-manager-1"><a class="header" href="#project-manager-1">Project Manager</a></h1>
+<p>This chapter explains how to use various parts of the project manager, what it can do in general, and why you should
+prefer it over good ol' console commands.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p><img src="beginning/project_manager.png" alt="project manager" /></p>
+<p>Project manager is a tool that is able to create projects, import existing projects, configure and build them, etc. Its
+main purpose is to reduce the complexity of project management to the minimum. For example, a new project can be created
+and built in a few clicks. While the same is possible to be done manually, it requires some juggling with console commands
+that in some cases (code hot reloading) contains a lot of unexpected parts.</p>
+<h2 id="creating-a-new-project"><a class="header" href="#creating-a-new-project">Creating a New Project</a></h2>
+<p>To create a new project simply click on <code>+Create</code> button, and you should see the following window:</p>
+<p><img src="beginning/pm_create_project.png" alt="project manager wizard" /></p>
+<p>This window contains four major options for your project:</p>
+<ul>
+<li><code>Path</code> - specifies a parent directory in which a project's directory will be created and then filled with the
+project's files.</li>
+<li><code>Name</code> - project name, it must follow specific rules. The name must start either from a letter or underscore (<code>_</code>),
+the rest of the characters must be letters, numbers, hyphens (<code>-</code>), underscore (<code>_</code>). The project manager performs
+name validation for you:</li>
+</ul>
+<p><img src="beginning/pm_validation.png" alt="project manager name validation" /></p>
+<ul>
+<li><code>Style</code> - defines initial content of the default scene. In general, it does not restrict you to a specific number
+of dimensions—you can still use both 2D and 3D or mix them.</li>
+<li><code>Version Control</code> - allows you to select a desired version control system (VCS) for your project. It is Git by default,
+but you can select any VCS you like or disable it completely by selecting <code>None</code> option.</li>
+</ul>
+<p>Every project has its own item in the list of projects, it shows important information about the project:</p>
+<p><img src="beginning/pm_project_info.png" alt="project info" /></p>
+<ol>
+<li>Project name.</li>
+<li>Full path to the project.</li>
+<li>Version of the engine the project uses.</li>
+<li>Code hot reloading marker.</li>
+</ol>
+<h2 id="project-management"><a class="header" href="#project-management">Project Management</a></h2>
+<p><img src="beginning/pm_management.png" alt="project management" /></p>
+<p>When a project is selected, it is possible to manage it using the toolbar on the right side. The available options
+are the following:</p>
+<ul>
+<li><code>Hot Reloading</code> - allows you to enable or disable code hot reloading. Code hot reloading is a handy feature
+for rapid prototyping. See <a href="beginning/./hot_reloading.html">the respective chapter</a> for more info.</li>
+<li><code>Edit</code> - builds and runs the editor.</li>
+<li><code>Run</code> - builds and runs the game. Final builds of the game should be produced using the project exporter tool of the
+editor. See <a href="beginning/../shipping/shipping.html">the respective chapter</a> for more info.</li>
+<li><code>Open IDE</code> - opens the specified IDE to edit the project's source code.</li>
+<li><code>Upgrade</code> - opens a separate tool that allows you to select a desired engine version. See
+<a href="beginning/project_manager.html#project-upgrade">the section below</a> for more info.</li>
+<li><code>Clean</code> - removes all build artifacts from the project. Essentially it just runs <code>cargo clean</code> command for your project.</li>
+<li><code>Locate</code> - opens the project directory in the file system explorer.</li>
+<li><code>Delete</code> - deletes the project. This is a destructive operation, and it is "gated" with a separate confirmation dialog.</li>
+<li><code>Exclude</code> - removes the project from the list of projects.</li>
+</ul>
+<h2 id="project-upgrade"><a class="header" href="#project-upgrade">Project Upgrade</a></h2>
+<p><img src="beginning/pm_upgrade.png" alt="project manager upgrade" /></p>
+<p>This tiny tool allows you to select a desired version of the engine in a few clicks. Available options are the following:</p>
+<ul>
+<li><code>Specific</code> - specific version of the engine. The version must comply with semver rules (for example - <code>0.36.0</code>).</li>
+<li><code>Nightly</code> - latest possible <em>potentially unstable</em> version of the engine directly from the development branch (<code>master</code>)
+of the <a href="https://github.com/FyroxEngine/Fyrox">GitHub repo</a>. Use it if you need latest features and bugfixes.</li>
+<li><code>Local</code> - special option that allows you to switch the engine to local copy of the engine repository. The engine must
+be located in the parent folder of your project's directory.</li>
+</ul>
+<h2 id="settings"><a class="header" href="#settings">Settings</a></h2>
+<p><img src="beginning/pm_settings.png" alt="project manager settings" /></p>
+<p>Project manager has its own settings, it is not much for now, but it will grow over time. Currently, there's only one
+option—an IDE that can be used to edit source code of your project.</p>
+<p>All that you need to is to specify a name of the executable of your IDE. The image above uses <code>RustRover</code> IDE. Keep in
+mind, that you must modify your <code>PATH</code> environment variable to include full path to the specified executable, otherwise
+this option will not work correctly!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="code-hot-reloading"><a class="header" href="#code-hot-reloading">Code Hot Reloading</a></h1>
+<p>Fyrox supports code hot reloading (CHR for short), which allows you to recompile the game code while the game is running.
+This functionality significantly reduces iteration times and allows rapid prototyping. This way, Rust becomes a sort of
+"scripting" language, but with all Rust safety and performance guarantees. CHR in action looks like this:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/vq6P3Npydmw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h2 id="how-to-use"><a class="header" href="#how-to-use">How To Use</a></h2>
+<blockquote>
+<p>⚠️ If you have an existing project from one of the previous versions of the engine, the best way to add support for
+CHR is to re-generate the entire project and copy all the assets and game code in the new project. CHR requires very
+specific project structure and a small mistake in it could lead to incorrect behavior.</p>
+</blockquote>
+<p>CHR is quite simple to use - a project generated by the project manager or <code>fyrox-template</code> already has all that is
+needed for hot reloading. There are two ways of enabling hot reloading support—using the project manager and doing
+the same manually using console commands.</p>
+<h3 id="project-manager-2"><a class="header" href="#project-manager-2">Project Manager</a></h3>
+<p>The easiest way of enabling hot reloading support is to simply click on <code>Hot Reloading</code> checkbox in the project
+manager and click <code>Edit</code> or <code>Run</code>:</p>
+<p><img src="beginning/project_manager_hot_reloading.png" alt="project manager hot reloading" /></p>
+<p>Note the small "fire" icon, it means that the project has this feature turned on. You can enable or disable it at any
+time.</p>
+<h3 id="console-commands"><a class="header" href="#console-commands">Console Commands</a></h3>
+<p>Doing the same via console commands requires some bootstrapping. At first, you need to compile your game plugin using the following
+command:</p>
+<pre><code class="language-shell">RUSTFLAGS="-C prefer-dynamic=yes" cargo build --package game_dylib --no-default-features --features="dylib-engine" --profile dev-hot-reload
+</code></pre>
+<p>This command will compile the engine DLL (<code>fyrox_dylib.dll/so</code>) and the plugin DLL (<code>game_dylib.dll/so</code>). Please note the
+mandatory environment variable <code>RUSTFLAGS="-C prefer-dynamic=yes"</code>. It forces the compiler to link the standard library
+dynamically. It is crucial because if not set, the standard library will be duplicated in game plugin and engine,
+which will lead to subtle bugs.</p>
+<blockquote>
+<p>⚠️ Environment variables can be set in a different ways, depending on your OS. On Linux it simply prepends the actual
+command, on Windows it requires a <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/set_1#examples">separate command</a>.
+Other OSes can have their own ways of setting environment variables.</p>
+</blockquote>
+<p>The next step is to compile the editor in CHR mode. To do that, run the following command:</p>
+<pre><code class="language-shell">RUSTFLAGS="-C prefer-dynamic=yes" cargo run --package editor --no-default-features --features="dylib" --profile dev-hot-reload
+</code></pre>
+<p>This command will compile the editor in CHR mode and run it. After this, all you need to do is to select build profile
+in the editor to be <code>Debug (HR)</code>:</p>
+<p><img src="beginning/build_profile.png" alt="img.png" /></p>
+<p>Once that's done you can run your game by clicking on the green <code>Play</code> button. You can switch between CHR and normal mode
+(static linking) at any time. Keep in mind that if you run the editor in CHR mode, it will also reload all changed plugins.</p>
+<h2 id="build-profiles"><a class="header" href="#build-profiles">Build Profiles</a></h2>
+<p>CHR uses separate build profiles: <code>dev-hot-reload</code> (no optimizations) and <code>release-hot-reload</code> (with optimizations).
+Separate build profiles allow you to quickly switch between statically linked plugins and code hot reloading. This could
+be useful if you're experiencing some issues with hot reloading (see next section for more info).</p>
+<h2 id="stability"><a class="header" href="#stability">Stability</a></h2>
+<p>CHR is a very new and experimental feature of the engine. It is based on wildly unsafe functionality which could result
+in memory corruption, subtle bugs, etc. If you experience weird behavior of your game after hot reloading, run the
+game in normal (static linking) mode instead. Please report any bugs in the <a href="https://github.com/FyroxEngine/Fyrox/issues">issue tracker</a>
+of the engine. CHR was tested on two relatively large games - <a href="https://github.com/mrDIMAS/FishFolly">Fish Folly</a> and
+<a href="https://github.com/mrDIMAS/StationIapetus">Station Iapetus</a>. You can download these projects and try CHR yourself.</p>
+<h2 id="technical-details-and-limitations"><a class="header" href="#technical-details-and-limitations">Technical Details and Limitations</a></h2>
+<p>CHR is using the standard operating system (OS) mechanism of shared libraries (DLL for short). Pretty much any OS can load
+native code into a running process dynamically from a DLL. Any dynamically loaded library can then be unloaded from the
+process memory. This gives a perfect opportunity to reload game code in runtime. It may sound quite easy, but in practice,
+there are a lot of issues.</p>
+<h3 id="plugin-entities-and-reloading"><a class="header" href="#plugin-entities-and-reloading">Plugin Entities and Reloading</a></h3>
+<p>Plugins can supply the engine with a predefined set of entities (such as scripts, etc.). These entities are serialized into
+a memory blob before the plugin itself is unloaded. When all plugins are reloaded, this memory blob is used to restore
+the state of plugin entities. That being said, pretty much all the plugin entities must be serializable (implement <code>Visit</code> trait).</p>
+<h3 id="trait-objects"><a class="header" href="#trait-objects">Trait Objects</a></h3>
+<p>Trait objects are very problematic with hot reloading, because internally trait objects contain vtable with function
+pointers. These pointers can be easily invalidated if the plugin is unloaded. This applies even to engine trait objects
+if they're created directly from the plugin side. The only way to bypass this issue is to use special methods from the
+engine to create its trait objects. It is possible to add a lint to clippy to check for such cases (see the respective
+<a href="https://github.com/rust-lang/rust-clippy/issues/12819">issue</a>).</p>
+<h3 id="dangling-objects"><a class="header" href="#dangling-objects">Dangling Objects</a></h3>
+<p>The current plugin system tries its best to remove all plugin entities from the engine internals before reloading plugins.
+However, some objects could be overlooked by this system, which could result in crash or memory corruption. The current<br />
+approach of preventing from having dangling objects is based on the built-in reflection system—the plugin system iterates
+across all fields of every object and checks its assembly name. If the assembly name matches the plugin's assembly name,
+then this object must be deleted before the plugin is unloaded.</p>
+<h3 id="non-serializable-entities"><a class="header" href="#non-serializable-entities">Non-serializable Entities</a></h3>
+<p>Not every object can be serialized, and in this case, the current plugin system calls a special method to restore such
+non-serializable entities after hot reloading. Such entities could include server connections, job queues, etc.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scripting"><a class="header" href="#scripting">Scripting</a></h1>
 <p>A game based on Fyrox is a plugin to the engine and the editor. Plugin defines global application logic and can provide
 a set of scripts, that can be used to assign custom logic to scene nodes. Every script can be attached to only one
