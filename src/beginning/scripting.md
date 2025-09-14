@@ -92,10 +92,40 @@ upgrade the project to a selected version of the engine, and many more options. 
 the project manager, read [this chapter](project_manager.md).
 
 [Download the project manager](https://fyrox.rs/download.html) for your OS from the website or install it using
-`cargo install fyrox-project-manager` and run it.
-Then click the `+Create` button, select the path where you want the project to be located and click `Create`. Select the
-new project in the list and click `Edit` button to run the editor. Learn more about
-the [project manager here](project_manager.md).
+`cargo install fyrox-project-manager` and run it. Then click the `+Create` button, select the path where you want the 
+project to be located and click `Create`. The project manager will create a new directory for your project with the 
+following structure (some files are omitted to be less verbose):
+
+```text
+YourProject
+├───Cargo.toml
+├───data
+│       scene.rgs
+├───game
+│   │   Cargo.toml
+│   └───src
+│           lib.rs
+├───editor
+├───executor
+├───executor-android
+├───executor-wasm
+└───game-dylib
+```
+
+The most important parts in this structure:
+
+- `Cargo.toml` - the workspace of your project.
+- `game` - your game code.
+- `data` - the folder where all the assets must be located (subfolders allowed).
+- `editor` - the editor for your project (can be deleted if not needed).
+- `executor` - entry point for PC (can be deleted if not needed).
+- `executor-android` - entry point for Android (can be deleted if not needed).
+- `executor-wasm` - entry point for WebAssembly (can be deleted if not needed).
+- `game-dylib` - special "bridge" for native code hot reloading functionality (can be deleted if not needed). 
+
+To run the project, select the new project in the list and click `Edit` button to run the editor, or `Run` to run 
+the game without the editor (the game can also be run from the editor). Learn more about the
+[project manager here](project_manager.md).
 
 Your project needs to be compiled from scratch before it can be run, it may take some time, usually it takes up to 10
 minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minutes or so). Next runs of the editor will
