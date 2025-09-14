@@ -109,5 +109,5 @@ Learn more about it in [this chapter](hot_reloading.md).
 ## Adding Game Logic
 
 Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be
-executed by the engine. Read the [Scripts](../scripting/script.md) chapter to learn how to create, edit, and use scripts
+executed by the engine. Read the [respective chapter](../scripting/scripting.md) to learn how to create, edit, and use scripts
 in your game.

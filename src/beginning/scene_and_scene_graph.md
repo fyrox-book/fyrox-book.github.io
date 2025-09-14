@@ -86,9 +86,14 @@ relative to its origin, its scale as a percentage, and its rotation around any a
 The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going
 back to the example of the character and the sword, if the character moves, and by extension the sword, the global
 transform of the sword will reflect the changes made to the character position, yet its local transform will not, since
-that represents the sword's position's relative to the character's, which didn't change.
+that represents the sword's position relative to the character's, which didn't change.
 
 This mechanism is very simple, yet powerful. The full grace of it unfolds when you're working with 3D models with
 skeletons. Each bone in a skeleton has its parent and a set of children, which allows you to rotate, translate, or scale
 them to
 animate your entire character.
+
+## Scripts
+
+Scene node can have zero or more scripts assigned to it to execute some logic associated with the node. Scripting
+is a separate large topic, and it is described in the [respective chapter](../scripting/scripting.md).
