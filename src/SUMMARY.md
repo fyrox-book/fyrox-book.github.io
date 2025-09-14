@@ -50,6 +50,7 @@
     - [Sound](./sound/index.md)
         - [Audio Bus](./sound/bus.md)
         - [Sound Node](./sound/sound.md)
+        - [Listener](./sound/listener.md)
         - [HRTF](./sound/hrtf.md)
     - [Animation](./animation/animation.md)
         - [Animation Editor](./animation/anim_editor.md)
