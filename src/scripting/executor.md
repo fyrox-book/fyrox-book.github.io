@@ -5,6 +5,17 @@ The editor runs the executor in separate process when you're entering the play m
 difference between running the game from the editor, or running it as a separate application. The main difference is that
 the editor passes `scene_path` parameter for the executor when entering the play mode.
 
+## Motivation
+
+Why there's a need for such a thing like executor? The first reason was already highlighted - game process isolation
+during the game development. The next major reason is the fact that your game can be run on a number of different platforms.
+If you [check the list of supported platforms](../introduction/requirements.md#supported-platforms), you'll understand
+why there's such a need. Each platform has its own way of how the native code is processed. For example, on WebAssembly
+the game code is compiled into an WASM module which is then loaded by a web browser and executed. This platform requires
+the native code to be compiled into a "dynamic library", while, for instance, the PC builds can be compiled directly 
+into an executable file. Android, for instance, requires the game to be compiled into a shared library (`.so`) and then 
+loaded by a bunch of "glue" code and executed. 
+
 ## Usage
 
 Executor is meant to be a part of your project's workspace, its typical look could something like this:

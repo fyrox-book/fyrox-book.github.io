@@ -106,6 +106,17 @@ only compile your game, which usually takes a few seconds. Anyway, after some ti
 To cut down iteration times, you may want to use a powerful-yet-dangerous tool called native code hot reloading.
 Learn more about it in [this chapter](hot_reloading.md).
 
+## Usage Modes
+
+There are a number of ways in which you can use the engine. For example, if you don't need the editor, just don't
+use it. You can still compile your game to a desired platform. Even the project manager and the projects it 
+generates aren't mandatory at all. 
+
+If you want to manually initialize the engine without all these fancy bells and whistles, read 
+[the respective chapter](../engine/manual_initialization.md). Keep in mind, however, that this book is written
+in assumption that you're using the engine in the recommended way and all non-standard usage may result in
+unexpected behavior. The recommended approach does all the "heavy lifting" for you.
+
 ## Adding Game Logic
 
 Any object-specific game logic should be added using scripts. A script is a "container" for data and code, that will be

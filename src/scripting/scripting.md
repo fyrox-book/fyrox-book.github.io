@@ -1,4 +1,4 @@
-# Scripting
+# Game Logic
 
 A game based on Fyrox is a plugin to the engine and the editor. The plugin defines global application logic and can provide
 a set of scripts, that can be used to assign custom logic to scene nodes. Every script can be attached to only one 
