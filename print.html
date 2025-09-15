@@ -2385,8 +2385,8 @@ You could off-thread AI, world manipulation (for example if you have a destructi
 do not use a sledgehammer to hammer nails, unless you have a <em>huge</em> nail.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
 <p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant
-difference between running the game from the editor, or running it as a separate application. The main difference is that
+The editor runs the executor in a separate process when you're entering the play mode. Basically, there is no significant
+difference between running the game from the editor or running it as a separate application. The main difference is that
 the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
 <h2 id="motivation-1"><a class="header" href="#motivation-1">Motivation</a></h2>
 <p>Why there's a need for such a thing like executor? The first reason was already highlighted - game process isolation
@@ -2422,7 +2422,7 @@ loaded by a bunch of "glue" code and executed.</p>
     executor.add_plugin_constructor(GameConstructor);
     executor.run()
 }</code></pre></pre>
-<p>Executor has full access to the engine, and through it to the main application window. You can freely change desired
+<p>The executor has full access to the engine, and through it to the main application window. You can freely change desired
 parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an "alias"
 to engine instance.</p>
 <p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
@@ -2431,24 +2431,23 @@ to engine instance.</p>
 <p>This section covers typical use cases for the <code>Executor</code>.</p>
 <h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
 <p>You can set window title when creating executor instance:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::engine::executor::Executor;
-</span><span class="boring">use fyrox::window::WindowAttributes;
-</span><span class="boring">use fyrox::engine::GraphicsContextParams;
-</span><span class="boring">use fyrox::event_loop::EventLoop;
-</span>let executor = Executor::from_params(
-    EventLoop::new().unwrap(),
-    GraphicsContextParams {
-        window_attributes: WindowAttributes {
-            title: "My Game".to_string(),
-            ..Default::default()
+<pre><pre class="playground"><code class="language-rust no_run">fn main() {
+    let executor = Executor::from_params(
+        EventLoop::new().ok(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                // Set window title.
+                title: "My Game".to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+            msaa_sample_count: None,
+            graphics_server_constructor: Default::default(),
+            named_objects: false,
         },
-        vsync: true,
-    },
-);
-<span class="boring">}</span></code></pre></pre>
+    );
+    // ...
+}</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene-1"><a class="header" href="#scene-1">Scene</a></h1>
 <p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
 <ol>
@@ -7433,6 +7432,38 @@ more support for other GAPIs will be added in the future.</p>
 it should be relatively straightforward for you to implement your own server.</p>
 <h2 id="usage-3"><a class="header" href="#usage-3">Usage</a></h2>
 <p>Typical use of the graphics server is shown extensively in the <a href="rendering/render_pass.html">render pass section</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="graphics-debugging-and-profiling"><a class="header" href="#graphics-debugging-and-profiling">Graphics Debugging and Profiling</a></h1>
+<p>Fyrox does not have any special tools for graphics debugging and profiling yet, such tools are planned for Fyrox 2.0.
+For now, you can use third-party tools for this, such as <a href="https://renderdoc.org/">RenderDoc</a>,
+<a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight</a>, <a href="https://gpuopen.com/rgp/">AMD Radeon GPU Profiler</a>, etc.</p>
+<h2 id="names-for-graphics-entities"><a class="header" href="#names-for-graphics-entities">Names for Graphics Entities</a></h2>
+<p>The engine has an ability to assign meaningful names for entities of underlying graphical API for the ease of
+debugging.</p>
+<pre><pre class="playground"><code class="language-rust no_run">fn main() {
+    let executor = Executor::from_params(
+        EventLoop::new().ok(),
+        GraphicsContextParams {
+            // This option forces the engine to use meaningful names for
+            // GPU objects (textures, buffers, shaders, etc.)
+            named_objects: true,
+            window_attributes: WindowAttributes::default(),
+            vsync: true,
+            msaa_sample_count: None,
+            graphics_server_constructor: Default::default(),
+        },
+    );
+    // ...
+}</code></pre></pre>
+<p>Recompile your game and run a graphics debugger (RenderDoc, for instance) and you should see that now GPU entities
+have meaningful names:</p>
+<p><img src="rendering/capture.png" alt="capture" /></p>
+<h2 id="profiling"><a class="header" href="#profiling">Profiling</a></h2>
+<p>Accurate GPU profiling is a hard task, because GPUs work independently of CPUs and any attempt to measure how
+much time is spent on GPU from the CPU side will only measure how much time was spent to prepare and issue
+commands for a GPU. That being said, profiling requires specialized tools for target GPUs. Use<br />
+<a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight</a> or <a href="https://gpuopen.com/rgp/">AMD Radeon GPU Profiler</a>,
+depending on the GPU you're using. <a href="https://renderdoc.org/">RenderDoc</a> also has <em>some</em> ability to measure
+GPU times, but its precision is not very high.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="asset-management-2"><a class="header" href="#asset-management-2">Asset Management</a></h1>
 <p>This chapter covers asset management in the engine. Asset management is performed by <code>Asset Browser</code> in the editor
 and by <code>ResourceManager</code> from API.</p>

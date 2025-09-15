@@ -194,8 +194,8 @@
                     <main>
                         <h1 id="executor"><a class="header" href="#executor">Executor</a></h1>
 <p>Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant
-difference between running the game from the editor, or running it as a separate application. The main difference is that
+The editor runs the executor in a separate process when you're entering the play mode. Basically, there is no significant
+difference between running the game from the editor or running it as a separate application. The main difference is that
 the editor passes <code>scene_path</code> parameter for the executor when entering the play mode.</p>
 <h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
 <p>Why there's a need for such a thing like executor? The first reason was already highlighted - game process isolation
@@ -231,7 +231,7 @@ loaded by a bunch of "glue" code and executed.</p>
     executor.add_plugin_constructor(GameConstructor);
     executor.run()
 }</code></pre></pre>
-<p>Executor has full access to the engine, and through it to the main application window. You can freely change desired
+<p>The executor has full access to the engine, and through it to the main application window. You can freely change desired
 parts, <code>Executor</code> implements <code>Deref&lt;Target = Engine&gt; + DerefMut</code> traits, so you can use its instance as an "alias"
 to engine instance.</p>
 <p>To add a plugin to the executor, just use <code>add_plugin_constructor</code> method, it accepts any entity that implements
@@ -240,24 +240,23 @@ to engine instance.</p>
 <p>This section covers typical use cases for the <code>Executor</code>.</p>
 <h3 id="setting-window-title"><a class="header" href="#setting-window-title">Setting Window Title</a></h3>
 <p>You can set window title when creating executor instance:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span><span class="boring">extern crate fyrox;
-</span><span class="boring">use fyrox::engine::executor::Executor;
-</span><span class="boring">use fyrox::window::WindowAttributes;
-</span><span class="boring">use fyrox::engine::GraphicsContextParams;
-</span><span class="boring">use fyrox::event_loop::EventLoop;
-</span>let executor = Executor::from_params(
-    EventLoop::new().unwrap(),
-    GraphicsContextParams {
-        window_attributes: WindowAttributes {
-            title: "My Game".to_string(),
-            ..Default::default()
+<pre><pre class="playground"><code class="language-rust no_run">fn main() {
+    let executor = Executor::from_params(
+        EventLoop::new().ok(),
+        GraphicsContextParams {
+            window_attributes: WindowAttributes {
+                // Set window title.
+                title: "My Game".to_string(),
+                ..Default::default()
+            },
+            vsync: true,
+            msaa_sample_count: None,
+            graphics_server_constructor: Default::default(),
+            named_objects: false,
         },
-        vsync: true,
-    },
-);
-<span class="boring">}</span></code></pre></pre>
+    );
+    // ...
+}</code></pre></pre>
 
                     </main>
 

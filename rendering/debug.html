@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Graphics Server - Fyrox Book</title>
+        <title>Debugging and Profiling - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -158,7 +158,7 @@
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/rendering/server.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/rendering/debug.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -192,35 +192,48 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="graphics-server"><a class="header" href="#graphics-server">Graphics Server</a></h1>
-<p>Graphics server is an abstraction that hides low-level graphics API (such as DirectX, OpenGL, Vulkan, etc.)
-calls under a higher level interface that consists of a number of "building blocks" that allows you to
-render computer graphics in an easier way.</p>
-<h2 id="opengl-graphics-server"><a class="header" href="#opengl-graphics-server">OpenGL Graphics Server</a></h2>
-<p>The default graphics server is the OpenGL-based one (<code>GlGraphicsServer</code>). Why using a deprecated API in the
-modern world? The answer is simple: OpenGL is wide-spread, runs on pretty much all mainstream platforms
-(except consoles). Fyrox has a small developers team, which can't maintain a number of different GAPIs for
-different platforms. Foreseeing the next potential question - why not just use wgpu? The answer is again
-simple: legacy. Fyrox is a relatively old game engine (compared to the entire Rust ecosystem, of course)
-and when its development was started, there was no such thing as wgpu. Transition to it nowadays is a
-challenging task, since the renderer of the engine is quite big. Anyway, the engine is still evolving and
-more support for other GAPIs will be added in the future.</p>
-<h2 id="custom-graphics-server"><a class="header" href="#custom-graphics-server">Custom Graphics Server</a></h2>
-<p>It is possible to write a graphics server with pretty much any API, since a graphics server
-(<code>GraphicsServer</code> trait) has quite a small number of functions. If you're familiar with other GAPIs, then
-it should be relatively straightforward for you to implement your own server.</p>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>Typical use of the graphics server is shown extensively in the <a href="render_pass.html">render pass section</a>.</p>
+                        <h1 id="graphics-debugging-and-profiling"><a class="header" href="#graphics-debugging-and-profiling">Graphics Debugging and Profiling</a></h1>
+<p>Fyrox does not have any special tools for graphics debugging and profiling yet, such tools are planned for Fyrox 2.0.
+For now, you can use third-party tools for this, such as <a href="https://renderdoc.org/">RenderDoc</a>,
+<a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight</a>, <a href="https://gpuopen.com/rgp/">AMD Radeon GPU Profiler</a>, etc.</p>
+<h2 id="names-for-graphics-entities"><a class="header" href="#names-for-graphics-entities">Names for Graphics Entities</a></h2>
+<p>The engine has an ability to assign meaningful names for entities of underlying graphical API for the ease of
+debugging.</p>
+<pre><pre class="playground"><code class="language-rust no_run">fn main() {
+    let executor = Executor::from_params(
+        EventLoop::new().ok(),
+        GraphicsContextParams {
+            // This option forces the engine to use meaningful names for
+            // GPU objects (textures, buffers, shaders, etc.)
+            named_objects: true,
+            window_attributes: WindowAttributes::default(),
+            vsync: true,
+            msaa_sample_count: None,
+            graphics_server_constructor: Default::default(),
+        },
+    );
+    // ...
+}</code></pre></pre>
+<p>Recompile your game and run a graphics debugger (RenderDoc, for instance) and you should see that now GPU entities
+have meaningful names:</p>
+<p><img src="capture.png" alt="capture" /></p>
+<h2 id="profiling"><a class="header" href="#profiling">Profiling</a></h2>
+<p>Accurate GPU profiling is a hard task, because GPUs work independently of CPUs and any attempt to measure how
+much time is spent on GPU from the CPU side will only measure how much time was spent to prepare and issue
+commands for a GPU. That being said, profiling requires specialized tools for target GPUs. Use<br />
+<a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight</a> or <a href="https://gpuopen.com/rgp/">AMD Radeon GPU Profiler</a>,
+depending on the GPU you're using. <a href="https://renderdoc.org/">RenderDoc</a> also has <em>some</em> ability to measure
+GPU times, but its precision is not very high.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../rendering/normal_maps.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rendering/server.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../rendering/debug.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../resources/resources.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -230,11 +243,11 @@ it should be relatively straightforward for you to implement your own server.</p
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../rendering/normal_maps.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rendering/server.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../rendering/debug.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../resources/resources.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
