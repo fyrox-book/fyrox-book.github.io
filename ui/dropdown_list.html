@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Dropdown list (WIP) - Fyrox Book</title>
+        <title>Dropdown list - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -192,10 +192,81 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="dropdown-list-wip"><a class="header" href="#dropdown-list-wip">Dropdown list (WIP)</a></h1>
+                        <h1 id="dropdown-list"><a class="header" href="#dropdown-list">Dropdown list</a></h1>
 <p><img src="dropdown_list.gif" alt="dropdown list" /></p>
-<p>Drop-down list. This is control which shows currently selected item and provides drop-down
-list to select its current item. It is build using composition with standard list view.</p>
+<p>Drop-down list is a control which shows the currently selected item and provides a dropdown
+list to select its current item. It is used to show a single selected item in a compact way.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>A dropdown list with two text items with the last one selected, could be created like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_drop_down_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    DropdownListBuilder::new(WidgetBuilder::new())
+        .with_items(vec![
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item 0")
+                .build(ctx),
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item 1")
+                .build(ctx),
+        ])
+        .with_selected(1)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind, that items of a dropdown list could be any widget, but usually each item is wrapped
+in some other widget that shows the current state of items (selected, hovered, clicked, etc.). One
+of the most convenient ways of doing this is to use Decorator widget:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn make_item(text: &amp;str, ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    DecoratorBuilder::new(BorderBuilder::new(
+        WidgetBuilder::new().with_child(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text(text)
+                .build(ctx),
+        ),
+    ))
+    .build(ctx)
+}
+
+fn create_drop_down_list_with_decorators(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    DropdownListBuilder::new(WidgetBuilder::new())
+        .with_items(vec![make_item("Item 0", ctx), make_item("Item 1", ctx)])
+        .with_selected(1)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="selection"><a class="header" href="#selection">Selection</a></h2>
+<p>Dropdown list supports two kinds of selection - <code>None</code> or <code>Some(index)</code>. To catch a moment when
+selection changes, use the following code:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo {
+    dropdown_list: Handle&lt;UiNode&gt;,
+}
+
+impl Foo {
+    fn on_ui_message(&amp;mut self, message: &amp;UiMessage) {
+        if let Some(DropdownListMessage::SelectionChanged(new_selection)) = message.data() {
+            if message.destination() == self.dropdown_list
+                &amp;&amp; message.direction() == MessageDirection::FromWidget
+            {
+                // Do something.
+                dbg!(new_selection);
+            }
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>To change selection of a dropdown list, send <code>DropdownListMessage::SelectionChanged</code> message
+to it.</p>
+<h2 id="items"><a class="header" href="#items">Items</a></h2>
+<p>To change current items of a dropdown list, create the items first and then send them to the
+dropdown list using <code>DropdownListMessage::Items</code> message.</p>
+<h2 id="opening-and-closing"><a class="header" href="#opening-and-closing">Opening and Closing</a></h2>
+<p>A dropdown list could be opened and closed manually using <code>DropdownListMessage::Open</code> and
+<code>DropdownListMessage::Close</code> messages.</p>
 
                     </main>
 
