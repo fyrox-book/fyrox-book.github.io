@@ -195,12 +195,10 @@
 <blockquote>
 <p>⚠️ Tip: If you want to start using the engine as fast as possible - read this <a href="./beginning/scripting.html">chapter</a>.</p>
 </blockquote>
-<p><strong>Warning:</strong> The book is in early development stage, you can help to improve it by making a contribution in its
-<a href="https://github.com/fyrox-book/fyrox-book.github.io">repository</a>. Don't be shy, every tip is helpful!</p>
 <h2 id="engine-version"><a class="header" href="#engine-version">Engine Version</a></h2>
 <p>Fyrox Team is trying to keep the book up-to-date with the latest version from <code>master</code> branch. If something does not
 compile with the latest release from crates.io, then you need to
-<a href="./beginning/scripting.html#using-the-latest-engine-version">use the latest engine from GitHub repo</a>.</p>
+<a href="./beginning/manual_installation.html#using-the-latest-engine-version">use the latest engine from GitHub repo</a>.</p>
 <h2 id="how-to-read-the-book"><a class="header" href="#how-to-read-the-book">How to read the book</a></h2>
 <p>Almost every chapter in this book can be read in any order, but we recommend reading Chapters 1, 2, 3 (they're quite small)
 and then going through <a href="./tutorials/platformer/part1.html">Platformer Tutorial (2D)</a> while learning more about specific
@@ -210,20 +208,23 @@ and <a href="./tutorials/rpg/intro.html">RPG Tutorial (3D)</a>.</p>
 <p>The book is primarily focused on game development with Fyrox, not on its API. You can find API docs
 <a href="https://docs.rs/fyrox/latest/fyrox/">here</a>.</p>
 <h2 id="required-knowledge"><a class="header" href="#required-knowledge">Required knowledge</a></h2>
-<p>We're expecting that you know basics of Rust programming language, its package manager Cargo. It is also necessary
-to know the <em>basics</em> of the game development, linear algebra, principles of software development and patterns,
-otherwise the book will probably be very hard for you.</p>
+<p>We're expecting that you know the basics of Rust programming language, its package manager Cargo. It is also necessary
+to know the <em>basics</em> of game development, linear algebra, principles of software development and patterns,
+otherwise the book will probably be quite hard for you.</p>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
+<p>You can help to improve the book it by making a contribution in its
+<a href="https://github.com/fyrox-book/fyrox-book.github.io">repository</a>.</p>
 <h2 id="support-the-development"><a class="header" href="#support-the-development">Support the development</a></h2>
 <p>The future of the project fully depends on community support, every bit is important!</p>
 <p><a href="https://www.patreon.com/mrdimas"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a patron!" /></a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>This section of the book contains brief overview of engine's features, it should help you to decide if the engine suits
-your needs and will it be easy enough for you to use. Following chapters takes you into a tour over engine's features,
-its editor, basic concepts and design philosophy.</p>
+<p>This section of the book contains a brief overview of engine's features, it should help you to decide if the engine suits
+your needs. The following chapters takes you into a tour over engine's features, its editor, basic concepts and design philosophy.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-to-fyrox"><a class="header" href="#introduction-to-fyrox">Introduction to Fyrox</a></h1>
 <p>Fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable of power
 games with small- or medium-sized worlds, large-sized world most likely will require some manual work.</p>
-<p>Games made with the engine are capable of run on desktop platforms (PC, Mac, Linux), Web (WebAssembly), Android and iOS.</p>
+<p>Games made with the engine are capable of run on desktop platforms (PC, Mac, Linux), Web (WebAssembly),
+Android and iOS. See the <a href="introduction/requirements.html#supported-platforms">full list of supported platforms here</a>.</p>
 <h2 id="what-can-the-engine-do"><a class="header" href="#what-can-the-engine-do">What can the engine do?</a></h2>
 <p>You can create pretty much any kind of game or interactive applications. Here's some examples of what the engine can
 do:</p>
@@ -1171,14 +1172,14 @@ Both handle types are interchangeable; you can use the <code>From</code> and <co
 <div style="break-before: page; page-break-before: always;"></div><h1 id="borrow-checker"><a class="header" href="#borrow-checker">Borrow Checker</a></h1>
 <p>Rust has a <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html">famous borrow checker</a>, which has become a
 sort of horror story for newcomers. It is often treated like an enemy that prevents you from writing anything
-useful in the ways you may be used to in other languages. In fact, it is a very useful part of Rust that proves correctness
-of your program and prevents you from doing nasty things like memory corruption, data races, etc. This chapter
-explains how Fyrox solves the most common borrowing issues and makes game development as easy as in any other
-game engine.</p>
+useful in the ways you may be used to in other languages. In fact, it is a very useful part of Rust that proves the correctness
+of your program and prevents you from doing nasty things like <a href="https://en.wikipedia.org/wiki/Memory_corruption">memory corruption</a>,
+<a href="https://en.wikipedia.org/wiki/Race_condition#Data_race">data races</a>, etc. This chapter explains how Fyrox solves
+the most common borrowing issues and makes game development as easy as in any other game engine.</p>
 <h2 id="multiple-borrowing"><a class="header" href="#multiple-borrowing">Multiple Borrowing</a></h2>
-<p>When writing a script logic there is often a need to do a multiple borrowing of some data, usually it is other scene
-nodes. In normal circumstances you can borrow each node one-by-one, but in other cases you can't do an action
-without borrowing two or more nodes simultaneously. In this case you can use multi-borrowing:</p>
+<p>When writing a script logic, there is often a need to do a multiple borrowing of some data, usually it is other scene
+nodes. In normal circumstances, you can borrow each node one-by-one, but in other cases you can't do an action
+without borrowing two or more nodes simultaneously. In this case, you can use multi-borrowing:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, Default, TypeUuidProvider, ComponentProvider)]
@@ -1285,10 +1286,10 @@ multi-borrowing context checks borrowing rules at runtime.</li>
 <p>Sometimes the code becomes so convoluted that it is hard to maintain and understand what it is doing.
 This happens when code coupling gets to a certain point, which requires very broad context for the code to
 be executed. For example, if bots in your game have weapons it is so tempting to just borrow the weapon
-and call something like <code>weapon.shoot(..)</code>. When your weapon is simple then it might work fine. However, when
+and call something like <code>weapon.shoot(..)</code>. When your weapon is simple, then it might work fine. However, when
 your game gets bigger and weapons get new features, a simple <code>weapon.shoot(..)</code> might be not enough. It could be
 because the <code>shoot</code> method gets more and more arguments or some other reason. This is quite common. In
-general, when your code becomes tightly coupled it becomes hard to maintain it, and, more importantly, can
+general, when your code becomes tightly coupled, it becomes hard to maintain it, and, more importantly, can
 easily result in issues with the borrow checker. To illustrate this, let's look at
 this code:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -1366,11 +1367,11 @@ impl ScriptTrait for Bot {
 
 <span class="boring">}</span></code></pre></pre>
 <p>This is probably one of the typical implementations of shooting in games - you cast a ray from the weapon
-and if it hits a bot, you apply some damage to it. In this case bots can also shoot, and this is where
+and if it hits a bot, you apply some damage to it. In this case, bots can also shoot, and this is where
 borrow checker again gets in our way. If you try to uncomment the
 <code>// weapon.shoot(ctx.handle, &amp;mut ctx.scene.graph);</code> line, you'll get a compilation error that tells you that
 <code>ctx.scene.graph</code> is already borrowed. It seems like we are stuck, and we need to somehow fix this issue.
-We can't use multi-borrowing in this case, because it still enforces borrowing rules and instead of compilation
+We can't use multi-borrowing in this case because it still enforces borrowing rules and instead of compilation
 error, you'll runtime error.</p>
 <p>To solve this, you can use the well-known message passing mechanism. The core idea is to not call methods
 immediately, but to collect all the needed data for the call and send it an object, so it can do the call later.
@@ -1433,11 +1434,11 @@ impl ScriptTrait for Bot {
 <p>The weapon now subscribes to <code>ShootMessage</code> and listens to it in <code>on_message</code> method and from there it can
 perform the actual shooting without any borrowing issues. The bot now just sends the <code>ShootMessage</code> instead of
 borrowing the weapon trying to call <code>shoot</code> directly. The messages do not add any one-frame delay as you might
-think, they're processed in the same frame so there's no one-or-more frames desynchronization.</p>
+think, they're processed in the same frame, so there's no one-or-more frames desynchronization.</p>
 <p>This approach with messages has its own pros and cons. The pros are quite significant:</p>
 <ul>
-<li>Decoupling - coupling is now very loose and done mostly on message side.</li>
-<li>Easy to refactor - since the coupling is loose, you can refactor the internals with low chance of breaking
+<li>Decoupling - coupling is now very loose and done mostly on the message side.</li>
+<li>Easy to refactor - since the coupling is loose, you can refactor the internals with a low chance of breaking
 existing code, that could otherwise be done because of intertwined and convoluted code.</li>
 <li>No borrowing issues - the method calls are done in different places and thus there are no lifetime collisions.</li>
 <li>Easy to write unit and integration tests - this comes from loose coupling.</li>
