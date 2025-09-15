@@ -1,10 +1,15 @@
-use fyrox::core::pool::Handle;
-use fyrox::gui::border::BorderBuilder;
-use fyrox::gui::decorator::DecoratorBuilder;
-use fyrox::gui::dropdown_list::DropdownListBuilder;
-use fyrox::gui::text::TextBuilder;
-use fyrox::gui::widget::WidgetBuilder;
-use fyrox::gui::{BuildContext, UiNode};
+use fyrox::{
+    core::pool::Handle,
+    gui::{
+        border::BorderBuilder,
+        decorator::DecoratorBuilder,
+        dropdown_list::{DropdownListBuilder, DropdownListMessage},
+        message::{MessageDirection, UiMessage},
+        text::TextBuilder,
+        widget::WidgetBuilder,
+        BuildContext, UiNode,
+    },
+};
 
 // ANCHOR: create_drop_down_list
 fn create_drop_down_list(ctx: &mut BuildContext) -> Handle<UiNode> {
