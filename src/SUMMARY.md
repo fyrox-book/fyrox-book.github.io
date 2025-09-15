@@ -107,7 +107,7 @@
         - [Curve editor (WIP)](./ui/curve_editor.md)
         - [Decorator](./ui/decorator.md)
         - [Docking manager (WIP)](./ui/dock.md)
-        - [Dropdown list (WIP)](./ui/dropdown_list.md)
+        - [Dropdown list](./ui/dropdown_list.md)
         - [Expander](./ui/expander.md)
         - [File browser (WIP)](./ui/file_browser.md)
         - [Grid](./ui/grid.md)
