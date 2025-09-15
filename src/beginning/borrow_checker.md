@@ -2,16 +2,16 @@
 
 Rust has a [famous borrow checker](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html), which has become a 
 sort of horror story for newcomers. It is often treated like an enemy that prevents you from writing anything 
-useful in the ways you may be used to in other languages. In fact, it is a very useful part of Rust that proves correctness
-of your program and prevents you from doing nasty things like memory corruption, data races, etc. This chapter 
-explains how Fyrox solves the most common borrowing issues and makes game development as easy as in any other 
-game engine.
+useful in the ways you may be used to in other languages. In fact, it is a very useful part of Rust that proves the correctness 
+of your program and prevents you from doing nasty things like [memory corruption](https://en.wikipedia.org/wiki/Memory_corruption), 
+[data races](https://en.wikipedia.org/wiki/Race_condition#Data_race), etc. This chapter explains how Fyrox solves 
+the most common borrowing issues and makes game development as easy as in any other game engine.
 
 ## Multiple Borrowing
 
-When writing a script logic there is often a need to do a multiple borrowing of some data, usually it is other scene
-nodes. In normal circumstances you can borrow each node one-by-one, but in other cases you can't do an action 
-without borrowing two or more nodes simultaneously. In this case you can use multi-borrowing:
+When writing a script logic, there is often a need to do a multiple borrowing of some data, usually it is other scene
+nodes. In normal circumstances, you can borrow each node one-by-one, but in other cases you can't do an action 
+without borrowing two or more nodes simultaneously. In this case, you can use multi-borrowing:
 
 ```rust
 {{#include ../code/snippets/src/borrowck/mod.rs:synthetic_example}}
@@ -58,10 +58,10 @@ multi-borrowing context checks borrowing rules at runtime.
 Sometimes the code becomes so convoluted that it is hard to maintain and understand what it is doing. 
 This happens when code coupling gets to a certain point, which requires very broad context for the code to
 be executed. For example, if bots in your game have weapons it is so tempting to just borrow the weapon 
-and call something like `weapon.shoot(..)`. When your weapon is simple then it might work fine. However, when 
+and call something like `weapon.shoot(..)`. When your weapon is simple, then it might work fine. However, when 
 your game gets bigger and weapons get new features, a simple `weapon.shoot(..)` might be not enough. It could be
 because the `shoot` method gets more and more arguments or some other reason. This is quite common. In
-general, when your code becomes tightly coupled it becomes hard to maintain it, and, more importantly, can
+general, when your code becomes tightly coupled, it becomes hard to maintain it, and, more importantly, can
 easily result in issues with the borrow checker. To illustrate this, let's look at
 this code:
 
@@ -70,11 +70,11 @@ this code:
 ```
 
 This is probably one of the typical implementations of shooting in games - you cast a ray from the weapon
-and if it hits a bot, you apply some damage to it. In this case bots can also shoot, and this is where
+and if it hits a bot, you apply some damage to it. In this case, bots can also shoot, and this is where
 borrow checker again gets in our way. If you try to uncomment the 
 `// weapon.shoot(ctx.handle, &mut ctx.scene.graph);` line, you'll get a compilation error that tells you that 
 `ctx.scene.graph` is already borrowed. It seems like we are stuck, and we need to somehow fix this issue.
-We can't use multi-borrowing in this case, because it still enforces borrowing rules and instead of compilation
+We can't use multi-borrowing in this case because it still enforces borrowing rules and instead of compilation
 error, you'll runtime error.
 
 To solve this, you can use the well-known message passing mechanism. The core idea is to not call methods
@@ -88,12 +88,12 @@ Here's how it will look:
 The weapon now subscribes to `ShootMessage` and listens to it in `on_message` method and from there it can
 perform the actual shooting without any borrowing issues. The bot now just sends the `ShootMessage` instead of
 borrowing the weapon trying to call `shoot` directly. The messages do not add any one-frame delay as you might
-think, they're processed in the same frame so there's no one-or-more frames desynchronization.
+think, they're processed in the same frame, so there's no one-or-more frames desynchronization.
 
 This approach with messages has its own pros and cons. The pros are quite significant: 
 
-- Decoupling - coupling is now very loose and done mostly on message side.
-- Easy to refactor - since the coupling is loose, you can refactor the internals with low chance of breaking
+- Decoupling - coupling is now very loose and done mostly on the message side.
+- Easy to refactor - since the coupling is loose, you can refactor the internals with a low chance of breaking
 existing code, that could otherwise be done because of intertwined and convoluted code.
 - No borrowing issues - the method calls are done in different places and thus there are no lifetime collisions.
 - Easy to write unit and integration tests - this comes from loose coupling. 

@@ -4,14 +4,11 @@ Practical reference and user guides for [Fyrox Game Engine](https://github.com/F
 
 > ⚠️ Tip: If you want to start using the engine as fast as possible - read this [chapter](./beginning/scripting.md).
 
-**Warning:** The book is in early development stage, you can help to improve it by making a contribution in its
-[repository](https://github.com/fyrox-book/fyrox-book.github.io). Don't be shy, every tip is helpful!
-
 ## Engine Version
 
 Fyrox Team is trying to keep the book up-to-date with the latest version from `master` branch. If something does not
 compile with the latest release from crates.io, then you need to
-[use the latest engine from GitHub repo](./beginning/scripting.md#using-the-latest-engine-version).
+[use the latest engine from GitHub repo](./beginning/manual_installation.md#using-the-latest-engine-version).
 
 ## How to read the book
 
@@ -27,9 +24,14 @@ The book is primarily focused on game development with Fyrox, not on its API. Yo
 
 ## Required knowledge
 
-We're expecting that you know basics of Rust programming language, its package manager Cargo. It is also necessary
-to know the _basics_ of the game development, linear algebra, principles of software development and patterns,
-otherwise the book will probably be very hard for you.
+We're expecting that you know the basics of Rust programming language, its package manager Cargo. It is also necessary
+to know the _basics_ of game development, linear algebra, principles of software development and patterns,
+otherwise the book will probably be quite hard for you.
+
+## Contributing
+
+You can help to improve the book it by making a contribution in its
+[repository](https://github.com/fyrox-book/fyrox-book.github.io).
 
 ## Support the development
 

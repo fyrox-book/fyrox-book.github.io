@@ -3,7 +3,8 @@
 Fyrox is a feature-rich, general purpose game engine that is suitable for any kind of games. It is capable of power
 games with small- or medium-sized worlds, large-sized world most likely will require some manual work. 
 
-Games made with the engine are capable of run on desktop platforms (PC, Mac, Linux), Web (WebAssembly), Android and iOS. 
+Games made with the engine are capable of run on desktop platforms (PC, Mac, Linux), Web (WebAssembly), 
+Android and iOS. See the [full list of supported platforms here](requirements.md#supported-platforms).
 
 ## What can the engine do?
 
