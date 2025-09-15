@@ -1,8 +1,8 @@
 # Executor 
 
 Executor is a simple wrapper that drives your game plugins, it is intended to be used for production builds of your game.
-The editor runs the executor in separate process when you're entering the play mode. Basically, there is no significant 
-difference between running the game from the editor, or running it as a separate application. The main difference is that
+The editor runs the executor in a separate process when you're entering the play mode. Basically, there is no significant 
+difference between running the game from the editor or running it as a separate application. The main difference is that
 the editor passes `scene_path` parameter for the executor when entering the play mode.
 
 ## Motivation
@@ -46,7 +46,7 @@ fn main() {
 }
 ```
 
-Executor has full access to the engine, and through it to the main application window. You can freely change desired
+The executor has full access to the engine, and through it to the main application window. You can freely change desired
 parts, `Executor` implements `Deref<Target = Engine> + DerefMut` traits, so you can use its instance as an "alias"
 to engine instance. 
 
@@ -62,19 +62,5 @@ This section covers typical use cases for the `Executor`.
 You can set window title when creating executor instance:
 
 ```rust,no_run
-# extern crate fyrox;
-# use fyrox::engine::executor::Executor;
-# use fyrox::window::WindowAttributes;
-# use fyrox::engine::GraphicsContextParams;
-# use fyrox::event_loop::EventLoop;
-let executor = Executor::from_params(
-    EventLoop::new().unwrap(),
-    GraphicsContextParams {
-        window_attributes: WindowAttributes {
-            title: "My Game".to_string(),
-            ..Default::default()
-        },
-        vsync: true,
-    },
-);
+{{#include ../code/snippets/src/engine/executor.rs:executor_window_title}}
 ```
