@@ -19,9 +19,21 @@ pub mod sprite;
 pub mod terrain;
 pub mod tilemap;
 
-use fyrox::core::pool::Handle;
-use fyrox::plugin::{Plugin, PluginContext};
-use fyrox::{core::reflect::prelude::*, core::visitor::prelude::*, scene::Scene};
+use fyrox::{
+    core::{algebra::Vector3, pool::Handle, reflect::prelude::*, visitor::prelude::*},
+    plugin::{Plugin, PluginContext},
+    scene::{
+        base::BaseBuilder,
+        camera::CameraBuilder,
+        mesh::{
+            surface,
+            surface::{SurfaceBuilder, SurfaceResource},
+            MeshBuilder,
+        },
+        transform::TransformBuilder,
+        Scene,
+    },
+};
 use std::path::Path;
 
 // ANCHOR: load_scene
@@ -85,9 +97,23 @@ impl Plugin for MyGame {
 
 // ANCHOR: create_scene
 fn create_scene(ctx: &mut PluginContext) -> Handle<Scene> {
-    let scene = Scene::new();
+    let mut scene = Scene::new();
 
     // Use node builders, create sounds, add physics, etc. here to fill the scene.
+    // The following code creates a simple cube and a camera to visualize it.
+    CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
+
+    MeshBuilder::new(
+        BaseBuilder::new().with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(0.0, 0.0, 3.0))
+                .build(),
+        ),
+    )
+    .with_surfaces(vec![
+        SurfaceBuilder::new(surface::CUBE.resource.clone()).build()
+    ])
+    .build(&mut scene.graph);
 
     ctx.scenes.add(scene)
 }

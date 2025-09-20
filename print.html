@@ -2449,17 +2449,13 @@ to engine instance.</p>
     // ...
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene-1"><a class="header" href="#scene-1">Scene</a></h1>
-<p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
-<ol>
-<li>Graph</li>
-<li>Animations</li>
-<li>Physics (rigid bodies, colliders, joints)</li>
-<li>Sound</li>
-</ol>
-<p>Scene allows you to create an isolated "world" which won't interact with other scenes, it is very useful for many
-more or less complex games.</p>
+<p>Scene is a container for game entities. Scene allows you to create an isolated "world" which won't
+interact with other scenes, it is very useful for many more or less complex games.</p>
+<p>What game scenes cannot handle is user interface entities, they're handled by a separate scene class,
+so-called UI scene. UI scenes are discussed in the <a href="scene/../ui/ui.html">respective chapter</a>. UI can still
+be incorporated in the game scene, see <a href="scene/../ui/rendering.html">this chapter</a> for more info.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
-<p>A scene could be created either in FyroxEd or programmatically. You can also combine both approaches, where
+<p>A scene could be created either in the editor or programmatically. You can also combine both approaches, where
 you build all "static" content in the editor and adding rest of the entities (bots, interactive objects, etc.)
 manually by instantiating the respective prefabs at runtime.</p>
 <h3 id="using-fyroxed"><a class="header" href="#using-fyroxed">Using FyroxEd</a></h3>
@@ -2518,28 +2514,42 @@ Next, when the scene is fully loaded and added to the engine, <code>on_scene_loa
 only one active scene, so we're removing the previous one and setting the new one as active.</p>
 <p>There are two additional methods:</p>
 <ol>
-<li><code>on_scene_begin_loading</code> - is called when a scene is just began to load. Keep in mind, that async scene loader
-could load multiple scenes at once and this method is guaranteed to be called exactly before the scene is started
+<li><code>on_scene_begin_loading</code> - is called when a scene is just began to load. Keep in mind that async scene loader
+could load multiple scenes at once, and this method is guaranteed to be called exactly before the scene is started
 to load.</li>
 <li><code>on_scene_loading_failed</code> - is called when a scene is failed to load. This method could be useful if you're using
 non-verified scenes (i.e. from game mods) and want to react somehow when the scene is failed to load.</li>
 </ol>
 <h3 id="create-scene-manually"><a class="header" href="#create-scene-manually">Create scene manually</a></h3>
-<p>A scene could also be created manually:</p>
+<p>A scene could also be created manually, the following code creates a cube and a camera to visualize the cube:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_scene(ctx: &amp;mut PluginContext) -&gt; Handle&lt;Scene&gt; {
-    let scene = Scene::new();
+    let mut scene = Scene::new();
 
     // Use node builders, create sounds, add physics, etc. here to fill the scene.
+    // The following code creates a simple cube and a camera to visualize it.
+    CameraBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
+
+    MeshBuilder::new(
+        BaseBuilder::new().with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(0.0, 0.0, 3.0))
+                .build(),
+        ),
+    )
+    .with_surfaces(vec![
+        SurfaceBuilder::new(surface::CUBE.resource.clone()).build()
+    ])
+    .build(&amp;mut scene.graph);
 
     ctx.scenes.add(scene)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>See respective node builders <a href="scene/../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
-<h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
-<p>All scenes "lives" in the engine, the engine has ownership over your scene after you've added it in the engine.
-You can borrow a scene at any time using its handle and do some changes:</p>
+<p>See the respective node builders <a href="scene/../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
+<h2 id="where-are-all-my-scenes-located"><a class="header" href="#where-are-all-my-scenes-located">Where are all my scenes located?</a></h2>
+<p>All scenes "live" in the engine, the engine has ownership over your scene after you've added it to the engine.
+You can borrow a scene at any time using its handle and do some changes to it and its nodes:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
@@ -2551,8 +2561,8 @@ You can borrow a scene at any time using its handle and do some changes:</p>
         }
     }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="building-scene-asynchronously"><a class="header" href="#building-scene-asynchronously">Building scene asynchronously</a></h2>
-<p>You can create your scene in a separate thread and then pass it to main thread to insert it in the engine. Why this
+<h2 id="building-a-scene-asynchronously"><a class="header" href="#building-a-scene-asynchronously">Building a scene asynchronously</a></h2>
+<p>You can create your scene in a separate thread and then pass it to the main thread to insert it in the engine. Why this
 is needed? Remember the last time you've played a relatively large game, you've probably noticed that it has
 loading screens and loading screen has some fancy interactive stuff with progress bar. Loading screen is fully
 responsive while the game is doing a hard job loading the world for you. Got it already? Asynchronous scene loading is
@@ -2564,6 +2574,8 @@ fully responsive.</p>
 updated, the sound will stop, and so on. In other words, the scene will be frozen. This is useful for situations
 when you often need to switch between scenes, leaving other scenes in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused.</p>
+<p>If multiple scenes are enabled, they'll be rendered in the same order as they were created. Multiple active
+scenes have very limited use.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="graph"><a class="header" href="#graph">Graph</a></h1>
 <p>Graph is a set of objects with hierarchical relationships between each object. It is one of the most important
 entities in the engine. Graph takes care of your scene objects and does all the hard work for you.</p>
@@ -2574,7 +2586,7 @@ easily: <code>scene_ref.graph</code></p>
 <p>There are two ways of adding nodes to the graph, either using <em>node builders</em> or manually by calling <code>graph.add_node</code>.</p>
 <h3 id="using-node-builders"><a class="header" href="#using-node-builders">Using node builders</a></h3>
 <p>Every node in the engine has its respective builder which can be used to create an instance of the node. Using
-builders is a preferable way to create scene nodes. There are following node builders:</p>
+builders is a preferable way to create scene nodes. The most significant node builders are the following:</p>
 <ol>
 <li><code>BaseBuilder</code> - creates an instance of base node. See <a href="scene/./base_node.html">Base node</a> for more info.</li>
 <li><code>PivotBuilder</code> - creates an instance of pivot node. See <a href="scene/./base_node.html">Base node</a> for more info.</li>
@@ -2586,10 +2598,18 @@ builders is a preferable way to create scene nodes. There are following node bui
 See <a href="scene/./particle_system_node.html">Particle system node</a> for more info.</li>
 <li><code>TerrainBuilder</code> - creates an instance of terrain node. See <a href="scene/./terrain_node.html">Terrain node</a> for more info.</li>
 <li><code>DecalBuilder</code> - creates an instance of decal node. See <a href="scene/./decal_node.html">Decal node</a> for more info.</li>
-<li><code>RigidBody</code> - creates an instance of rigid body node. See <a href="scene/../physics/rigid_body.html">Rigid body</a> for more info.</li>
-<li><code>Collider</code> - creates an instance of collider node. See <a href="scene/../physics/collider.html">Collider</a> for more info.</li>
-<li><code>Joint</code> - creates an instance of joint node. See <a href="scene/../physics/joint.html">Joint</a> for more info.</li>
-<li><code>Rectangle</code> - creates an instance of 2D rectangle node. See <a href="scene/./rectangle.html">Rectangle</a> for more info.</li>
+<li><code>RigidBodyBuilder</code> - creates an instance of rigid body node. See <a href="scene/../physics/rigid_body.html">Rigid body</a> for more
+info.</li>
+<li><code>ColliderBuilder</code> - creates an instance of collider node. See <a href="scene/../physics/collider.html">Collider</a> for more info.</li>
+<li><code>JointBuilder</code> - creates an instance of joint node. See <a href="scene/../physics/joint.html">Joint</a> for more info.</li>
+<li><code>RectangleBuilder</code> - creates an instance of 2D rectangle node. See <a href="scene/./rectangle.html">Rectangle</a> for more info.</li>
+<li><code>AnimationPlayerBuilder</code> - creates an instance of <code>AnimationPlayer</code> node. See <a href="scene/../animation/animation.html">Animation</a>
+chapter for more info.</li>
+<li><code>AnimationBlendingStateMachineBuilder</code> - creates an instance of <code>AnimationBlendingStateMachineBuilder</code> node.
+See <a href="scene/../animation/blending.html">Animation Blending</a> chapter for more info.</li>
+<li><code>ReflectionProbeBuilder</code> - creates an instance of a <a href="scene/probe.html">Reflection Probe</a> node.</li>
+<li><code>TileMapBuilder</code> - creates an instance of a <a href="scene/tilemap.html">Tile Map</a> node.</li>
+<li><code>Ragdoll</code> - creates and instance of a <a href="scene/../physics/ragdoll.html">Ragdoll</a> node.</li>
 </ol>
 <p>Every builder, other than <code>BaseBuilder</code>, accepts <code>BaseBuilder</code> as a parameter in <code>.new(..)</code> method. Why so?
 Because every node (other than Base) is "derived" from Base via composition and the derived
@@ -2656,7 +2676,7 @@ in a declarative manner:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code snippet creates a camera for first-person role-playing game's player, it will have a staff in "right-hand"
-and a spell in the left hand. Of course all of this is very simplified, but should give you the main idea. Note
+and a spell in the left hand. Of course, all of this is very simplified, but should give you the main idea. Note
 that staff and fireball will be children nodes of camera, and when setting their transform, we're actually setting
 <strong>local</strong> transform which means that the transform will be relative to camera's. The staff and the spell will move
 together with the camera.</p>
@@ -2673,7 +2693,7 @@ builder has <code>.build_node</code> method which creates an instance of <code>N
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-modify-the-hierarchy"><a class="header" href="#how-to-modify-the-hierarchy">How to modify the hierarchy</a></h2>
-<p>For many cases you can't use builders to create complex hierarchy, the simplest example of such situation when
+<p>For many cases, you can't use builders to create complex hierarchy, the simplest example of such situation when
 you're creating an instance of some 3D model. If you want the instance to be a child object of some other object,
 you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -2694,7 +2714,7 @@ you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
 <p>Here we've loaded a weapon 3D model, instantiated it on scene and attached to <em>existing</em> camera.</p>
 <h2 id="how-to-remove-nodes"><a class="header" href="#how-to-remove-nodes">How to remove nodes</a></h2>
 <p>A node could be removed by simply calling <code>graph.remove_node(handle)</code>, this method removes the node from the
-graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behaviour, and you want to preserve children
+graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behavior, and you want to preserve children
 nodes while deleting parent node. To do that, you need to explicitly detach children nodes of the node you're about
 to delete:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]

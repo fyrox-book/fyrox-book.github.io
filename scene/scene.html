@@ -193,17 +193,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
-<p>Scene is a container for game entities. Currently, scenes in the engine manage following entities:</p>
-<ol>
-<li>Graph</li>
-<li>Animations</li>
-<li>Physics (rigid bodies, colliders, joints)</li>
-<li>Sound</li>
-</ol>
-<p>Scene allows you to create an isolated "world" which won't interact with other scenes, it is very useful for many
-more or less complex games.</p>
+<p>Scene is a container for game entities. Scene allows you to create an isolated "world" which won't
+interact with other scenes, it is very useful for many more or less complex games.</p>
+<p>What game scenes cannot handle is user interface entities, they're handled by a separate scene class,
+so-called UI scene. UI scenes are discussed in the <a href="../ui/ui.html">respective chapter</a>. UI can still
+be incorporated in the game scene, see <a href="../ui/rendering.html">this chapter</a> for more info.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
-<p>A scene could be created either in FyroxEd or programmatically. You can also combine both approaches, where
+<p>A scene could be created either in the editor or programmatically. You can also combine both approaches, where
 you build all "static" content in the editor and adding rest of the entities (bots, interactive objects, etc.)
 manually by instantiating the respective prefabs at runtime.</p>
 <h3 id="using-fyroxed"><a class="header" href="#using-fyroxed">Using FyroxEd</a></h3>
@@ -262,28 +258,42 @@ Next, when the scene is fully loaded and added to the engine, <code>on_scene_loa
 only one active scene, so we're removing the previous one and setting the new one as active.</p>
 <p>There are two additional methods:</p>
 <ol>
-<li><code>on_scene_begin_loading</code> - is called when a scene is just began to load. Keep in mind, that async scene loader
-could load multiple scenes at once and this method is guaranteed to be called exactly before the scene is started
+<li><code>on_scene_begin_loading</code> - is called when a scene is just began to load. Keep in mind that async scene loader
+could load multiple scenes at once, and this method is guaranteed to be called exactly before the scene is started
 to load.</li>
 <li><code>on_scene_loading_failed</code> - is called when a scene is failed to load. This method could be useful if you're using
 non-verified scenes (i.e. from game mods) and want to react somehow when the scene is failed to load.</li>
 </ol>
 <h3 id="create-scene-manually"><a class="header" href="#create-scene-manually">Create scene manually</a></h3>
-<p>A scene could also be created manually:</p>
+<p>A scene could also be created manually, the following code creates a cube and a camera to visualize the cube:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_scene(ctx: &amp;mut PluginContext) -&gt; Handle&lt;Scene&gt; {
-    let scene = Scene::new();
+    let mut scene = Scene::new();
 
     // Use node builders, create sounds, add physics, etc. here to fill the scene.
+    // The following code creates a simple cube and a camera to visualize it.
+    CameraBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
+
+    MeshBuilder::new(
+        BaseBuilder::new().with_local_transform(
+            TransformBuilder::new()
+                .with_local_position(Vector3::new(0.0, 0.0, 3.0))
+                .build(),
+        ),
+    )
+    .with_surfaces(vec![
+        SurfaceBuilder::new(surface::CUBE.resource.clone()).build()
+    ])
+    .build(&amp;mut scene.graph);
 
     ctx.scenes.add(scene)
 }
 <span class="boring">}</span></code></pre></pre>
-<p>See respective node builders <a href="../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
-<h2 id="where-all-my-scenes-located"><a class="header" href="#where-all-my-scenes-located">Where all my scenes located?</a></h2>
-<p>All scenes "lives" in the engine, the engine has ownership over your scene after you've added it in the engine.
-You can borrow a scene at any time using its handle and do some changes:</p>
+<p>See the respective node builders <a href="../scene/graph.html#using-node-builders">docs</a> to populate the scene.</p>
+<h2 id="where-are-all-my-scenes-located"><a class="header" href="#where-are-all-my-scenes-located">Where are all my scenes located?</a></h2>
+<p>All scenes "live" in the engine, the engine has ownership over your scene after you've added it to the engine.
+You can borrow a scene at any time using its handle and do some changes to it and its nodes:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
@@ -295,8 +305,8 @@ You can borrow a scene at any time using its handle and do some changes:</p>
         }
     }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="building-scene-asynchronously"><a class="header" href="#building-scene-asynchronously">Building scene asynchronously</a></h2>
-<p>You can create your scene in a separate thread and then pass it to main thread to insert it in the engine. Why this
+<h2 id="building-a-scene-asynchronously"><a class="header" href="#building-a-scene-asynchronously">Building a scene asynchronously</a></h2>
+<p>You can create your scene in a separate thread and then pass it to the main thread to insert it in the engine. Why this
 is needed? Remember the last time you've played a relatively large game, you've probably noticed that it has
 loading screens and loading screen has some fancy interactive stuff with progress bar. Loading screen is fully
 responsive while the game is doing a hard job loading the world for you. Got it already? Asynchronous scene loading is
@@ -308,6 +318,8 @@ fully responsive.</p>
 updated, the sound will stop, and so on. In other words, the scene will be frozen. This is useful for situations
 when you often need to switch between scenes, leaving other scenes in frozen state. One of the examples where this
 can be useful is menus. In most games when you're entering the menu, game world is paused.</p>
+<p>If multiple scenes are enabled, they'll be rendered in the same order as they were created. Multiple active
+scenes have very limited use.</p>
 
                     </main>
 

@@ -202,7 +202,7 @@ easily: <code>scene_ref.graph</code></p>
 <p>There are two ways of adding nodes to the graph, either using <em>node builders</em> or manually by calling <code>graph.add_node</code>.</p>
 <h3 id="using-node-builders"><a class="header" href="#using-node-builders">Using node builders</a></h3>
 <p>Every node in the engine has its respective builder which can be used to create an instance of the node. Using
-builders is a preferable way to create scene nodes. There are following node builders:</p>
+builders is a preferable way to create scene nodes. The most significant node builders are the following:</p>
 <ol>
 <li><code>BaseBuilder</code> - creates an instance of base node. See <a href="./base_node.html">Base node</a> for more info.</li>
 <li><code>PivotBuilder</code> - creates an instance of pivot node. See <a href="./base_node.html">Base node</a> for more info.</li>
@@ -214,10 +214,18 @@ builders is a preferable way to create scene nodes. There are following node bui
 See <a href="./particle_system_node.html">Particle system node</a> for more info.</li>
 <li><code>TerrainBuilder</code> - creates an instance of terrain node. See <a href="./terrain_node.html">Terrain node</a> for more info.</li>
 <li><code>DecalBuilder</code> - creates an instance of decal node. See <a href="./decal_node.html">Decal node</a> for more info.</li>
-<li><code>RigidBody</code> - creates an instance of rigid body node. See <a href="../physics/rigid_body.html">Rigid body</a> for more info.</li>
-<li><code>Collider</code> - creates an instance of collider node. See <a href="../physics/collider.html">Collider</a> for more info.</li>
-<li><code>Joint</code> - creates an instance of joint node. See <a href="../physics/joint.html">Joint</a> for more info.</li>
-<li><code>Rectangle</code> - creates an instance of 2D rectangle node. See <a href="./rectangle.html">Rectangle</a> for more info.</li>
+<li><code>RigidBodyBuilder</code> - creates an instance of rigid body node. See <a href="../physics/rigid_body.html">Rigid body</a> for more
+info.</li>
+<li><code>ColliderBuilder</code> - creates an instance of collider node. See <a href="../physics/collider.html">Collider</a> for more info.</li>
+<li><code>JointBuilder</code> - creates an instance of joint node. See <a href="../physics/joint.html">Joint</a> for more info.</li>
+<li><code>RectangleBuilder</code> - creates an instance of 2D rectangle node. See <a href="./rectangle.html">Rectangle</a> for more info.</li>
+<li><code>AnimationPlayerBuilder</code> - creates an instance of <code>AnimationPlayer</code> node. See <a href="../animation/animation.html">Animation</a>
+chapter for more info.</li>
+<li><code>AnimationBlendingStateMachineBuilder</code> - creates an instance of <code>AnimationBlendingStateMachineBuilder</code> node.
+See <a href="../animation/blending.html">Animation Blending</a> chapter for more info.</li>
+<li><code>ReflectionProbeBuilder</code> - creates an instance of a <a href="probe.html">Reflection Probe</a> node.</li>
+<li><code>TileMapBuilder</code> - creates an instance of a <a href="tilemap.html">Tile Map</a> node.</li>
+<li><code>Ragdoll</code> - creates and instance of a <a href="../physics/ragdoll.html">Ragdoll</a> node.</li>
 </ol>
 <p>Every builder, other than <code>BaseBuilder</code>, accepts <code>BaseBuilder</code> as a parameter in <code>.new(..)</code> method. Why so?
 Because every node (other than Base) is "derived" from Base via composition and the derived
@@ -284,7 +292,7 @@ in a declarative manner:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <p>This code snippet creates a camera for first-person role-playing game's player, it will have a staff in "right-hand"
-and a spell in the left hand. Of course all of this is very simplified, but should give you the main idea. Note
+and a spell in the left hand. Of course, all of this is very simplified, but should give you the main idea. Note
 that staff and fireball will be children nodes of camera, and when setting their transform, we're actually setting
 <strong>local</strong> transform which means that the transform will be relative to camera's. The staff and the spell will move
 together with the camera.</p>
@@ -301,7 +309,7 @@ builder has <code>.build_node</code> method which creates an instance of <code>N
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="how-to-modify-the-hierarchy"><a class="header" href="#how-to-modify-the-hierarchy">How to modify the hierarchy</a></h2>
-<p>For many cases you can't use builders to create complex hierarchy, the simplest example of such situation when
+<p>For many cases, you can't use builders to create complex hierarchy, the simplest example of such situation when
 you're creating an instance of some 3D model. If you want the instance to be a child object of some other object,
 you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -322,7 +330,7 @@ you should attach it explicitly by using <code>graph.link_nodes(..)</code>:</p>
 <p>Here we've loaded a weapon 3D model, instantiated it on scene and attached to <em>existing</em> camera.</p>
 <h2 id="how-to-remove-nodes"><a class="header" href="#how-to-remove-nodes">How to remove nodes</a></h2>
 <p>A node could be removed by simply calling <code>graph.remove_node(handle)</code>, this method removes the node from the
-graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behaviour, and you want to preserve children
+graph <strong>with all of its children nodes</strong>. Sometimes this is unwanted behavior, and you want to preserve children
 nodes while deleting parent node. To do that, you need to explicitly detach children nodes of the node you're about
 to delete:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
