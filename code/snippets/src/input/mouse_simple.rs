@@ -19,23 +19,13 @@ pub struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) {
-        // We'll listen to MouseMotion raw device event to rotate an object. It provides
-        // offsets only.
-        if let Event::DeviceEvent {
-            event: DeviceEvent::MouseMotion {
-                delta: (dx, dy), ..
-            },
-            ..
-        } = event
-        {
-            let limit = std::f32::consts::FRAC_PI_2;
-            self.pitch = (self.pitch + *dy as f32).clamp(-limit, limit);
-            self.yaw += *dx as f32;
-        }
-    }
-
     fn on_update(&mut self, ctx: &mut ScriptContext) {
+        let mouse_speed = ctx.input_state.mouse_speed();
+        let limit = std::f32::consts::FRAC_PI_2;
+
+        self.pitch = (self.pitch + mouse_speed.y).clamp(-limit, limit);
+        self.yaw += mouse_speed.x;
+
         let node = &mut ctx.scene.graph[ctx.handle];
         let transform = node.local_transform_mut();
         transform.set_rotation(
@@ -55,23 +45,11 @@ pub struct Clicker {
 }
 
 impl ScriptTrait for Clicker {
-    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) {
-        if let Event::WindowEvent {
-            event: WindowEvent::MouseInput { button, state, .. },
-            ..
-        } = event
-        {
-            if *state == ElementState::Pressed {
-                match *button {
-                    MouseButton::Left => {
-                        self.counter -= 1;
-                    }
-                    MouseButton::Right => {
-                        self.counter += 1;
-                    }
-                    _ => (),
-                }
-            }
+    fn on_update(&mut self, ctx: &mut ScriptContext) {
+        if ctx.input_state.is_left_mouse_button_pressed() {
+            self.counter += 1;
+        } else if ctx.input_state.is_left_mouse_button_released() {
+            self.counter -= 1;
         }
     }
 }

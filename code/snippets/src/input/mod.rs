@@ -1,6 +1,7 @@
 pub mod keyboard;
 pub mod keyboard_simple;
 pub mod mouse;
+pub mod mouse_simple;
 
 use fyrox::{
     core::reflect::prelude::*,

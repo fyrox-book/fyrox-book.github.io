@@ -193,11 +193,39 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="mouse-input"><a class="header" href="#mouse-input">Mouse Input</a></h1>
-<p>Mouse input is usually used to control a camera rotation, to pick objects in game world, etc. Let's take a look at
-the most common use cases.</p>
+<p>Mouse input is usually used to control a camera rotation, to pick objects in game world, etc. There are two major
+ways to get the mouse state - the simple and the event-based ones.</p>
 <h2 id="mouse-motion"><a class="header" href="#mouse-motion">Mouse Motion</a></h2>
 <p>The following example shows how to use raw mouse events to rotate an object. It could also be used to rotate a camera
 in your game (with slight modifications).</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
+#[visit(optional)]
+pub struct Player {
+    yaw: f32,
+    pitch: f32,
+}
+
+impl ScriptTrait for Player {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        let mouse_speed = ctx.input_state.mouse_speed();
+        let limit = std::f32::consts::FRAC_PI_2;
+
+        self.pitch = (self.pitch + mouse_speed.y).clamp(-limit, limit);
+        self.yaw += mouse_speed.x;
+
+        let node = &amp;mut ctx.scene.graph[ctx.handle];
+        let transform = node.local_transform_mut();
+        transform.set_rotation(
+            UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), self.pitch)
+                * UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw),
+        );
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The same can be done with an event-based approach:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
@@ -219,8 +247,8 @@ impl ScriptTrait for Player {
             ..
         } = event
         {
-            self.pitch = (self.pitch + *dy as f32)
-                .clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
+            let limit = std::f32::consts::FRAC_PI_2;
+            self.pitch = (self.pitch + *dy as f32).clamp(-limit, limit);
             self.yaw += *dx as f32;
         }
     }
@@ -241,6 +269,26 @@ relative offsets (<code>dx</code>, <code>dy</code>) and modifying the <code>pitc
 every frame and it is used to apply <code>pitch</code> and <code>yaw</code> values to the scene node the script is assigned to.</p>
 <h2 id="mouse-buttons"><a class="header" href="#mouse-buttons">Mouse Buttons</a></h2>
 <p>The following example shows how to handle events from mouse buttons.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff1")]
+#[visit(optional)]
+pub struct Clicker {
+    counter: i32,
+}
+
+impl ScriptTrait for Clicker {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        if ctx.input_state.is_left_mouse_button_pressed() {
+            self.counter += 1;
+        } else if ctx.input_state.is_left_mouse_button_released() {
+            self.counter -= 1;
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The same can be done with an event-based approach:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
