@@ -17,6 +17,7 @@
     - [Borrow Checker](./beginning/borrow_checker.md)
     - [Project Manager](./beginning/project_manager.md)
     - [Hot Reloading](./beginning/hot_reloading.md)
+    - [IDE for code](./beginning/ide.md)
 - [Game Logic](./scripting/scripting.md)
     - [Plugins](./scripting/plugin.md)    
     - [Scripts](./scripting/script.md)
