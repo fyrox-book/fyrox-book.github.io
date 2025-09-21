@@ -1,12 +1,18 @@
 # Mouse Input
 
-Mouse input is usually used to control a camera rotation, to pick objects in game world, etc. Let's take a look at 
-the most common use cases.
+Mouse input is usually used to control a camera rotation, to pick objects in game world, etc. There are two major
+ways to get the mouse state - the simple and the event-based ones. 
 
 ## Mouse Motion
 
 The following example shows how to use raw mouse events to rotate an object. It could also be used to rotate a camera
 in your game (with slight modifications).
+
+```rust
+{{#include ../code/snippets/src/input/mouse_simple.rs:mouse}}
+```
+
+The same can be done with an event-based approach:
 
 ```rust
 {{#include ../code/snippets/src/input/mouse.rs:mouse}}
@@ -20,6 +26,13 @@ every frame and it is used to apply `pitch` and `yaw` values to the scene node t
 ## Mouse Buttons
 
 The following example shows how to handle events from mouse buttons.  
+
+
+```rust
+{{#include ../code/snippets/src/input/mouse_simple.rs:clicker}}
+```
+
+The same can be done with an event-based approach:
 
 ```rust
 {{#include ../code/snippets/src/input/mouse.rs:clicker}}
