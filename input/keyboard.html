@@ -193,10 +193,56 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="keyboard-input"><a class="header" href="#keyboard-input">Keyboard Input</a></h1>
+<p>There are two major ways to check the keyboard state - the simple and the event-based ones.</p>
+<h2 id="simple-way"><a class="header" href="#simple-way">Simple way</a></h2>
+<p>The simplest way to check if a key was pressed/released or if it is still down is three methods of <code>InputState</code>:</p>
+<ul>
+<li><code>is_key_down</code> - returns <code>true</code> if the specified key is pressed, <code>false</code> - otherwise.</li>
+<li><code>is_key_pressed</code> - returns <code>true</code> if the specified key was pressed in the current frame, <code>false</code> - otherwise.
+This method will return <code>false</code> if the key is still pressed in the next frame. This is useful to check if a key
+was pressed and some action, but do not repeat the same action over and over until the key is released.</li>
+<li><code>is_key_released</code> - returns <code>true</code> if the specified key was released in the current frame, <code>false</code> - otherwise.
+This method will return <code>false</code> if the key is still released in the next frame. This is useful to check if a
+key was released and some action, but do not repeat the same action over and over until the key is pressed.</li>
+</ul>
+<p>Typical usage of these methods is the following.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
+#[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
+#[visit(optional)]
+pub struct Player {}
+
+impl ScriptTrait for Player {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+        let node = &amp;mut ctx.scene.graph[ctx.handle];
+        let transform = node.local_transform_mut();
+
+        // Check if the keys are down and move the player accordingly.
+        if ctx.input_state.is_key_down(KeyCode::KeyA) {
+            transform.offset(Vector3::new(-1.0, 0.0, 0.0));
+        }
+        if ctx.input_state.is_key_down(KeyCode::KeyD) {
+            transform.offset(Vector3::new(1.0, 0.0, 0.0));
+        }
+
+        // It is also possible to check if a key was pressed or released on this frame. This
+        // could be useful to do something only once per each press or release. For example,
+        // jump could be performed on a key press.
+        if ctx.input_state.is_key_pressed(KeyCode::Space) {
+            transform.offset(Vector3::new(0.0, 1.0, 0.0));
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="event-based-approach"><a class="header" href="#event-based-approach">Event-based approach</a></h2>
+<p>The more advanced approach is to use keyboard events directly. This may seem harder to maintain than the simple
+approach with functions like <code>is_key_down</code>, but in reality it is slightly more verbose. The main advantage is
+that this approach allows you to carefully select which entity will receive an event.</p>
 <p>Keyboard input events can be handled by listening to <code>WindowEvent::KeyboardInput</code>, for example you can check for A, D
 keys and save their state in some variables in your script. These variables will tell the script that an entity, to
 which the script was assigned, should move in a certain direction. This could be expressed like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "abbad54c-e267-4d7e-a3cd-e125a7e87ff0")]
