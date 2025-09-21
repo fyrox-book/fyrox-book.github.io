@@ -1595,6 +1595,75 @@ then this object must be deleted before the plugin is unloaded.</p>
 <h3 id="non-serializable-entities"><a class="header" href="#non-serializable-entities">Non-serializable Entities</a></h3>
 <p>Not every object can be serialized, and in this case, the current plugin system calls a special method to restore such
 non-serializable entities after hot reloading. Such entities could include server connections, job queues, etc.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ide-for-code"><a class="header" href="#ide-for-code">IDE for code</a></h1>
+<p>Fyrox does not have its own integrated development environment (IDE for short) to edit the source code of your project.
+Instead, you may use pretty much any IDE that you like. By default, Fyrox assumes that you're using RustRover. This
+chapter describes the recommended way of using IDEs with the engine. As usual, using the right tools for the job
+is a half of the overall success.</p>
+<h2 id="rustrover"><a class="header" href="#rustrover">RustRover</a></h2>
+<p>This section explains how to use the engine with RustRover and how to prepare it for the most efficient workflow.
+RustRover is the recommended IDE for the engine. It is free for non-commercial use and works on pretty much every
+major platform. A typical workflow is presented on this picture (keep in mind that it uses Classic UI extension):</p>
+<p><img src="beginning/rr_ide.png" alt="RustRover IDE" /></p>
+<p>The left side contains the opened editor and the right side contains the opened RustRover. When a new project is
+created, all that you need to start using the IDE is simply go to <code>File -&gt; Open</code> and select the project directory.
+The same effect can be achieved via the <a href="beginning/project_manager.html">project manager</a> by selecting your project and
+clicking the <code>Open IDE</code> buttons. Once the project is open, find the following place in the UI and click on the
+dropdown list and select <code>Edit Configurations...</code>.</p>
+<p><img src="beginning/rr_buttons.png" alt="Rust Rover Buttons" /></p>
+<h3 id="static-linking-build-configuration"><a class="header" href="#static-linking-build-configuration">Static linking build configuration</a></h3>
+<p>Click on the <code>+</code> icon in the top left corner and select <code>Cargo</code>. Rename the new configuration to <code>Editor</code> and
+specify the command to run:</p>
+<pre><code class="language-shell">run --package editor
+</code></pre>
+<blockquote>
+<p>Note that the build commands aren't prefixed with <code>cargo</code>, it is done by RR automatically.</p>
+</blockquote>
+<p>It should look like this:</p>
+<p><img src="beginning/rr_editor.png" alt="img.png" /></p>
+<p>To run the game separately from the editor, add the following:</p>
+<pre><code>run --package executor
+</code></pre>
+<p>It should look like this:</p>
+<p><img src="beginning/rr_game.png" alt="img.png" /></p>
+<p>Typical workflow in the statically linked mode is the following:</p>
+<ol>
+<li>Run the editor</li>
+<li>Do some changes in the scene</li>
+<li>Run the game (<code>Debug</code> mode) from the editor</li>
+<li>Repeat steps 2-4.</li>
+</ol>
+<p>If any changes are needed in the game g</p>
+<h3 id="hot-reloading-build-configuration"><a class="header" href="#hot-reloading-build-configuration">Hot reloading build configuration</a></h3>
+<p>If you want to run the editor in <a href="beginning/hot_reloading.html">code hot reloading</a> mode from the IDE, make sure to add the
+following build configurations. The first step is to define a configuration that builds the game's dynamic library:</p>
+<pre><code class="language-shell">build --package game_dylib --no-default-features --features=dylib-engine --profile dev-hot-reload
+</code></pre>
+<p>Do not forget to add the following to <code>Environment Variables</code> as well:</p>
+<pre><code class="language-shell">RUSTFLAGS=-C prefer-dynamic=yes
+</code></pre>
+<p>In the RR it will look like this:</p>
+<p><img src="beginning/rr_build_game_hr.png" alt="img.png" /></p>
+<p>The next step is to add a configuration that builds the editor:</p>
+<pre><code class="language-shell">run --package editor --no-default-features --features=dylib --profile dev-hot-reload
+</code></pre>
+<p>Do not forget to add the following to <code>Environment Variables</code> as well:</p>
+<pre><code class="language-shell">RUSTFLAGS=-C prefer-dynamic=yes
+</code></pre>
+<p>The last step is to specify additional build configuration that must be run before the main one, this is done
+in the bottom section of the window, and you should select <code>Build Game HR</code> configuration there. Overall, you should
+have something like this:</p>
+<p><img src="beginning/rr_editor_hr.png" alt="img.png" /></p>
+<p>Typical workflow with the native code hot reloading (CHR) is the following:</p>
+<ol>
+<li>Run the editor first in CHR mode.</li>
+<li>Do some changes in the scene.</li>
+<li>Run the game in CHR mode from the editor (<code>Debug (HR)</code> build configuration in the editor).</li>
+<li>Do some changes in the game code.</li>
+<li>Select <code>Build Game HR</code> build configuration and run it, once the build is finished, the game and the editor
+will automagically reload the native code.</li>
+<li>Repeat steps 4-6.</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="game-logic"><a class="header" href="#game-logic">Game Logic</a></h1>
 <p>A game based on Fyrox is a plugin to the engine and the editor. The plugin defines global application logic and can provide
 a set of scripts, that can be used to assign custom logic to scene nodes. Every script can be attached to only one
