@@ -4,6 +4,7 @@ pub mod canvas;
 pub mod check_box;
 pub mod custom;
 pub mod decorator;
+mod docking_manager;
 pub mod dropdown_list;
 pub mod expander;
 pub mod font;
