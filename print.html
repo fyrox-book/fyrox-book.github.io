@@ -10280,8 +10280,118 @@ to mismatch of coordinates of UI and graphics API. The UI has origin at left top
 <div style="break-before: page; page-break-before: always;"></div><h1 id="inspector-wip"><a class="header" href="#inspector-wip">Inspector (WIP)</a></h1>
 <p><img src="ui/inspector.png" alt="inspector" /></p>
 <p>A widget that allows you to generate visual representation for arbitrary structures, that implement <code>Reflect</code> trait.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="list-view-wip"><a class="header" href="#list-view-wip">List view (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="list-view"><a class="header" href="#list-view">List view</a></h1>
 <p><img src="ui/list_view.gif" alt="list view" /></p>
+<p>List view is used to display lists with arbitrary items. It supports multiple selection and by
+default, it stacks the items vertically (this can be changed by providing a custom panel for the
+items, see the section below).</p>
+<h2 id="example-5"><a class="header" href="#example-5">Example</a></h2>
+<p><code>ListView</code> can be created using <code>ListViewBuilder</code>:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    ListViewBuilder::new(WidgetBuilder::new())
+        .with_items(vec![
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item0")
+                .build(ctx),
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item1")
+                .build(ctx),
+        ])
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind, that the items of the list view can be pretty much any other widget. They also don't have to be the same
+type, you can mix any type of widgets.</p>
+<h2 id="custom-items-panel"><a class="header" href="#custom-items-panel">Custom Items Panel</a></h2>
+<p>By default, list view creates inner <code>StackPanel</code> to arrange its items. It is enough for most cases, however,
+in rare cases you might want to use something else. For example, you could use <code>WrapPanel</code> to create list view with
+selectable "tiles":</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_list_with_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    ListViewBuilder::new(WidgetBuilder::new())
+        // Using WrapPanel instead of StackPanel:
+        .with_items_panel(WrapPanelBuilder::new(WidgetBuilder::new()).build(ctx))
+        .with_items(vec![
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item0")
+                .build(ctx),
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item1")
+                .build(ctx),
+        ])
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="selection-1"><a class="header" href="#selection-1">Selection</a></h2>
+<p>List view supports any number of selected items (you can add items to the current selecting by holding Ctrl key),
+you can change it at runtime by sending [<code>ListViewMessage::SelectionChanged</code>] message with
+[<code>MessageDirection::ToWidget</code>] like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_selection(my_list_view: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(ListViewMessage::selection(
+        my_list_view,
+        MessageDirection::ToWidget,
+        vec![1],
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<p>It is also possible to not have selected item at all, to do this you need to send an empty vector as a selection.
+To catch the moment when selection has changed (either by a user or by the <code>ListViewMessage::SelectionChanged</code>)
+you need to listen to the same message but with opposite direction, like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_something(my_list_view: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if let Some(ListViewMessage::SelectionChanged(selection)) = message.data() {
+        if message.destination() == my_list_view
+            &amp;&amp; message.direction() == MessageDirection::FromWidget
+        {
+            println!("New selection is: {:?}", selection);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="addingremoving-items"><a class="header" href="#addingremoving-items">Adding/removing items</a></h2>
+<p>To change items of the list view you can use the variety of following messages: ListViewMessage::AddItem<code>,  </code>ListViewMessage::RemoveItem<code>, </code>ListViewMessage::Items<code>. To decide which one to use, is very simple - if you  adding/removing a few items, use </code>ListViewMessage::AddItem<code>and</code>ListViewMessage::RemoveItem<code>, otherwise use  </code>ListViewMessage::Items`, which changes the items at once.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_items(my_list_view: Handle&lt;UiNode&gt;, ui: &amp;mut UserInterface) {
+    let ctx = &amp;mut ui.build_ctx();
+    // Build new items first.
+    let items = vec![
+        TextBuilder::new(WidgetBuilder::new())
+            .with_text("Item0")
+            .build(ctx),
+        TextBuilder::new(WidgetBuilder::new())
+            .with_text("Item1")
+            .build(ctx),
+    ];
+    // Then send the message with their handles to the list view.
+    ui.send_message(ListViewMessage::items(
+        my_list_view,
+        MessageDirection::ToWidget,
+        items,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="bringing-a-particular-item-into-view"><a class="header" href="#bringing-a-particular-item-into-view">Bringing a particular item into view</a></h2>
+<p>It is possible to bring a particular item into view, which is useful when you have hundreds or thousands of items and
+you
+want to bring only particular item into view. It could be done by sending a <code>ListViewMessage::BringItemIntoView</code>
+message:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn bring_item_into_view(my_list_view: Handle&lt;UiNode&gt;, my_item: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(ListViewMessage::bring_item_into_view(
+        my_list_view,
+        MessageDirection::ToWidget,
+        my_item,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="menu-wip"><a class="header" href="#menu-wip">Menu (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="message-box-wip"><a class="header" href="#message-box-wip">Message box (WIP)</a></h1>
 <p><img src="ui/message_box.gif" alt="message box" /></p>
@@ -10356,7 +10466,7 @@ but you interested in only first two decimal places. In this case you can set th
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-5"><a class="header" href="#example-5">Example</a></h2>
+<h2 id="example-6"><a class="header" href="#example-6">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10481,7 +10591,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="ui/window.html">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-6"><a class="header" href="#example-6">Example</a></h2>
+<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11751,7 +11861,7 @@ fn add_collection_property_editor(editor: &amp;Editor) {
 <p>This chapter should help you to have better understanding of how to configure the editor and which settings
 are responsible for what.</p>
 <p><img src="editor/settings.png" alt="settings" /></p>
-<h2 id="selection-1"><a class="header" href="#selection-1">Selection</a></h2>
+<h2 id="selection-2"><a class="header" href="#selection-2">Selection</a></h2>
 <p>This section contains options for objects selection.</p>
 <ul>
 <li><code>Ignore Back Faces</code> - if set, forces mouse picking to ignore back faces of triangles, allowing you to "click-thru"

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>List view (WIP) - Fyrox Book</title>
+        <title>List view - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -192,8 +192,118 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="list-view-wip"><a class="header" href="#list-view-wip">List view (WIP)</a></h1>
+                        <h1 id="list-view"><a class="header" href="#list-view">List view</a></h1>
 <p><img src="list_view.gif" alt="list view" /></p>
+<p>List view is used to display lists with arbitrary items. It supports multiple selection and by
+default, it stacks the items vertically (this can be changed by providing a custom panel for the
+items, see the section below).</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p><code>ListView</code> can be created using <code>ListViewBuilder</code>:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    ListViewBuilder::new(WidgetBuilder::new())
+        .with_items(vec![
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item0")
+                .build(ctx),
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item1")
+                .build(ctx),
+        ])
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind, that the items of the list view can be pretty much any other widget. They also don't have to be the same
+type, you can mix any type of widgets.</p>
+<h2 id="custom-items-panel"><a class="header" href="#custom-items-panel">Custom Items Panel</a></h2>
+<p>By default, list view creates inner <code>StackPanel</code> to arrange its items. It is enough for most cases, however,
+in rare cases you might want to use something else. For example, you could use <code>WrapPanel</code> to create list view with
+selectable "tiles":</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_list_with_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    ListViewBuilder::new(WidgetBuilder::new())
+        // Using WrapPanel instead of StackPanel:
+        .with_items_panel(WrapPanelBuilder::new(WidgetBuilder::new()).build(ctx))
+        .with_items(vec![
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item0")
+                .build(ctx),
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("Item1")
+                .build(ctx),
+        ])
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="selection"><a class="header" href="#selection">Selection</a></h2>
+<p>List view supports any number of selected items (you can add items to the current selecting by holding Ctrl key),
+you can change it at runtime by sending [<code>ListViewMessage::SelectionChanged</code>] message with
+[<code>MessageDirection::ToWidget</code>] like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_selection(my_list_view: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(ListViewMessage::selection(
+        my_list_view,
+        MessageDirection::ToWidget,
+        vec![1],
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<p>It is also possible to not have selected item at all, to do this you need to send an empty vector as a selection.
+To catch the moment when selection has changed (either by a user or by the <code>ListViewMessage::SelectionChanged</code>)
+you need to listen to the same message but with opposite direction, like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_something(my_list_view: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if let Some(ListViewMessage::SelectionChanged(selection)) = message.data() {
+        if message.destination() == my_list_view
+            &amp;&amp; message.direction() == MessageDirection::FromWidget
+        {
+            println!("New selection is: {:?}", selection);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="addingremoving-items"><a class="header" href="#addingremoving-items">Adding/removing items</a></h2>
+<p>To change items of the list view you can use the variety of following messages: ListViewMessage::AddItem<code>,  </code>ListViewMessage::RemoveItem<code>, </code>ListViewMessage::Items<code>. To decide which one to use, is very simple - if you  adding/removing a few items, use </code>ListViewMessage::AddItem<code>and</code>ListViewMessage::RemoveItem<code>, otherwise use  </code>ListViewMessage::Items`, which changes the items at once.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_items(my_list_view: Handle&lt;UiNode&gt;, ui: &amp;mut UserInterface) {
+    let ctx = &amp;mut ui.build_ctx();
+    // Build new items first.
+    let items = vec![
+        TextBuilder::new(WidgetBuilder::new())
+            .with_text("Item0")
+            .build(ctx),
+        TextBuilder::new(WidgetBuilder::new())
+            .with_text("Item1")
+            .build(ctx),
+    ];
+    // Then send the message with their handles to the list view.
+    ui.send_message(ListViewMessage::items(
+        my_list_view,
+        MessageDirection::ToWidget,
+        items,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="bringing-a-particular-item-into-view"><a class="header" href="#bringing-a-particular-item-into-view">Bringing a particular item into view</a></h2>
+<p>It is possible to bring a particular item into view, which is useful when you have hundreds or thousands of items and
+you
+want to bring only particular item into view. It could be done by sending a <code>ListViewMessage::BringItemIntoView</code>
+message:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn bring_item_into_view(my_list_view: Handle&lt;UiNode&gt;, my_item: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(ListViewMessage::bring_item_into_view(
+        my_list_view,
+        MessageDirection::ToWidget,
+        my_item,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 
