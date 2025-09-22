@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Docking manager (WIP) - Fyrox Book</title>
+        <title>Docking manager - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -192,11 +192,86 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="docking-manager-wip"><a class="header" href="#docking-manager-wip">Docking manager (WIP)</a></h1>
+                        <h1 id="docking-manager"><a class="header" href="#docking-manager">Docking manager</a></h1>
 <p><img src="docking_manager.gif" alt="docking manager" /></p>
-<p>Docking manager allows you to dock windows and hold them in-place.</p>
-<p>Docking manager can hold any types of UI elements, but dragging works only
-for windows.</p>
+<p>Docking manager is a special container widget, that holds a bunch of children widgets in-place
+using <code>Tiles</code> and a bunch of floating windows. Any window can be undocked and become a floating
+window and vice versa. Docking manager is typically used to "pack" multiple windows into a
+rectangular. The most notable use case is IDEs where you can drag,
+dock, undock, stack windows.</p>
+<h2 id="tiles"><a class="header" href="#tiles">Tiles</a></h2>
+<p>The main element of the docking manager is the <code>Tile</code> widget, which can be in two major states:</p>
+<ol>
+<li>It can hold a window</li>
+<li>It can be split into two more sub-tiles (either vertically or horizontally), which can in
+their turn either contain some other window or a sub-tile.
+This structure essentially forms a tree of pretty much unlimited depth. This approach basically
+allows you to "pack" multiple windows in a rectangular area with no free space between the tiles.
+Split tiles have a special parameter called splitter, which is simply a fraction that shows how
+much space each half takes. In the case of a horizontal tile, if the splitter is 0.25, then the left
+tile will take 25% of the width of the tile and the right tile will take the rest 75% of the
+width.</li>
+</ol>
+<h2 id="floating-windows"><a class="header" href="#floating-windows">Floating Windows</a></h2>
+<p>The docking manager can control an unlimited number of floating windows, floating windows can be
+docked and vice versa. When a window is undocked, it is automatically placed into a list of floating
+windows. Only the windows from this list can be docked.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>The following example shows how to create a docking manager with one root tile split vertically
+into two smaller tiles where each tile holds a separate window.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_docking_manager(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    let top_window = WindowBuilder::new(WidgetBuilder::new())
+        .with_title(WindowTitle::text("Top Window"))
+        .build(ctx);
+    let bottom_window = WindowBuilder::new(WidgetBuilder::new())
+        .with_title(WindowTitle::text("Bottom Window"))
+        .build(ctx);
+    let root_tile = TileBuilder::new(WidgetBuilder::new())
+        .with_content(TileContent::VerticalTiles {
+            splitter: 0.5,
+            tiles: [
+                TileBuilder::new(WidgetBuilder::new())
+                    // Note that you have to put the window into a separate tile, otherwise
+                    // you'll get unexpected results.
+                    .with_content(TileContent::Window(top_window))
+                    .build(ctx),
+                TileBuilder::new(WidgetBuilder::new())
+                    .with_content(TileContent::Window(bottom_window))
+                    .build(ctx),
+            ],
+        })
+        .build(ctx);
+    DockingManagerBuilder::new(
+        WidgetBuilder::new()
+            .with_child(root_tile)
+            .with_width(500.0)
+            .with_height(500.0),
+    )
+    .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="layout"><a class="header" href="#layout">Layout</a></h2>
+<p>The current docking manager layout can be saved and restored later if needed. This is a very useful
+option for customizable user interfaces, where users can adjust the interface as they like,
+save it and then load on the next session. Use the following code to save the layout:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn save_layout(
+    ui: &amp;UserInterface,
+    docking_manager_handle: Handle&lt;UiNode&gt;,
+) -&gt; Option&lt;DockingManagerLayoutDescriptor&gt; {
+    ui.try_get_of_type::&lt;DockingManager&gt;(docking_manager_handle)
+        .as_ref()
+        .map(|docking_manager| docking_manager.layout(ui))
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The layout can be restored by sending a <code>DockingManagerMessage::Layout</code> message to the docking
+manager. Use <code>DockingManagerMessage::layout</code> builder method to make one.
+To be able to restore the layout to its defaults, just create a desired layout from code,
+save the layout and use the returned layout descriptor when you need to restore the layout
+to its defaults.</p>
 
                     </main>
 

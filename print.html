@@ -9960,16 +9960,91 @@ feedback the user.</p>
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="docking-manager-wip"><a class="header" href="#docking-manager-wip">Docking manager (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="docking-manager"><a class="header" href="#docking-manager">Docking manager</a></h1>
 <p><img src="ui/docking_manager.gif" alt="docking manager" /></p>
-<p>Docking manager allows you to dock windows and hold them in-place.</p>
-<p>Docking manager can hold any types of UI elements, but dragging works only
-for windows.</p>
+<p>Docking manager is a special container widget, that holds a bunch of children widgets in-place
+using <code>Tiles</code> and a bunch of floating windows. Any window can be undocked and become a floating
+window and vice versa. Docking manager is typically used to "pack" multiple windows into a
+rectangular. The most notable use case is IDEs where you can drag,
+dock, undock, stack windows.</p>
+<h2 id="tiles"><a class="header" href="#tiles">Tiles</a></h2>
+<p>The main element of the docking manager is the <code>Tile</code> widget, which can be in two major states:</p>
+<ol>
+<li>It can hold a window</li>
+<li>It can be split into two more sub-tiles (either vertically or horizontally), which can in
+their turn either contain some other window or a sub-tile.
+This structure essentially forms a tree of pretty much unlimited depth. This approach basically
+allows you to "pack" multiple windows in a rectangular area with no free space between the tiles.
+Split tiles have a special parameter called splitter, which is simply a fraction that shows how
+much space each half takes. In the case of a horizontal tile, if the splitter is 0.25, then the left
+tile will take 25% of the width of the tile and the right tile will take the rest 75% of the
+width.</li>
+</ol>
+<h2 id="floating-windows"><a class="header" href="#floating-windows">Floating Windows</a></h2>
+<p>The docking manager can control an unlimited number of floating windows, floating windows can be
+docked and vice versa. When a window is undocked, it is automatically placed into a list of floating
+windows. Only the windows from this list can be docked.</p>
+<h2 id="example-4"><a class="header" href="#example-4">Example</a></h2>
+<p>The following example shows how to create a docking manager with one root tile split vertically
+into two smaller tiles where each tile holds a separate window.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_docking_manager(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    let top_window = WindowBuilder::new(WidgetBuilder::new())
+        .with_title(WindowTitle::text("Top Window"))
+        .build(ctx);
+    let bottom_window = WindowBuilder::new(WidgetBuilder::new())
+        .with_title(WindowTitle::text("Bottom Window"))
+        .build(ctx);
+    let root_tile = TileBuilder::new(WidgetBuilder::new())
+        .with_content(TileContent::VerticalTiles {
+            splitter: 0.5,
+            tiles: [
+                TileBuilder::new(WidgetBuilder::new())
+                    // Note that you have to put the window into a separate tile, otherwise
+                    // you'll get unexpected results.
+                    .with_content(TileContent::Window(top_window))
+                    .build(ctx),
+                TileBuilder::new(WidgetBuilder::new())
+                    .with_content(TileContent::Window(bottom_window))
+                    .build(ctx),
+            ],
+        })
+        .build(ctx);
+    DockingManagerBuilder::new(
+        WidgetBuilder::new()
+            .with_child(root_tile)
+            .with_width(500.0)
+            .with_height(500.0),
+    )
+    .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="layout-1"><a class="header" href="#layout-1">Layout</a></h2>
+<p>The current docking manager layout can be saved and restored later if needed. This is a very useful
+option for customizable user interfaces, where users can adjust the interface as they like,
+save it and then load on the next session. Use the following code to save the layout:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn save_layout(
+    ui: &amp;UserInterface,
+    docking_manager_handle: Handle&lt;UiNode&gt;,
+) -&gt; Option&lt;DockingManagerLayoutDescriptor&gt; {
+    ui.try_get_of_type::&lt;DockingManager&gt;(docking_manager_handle)
+        .as_ref()
+        .map(|docking_manager| docking_manager.layout(ui))
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The layout can be restored by sending a <code>DockingManagerMessage::Layout</code> message to the docking
+manager. Use <code>DockingManagerMessage::layout</code> builder method to make one.
+To be able to restore the layout to its defaults, just create a desired layout from code,
+save the layout and use the returned layout descriptor when you need to restore the layout
+to its defaults.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dropdown-list"><a class="header" href="#dropdown-list">Dropdown list</a></h1>
 <p><img src="ui/dropdown_list.gif" alt="dropdown list" /></p>
 <p>Drop-down list is a control which shows the currently selected item and provides a dropdown
 list to select its current item. It is used to show a single selected item in a compact way.</p>
-<h2 id="example-4"><a class="header" href="#example-4">Example</a></h2>
+<h2 id="example-5"><a class="header" href="#example-5">Example</a></h2>
 <p>A dropdown list with two text items with the last one selected, could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10285,7 +10360,7 @@ to mismatch of coordinates of UI and graphics API. The UI has origin at left top
 <p>List view is used to display lists with arbitrary items. It supports multiple selection and by
 default, it stacks the items vertically (this can be changed by providing a custom panel for the
 items, see the section below).</p>
-<h2 id="example-5"><a class="header" href="#example-5">Example</a></h2>
+<h2 id="example-6"><a class="header" href="#example-6">Example</a></h2>
 <p><code>ListView</code> can be created using <code>ListViewBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10466,7 +10541,7 @@ but you interested in only first two decimal places. In this case you can set th
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-6"><a class="header" href="#example-6">Example</a></h2>
+<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10591,7 +10666,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="ui/window.html">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
+<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
