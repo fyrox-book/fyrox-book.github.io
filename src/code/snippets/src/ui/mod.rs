@@ -9,6 +9,7 @@ pub mod expander;
 pub mod font;
 pub mod grid;
 pub mod image;
+pub mod list_view;
 pub mod numeric;
 pub mod rendering;
 pub mod screen;

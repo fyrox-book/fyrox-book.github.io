@@ -114,7 +114,7 @@
         - [Grid](./ui/grid.md)
         - [Image](./ui/image.md)
         - [Inspector (WIP)](./ui/inspector.md)
-        - [List view (WIP)](./ui/list_view.md)
+        - [List view](./ui/list_view.md)
         - [Menu (WIP)](./ui/menu.md)
         - [Message box (WIP)](./ui/message_box.md)
         - [Numeric field](./ui/numeric.md)
