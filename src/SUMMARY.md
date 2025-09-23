@@ -118,7 +118,7 @@
         - [Menu (WIP)](./ui/menu.md)
         - [Message box (WIP)](./ui/message_box.md)
         - [Numeric field](./ui/numeric.md)
-        - [Popup (WIP)](./ui/popup.md)
+        - [Popup](./ui/popup.md)
         - [Progress bar](./ui/progress_bar.md)
         - [Range (WIP)](./ui/range.md)
         - [Rect (WIP)](./ui/rect.md)
