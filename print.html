@@ -10528,7 +10528,110 @@ but you interested in only first two decimal places. In this case you can set th
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="popup-wip"><a class="header" href="#popup-wip">Popup (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="popup"><a class="header" href="#popup">Popup</a></h1>
+<p>Popup is used to display other widgets in floating panel that could lock input in its own bounds.</p>
+<h2 id="how-to-create-20"><a class="header" href="#how-to-create-20">How to create</a></h2>
+<p>A simple popup with a button could be created using the following code:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_popup_with_button(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    PopupBuilder::new(WidgetBuilder::new())
+        .with_content(
+            ButtonBuilder::new(WidgetBuilder::new())
+                .with_text("Click Me!")
+                .build(ctx),
+        )
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Keep in mind that the popup is closed by default. You need to open it explicitly by sending a <code>PopupMessage::Open</code> to
+it, otherwise you won't see it:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_popup_with_button_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    let popup = PopupBuilder::new(WidgetBuilder::new())
+        .with_content(
+            ButtonBuilder::new(WidgetBuilder::new())
+                .with_text("Click Me!")
+                .build(&amp;mut ui.build_ctx()),
+        )
+        .build(&amp;mut ui.build_ctx());
+    // Open the popup explicitly.
+    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    popup
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="placement"><a class="header" href="#placement">Placement</a></h2>
+<p>Since popups are usually used to show useful context-specific information (like context menus, drop-down lists, etc.),
+they're usually open above some other widget with specific alignment (right, left, center, etc.).</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_popup_with_button_and_placement_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+    let popup = PopupBuilder::new(WidgetBuilder::new())
+        .with_content(
+            ButtonBuilder::new(WidgetBuilder::new())
+                .with_text("Click Me!")
+                .build(&amp;mut ui.build_ctx()),
+        )
+        // Set the placement. For simplicity it is just a cursor position with Handle::NONE as placement target.
+        .with_placement(Placement::Cursor(Handle::NONE))
+        .build(&amp;mut ui.build_ctx());
+    // Open the popup explicitly at the current placement.
+    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    popup
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The example uses <code>Placement::Cursor</code> with <code>Handle::NONE</code> placement target for simplicity reasons, however in
+the real-world usages this handle must be a handle of some widget that is located under the popup. It is very
+important to specify it correctly, otherwise you will lose the built-in ability to fetch the actual placement target.
+For example, imagine that you're building your own custom <code>DropdownList</code> widget and the popup
+is used to display content of the list. In this case, you could specify the placement target like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_popup_with_button_and_bottom_placement_and_open_it(
+    dropdown_list: Handle&lt;UiNode&gt;,
+    ui: &amp;mut UserInterface,
+) -&gt; Handle&lt;UiNode&gt; {
+    let popup = PopupBuilder::new(WidgetBuilder::new())
+        .with_content(
+            ButtonBuilder::new(WidgetBuilder::new())
+                .with_text("Click Me!")
+                .build(&amp;mut ui.build_ctx()),
+        )
+        // Set the placement to the dropdown list.
+        .with_placement(Placement::LeftBottom(dropdown_list))
+        .build(&amp;mut ui.build_ctx());
+    // Open the popup explicitly at the current placement.
+    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    popup
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In this case, the popup will open at the left bottom corner of the dropdown list automatically. Placement target is also
+useful to build context menus, especially for lists with multiple items. Each item in the list usually has the same
+context menu, and this is an ideal use case for popups, since the single context menu can be shared across multiple list
+items. To find which item cause the context menu to open, catch [<code>PopupMessage::Placement</code>] and extract the node
+handle - this will be your actual item.</p>
+<h2 id="opening-mode"><a class="header" href="#opening-mode">Opening mode</a></h2>
+<p>By default, when you click outside your popup, it will automatically close. It is pretty common behavior in the UI,
+you can see it almost every time you use context menus in various apps. There are cases when this behavior is undesired
+and it can be turned off:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_popup_that_stays_open(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    PopupBuilder::new(WidgetBuilder::new())
+        .with_content(
+            ButtonBuilder::new(WidgetBuilder::new())
+                .with_text("Click Me!")
+                .build(ctx),
+        )
+        // This forces the popup to stay open when clicked outside of its bounds
+        .stays_open(true)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="smart-placement"><a class="header" href="#smart-placement">Smart placement</a></h2>
+<p>Popup widget can automatically adjust its position to always remain on screen, which is useful for tooltips, dropdown
+lists, etc. To enable this option, use <code>PopupBuilder::with_smart_placement</code> with <code>true</code> as the first argument.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="progress-bar"><a class="header" href="#progress-bar">Progress bar</a></h1>
 <p><img src="ui/progress_bar.gif" alt="progress bar" /></p>
 <p>Progress bar is used to show a bar that fills in from left to right according to the progress value. It is used to
@@ -10760,7 +10863,7 @@ fitting to the current screen size. For example, Screen widget could be used as 
 screen and will automatically shrink or expand when the screen size changes. It is ideal choice if
 you want to have some widgets always centered on screen (for example - crosshair, main menu of
 your game, etc.).</p>
-<h2 id="how-to-create-20"><a class="header" href="#how-to-create-20">How To Create</a></h2>
+<h2 id="how-to-create-21"><a class="header" href="#how-to-create-21">How To Create</a></h2>
 <p>There are two major ways to create a Screen widget - using the editor or by code.</p>
 <h3 id="using-the-editor-2"><a class="header" href="#using-the-editor-2">Using the Editor</a></h3>
 <p>Go to <code>Create -&gt; UI</code> menu and find <code>Screen</code> widget there, make sure it is a direct child of the
@@ -10942,7 +11045,7 @@ code example and you will get a decent look:</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text"><a class="header" href="#text">Text</a></h1>
 <p>Text is a simple widget that allows you to print text on screen. It has various options like word wrapping, text
 alignment, and so on.</p>
-<h2 id="how-to-create-21"><a class="header" href="#how-to-create-21">How to create</a></h2>
+<h2 id="how-to-create-22"><a class="header" href="#how-to-create-22">How to create</a></h2>
 <p>An instance of the Text widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11076,7 +11179,7 @@ code (or will be done automatically if you're using scripts or Framework (obsole
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text-box"><a class="header" href="#text-box">Text Box</a></h1>
 <p>TextBox is a text widget that allows you to edit text and create specialized input fields. It has various options like
 word wrapping, text alignment, and so on.</p>
-<h2 id="how-to-create-22"><a class="header" href="#how-to-create-22">How to create</a></h2>
+<h2 id="how-to-create-23"><a class="header" href="#how-to-create-23">How to create</a></h2>
 <p>An instance of the TextBox widget could be created like so:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11389,7 +11492,7 @@ could useful to highlight something visually.</p>
 <p>Vector image is used to create images, that consists from a fixed set of basic primitives, such as lines,
 triangles, rectangles, etc. It could be used to create simple images that can be infinitely scaled without
 aliasing issues.</p>
-<h2 id="how-to-create-23"><a class="header" href="#how-to-create-23">How To Create</a></h2>
+<h2 id="how-to-create-24"><a class="header" href="#how-to-create-24">How To Create</a></h2>
 <p>There are two major ways to create a vector image widget - using the editor and from code.</p>
 <h3 id="using-the-editor-3"><a class="header" href="#using-the-editor-3">Using the Editor</a></h3>
 <p><img src="ui/vector_image.png" alt="vector image" /></p>
@@ -11482,7 +11585,7 @@ else until the modal is dissmissed.</p>
 <p><img src="ui/wrap_panel.gif" alt="wrap panel" /></p>
 <p>Wrap panel is used to stack children widgets either in vertical or horizontal direction with overflow - every widget
 that does not have enough space on current line, will automatically be placed on the next line.</p>
-<h2 id="how-to-create-24"><a class="header" href="#how-to-create-24">How to create</a></h2>
+<h2 id="how-to-create-25"><a class="header" href="#how-to-create-25">How to create</a></h2>
 <p>Use <code>WrapPanelBuilder</code> to create new wrap panel instance:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
