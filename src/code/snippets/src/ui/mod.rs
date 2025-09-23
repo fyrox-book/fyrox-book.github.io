@@ -12,6 +12,7 @@ pub mod grid;
 pub mod image;
 pub mod list_view;
 pub mod numeric;
+pub mod progress;
 pub mod rendering;
 pub mod screen;
 pub mod scroll_bar;
