@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Progress bar (WIP) - Fyrox Book</title>
+        <title>Progress bar - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -192,8 +192,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="progress-bar-wip"><a class="header" href="#progress-bar-wip">Progress bar (WIP)</a></h1>
+                        <h1 id="progress-bar"><a class="header" href="#progress-bar">Progress bar</a></h1>
 <p><img src="progress_bar.gif" alt="progress bar" /></p>
+<p>Progress bar is used to show a bar that fills in from left to right according to the progress value. It is used to
+show progress for long actions.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    ProgressBarBuilder::new(WidgetBuilder::new())
+        // Keep mind, that the progress is "normalized", which means that it is defined on
+        // [0..1] range, where 0 - no progress at all, 1 - maximum progress.
+        .with_progress(0.25)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="style"><a class="header" href="#style">Style</a></h2>
+<p>It is possible to specify custom indicator (the part that show the progress) and the back of
+the progress bar. Use <code>ProgressBarBuilder::with_indicator</code> and <code>ProgressBarBuilder::with_body</code>
+methods respectively. These methods can accept any widget, but usually it i a
+<code>crate::border::Border</code>, <code>crate::image::Image</code>, <code>crate::nine_patch::NinePatch</code> widgets.</p>
+<h2 id="changing-progress"><a class="header" href="#changing-progress">Changing progress</a></h2>
+<p>To change progress of a progress bar all you need is to send <code>ProgressBarMessage::Progress</code> to it:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_progress(progress_bar: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(ProgressBarMessage::progress(
+        progress_bar,
+        MessageDirection::ToWidget,
+        0.33,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 

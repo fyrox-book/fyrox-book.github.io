@@ -10529,8 +10529,38 @@ but you interested in only first two decimal places. In this case you can set th
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="popup-wip"><a class="header" href="#popup-wip">Popup (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="progress-bar-wip"><a class="header" href="#progress-bar-wip">Progress bar (WIP)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="progress-bar"><a class="header" href="#progress-bar">Progress bar</a></h1>
 <p><img src="ui/progress_bar.gif" alt="progress bar" /></p>
+<p>Progress bar is used to show a bar that fills in from left to right according to the progress value. It is used to
+show progress for long actions.</p>
+<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+    ProgressBarBuilder::new(WidgetBuilder::new())
+        // Keep mind, that the progress is "normalized", which means that it is defined on
+        // [0..1] range, where 0 - no progress at all, 1 - maximum progress.
+        .with_progress(0.25)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="style"><a class="header" href="#style">Style</a></h2>
+<p>It is possible to specify custom indicator (the part that show the progress) and the back of
+the progress bar. Use <code>ProgressBarBuilder::with_indicator</code> and <code>ProgressBarBuilder::with_body</code>
+methods respectively. These methods can accept any widget, but usually it i a
+<code>crate::border::Border</code>, <code>crate::image::Image</code>, <code>crate::nine_patch::NinePatch</code> widgets.</p>
+<h2 id="changing-progress"><a class="header" href="#changing-progress">Changing progress</a></h2>
+<p>To change progress of a progress bar all you need is to send <code>ProgressBarMessage::Progress</code> to it:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_progress(progress_bar: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send_message(ProgressBarMessage::progress(
+        progress_bar,
+        MessageDirection::ToWidget,
+        0.33,
+    ));
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="range-wip"><a class="header" href="#range-wip">Range (WIP)</a></h1>
 <p><img src="ui/range_editor.gif" alt="range editor" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rect-editor-wip"><a class="header" href="#rect-editor-wip">Rect editor (WIP)</a></h1>
@@ -10541,7 +10571,7 @@ but you interested in only first two decimal places. In this case you can set th
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
+<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10666,7 +10696,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="ui/window.html">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
+<h2 id="example-9"><a class="header" href="#example-9">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11179,7 +11209,7 @@ phone number. A filter can be specified at build stage like so:</p>
         .build(&amp;mut ui.build_ctx())
 }
 <span class="boring">}</span></code></pre></pre>
-<h2 id="style"><a class="header" href="#style">Style</a></h2>
+<h2 id="style-1"><a class="header" href="#style-1">Style</a></h2>
 <p>You can change brush of caret by using <code>.with_caret_brush</code> and also selection brush by using <code>.with_selection_brush</code>,
 it could be useful if you don't like default colors.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tree"><a class="header" href="#tree">Tree</a></h1>
