@@ -8766,11 +8766,13 @@ structure. Such approach allows us to modify the look of the button as we wish, 
 image background, or with any vector image, or even other widgets. The foreground can be anything too, it can also
 contain its own complex hierarchy, like a pair of an icon with a text and so on.</p>
 <h2 id="composition"><a class="header" href="#composition">Composition</a></h2>
-<p>Every widget in the engine uses composition to build more complex widgets. All widgets (and respective builders) contains
+<p>Every widget in the engine uses composition to build more complex widgets. All widgets (and respective builders)
+contains
 <code>Widget</code> instance inside, it provides basic functionality the widget such as layout information, hierarchy, default
 foreground and background brushes (their usage depends on derived widget), render and layout transform and so on.</p>
 <h2 id="component-querying"><a class="header" href="#component-querying">Component Querying</a></h2>
-<p>Many widgets provide component querying functionality - you can get an immutable reference to inner component by its type. It is
+<p>Many widgets provide component querying functionality - you can get an immutable reference to inner component by its
+type. It is
 used instead of type casting in many places. Component querying is much more flexible compared to direct type casting.
 For example, you may want to build a custom <a href="ui/basic_concepts/../tree.html">Tree</a> widget, you want your CustomTree to inherit all the
 functionality from the Tree, but add something new. The Tree widget can manage its children subtrees, but it needs to
@@ -8791,7 +8793,8 @@ that this has nothing similar with ECS and stuff, it is made to circumvent Rust'
 <p>The engine uses message passing mechanism for any UI logic. What does that mean? Let's see at the button from the
 previous section and imagine we want to change its text. To do that we need to explicitly "tell" the button's text
 widget to change its content to something new. This is done by sending a message to the widget.</p>
-<p>There is no classic callbacks to handle various types of messages, which may come from widgets. Instead, you should write
+<p>There is no classic callbacks to handle various types of messages, which may come from widgets. Instead, you should
+write
 your own message dispatcher where you'll handle all messages. Why so? At first - decoupling, in this case business logic
 is decoupled from the UI. You just receive messages one-by-one and do specific logic. The next reason is that any
 callback would require context capturing which could be somewhat restrictive - since you need to share context with the
@@ -8821,7 +8824,8 @@ from which a message was come from. Then you do any actions you want.</p>
 will "travel" across the tree of nodes.</p>
 <ol>
 <li>Bubble - a message starts its way from a widget and goes up on hierarchy until it reaches root node of hierarchy.
-Nodes that lies outside that path won't receive the message. This is the most important message routing strategy, that
+Nodes that lies outside that path won't receive the message. This is the most important message routing strategy,
+that
 is used for <strong>every</strong> node by default.</li>
 <li>Direct - a message passed directly to every node that are capable to handle it. There is actual routing in this
 case. Direct routing is used in rare cases when you need to catch a message outside its normal "bubble" route.</li>
@@ -8834,8 +8838,10 @@ level of hierarchy up - to the button widget itself. This way the button widget 
 <p>The UI systems uses complex, yet powerful layout system that allows you to build complex user interfaces with
 complex layout. Layout pass has two <em>recursive</em> sub-passes:</p>
 <ol>
-<li>Measurement - the sub-pass is used to fetch the desired size of each widget in hierarchy. Each widget in the hierarchy
-"asked" for its desired size with the constraint from a parent widget. This step is recursive - to know a desired size
+<li>Measurement - the sub-pass is used to fetch the desired size of each widget in hierarchy. Each widget in the
+hierarchy
+"asked" for its desired size with the constraint from a parent widget. This step is recursive - to know a desired
+size
 of a widget root of some hierarchy you need to recursively fetch the desired sizes of every descendant.</li>
 <li>Arrangement - the sub-pass is used to set final position and size of each widget in hierarchy. It uses desired size
 of every widget from the previous step to set the final size and relative position. This step is recursive.</li>
@@ -8843,14 +8849,10 @@ of every widget from the previous step to set the final size and relative positi
 <p>Such separation in two passes is required because we need to know desired size of each node in hierarchy before we can
 actually do an arrangement.</p>
 <h2 id="code-first-and-editor-first-approaches"><a class="header" href="#code-first-and-editor-first-approaches">Code-first and Editor-first approaches</a></h2>
-<p>The UI system supports both ways of making a UI:</p>
-<ol>
-<li>Code-first approach is used when your user interface is procedural and its appearance is heavily depends on
-your game logic. In this case you need to use various widget builder to create UIs.</li>
-<li>Editor-first approach is used when you have relatively static (animations does not count) user interface,
-that almost does not change in time. In this case you can use built-in WYSIWYG (what-you-see-is-what-you-get)
-editor. See <a href="ui/basic_concepts/../editor/editor.html">Editor</a> chapter for more info.</li>
-</ol>
+<p>The UI system supports both ways of making a UI - code- and editor-based approaches.</p>
+<h3 id="code-first-approach"><a class="header" href="#code-first-approach">Code-first approach</a></h3>
+<p>Code-first approach is used when your user interface is procedural and its appearance is heavily depends on
+your game logic. In this case you need to use various widget builder to create UIs.</p>
 <p>In case of code-first approach you should prefer so-called <em>fluent syntax</em>: this means that you can create your
 widget in series of nested call of other widget builders. In code, it looks something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -8928,6 +8930,35 @@ the fluent syntax:</p>
         .build(ctx)
 }
 <span class="boring">}</span></code></pre></pre>
+<h3 id="editor-first-approach"><a class="header" href="#editor-first-approach">Editor-first approach</a></h3>
+<p>Editor-first approach is used when you have relatively static (animations does not count) user interface,
+that almost does not change in time. In this case you can use built-in WYSIWYG (what-you-see-is-what-you-get)
+editor. See <a href="ui/basic_concepts/../editor/editor.html">Editor</a> chapter for more info.</p>
+<p>When a user interface is ready to be loaded in your game, you can do this like so:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Visit, Reflect, Debug)]
+struct MyPlugin {
+    button: Handle&lt;UiNode&gt;,
+}
+
+impl Plugin for crate::ui::MyPlugin {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) {
+        ctx.task_pool.spawn_plugin_task(
+            UserInterface::load_from_file("data/my_ui_asset.ui", ctx.resource_manager.clone()),
+            |result, game: &amp;mut MyPlugin, ctx| match result {
+                Ok(ui) =&gt; {
+                    *ctx.user_interfaces.first_mut() = ui;
+                }
+                Err(e) =&gt; Log::err(format!("Unable to load a user interface! Reason: {:?}", e)),
+            },
+        );
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This code loads the given user interface and sets it as primary user interface of your game. You can have multiple
+user interfaces and they can be added using <code>let ui_handle = ctx.user_interfaces.add(ui);</code>. The <code>ui_handle</code> is then
+can be used in <code>on_ui_message</code>, to understand from which UI the message has come from.</p>
 <h2 id="limitations-4"><a class="header" href="#limitations-4">Limitations</a></h2>
 <p>UI system uses completely different kind of scenes - UI scenes, which are fully decoupled from game scenes. This means
 that you can't incorporate UI widgets in a game scene. As a consequence, you don't have an ability to attach scripts to

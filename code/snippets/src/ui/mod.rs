@@ -11,6 +11,7 @@ pub mod font;
 pub mod grid;
 pub mod image;
 pub mod list_view;
+pub mod load;
 pub mod numeric;
 pub mod popup;
 pub mod progress;
