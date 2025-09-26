@@ -40,13 +40,15 @@ contain its own complex hierarchy, like a pair of an icon with a text and so on.
 
 ## Composition
 
-Every widget in the engine uses composition to build more complex widgets. All widgets (and respective builders) contains
+Every widget in the engine uses composition to build more complex widgets. All widgets (and respective builders)
+contains
 `Widget` instance inside, it provides basic functionality the widget such as layout information, hierarchy, default
 foreground and background brushes (their usage depends on derived widget), render and layout transform and so on.
 
 ## Component Querying
 
-Many widgets provide component querying functionality - you can get an immutable reference to inner component by its type. It is
+Many widgets provide component querying functionality - you can get an immutable reference to inner component by its
+type. It is
 used instead of type casting in many places. Component querying is much more flexible compared to direct type casting.
 For example, you may want to build a custom [Tree](../tree.md) widget, you want your CustomTree to inherit all the
 functionality from the Tree, but add something new. The Tree widget can manage its children subtrees, but it needs to
@@ -71,7 +73,8 @@ The engine uses message passing mechanism for any UI logic. What does that mean?
 previous section and imagine we want to change its text. To do that we need to explicitly "tell" the button's text
 widget to change its content to something new. This is done by sending a message to the widget.
 
-There is no classic callbacks to handle various types of messages, which may come from widgets. Instead, you should write
+There is no classic callbacks to handle various types of messages, which may come from widgets. Instead, you should
+write
 your own message dispatcher where you'll handle all messages. Why so? At first - decoupling, in this case business logic
 is decoupled from the UI. You just receive messages one-by-one and do specific logic. The next reason is that any
 callback would require context capturing which could be somewhat restrictive - since you need to share context with the
@@ -92,10 +95,11 @@ Message passing mechanism works in pair with various routing strategies that all
 will "travel" across the tree of nodes.
 
 1. Bubble - a message starts its way from a widget and goes up on hierarchy until it reaches root node of hierarchy.
-Nodes that lies outside that path won't receive the message. This is the most important message routing strategy, that
-is used for **every** node by default.
+   Nodes that lies outside that path won't receive the message. This is the most important message routing strategy,
+   that
+   is used for **every** node by default.
 2. Direct - a message passed directly to every node that are capable to handle it. There is actual routing in this
-case. Direct routing is used in rare cases when you need to catch a message outside its normal "bubble" route.
+   case. Direct routing is used in rare cases when you need to catch a message outside its normal "bubble" route.
 
 Bubble message routing is used to handle complex hierarchies of widgets with ease. Let's take a look at the button
 example above - it has text widget as a content and when, for instance, you hover a mouse over the text widget the UI
@@ -107,24 +111,25 @@ level of hierarchy up - to the button widget itself. This way the button widget 
 The UI systems uses complex, yet powerful layout system that allows you to build complex user interfaces with
 complex layout. Layout pass has two _recursive_ sub-passes:
 
-1. Measurement - the sub-pass is used to fetch the desired size of each widget in hierarchy. Each widget in the hierarchy
-"asked" for its desired size with the constraint from a parent widget. This step is recursive - to know a desired size
-of a widget root of some hierarchy you need to recursively fetch the desired sizes of every descendant.
+1. Measurement - the sub-pass is used to fetch the desired size of each widget in hierarchy. Each widget in the
+   hierarchy
+   "asked" for its desired size with the constraint from a parent widget. This step is recursive - to know a desired
+   size
+   of a widget root of some hierarchy you need to recursively fetch the desired sizes of every descendant.
 2. Arrangement - the sub-pass is used to set final position and size of each widget in hierarchy. It uses desired size
-of every widget from the previous step to set the final size and relative position. This step is recursive.
+   of every widget from the previous step to set the final size and relative position. This step is recursive.
 
 Such separation in two passes is required because we need to know desired size of each node in hierarchy before we can
 actually do an arrangement.
 
 ## Code-first and Editor-first approaches
 
-The UI system supports both ways of making a UI:
+The UI system supports both ways of making a UI - code- and editor-based approaches.
 
-1) Code-first approach is used when your user interface is procedural and its appearance is heavily depends on
+### Code-first approach
+
+Code-first approach is used when your user interface is procedural and its appearance is heavily depends on
 your game logic. In this case you need to use various widget builder to create UIs.
-2) Editor-first approach is used when you have relatively static (animations does not count) user interface,
-that almost does not change in time. In this case you can use built-in WYSIWYG (what-you-see-is-what-you-get)
-editor. See [Editor](../editor/editor.md) chapter for more info.
 
 In case of code-first approach you should prefer so-called _fluent syntax_: this means that you can create your
 widget in series of nested call of other widget builders. In code, it looks something like this:
@@ -150,6 +155,22 @@ the fluent syntax:
 ```rust,no_run
 {{#include ../../code/snippets/src/ui/mod.rs:create_fancy_button_with_shortcut}}
 ```
+
+### Editor-first approach
+
+Editor-first approach is used when you have relatively static (animations does not count) user interface,
+that almost does not change in time. In this case you can use built-in WYSIWYG (what-you-see-is-what-you-get)
+editor. See [Editor](../editor/editor.md) chapter for more info.
+
+When a user interface is ready to be loaded in your game, you can do this like so:
+
+```rust,no_run
+{{#include ../../code/snippets/src/ui/load.rs:load_ui}}
+```
+
+This code loads the given user interface and sets it as primary user interface of your game. You can have multiple
+user interfaces and they can be added using `let ui_handle = ctx.user_interfaces.add(ui);`. The `ui_handle` is then
+can be used in `on_ui_message`, to understand from which UI the message has come from.
 
 ## Limitations
 
