@@ -8942,7 +8942,7 @@ struct MyPlugin {
     button: Handle&lt;UiNode&gt;,
 }
 
-impl Plugin for crate::ui::MyPlugin {
+impl Plugin for MyPlugin {
     fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) {
         ctx.task_pool.spawn_plugin_task(
             UserInterface::load_from_file("data/my_ui_asset.ui", ctx.resource_manager.clone()),

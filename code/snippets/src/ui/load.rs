@@ -11,7 +11,7 @@ struct MyPlugin {
     button: Handle<UiNode>,
 }
 
-impl Plugin for crate::ui::MyPlugin {
+impl Plugin for MyPlugin {
     fn init(&mut self, scene_path: Option<&str>, ctx: PluginContext) {
         ctx.task_pool.spawn_plugin_task(
             UserInterface::load_from_file("data/my_ui_asset.ui", ctx.resource_manager.clone()),
