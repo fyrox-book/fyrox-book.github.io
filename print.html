@@ -11948,6 +11948,58 @@ we want to save in a save file as well as current scene. We're doing that in <co
 <code>self.data.visit("Data", &amp;mut visitor).unwrap();</code> which serializes our data. To load the data back (deserialize), we
 have to wait until the scene is fully loaded and then try to deserialize the data. This is done by the last three lines
 of code of <code>on_scene_loaded</code> method.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reflection"><a class="header" href="#reflection">Reflection</a></h1>
+<p>The engine offers quite powerful static <a href="https://en.wikipedia.org/wiki/Reflective_programming">reflection</a>. Reflection
+allows you to get information about fields of structures, variants of an enumeration and its fields. It is also possible
+to iterate over all fields, and iterate in-depth to get information about the entire "tree".</p>
+<h2 id="code-generation-1"><a class="header" href="#code-generation-1">Code Generation</a></h2>
+<p>The derive macro is available under <code>#[reflect(...)]</code> attribute that can be placed on both
+the type and its fields.</p>
+<h3 id="type-attributes"><a class="header" href="#type-attributes">Type attributes</a></h3>
+<ul>
+<li><code>#[reflect(hide_all)]</code> - hide all fields from reflection.</li>
+<li><code>#[reflect(bounds)]</code> - add type boundary for <code>Reflect</code> impl, for example
+<code>#[reflect(bounds = "T: Reflect + Clone")]</code></li>
+<li><code>#[reflect(non_cloneable)]</code> - prevent the macro from generating an implementation of
+[<code>Self::try_clone_box</code>] trait for your type. Could be useful for non-cloneable types.</li>
+<li><code>#[reflect(derived_type = "Type")]</code> - marks the type for which the attribute is added as a
+subtype for the <code>Type</code>.</li>
+</ul>
+<h3 id="field-attributes"><a class="header" href="#field-attributes">Field attributes</a></h3>
+<ul>
+<li><code>#[reflect(hidden)]</code> - hides the field from reflection.</li>
+<li><code>#[reflect(setter = "foo")]</code> - set the desired method that will be used by [<code>Self::set_field</code>]
+default implementation.</li>
+<li><code>#[reflect(deref)]</code> - delegate the field access with <code>deref</code> + <code>deref_mut</code> calls. Could be
+useful for new-type objects.</li>
+<li><code>#[reflect(field = "foo")]</code> - sets the desired method, that will be used to access
+the field.</li>
+<li><code>#[reflect(field_mut = "foo")]</code> - sets the desired method, that will be used to access
+the field.</li>
+<li><code>#[reflect(name = "name")]</code> - overrides the name of the field.</li>
+<li><code>#[reflect(display_name = "name")]</code> - sets the human-readable name for the field.</li>
+<li><code>#[reflect(tag = "tag")]</code> - sets some arbitrary string tag of the field. It could be used to
+group properties by a certain criteria or to find a specific property by its tag.</li>
+<li><code>#[reflect(read_only)]</code> - the field is not meant to be editable. This flag does not prevent
+the reflection API from changing the actual value, it is just an instruction for external
+users (editors, tools, etc.)</li>
+<li><code>[#reflect(immutable_collection)]</code> - only for dynamic collections (<code>Vec</code>, etc.) - means that its
+size cannot be changed, however the <em>items</em> of the collection can still be changed.</li>
+<li><code>#[reflect(min_value = "0.0")]</code> - minimal value of the field. Works only for numeric fields!</li>
+<li><code>#[reflect(max_value = "1.0")]</code> - maximal value of the field. Works only for numeric fields!</li>
+<li><code>#[reflect(step = "0.1")]</code> - increment/decrement step of the field. Works only for numeric fields!</li>
+<li><code>#[reflect(precision = "3")]</code> - maximum amount of decimal places for a numeric property.</li>
+</ul>
+<h3 id="clone"><a class="header" href="#clone">Clone</a></h3>
+<p>By default, the proc macro adds an implementation of [<code>Self::try_clone_box</code>] with the assumption
+that your type implements the [<code>Clone</code>] trait. Not all types can implement this trait, in this
+case, add <code>#[reflect(non_cloneable)]</code> attribute for your type. This will force the implementation
+of [<code>Self::try_clone_box</code>] to return <code>None</code>.</p>
+<h2 id="additional-trait-bounds"><a class="header" href="#additional-trait-bounds">Additional Trait Bounds</a></h2>
+<p><code>Reflect</code> restricted to types that implement <code>Debug</code> trait, this is needed to convert the actual value
+to string. <code>Display</code> isn't used here, because it can't be derived and it is very tedious to implement it
+for every type that should support <code>Reflect</code> trait. It is a good compromise between development speed
+and the quality of the string output.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="editor-3"><a class="header" href="#editor-3">Editor</a></h1>
 <p>This section of the book covers various aspects of the editor. Keep in mind, that this section covers aspects of the
 editor, that does not have direct relations with engine entities. For example, this section covers
