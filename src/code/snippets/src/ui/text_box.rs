@@ -1,10 +1,11 @@
 use fyrox::asset::manager::ResourceManager;
+use fyrox::core::algebra::Vector2;
 use fyrox::core::color::Color;
 use fyrox::core::parking_lot::Mutex;
 use fyrox::gui::brush::Brush;
 use fyrox::gui::font::Font;
 use fyrox::gui::formatted_text::WrapMode;
-use fyrox::gui::message::MessageDirection;
+use fyrox::gui::message::{MessageDirection, UiMessage};
 use fyrox::gui::text::TextMessage;
 use fyrox::gui::{HorizontalAlignment, VerticalAlignment};
 use fyrox::{
@@ -82,3 +83,29 @@ fn create_text_box_with_filter(ui: &mut UserInterface) -> Handle<UiNode> {
         .build(&mut ui.build_ctx())
 }
 // ANCHOR_END: create_text_box_with_filter
+
+// ANCHOR: create_red_text_with_black_shadows
+fn create_red_text_with_black_shadows(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+    TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
+        .with_text(text)
+        // Enable shadows.
+        .with_shadow(true)
+        // Black shadows.
+        .with_shadow_brush(Brush::Solid(Color::BLACK))
+        // 1px thick.
+        .with_shadow_dilation(1.0)
+        // Offset the shadow slightly to the right-bottom.
+        .with_shadow_offset(Vector2::new(1.0, 1.0))
+        .build(&mut ui.build_ctx())
+}
+// ANCHOR_END: create_red_text_with_black_shadows
+
+// ANCHOR: text_message
+fn on_ui_message(my_text_box: Handle<UiNode>, message: &UiMessage) {
+    if let Some(TextMessage::Text(text)) = message.data() {
+        if message.destination() == my_text_box {
+            println!("The text is: {}", text)
+        }
+    }
+}
+// ANCHOR_END: text_message

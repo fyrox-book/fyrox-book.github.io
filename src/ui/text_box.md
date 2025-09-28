@@ -1,6 +1,6 @@
 # Text Box
 
-TextBox is a text widget that allows you to edit text and create specialized input fields. It has various options like 
+TextBox is a text widget that allows you to edit text and create specialized input fields. It has various options like
 word wrapping, text alignment, and so on.
 
 ## How to create
@@ -44,6 +44,16 @@ By default, text is created with default font, however it is possible to set any
 
 Please refer to [Font](font.md) chapter to learn more about fonts.
 
+## Shadows
+
+TextBox widget supports shadows effect to add contrast to your text, which could be useful to make text readable
+independent on the background colors. This effect could be used for subtitles. Shadows are pretty easy to add, all you
+need to do is to enable them, setup desired thickness, offset and brush (solid color or gradient).
+
+```rust,no_run
+{{#include ../code/snippets/src/ui/text_box.rs:create_red_text_with_black_shadows}}
+```
+
 ## Messages
 
 TextBox widget accepts the following list of messages:
@@ -52,10 +62,18 @@ TextBox widget accepts the following list of messages:
 - `TextBoxMessage::CaretBrush` - changes the brush of the caret (small blinking vertical line).
 - `TextBoxMessage::TextCommitMode` - changes the [text commit mode](text_box.md#text-commit-mode).
 - `TextBoxMessage::Multiline` - makes the TextBox either multiline (`true`) or single line (`false`)
-- `TextBoxMessage::Editable` - enables or disables editing of the text. 
+- `TextBoxMessage::Editable` - enables or disables editing of the text.
+- `TextMessage::Text` - sets or gets the new text.
+- `TextMessage::Wrap` - sets new [wrapping mode](text.md#text-alignment-and-word-wrapping).
+- `TextMessage::Font` - sets new [font](text.md#fonts-and-colors)
+- `TextMessage::VerticalAlignment` and `TextMessage::HorizontalAlignment` sets
+  [vertical and horizontal](text_box.md#text-alignment-and-word-wrapping) text alignment respectively.
+- `TextMessage::Shadow` - enables or disables [shadow casting](text_box.md#shadows)
+- `TextMessage::ShadowDilation` - sets "thickness" of the shadows under the tex.
+- `TextMessage::ShadowBrush` - sets shadow brush (allows you to change color and even make shadow with color gradients).
+- `TextMessage::ShadowOffset` - sets offset of the shadows.
 
-**Important:** Please keep in mind, that TextBox widget also accepts `Text` [widget messages](text.md#messages). An 
-example of changing text at runtime could be something like this:
+An example of changing text at runtime could be something like this:
 
 ```rust,no_run
 {{#include ../code/snippets/src/ui/text_box.rs:request_change_text}}
@@ -83,7 +101,7 @@ There are number of default shortcuts that can be used to speed up text editing:
 
 ## Multiline Text Box
 
-By default, text box will not add new line character to the text if you press `Enter` on keyboard. To enable this 
+By default, text box will not add new line character to the text if you press `Enter` on keyboard. To enable this
 functionality use `.with_multiline(true)`
 
 ## Read-only Mode
@@ -92,20 +110,29 @@ You can enable or disable content editing by using read-only mode. Use `.with_re
 
 ## Mask Character
 
-You can specify replacement character for every other characters, this is useful option for password fields. Use 
-`.with_mask_char` at build stage. For example, you can set replacement character to asterisk `*` using 
+You can specify replacement character for every other characters, this is useful option for password fields. Use
+`.with_mask_char` at build stage. For example, you can set replacement character to asterisk `*` using
 `.with_mask_char(Some('*'))`
 
-## Text Commit Mode
+## Receiving Text Changes
 
-In many situations you don't need the text box to send `new text` message every new character, you either want this 
-message if `Enter` key is pressed or TextBox has lost keyboard focus (or both). There is `with_text_commit_mode` on builder 
-specifically for that purpose. Use one of the following modes:
+TextBox uses `TextMessage::Text` message to send the new text to a user. To get a text from text box you need to
+listen to this message:
+
+```rust,no_run
+{{#include ../code/snippets/src/ui/text_box.rs:text_message}}
+```
+
+### Text Commit Mode
+
+In many situations you don't need the text box to send `new text` message every new character, you either want this
+message if `Enter` key is pressed or TextBox has lost keyboard focus (or both). There is `with_text_commit_mode` on
+builder specifically for that purpose. Use one of the following modes:
 
 - `TextCommitMode::Immediate` - text box will immediately send `Text` message after any change.
 - `TextCommitMode::LostFocus` - text box will send `Text` message only when it loses focus.
-- `TextCommitMode::LostFocusPlusEnter` - text box will send `Text` message when it loses focus or if Enter key was pressed. 
-This is **default** behavior. In case of multiline text box hitting Enter key won't commit text!
+- `TextCommitMode::LostFocusPlusEnter` - text box will send `Text` message when it loses focus or if Enter key was
+  pressed. This is **default** behavior. In case of multiline text box hitting Enter key won't commit text!
 
 ## Filtering
 
