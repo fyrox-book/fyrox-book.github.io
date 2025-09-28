@@ -1,6 +1,5 @@
 use fyrox::core::log::Log;
 use fyrox::core::pool::Handle;
-use fyrox::gui::message::UiMessage;
 use fyrox::gui::{UiNode, UserInterface};
 use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::{core::reflect::prelude::*, core::visitor::prelude::*};

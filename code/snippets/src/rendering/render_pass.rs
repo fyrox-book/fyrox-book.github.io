@@ -1,17 +1,15 @@
 use fyrox::{
     core::{algebra::Matrix4, pool::Handle},
-    renderer::{
-        framework::{
-            buffer::{Buffer, BufferKind, BufferUsage},
-            error::FrameworkError,
-            framebuffer::{BufferDataUsage, BufferLocation, ResourceBindGroup, ResourceBinding},
-            geometry_buffer::GeometryBuffer,
-            gpu_program::GpuProgram,
-            uniform::StaticUniformBuffer,
-            DrawParameters, ElementRange, GeometryBufferExt,
-        },
-        RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext,
+    graphics::{
+        buffer::{Buffer, BufferKind, BufferUsage},
+        error::FrameworkError,
+        framebuffer::{BufferDataUsage, BufferLocation, ResourceBindGroup, ResourceBinding},
+        geometry_buffer::GeometryBuffer,
+        gpu_program::GpuProgram,
+        uniform::StaticUniformBuffer,
+        DrawParameters, ElementRange, GeometryBufferExt,
     },
+    renderer::{RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext},
     scene::{mesh::surface::SurfaceData, Scene},
 };
 use std::any::{Any, TypeId};
