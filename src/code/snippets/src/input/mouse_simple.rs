@@ -5,7 +5,6 @@ use fyrox::{
         type_traits::prelude::*,
         visitor::prelude::*,
     },
-    event::{DeviceEvent, ElementState, Event, MouseButton, WindowEvent},
     script::{ScriptContext, ScriptTrait},
 };
 

@@ -1,7 +1,6 @@
 use fyrox::{
     core::{algebra::Vector3, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
-    event::{ElementState, Event, WindowEvent},
-    keyboard::{KeyCode, PhysicalKey},
+    keyboard::KeyCode,
     script::{ScriptContext, ScriptTrait},
 };
 

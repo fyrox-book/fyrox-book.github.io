@@ -25,11 +25,7 @@ use fyrox::{
     scene::{
         base::BaseBuilder,
         camera::CameraBuilder,
-        mesh::{
-            surface,
-            surface::{SurfaceBuilder, SurfaceResource},
-            MeshBuilder,
-        },
+        mesh::{surface, surface::SurfaceBuilder, MeshBuilder},
         transform::TransformBuilder,
         Scene,
     },

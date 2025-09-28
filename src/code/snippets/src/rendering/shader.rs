@@ -1,4 +1,4 @@
-use fyrox::engine::{GraphicsContext, InitializedGraphicsContext};
+use fyrox::engine::GraphicsContext;
 use fyrox::graphics_gl::server::GlGraphicsServer;
 use fyrox::material::{Material, MaterialResource, MaterialResourceExtension};
 use fyrox::plugin::PluginContext;
