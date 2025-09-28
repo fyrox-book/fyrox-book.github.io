@@ -258,6 +258,26 @@ centered text could be created like so:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Please refer to <a href="font.html">Font</a> chapter to learn more about fonts.</p>
+<h2 id="shadows"><a class="header" href="#shadows">Shadows</a></h2>
+<p>TextBox widget supports shadows effect to add contrast to your text, which could be useful to make text readable
+independent on the background colors. This effect could be used for subtitles. Shadows are pretty easy to add, all you
+need to do is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+    TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
+        .with_text(text)
+        // Enable shadows.
+        .with_shadow(true)
+        // Black shadows.
+        .with_shadow_brush(Brush::Solid(Color::BLACK))
+        // 1px thick.
+        .with_shadow_dilation(1.0)
+        // Offset the shadow slightly to the right-bottom.
+        .with_shadow_offset(Vector2::new(1.0, 1.0))
+        .build(&amp;mut ui.build_ctx())
+}
+<span class="boring">}</span></code></pre></pre>
 <h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
 <p>TextBox widget accepts the following list of messages:</p>
 <ul>
@@ -266,9 +286,17 @@ centered text could be created like so:</p>
 <li><code>TextBoxMessage::TextCommitMode</code> - changes the <a href="text_box.html#text-commit-mode">text commit mode</a>.</li>
 <li><code>TextBoxMessage::Multiline</code> - makes the TextBox either multiline (<code>true</code>) or single line (<code>false</code>)</li>
 <li><code>TextBoxMessage::Editable</code> - enables or disables editing of the text.</li>
+<li><code>TextMessage::Text</code> - sets or gets the new text.</li>
+<li><code>TextMessage::Wrap</code> - sets new <a href="text.html#text-alignment-and-word-wrapping">wrapping mode</a>.</li>
+<li><code>TextMessage::Font</code> - sets new <a href="text.html#fonts-and-colors">font</a></li>
+<li><code>TextMessage::VerticalAlignment</code> and <code>TextMessage::HorizontalAlignment</code> sets
+<a href="text_box.html#text-alignment-and-word-wrapping">vertical and horizontal</a> text alignment respectively.</li>
+<li><code>TextMessage::Shadow</code> - enables or disables <a href="text_box.html#shadows">shadow casting</a></li>
+<li><code>TextMessage::ShadowDilation</code> - sets "thickness" of the shadows under the tex.</li>
+<li><code>TextMessage::ShadowBrush</code> - sets shadow brush (allows you to change color and even make shadow with color gradients).</li>
+<li><code>TextMessage::ShadowOffset</code> - sets offset of the shadows.</li>
 </ul>
-<p><strong>Important:</strong> Please keep in mind, that TextBox widget also accepts <code>Text</code> <a href="text.html#messages">widget messages</a>. An
-example of changing text at runtime could be something like this:</p>
+<p>An example of changing text at runtime could be something like this:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn request_change_text(ui: &amp;UserInterface, text_box_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
@@ -306,15 +334,28 @@ functionality use <code>.with_multiline(true)</code></p>
 <p>You can specify replacement character for every other characters, this is useful option for password fields. Use
 <code>.with_mask_char</code> at build stage. For example, you can set replacement character to asterisk <code>*</code> using
 <code>.with_mask_char(Some('*'))</code></p>
-<h2 id="text-commit-mode"><a class="header" href="#text-commit-mode">Text Commit Mode</a></h2>
+<h2 id="receiving-text-changes"><a class="header" href="#receiving-text-changes">Receiving Text Changes</a></h2>
+<p>TextBox uses <code>TextMessage::Text</code> message to send the new text to a user. To get a text from text box you need to
+listen to this message:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_ui_message(my_text_box: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if let Some(TextMessage::Text(text)) = message.data() {
+        if message.destination() == my_text_box {
+            println!("The text is: {}", text)
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="text-commit-mode"><a class="header" href="#text-commit-mode">Text Commit Mode</a></h3>
 <p>In many situations you don't need the text box to send <code>new text</code> message every new character, you either want this
-message if <code>Enter</code> key is pressed or TextBox has lost keyboard focus (or both). There is <code>with_text_commit_mode</code> on builder
-specifically for that purpose. Use one of the following modes:</p>
+message if <code>Enter</code> key is pressed or TextBox has lost keyboard focus (or both). There is <code>with_text_commit_mode</code> on
+builder specifically for that purpose. Use one of the following modes:</p>
 <ul>
 <li><code>TextCommitMode::Immediate</code> - text box will immediately send <code>Text</code> message after any change.</li>
 <li><code>TextCommitMode::LostFocus</code> - text box will send <code>Text</code> message only when it loses focus.</li>
-<li><code>TextCommitMode::LostFocusPlusEnter</code> - text box will send <code>Text</code> message when it loses focus or if Enter key was pressed.
-This is <strong>default</strong> behavior. In case of multiline text box hitting Enter key won't commit text!</li>
+<li><code>TextCommitMode::LostFocusPlusEnter</code> - text box will send <code>Text</code> message when it loses focus or if Enter key was
+pressed. This is <strong>default</strong> behavior. In case of multiline text box hitting Enter key won't commit text!</li>
 </ul>
 <h2 id="filtering"><a class="header" href="#filtering">Filtering</a></h2>
 <p>It is possible specify custom input filter, it can be useful if you're creating special input fields like numerical or
