@@ -60,6 +60,7 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
         ),
     )
     .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+        Uuid::new_v4(),
         ResourceKind::Embedded,
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited number of surfaces.
@@ -67,7 +68,7 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
             25.0, 0.25, 25.0,
         ))),
     ))
-    .with_material(MaterialResource::new_ok(ResourceKind::Embedded, material))
+    .with_material(MaterialResource::new_ok(Uuid::new_v4(), ResourceKind::Embedded, material))
     .build()])
     .build(&mut scene.graph)
 }

@@ -3059,6 +3059,7 @@ cannot create a mesh in 3D modelling software.</p>
         ),
     )
     .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+        Uuid::new_v4(),
         ResourceKind::Embedded,
         // Our procedural mesh will have a form of squashed cube.
         // A mesh can have unlimited number of surfaces.
@@ -3066,7 +3067,7 @@ cannot create a mesh in 3D modelling software.</p>
             25.0, 0.25, 25.0,
         ))),
     ))
-    .with_material(MaterialResource::new_ok(ResourceKind::Embedded, material))
+    .with_material(MaterialResource::new_ok(Uuid::new_v4(), ResourceKind::Embedded, material))
     .build()])
     .build(&amp;mut scene.graph)
 }
