@@ -30,7 +30,7 @@ these [instructions](https://developer.android.com/studio/projects/install-ndk).
 Setup environment variables, you need to set two of them to correct paths: `ANDROID_HOME` and `ANDROID_NDK_ROOT`.
 Follow these [instructions](https://developer.android.com/tools/variables)
 
-Install Java Runtime Environment from [here](https://www.java.com/ru/download/manual.jsp) and add `bin` folder
+Install Java Runtime Environment from [here](https://www.java.com/en/download/manual.jsp) and add `bin` folder
 of it to your `PATH` variable. On Windows it could be `C:\Program Files\Java\jre-1.8\bin`.
 
 Now you can build your game by running the following command from `executor-android` folder:
