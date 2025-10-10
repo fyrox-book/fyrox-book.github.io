@@ -840,12 +840,12 @@ main menu:</p>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene-and-scene-graph"><a class="header" href="#scene-and-scene-graph">Scene and Scene Graph</a></h1>
 <p>When you're playing a game, you often see various objects scattered around the screen, all of them are forming a
-<em>scene</em>. A scene is just a set of a variety objects, as in many other game engines, Fyrox allows you to create multiple
+<em>scene</em>. A scene is just a set of a variety of objects, as in many other game engines, Fyrox allows you to create multiple
 scenes for multiple purposes, for example, one scene could be used for a menu, a bunch of others for game levels,
 and another one for an ending screen. Scenes can also be used to create a source of data for other scenes, such scenes
 are called <em>prefabs</em>. Scenes can also be rendered in a texture, which can be used in other scenes - this way you
 can create interactive screens that show other places.</p>
-<p>While playing games, you may have noticed that some objects behaves as if they were linked to other objects, for
+<p>While playing games, you may have noticed that some objects behave as if they were linked to other objects, for
 example, a character in a role-playing game could carry a sword. While the character holds the sword, it is linked to
 his
 arm. Such relations between the objects can be presented by a graph structure.</p>
@@ -862,8 +862,8 @@ drag a node onto some other node, and it will attach itself to it.</p>
 <li><a href="beginning/../scene/base_node.html">Base</a> - stores hierarchical information (a handle to the parent node and handles
 to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it's used as a
 base node for every other scene node via composition.</li>
-<li><a href="beginning/../scene/mesh_node.html">Mesh</a> - represents a 3D model. This one of the most commonly used nodes in almost every game.
-Meshes can be easily created either programmatically, or be made in some 3D modelling software, such as Blender,
+<li><a href="beginning/../scene/mesh_node.html">Mesh</a> - represents a 3D model. This is one of the most commonly used nodes in almost every game.
+Meshes can be easily created either programmatically or be made in some 3D modeling software, such as Blender,
 and then loaded into the scene.</li>
 <li><a href="beginning/../scene/light_node.html">Light</a> - represents a light source. There are three types of light sources:
 <ul>
@@ -893,16 +893,16 @@ least one collider. There is a special variant for 2D - <code>Collider2D</code>.
 <li><a href="beginning/../physics/joint.html">Joint</a> - a physical entity that restricts motion between two rigid bodies. It has various
 amounts of degrees of freedom depending on the type of the joint. There is a special variant for 2D - <code>Joint2D</code>.</li>
 <li><a href="beginning/../scene/rectangle.html">Rectangle</a> - a simple rectangle mesh that can have a texture and a color. It is a very simple
-version of a Mesh node, yet it uses very optimized renderer, that allows you to render dozens of rectangles
+version of a Mesh node, yet it uses a very optimized renderer that allows you to render dozens of rectangles
 simultaneously. This node is intended for use in <strong>2D games</strong> only.</li>
-<li><a href="beginning/../scene/tilemap.html">Tile Map</a> - tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used</li>
-<li>in 2D games to build game worlds quickly and easily. An example of a tile map could be something like this:</li>
+<li><a href="beginning/../scene/tilemap.html">Tile Map</a> - tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used in
+2D games to build game worlds quickly and easily.</li>
 <li><a href="beginning/../sound/sound.html">Sound</a> - a sound source universal for 2D and 3D. Spatial blend factor allows you to select
 a proportion between 2D and 3D.</li>
 <li><a href="beginning/../sound/listener.html">Listener</a> - an audio receiver that captures the sound at a particular point in your scene and
 sends it to an audio context for processing and outputting to an audio playback device.</li>
 <li>Animation Player - a container for multiple animations. It can play animations made in the
-<a href="beginning/../animation/anim_editor.html">animation editor</a> and apply animation poses to respective scene nodes.</li>
+<a href="beginning/../animation/anim_editor.html">animation editor</a> and apply animation poses to the respective scene nodes.</li>
 <li>Animation Blending State Machine - a state machine that mixes multiple animations from multiple states into one; each
 state is backed by one or more animation playing or blending nodes. See
 its <a href="beginning/../animation/absm_editor.html">respective chapter</a> for more info.</li>
@@ -913,9 +913,9 @@ see <a href="https://docs.rs/fyrox/latest/fyrox/scene/index.html">API docs</a> f
 almost any kind of game. It is also possible to create your own types of nodes, but that is an advanced topic, which is
 covered in a <a href="beginning/../scene/custom_node.html">future chapter</a>.</p>
 <h2 id="local-and-global-coordinates"><a class="header" href="#local-and-global-coordinates">Local and Global Coordinates</a></h2>
-<p>A graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
+<p>A graph describes your scene in a very natural way, allowing you to think in terms of relative and absolute coordinates
 when working with <em>scene nodes</em>.</p>
-<p>A scene node has two kinds of transform - a local and global. The local transform defines where the node is located
+<p>A scene node has two kinds of transform - local and global. The local transform defines where the node is located
 relative to its origin, its scale as a percentage, and its rotation around any arbitrary axis.
 The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going
 back to the example of the character and the sword, if the character moves, and by extension the sword, the global
