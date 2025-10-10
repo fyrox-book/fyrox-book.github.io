@@ -1,13 +1,13 @@
 # Scene and Scene Graph
 
 When you're playing a game, you often see various objects scattered around the screen, all of them are forming a
-_scene_. A scene is just a set of a variety objects, as in many other game engines, Fyrox allows you to create multiple
+_scene_. A scene is just a set of a variety of objects, as in many other game engines, Fyrox allows you to create multiple
 scenes for multiple purposes, for example, one scene could be used for a menu, a bunch of others for game levels,
 and another one for an ending screen. Scenes can also be used to create a source of data for other scenes, such scenes
 are called _prefabs_. Scenes can also be rendered in a texture, which can be used in other scenes - this way you
 can create interactive screens that show other places.
 
-While playing games, you may have noticed that some objects behaves as if they were linked to other objects, for
+While playing games, you may have noticed that some objects behave as if they were linked to other objects, for
 example, a character in a role-playing game could carry a sword. While the character holds the sword, it is linked to
 his
 arm. Such relations between the objects can be presented by a graph structure.
@@ -28,8 +28,8 @@ The engine offers various types of "building blocks" for your scene, each such b
 - [Base](../scene/base_node.md) - stores hierarchical information (a handle to the parent node and handles
   to children nodes), local and global transform, name, tag, lifetime, etc. It has self-describing name - it's used as a
   base node for every other scene node via composition.
-- [Mesh](../scene/mesh_node.md) - represents a 3D model. This one of the most commonly used nodes in almost every game.
-  Meshes can be easily created either programmatically, or be made in some 3D modelling software, such as Blender,
+- [Mesh](../scene/mesh_node.md) - represents a 3D model. This is one of the most commonly used nodes in almost every game.
+  Meshes can be easily created either programmatically or be made in some 3D modeling software, such as Blender,
   and then loaded into the scene.
 - [Light](../scene/light_node.md) - represents a light source. There are three types of light sources:
     - **Point** - emits light in every direction. A real-world example would be a light bulb.
@@ -56,16 +56,16 @@ The engine offers various types of "building blocks" for your scene, each such b
 - [Joint](../physics/joint.md) - a physical entity that restricts motion between two rigid bodies. It has various
   amounts of degrees of freedom depending on the type of the joint. There is a special variant for 2D - `Joint2D`.
 - [Rectangle](../scene/rectangle.md) - a simple rectangle mesh that can have a texture and a color. It is a very simple
-  version of a Mesh node, yet it uses very optimized renderer, that allows you to render dozens of rectangles
+  version of a Mesh node, yet it uses a very optimized renderer that allows you to render dozens of rectangles
   simultaneously. This node is intended for use in **2D games** only.
-- [Tile Map](../scene/tilemap.md) - tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used
-- in 2D games to build game worlds quickly and easily. An example of a tile map could be something like this:
+- [Tile Map](../scene/tilemap.md) - tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used in
+  2D games to build game worlds quickly and easily.
 - [Sound](../sound/sound.md) - a sound source universal for 2D and 3D. Spatial blend factor allows you to select
   a proportion between 2D and 3D.
 - [Listener](../sound/listener.md) - an audio receiver that captures the sound at a particular point in your scene and
   sends it to an audio context for processing and outputting to an audio playback device.
 - Animation Player - a container for multiple animations. It can play animations made in the
-  [animation editor](../animation/anim_editor.md) and apply animation poses to respective scene nodes.
+  [animation editor](../animation/anim_editor.md) and apply animation poses to the respective scene nodes.
 - Animation Blending State Machine - a state machine that mixes multiple animations from multiple states into one; each
   state is backed by one or more animation playing or blending nodes. See
   its [respective chapter](../animation/absm_editor.md) for more info.
@@ -78,10 +78,10 @@ covered in a [future chapter](../scene/custom_node.md).
 
 ## Local and Global Coordinates
 
-A graph describes your scene in a very natural way, allowing you think in terms of relative and absolute coordinates
+A graph describes your scene in a very natural way, allowing you to think in terms of relative and absolute coordinates
 when working with _scene nodes_.
 
-A scene node has two kinds of transform - a local and global. The local transform defines where the node is located
+A scene node has two kinds of transform - local and global. The local transform defines where the node is located
 relative to its origin, its scale as a percentage, and its rotation around any arbitrary axis.
 The global transform is almost the same, but it also includes the whole chain of transforms of the parent nodes. Going
 back to the example of the character and the sword, if the character moves, and by extension the sword, the global
