@@ -1966,23 +1966,39 @@ fn add_my_script(node: &amp;mut Node) {
 <span class="boring">}</span></code></pre></pre>
 <p>Each script must implement following traits:</p>
 <ul>
-<li><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a
-scene file.</li>
-<li><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values,
-find fields by their paths, etc.</li>
-<li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it turn the structure and its fields
-into string.</li>
-<li><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be
-cloned.</li>
-<li><code>Default</code> implementation is very important - the scripting system uses it to create your scripts in the default state.
+<li>
+<p><code>Visit</code> implements serialization/deserialization functionality, it is used by the editor to save your object to a
+scene file.</p>
+</li>
+<li>
+<p><code>Reflect</code> implements compile-time reflection that provides a way to iterate over script fields, set their values,
+find fields by their paths, etc.</p>
+</li>
+<li>
+<p><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it turn the structure and its fields
+into string.</p>
+</li>
+<li>
+<p><code>Clone</code> - makes your structure clone-able, since we can clone objects, we also want the script instance to be
+cloned.</p>
+</li>
+<li>
+<p><code>Default</code> implementation is very important - the scripting system uses it to create your scripts in the default state.
 This is necessary to set some data to it and so on. If it's a special case, you can always implement your own <code>Default</code>'s
-implementation if it's necessary for your script.</li>
-<li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script <strong>must</strong> have a unique ID, otherwise,
+implementation if it's necessary for your script.</p>
+</li>
+<li>
+<p><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script <strong>must</strong> have a unique ID, otherwise,
 the engine will not be able to save and load your scripts. To generate a new UUID, use
-<a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or any other tool that can generate UUIDs.</li>
-<li><code>ComponentProvider</code> - gives access to inner fields of the script marked with <code>#[component(include)]</code> attribute.</li>
-</ul>
+<a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or any other tool that can generate UUIDs.</p>
+</li>
+<li>
+<p><code>ComponentProvider</code> - gives access to inner fields of the script marked with <code>#[component(include)]</code> attribute.</p>
+</li>
+<li>
 <p><code>#[visit(optional)]</code> attribute is used to suppress serialization errors when some fields are missing or changed.</p>
+</li>
+</ul>
 <h2 id="script-template-generator"><a class="header" href="#script-template-generator">Script Template Generator</a></h2>
 <p>You can use <code>fyrox-template</code> tool to generate all required boilerplate code for a new script, it makes adding new scripts
 much less tedious. To generate a new script use <code>script</code> command:</p>
