@@ -39,7 +39,7 @@ the engine will not be able to save and load your scripts. To generate a new UUI
 [Online UUID Generator](https://www.uuidgenerator.net/) or any other tool that can generate UUIDs.
 - `ComponentProvider` - gives access to inner fields of the script marked with `#[component(include)]` attribute.
 
-`#[visit(optional)]` attribute is used to suppress serialization errors when some fields are missing or changed. 
+- `#[visit(optional)]` attribute is used to suppress serialization errors when some fields are missing or changed. 
 
 ## Script Template Generator
 
