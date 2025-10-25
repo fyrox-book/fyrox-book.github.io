@@ -15,7 +15,7 @@ pub mod bot;
 pub mod projectile;
 pub mod weapon;
 
-#[derive(Visit, Reflect, Default, Debug)]
+#[derive(Visit, Reflect, Default, Debug, Clone)]
 pub struct Game {
     scene: Handle<Scene>,
 }

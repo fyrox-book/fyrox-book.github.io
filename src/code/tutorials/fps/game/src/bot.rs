@@ -1,6 +1,6 @@
 use crate::player::Player;
 use fyrox::core::algebra::UnitQuaternion;
-use fyrox::graph::{BaseSceneGraph, SceneGraph, SceneGraphNode};
+use fyrox::graph::{SceneGraph, SceneGraphNode};
 use fyrox::{
     core::{
         algebra::{Matrix4, Point3, Vector3},
@@ -71,16 +71,16 @@ impl Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_init(&mut self, context: &mut ScriptContext) {
+    fn on_init(&mut self, _context: &mut ScriptContext) {
         // Put initialization logic here.
     }
 
-    fn on_start(&mut self, context: &mut ScriptContext) {
+    fn on_start(&mut self, _context: &mut ScriptContext) {
         // There should be a logic that depends on other scripts in scene.
         // It is called right after **all** scripts were initialized.
     }
 
-    fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
+    fn on_deinit(&mut self, _context: &mut ScriptDeinitContext) {
         // Put de-initialization logic here.
     }
 

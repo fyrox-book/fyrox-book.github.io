@@ -1,6 +1,7 @@
 (
     selection: (
         ignore_back_faces: false,
+        hull_less_object_selection_radius: 0.33,
         track_selection: true,
     ),
     graphics: (
@@ -27,7 +28,7 @@
             ssao_radius: 0.5,
             light_scatter_enabled: true,
             fxaa: true,
-            use_parallax_mapping: false,
+            use_parallax_mapping: true,
             use_bloom: true,
             use_occlusion_culling: false,
             use_light_occlusion_culling: false,
@@ -35,6 +36,7 @@
         z_near: 0.025,
         z_far: 128.0,
         draw_grid: true,
+        gizmo_scale: 1.0,
     ),
     build: (
         selected_profile: 0,
@@ -189,7 +191,7 @@
     ),
     debugging: (
         show_physics: true,
-        show_bounds: false,
+        show_bounds: true,
         show_tbn: false,
         show_terrains: false,
         show_light_bounds: true,
@@ -198,7 +200,7 @@
         save_scene_in_text_form: false,
     ),
     move_mode_settings: (
-        grid_snapping: true,
+        grid_snapping: false,
         x_snap_step: 0.05,
         y_snap_step: 0.05,
         z_snap_step: 0.05,
@@ -214,6 +216,7 @@
     ),
     camera: (
         speed: 10.0,
+        sensitivity: 1.0,
         zoom_speed: 0.5,
         zoom_range: (
             start: 0.0,
@@ -225,15 +228,15 @@
         vertex_radius: 0.2,
     ),
     key_bindings: (
-        move_forward: Some(KeyW),
-        move_back: Some(KeyS),
-        move_left: Some(KeyA),
-        move_right: Some(KeyD),
-        move_up: Some(KeyQ),
-        move_down: Some(KeyE),
-        speed_up: Some(ControlLeft),
-        slow_down: Some(ShiftLeft),
-        undo: Some(
+        move_forward: r#Some(KeyW),
+        move_back: r#Some(KeyS),
+        move_left: r#Some(KeyA),
+        move_right: r#Some(KeyD),
+        move_up: r#Some(KeyE),
+        move_down: r#Some(KeyQ),
+        speed_up: r#Some(ControlLeft),
+        slow_down: r#Some(ShiftLeft),
+        undo: r#Some(
             code: KeyZ,
             modifiers: (
                 alt: false,
@@ -242,7 +245,7 @@
                 system: false,
             ),
         ),
-        redo: Some(
+        redo: r#Some(
             code: KeyY,
             modifiers: (
                 alt: false,
@@ -251,7 +254,7 @@
                 system: false,
             ),
         ),
-        enable_select_mode: Some(
+        enable_select_mode: r#Some(
             code: Digit1,
             modifiers: (
                 alt: false,
@@ -260,7 +263,7 @@
                 system: false,
             ),
         ),
-        enable_move_mode: Some(
+        enable_move_mode: r#Some(
             code: Digit2,
             modifiers: (
                 alt: false,
@@ -269,7 +272,7 @@
                 system: false,
             ),
         ),
-        enable_rotate_mode: Some(
+        enable_rotate_mode: r#Some(
             code: Digit3,
             modifiers: (
                 alt: false,
@@ -278,7 +281,7 @@
                 system: false,
             ),
         ),
-        enable_scale_mode: Some(
+        enable_scale_mode: r#Some(
             code: Digit4,
             modifiers: (
                 alt: false,
@@ -287,7 +290,7 @@
                 system: false,
             ),
         ),
-        enable_navmesh_mode: Some(
+        enable_navmesh_mode: r#Some(
             code: Digit5,
             modifiers: (
                 alt: false,
@@ -296,7 +299,7 @@
                 system: false,
             ),
         ),
-        enable_terrain_mode: Some(
+        enable_terrain_mode: r#Some(
             code: Digit6,
             modifiers: (
                 alt: false,
@@ -305,7 +308,7 @@
                 system: false,
             ),
         ),
-        save_scene: Some(
+        save_scene: r#Some(
             code: KeyS,
             modifiers: (
                 alt: false,
@@ -314,7 +317,7 @@
                 system: false,
             ),
         ),
-        save_scene_as: Some(
+        save_scene_as: r#Some(
             code: KeyS,
             modifiers: (
                 alt: false,
@@ -323,7 +326,7 @@
                 system: false,
             ),
         ),
-        save_all_scenes: Some(
+        save_all_scenes: r#Some(
             code: KeyS,
             modifiers: (
                 alt: true,
@@ -332,7 +335,7 @@
                 system: false,
             ),
         ),
-        load_scene: Some(
+        load_scene: r#Some(
             code: KeyL,
             modifiers: (
                 alt: false,
@@ -341,7 +344,7 @@
                 system: false,
             ),
         ),
-        copy_selection: Some(
+        copy_selection: r#Some(
             code: KeyC,
             modifiers: (
                 alt: false,
@@ -350,7 +353,7 @@
                 system: false,
             ),
         ),
-        paste: Some(
+        paste: r#Some(
             code: KeyV,
             modifiers: (
                 alt: false,
@@ -359,7 +362,7 @@
                 system: false,
             ),
         ),
-        new_scene: Some(
+        new_scene: r#Some(
             code: KeyN,
             modifiers: (
                 alt: false,
@@ -368,7 +371,7 @@
                 system: false,
             ),
         ),
-        close_scene: Some(
+        close_scene: r#Some(
             code: KeyQ,
             modifiers: (
                 alt: false,
@@ -377,7 +380,7 @@
                 system: false,
             ),
         ),
-        remove_selection: Some(
+        remove_selection: r#Some(
             code: Delete,
             modifiers: (
                 alt: false,
@@ -386,7 +389,7 @@
                 system: false,
             ),
         ),
-        focus: Some(
+        focus: r#Some(
             code: KeyF,
             modifiers: (
                 alt: false,
@@ -396,7 +399,7 @@
             ),
         ),
         terrain_key_bindings: (
-            modify_height_map_mode: Some(
+            modify_height_map_mode: r#Some(
                 code: F1,
                 modifiers: (
                     alt: false,
@@ -405,7 +408,7 @@
                     system: false,
                 ),
             ),
-            draw_on_mask_mode: Some(
+            draw_on_mask_mode: r#Some(
                 code: F2,
                 modifiers: (
                     alt: false,
@@ -414,7 +417,7 @@
                     system: false,
                 ),
             ),
-            flatten_slopes_mode: Some(
+            flatten_slopes_mode: r#Some(
                 code: F3,
                 modifiers: (
                     alt: false,
@@ -423,7 +426,7 @@
                     system: false,
                 ),
             ),
-            increase_brush_size: Some(
+            increase_brush_size: r#Some(
                 code: BracketRight,
                 modifiers: (
                     alt: false,
@@ -432,7 +435,7 @@
                     system: false,
                 ),
             ),
-            decrease_brush_size: Some(
+            decrease_brush_size: r#Some(
                 code: BracketLeft,
                 modifiers: (
                     alt: false,
@@ -441,7 +444,7 @@
                     system: false,
                 ),
             ),
-            increase_brush_opacity: Some(
+            increase_brush_opacity: r#Some(
                 code: Period,
                 modifiers: (
                     alt: false,
@@ -450,7 +453,7 @@
                     system: false,
                 ),
             ),
-            decrease_brush_opacity: Some(
+            decrease_brush_opacity: r#Some(
                 code: Comma,
                 modifiers: (
                     alt: false,
@@ -459,7 +462,7 @@
                     system: false,
                 ),
             ),
-            prev_layer: Some(
+            prev_layer: r#Some(
                 code: Semicolon,
                 modifiers: (
                     alt: false,
@@ -468,7 +471,7 @@
                     system: false,
                 ),
             ),
-            next_layer: Some(
+            next_layer: r#Some(
                 code: Quote,
                 modifiers: (
                     alt: false,
@@ -478,7 +481,7 @@
                 ),
             ),
         ),
-        run_game: Some(
+        run_game: r#Some(
             code: F5,
             modifiers: (
                 alt: false,
@@ -489,165 +492,11 @@
         ),
     ),
     scene_settings: {
-        ".\\data\\scene.rgs": (
-            camera_settings: (
-                position: (1.7520006, 2.7795904, 1.2043228),
-                yaw: -1.3899992,
-                pitch: 0.55999947,
-                projection: Perspective((
-                    fov: 1.3089969,
-                    z_near: 0.025,
-                    z_far: 2048.0,
-                )),
-            ),
-            node_infos: {
-                (
-                    index: 5,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 59,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 57,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 58,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 64,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 7,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 14,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 61,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 56,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 13,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 11,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 15,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 12,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "data/effects/bullet_impact.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-                projection: Perspective((
-                    fov: 1.3089969,
-                    z_near: 0.025,
-                    z_far: 128.0,
-                )),
-            ),
-            node_infos: {
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
         "data/scene.rgs": (
             camera_settings: (
-                position: (-2.2837572, 1.6163372, -0.091065586),
-                yaw: 17.520027,
-                pitch: 0.43079647,
+                position: (3.0429707, -1.5831695, -1.9284489),
+                yaw: 1.4599999,
+                pitch: 0.6300001,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
@@ -655,96 +504,6 @@
                 )),
             ),
             node_infos: {
-                (
-                    index: 49,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 62,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 61,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 51,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 64,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 60,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 44,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 58,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 63,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 47,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 53,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 59,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 54,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
                 (
                     index: 1,
                     generation: 1,
@@ -752,63 +511,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 52,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 48,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 46,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 65,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "data/models/bullet.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-                projection: Perspective((
-                    fov: 1.3089969,
-                    z_near: 0.025,
-                    z_far: 128.0,
-                )),
-            ),
-            node_infos: {
-                (
-                    index: 2,
+                    index: 147,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -818,15 +521,13 @@
     },
     recent: (
         scenes: [
-            "data/effects/bullet_impact.rgs",
-            "data/models/bullet.rgs",
             "data/scene.rgs",
         ],
     ),
     windows: (
         window_position: (-8.0, -8.0),
         window_size: (1920.0, 1017.0),
-        window_maximized: false,
+        window_maximized: true,
         layout: None,
     ),
 )

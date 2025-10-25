@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "416fcabf3180b1906ef04563f533417ecddb1674" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "416fcabf3180b1906ef04563f533417ecddb1674" }
+fyrox = "1.0.0-rc.1"
+fyroxed_base = "1.0.0-rc.1"
 strum = "0.27"
 strum_macros = "0.27"
 serde = "1"
