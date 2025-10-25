@@ -14529,6 +14529,7 @@ for shooting in <code>weapon.rs</code>:</p>
 </span><span class="boring">fn main() {
 </span>#[derive(Debug)]
 pub struct ShootWeaponMessage {}
+impl ScriptMessagePayload for ShootWeaponMessage {}
 <span class="boring">}</span></code></pre></pre>
 <p>To actually be able to receive this message, we need to explicitly "subscribe" out script to it. Add the following code
 to the <code>on_start</code> method:</p>

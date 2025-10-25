@@ -1,4 +1,4 @@
-use fyrox::graph::{BaseSceneGraph, SceneGraph};
+use fyrox::graph::SceneGraph;
 use fyrox::{
     core::{
         math, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
@@ -36,6 +36,7 @@ pub struct Weapon {
 // ANCHOR: shoot_message
 #[derive(Debug)]
 pub struct ShootWeaponMessage {}
+impl ScriptMessagePayload for ShootWeaponMessage {}
 // ANCHOR_END: shoot_message
 
 impl ScriptTrait for Weapon {
