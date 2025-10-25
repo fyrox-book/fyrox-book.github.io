@@ -9,7 +9,7 @@ use fyrox::{
         variable::InheritableVariable,
         visitor::prelude::*,
     },
-    graph::{BaseSceneGraph, SceneGraph},
+    graph::SceneGraph,
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{

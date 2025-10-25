@@ -13112,6 +13112,7 @@ use fyrox::{
         visitor::prelude::*,
     },
     event::{ElementState, Event, WindowEvent},
+    graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
@@ -13441,7 +13442,7 @@ use fyrox::{
         variable::InheritableVariable,
         visitor::prelude::*,
     },
-    graph::{BaseSceneGraph, SceneGraph},
+    graph::SceneGraph,
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{

@@ -14,6 +14,7 @@ use fyrox::{
         visitor::prelude::*,
     },
     event::{ElementState, Event, WindowEvent},
+    graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{
@@ -27,7 +28,7 @@ use fyrox::{
 use std::path::Path;
 // ANCHOR_END: imports
 
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Reflect, Debug, Default, Clone)]
 pub struct Game {
     scene: Handle<Scene>,
 
