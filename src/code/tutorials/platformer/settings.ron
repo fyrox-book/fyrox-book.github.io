@@ -1,6 +1,7 @@
 (
     selection: (
         ignore_back_faces: false,
+        hull_less_object_selection_radius: 0.33,
         track_selection: true,
     ),
     graphics: (
@@ -26,7 +27,7 @@
             use_ssao: true,
             ssao_radius: 0.5,
             light_scatter_enabled: true,
-            fxaa: false,
+            fxaa: true,
             use_parallax_mapping: true,
             use_bloom: true,
             use_occlusion_culling: false,
@@ -35,6 +36,7 @@
         z_near: 0.025,
         z_far: 128.0,
         draw_grid: true,
+        gizmo_scale: 1.0,
     ),
     build: (
         selected_profile: 0,
@@ -214,6 +216,7 @@
     ),
     camera: (
         speed: 10.0,
+        sensitivity: 1.0,
         zoom_speed: 0.5,
         zoom_range: (
             start: 0.0,
@@ -225,15 +228,15 @@
         vertex_radius: 0.2,
     ),
     key_bindings: (
-        move_forward: Some(KeyW),
-        move_back: Some(KeyS),
-        move_left: Some(KeyA),
-        move_right: Some(KeyD),
-        move_up: Some(KeyQ),
-        move_down: Some(KeyE),
-        speed_up: Some(ControlLeft),
-        slow_down: Some(ShiftLeft),
-        undo: Some(
+        move_forward: r#Some(KeyW),
+        move_back: r#Some(KeyS),
+        move_left: r#Some(KeyA),
+        move_right: r#Some(KeyD),
+        move_up: r#Some(KeyE),
+        move_down: r#Some(KeyQ),
+        speed_up: r#Some(ControlLeft),
+        slow_down: r#Some(ShiftLeft),
+        undo: r#Some(
             code: KeyZ,
             modifiers: (
                 alt: false,
@@ -242,7 +245,7 @@
                 system: false,
             ),
         ),
-        redo: Some(
+        redo: r#Some(
             code: KeyY,
             modifiers: (
                 alt: false,
@@ -251,7 +254,7 @@
                 system: false,
             ),
         ),
-        enable_select_mode: Some(
+        enable_select_mode: r#Some(
             code: Digit1,
             modifiers: (
                 alt: false,
@@ -260,7 +263,7 @@
                 system: false,
             ),
         ),
-        enable_move_mode: Some(
+        enable_move_mode: r#Some(
             code: Digit2,
             modifiers: (
                 alt: false,
@@ -269,7 +272,7 @@
                 system: false,
             ),
         ),
-        enable_rotate_mode: Some(
+        enable_rotate_mode: r#Some(
             code: Digit3,
             modifiers: (
                 alt: false,
@@ -278,7 +281,7 @@
                 system: false,
             ),
         ),
-        enable_scale_mode: Some(
+        enable_scale_mode: r#Some(
             code: Digit4,
             modifiers: (
                 alt: false,
@@ -287,7 +290,7 @@
                 system: false,
             ),
         ),
-        enable_navmesh_mode: Some(
+        enable_navmesh_mode: r#Some(
             code: Digit5,
             modifiers: (
                 alt: false,
@@ -296,7 +299,7 @@
                 system: false,
             ),
         ),
-        enable_terrain_mode: Some(
+        enable_terrain_mode: r#Some(
             code: Digit6,
             modifiers: (
                 alt: false,
@@ -305,7 +308,7 @@
                 system: false,
             ),
         ),
-        save_scene: Some(
+        save_scene: r#Some(
             code: KeyS,
             modifiers: (
                 alt: false,
@@ -314,7 +317,7 @@
                 system: false,
             ),
         ),
-        save_scene_as: Some(
+        save_scene_as: r#Some(
             code: KeyS,
             modifiers: (
                 alt: false,
@@ -323,7 +326,7 @@
                 system: false,
             ),
         ),
-        save_all_scenes: Some(
+        save_all_scenes: r#Some(
             code: KeyS,
             modifiers: (
                 alt: true,
@@ -332,7 +335,7 @@
                 system: false,
             ),
         ),
-        load_scene: Some(
+        load_scene: r#Some(
             code: KeyL,
             modifiers: (
                 alt: false,
@@ -341,7 +344,7 @@
                 system: false,
             ),
         ),
-        copy_selection: Some(
+        copy_selection: r#Some(
             code: KeyC,
             modifiers: (
                 alt: false,
@@ -350,7 +353,7 @@
                 system: false,
             ),
         ),
-        paste: Some(
+        paste: r#Some(
             code: KeyV,
             modifiers: (
                 alt: false,
@@ -359,7 +362,7 @@
                 system: false,
             ),
         ),
-        new_scene: Some(
+        new_scene: r#Some(
             code: KeyN,
             modifiers: (
                 alt: false,
@@ -368,7 +371,7 @@
                 system: false,
             ),
         ),
-        close_scene: Some(
+        close_scene: r#Some(
             code: KeyQ,
             modifiers: (
                 alt: false,
@@ -377,7 +380,7 @@
                 system: false,
             ),
         ),
-        remove_selection: Some(
+        remove_selection: r#Some(
             code: Delete,
             modifiers: (
                 alt: false,
@@ -386,7 +389,7 @@
                 system: false,
             ),
         ),
-        focus: Some(
+        focus: r#Some(
             code: KeyF,
             modifiers: (
                 alt: false,
@@ -396,7 +399,7 @@
             ),
         ),
         terrain_key_bindings: (
-            modify_height_map_mode: Some(
+            modify_height_map_mode: r#Some(
                 code: F1,
                 modifiers: (
                     alt: false,
@@ -405,7 +408,7 @@
                     system: false,
                 ),
             ),
-            draw_on_mask_mode: Some(
+            draw_on_mask_mode: r#Some(
                 code: F2,
                 modifiers: (
                     alt: false,
@@ -414,7 +417,7 @@
                     system: false,
                 ),
             ),
-            flatten_slopes_mode: Some(
+            flatten_slopes_mode: r#Some(
                 code: F3,
                 modifiers: (
                     alt: false,
@@ -423,7 +426,7 @@
                     system: false,
                 ),
             ),
-            increase_brush_size: Some(
+            increase_brush_size: r#Some(
                 code: BracketRight,
                 modifiers: (
                     alt: false,
@@ -432,7 +435,7 @@
                     system: false,
                 ),
             ),
-            decrease_brush_size: Some(
+            decrease_brush_size: r#Some(
                 code: BracketLeft,
                 modifiers: (
                     alt: false,
@@ -441,7 +444,7 @@
                     system: false,
                 ),
             ),
-            increase_brush_opacity: Some(
+            increase_brush_opacity: r#Some(
                 code: Period,
                 modifiers: (
                     alt: false,
@@ -450,7 +453,7 @@
                     system: false,
                 ),
             ),
-            decrease_brush_opacity: Some(
+            decrease_brush_opacity: r#Some(
                 code: Comma,
                 modifiers: (
                     alt: false,
@@ -459,7 +462,7 @@
                     system: false,
                 ),
             ),
-            prev_layer: Some(
+            prev_layer: r#Some(
                 code: Semicolon,
                 modifiers: (
                     alt: false,
@@ -468,7 +471,7 @@
                     system: false,
                 ),
             ),
-            next_layer: Some(
+            next_layer: r#Some(
                 code: Quote,
                 modifiers: (
                     alt: false,
@@ -478,7 +481,7 @@
                 ),
             ),
         ),
-        run_game: Some(
+        run_game: r#Some(
             code: F5,
             modifiers: (
                 alt: false,
@@ -489,257 +492,29 @@
         ),
     ),
     scene_settings: {
-        "\\\\?\\D:\\RustEngine\\fyrox-book.github.io\\src\\code\\tutorials\\platformer\\data\\characters\\skeleton.rgs": (
-            camera_settings: (
-                position: (0.0, 0.08333321, -3.0),
-                yaw: 0.4700005,
-                pitch: 1.5407964,
-                projection: Perspective((
-                    fov: 1.3089969,
-                    z_near: 0.025,
-                    z_far: 2048.0,
-                )),
-            ),
-            node_infos: {
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "data/characters/skeleton.rgs": (
-            camera_settings: (
-                position: (0.40135893, 0.38078198, 1.2874793),
-                yaw: 0.09999878,
-                pitch: -0.00079720095,
-                projection: Perspective((
-                    fov: 1.3089969,
-                    z_near: 0.025,
-                    z_far: 2048.0,
-                )),
-            ),
-            node_infos: {
-                (
-                    index: 47,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 44,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 48,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 5,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
         "data/scene.rgs": (
             camera_settings: (
-                position: (-1.7239449, -2.8284836, -0.89434147),
-                yaw: 0.009202758,
-                pitch: 0.53999996,
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
                     z_far: 128.0,
                 )),
             ),
-            node_infos: {
-                (
-                    index: 127,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 122,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 155,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 172,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 123,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 164,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 41,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 170,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 15,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 40,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 54,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 52,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 165,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 124,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 53,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 129,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 126,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
+            node_infos: {},
         ),
     },
     recent: (
         scenes: [
-            "data/characters/skeleton.rgs",
             "data/scene.rgs",
         ],
     ),
     windows: (
         window_position: (-8.0, -8.0),
         window_size: (1920.0, 1017.0),
-        window_maximized: false,
+        window_maximized: true,
         layout: None,
     ),
 )
