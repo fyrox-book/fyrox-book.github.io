@@ -21,21 +21,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="../../favicon.svg">
-        <link rel="shortcut icon" href="../../favicon.png">
-        <link rel="stylesheet" href="../../css/variables.css">
-        <link rel="stylesheet" href="../../css/general.css">
-        <link rel="stylesheet" href="../../css/chrome.css">
-        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <link rel="icon" href="../../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../../css/general-2459343d.css">
+        <link rel="stylesheet" href="../../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <link rel="stylesheet" href="../../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="../../highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="../../tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="../../ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -47,10 +46,10 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex.js";
+            window.path_to_searchindex_js = "../../searchindex-2383a967.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc.js"></script>
+        <script src="../../toc-025265cf.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -64,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -93,12 +92,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -113,39 +112,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -153,44 +152,44 @@
 
                     <div class="right-buttons">
                         <a href="../../print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
-                            <i id="git-repository-button" class="fa fa-github"></i>
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/tutorials/platformer/part1.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
-                            <i id="git-edit-button" class="fa fa-edit"></i>
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="character-controller"><a class="header" href="#character-controller">Character Controller</a></h1>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
@@ -208,19 +207,19 @@
 </li>
 </ul>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
-<p>In this tutorial, we'll make a character controller for our 2D platformer. Here's what you'll get after finishing the tutorial:</p>
-<iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>In this tutorial, we’ll make a character controller for our 2D platformer. Here’s what you’ll get after finishing the tutorial:</p>
+<iframe width="560" height="315" src="https://youtube.com/embed/EcvtwEkBxNU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 <p>You can find the source code of the tutorial <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer">here</a>, you can
 test it yourself by cloning the repository and <code>cargo run --package editor --release</code> in the <code>platformer</code> directory.</p>
 <h2 id="project"><a class="header" href="#project">Project</a></h2>
-<p>Let's start by making a new project using the special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
+<p>Let’s start by making a new project using the special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
 parts in a single call. Install it using the following command:</p>
 <pre><code class="language-shell">cargo install fyrox-template
 </code></pre>
 <p>Navigate to a folder where you want the project to be created and do the following command:</p>
 <pre><code class="language-shell">fyrox-template init --name platformer --style 2d
 </code></pre>
-<p>The tool accepts two arguments - project name and a style, we're interested in 2D game so the style is set to 2D. After
+<p>The tool accepts two arguments - project name and a style, we’re interested in 2D game so the style is set to 2D. After
 the project is generated, you should memorize two commands:</p>
 <ul>
 <li><code>cargo run --package editor --release</code> - launches the editor with your game attached, the editor allows you to run your game
@@ -229,28 +228,28 @@ inside it and edit game entities. It is intended to be used only for development
 example - to a store).</li>
 </ul>
 <p>Navigate to the <code>platformer</code> directory and run <code>cargo run --package editor --release</code>, after some time you should see the editor:</p>
-<p><img src="editor.png" alt="editor" /></p>
+<p><img src="editor.png" alt="editor"></p>
 <p>Great! Now we can start making our game. Go to <code>game/src/lib.rs</code> - it is where your game logic is located, as you can see
 the <code>fyrox-template</code> generate quite some code for you. There are tiny comments about which place is for what. For more info
 about each method, please refer <a href="https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
 <h2 id="using-the-editor"><a class="header" href="#using-the-editor">Using the Editor</a></h2>
-<p>For now, we don't even need to write a single line of code, we can create a scene entirely in the editor. This section will guide
-you through the process of scene creation, as a final result we'll get something similar to this:</p>
-<p><img src="editor_with_scene.png" alt="editor with scene" /></p>
-<p>At first, we need some assets, I prepared all required (and some more) in a separate zip archive, so you don't need to search
+<p>For now, we don’t even need to write a single line of code, we can create a scene entirely in the editor. This section will guide
+you through the process of scene creation, as a final result we’ll get something similar to this:</p>
+<p><img src="editor_with_scene.png" alt="editor with scene"></p>
+<p>At first, we need some assets, I prepared all required (and some more) in a separate zip archive, so you don’t need to search
 assets all over the internet. Download assets from <a href="assets.zip">here</a> and unpack them in a <code>data</code> folder in the root folder of
 your project.</p>
-<p>Let's start filling the scene. Run the editor and remove all content from the generated scene. Since we're making a 2D game, switch the editor's
+<p>Let’s start filling the scene. Run the editor and remove all content from the generated scene. Since we’re making a 2D game, switch the editor’s
 camera mode to <code>2D</code> at the top toolbar of the scene preview window. Now we need to populate the scene with some objects,
-we'll start by adding a simple ground block. Right-click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select
+we’ll start by adding a simple ground block. Right-click on <code>__ROOT__</code> of the scene in <code>World Viewer</code> and select
 <code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body, and
-set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we're telling the physics engine that our ground block should not move
+set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we’re telling the physics engine that our ground block should not move
 and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions,
-right-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We've just added a new collider to the rigid
+right-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We’ve just added a new collider to the rigid
 body, by default it has a <code>Cuboid</code> shape with a <code>1.0</code> meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>. This adds a simple 2D sprite, select it and set a texture
 to it by finding the <code>Material</code> property in the Inspector, clicking <code>Edit</code> button near it and setting the <code>diffuseTexture</code>
-property by simply drag'n'dropping the texture from the asset browser to the property. For my scene, I'm gonna be using
+property by simply drag’n’dropping the texture from the asset browser to the property. For my scene, I’m gonna be using
 three sprites.</p>
 <ul>
 <li><code>data/tiles/13.png</code> - left ground block</li>
@@ -258,34 +257,34 @@ three sprites.</p>
 <li><code>data/tiles/15.png</code> - right ground block</li>
 </ul>
 <p>You can use any other textures and build your level as you like. After doing all these steps you should get something like this:</p>
-<p><img src="editor_step1.png" alt="editor_step1" /></p>
+<p><img src="editor_step1.png" alt="editor_step1"></p>
 <p>Clone the block by selecting its rigid body and pressing <code>Ctrl+C</code> followed by <code>Ctrl+V</code>, navigate to sprite in the copy and change its
 texture to either the left or right end of the block. Use <code>Move Tool</code> to move the block somewhere you like (you can also use grid-snapping
 by going to <code>File -&gt; Setting</code> and setting <code>Snap To Grid</code> for <code>Move Interaction Mode</code>). Do this one more time for the opposite end and you
 should get something like this:</p>
-<p><img src="editor_step2.png" alt="editor_step2" /></p>
+<p><img src="editor_step2.png" alt="editor_step2"></p>
 <p>Repeat these steps if you like, to add more platforms. You can also add some background objects, by creating a new sprite
 (right click <code>__ROOT__</code> and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>) and assigning a texture to it:</p>
-<p><img src="editor_step3.png" alt="editor_step3" /></p>
-<p>As the last step of world editing, let's add some dynamic objects, like boxes. Pick some random ground block, select its rigid body, and
-clone it. Switch body type of the copy to <code>Dynamic</code>. Now change its sprite texture to a box (drag'n'drop <code>data/objects/Crate.png</code> to
+<p><img src="editor_step3.png" alt="editor_step3"></p>
+<p>As the last step of world editing, let’s add some dynamic objects, like boxes. Pick some random ground block, select its rigid body, and
+clone it. Switch body type of the copy to <code>Dynamic</code>. Now change its sprite texture to a box (drag’n’drop <code>data/objects/Crate.png</code> to
 <code>Texture</code> field) and clone the box a few times, you should get something like this:</p>
-<p><img src="editor_step4.png" alt="editor_step4" /></p>
-<p>Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
+<p><img src="editor_step4.png" alt="editor_step4"></p>
+<p>Now for the player. As always, let’s start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - <code>Begin = 0.0, 0.0</code> and <code>End = 0.0, 0.3</code>. Add a 2D sprite (rectangle) to the rigid body and set its texture to
 <code>data/characters/adventurer/adventurer-Sheet.png</code>. Set its uv rect to <code>(0.0, 0.0, 0.143, 0.091)</code> to see only one frame.
-We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our
-camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
-and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag'n'drop it to
-the <code>Front</code> field of the <code>Skybox</code> property. Don't forget to adjust the far plane distance to something like <code>20.0</code>,
-otherwise, you'll see just a portion of the background image. If everything is done correctly, you should get something like this:</p>
-<p><img src="editor_step5.png" alt="editor_step5" /></p>
+We also need a camera, otherwise, we won’t see anything. Add it as a child to a player’s rigid body. By default, our
+camera will have no background, there’ll be a black “void”, this is not great and let’s fix that. Select the camera
+and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag’n’drop it to
+the <code>Front</code> field of the <code>Skybox</code> property. Don’t forget to adjust the far plane distance to something like <code>20.0</code>,
+otherwise, you’ll see just a portion of the background image. If everything is done correctly, you should get something like this:</p>
+<p><img src="editor_step5.png" alt="editor_step5"></p>
 <p>Save your scene by goint to <code>File -&gt; Save Scene</code>. Now we can run the game using the <code>Play/Stop</code> button at the top of the
 scene previewer. You should see pretty much the same as in the scene preview, except
 for service graphics, such as rigid body shapes, node bounds, and so on. Now we can start writing scripts.</p>
-<p>As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
+<p>As the last preparation step, let’s import all entities at the beginning, so you don’t need to find them manually, add the following code
 at the beginning of the <code>game/src/lib.rs</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::bot::Bot;
 use fyrox::{
@@ -309,11 +308,11 @@ use fyrox::{
     script::{ScriptContext, ScriptTrait},
 };
 use std::path::Path;
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="scripts---player"><a class="header" href="#scripts---player">Scripts - Player</a></h2>
-<p>Our scene has pretty much everything we need to start adding scripts, we'll start from the <code>Player</code> script and make our character
+<p>Our scene has pretty much everything we need to start adding scripts, we’ll start from the <code>Player</code> script and make our character
 move. Navigate to <code>game/src/lib.rs</code> and at the end of the file add the following code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, Default, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
@@ -333,21 +332,21 @@ impl ScriptTrait for Player {
     // Called every frame at fixed rate of 60 FPS.
     fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {}
 }
-<span class="boring">}</span></code></pre></pre>
-<p>This is a typical "skeleton" of any script, for now, its methods are pretty much empty, we'll fill it with actual code very soon.
-Let's go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone, Default)]</code>
+<span class="boring">}</span></code></pre>
+<p>This is a typical “skeleton” of any script, for now, its methods are pretty much empty, we’ll fill it with actual code very soon.
+Let’s go over the most important parts. The snippet starts from the <code>Player</code> structure definition which has <code>#[derive(Visit, Inspect, Debug, Clone, Default)]</code>
 attributes:</p>
 <ul>
 <li><code>Visit</code> - implements serialization/deserialization functionality, it is used by the editor to save your object to a scene file.</li>
-<li><code>Inspect</code> - generates metadata for the fields of your type - in other words, it allows the editor to "see" what's inside
+<li><code>Inspect</code> - generates metadata for the fields of your type - in other words, it allows the editor to “see” what’s inside
 your structure and show additional information attached to the fields via proc-macro attributes.</li>
 <li><code>Reflect</code> - implements compile-time reflection that allows the editor to mutate your objects.</li>
 <li><code>Debug</code> - provides debugging functionality, it is mostly for the editor to let it print stuff into the console.</li>
 <li><code>Clone</code> - makes your structure clone-able, why do we need this? We can clone objects, and we also want the script instance to be
 copied.</li>
 <li><code>Default</code> implementation is very important - the scripting system uses it to create your scripts in the default state.
-This is necessary to set some data to it and so on. If it's a special case, you can always implement your own <code>Default</code>'s
-implementation if it's necessary for your script.</li>
+This is necessary to set some data to it and so on. If it’s a special case, you can always implement your own <code>Default</code>’s
+implementation if it’s necessary for your script.</li>
 <li><code>TypeUuidProvider</code> is used to attach some unique id for your type, every script *<em>must</em> have a unique ID, otherwise, the engine will
 not be able to save and load your scripts. To generate a new UUID, use <a href="https://www.uuidgenerator.net/">Online UUID Generator</a> or
 any other tool that can generate UUIDs.</li>
@@ -357,22 +356,22 @@ every method in <a href="https://docs.rs/fyrox/latest/fyrox/script/trait.ScriptT
 <p>Before we can use the script in the editor, we must tell the engine that our script exists - we must register it. Remember that
 <code>register</code> method in the <code>PluginConstructor</code> trait implementation? It is exactly for script registration, replace its implementation with the following
 code snippet:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Plugin for Game {
     fn register(&amp;self, context: PluginRegistrationContext) {
         let script_constructors = &amp;context.serialization_context.script_constructors;
         script_constructors.add::&lt;Player&gt;("Player");
         // ...
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Now the engine knows about our script and will be able to use it. It is pretty much useless in the current state, but we can already
-assign it to the player. Select the player's rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from the respective
-drop-down list and that's pretty much it - now the script is assigned:</p>
-<p><img src="script_selection.png" alt="script_selection" /></p>
-<p>Let's learn how to edit script properties from the editor. In the next section, we'll be adding keyframe animation for your character,
+assign it to the player. Select the player’s rigid body node and find <code>Script</code> in the <code>Inspector</code>, select <code>Player</code> from the respective
+drop-down list and that’s pretty much it - now the script is assigned:</p>
+<p><img src="script_selection.png" alt="script_selection"></p>
+<p>Let’s learn how to edit script properties from the editor. In the next section, we’ll be adding keyframe animation for your character,
 it is a perfect opportunity to learn how the engine and the editor operate with user-defined properties in scripts. To animate the player
-we need to get its sprite first. Let's start by adding the required field in the <code>Player</code> structure:</p>
-<pre><pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
+we need to get its sprite first. Let’s start by adding the required field in the <code>Player</code> structure:</p>
+<pre class="playground"><code class="language-rust no_run compile_fail"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
@@ -380,21 +379,21 @@ we need to get its sprite first. Let's start by adding the required field in the
 struct Player {
     sprite: Handle&lt;Node&gt;,
     // ... 
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector.
 To assign the correct handle of the sprite to the respective field in script properties, hold <code>Alt</code> and start dragging
 the sprite node from the world viewer to the respective field in the player script. Release the mouse button and if
-everything is ok, the field should "say" something different than "Unassigned".</p>
+everything is ok, the field should “say” something different than “Unassigned”.</p>
 <p>Alright, at this point we know how to work with script properties, now we can start adding basic movement for the player.
 Go to the <code>Player</code> structure and add the following fields:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    move_left: bool,
     move_right: bool,
     jump: bool,
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>These fields will store the state of keyboard keys responsible for player movement. Now for <code>on_os_event</code>, add the following code there:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    // Called everytime when there is an event from OS (mouse click, key press, etc.)
     fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: &amp;mut ScriptContext) {
@@ -413,10 +412,10 @@ Go to the <code>Player</code> structure and add the following fields:</p>
             }
         }
     }
-<span class="boring">}</span></code></pre></pre>
-<p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it's time for
+<span class="boring">}</span></code></pre>
+<p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it’s time for
 <code>on_update</code>. The method is called each frame and allows you to put game logic there:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
         // The script can be assigned to any scene node, but we assert that it will work only with
@@ -438,17 +437,17 @@ Go to the <code>Player</code> structure and add the following fields:</p>
             // ...
         }
     }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
-we're checking movement flags and form horizontal speed, and applying velocity to the body. Velocity is applied in two ways: if
-the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If the jump button wasn't pressed -
+we’re checking movement flags and form horizontal speed, and applying velocity to the body. Velocity is applied in two ways: if
+the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If the jump button wasn’t pressed -
 just change horizontal velocity - this will allow the player to free fall.</p>
 <p>Run the editor and enter play mode, press <code>[A][D][Space]</code> buttons to check if everything works correctly - the player should move
 horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge.</p>
-<p>The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite the lack of animation),
-but if we'll move to the right - it looks like the player moves backward. Let's fix that by changing the horizontal scaling of the player's
+<p>The movement is working, but the player does not change orientation, if we’ll go to the left - it looks ok (despite the lack of animation),
+but if we’ll move to the right - it looks like the player moves backward. Let’s fix that by changing the horizontal scaling of the player’s
 sprite. Add the following code at the end of the <code>if let ...</code> block of the code above:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>            // It is always a good practice to check whether the handles are valid, at this point we don't know
             // for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
@@ -468,22 +467,22 @@ sprite. Add the following code at the end of the <code>if let ...</code> block o
                     ));
                 }
             }
-<span class="boring">}</span></code></pre></pre>
-<p>The comments should clarify what's going on here, but in short, we're changing the horizontal scaling of the player's sprite if the player is
+<span class="boring">}</span></code></pre>
+<p>The comments should clarify what’s going on here, but in short, we’re changing the horizontal scaling of the player’s sprite if the player is
 moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces the sign of current horizontal scaling
 using the opposite sign of <code>x_speed</code>.</p>
-<p>Now if you run the game, the player will "look" in correct direction depending on the velocity vector.</p>
+<p>Now if you run the game, the player will “look” in correct direction depending on the velocity vector.</p>
 <h2 id="animation"><a class="header" href="#animation">Animation</a></h2>
-<p>Since we're making a 2D game, we'll be using simple animations based on the continuous change of keyframes. In other words, we'll be changing
-the texture of the player's body sprite. Luckily for us, the engine has built-in sprite sheet animations. Just add the
+<p>Since we’re making a 2D game, we’ll be using simple animations based on the continuous change of keyframes. In other words, we’ll be changing
+the texture of the player’s body sprite. Luckily for us, the engine has built-in sprite sheet animations. Just add the
 following fields to the <code>Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    animations: Vec&lt;SpriteSheetAnimation&gt;,
     current_animation: u32,
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Currently, we just pass default values.</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Default for Player {
     fn default() -&gt; Self {
@@ -494,21 +493,21 @@ following fields to the <code>Player</code>:</p>
         }
     }
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The Player will use multiple animations in future tutorials, but for now, it will use only two - idle and run.
 Now we need to somehow switch animations. Go to <code>on_update</code> in <code>Player</code> and add the following lines after
 the <code>x_speed</code> declaration:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>            if x_speed != 0.0 {
                 self.current_animation = 0;
             } else {
                 self.current_animation = 1;
             }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Here we assume that the run animation will be at index <code>1</code> and the idle animation at index <code>0</code>. We also need to
-apply the texture from the current animation to the player's sprite, and add the following lines at the end of <code>on_update</code></p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+apply the texture from the current animation to the player’s sprite, and add the following lines at the end of <code>on_update</code></p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
             current_animation.update(context.dt);
@@ -531,17 +530,17 @@ apply the texture from the current animation to the player's sprite, and add the
                 );
             }
         }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,
-and if we're succeeded, we update it. At the next step, we're getting sprite and assigning a current frame of
+and if we’re succeeded, we update it. At the next step, we’re getting sprite and assigning a current frame of
 the current animation.</p>
-<p>Now we need to go to the editor again and add the animations to the <code>Player</code>, select the player's rigid body, and
+<p>Now we need to go to the editor again and add the animations to the <code>Player</code>, select the player’s rigid body, and
 find the <code>Script</code> section in the <code>Inspector</code>. Add two animations there like so:</p>
-<p><img src="editor_step6.png" alt="editor_step6" /></p>
+<p><img src="editor_step6.png" alt="editor_step6"></p>
 <p>After filling in the animations and turning them on, you can run the game and your character should play animations
 correctly.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this tutorial, we've learned the basics of the new scripting system of the engine. The game we've built it very
+<p>In this tutorial, we’ve learned the basics of the new scripting system of the engine. The game we’ve built it very
 simple, but it is just the beginning. It is easy to add more scripts for enemies, weapons, collectible items, and so on.</p>
 
                     </main>
@@ -549,11 +548,11 @@ simple, but it is just the beginning. It is easy to add more scripts for enemies
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="../../tutorials/platformer/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
                             <a rel="next prefetch" href="../../tutorials/platformer/part2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -563,16 +562,21 @@ simple, but it is just the beginning. It is easy to add more scripts for enemies
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="../../tutorials/platformer/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
                     <a rel="next prefetch" href="../../tutorials/platformer/part2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
         <script>
@@ -583,19 +587,19 @@ simple, but it is just the beginning. It is easy to add more scripts for enemies
             window.playground_copyable = true;
         </script>
 
-        <script src="../../ace.js"></script>
-        <script src="../../mode-rust.js"></script>
-        <script src="../../editor.js"></script>
-        <script src="../../theme-dawn.js"></script>
-        <script src="../../theme-tomorrow_night.js"></script>
+        <script src="../../ace-2a3cd908.js"></script>
+        <script src="../../mode-rust-2c9d5c9a.js"></script>
+        <script src="../../editor-16ca416c.js"></script>
+        <script src="../../theme-dawn-4493f9c8.js"></script>
+        <script src="../../theme-tomorrow_night-9dbe62a9.js"></script>
 
-        <script src="../../elasticlunr.min.js"></script>
-        <script src="../../mark.min.js"></script>
-        <script src="../../searcher.js"></script>
+        <script src="../../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../../mark-09e88c2c.min.js"></script>
+        <script src="../../searcher-c2a407aa.js"></script>
 
-        <script src="../../clipboard.min.js"></script>
-        <script src="../../highlight.js"></script>
-        <script src="../../book.js"></script>
+        <script src="../../clipboard-1626706a.min.js"></script>
+        <script src="../../highlight-abc7f01d.js"></script>
+        <script src="../../book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 

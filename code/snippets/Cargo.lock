@@ -1406,8 +1406,7 @@ dependencies = [
 [[package]]
 name = "fyrox"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41cb10b9303ad6cbcda1339840420f5887d4e027786fadb62b3b5a9fd5edaace"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fyrox-impl",
 ]
@@ -1415,8 +1414,7 @@ dependencies = [
 [[package]]
 name = "fyrox-animation"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3385a82e986f84bc0fc256341f907082c19b1ac24816d3dffcfbeaccc05c5a3"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1429,8 +1427,7 @@ dependencies = [
 [[package]]
 name = "fyrox-autotile"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef62b36e2977a8d283e9df453323168e0ac69cdee6568c75b4c8754f760eb8f6"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fxhash",
  "nalgebra 0.34.1",
@@ -1452,8 +1449,7 @@ dependencies = [
 [[package]]
 name = "fyrox-build-tools"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b1826f90b01553807663d46f4ad130e696eaf6c66ee0ad40126fb05916ac51a"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fyrox-core",
  "fyrox-resource",
@@ -1464,8 +1460,7 @@ dependencies = [
 [[package]]
 name = "fyrox-core"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ec14e01c1afa0cce76b4bba9354694106c208cc276f8b2bf2a38d46a2c2888c"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "android-activity",
  "arrayvec",
@@ -1477,7 +1472,7 @@ dependencies = [
  "futures",
  "fxhash",
  "fyrox-core-derive",
- "fyrox-math",
+ "fyrox-math 1.0.0-rc.1 (git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6)",
  "instant",
  "js-sys",
  "lazy_static",
@@ -1500,8 +1495,7 @@ dependencies = [
 [[package]]
 name = "fyrox-core-derive"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1061fc2ed02a7facd0af769ea3da717e47fb817fa73743e2560cc6afe3ec649"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "convert_case",
  "darling",
@@ -1514,8 +1508,7 @@ dependencies = [
 [[package]]
 name = "fyrox-graph"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77f2cfcfd83e905d0ccd1c6bd873d901e58bac6056a223a8d518cfc00401d874"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1525,8 +1518,7 @@ dependencies = [
 [[package]]
 name = "fyrox-graphics"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c6daf3e6ff8dffd22c6b6aedcb2dec6ef64d994ae74604b3650b72418fbe9cd"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "bytemuck",
  "fyrox-core",
@@ -1538,8 +1530,7 @@ dependencies = [
 [[package]]
 name = "fyrox-graphics-gl"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b3e39b9ee37b6365e9cb827f9d20ff03e922adad04fc1edda13a28a9050e4f0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1557,8 +1548,7 @@ dependencies = [
 [[package]]
 name = "fyrox-impl"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0705a801124d0c8d8f2389e8f91163a7bea2fdaf77bc15c17b7ba3888d75b51d"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "approx",
  "base64",
@@ -1612,8 +1602,7 @@ dependencies = [
 [[package]]
 name = "fyrox-material"
 version = "1.0.0-rc.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "234db9a2cab8c9d7682cd4f0d2ed7c75cd4b25a4c69cc7e4878d19c65129ed33"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1644,10 +1633,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "fyrox-math"
+version = "1.0.0-rc.1"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+dependencies = [
+ "arrayvec",
+ "bytemuck",
+ "nalgebra 0.34.1",
+ "num-traits",
+ "rectutils",
+ "uuid",
+]
+
+[[package]]
 name = "fyrox-resource"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c18588c8b855b2e3a062fac227979ef57cb95642fc7b84392bb160f0f01b308"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1660,8 +1661,7 @@ dependencies = [
 [[package]]
 name = "fyrox-sound"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c69bbd7902c619632a71f166ea8de20ac36b8ea2125b06c1b3f4372d959a8055"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "fyrox-core",
  "fyrox-resource",
@@ -1677,8 +1677,7 @@ dependencies = [
 [[package]]
 name = "fyrox-texture"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "36ab41f95e4b185949d5444c3337ce79f8ef88b6b715c672689f4d59b5a800f9"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "ddsfile",
  "fast_image_resize",
@@ -1696,8 +1695,7 @@ dependencies = [
 [[package]]
 name = "fyrox-ui"
 version = "1.0.0-rc.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62c9663a0a7d878768c27d373024f19dcbb2d9961a3c20a104bf2df0e20e1fbc"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "bytemuck",
  "copypasta",
@@ -1722,8 +1720,7 @@ dependencies = [
 [[package]]
 name = "fyroxed_base"
 version = "1.0.0-rc.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f9152570d59d772d7ccd3903209970309d7aa6e56cb70386b5ee380225649f10"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
 dependencies = [
  "bitflags 2.10.0",
  "cargo_metadata",
@@ -2522,7 +2519,7 @@ checksum = "1b655dabe1d88c3297dd0ad41b9816fef42714a5280fe7ce86ef42e1e6b984aa"
 dependencies = [
  "arrayvec",
  "fxhash",
- "fyrox-math",
+ "fyrox-math 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "nalgebra 0.34.1",
  "rayon",
  "uvgen",
@@ -3317,9 +3314,9 @@ dependencies = [
 
 [[package]]
 name = "parry2d"
-version = "0.24.0"
+version = "0.25.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8240961674a91f3eb4af1bb7451f27c18a07813d223af73789bd90b296f69940"
+checksum = "ef681740349cec3ab9b5996b03b459b383b6998e1ffcb2804e8b57eb1e8491d9"
 dependencies = [
  "approx",
  "arrayvec",
@@ -3343,9 +3340,9 @@ dependencies = [
 
 [[package]]
 name = "parry3d"
-version = "0.24.0"
+version = "0.25.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29a58098398ec9b65abcd8c04501430bd273e3bb48ef3664d4d4e0eb7a44029d"
+checksum = "e99471b7b6870f7fe406d5611dd4b4c9b07aa3e5436b1d27e1515f9832bb0c6b"
 dependencies = [
  "approx",
  "arrayvec",
@@ -3617,9 +3614,9 @@ dependencies = [
 
 [[package]]
 name = "rapier2d"
-version = "0.29.0"
+version = "0.30.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49586478ee35cd09ca37c7c2eaeb2b4e01ffee038163cd4c45005dbb8046261d"
+checksum = "eab12a465faea032e025eb97a3b0763422391c3edb98200ed5efd516307df550"
 dependencies = [
  "approx",
  "arrayvec",
@@ -3642,9 +3639,9 @@ dependencies = [
 
 [[package]]
 name = "rapier3d"
-version = "0.29.0"
+version = "0.30.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30921dd14f66b5b9fd6e904ce66229640e31241f1fa4e760c2ce4a2ce8ed4dc6"
+checksum = "5bd27b8eb36d0833fa0f2aea40164fabfad0fc34b9932286ae9e84f3452f5364"
 dependencies = [
  "approx",
  "arrayvec",

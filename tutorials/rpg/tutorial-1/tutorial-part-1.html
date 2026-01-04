@@ -21,21 +21,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="../../../favicon.svg">
-        <link rel="shortcut icon" href="../../../favicon.png">
-        <link rel="stylesheet" href="../../../css/variables.css">
-        <link rel="stylesheet" href="../../../css/general.css">
-        <link rel="stylesheet" href="../../../css/chrome.css">
-        <link rel="stylesheet" href="../../../css/print.css" media="print">
+        <link rel="icon" href="../../../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../../../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../../../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../../../css/general-2459343d.css">
+        <link rel="stylesheet" href="../../../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="../../../fonts/fonts.css">
+        <link rel="stylesheet" href="../../../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="../../../highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="../../../tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="../../../ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../../../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../../../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -47,10 +46,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex.js";
+            window.path_to_searchindex_js = "../../../searchindex-2383a967.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc.js"></script>
+        <script src="../../../toc-025265cf.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -64,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -93,12 +92,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -113,39 +112,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="../../../toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -153,44 +152,44 @@
 
                     <div class="right-buttons">
                         <a href="../../../print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
-                            <i id="git-repository-button" class="fa fa-github"></i>
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/tutorials/rpg/tutorial-1/tutorial-part-1.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
-                            <i id="git-edit-button" class="fa fa-edit"></i>
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="rpg-tutorial-part-1---character-controller"><a class="header" href="#rpg-tutorial-part-1---character-controller">RPG Tutorial Part 1 - Character Controller</a></h1>
 <p><strong>Source code</strong>: <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/rpg">GitHub</a></p>
@@ -216,17 +215,17 @@
 </ul>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>In this series of tutorials we will make a game similar to The Elder Scrolls series (but much, much smaller indeed),
-we'll have a main character, a simple world with intractable items and a few kind of enemies. In this series you'll
+we’ll have a main character, a simple world with intractable items and a few kind of enemies. In this series you’ll
 understand how to add an inventory, a quests journal, and the quests itself. This series should have at least 5
-tutorials, but this might change. At the end of the series we'll have a playable RPG which you will be able to use to
+tutorials, but this might change. At the end of the series we’ll have a playable RPG which you will be able to use to
 continue making your own game. It is very ambitious, but totally doable with the current state of the engine.</p>
 <p>Most of the role-playing games (RPGs for short) using 3rd person camera which allows you to see your character entirely.
-In this tutorial we'll make something similar. Check the video with final result of the tutorial:</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<p>As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by
+In this tutorial we’ll make something similar. Check the video with final result of the tutorial:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+<p>As you can see, at the end of the tutorial we’ll be able to walk and explore a small fantasy world. Let’s start by
 creating a new game project, by running the following command:</p>
 <p><code>fyrox-template init --name=rpg --style=3d</code></p>
-<p>This command will create a new cargo workspace with a few projects inside, we're interested only in <code>game</code> folder
+<p>This command will create a new cargo workspace with a few projects inside, we’re interested only in <code>game</code> folder
 in this tutorial.</p>
 <pre><code class="language-text">rpg
 ├───data
@@ -244,122 +243,120 @@ in this tutorial.</p>
 <p>Learn more about <code>fyrox-template</code> command <a href="../../../beginning/scripting.html">here</a>. Now we can run
 the game using <code>cargo run --package executor</code> command, and you should see a white cube floating in blue space.</p>
 <blockquote>
-<p>️⚠️ There are two important commands:<br />
-To run the game use: <code>cargo run --package executor</code> command<br />
-To run the editor use: <code>cargo run --package editor</code> command.</p>
+<p>️⚠️ There are two important commands:<br>To run the game use: <code>cargo run --package executor</code> command<br>To run the editor use: <code>cargo run --package editor</code> command.</p>
 </blockquote>
 <h2 id="assets"><a class="header" href="#assets">Assets</a></h2>
 <p>For any kind of game you need a lot of various assets, in our case we need a 3D model for our character, a set of
 animations, a level, a set of textures for terrain, trees and bushes, barrels, etc. I prepared all assets as a single
-ZIP archive which can be downloaded <a href="./data.zip">here</a>. Once you've downloaded it, unpack it in <code>./data</code> folder.</p>
+ZIP archive which can be downloaded <a href="./data.zip">here</a>. Once you’ve downloaded it, unpack it in <code>./data</code> folder.</p>
 <h2 id="player-prefab"><a class="header" href="#player-prefab">Player Prefab</a></h2>
-<p>Let's start from assembling our player prefab, that will also have a camera controller in it. At first, let's find out
+<p>Let’s start from assembling our player prefab, that will also have a camera controller in it. At first, let’s find out
 what the prefab is - prefab a scene, that contains some scene nodes, which can be instantiated to some other scene
-while preserving "connection" between all properties of the nodes. It means, that if you change something in a prefab,
-the changes will be reflected on every instance of it; on those properties that weren't modified. This is a condensed
+while preserving “connection” between all properties of the nodes. It means, that if you change something in a prefab,
+the changes will be reflected on every instance of it; on those properties that weren’t modified. This is a condensed
 explanation, that may look a bit complicated - <a href="../../../scene/prefab.html">read this</a> to learn more about prefabs.</p>
-<p>Now let's open the editor (<code>cargo run --package editor</code>) and start making our prefab by creating a new scene. Save the
+<p>Now let’s open the editor (<code>cargo run --package editor</code>) and start making our prefab by creating a new scene. Save the
 scene to <code>data/models/paladin/paladin.rgs</code> by going to <code>File -&gt; Save</code>. In the opened window, find the path and click
 <code>Save</code>:</p>
-<p><img src="save_prefab.png" alt="save prefab" /></p>
-<p>Let's rename the root node of the scene to <code>Paladin</code> and change its type to <code>RigidBody</code>:</p>
-<p><img src="replace_root.png" alt="replace root" /></p>
+<p><img src="save_prefab.png" alt="save prefab"></p>
+<p>Let’s rename the root node of the scene to <code>Paladin</code> and change its type to <code>RigidBody</code>:</p>
+<p><img src="replace_root.png" alt="replace root"></p>
 <p>We need this so out root node of the prefab could move in a scene to which it will be instantiated later. Make sure, that
 the <code>X/Y/Z Rotation Locked</code> property is set to <code>true</code>. Also <code>Can Sleep</code> must be false, otherwise the rigid body will
 be excluded from the physical simulation when it does not move. As you can see, the editor shows a small warning icon
-near the root node - it warns us, that the rigid body does not have a collider and won't be able to participate in
-physical simulation. Let's fix it by adding a capsule collider to it and setting its <code>Begin</code>, <code>End</code>, <code>Radius</code> properties
+near the root node - it warns us, that the rigid body does not have a collider and won’t be able to participate in
+physical simulation. Let’s fix it by adding a capsule collider to it and setting its <code>Begin</code>, <code>End</code>, <code>Radius</code> properties
 accordingly:</p>
-<p><img src="capsule_collider.png" alt="capsule colliders" /></p>
+<p><img src="capsule_collider.png" alt="capsule colliders"></p>
 <p>The next step is to add an actual character 3D model, this is very easy - find <code>paladin.fbx</code> in the asset browser using
-its searching functionality and then drag'n'drop (click on the asset, and while holding the button, move the mouse in
+its searching functionality and then drag’n’drop (click on the asset, and while holding the button, move the mouse in
 the scene, then release the button) it to the scene:</p>
-<p><img src="model.png" alt="model" /></p>
+<p><img src="model.png" alt="model"></p>
 <p>Now we need to adjust its <code>Local Scale</code> property, because the model is too big. Set it to <code>0.01</code> for all 3 axes, like on
 the screenshot above. Also, adjust position of the capsule collider, so it will fully enclose 3d model. Create a new
-<code>Pivot</code> node called <code>ModelPivot</code> and attach the <code>paladin.fbx</code> node to it by drag'n'dropping the <code>paladin.fbx</code> node onto
+<code>Pivot</code> node called <code>ModelPivot</code> and attach the <code>paladin.fbx</code> node to it by drag’n’dropping the <code>paladin.fbx</code> node onto
 <code>ModelPivot</code>. The reason why we need to do this will be explained later in the tutorial.</p>
-<p><img src="model_pivot.png" alt="model pivot" /></p>
+<p><img src="model_pivot.png" alt="model pivot"></p>
 <h3 id="camera"><a class="header" href="#camera">Camera</a></h3>
 <p>It is the time to add camera controller scene nodes. We need to add three nodes in a chain:</p>
-<p><img src="camera_nodes_chain.png" alt="camera nodes chain" /></p>
+<p><img src="camera_nodes_chain.png" alt="camera nodes chain"></p>
 <p>There are three nodes added:</p>
 <ol>
 <li><code>CameraPivot</code> (<code>Pivot</code> node type) - it will serve a pivot point around which we will rotate the camera around Y axis.
-(horizontal camera rotation). It should be placed right at the center of the Paladin's head.</li>
+(horizontal camera rotation). It should be placed right at the center of the Paladin’s head.</li>
 <li><code>CameraHinge</code> (<code>Pivot</code> node type) - it will also be a pivot point, but for X axis (vertical camera rotation)</li>
-<li><code>Camera</code> (<code>Camera</code> node type) - the camera itself, it should be placed on some distance from the Paladin's back.</li>
+<li><code>Camera</code> (<code>Camera</code> node type) - the camera itself, it should be placed on some distance from the Paladin’s back.</li>
 </ol>
-<p>This nodes configuration will allow us to create some sort of "orbital" (also called arcball) camera as in many 3rd person
+<p>This nodes configuration will allow us to create some sort of “orbital” (also called arcball) camera as in many 3rd person
 games nowadays.</p>
 <h3 id="animations"><a class="header" href="#animations">Animations</a></h3>
 <p>The next step is to add animations. Create a new <code>Animation Player</code> node, click <code>Open Animation Editor</code> near its
 <code>Animations</code> property in the inspector to open the animation editor:</p>
-<p><img src="animation_editor.png" alt="animation editor" /></p>
+<p><img src="animation_editor.png" alt="animation editor"></p>
 <p>Dock the animation editor below the scene preview - this way it will be much comfortable to use. Now we need to import
 two animations <code>run.fbx</code> and <code>idle.fbx</code> from the <code>data/models/paladin</code> folder. To do this, click on the button with
 arrow at the tool strip in the animation editor:</p>
-<p><img src="animation_import_1.png" alt="animation import step 1" /></p>
+<p><img src="animation_import_1.png" alt="animation import step 1"></p>
 <p>The editor asks us for the root node to which import the animation - it our case it is <code>paladin.fbx</code>. Select it in the
 window and click <code>OK</code>. Another window opens and asks us about the animation we want to import - find <code>idle.fbx</code> in the
 tree and click <code>Open</code>. You should see something like this as a result:</p>
-<p><img src="idle_animation.png" alt="idle animation" /></p>
+<p><img src="idle_animation.png" alt="idle animation"></p>
 <p>Click on <code>Preview</code> check box in the tool strip and the animation should play without artifacts. Now repeat the previous
-steps and import <code>running.fbx</code>. Click <code>Preview</code> again, and you'll see that the character is running, but not in-place as
-we'd like it to. Let's fix that by applying a Root Motion settings. Click on the <code>RM</code> button and set it up like so:</p>
-<p><img src="root_motion.png" alt="root motion" /></p>
-<p>Now if you click on <code>Preview</code> again, you'll see that the character is now moving in-place. But what we did by applying
+steps and import <code>running.fbx</code>. Click <code>Preview</code> again, and you’ll see that the character is running, but not in-place as
+we’d like it to. Let’s fix that by applying a Root Motion settings. Click on the <code>RM</code> button and set it up like so:</p>
+<p><img src="root_motion.png" alt="root motion"></p>
+<p>Now if you click on <code>Preview</code> again, you’ll see that the character is now moving in-place. But what we did by applying
 the root motion? We forced the engine to extract movement vector from the hips of the character that could be later used
-to move the capsule rigid body we've made early. This way the animation itself will drive the character and the actual
+to move the capsule rigid body we’ve made early. This way the animation itself will drive the character and the actual
 movement will perfectly match the physical movement.</p>
 <p>At this point we have two separate animations that work independently. But what if we want to add a smooth transition
 between the two (or more)? This is where animation blending state machines comes into play. Create a new state machine
 and assign an animation player to it:</p>
-<p><img src="absm.png" alt="absm" /></p>
+<p><img src="absm.png" alt="absm"></p>
 <p>The animation player will be used as a source of animations for our state machine. Now open the <code>ABSM Editor</code> by clicking
 the <code>Open ABSM Editor...</code> button in the inspector (right above the animation player property). Dock the editor and select
 a <code>Base Layer</code> in the dropdown list in the toolbar. Next, we need to add two states - <code>Idle</code> and <code>Running</code>. This can be
 done by right-clicking on in the <code>State Graph</code> and selecting <code>Create State</code>:</p>
-<p><img src="states.png" alt="states" /></p>
+<p><img src="states.png" alt="states"></p>
 <p>A state requires animation source to be usable, we can specify it by double-clicking on it (or right-click -&gt; <code>Enter State</code>)
 and creating a <code>Play Animation</code> pose node in the <code>State Viewer</code> (right-click -&gt; <code>Play Animation</code>):</p>
-<p><img src="animation_source.png" alt="img.png" /></p>
+<p><img src="animation_source.png" alt="img.png"></p>
 <p>Select the <code>Play Animation</code> node and in the <code>Inspector</code> select the <code>Idle</code> animation from the dropdown list near the
 <code>Animation</code> property. Repeat the same steps for the <code>Running</code> state, but in this case set <code>Running</code> animation.</p>
-<p>Now when we two states ready, we need to create transitions between the two. Transition is a "rule", that defines whether
+<p>Now when we two states ready, we need to create transitions between the two. Transition is a “rule”, that defines whether
 a current active state can be switched to another one. While doing so, the engine will blend an animation coming from
 two states. To create a transition, right-click on a state and click <code>Create Transition</code>. Do the same in the opposite
 direction. As a result, you should have something like this:</p>
-<p><img src="transition.png" alt="transition" /></p>
-<p>A transition requires a boolean value to "understand" whether an actual transition is possible or not. Let's add one
+<p><img src="transition.png" alt="transition"></p>
+<p>A transition requires a boolean value to “understand” whether an actual transition is possible or not. Let’s add one
 in the <code>Parameters</code> section of the editor. Click on the small <code>+</code> button and change the name to <code>Running</code> and the type
 to the <code>Rule</code>:</p>
-<p><img src="parameters.png" alt="parameters" /></p>
-<p>Let's assign the rule to our transitions, select the <code>Idle -&gt; Running</code> transition and in the Inspector set its condition
+<p><img src="parameters.png" alt="parameters"></p>
+<p>Let’s assign the rule to our transitions, select the <code>Idle -&gt; Running</code> transition and in the Inspector set its condition
 to the following:</p>
-<p><img src="condition.png" alt="condition" /></p>
+<p><img src="condition.png" alt="condition"></p>
 <p><code>Running -&gt; Idle</code> requires a reverse condition, the engine has a computational graph for this purpose (to compute
 boolean expressions). Set the condition of it to the following:</p>
-<p><img src="not_condition.png" alt="not condition" /></p>
+<p><img src="not_condition.png" alt="not condition"></p>
 <p>As you can see we negate (using the <code>Not</code> boolean operator) the value of the <code>Running</code> parameter and use it compute the
 final value for the transition. At this point we can check how our animation blending works. Click on <code>Preview</code> check box,
 and you should see that the character is currently being in the <code>Idle</code> state, now click at the checkbox in the <code>Running</code>
-parameter, and you'll see that the <code>Idle -&gt; Running</code> transition started and ended shortly after. If you uncheck the
+parameter, and you’ll see that the <code>Idle -&gt; Running</code> transition started and ended shortly after. If you uncheck the
 parameter, the character will switch back to idle.</p>
-<p>This was the last step in this long procedure or making the prefab. As you can see, we haven't written a single line of
+<p>This was the last step in this long procedure or making the prefab. As you can see, we haven’t written a single line of
 code and saw the results immediately, without a need to compile anything.</p>
 <h2 id="player-script"><a class="header" href="#player-script">Player Script</a></h2>
-<p>Finally, we can start writing some code. There won't be much of it, but it is still required. Fyrox allows you to add
-custom game logic to scene nodes using scripts. Scripts "skeleton" contains quite a lot of boilerplate code and to
+<p>Finally, we can start writing some code. There won’t be much of it, but it is still required. Fyrox allows you to add
+custom game logic to scene nodes using scripts. Scripts “skeleton” contains quite a lot of boilerplate code and to
 prevent this tedious work, <code>fyrox-template</code> offers a sub-command called <code>script</code>, which allows you to generate a script
 skeleton in a single command. Go to root folder of your project and execute the following command there:</p>
 <pre><code class="language-shell">fyrox-template script --name=player
 </code></pre>
 <p>The CLI tool will create the new module in <code>game/src</code> folder called <code>player.rs</code> and all you need to do is to register
 the module in two places. The first place is to add <code>mod player;</code> line somewhere at the beginning of the <code>game/src/lib.rs</code>.
-The second place is <code>PluginConstructor::register</code> method - every script must be registered before use. Let's do so by adding
+The second place is <code>PluginConstructor::register</code> method - every script must be registered before use. Let’s do so by adding
 the following code to the method:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Plugin for Game {
     fn register(&amp;self, context: PluginRegistrationContext) {
@@ -368,11 +365,11 @@ the following code to the method:</p>
             .script_constructors
             .add::&lt;Player&gt;("Player");
     }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the <code>player.rs</code>
-and you'll see quite a lot of code. Most of the methods, however, can be removed, and we're only interested in <code>on_update</code>
-and <code>on_os_event</code>. But for now, let's add the following fields in the <code>Player</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+and you’ll see quite a lot of code. Most of the methods, however, can be removed, and we’re only interested in <code>on_update</code>
+and <code>on_os_event</code>. But for now, let’s add the following fields in the <code>Player</code> struct:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Default, Debug, Clone)]
 #[visit(optional)]
@@ -413,22 +410,22 @@ pub struct Player {
     #[visit(skip)]
     pitch: f32,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>There are quite a lot of them, but all of them will be in use. The first four fields will contain handles to scene nodes
-we've made earlier, the <code>model_yaw</code> field contains a <code>SmoothAngle</code> which is used for smooth angle interpolation we'll
+we’ve made earlier, the <code>model_yaw</code> field contains a <code>SmoothAngle</code> which is used for smooth angle interpolation we’ll
 use later in tutorial. Please note that these fields marked with <code>#[visit(optional)]</code> attribute, which tells the engine
 that these fields can be missing and should be replaced with default values in this case. This is very useful attribute
-if you're adding new fields to some existing script, it will prevent serialization error. The rest of the fields contains
+if you’re adding new fields to some existing script, it will prevent serialization error. The rest of the fields contains
 runtime information about movement state (<code>move_forward</code>, <code>move_backward</code>, <code>walk_left</code>, <code>walk_right</code>) and the
 camera orientation (<code>yaw</code> and <code>pitch</code> fields).</p>
 <p>A few notes why the first five fields are wrapped in the <code>InheritableVariable</code> - it is to support property inheritance
-mechanism for these fields. The engine will save the values for these variables only if they're manually modified, on
+mechanism for these fields. The engine will save the values for these variables only if they’re manually modified, on
 loading, however, it will replace non-modified values with the ones from parent prefab. If it sounds too complicated for
 you, then you should probably read <a href="../../../scene/prefab.html#property-inheritance">this chapter</a>.</p>
-<p>Let's start writing player controller's logic.</p>
+<p>Let’s start writing player controller’s logic.</p>
 <h3 id="event-handling"><a class="header" href="#event-handling">Event Handling</a></h3>
-<p>We'll start from keyboard and mouse event handling, add the following code to the <code>impl ScriptTrait for Player</code>:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<p>We’ll start from keyboard and mouse event handling, add the following code to the <code>impl ScriptTrait for Player</code>:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
         match event {
@@ -457,16 +454,16 @@ you, then you should probably read <a href="../../../scene/prefab.html#property-
             _ =&gt; (),
         }
     }
-<span class="boring">}</span></code></pre></pre>
-<p>This code consists of two major sections: <code>KeyboardInput</code> event handling and <code>MouseMotion</code> event handling. Let's start
-from <code>KeyboardInput</code> event. At the beginning of it we're checking if a key was pressed or not and saving it to the
+<span class="boring">}</span></code></pre>
+<p>This code consists of two major sections: <code>KeyboardInput</code> event handling and <code>MouseMotion</code> event handling. Let’s start
+from <code>KeyboardInput</code> event. At the beginning of it we’re checking if a key was pressed or not and saving it to the
 <code>pressed</code> flag, then we check for <code>W</code>, <code>S</code>, <code>A</code>, <code>D</code> keys and set each movement flag accordingly.</p>
-<p>The <code>MouseMotion</code> event handling is different: we're using mouse movement delta to calculate new yaw and pitch values
+<p>The <code>MouseMotion</code> event handling is different: we’re using mouse movement delta to calculate new yaw and pitch values
 for our camera. Pitch calculation also includes angle clamping in <code>-90.0..90.0</code> degree range.</p>
 <h3 id="logic"><a class="header" href="#logic">Logic</a></h3>
-<p>The next important step is to apply all the data we have to a bunch of scene nodes the player consists of. Let's fill
+<p>The next important step is to apply all the data we have to a bunch of scene nodes the player consists of. Let’s fill
 the <code>on_update</code> method with the following code:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
         // Step 1. Fetch the velocity vector from the animation blending state machine.
@@ -567,36 +564,36 @@ the <code>on_update</code> method with the following code:</p>
                 .set_parameter("Running", Parameter::Rule(moving));
         }
     }
-<span class="boring">}</span></code></pre></pre>
-<p>That's a big chunk of code, but it mostly consists of a set of separate steps. Let's try to understand what each step does.</p>
-<p>Step 1 extracts the root motion vector from the animation blending state machine: at first, we're getting the current
-transformation matrix of the Paladin's model. Then we're trying to borrow the ABSM node from the scene. If it is
-successful, then we're trying to extract the root motion vector from the final pose of the ABSM. If we have one, then
-we need to transform it from the local space to the world space - we're doing this using matrix-vector multiplication.
-And as the last step, we're scaling the vector by delta time to get the final velocity in world coordinates that can
+<span class="boring">}</span></code></pre>
+<p>That’s a big chunk of code, but it mostly consists of a set of separate steps. Let’s try to understand what each step does.</p>
+<p>Step 1 extracts the root motion vector from the animation blending state machine: at first, we’re getting the current
+transformation matrix of the Paladin’s model. Then we’re trying to borrow the ABSM node from the scene. If it is
+successful, then we’re trying to extract the root motion vector from the final pose of the ABSM. If we have one, then
+we need to transform it from the local space to the world space - we’re doing this using matrix-vector multiplication.
+And as the last step, we’re scaling the vector by delta time to get the final velocity in world coordinates that can
 be used to move the rigid body.</p>
 <p>Step 2 uses the root motion vector to move the rigid body. The body is the node to which the script is assigned to,
-so we're using <code>ctx.handle</code> to borrow a "self" reference and setting the new linear and angular velocities.</p>
+so we’re using <code>ctx.handle</code> to borrow a “self” reference and setting the new linear and angular velocities.</p>
 <p>Step 3 is the largest (code-wise) step, yet very simple. All we do here is rotating the camera and the model pivot in
 according to pressed keys. The code should be self-explanatory.</p>
 <p>Step 4 feeds the animation blending state machine with the variables it needs to perform state transitions. Currently,
-we have only one variable - <code>Running</code> and to set it, we're trying to borrow the ABSM using its handle, then we're
+we have only one variable - <code>Running</code> and to set it, we’re trying to borrow the ABSM using its handle, then we’re
 using the state of four of our movement variable to combine them into one and use this flag to set the value in the
 ABSM.</p>
 <h3 id="binding"><a class="header" href="#binding">Binding</a></h3>
 <p>Now, when we have finished coding part, we can open <code>paladin.rgs</code> in the editor again and assign the script to it:</p>
-<p><img src="assigned_script.png" alt="assigned script" /></p>
-<p>Make sure to correctly set the script fields (as on the screenshot above), otherwise it won't work correctly.</p>
+<p><img src="assigned_script.png" alt="assigned script"></p>
+<p>Make sure to correctly set the script fields (as on the screenshot above), otherwise it won’t work correctly.</p>
 <h2 id="game-level"><a class="header" href="#game-level">Game Level</a></h2>
 <p>Use your imagination to create a game level (or just use the one from the assets pack for this tutorial). Level design
 is not covered by this tutorial. You can create a simple level using a Terrain, a few 3D models from the assets pack:</p>
-<p><img src="simple_level.png" alt="simple level" /></p>
+<p><img src="simple_level.png" alt="simple level"></p>
 <p>The most important part, however, is to add a player instance to the level:</p>
-<p><img src="player_on_level.png" alt="player on level" /></p>
-<p>Now all you need to do is to click on the green <code>&gt;</code> button and run the game. "Production" build could be created by
+<p><img src="player_on_level.png" alt="player on level"></p>
+<p>Now all you need to do is to click on the green <code>&gt;</code> button and run the game. “Production” build could be created by
 running <code>cargo run --package executor --release</code>.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this tutorial we've learned how to set up physics for humanoid characters, how to create simple 3rd person camera
+<p>In this tutorial we’ve learned how to set up physics for humanoid characters, how to create simple 3rd person camera
 controllers, how to import and blend multiple animation into one, how to use root motion to extract motion vector from
 animations. We also learned how to create prefabs and use them correctly. Finally, we have created a simple level and
 instantiated the character prefab on it.</p>
@@ -606,11 +603,11 @@ instantiated the character prefab on it.</p>
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="../../../tutorials/rpg/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
                             <a rel="next prefetch" href="../../../tutorials/fps/fps-intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -620,16 +617,21 @@ instantiated the character prefab on it.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="../../../tutorials/rpg/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
                     <a rel="next prefetch" href="../../../tutorials/fps/fps-intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
         <script>
@@ -640,19 +642,19 @@ instantiated the character prefab on it.</p>
             window.playground_copyable = true;
         </script>
 
-        <script src="../../../ace.js"></script>
-        <script src="../../../mode-rust.js"></script>
-        <script src="../../../editor.js"></script>
-        <script src="../../../theme-dawn.js"></script>
-        <script src="../../../theme-tomorrow_night.js"></script>
+        <script src="../../../ace-2a3cd908.js"></script>
+        <script src="../../../mode-rust-2c9d5c9a.js"></script>
+        <script src="../../../editor-16ca416c.js"></script>
+        <script src="../../../theme-dawn-4493f9c8.js"></script>
+        <script src="../../../theme-tomorrow_night-9dbe62a9.js"></script>
 
-        <script src="../../../elasticlunr.min.js"></script>
-        <script src="../../../mark.min.js"></script>
-        <script src="../../../searcher.js"></script>
+        <script src="../../../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../../../mark-09e88c2c.min.js"></script>
+        <script src="../../../searcher-c2a407aa.js"></script>
 
-        <script src="../../../clipboard.min.js"></script>
-        <script src="../../../highlight.js"></script>
-        <script src="../../../book.js"></script>
+        <script src="../../../clipboard-1626706a.min.js"></script>
+        <script src="../../../highlight-abc7f01d.js"></script>
+        <script src="../../../book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 

@@ -21,21 +21,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="../favicon.svg">
-        <link rel="shortcut icon" href="../favicon.png">
-        <link rel="stylesheet" href="../css/variables.css">
-        <link rel="stylesheet" href="../css/general.css">
-        <link rel="stylesheet" href="../css/chrome.css">
-        <link rel="stylesheet" href="../css/print.css" media="print">
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="../fonts/fonts.css">
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -47,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex.js";
+            window.path_to_searchindex_js = "../searchindex-2383a967.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc.js"></script>
+        <script src="../toc-025265cf.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -64,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -93,12 +92,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -113,39 +112,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -153,49 +152,49 @@
 
                     <div class="right-buttons">
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
-                            <i id="git-repository-button" class="fa fa-github"></i>
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/scene/tilemap.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
-                            <i id="git-edit-button" class="fa fa-edit"></i>
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="tile-map"><a class="header" href="#tile-map">Tile Map</a></h1>
-<p>Tile map is a 2D "image", made out of a small blocks called tiles. Tile maps used in 2D games to build game worlds
+<p>Tile map is a 2D “image”, made out of a small blocks called tiles. Tile maps used in 2D games to build game worlds
 quickly and easily. An example of a tile map could be something like this:</p>
-<p><img src="tile_map.png" alt="tile map" /></p>
+<p><img src="tile_map.png" alt="tile map"></p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to Create</a></h2>
 <p>A tile map comes in two pieces: A <code>TileMap</code> node that can be added to a scene, and a <code>TileSet</code> resource that holds the
 data required to render each tile.</p>
@@ -205,7 +204,7 @@ on their grids according to whatever organizational principles you please. The c
 handle, called a <code>TileDefinitionHandle</code>, and this handle is what will be stored in the tile map to determine how to render
 the tiles.</p>
 <p>Here is an example handle: <code>(0,2):(-3,5)</code>. This handle means that the tile is on the page at coordinates
-(0,2) and the tile data is at (-3,5) within that page's grid. Once a handle like this has been put into a tile map cell,
+(0,2) and the tile data is at (-3,5) within that page’s grid. Once a handle like this has been put into a tile map cell,
 the tile map rendering process will look for a page at that position and a tile at that position within the page.
 If it fails to find a page at that position, or the tile position is empty in the page, then a pink texture will be
 rendered to indicate a missing tile texture. Be aware of this if you are considering changing the position of
@@ -251,7 +250,7 @@ procedural worlds, while the editor-based approach is good for hand-crafted worl
 <h3 id="code"><a class="header" href="#code">Code</a></h3>
 <p>The following example creates a simple tile map with two tile types - grass and stone. It creates stone foundation and
 lays grass on top of it.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_tile_map(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
     // Each tile could have its own material, for simplicity it is just a standard 2D material.
@@ -339,56 +338,56 @@ lays grass on top of it.</p>
         .with_tiles(&amp;tiles)
         .build(graph)
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Please refer to the API docs for more info about each method.</p>
 <h3 id="editor"><a class="header" href="#editor">Editor</a></h3>
 <p>Editor-based approach requires a bit of preparation, yet it is still simple. First you need a tile set, something like this:</p>
-<p><img src="tileset.png" alt="tile set" /></p>
+<p><img src="tileset.png" alt="tile set"></p>
 <p>It is a 11x11 sprite sheet for a top-down game. Now you need to create a tile set resource from this tile set. Navigate
 the asset browser and click on <code>+</code> button near the search bar. Select <code>TileSet</code> resource and click <code>OK</code>. Find the resource
-you've just created in the asset browser, then double-click on it to open the tile set editor.</p>
-<p><img src="tile_set_editor.png" alt="tile set editor" /></p>
+you’ve just created in the asset browser, then double-click on it to open the tile set editor.</p>
+<p><img src="tile_set_editor.png" alt="tile set editor"></p>
 <h4 id="creating-an-atlas-page"><a class="header" href="#creating-an-atlas-page">Creating an Atlas Page</a></h4>
 <p>Now it is time to create the first page for our new tile set. Click anywhere in the upper grid to select the position for
-the page, then click the "Tile Atlas" button under "Create New Page" on the right side of the editor.</p>
-<p>Because the selected page position is no longer empty, the "Create New Page" menu is replaced by an inspector for the
+the page, then click the “Tile Atlas” button under “Create New Page” on the right side of the editor.</p>
+<p>Because the selected page position is no longer empty, the “Create New Page” menu is replaced by an inspector for the
 properties of the new atlas page. Here you can edit the material for the tiles and change the size of the tiles as measured
 in texture pixels. These properties can be changed at any time, and the resulting changes will affect all the tiles of the page.</p>
 <p>Once you have set your sprite sheet as the texture for the material, the texture will become visible in the lower grid of the
 editor. Use the scroll wheel to zoom and pan if necessary to see all of it. This is only a <em>preview</em> of what the tiles might
 look like; the tiles have not yet been created, and the texture is faded to distinguish it from actual tiles.
-You can adjust the fade using the "Material Tint" color field in the top-right of the editor. This has no affect on the tile
+You can adjust the fade using the “Material Tint” color field in the top-right of the editor. This has no affect on the tile
 set resource; it is purely cosmetic within the editor.</p>
 <p>To actually create some tiles, left-click and drag on the lower grid to select whatever areas of the material should have
 tiles. Holding shift will allow you to select multiple areas at once. Once you are satisfied with your selection,
-press the "Create Tile" button on the right side of the editor. This will fill any empty selected cells with new tiles,
+press the “Create Tile” button on the right side of the editor. This will fill any empty selected cells with new tiles,
 covering the faded material preview with the full-color of actual tiles.</p>
 <h4 id="creating-a-freeform-page"><a class="header" href="#creating-a-freeform-page">Creating a Freeform Page</a></h4>
-<p>Select any empty cell in the upper grid to cause the "Create New Page" menu to appear. Click "Free Tiles" button to
-start creating freeform tiles on your tile set's new page. Unlike the atlas page, a freeform page has very few properties
+<p>Select any empty cell in the upper grid to cause the “Create New Page” menu to appear. Click “Free Tiles” button to
+start creating freeform tiles on your tile set’s new page. Unlike the atlas page, a freeform page has very few properties
 to edit in the inspector. This is because each tile has its own material and size fields.</p>
-<p><img src="freeform_tile_edit.png" alt="Freeform tile edit" /></p>
-<p>Select any empty cell in the lower grid and click "Create Tile" to begin editing the properties for a new freeform tile.
+<p><img src="freeform_tile_edit.png" alt="Freeform tile edit"></p>
+<p>Select any empty cell in the lower grid and click “Create Tile” to begin editing the properties for a new freeform tile.
 At the top is a field for choosing the material for the tile. It will initially be a blank material with the
-standard tile shader. Below that are four pairs of coordinates that represent for points on the material's texture as
+standard tile shader. Below that are four pairs of coordinates that represent for points on the material’s texture as
 measured in texture pixels. The left-top point represents the left-top corner of the tile, and so on around all four
 corners of the tile.</p>
 <p>Below the tile corners are four buttons for performing flips and rotations on the corner coordinates. By changing the
 coordinates of the corners of the tile, the tile can be rotated by 90 degrees and flipped horizontally and vertically.</p>
-<p>Next there is the tile's color which can be used to apply tinting or transparency to the tile.</p>
+<p>Next there is the tile’s color which can be used to apply tinting or transparency to the tile.</p>
 <p>It is also possible to add tiles to a freeform page by painting them with tools on the Tile Map Control Panel which will
 be discussed later.</p>
 <h4 id="creating-a-transform-page"><a class="header" href="#creating-a-transform-page">Creating a Transform Page</a></h4>
 <p>Once you have prepared a library of tiles with your tile set, you may want to specify which tiles are mirrored or rotated
 versions of other tiles. This will allow the tile set to produce a flipped or rotated version of a tile just by giving it
-the handle of the tile and the desired transformation. Start by selecting an empty page cell and clicking "Transform"
-under "Create New Page."</p>
+the handle of the tile and the desired transformation. Start by selecting an empty page cell and clicking “Transform”
+under “Create New Page.”</p>
 <p>In the lower grid area you should see that the cells have been divided into 2x4 groups. Each cell of these groups can store
 a <code>TileDefinitionHandle</code> and the eight handles together will specify all possible combinations of flips and 90-degree rotations
 that may be needed for a tile. The left 2x2 tiles are supposed to be a horizontal reflection of the right 2x2 tiles,
 and within each 2x2 the tiles are supposed to rotate as you look clockwise or counter-clockwise around the square, as illustrated below.</p>
-<p><img src="tile_map_rotate.png" alt="Transform page" /></p>
-<p>In order to fill this page with tile handles, click the "Palette" button in the upper-right to open the "Tile Map Control Panel" window,
+<p><img src="tile_map_rotate.png" alt="Transform page"></p>
+<p>In order to fill this page with tile handles, click the “Palette” button in the upper-right to open the “Tile Map Control Panel” window,
 if it is not already open. This is the same window that you will use to edit a tile map, and so it has tools designed for selecting
 tile handles and putting them wherever you want them. The panel should already be showing the grid of pages from your tile set.
 If the panel is showing something else, then find your tile set in the asset browser and drag it onto the panel.</p>
@@ -399,7 +398,7 @@ tile handles will be discussed in more detail later.</p>
 <h4 id="creating-an-animation-page"><a class="header" href="#creating-an-animation-page">Creating an Animation Page</a></h4>
 <p>In order to make your tiles move over time, first create a sequence of animation frames for your tile, and make a tile
 for each from using an atlas page or a freeform page. Now we are ready to create an animation page.</p>
-<p><img src="tile_map_animation.png" alt="Animation page" /></p>
+<p><img src="tile_map_animation.png" alt="Animation page"></p>
 <p>While the animation page is selected, choose the frame rate for animations on this page, measured in frames per second.
 All animations on the same page share the same frame rate.</p>
 <p>Editing an animation page is just like editing a transform page, but instead of organizing the tile handles in groups of eight,
@@ -412,24 +411,24 @@ as smoothly as a running game, so put some animated tiles in your tile map and t
 <h4 id="creating-the-tile-map-node"><a class="header" href="#creating-the-tile-map-node">Creating the Tile Map Node</a></h4>
 <p>Now we have the tile set, and we can start creating a tile map using it. Click <code>Create -&gt; 2D -&gt; Tile Map</code> and you should
 see something like this:</p>
-<p><img src="empty_tile_map.png" alt="empty tile map" /></p>
-<p>If you look closely, the editor warns us about a missing tile set. Find the tile set you've just made and drag'n'drop it
+<p><img src="empty_tile_map.png" alt="empty tile map"></p>
+<p>If you look closely, the editor warns us about a missing tile set. Find the tile set you’ve just made and drag’n’drop it
 from the asset browser to the <code>Tile Set</code> field in the inspector.</p>
 <h2 id="tile-map-brush"><a class="header" href="#tile-map-brush">Tile Map Brush</a></h2>
-<p>There's one more step before we start editing the tile map—we may want a brush to paint on the tile map.
+<p>There’s one more step before we start editing the tile map—we may want a brush to paint on the tile map.
 Click <code>+</code> button in the asset browser and select <code>TileMapBrush</code>, set a name for it and click <code>OK</code>.
-Now select the tile map scene node and drag'n'drop the brush you've just created to "Active Brush" property.
+Now select the tile map scene node and drag’n’drop the brush you’ve just created to “Active Brush” property.
 This will make it the default brush whenever you edit this tile map node.</p>
 <p>Double-click the brush asset in the asset browser to open the tile set editor again. This time the editor will be
 in brush-editing mode, which is simpler because a brush has only one kind of page and it has no tabs for properties
 or collision. The purpose of a brush is just to create convenient arrangements of tile handles from some tile set
 to streamline the process of tile map editing.</p>
-<p>Drag the tile set asset from the asset browser into the "Tile Set" field in the upper-right of the tile set editor to
+<p>Drag the tile set asset from the asset browser into the “Tile Set” field in the upper-right of the tile set editor to
 store a reference to the tile set in the brush asset. The brush needs to know which tile set its tile handles refer to.</p>
-<p>Click some empty cell in the upper grid of the editor and then click "Add Page" to add your first page to the brush.</p>
-<p>Next, press the "Palette" button to open the Tile Map Control Panel so that you can paint some tile handles into the
+<p>Click some empty cell in the upper grid of the editor and then click “Add Page” to add your first page to the brush.</p>
+<p>Next, press the “Palette” button to open the Tile Map Control Panel so that you can paint some tile handles into the
 new brush. Initially the control panel will show the tiles and pages of the brush you are currently editing, which
-is no help when the brush is empty, so click the "Tile Set" button in the control panel to switch to showing the pages
+is no help when the brush is empty, so click the “Tile Set” button in the control panel to switch to showing the pages
 and tiles of the tile set. Select some tiles and paint them into the brush in whatever arrangement is most convenient
 for editing.</p>
 <p>Unlike a tile set resource, the content of a brush resource is only used in the editor, so you can re-arrange the pages
@@ -440,60 +439,60 @@ gather your most-often-used tiles.</p>
 <p>At this point everything is ready for painting. Select the tile map node and click tile map interaction mode button
 at the top of the Scene Preview window. You should now see the tile map grid in the Scene Preview. The Tile Map Control Panel
 should automatically open if it is not already open, and it should be showing the pages and tiles of your brush.</p>
-<p><img src="grid.png" alt="grid" /></p>
+<p><img src="grid.png" alt="grid"></p>
 <p>Select some tiles on the control panel and start drawing:</p>
-<p><img src="drawing.png" alt="drawing" /></p>
+<p><img src="drawing.png" alt="drawing"></p>
 <h2 id="drawing-tools"><a class="header" href="#drawing-tools">Drawing Tools</a></h2>
 <p>There are number of tools that could be useful while editing tile maps when in the tile map interaction mode.</p>
 <h3 id="brush-tool"><a class="header" href="#brush-tool">Brush Tool</a></h3>
-<p><img src="tile_map_tools/brush_tool.png" alt="Brush tool" /></p>
+<p><img src="tile_map_tools/brush_tool.png" alt="Brush tool"></p>
 <p>The brush tool takes whatever tiles are selected and puts the handles for those tiles wherever you click on the selected tile map.
 The selected tiles are called the stamp, and the stamp will be used in one way or another by each of the drawing tools.
 You can select any number of tiles and their handles will be drawn in the same relative positions where you click, or you can use
 the flip and rotation buttons to flip and rotate the stamp before drawing it. The preview area of the Tile Map Control Panel
 shows approximately what the tiles should look like when they are drawn.</p>
 <h3 id="erase-tool"><a class="header" href="#erase-tool">Erase Tool</a></h3>
-<p><img src="tile_map_tools/erase_tool.png" alt="Erase tool" /></p>
+<p><img src="tile_map_tools/erase_tool.png" alt="Erase tool"></p>
 <p>Erases tiles using the shape of the current stamp. Activate it using the <code>2</code> key or by clicking on the
 button with eraser icon.</p>
-<p><img src="erase.gif" alt="erase" /></p>
+<p><img src="erase.gif" alt="erase"></p>
 <h3 id="flood-fill-tool"><a class="header" href="#flood-fill-tool">Flood Fill Tool</a></h3>
-<p><img src="tile_map_tools/flood_tool.png" alt="Flood fill tool" /></p>
+<p><img src="tile_map_tools/flood_tool.png" alt="Flood fill tool"></p>
 <p>Fills a region with the same tile kind (or empty space) using the tiles of the current stamp.
 Activate it using the button with paint bucket icon.</p>
 <p>Unlike the other tools, the flood fill tool is not implemented for use in the Tile Set Editor,
 so in the Tile Set Editor the flood tool will just act like the brush tool.</p>
-<p><img src="flood_fill.gif" alt="flood fill" /></p>
+<p><img src="flood_fill.gif" alt="flood fill"></p>
 <h3 id="pick-tool"><a class="header" href="#pick-tool">Pick Tool</a></h3>
-<p><img src="tile_map_tools/pick_tool.png" alt="Pick tool" /></p>
+<p><img src="tile_map_tools/pick_tool.png" alt="Pick tool"></p>
 <p>Picks a rectangular region of tiles from the tile map itself and turns them into the current stamp.
 Hold shift to add additional rectangular regions to the stamp.
 Activate it using the <code>1</code> key or by clicking the button with pipette icon.</p>
 <p>Hold alt to drag the currently selected tiles and move them to a different location in the tile map,
 or tile set editor page. You can also use this to change the position of a page in the tile set editor,
-but beware that the position of a tile set page is part of a tile's handle, so moving a page can invalidate
+but beware that the position of a tile set page is part of a tile’s handle, so moving a page can invalidate
 any handle that refers to a tile on that page. Handles are not destroyed when they are invalidated this way;
 they merely fail to render correctly until a page is added to the tile set with a tile where the handle
 is expecting to find tile data.</p>
 <h3 id="rectangular-fill-tool"><a class="header" href="#rectangular-fill-tool">Rectangular Fill Tool</a></h3>
-<p><img src="tile_map_tools/rect_tool.png" alt="Rect fill tool" /></p>
+<p><img src="tile_map_tools/rect_tool.png" alt="Rect fill tool"></p>
 <p>Fills a rectangular region with the tiles from the current stamp. It tiles the given region using the
 tiles from current stamp. Could be activated using <code>3</code> key or by clicking on the button with the tiles icon.</p>
 <p>To randomize the order of the tiles within the rectangle, toggle the on the dice button.</p>
-<p><img src="rect_fill.gif" alt="rect fill" /></p>
+<p><img src="rect_fill.gif" alt="rect fill"></p>
 <h3 id="nine-slice-tool"><a class="header" href="#nine-slice-tool">Nine Slice Tool</a></h3>
-<p><img src="tile_map_tools/nine_tool.png" alt="Nine slice tool" /></p>
+<p><img src="tile_map_tools/nine_tool.png" alt="Nine slice tool"></p>
 <p>Fills a rectangular region using a rectangluer stamp divided into nine sections: four corners, four sides, and the center.
 The corners of the stamp will be placed at the corners of the selected region. The sides of the stamp will fill the sides
 of the selected reation, and the center of the stamp will fill the center of the selected region.</p>
 <p>To randomize the order of the tiles within the rectangle, toggle the on the dice button.</p>
-<p><img src="nine_slice.gif" alt="nine slice" /></p>
+<p><img src="nine_slice.gif" alt="nine slice"></p>
 <h3 id="line-tool"><a class="header" href="#line-tool">Line Tool</a></h3>
-<p><img src="tile_map_tools/line_tool.png" alt="Nine slice tool" /></p>
+<p><img src="tile_map_tools/line_tool.png" alt="Nine slice tool"></p>
 <p>Drag the mouse from one cell to another to draw a line of tiles between the two cells using the tiles of the current brush.</p>
 <h2 id="physics"><a class="header" href="#physics">Physics</a></h2>
 <p>Tile maps support physics for tiles, if collision shape data is included in the tile set. Start by opening the
-tile set editor, then click on the "Collison" tab at the top of the window. This will allow you to edit
+tile set editor, then click on the “Collison” tab at the top of the window. This will allow you to edit
 the list of collision layers of the tile set. Each layer allows a collision shape to be added to the tiles,
 so with multiple layers a tile may have multiple collison shapes.</p>
 <p>Each layer has a name and a color, and in code it can be identified by a UUID. The color is cosmetic, and
@@ -505,14 +504,14 @@ for a 2D rigid body.</p>
 <p><strong>None:</strong> The tile has no collision shape, the default.</p>
 </li>
 <li>
-<p><strong>Full:</strong> The tile's full square is covered by a collision shape.</p>
+<p><strong>Full:</strong> The tile’s full square is covered by a collision shape.</p>
 </li>
 <li>
 <p><strong>Custom:</strong> The user supplies a list of triangles to construct a collision shape.</p>
 </li>
 </ul>
 <p>In code, custom collision shapes are created using a <code>fyrox::scene::tilemap::CustomTileCollider</code> which is a simple struct like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct CustomTileCollider {
     /// The vertices of the triangles, with the boundaries of the tile being between (0,0) and (1,1).
@@ -520,19 +519,19 @@ for a 2D rigid body.</p>
     /// The indices of the vertices of each triangle
     pub triangles: Vec&lt;TriangleDefinition&gt;,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>To create a custom tile collider in the editor, it is currently required that the user manually types in the information
-as a list of vertices and triangle indices, such as "(0,0) (1,1) (1,0) [0,1,2]". This would create a triangle covering the
+as a list of vertices and triangle indices, such as “(0,0) (1,1) (1,0) [0,1,2]”. This would create a triangle covering the
 bottom right half of the tile. The parentheses and brackets are optional and are ignored; only the numbers and commas are parsed
-to understand the user's intended triangles.</p>
-<p><img src="tile_collider_edit.png" alt="Tile with custom collision shape" /></p>
+to understand the user’s intended triangles.</p>
+<p><img src="tile_collider_edit.png" alt="Tile with custom collision shape"></p>
 <p>Click the eye button next to the collision layer to toggle visibility of collision shapes for that layer.
 Collisions shapes will be drawn over the tiles in the color you have chosen for that collision layer,
 so it is best to choose an alpha value with some transparency.</p>
 <h3 id="adding-a-2d-rigid-body"><a class="header" href="#adding-a-2d-rigid-body">Adding a 2D Rigid Body</a></h3>
 <p>Enable physics for a tile map by using the collider shape called <code>TileMap</code> and specifying the name of the layer.
 In code it could be done something like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn add_tile_map_physics(tile_map: Handle&lt;Node&gt;, graph: &amp;mut Graph) {
     // Create a new collider with tile map shape.
@@ -548,10 +547,10 @@ In code it could be done something like this:</p>
         .with_body_type(RigidBodyType::Static)
         .build(graph);
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>In the editor it could be done by creating a static 2D rigid body with a 2D collider that has the <code>TileMap</code> shape.
 Give the shape the tile map and the name of the collision layer that the rigid body is supposed to represent.</p>
-<p><img src="tile_map_physics.png" alt="tile map physics" /></p>
+<p><img src="tile_map_physics.png" alt="tile map physics"></p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
 <p>Tile map does not support any layers on its own, but layers can be added very easily by simply creating another tile
 map with its own tile set and shifting this new layer by Z axis towards camera by some small value.</p>
@@ -559,16 +558,16 @@ map with its own tile set and shifting this new layer by Z axis towards camera b
 <p>Tile set could contain custom properties for each tile, these properties could be used to attach additional information
 to the tiles in your game. This could include surface type (water, lava, dirt, etc.), physics properties (friction,
 restitution, etc.) and any other you need.</p>
-<p>In the tile set editor, create properties using the "Properties" tab which gives you access to a list of property layers.
+<p>In the tile set editor, create properties using the “Properties” tab which gives you access to a list of property layers.
 Each property layer has a data type, and the type must be chosen when the layer is created, since changing the type of
 an already existing layer could cause tiles to have the wrong type of value for the property.</p>
-<p><img src="tile_map_properties.png" alt="Tile map properties editor" /></p>
+<p><img src="tile_map_properties.png" alt="Tile map properties editor"></p>
 <p>Each property may also have a list of pre-defined values. Each pre-defined value has a name and a color to help the user
 visualize which tiles have that value for the property and to help keep track of the meaning of that value.
 Once a property has been created in the Properties tab, the value for that property can be set for each tile in the
 Tiles tab.</p>
 <p>In code, properties can be created, set, and accessed like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>const SOIL: i32 = 1;
 const SLIME: i32 = 2;
@@ -658,8 +657,8 @@ fn calculate_speed_factor(tile_map: &amp;TileMap, player_position: Vector3&lt;f3
     }
 }
 
-<span class="boring">}</span></code></pre></pre>
-<p>Here we have two types of tiles - soil and slime, soil does not have any effect on player's movement speed, while the
+<span class="boring">}</span></code></pre>
+<p>Here we have two types of tiles - soil and slime, soil does not have any effect on player’s movement speed, while the
 slime slows down the player by 30%. This code does not actually use any physical contact information and just uses tile
 position, but it could be fixed pretty easily - supply physical contact position to it, and it will return correct results.</p>
 
@@ -668,11 +667,11 @@ position, but it could be fixed pretty easily - supply physical contact position
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="../scene/rectangle.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
                             <a rel="next prefetch" href="../scene/autotiling.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -682,16 +681,21 @@ position, but it could be fixed pretty easily - supply physical contact position
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="../scene/rectangle.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
                     <a rel="next prefetch" href="../scene/autotiling.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
         <script>
@@ -702,19 +706,19 @@ position, but it could be fixed pretty easily - supply physical contact position
             window.playground_copyable = true;
         </script>
 
-        <script src="../ace.js"></script>
-        <script src="../mode-rust.js"></script>
-        <script src="../editor.js"></script>
-        <script src="../theme-dawn.js"></script>
-        <script src="../theme-tomorrow_night.js"></script>
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
 
-        <script src="../elasticlunr.min.js"></script>
-        <script src="../mark.min.js"></script>
-        <script src="../searcher.js"></script>
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
 
-        <script src="../clipboard.min.js"></script>
-        <script src="../highlight.js"></script>
-        <script src="../book.js"></script>
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 

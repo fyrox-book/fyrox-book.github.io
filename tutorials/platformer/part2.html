@@ -21,21 +21,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="../../favicon.svg">
-        <link rel="shortcut icon" href="../../favicon.png">
-        <link rel="stylesheet" href="../../css/variables.css">
-        <link rel="stylesheet" href="../../css/general.css">
-        <link rel="stylesheet" href="../../css/chrome.css">
-        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <link rel="icon" href="../../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../../css/general-2459343d.css">
+        <link rel="stylesheet" href="../../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <link rel="stylesheet" href="../../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="../../highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="../../tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="../../ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -47,10 +46,10 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex.js";
+            window.path_to_searchindex_js = "../../searchindex-2383a967.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc.js"></script>
+        <script src="../../toc-025265cf.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -64,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -93,12 +92,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -113,39 +112,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -153,82 +152,82 @@
 
                     <div class="right-buttons">
                         <a href="../../print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main" title="Git repository" aria-label="Git repository">
-                            <i id="git-repository-button" class="fa fa-github"></i>
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
                         </a>
                         <a href="https://github.com/fyrox-book/fyrox-book.github.io/edit/main/src/tutorials/platformer/part2.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
-                            <i id="git-edit-button" class="fa fa-edit"></i>
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="bots-and-ai"><a class="header" href="#bots-and-ai">Bots and AI</a></h1>
-<p>In this tutorial we'll add bots and a simple AI system to our 2D platformer. In the end we'll get something like this:</p>
-<p><img src="attack.gif" alt="attack" /></p>
+<p>In this tutorial we’ll add bots and a simple AI system to our 2D platformer. In the end we’ll get something like this:</p>
+<p><img src="attack.gif" alt="attack"></p>
 <h2 id="bot-prefab"><a class="header" href="#bot-prefab">Bot Prefab</a></h2>
-<p>Let's start by creating a prefab for our bots. Prefab is a separate scene, that can be instantiated at any time in some
+<p>Let’s start by creating a prefab for our bots. Prefab is a separate scene, that can be instantiated at any time in some
 other scene. It allows us to make reusable and well isolated parts of the game. At first, we need a sprite sheet for the
-bot, we'll use <a href="https://astrobob.itch.io/animated-pixel-art-skeleton">this one</a>. It contains attack, hit, death, walk, idle animations. In this tutorial we'll use only
+bot, we’ll use <a href="https://astrobob.itch.io/animated-pixel-art-skeleton">this one</a>. It contains attack, hit, death, walk, idle animations. In this tutorial we’ll use only
 walk and attack animations, other animations will be used in the next tutorial. The sprite sheet looks like this - 13x5
 sprites where every sprite is 64x64px:</p>
-<p><img src="skeleton.png" alt="skeleton" /></p>
+<p><img src="skeleton.png" alt="skeleton"></p>
 <p>Save this image in the <code>data/characters</code> folder as <code>skeleton.png</code>. Open the editor and create a new scene, right-click on
 the <code>__ROOT__</code> scene node and click on <code>Replace With -&gt; Physics 2D -&gt; Rigid Body</code>. Rename this node to <code>Skeleton</code> and then
 create a <code>Rectangle</code> child node by right-clicking on the <code>Skeleton</code> node and doing <code>Create Child -&gt; 2D -&gt; Rectangle</code>,
 select the new rectangle node and set its scale to <code>2.0, 2.0, 1.0</code> (default scale of 1.0 is too small and the skeleton
-will be half of the height of our player). Now let's apply a texture to the rectangle, find <code>skeleton.png</code> in the asset
+will be half of the height of our player). Now let’s apply a texture to the rectangle, find <code>skeleton.png</code> in the asset
 browser, select it, set its properties like on the screenshot below - all filtration modes to <code>Nearest</code> (to make its
 pixels sharp, not blurry) and wrapping to <code>Clamp To Edge</code> (to prevent potential seams on the edges). Find the <code>Material</code>
 property in the inspector and open the material editor, drag the <code>skeleton.png</code> texture from the asset browser to
 <code>diffuseTexture</code> property in the material editor. Set the <code>UV Rect -&gt; Size</code> property to <code>0.077; 0.2</code> to select a single
 sprite from the sprite sheet, and you should see something similar to this:</p>
-<p><img src="skeleton_prefab.png" alt="skeleton prefab" /></p>
+<p><img src="skeleton_prefab.png" alt="skeleton prefab"></p>
 <p>If you look closely at the world viewer, you should notice a small warning sign near the rigid body - the editor tells
-us that we've forgotten to add a collider to the rigid body. Let's fix this by right-clicking on the rigid body, then
+us that we’ve forgotten to add a collider to the rigid body. Let’s fix this by right-clicking on the rigid body, then
 select <code>Create Child -&gt; Physics 2D -&gt; Collider</code>. Select the collider and set its shape to <code>Capsule</code> in the properties
 like so:</p>
-<p><img src="capsule.png" alt="capsule" /></p>
-<p>We're almost finished with our prefab, the last step is to configure properties of the rigid body. Currently, we
-have a simple rigid body, that will rotate freely during collisions and will also "sleep" on inactivity, which will prevent
-the body from moving. Let's fix this by selecting the rigid body in the inspector and disable rotational movement and
+<p><img src="capsule.png" alt="capsule"></p>
+<p>We’re almost finished with our prefab, the last step is to configure properties of the rigid body. Currently, we
+have a simple rigid body, that will rotate freely during collisions and will also “sleep” on inactivity, which will prevent
+the body from moving. Let’s fix this by selecting the rigid body in the inspector and disable rotational movement and
 prevent it from sleeping:</p>
-<p><img src="rigid_body.png" alt="rigid body" /></p>
-<p>The "skeleton" of our skeleton (pun intended) prefab is finished, and now we can start writing some code.</p>
+<p><img src="rigid_body.png" alt="rigid body"></p>
+<p>The “skeleton” of our skeleton (pun intended) prefab is finished, and now we can start writing some code.</p>
 <h2 id="script"><a class="header" href="#script">Script</a></h2>
 <p>Now on to the code part, run the following command in the root folder of your game: <code>fyrox-template script --name=bot</code> and add
 the <code>mod bot;</code> line at the beginning of <code>lib.rs</code> of the <code>game</code> package. The code for the script will look something like
 this:</p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "d2786d36-a0af-4e67-916a-438af62f818b")]
@@ -259,12 +258,12 @@ impl ScriptTrait for Bot {
         // Put object logic here.
     }
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>We need only <code>on_update</code> method, and the rest methods can be removed. Register the script by adding
 <code>script_constructors.add::&lt;Bot&gt;("Bot");</code> line near the <code>script_constructors.add::&lt;Player&gt;("Player");</code>
 line in <code>lib.rs</code> (as we did in the previous part of the tutorial). We also need to import all required types for the bot,
 replace all the imports at the beginning of the <code>bot.rs</code> with the following:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::Game;
 use fyrox::{
@@ -287,28 +286,28 @@ use fyrox::{
     },
     script::{ScriptContext, ScriptTrait},
 };
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>We need to store a handle to the sprite in our script, add the following field in the <code>Bot</code> struct:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    rectangle: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Open the skeleton prefab and assign the script to the root rigid body. Set the <code>rectangle</code> field to <code>Sprite (2D)</code> and
-save the prefab. Great, now let's begin writing the actual AI code of the bot.</p>
+save the prefab. Great, now let’s begin writing the actual AI code of the bot.</p>
 <h3 id="patrol"><a class="header" href="#patrol">Patrol</a></h3>
-<p>By default, when there's no target nearby the bot will patrol in available bounds. Basically, it will walk from one "wall"
+<p>By default, when there’s no target nearby the bot will patrol in available bounds. Basically, it will walk from one “wall”
 to another. Add the following fields to the <code>Bot</code> script:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    speed: InheritableVariable&lt;f32&gt;,
     direction: f32,
     front_obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
     back_obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p><code>speed</code> field will define overall movement speed of the bot and <code>direction</code> will be used to alternate movement direction
 along X axis. Open the skeleton prefab and set the speed to <code>1.2</code> and the direction to <code>-1.0</code>. Add the movement handling
 code somewhere in the <code>impl Bot</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn do_move(&amp;mut self, ctx: &amp;mut ScriptContext) {
         let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) else {
@@ -330,33 +329,33 @@ code somewhere in the <code>impl Bot</code>:</p>
             1.0,
         ));
     }
-<span class="boring">}</span></code></pre></pre>
-<p>This code is quite straightforward - at first, we're doing a checked borrow of the node that contains the script. It must
-be of <code>dim2::RigidBody</code> type. Then we're setting horizontal speed of body using <code>speed</code> and <code>direction</code> variables we've
-added earlier. As the last step we're changing horizontal scale of the sprite using sign of the current direction. This
-way we're flipping the sprite in the current direction. Now we need to call <code>do_move</code> method in <code>on_update</code> like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<span class="boring">}</span></code></pre>
+<p>This code is quite straightforward - at first, we’re doing a checked borrow of the node that contains the script. It must
+be of <code>dim2::RigidBody</code> type. Then we’re setting horizontal speed of body using <code>speed</code> and <code>direction</code> variables we’ve
+added earlier. As the last step we’re changing horizontal scale of the sprite using sign of the current direction. This
+way we’re flipping the sprite in the current direction. Now we need to call <code>do_move</code> method in <code>on_update</code> like so:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        self.do_move(ctx);
-<span class="boring">}</span></code></pre></pre>
-<p>Open the main scene (<code>scene.rgs</code> by default) and find the skeleton prefab in the asset browser, drag'n'drop it in the
+<span class="boring">}</span></code></pre>
+<p>Open the main scene (<code>scene.rgs</code> by default) and find the skeleton prefab in the asset browser, drag’n’drop it in the
 scene and adjust its position to get something like this:</p>
-<p><img src="skeleton_on_scene.png" alt="skeleton on scene" /></p>
+<p><img src="skeleton_on_scene.png" alt="skeleton on scene"></p>
 <p>Run the game, and you should see the skeleton moving away from the player to the right. Cool, but the bot will be stuck
-immediately when it hits a wall, so we also need a way of detecting obstacles along the way, so the bot could "understand"
-when it should change movement direction. We'll use sensor collider for this purpose. Open the skeleton prefab and create
+immediately when it hits a wall, so we also need a way of detecting obstacles along the way, so the bot could “understand”
+when it should change movement direction. We’ll use sensor collider for this purpose. Open the skeleton prefab and create
 two new 2D colliders under the root <code>Skeleton</code> node, adjust their sizes to be something similar to the following screenshot:</p>
-<p><img src="obstacle_sensor.png" alt="obstacle sensor" /></p>
-<p>It is very important to have <code>Is Sensor</code> property checked on both colliders, we don't need the collider to participate
+<p><img src="obstacle_sensor.png" alt="obstacle sensor"></p>
+<p>It is very important to have <code>Is Sensor</code> property checked on both colliders, we don’t need the collider to participate
 in actual collision detection - it will be used only in intersection checks with the environment. Do not forget to assign
 handles of both <code>FrontObstacleSensor</code> and <code>BackObstacleSensor</code> to the respective fields in the <code>Bot</code> script instance on
 the root rigid body.</p>
 <p>Now onto the movement algorithm, it is quite simple: move the bot horizontally in the current direction until one of the
 obstacle sensors intersects with an obstacle. In this case all we need to do is to switch the current direction to opposite
 (from 1.0 to -1.0 and vice versa). This way the bot will patrol arbitrary level parts quite easily and reliably and
-there's no need to manually place any way points.</p>
+there’s no need to manually place any way points.</p>
 <p>Obstacles checking algorithms is quite simple, add the following code in the <code>impl Bot</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn has_obstacles(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; bool {
         let graph = &amp;ctx.scene.graph;
@@ -396,34 +395,34 @@ there's no need to manually place any way points.</p>
 
         false
     }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>At first, it selects the sensor using the current movement direction, then it fetches all intersection events from it
-and checks if there's at least one static rigid body intersected. Remember, that we've set static rigid bodies for our
+and checks if there’s at least one static rigid body intersected. Remember, that we’ve set static rigid bodies for our
 level tiles. As the final step, add the following code to the <code>on_update</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if self.has_obstacles(ctx) {
             self.direction = -self.direction;
         }
-<span class="boring">}</span></code></pre></pre>
-<p>This code is very simple - if there's an obstacle, then change movement direction to opposite. Now run the game and the
+<span class="boring">}</span></code></pre>
+<p>This code is very simple - if there’s an obstacle, then change movement direction to opposite. Now run the game and the
 bot should change its direction when it detects an obstacle before it. It should look like this:</p>
-<p><img src="obstacle_checks.gif" alt="obstacle checks" /></p>
-<p>There's no animations yet, but the basic movement works ok. We'll add animations later in this tutorial.</p>
+<p><img src="obstacle_checks.gif" alt="obstacle checks"></p>
+<p>There’s no animations yet, but the basic movement works ok. We’ll add animations later in this tutorial.</p>
 <h3 id="ground-checks"><a class="header" href="#ground-checks">Ground Checks</a></h3>
-<p>At this moment, our bot can move, but it can easily fall off the ledge into "abyss" and die. Let's prevent that by adding
-ground check, that will be used to switch movement direction also. How will we check for ground presence anyway? We'll do
+<p>At this moment, our bot can move, but it can easily fall off the ledge into “abyss” and die. Let’s prevent that by adding
+ground check, that will be used to switch movement direction also. How will we check for ground presence anyway? We’ll do
 this using simple ray casting. At first, add the following fields to the bot script:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    ground_probe: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
     ground_probe_distance: InheritableVariable&lt;f32&gt;,
     ground_probe_timeout: f32,
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p><code>ground_probe</code> field will be used to store a handle of a point scene node, that will be used as a starting point for ray
 casting. <code>ground_probe_distance</code> field is used to define maximum distance, after which ray casting considered failed.
 Now add the following code in the <code>impl Bot</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Bot {
     fn has_ground_in_front(&amp;self, ctx: &amp;ScriptContext) -&gt; bool {
@@ -474,11 +473,11 @@ Now add the following code in the <code>impl Bot</code>:</p>
 
         false
     }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Open the skeleton prefab and create the ground probe like so:</p>
-<p><img src="ground_probe.png" alt="ground probe" /></p>
+<p><img src="ground_probe.png" alt="ground probe"></p>
 <p>Do not forget to assign its handle to the bot script as well. Add the final piece of code to <code>on_update</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        self.ground_probe_timeout -= ctx.dt;
         if self.ground_probe_timeout &lt;= 0.0 {
@@ -487,28 +486,28 @@ Now add the following code in the <code>impl Bot</code>:</p>
             }
             self.ground_probe_timeout = 0.3;
         }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Open the editor and add another skeleton somewhere, where it can easily fall off the ledge. Run the game and the skeleton
 should avoid such place and walk back and forth on a platform.</p>
 <h3 id="targets"><a class="header" href="#targets">Targets</a></h3>
 <p>When the bot is patrolling, it will search for a target to attack. Bots will be able to attack only the player, so we just
-need to check if the player is in front of a bot and close enough to it. We need a way to get player's handle, we could just
-iterate over the scene and search for it at every frame, but that's inefficient and there's a better way. All we need to
+need to check if the player is in front of a bot and close enough to it. We need a way to get player’s handle, we could just
+iterate over the scene and search for it at every frame, but that’s inefficient and there’s a better way. All we need to
 do is to slightly modify the plugin and the player script. Add the following field to the plugin:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    player: Handle&lt;Node&gt;,
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Now we need to set this handle somehow, the ideal place for it is <code>on_start</code> method of the <code>Player</code> script:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
         ctx.plugins.get_mut::&lt;Game&gt;().player = ctx.handle;
     }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Great, now when the player script is created and initialized, it will register itself in the plugin. Now we can use this handle
-in the bot's target searching routine. Add the following code to the <code>impl Bot</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+in the bot’s target searching routine. Add the following code to the <code>impl Bot</code>:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn search_target(&amp;mut self, ctx: &amp;mut ScriptContext) {
         let game = ctx.plugins.get::&lt;Game&gt;();
@@ -526,21 +525,21 @@ in the bot's target searching routine. Add the following code to the <code>impl 
             self.target = game.player;
         }
     }
-<span class="boring">}</span></code></pre></pre>
-<p>This code is very straightforward - at first, we're fetching a reference to the plugin (in which we've just stored player's
-handle). Then we're getting self position of the bot and player's position. Finally, to check if the bot can "see" the
-player we're calculating horizontal distance between the player and the bot, checking its absolute value to be less than
+<span class="boring">}</span></code></pre>
+<p>This code is very straightforward - at first, we’re fetching a reference to the plugin (in which we’ve just stored player’s
+handle). Then we’re getting self position of the bot and player’s position. Finally, to check if the bot can “see” the
+player we’re calculating horizontal distance between the player and the bot, checking its absolute value to be less than
 some sensible threshold and also checking the sign of the distance. If the sign of the distance is opposite to the sign of
 the direction, then the bot can see the player. As the last step, call this method in the <code>on_update</code> method:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
         self.search_target(ctx);
-<span class="boring">}</span></code></pre></pre>
-<p>If there's a target, then the bot will follow it and try to attack when it is close enough. To implement this, all we need
+<span class="boring">}</span></code></pre>
+<p>If there’s a target, then the bot will follow it and try to attack when it is close enough. To implement this, all we need
 to do is to alternate movement direction according to a target position. Add the following code in <code>on_update</code>, but after
 any other direction modifications - target following will have priority over any other actions.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if self.target.is_some() {
             let target_position = ctx.scene.graph[self.target].global_position();
@@ -554,23 +553,23 @@ any other direction modifications - target following will have priority over any
                 self.speed.set_value_and_mark_modified(0.0);
             }
         }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="animations"><a class="header" href="#animations">Animations</a></h2>
-<p>Our bot can patrol, search and follow targets, but all of this is not properly visualized since we're not using any animations
-for such actions. Let's fix this, add the following fields to the <code>Bot</code> structure:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<p>Our bot can patrol, search and follow targets, but all of this is not properly visualized since we’re not using any animations
+for such actions. Let’s fix this, add the following fields to the <code>Bot</code> structure:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    animations: Vec&lt;SpriteSheetAnimation&gt;,
     current_animation: InheritableVariable&lt;u32&gt;,
-<span class="boring">}</span></code></pre></pre>
-<p>As with the player from the previous tutorial, we'll use sprite sheet animations. Open the bot prefab and select the rigid
+<span class="boring">}</span></code></pre>
+<p>As with the player from the previous tutorial, we’ll use sprite sheet animations. Open the bot prefab and select the rigid
 body, add five animations and fill every slot. For example, attack animation will look like this:</p>
-<p><img src="attack_animation.png" alt="attack animation" /></p>
+<p><img src="attack_animation.png" alt="attack animation"></p>
 <p>If you have any issues with this, see previous part of the tutorial to learn how to use sprite sheet animations editor.
 Remember, that we have 5 animations and their indices are the following: 0 - attack, 1 - death, 2 - walk, 3 - idle, 4 - hit
 reaction. Now on to the animation switching. We need to handle just two animations for now - walking and attacking. Add
 the following code somewhere in the <code>on_update</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if self.direction != 0.0 {
             self.current_animation.set_value_and_mark_modified(2);
@@ -582,11 +581,11 @@ the following code somewhere in the <code>on_update</code>:</p>
                 self.current_animation.set_value_and_mark_modified(0);
             }
         }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Here we just switch current animation index. If the bot is moving, then movement animation is selected (with index 2) and
-if there's a target (and it is close enough), then the attack animation is selected (with index 0). The last step is to
-apply the animation to the bot's sprite. Add the following code at the end of <code>on_update</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+if there’s a target (and it is close enough), then the attack animation is selected (with index 0). The last step is to
+apply the animation to the bot’s sprite. Add the following code at the end of <code>on_update</code>:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
             current_animation.update(ctx.dt);
@@ -608,15 +607,15 @@ apply the animation to the bot's sprite. Add the following code at the end of <c
                 );
             }
         }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Run the game and you should see something like this:</p>
-<p><img src="attack.gif" alt="attack" /></p>
+<p><img src="attack.gif" alt="attack"></p>
 <p>You can create multiple instances of the skeleton and place them in different places on your level, to make the game more
 interesting. This tutorial teaches about technical details, not game design, so use your imagination and experiment with
 different approaches.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this tutorial we've learned how to create basic AI, that can patrol an area, search for a target, follow and attack it.
-In the next tutorial we'll add damage system, ability to attack for the player and the bot and various items, such as
+<p>In this tutorial we’ve learned how to create basic AI, that can patrol an area, search for a target, follow and attack it.
+In the next tutorial we’ll add damage system, ability to attack for the player and the bot and various items, such as
 healing potions.</p>
 
                     </main>
@@ -624,11 +623,11 @@ healing potions.</p>
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="../../tutorials/platformer/part1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
                             <a rel="next prefetch" href="../../tutorials/rpg/intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -638,16 +637,21 @@ healing potions.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="../../tutorials/platformer/part1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
                     <a rel="next prefetch" href="../../tutorials/rpg/intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
         <script>
@@ -658,19 +662,19 @@ healing potions.</p>
             window.playground_copyable = true;
         </script>
 
-        <script src="../../ace.js"></script>
-        <script src="../../mode-rust.js"></script>
-        <script src="../../editor.js"></script>
-        <script src="../../theme-dawn.js"></script>
-        <script src="../../theme-tomorrow_night.js"></script>
+        <script src="../../ace-2a3cd908.js"></script>
+        <script src="../../mode-rust-2c9d5c9a.js"></script>
+        <script src="../../editor-16ca416c.js"></script>
+        <script src="../../theme-dawn-4493f9c8.js"></script>
+        <script src="../../theme-tomorrow_night-9dbe62a9.js"></script>
 
-        <script src="../../elasticlunr.min.js"></script>
-        <script src="../../mark.min.js"></script>
-        <script src="../../searcher.js"></script>
+        <script src="../../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../../mark-09e88c2c.min.js"></script>
+        <script src="../../searcher-c2a407aa.js"></script>
 
-        <script src="../../clipboard.min.js"></script>
-        <script src="../../highlight.js"></script>
-        <script src="../../book.js"></script>
+        <script src="../../clipboard-1626706a.min.js"></script>
+        <script src="../../highlight-abc7f01d.js"></script>
+        <script src="../../book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 
