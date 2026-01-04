@@ -1,7 +1,6 @@
 [book]
 authors = ["Dmitry Stepanov"]
 language = "en"
-multilingual = false
 src = "src"
 title = "Fyrox Book"
 
