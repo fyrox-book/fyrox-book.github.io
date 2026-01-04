@@ -15,3 +15,4 @@ pub mod scripting;
 pub mod serialization;
 pub mod ui;
 pub mod window;
+pub mod error;

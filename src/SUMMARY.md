@@ -22,6 +22,7 @@
     - [Plugins](./scripting/plugin.md)
     - [Scripts](./scripting/script.md)
     - [Tasks](./scripting/tasks.md)
+    - [Error Handling](./scripting/error.md)
     - [Executor](./scripting/executor.md)
 - [Scene](./scene/scene.md)
     - [Graph](./scene/graph.md)
