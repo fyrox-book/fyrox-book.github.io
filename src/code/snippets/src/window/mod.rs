@@ -6,6 +6,7 @@ use fyrox::{
     plugin::{Plugin, PluginContext},
     window::{CursorGrabMode, Fullscreen},
 };
+use fyrox::plugin::error::GameResult;
 
 #[derive(Debug, Reflect, Visit)]
 struct MyGame {
@@ -13,7 +14,7 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn update(&mut self, ctx: &mut PluginContext) {
+    fn update(&mut self, ctx: &mut PluginContext)->GameResult {
         // ANCHOR: fullscreen
         if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
             // Option 1: Use borderless non-exclusive full screen mode.
@@ -58,5 +59,7 @@ impl Plugin for MyGame {
         if let GraphicsContext::Initialized(ref graphics_context) = ctx.graphics_context {
             let window_size = graphics_context.window.inner_size();
         }
+        
+        Ok(())
     }
 }

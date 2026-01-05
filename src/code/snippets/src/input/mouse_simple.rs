@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
@@ -18,7 +19,7 @@ pub struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let mouse_speed = ctx.input_state.mouse_speed();
         let limit = std::f32::consts::FRAC_PI_2;
 
@@ -31,6 +32,7 @@ impl ScriptTrait for Player {
             UnitQuaternion::from_axis_angle(&Vector3::x_axis(), self.pitch)
                 * UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw),
         );
+        Ok(())
     }
 }
 // ANCHOR_END: mouse
@@ -44,12 +46,13 @@ pub struct Clicker {
 }
 
 impl ScriptTrait for Clicker {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         if ctx.input_state.is_left_mouse_button_pressed() {
             self.counter += 1;
         } else if ctx.input_state.is_left_mouse_button_released() {
             self.counter -= 1;
         }
+        Ok(())
     }
 }
 // ANCHOR_END: clicker

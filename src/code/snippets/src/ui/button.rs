@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     asset::manager::ResourceManager,
     core::pool::Handle,
@@ -60,14 +61,18 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_ui_message(&mut self, _context: &mut PluginContext, message: &UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                //
-                // Insert your code clicking handling code here.
-                //
-            }
+    fn on_ui_message(
+        &mut self,
+        _context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.button) {
+            //
+            // Insert your code clicking handling code here.
+            //
         }
+        Ok(())
     }
 }
 // ANCHOR_END: button_click_handling
@@ -97,14 +102,16 @@ impl Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.quit_button_handle {
-                if let Some(window_target) = context.window_target {
-                    window_target.exit();
-                }
-            }
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.quit_button_handle) {
+            context.loop_controller.exit();
         }
+        Ok(())
     }
 }
 // ANCHOR_END: quit_button

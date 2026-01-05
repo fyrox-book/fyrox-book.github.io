@@ -1,7 +1,8 @@
 use fyrox::core::color::Color;
 use fyrox::gui::image::ImageBuilder;
 use fyrox::gui::UiNode;
-use fyrox::renderer::framework::gpu_texture::PixelKind;
+use fyrox::plugin::error::GameResult;
+use fyrox::renderer::ui_renderer::UiRenderInfo;
 use fyrox::{
     core::{algebra::Vector2, log::Log, pool::Handle},
     core::{reflect::prelude::*, visitor::prelude::*},
@@ -25,7 +26,7 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
         // Add this code to your Plugin::init
 
         // Define the desired render target size.
@@ -46,9 +47,11 @@ impl Plugin for Game {
         let mut material = Material::standard();
         material.bind("diffuseTexture", Some(self.render_target.clone()));
         // This material **must** be assigned to some mesh in your scene!
+
+        Ok(())
     }
 
-    fn update(&mut self, context: &mut PluginContext) {
+    fn update(&mut self, context: &mut PluginContext) -> GameResult {
         // It is very important to update the UI every frame and process all events that
         // comes from it.
         self.my_ui
@@ -57,9 +60,11 @@ impl Plugin for Game {
         while let Some(message) = self.my_ui.poll_message() {
             // Do something with the events coming from the custom UI.
         }
+
+        Ok(())
     }
 
-    fn on_os_event(&mut self, event: &Event<()>, context: PluginContext) {
+    fn on_os_event(&mut self, event: &Event<()>, context: PluginContext) -> GameResult {
         // This is the tricky part. Event OS event handling will be different depending on the use case.
         // In cases if your UI just shows some information, this method can be fully removed. In case when
         // you need to interact with the UI, there are two different ways.
@@ -73,19 +78,22 @@ impl Plugin for Game {
                 self.my_ui.process_os_event(&event);
             }
         }
+
+        Ok(())
     }
 
-    fn before_rendering(&mut self, context: PluginContext) {
+    fn before_rendering(&mut self, context: PluginContext) -> GameResult {
         // Render the UI before every other rendering operation, this way the texture will be ready for use immediately.
         if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context {
-            Log::verify(graphics_context.renderer.render_ui_to_texture(
-                self.render_target.clone(),
-                self.screen_size,
-                self.my_ui.draw(),
-                Color::TRANSPARENT,
-                PixelKind::RGBA8,
-            ));
+            Log::verify(graphics_context.renderer.render_ui(UiRenderInfo {
+                ui: &self.my_ui,
+                render_target: Some(self.render_target.clone()),
+                clear_color: Color::TRANSPARENT,
+                resource_manager: &context.resource_manager,
+            }));
         }
+
+        Ok(())
     }
 }
 // ANCHOR_END: rendering

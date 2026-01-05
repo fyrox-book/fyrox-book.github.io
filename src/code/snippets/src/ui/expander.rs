@@ -6,7 +6,9 @@ use fyrox::gui::message::{MessageDirection, UiMessage};
 use fyrox::gui::{
     button::ButtonBuilder, core::pool::Handle, expander::ExpanderBuilder,
     stack_panel::StackPanelBuilder, text::TextBuilder, widget::WidgetBuilder, BuildContext, UiNode,
+    UserInterface,
 };
+use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginContext};
 
 // ANCHOR: create_expander
@@ -68,7 +70,12 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
         if let Some(ExpanderMessage::Expand(expanded)) = message.data() {
             if message.destination() == self.expander
                 && message.direction() == MessageDirection::FromWidget
@@ -80,6 +87,7 @@ impl Plugin for Game {
                 );
             }
         }
+        Ok(())
     }
 }
 // ANCHOR_END: message_handling

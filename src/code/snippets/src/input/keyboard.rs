@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{algebra::Vector3, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
     event::{ElementState, Event, WindowEvent},
@@ -15,7 +16,7 @@ pub struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) {
+    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) -> GameResult {
         // Listen to keyboard events, that comes to the main window.
         if let Event::WindowEvent {
             event: WindowEvent::KeyboardInput { event, .. },
@@ -36,9 +37,10 @@ impl ScriptTrait for Player {
                 }
             }
         }
+        Ok(())
     }
 
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let node = &mut ctx.scene.graph[ctx.handle];
         let transform = node.local_transform_mut();
         if self.move_left {
@@ -47,6 +49,7 @@ impl ScriptTrait for Player {
         if self.move_right {
             transform.offset(Vector3::new(1.0, 0.0, 0.0));
         }
+        Ok(())
     }
 }
 // ANCHOR_END: keyboard
