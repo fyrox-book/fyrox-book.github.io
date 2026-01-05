@@ -1,5 +1,6 @@
 // ANCHOR: imports
 use crate::Game;
+use fyrox::plugin::error::{GameError, GameResult};
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
@@ -27,7 +28,7 @@ use fyrox::{
 #[visit(optional)]
 pub struct Bot {
     // ANCHOR: visual_fields
-    rectangle: InheritableVariable<Handle<Node>>,
+    rectangle: InheritableVariable<Handle<Rectangle>>,
     // ANCHOR_END: visual_fields
 
     // ANCHOR: ground_probe_fields
@@ -39,8 +40,8 @@ pub struct Bot {
     // ANCHOR: movement_fields
     speed: InheritableVariable<f32>,
     direction: f32,
-    front_obstacle_sensor: InheritableVariable<Handle<Node>>,
-    back_obstacle_sensor: InheritableVariable<Handle<Node>>,
+    front_obstacle_sensor: InheritableVariable<Handle<Collider>>,
+    back_obstacle_sensor: InheritableVariable<Handle<Collider>>,
     // ANCHOR_END: movement_fields
 
     // ANCHOR: target_fields
@@ -77,16 +78,16 @@ impl Default for Bot {
 
 // ANCHOR: has_ground_in_front
 impl Bot {
-    fn has_ground_in_front(&self, ctx: &ScriptContext) -> bool {
+    fn has_ground_in_front(&self, ctx: &ScriptContext) -> Result<bool, GameError> {
+        let graph = &ctx.scene.graph;
+
         // Do ground check using ray casting from the ground probe position down at some distance.
-        let Some(ground_probe) = ctx.scene.graph.try_get(*self.ground_probe) else {
-            return false;
-        };
+        let ground_probe = graph.try_get(*self.ground_probe)?;
 
         let ground_probe_position = ground_probe.global_position().xy();
 
         let mut intersections = Vec::new();
-        ctx.scene.graph.physics2d.cast_ray(
+        graph.physics2d.cast_ray(
             RayCastOptions {
                 ray_origin: ground_probe_position.into(),
                 // Cast the ray
@@ -100,42 +101,30 @@ impl Bot {
         );
 
         for intersection in intersections {
-            let Some(collider) = ctx.scene.graph.try_get(intersection.collider) else {
-                continue;
-            };
-
-            let Some(rigid_body) = ctx
-                .scene
-                .graph
-                .try_get_of_type::<RigidBody>(collider.parent())
-            else {
-                continue;
-            };
-
+            let collider = graph.try_get(intersection.collider)?;
+            let rigid_body = graph.try_get_of_type::<RigidBody>(collider.parent())?;
+            let distance = intersection
+                .position
+                .coords
+                .metric_distance(&ground_probe_position);
             if rigid_body.body_type() == RigidBodyType::Static
-                && intersection
-                    .position
-                    .coords
-                    .metric_distance(&ground_probe_position)
-                    <= *self.ground_probe_distance
+                && distance <= *self.ground_probe_distance
             {
-                return true;
+                return Ok(true);
             }
         }
 
-        false
+        Ok(false)
     }
     // ANCHOR_END: has_ground_in_front
 
     // ANCHOR: search_target
-    fn search_target(&mut self, ctx: &mut ScriptContext) {
+    fn search_target(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let game = ctx.plugins.get::<Game>();
 
         let self_position = ctx.scene.graph[ctx.handle].global_position();
 
-        let Some(player) = ctx.scene.graph.try_get(game.player) else {
-            return;
-        };
+        let player = ctx.scene.graph.try_get(game.player)?;
 
         let player_position = player.global_position();
 
@@ -143,34 +132,32 @@ impl Bot {
         if signed_distance.abs() < 3.0 && signed_distance.signum() != self.direction.signum() {
             self.target = game.player;
         }
+        Ok(())
     }
     // ANCHOR_END: search_target
 
     // ANCHOR: do_move
-    fn do_move(&mut self, ctx: &mut ScriptContext) {
-        let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) else {
-            return;
-        };
+    fn do_move(&mut self, ctx: &mut ScriptContext) -> GameResult {
+        let graph = &mut ctx.scene.graph;
 
+        let rigid_body = graph.try_get_mut_of_type::<RigidBody>(ctx.handle)?;
         let y_vel = rigid_body.lin_vel().y;
-
         rigid_body.set_lin_vel(Vector2::new(-*self.speed * self.direction, y_vel));
 
         // Also, inverse the sprite along the X axis.
-        let Some(rectangle) = ctx.scene.graph.try_get_mut(*self.rectangle) else {
-            return;
-        };
-
+        let rectangle = graph.try_get_mut(*self.rectangle)?;
         rectangle.local_transform_mut().set_scale(Vector3::new(
             2.0 * self.direction.signum(),
             2.0,
             1.0,
         ));
+
+        Ok(())
     }
     // ANCHOR_END: do_move
 
     // ANCHOR: has_obstacles
-    fn has_obstacles(&mut self, ctx: &mut ScriptContext) -> bool {
+    fn has_obstacles(&mut self, ctx: &mut ScriptContext) -> Result<bool, GameError> {
         let graph = &ctx.scene.graph;
 
         // Select the sensor using current walking direction.
@@ -181,44 +168,35 @@ impl Bot {
         };
 
         // Check if it intersects something.
-        let Some(obstacle_sensor) = graph.try_get_of_type::<Collider>(sensor_handle) else {
-            return false;
-        };
+        let obstacle_sensor = graph.try_get(sensor_handle)?;
 
         for intersection in obstacle_sensor
             .intersects(&ctx.scene.graph.physics2d)
             .filter(|i| i.has_any_active_contact)
         {
             for collider_handle in [intersection.collider1, intersection.collider2] {
-                let Some(other_collider) = graph.try_get_of_type::<Collider>(collider_handle)
-                else {
-                    continue;
-                };
-
-                let Some(rigid_body) = graph.try_get_of_type::<RigidBody>(other_collider.parent())
-                else {
-                    continue;
-                };
+                let other_collider = graph.try_get_of_type::<Collider>(collider_handle)?;
+                let rigid_body = graph.try_get_of_type::<RigidBody>(other_collider.parent())?;
 
                 if rigid_body.body_type() == RigidBodyType::Static {
-                    return true;
+                    return Ok(true);
                 }
             }
         }
 
-        false
+        Ok(false)
     }
     // ANCHOR_END: has_obstacles
 }
 
 impl ScriptTrait for Bot {
     // ANCHOR: search_target_call
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
-        self.search_target(ctx);
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
+        self.search_target(ctx)?;
         // ANCHOR_END: search_target_call
 
         // ANCHOR: check_for_obstacles
-        if self.has_obstacles(ctx) {
+        if self.has_obstacles(ctx)? {
             self.direction = -self.direction;
         }
         // ANCHOR_END: check_for_obstacles
@@ -226,7 +204,7 @@ impl ScriptTrait for Bot {
         // ANCHOR: ground_checks
         self.ground_probe_timeout -= ctx.dt;
         if self.ground_probe_timeout <= 0.0 {
-            if !self.has_ground_in_front(ctx) {
+            if !self.has_ground_in_front(ctx)? {
                 self.direction = -self.direction;
             }
             self.ground_probe_timeout = 0.3;
@@ -249,7 +227,7 @@ impl ScriptTrait for Bot {
         // ANCHOR_END: move_to_target
 
         // ANCHOR: do_move_call
-        self.do_move(ctx);
+        self.do_move(ctx)?;
         // ANCHOR_END: do_move_call
 
         // ANCHOR: animation_switching
@@ -269,23 +247,20 @@ impl ScriptTrait for Bot {
         if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
             current_animation.update(ctx.dt);
 
-            if let Some(sprite) = ctx
-                .scene
-                .graph
-                .try_get_mut_of_type::<Rectangle>(*self.rectangle)
-            {
-                // Set new frame to the sprite.
-                sprite
-                    .material()
-                    .data_ref()
-                    .bind("diffuseTexture", current_animation.texture());
-                sprite.set_uv_rect(
-                    current_animation
-                        .current_frame_uv_rect()
-                        .unwrap_or_default(),
-                );
-            }
+            let sprite = ctx.scene.graph.try_get_mut::<Rectangle>(*self.rectangle)?;
+            // Set the new frame to the sprite.
+            sprite
+                .material()
+                .data_ref()
+                .bind("diffuseTexture", current_animation.texture());
+            sprite.set_uv_rect(
+                current_animation
+                    .current_frame_uv_rect()
+                    .unwrap_or_default(),
+            );
         }
         // ANCHOR_END: applying_animation
+
+        Ok(())
     }
 }
