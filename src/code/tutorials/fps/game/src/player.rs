@@ -1,5 +1,6 @@
 use crate::weapon::ShootWeaponMessage;
 use fyrox::graph::SceneGraph;
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, UnitVector3, Vector3},
@@ -52,7 +53,7 @@ pub struct Player {
 
 impl ScriptTrait for Player {
     // ANCHOR: on_os_event
-    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) {
+    fn on_os_event(&mut self, event: &Event<()>, _ctx: &mut ScriptContext) -> GameResult {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
@@ -76,18 +77,10 @@ impl ScriptTrait for Player {
                 if let PhysicalKey::Code(code) = event.physical_key {
                     let is_pressed = event.state == ElementState::Pressed;
                     match code {
-                        KeyCode::KeyW => {
-                            self.move_forward = is_pressed;
-                        }
-                        KeyCode::KeyS => {
-                            self.move_backward = is_pressed;
-                        }
-                        KeyCode::KeyA => {
-                            self.move_left = is_pressed;
-                        }
-                        KeyCode::KeyD => {
-                            self.move_right = is_pressed;
-                        }
+                        KeyCode::KeyW => self.move_forward = is_pressed,
+                        KeyCode::KeyS => self.move_backward = is_pressed,
+                        KeyCode::KeyA => self.move_left = is_pressed,
+                        KeyCode::KeyD => self.move_right = is_pressed,
                         _ => (),
                     }
                 }
@@ -111,10 +104,12 @@ impl ScriptTrait for Player {
             self.shoot = *state == ElementState::Pressed;
         }
         // ANCHOR_END: shooting
+
+        Ok(())
     }
 
     // ANCHOR: on_update_begin
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         // ANCHOR_END: on_update_begin
 
         // ANCHOR: shooting_on_update
@@ -125,54 +120,55 @@ impl ScriptTrait for Player {
         // ANCHOR_END: shooting_on_update
 
         // ANCHOR: camera_rotation
-        let mut look_vector = Vector3::default();
-        let mut side_vector = Vector3::default();
-        if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
-            look_vector = camera.look_vector();
-            side_vector = camera.side_vector();
+        let camera = ctx.scene.graph.try_get_mut(self.camera)?;
+        let look_vector = camera.look_vector();
+        let side_vector = camera.side_vector();
 
-            let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
-            let transform = camera.local_transform_mut();
-            transform.set_rotation(
-                UnitQuaternion::from_axis_angle(
-                    &UnitVector3::new_normalize(yaw * Vector3::x()),
-                    self.pitch.to_radians(),
-                ) * yaw,
-            );
-        }
+        let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
+        let transform = camera.local_transform_mut();
+        transform.set_rotation(
+            UnitQuaternion::from_axis_angle(
+                &UnitVector3::new_normalize(yaw * Vector3::x()),
+                self.pitch.to_radians(),
+            ) * yaw,
+        );
         // ANCHOR_END: camera_rotation
 
         // ANCHOR: on_update_end
         // Borrow the node to which this script is assigned to. We also check if the node is RigidBody.
-        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
-            // Form a new velocity vector that corresponds to the pressed buttons.
-            let mut velocity = Vector3::new(0.0, 0.0, 0.0);
-            if self.move_forward {
-                velocity += look_vector;
-            }
-            if self.move_backward {
-                velocity -= look_vector;
-            }
-            if self.move_left {
-                velocity += side_vector;
-            }
-            if self.move_right {
-                velocity -= side_vector;
-            }
-
-            let y_vel = rigid_body.lin_vel().y;
-            if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
-                let movement_speed = 240.0 * ctx.dt;
-                rigid_body.set_lin_vel(Vector3::new(
-                    normalized_velocity.x * movement_speed,
-                    y_vel,
-                    normalized_velocity.z * movement_speed,
-                ));
-            } else {
-                // Hold player in-place in XZ plane when no button is pressed.
-                rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
-            }
+        let rigid_body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::<RigidBody>(ctx.handle)?;
+        // Form a new velocity vector that corresponds to the pressed buttons.
+        let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+        if self.move_forward {
+            velocity += look_vector;
         }
+        if self.move_backward {
+            velocity -= look_vector;
+        }
+        if self.move_left {
+            velocity += side_vector;
+        }
+        if self.move_right {
+            velocity -= side_vector;
+        }
+
+        let y_vel = rigid_body.lin_vel().y;
+        if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
+            let movement_speed = 240.0 * ctx.dt;
+            rigid_body.set_lin_vel(Vector3::new(
+                normalized_velocity.x * movement_speed,
+                y_vel,
+                normalized_velocity.z * movement_speed,
+            ));
+        } else {
+            // Hold player in-place in XZ plane when no button is pressed.
+            rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
+        }
+
+        Ok(())
     }
     // ANCHOR_END: on_update_end
 }
