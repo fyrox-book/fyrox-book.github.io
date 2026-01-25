@@ -6,12 +6,6 @@ mod residuals;
 // ANCHOR: imports
 use crate::bot::Bot;
 use fyrox::{
-    plugin::{
-        error::GameResult,
-        Plugin,
-        PluginContext,
-        PluginRegistrationContext
-    },
     core::{
         algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
         visitor::prelude::*,
@@ -19,13 +13,14 @@ use fyrox::{
     event::{ElementState, Event, WindowEvent},
     graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
+    plugin::{error::GameResult, Plugin, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
         node::Node,
         Scene,
     },
-    script::{ScriptContext, ScriptTrait}
+    script::{ScriptContext, ScriptTrait},
 };
 use std::path::Path;
 // ANCHOR_END: imports
@@ -203,17 +198,11 @@ impl ScriptTrait for Player {
         if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
             current_animation.update(context.dt);
 
-            let sprite = context.scene.graph.try_get_mut(self.sprite)?;
-            // Set new frame to the sprite.
-            sprite
-                .material()
-                .data_ref()
-                .bind("diffuseTexture", current_animation.texture());
-            sprite.set_uv_rect(
-                current_animation
-                    .current_frame_uv_rect()
-                    .unwrap_or_default(),
-            );
+            context
+                .scene
+                .graph
+                .try_get_mut(self.sprite)?
+                .apply_animation(current_animation);
         }
         // ANCHOR_END: applying_animation
 

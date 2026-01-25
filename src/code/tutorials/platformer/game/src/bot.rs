@@ -3,12 +3,8 @@ use crate::Game;
 use fyrox::plugin::error::{GameError, GameResult};
 use fyrox::{
     core::{
-        algebra::{Vector2, Vector3},
-        pool::Handle,
-        reflect::prelude::*,
-        type_traits::prelude::*,
-        variable::InheritableVariable,
-        visitor::prelude::*,
+        algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
+        variable::InheritableVariable, visitor::prelude::*,
     },
     graph::SceneGraph,
     scene::{
@@ -140,17 +136,13 @@ impl Bot {
     fn do_move(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let graph = &mut ctx.scene.graph;
 
-        let rigid_body = graph.try_get_mut_of_type::<RigidBody>(ctx.handle)?;
-        let y_vel = rigid_body.lin_vel().y;
-        rigid_body.set_lin_vel(Vector2::new(-*self.speed * self.direction, y_vel));
+        graph
+            .try_get_mut_of_type::<RigidBody>(ctx.handle)?
+            .set_lin_vel_x(-*self.speed * self.direction);
 
-        // Also, inverse the sprite along the X axis.
-        let rectangle = graph.try_get_mut(*self.rectangle)?;
-        rectangle.local_transform_mut().set_scale(Vector3::new(
-            2.0 * self.direction.signum(),
-            2.0,
-            1.0,
-        ));
+        graph
+            .try_get_mut(*self.rectangle)?
+            .set_scale_xyz(2.0 * self.direction.signum(), 2.0, 1.0);
 
         Ok(())
     }
@@ -175,7 +167,7 @@ impl Bot {
             .filter(|i| i.has_any_active_contact)
         {
             for collider_handle in [intersection.collider1, intersection.collider2] {
-                let other_collider = graph.try_get_of_type::<Collider>(collider_handle)?;
+                let other_collider = graph.try_get(collider_handle)?;
                 let rigid_body = graph.try_get_of_type::<RigidBody>(other_collider.parent())?;
 
                 if rigid_body.body_type() == RigidBodyType::Static {
@@ -247,17 +239,10 @@ impl ScriptTrait for Bot {
         if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
             current_animation.update(ctx.dt);
 
-            let sprite = ctx.scene.graph.try_get_mut::<Rectangle>(*self.rectangle)?;
-            // Set the new frame to the sprite.
-            sprite
-                .material()
-                .data_ref()
-                .bind("diffuseTexture", current_animation.texture());
-            sprite.set_uv_rect(
-                current_animation
-                    .current_frame_uv_rect()
-                    .unwrap_or_default(),
-            );
+            ctx.scene
+                .graph
+                .try_get_mut(*self.rectangle)?
+                .apply_animation(current_animation);
         }
         // ANCHOR_END: applying_animation
 
