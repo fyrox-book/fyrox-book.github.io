@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -245,10 +245,11 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -257,8 +258,9 @@ impl Plugin for MyGame {
         scene: Handle&lt;Scene&gt;,
         _data: &amp;[u8],
         _context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -317,7 +319,7 @@ impl MyGame {
         self.data.visit("Data", &amp;mut visitor).unwrap();
 
         // Save it to a file.
-        visitor.save_binary(Path::new("save.rgs")).unwrap()
+        visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
     pub fn load_game(&amp;mut self, context: &amp;mut PluginContext) {
@@ -330,10 +332,11 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -342,13 +345,15 @@ impl Plugin for MyGame {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         _context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
 
         // Restore the data when the scene was loaded.
         if let Ok(mut visitor) = Visitor::load_from_memory(data) {
             self.data.visit("Data", &amp;mut visitor).unwrap();
         }
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

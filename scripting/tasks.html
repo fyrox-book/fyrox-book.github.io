@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -231,49 +231,50 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Borrow a navigational mesh scene node first.
-        if let Some(navmesh_node) = ctx
+        let navmesh_node = ctx
             .scene
             .graph
-            .try_get_of_type::&lt;NavigationalMesh&gt;(self.navmesh)
-        {
-            // Take a shared reference to the internal navigational mesh.
-            let shared_navmesh = navmesh_node.navmesh();
+            .try_get_of_type::&lt;NavigationalMesh&gt;(self.navmesh)?;
 
-            // Spawn a task, that will calculate a long path.
-            ctx.task_pool.spawn_script_task(
-                ctx.scene_handle,
-                ctx.handle,
-                ctx.script_index,
-                async move {
-                    let navmesh = shared_navmesh.read();
+        // Take a shared reference to the internal navigational mesh.
+        let shared_navmesh = navmesh_node.navmesh();
 
-                    if let Some((_, begin_index)) =
-                        navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0))
+        // Spawn a task, that will calculate a long path.
+        ctx.task_pool.spawn_script_task(
+            ctx.scene_handle,
+            ctx.handle,
+            ctx.script_index,
+            async move {
+                let navmesh = shared_navmesh.read();
+
+                if let Some((_, begin_index)) = navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0)) {
+                    if let Some((_, end_index)) =
+                        navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
                     {
-                        if let Some((_, end_index)) =
-                            navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
+                        let mut path = Vec::new();
+                        if navmesh
+                            .build_path(begin_index, end_index, &amp;mut path)
+                            .is_ok()
                         {
-                            let mut path = Vec::new();
-                            if navmesh
-                                .build_path(begin_index, end_index, &amp;mut path)
-                                .is_ok()
-                            {
-                                return Some(path);
-                            }
+                            return Some(path);
                         }
                     }
+                }
 
-                    None
-                },
-                |path, this: &amp;mut MyScript, _ctx| {
-                    this.path = path;
+                None
+            },
+            |path, this: &amp;mut MyScript, _ctx| {
+                this.path = path;
 
-                    Log::info("Path is calculated!");
-                },
-            );
-        }
+                Log::info("Path is calculated!");
+
+                Ok(())
+            },
+        );
+
+        Ok(())
     }
 
     fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
@@ -324,11 +325,12 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn update(&amp;mut self, _context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, _context: &amp;mut PluginContext) -&gt; GameResult {
         // Do something with the data.
         if let Some(data) = self.data.take() {
             println!("The data is: {:?}", data);
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

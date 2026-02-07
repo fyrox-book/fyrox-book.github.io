@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -223,57 +223,72 @@ impl Game {
 }
 
 impl Plugin for Game {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         // Register scripts here.
+        Ok(())
     }
 
-    fn register_property_editors(&amp;self) -&gt; PropertyEditorDefinitionContainer {
+    fn register_property_editors(&amp;self, editors: Arc&lt;PropertyEditorDefinitionContainer&gt;) {
         // Register custom property editors for the editor here.
-        PropertyEditorDefinitionContainer::empty()
     }
 
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
+        Ok(())
     }
 
-    fn on_loaded(&amp;mut self, context: PluginContext) {
+    fn on_loaded(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // For hot reloading only! Only for development.
         // Re-initialize non-serializable data.
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, _context: PluginContext) {
+    fn on_deinit(&amp;mut self, _context: PluginContext) -&gt; GameResult {
         // Do a cleanup here.
+        Ok(())
     }
 
-    fn update(&amp;mut self, _context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, _context: &amp;mut PluginContext) -&gt; GameResult {
         // Add your global update code here.
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, _event: &amp;Event&lt;()&gt;, _context: PluginContext) {
+    fn on_os_event(&amp;mut self, _event: &amp;Event&lt;()&gt;, _context: PluginContext) -&gt; GameResult {
         // Do something on OS event here.
+        Ok(())
     }
 
-    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) {
+    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Executed when graphics context was initialized.
+        Ok(())
     }
 
-    fn before_rendering(&amp;mut self, context: PluginContext) {
+    fn before_rendering(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Executed before rendering begins.
+        Ok(())
     }
 
-    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) {
+    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Executed when graphics context was destroyed.
+        Ok(())
     }
 
-    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, _message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        _context: &amp;mut PluginContext,
+        _message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         // Handle UI events here.
+        Ok(())
     }
 
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         // Handle started scene loading here.
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -282,12 +297,14 @@ impl Plugin for Game {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
 
         self.scene = scene;
+
+        Ok(())
     }
 
     fn on_scene_loading_failed(
@@ -295,8 +312,9 @@ impl Plugin for Game {
         path: &amp;Path,
         error: &amp;VisitError,
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         // Handle failed scenes here.
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -403,11 +421,12 @@ Notice the <code>unwrap()</code> here, <code>window_target</code> could not be a
 in the editor, it tells the game instance to load it on startup. Let’s look closely at <code>Plugin::init</code> method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>The <code>scene_path</code> parameter is a path to a scene that is currently opened in the editor, your game should use it if you

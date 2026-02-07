@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -213,32 +213,38 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put initialization logic here.
+        Ok(())
     }
 
-    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put start logic - it is called when every other script is already initialized.
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) {
+    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) -&gt; GameResult {
         // Put de-initialization logic here.
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Respond to OS events here.
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put object logic here.
+        Ok(())
     }
 
     fn on_message(
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // See "message passing" section below.
+        Ok(())
     }
 }
 
@@ -246,11 +252,12 @@ impl ScriptTrait for MyScript {
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .serialization_context
             .script_constructors
             .add::&lt;MyScript&gt;("My Script");
+        Ok(())
     }
 }
 
@@ -321,11 +328,12 @@ you need to register it in the list of script constructors like so:</p>
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .serialization_context
             .script_constructors
             .add::&lt;MyScript&gt;("My Script");
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -429,6 +437,7 @@ enum Message {
         attacker: Handle&lt;Node&gt;,
     },
 }
+impl ScriptMessagePayload for Message {}
 
 #[derive(Default, Clone, Reflect, Visit, Debug, ComponentProvider, TypeUuidProvider)]
 #[type_uuid(id = "eb3c6354-eaf5-4e43-827d-0bb10d6d966b")]
@@ -436,12 +445,13 @@ enum Message {
 struct Projectile;
 
 impl ScriptTrait for Projectile {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Broadcast the message globally.
         ctx.message_sender.send_global(Message::Damage {
             actor: Default::default(),
             attacker: ctx.handle,
         });
+        Ok(())
     }
 }
 
@@ -451,20 +461,22 @@ impl ScriptTrait for Projectile {
 struct LaserSight;
 
 impl ScriptTrait for LaserSight {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Subscript to messages.
         ctx.message_dispatcher.subscribe_to::&lt;Message&gt;(ctx.handle);
+        Ok(())
     }
 
     fn on_message(
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         _ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // React to message.
         if let Some(Message::Damage { actor, attacker }) = message.downcast_ref::&lt;Message&gt;() {
             Log::info(format!("{actor} damaged {attacker}",))
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -491,28 +503,25 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
-        if let Some(second_nodes_script_ref) = ctx
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
+        let second_nodes_script_ref = ctx
             .scene
             .graph
-            .try_get_script_of::&lt;MyOtherScript&gt;(self.second_node)
-        {
-            if second_nodes_script_ref.counter &gt; 60.0 {
-                Log::info("Done!");
-            }
+            .try_get_script_of::&lt;MyOtherScript&gt;(self.second_node)?;
+        if second_nodes_script_ref.counter &gt; 60.0 {
+            Log::info("Done!");
         }
 
         // The code below is equivalent to the code above. The only difference is that
         // it borrows the node and then borrows the script from it, giving you access
         // to the node.
-        if let Some(second_node_ref) = ctx.scene.graph.try_get(self.second_node) {
-            if let Some(second_nodes_script_ref) = second_node_ref.try_get_script::&lt;MyOtherScript&gt;()
-            {
-                if second_nodes_script_ref.counter &gt; 60.0 {
-                    Log::info("Done!");
-                }
+        let second_node_ref = ctx.scene.graph.try_get(self.second_node)?;
+        if let Some(second_nodes_script_ref) = second_node_ref.try_get_script::&lt;MyOtherScript&gt;() {
+            if second_nodes_script_ref.counter &gt; 60.0 {
+                Log::info("Done!");
             }
         }
+        Ok(())
     }
 }
 
@@ -524,9 +533,10 @@ struct MyOtherScript {
 }
 
 impl ScriptTrait for MyOtherScript {
-    fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Counting.
         self.counter += 1.0;
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -540,13 +550,14 @@ method (or <code>try_get_script_mut</code> for the alternative code).</p>
 your scene by using the following code:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         self.second_node = ctx
             .scene
             .graph
             .find_by_name_from_root("SomeName")
             .map(|(handle, _)| handle)
             .unwrap_or_default();
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code searches for a node with <code>SomeName</code> and assigns its handle to the <code>second_node</code> variable in the script
@@ -574,14 +585,15 @@ struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Get a reference to the plugin.
         let plugin = ctx.plugins.get_mut::&lt;GamePlugin&gt;();
         // Register self in the "global" list of bots.
         plugin.bots.push(ctx.handle);
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, ctx: &amp;mut ScriptDeinitContext) {
+    fn on_deinit(&amp;mut self, ctx: &amp;mut ScriptDeinitContext) -&gt; GameResult {
         let plugin = ctx.plugins.get_mut::&lt;GamePlugin&gt;();
         // Unregister the bot from the list.
         if let Some(index) = plugin
@@ -591,15 +603,17 @@ impl ScriptTrait for Bot {
         {
             plugin.bots.remove(index);
         }
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let plugin = ctx.plugins.get::&lt;GamePlugin&gt;();
         for bot in plugin.bots.iter() {
             if *bot != ctx.handle {
                 // Search for target.
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

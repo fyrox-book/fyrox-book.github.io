@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-025265cf.js"></script>
@@ -318,14 +318,17 @@ chasing the player. On to the code we go, add the following field to the <code>B
 the bot. Add the following code to the <code>on_update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
-            let position = rigid_body.global_position();
-            let up_vector = rigid_body.up_vector();
-            let look_vector = rigid_body.look_vector();
+</span>        let rigid_body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?;
+        let position = rigid_body.global_position();
+        let up_vector = rigid_body.up_vector();
+        let look_vector = rigid_body.look_vector();
 
-            // Update the viewing frustum.
-            self.update_frustum(position, look_vector, up_vector, 20.0);
-        }
+        // Update the viewing frustum.
+        self.update_frustum(position, look_vector, up_vector, 20.0);
+
 <span class="boring">}</span></code></pre>
 <p>Now we need to check if the player’s position intersects with the frustum. Add the following code at the beginning
 of <code>on_update</code>:</p>
@@ -370,7 +373,7 @@ for that. Root motion will be extracted from the animation blending state machin
 add this code to the <code>Bot</code> struct:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    absm: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    absm: InheritableVariable&lt;Handle&lt;AnimationBlendingStateMachine&gt;&gt;,
     model_root: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p>The first field will hold a handle to the ABSM and the second - a handle to the 3D model root. We’ll assign
@@ -381,18 +384,13 @@ this vector to the rigid body of the bot:</p>
 </span>        let model_transform = ctx
             .scene
             .graph
-            .try_get(*self.model_root)
-            .map(|model| model.global_transform())
-            .unwrap_or_default();
+            .try_get(*self.model_root)?
+            .global_transform();
 
         let mut velocity = Vector3::default();
-        if let Some(state_machine) = ctx
-            .scene
-            .graph
-            .try_get_mut(*self.absm)
-            .and_then(|node| node.component_mut::&lt;AnimationBlendingStateMachine&gt;())
-        {
-        }
+        let state_machine = ctx.scene.graph.try_get_mut(*self.absm)?;
+
+
 <span class="boring">}</span></code></pre>
 <p>At first, we’re getting current world-space transform of the 3D model’s root and saving it into a local variable.
 Then we’re borrowing the ABSM we’ve made earlier and extracting the root motion offset vector. As a final step
@@ -401,15 +399,15 @@ the rigid body of the bot. To do that, add the following code at the end of the 
 we’re borrowing the rigid body):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            let y_vel = rigid_body.lin_vel().y;
-            rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
+</span>        let y_vel = rigid_body.lin_vel().y;
+        rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
 <span class="boring">}</span></code></pre>
 <p>Next we need to somehow inform the ABSM about the current state of the bot. Remember that we have two parameters
 in the ABSM? We need to set them from the code, it could be done like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            let y_vel = rigid_body.lin_vel().y;
-            rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
+</span>        let y_vel = rigid_body.lin_vel().y;
+        rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
 <span class="boring">}</span></code></pre>
 <p>Now it’s time to do small adjustments to our prefabs. Open the <code>zombie.rgs</code> prefab and assign the <code>Bot</code>
 script to the root node of the prefab, set its properties like so:</p>
@@ -421,7 +419,7 @@ the target (the player). Let’s fix that. At first, we need to calculate an ang
 We’ll calculate it using <code>atan2</code> trigonometric function, add the following code somewhere in <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        let angle_to_target = ctx.scene.graph.try_get(self.target).map(|target| {
+</span>        let angle_to_target = ctx.scene.graph.try_get(self.target).ok().map(|target| {
             let self_position = ctx.scene.graph[ctx.handle].global_position();
             let look_dir = target.global_position() - self_position;
             look_dir.x.atan2(look_dir.z)
@@ -432,11 +430,11 @@ using <code>atan2(x, z)</code> trigonometric function. Let’s use this angle, a
 last <code>if</code> statement (where we’re borrowing the rigid body):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            if let Some(angle) = angle_to_target {
-                rigid_body
-                    .local_transform_mut()
-                    .set_rotation(UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle));
-            }
+</span>        if let Some(angle) = angle_to_target {
+            rigid_body
+                .local_transform_mut()
+                .set_rotation(UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle));
+        }
 <span class="boring">}</span></code></pre>
 <p>This code is trivial - we’re making a rotation quaternion, that rotates the bot around Y axis using the angle
 we’ve calculated.</p>

@@ -1,5 +1,6 @@
 use fyrox::core::{ComponentProvider, TypeUuidProvider};
 use fyrox::graph::SceneGraph;
+use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::{
     core::{
@@ -21,49 +22,50 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_start(&mut self, ctx: &mut ScriptContext) {
+    fn on_start(&mut self, ctx: &mut ScriptContext) -> GameResult {
         // Borrow a navigational mesh scene node first.
-        if let Some(navmesh_node) = ctx
+        let navmesh_node = ctx
             .scene
             .graph
-            .try_get_of_type::<NavigationalMesh>(self.navmesh)
-        {
-            // Take a shared reference to the internal navigational mesh.
-            let shared_navmesh = navmesh_node.navmesh();
+            .try_get_of_type::<NavigationalMesh>(self.navmesh)?;
 
-            // Spawn a task, that will calculate a long path.
-            ctx.task_pool.spawn_script_task(
-                ctx.scene_handle,
-                ctx.handle,
-                ctx.script_index,
-                async move {
-                    let navmesh = shared_navmesh.read();
+        // Take a shared reference to the internal navigational mesh.
+        let shared_navmesh = navmesh_node.navmesh();
 
-                    if let Some((_, begin_index)) =
-                        navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0))
+        // Spawn a task, that will calculate a long path.
+        ctx.task_pool.spawn_script_task(
+            ctx.scene_handle,
+            ctx.handle,
+            ctx.script_index,
+            async move {
+                let navmesh = shared_navmesh.read();
+
+                if let Some((_, begin_index)) = navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0)) {
+                    if let Some((_, end_index)) =
+                        navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
                     {
-                        if let Some((_, end_index)) =
-                            navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
+                        let mut path = Vec::new();
+                        if navmesh
+                            .build_path(begin_index, end_index, &mut path)
+                            .is_ok()
                         {
-                            let mut path = Vec::new();
-                            if navmesh
-                                .build_path(begin_index, end_index, &mut path)
-                                .is_ok()
-                            {
-                                return Some(path);
-                            }
+                            return Some(path);
                         }
                     }
+                }
 
-                    None
-                },
-                |path, this: &mut MyScript, _ctx| {
-                    this.path = path;
+                None
+            },
+            |path, this: &mut MyScript, _ctx| {
+                this.path = path;
 
-                    Log::info("Path is calculated!");
-                },
-            );
-        }
+                Log::info("Path is calculated!");
+
+                Ok(())
+            },
+        );
+
+        Ok(())
     }
 
     fn on_update(&mut self, ctx: &mut ScriptContext) {
@@ -112,11 +114,12 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn update(&mut self, _context: &mut PluginContext) {
+    fn update(&mut self, _context: &mut PluginContext) -> GameResult {
         // Do something with the data.
         if let Some(data) = self.data.take() {
             println!("The data is: {:?}", data);
         }
+        Ok(())
     }
 }
 // ANCHOR_END: plugin_task

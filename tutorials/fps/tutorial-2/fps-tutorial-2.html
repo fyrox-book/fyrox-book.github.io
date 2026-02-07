@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-025265cf.js"></script>
@@ -240,10 +240,11 @@ impl ScriptMessagePayload for ShootWeaponMessage {}
 to the <code>on_start</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         context
             .message_dispatcher
             .subscribe_to::&lt;ShootWeaponMessage&gt;(context.handle);
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Every script has <code>on_message</code> method that is used for a message processing, we’ll use it for shooting. Add the following
@@ -254,30 +255,26 @@ code in the <code>impl ScriptTrait for Weapon</code>:</p>
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // Check if we've received an appropriate message. This is needed because message channel is
         // common across all scripts.
         if message.downcast_ref::&lt;ShootWeaponMessage&gt;().is_some() {
             if let Some(projectile_prefab) = self.projectile.as_ref() {
                 // Try to get the position of the shooting point.
-                if let Some(shot_point) = ctx
-                    .scene
-                    .graph
-                    .try_get(*self.shot_point)
-                    .map(|point| point.global_position())
-                {
-                    // Shooting direction is just a direction of the weapon (its look vector)
-                    let direction = ctx.scene.graph[ctx.handle].look_vector();
+                let shot_point = ctx.scene.graph.try_get(*self.shot_point)?.global_position();
 
-                    // Finally instantiate our projectile at the position and direction.
-                    projectile_prefab.instantiate_at(
-                        ctx.scene,
-                        shot_point,
-                        math::vector_to_quat(direction),
-                    );
-                }
+                // Shooting direction is just a direction of the weapon (its look vector)
+                let direction = ctx.scene.graph[ctx.handle].look_vector();
+
+                // Finally instantiate our projectile at the position and direction.
+                projectile_prefab.instantiate_at(
+                    ctx.scene,
+                    shot_point,
+                    math::vector_to_quat(direction),
+                );
             }
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is pretty straightforward: at first, we’re checking the message type, then we’re checking if we have a prefab
@@ -329,7 +326,7 @@ borrow the node and modify the trail’s length after ray casting.</p>
 <p>The ray casting itself is the core of our projectiles, add the following code to the <code>on_start</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let this_node = &amp;ctx.scene.graph[ctx.handle];
         let this_node_position = this_node.global_position();
 
@@ -357,17 +354,17 @@ borrow the node and modify the trail’s length after ray casting.</p>
             1000.0
         };
 
-        if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
-            let transform = trail_node.local_transform_mut();
-            let current_trail_scale = **transform.scale();
-            transform.set_scale(Vector3::new(
-                // Keep x scaling.
-                current_trail_scale.x,
-                trail_length,
-                // Keep z scaling.
-                current_trail_scale.z,
-            ));
-        }
+        let trail_node = ctx.scene.graph.try_get_mut(*self.trail)?;
+        let transform = trail_node.local_transform_mut();
+        let current_trail_scale = **transform.scale();
+        transform.set_scale(Vector3::new(
+            // Keep x scaling.
+            current_trail_scale.x,
+            trail_length,
+            // Keep z scaling.
+            current_trail_scale.z,
+        ));
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is pretty straightforward - at first we’re borrowing the node of the projectile, saving its global position
@@ -436,8 +433,9 @@ shoot with desired interval while we’re holding the mouse button. Add the two 
 desired period of shooting (in seconds). We’ll handle one of these variables in <code>on_update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         self.shot_timer -= context.dt;
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is very simple - it just decreases the timer and that’s all. Now let’s add a new condition to the
@@ -445,7 +443,7 @@ desired period of shooting (in seconds). We’ll handle one of these variables i
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>            if self.shot_timer &gt;= 0.0 {
-                return;
+                return Ok(());
             }
             // Reset the timer, this way the next shot cannot be done earlier than the interval.
             self.shot_timer = *self.shot_interval;
@@ -494,22 +492,20 @@ following code to at the end of <code>on_start</code> of <code>impl ScriptTrait 
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let Some(intersection) = intersections.first() {
-            if let Some(collider) = ctx.scene.graph.try_get(intersection.collider) {
-                let rigid_body_handle = collider.parent();
-                if let Some(rigid_body) = ctx
-                    .scene
-                    .graph
-                    .try_get_mut_of_type::&lt;RigidBody&gt;(rigid_body_handle)
-                {
-                    if let Some(force_dir) = (intersection.position.coords - this_node_position)
-                        .try_normalize(f32::EPSILON)
-                    {
-                        let force = force_dir.scale(200.0);
+            let collider = ctx.scene.graph.try_get(intersection.collider)?;
+            let rigid_body_handle = collider.parent();
+            let rigid_body = ctx
+                .scene
+                .graph
+                .try_get_mut_of_type::&lt;RigidBody&gt;(rigid_body_handle)?;
 
-                        rigid_body.apply_force_at_point(force, intersection.position.coords);
-                        rigid_body.wake_up();
-                    }
-                }
+            if let Some(force_dir) =
+                (intersection.position.coords - this_node_position).try_normalize(f32::EPSILON)
+            {
+                let force = force_dir.scale(200.0);
+
+                rigid_body.apply_force_at_point(force, intersection.position.coords);
+                rigid_body.wake_up();
             }
         }
 <span class="boring">}</span></code></pre>
@@ -529,26 +525,26 @@ property of <code>m4.FBX</code> node with the following parameters:</p>
 player in the weapon script. Let’s add it to the <code>Weapon</code> struct:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    animation_player: InheritableVariable&lt;Handle&lt;AnimationPlayer&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p>Add the following code to the <code>on_message</code> in <code>weapon.rs</code>, right after the shooting condition (<code>if self.shot_timer &gt;= 0.0 { ...</code>):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            if let Some(animation_player) = ctx
+</span>            let animation_player = ctx
                 .scene
                 .graph
-                .try_get_mut_of_type::&lt;AnimationPlayer&gt;(*self.animation_player)
+                .try_get_mut::&lt;AnimationPlayer&gt;(*self.animation_player)?;
+
+            if let Some(animation) = animation_player
+                .animations_mut()
+                .get_value_mut_silent()
+                .iter_mut()
+                .next()
             {
-                if let Some(animation) = animation_player
-                    .animations_mut()
-                    .get_value_mut_silent()
-                    .iter_mut()
-                    .next()
-                {
-                    animation.rewind();
-                    animation.set_enabled(true);
-                }
+                animation.rewind();
+                animation.set_enabled(true);
             }
+
 <span class="boring">}</span></code></pre>
 <p>Run the game, and you should see something like this when shooting:</p>
 <p><img src="recoil.gif" alt="recoil"></p>

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -222,13 +222,7 @@ pub enum MyButtonMessage {
     // A message, that will be emitted when our button is clicked.
     Click,
 }
-
-impl MyButtonMessage {
-    // A constructor for `Click` message.
-    define_constructor!(
-        MyButtonMessage:Click =&gt; fn click(), layout: false
-    );
-}
+impl MessageData for MyButtonMessage {}
 
 #[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
@@ -243,21 +237,19 @@ define_widget_deref!(MyButton);
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
         for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send_message(WidgetMessage::foreground(
+            ui.send(
                 handle,
-                MessageDirection::ToWidget,
-                Brush::Solid(color).into(),
-            ));
+                WidgetMessage::Foreground(Brush::Solid(color).into()),
+            );
         }
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
         border_color.set_brightness(border_color.brightness() - 20.0);
-        ui.send_message(WidgetMessage::background(
+        ui.send(
             self.border,
-            MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()).into(),
-        ));
+            WidgetMessage::Background(Brush::Solid(border_color.into()).into()),
+        );
     }
 }
 
@@ -274,10 +266,7 @@ impl Control for MyButton {
                 match msg {
                     WidgetMessage::MouseUp { .. } =&gt; {
                         // Send the message to outside world, saying that the button was clicked.
-                        ui.send_message(MyButtonMessage::click(
-                            self.handle(),
-                            MessageDirection::FromWidget,
-                        ));
+                        ui.post(self.handle(), MyButtonMessage::Click);
                         ui.release_mouse_capture();
                     }
                     WidgetMessage::MouseDown { .. } =&gt; {
@@ -360,12 +349,18 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if message.destination() == self.my_button {
             if let Some(MyButtonMessage::Click) = message.data() {
                 // Do something.
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -388,13 +383,7 @@ pub enum MyButtonMessage {
     // A message, that will be emitted when our button is clicked.
     Click,
 }
-
-impl MyButtonMessage {
-    // A constructor for `Click` message.
-    define_constructor!(
-        MyButtonMessage:Click =&gt; fn click(), layout: false
-    );
-}
+impl MessageData for MyButtonMessage {}
 
 #[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
@@ -409,21 +398,19 @@ define_widget_deref!(MyButton);
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
         for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send_message(WidgetMessage::foreground(
+            ui.send(
                 handle,
-                MessageDirection::ToWidget,
-                Brush::Solid(color).into(),
-            ));
+                WidgetMessage::Foreground(Brush::Solid(color).into()),
+            );
         }
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
         border_color.set_brightness(border_color.brightness() - 20.0);
-        ui.send_message(WidgetMessage::background(
+        ui.send(
             self.border,
-            MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()).into(),
-        ));
+            WidgetMessage::Background(Brush::Solid(border_color.into()).into()),
+        );
     }
 }
 
@@ -440,10 +427,7 @@ impl Control for MyButton {
                 match msg {
                     WidgetMessage::MouseUp { .. } =&gt; {
                         // Send the message to outside world, saying that the button was clicked.
-                        ui.send_message(MyButtonMessage::click(
-                            self.handle(),
-                            MessageDirection::FromWidget,
-                        ));
+                        ui.post(self.handle(), MyButtonMessage::Click);
                         ui.release_mouse_capture();
                     }
                     WidgetMessage::MouseDown { .. } =&gt; {
@@ -556,12 +540,18 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if message.destination() == self.my_button {
             if let Some(MyButtonMessage::Click) = message.data() {
                 // Do something.
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

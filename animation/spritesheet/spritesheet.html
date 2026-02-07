@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-025265cf.js"></script>
@@ -216,25 +216,25 @@ struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Update the animation first, it will switch current frame automatically if needed.
         self.animation.update(ctx.dt);
 
-        if let Some(sprite) = ctx
+        let sprite = ctx
             .scene
             .graph
-            .try_get_mut(ctx.handle)
-            .and_then(|n| n.cast_mut::&lt;Rectangle&gt;())
-        {
-            // Assign the texture from the animation to the sprite first.
-            sprite
-                .material()
-                .data_ref()
-                .bind("diffuseTexture", self.animation.texture());
+            .try_get_mut_of_type::&lt;Rectangle&gt;(ctx.handle)?;
 
-            // Set the current animation's UV rect to the sprite.
-            sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
-        }
+        // Assign the texture from the animation to the sprite first.
+        sprite
+            .material()
+            .data_ref()
+            .bind("diffuseTexture", self.animation.texture());
+
+        // Set the current animation's UV rect to the sprite.
+        sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

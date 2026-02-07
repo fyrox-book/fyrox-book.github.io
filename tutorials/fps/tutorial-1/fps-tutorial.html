@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-025265cf.js"></script>
@@ -330,7 +330,7 @@ The next thing that we need to do is properly react to incoming OS events to mod
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
@@ -354,18 +354,10 @@ defined. Add the following code to the <code>on_os_event</code> method like so:<
                 if let PhysicalKey::Code(code) = event.physical_key {
                     let is_pressed = event.state == ElementState::Pressed;
                     match code {
-                        KeyCode::KeyW =&gt; {
-                            self.move_forward = is_pressed;
-                        }
-                        KeyCode::KeyS =&gt; {
-                            self.move_backward = is_pressed;
-                        }
-                        KeyCode::KeyA =&gt; {
-                            self.move_left = is_pressed;
-                        }
-                        KeyCode::KeyD =&gt; {
-                            self.move_right = is_pressed;
-                        }
+                        KeyCode::KeyW =&gt; self.move_forward = is_pressed,
+                        KeyCode::KeyS =&gt; self.move_backward = is_pressed,
+                        KeyCode::KeyA =&gt; self.move_left = is_pressed,
+                        KeyCode::KeyD =&gt; self.move_right = is_pressed,
                         _ =&gt; (),
                     }
                 }
@@ -390,21 +382,18 @@ axis and vertical mouse movement is used to rotate the camera around horizontal 
 the <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        let mut look_vector = Vector3::default();
-        let mut side_vector = Vector3::default();
-        if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
-            look_vector = camera.look_vector();
-            side_vector = camera.side_vector();
+</span>        let camera = ctx.scene.graph.try_get_mut(self.camera)?;
+        let look_vector = camera.look_vector();
+        let side_vector = camera.side_vector();
 
-            let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
-            let transform = camera.local_transform_mut();
-            transform.set_rotation(
-                UnitQuaternion::from_axis_angle(
-                    &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
-                    self.pitch.to_radians(),
-                ) * yaw,
-            );
-        }
+        let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
+        let transform = camera.local_transform_mut();
+        transform.set_rotation(
+            UnitQuaternion::from_axis_angle(
+                &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
+                self.pitch.to_radians(),
+            ) * yaw,
+        );
 <span class="boring">}</span></code></pre>
 <p>This piece of code is relatively straightforward: at first we’re trying to borrow the camera in the scene graph using
 its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them
@@ -412,37 +401,41 @@ using simple multiplication.</p>
 <p>Next thing we’ll add movement code. Add the following code to the end of <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Borrow the node to which this script is assigned to. We also check if the node is RigidBody.
-        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
-            // Form a new velocity vector that corresponds to the pressed buttons.
-            let mut velocity = Vector3::new(0.0, 0.0, 0.0);
-            if self.move_forward {
-                velocity += look_vector;
-            }
-            if self.move_backward {
-                velocity -= look_vector;
-            }
-            if self.move_left {
-                velocity += side_vector;
-            }
-            if self.move_right {
-                velocity -= side_vector;
-            }
-
-            let y_vel = rigid_body.lin_vel().y;
-            if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
-                let movement_speed = 240.0 * ctx.dt;
-                rigid_body.set_lin_vel(Vector3::new(
-                    normalized_velocity.x * movement_speed,
-                    y_vel,
-                    normalized_velocity.z * movement_speed,
-                ));
-            } else {
-                // Hold player in-place in XZ plane when no button is pressed.
-                rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
-            }
+        let rigid_body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?;
+        // Form a new velocity vector that corresponds to the pressed buttons.
+        let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+        if self.move_forward {
+            velocity += look_vector;
         }
+        if self.move_backward {
+            velocity -= look_vector;
+        }
+        if self.move_left {
+            velocity += side_vector;
+        }
+        if self.move_right {
+            velocity -= side_vector;
+        }
+
+        let y_vel = rigid_body.lin_vel().y;
+        if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
+            let movement_speed = 240.0 * ctx.dt;
+            rigid_body.set_lin_vel(Vector3::new(
+                normalized_velocity.x * movement_speed,
+                y_vel,
+                normalized_velocity.z * movement_speed,
+            ));
+        } else {
+            // Hold player in-place in XZ plane when no button is pressed.
+            rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
+        }
+
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is responsible for movement when any of WSAD keys are pressed. At first, it tries to borrow the node to which

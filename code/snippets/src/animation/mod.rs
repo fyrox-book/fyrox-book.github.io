@@ -2,6 +2,7 @@ pub mod blending;
 pub mod root_motion;
 pub mod signal;
 
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     asset::manager::ResourceManager,
     core::{
@@ -42,25 +43,25 @@ struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         // Update the animation first, it will switch current frame automatically if needed.
         self.animation.update(ctx.dt);
 
-        if let Some(sprite) = ctx
+        let sprite = ctx
             .scene
             .graph
-            .try_get_mut(ctx.handle)
-            .and_then(|n| n.cast_mut::<Rectangle>())
-        {
-            // Assign the texture from the animation to the sprite first.
-            sprite
-                .material()
-                .data_ref()
-                .bind("diffuseTexture", self.animation.texture());
+            .try_get_mut_of_type::<Rectangle>(ctx.handle)?;
 
-            // Set the current animation's UV rect to the sprite.
-            sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
-        }
+        // Assign the texture from the animation to the sprite first.
+        sprite
+            .material()
+            .data_ref()
+            .bind("diffuseTexture", self.animation.texture());
+
+        // Set the current animation's UV rect to the sprite.
+        sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
+
+        Ok(())
     }
 }
 // ANCHOR_END: animation

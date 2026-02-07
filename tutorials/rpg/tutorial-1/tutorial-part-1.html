@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-025265cf.js"></script>
@@ -359,11 +359,12 @@ the following code to the method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Plugin for Game {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .serialization_context
             .script_constructors
             .add::&lt;Player&gt;("Player");
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the <code>player.rs</code>
@@ -378,7 +379,7 @@ pub struct Player {
 
     camera_hinge: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-    state_machine: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    state_machine: InheritableVariable&lt;Handle&lt;AnimationBlendingStateMachine&gt;&gt;,
 
     model_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
@@ -427,7 +428,7 @@ you, then you should probably read <a href="../../../scene/prefab.html#property-
 <p>We’ll start from keyboard and mouse event handling, add the following code to the <code>impl ScriptTrait for Player</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         match event {
             Event::WindowEvent { event, .. } =&gt; {
                 if let WindowEvent::KeyboardInput { event, .. } = event {
@@ -453,6 +454,7 @@ you, then you should probably read <a href="../../../scene/prefab.html#property-
             }
             _ =&gt; (),
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code consists of two major sections: <code>KeyboardInput</code> event handling and <code>MouseMotion</code> event handling. Let’s start
@@ -465,28 +467,24 @@ for our camera. Pitch calculation also includes angle clamping in <code>-90.0..9
 the <code>on_update</code> method with the following code:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Step 1. Fetch the velocity vector from the animation blending state machine.
         let transform = ctx.scene.graph[*self.model].global_transform();
         let mut velocity = Vector3::default();
-        if let Some(state_machine) = ctx
-            .scene
-            .graph
-            .try_get(*self.state_machine)
-            .and_then(|node| node.component_ref::&lt;AnimationBlendingStateMachine&gt;())
-        {
-            if let Some(root_motion) = state_machine.machine().pose().root_motion() {
-                velocity = transform
-                    .transform_vector(&amp;root_motion.delta_position)
-                    .scale(1.0 / ctx.dt);
-            }
+        let state_machine = ctx.scene.graph.try_get(*self.state_machine)?;
+        if let Some(root_motion) = state_machine.machine().pose().root_motion() {
+            velocity = transform
+                .transform_vector(&amp;root_motion.delta_position)
+                .scale(1.0 / ctx.dt);
         }
 
         // Step 2. Apply the velocity to the rigid body and lock rotations.
-        if let Some(body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
-            body.set_ang_vel(Default::default());
-            body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
-        }
+        let body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?;
+        body.set_ang_vel(Default::default());
+        body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
 
         // Step 3. Rotate the model pivot according to the movement direction.
         let quat_yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw);
@@ -494,9 +492,11 @@ the <code>on_update</code> method with the following code:</p>
         if velocity.norm_squared() &gt; 0.0 {
             // Since we have free camera while not moving, we have to sync rotation of pivot
             // with rotation of camera so character will start moving in look direction.
-            if let Some(model_pivot) = ctx.scene.graph.try_get_mut(*self.model_pivot) {
-                model_pivot.local_transform_mut().set_rotation(quat_yaw);
-            }
+            ctx.scene
+                .graph
+                .try_get_mut(*self.model_pivot)?
+                .local_transform_mut()
+                .set_rotation(quat_yaw);
 
             // Apply additional rotation to model - it will turn in front of walking direction.
             let angle: f32 = if self.walk_left {
@@ -523,46 +523,42 @@ the <code>on_update</code> method with the following code:</p>
 
             self.model_yaw.set_target(angle.to_radians()).update(ctx.dt);
 
-            if let Some(model) = ctx.scene.graph.try_get_mut(*self.model) {
-                model
-                    .local_transform_mut()
-                    .set_rotation(UnitQuaternion::from_axis_angle(
-                        &amp;Vector3::y_axis(),
-                        self.model_yaw.angle,
-                    ));
-            }
-        }
-
-        if let Some(camera_pivot) = ctx.scene.graph.try_get_mut(*self.camera_pivot) {
-            camera_pivot.local_transform_mut().set_rotation(quat_yaw);
-        }
-
-        // Rotate camera hinge - this will make camera move up and down while look at character
-        // (well not exactly on character - on characters head)
-        if let Some(camera_hinge) = ctx.scene.graph.try_get_mut(*self.camera_hinge) {
-            camera_hinge
+            ctx.scene
+                .graph
+                .try_get_mut(*self.model)?
                 .local_transform_mut()
                 .set_rotation(UnitQuaternion::from_axis_angle(
-                    &amp;Vector3::x_axis(),
-                    self.pitch,
+                    &amp;Vector3::y_axis(),
+                    self.model_yaw.angle,
                 ));
         }
 
-        // Step 4. Feed the animation blending state machine with the current state of the player.
-        if let Some(state_machine) = ctx
-            .scene
+        ctx.scene
             .graph
-            .try_get_mut(*self.state_machine)
-            .and_then(|node| node.component_mut::&lt;AnimationBlendingStateMachine&gt;())
-        {
-            let moving =
-                self.walk_left || self.walk_right || self.walk_forward || self.walk_backward;
+            .try_get_mut(*self.camera_pivot)?
+            .local_transform_mut()
+            .set_rotation(quat_yaw);
 
-            state_machine
-                .machine_mut()
-                .get_value_mut_silent()
-                .set_parameter("Running", Parameter::Rule(moving));
-        }
+        // Rotate camera hinge - this will make camera move up and down while look at character
+        // (well not exactly on character - on characters head)
+        ctx.scene
+            .graph
+            .try_get_mut(*self.camera_hinge)?
+            .local_transform_mut()
+            .set_rotation(UnitQuaternion::from_axis_angle(
+                &amp;Vector3::x_axis(),
+                self.pitch,
+            ));
+
+        // Step 4. Feed the animation blending state machine with the current state of the player.
+        let state_machine = ctx.scene.graph.try_get_mut(*self.state_machine)?;
+        let moving = self.walk_left || self.walk_right || self.walk_forward || self.walk_backward;
+        state_machine
+            .machine_mut()
+            .get_value_mut_silent()
+            .set_parameter("Running", Parameter::Rule(moving));
+
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>That’s a big chunk of code, but it mostly consists of a set of separate steps. Let’s try to understand what each step does.</p>

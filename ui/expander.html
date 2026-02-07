@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -264,7 +264,12 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if let Some(ExpanderMessage::Expand(expanded)) = message.data() {
             if message.destination() == self.expander
                 &amp;&amp; message.direction() == MessageDirection::FromWidget
@@ -276,6 +281,7 @@ impl Plugin for Game {
                 );
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

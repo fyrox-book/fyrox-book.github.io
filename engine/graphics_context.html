@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -213,16 +213,19 @@ and <code>on_graphics_context_destroyed</code>:</p>
 struct Game {}
 
 impl Plugin for Game {
-    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) {
+    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // At this stage it is safe to call `as_initialized_mut`, because graphics context is guaranteed
         // to be alive when this method is being called.
         let graphics_context = context.graphics_context.as_initialized_mut();
 
         graphics_context.window.set_title("My Cool Game");
+
+        Ok(())
     }
 
-    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) {
-        println!("Graphics context was destroyed.")
+    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) -&gt; GameResult {
+        println!("Graphics context was destroyed.");
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>You can also do a checked borrow of the graphics context at any place in a plugin. For example, the following
@@ -230,13 +233,14 @@ code tries to fetch current graphics context, and if it succeeds, then it prints
 title:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         if let GraphicsContext::Initialized(graphics_context) = context.graphics_context {
             graphics_context.window.set_title(&amp;format!(
                 "FPS: {}",
                 graphics_context.renderer.get_statistics().frames_per_second
             ));
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <h2 id="window"><a class="header" href="#window">Window</a></h2>

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -216,6 +216,7 @@ the same application), which is the easiest kind of server to implement. Its imp
 </span><span class="boring">fn main() {
 </span>// Implements listen server.
 #[derive(Default, Reflect, Debug)]
+#[reflect(non_cloneable)]
 pub struct Game {
     scene: Handle&lt;Scene&gt;,
     server: Option&lt;Server&gt;,
@@ -223,12 +224,13 @@ pub struct Game {
 }
 
 impl Plugin for Game {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         self.server = Some(Server::new());
         self.client = Some(Client::connect(Server::ADDRESS));
+        Ok(())
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
@@ -236,6 +238,7 @@ impl Plugin for Game {
         if let Some(client) = self.client.as_mut() {
             client.read_messages();
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -244,7 +247,7 @@ impl Plugin for Game {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
 
         if self.server.is_none() {
@@ -254,6 +257,8 @@ impl Plugin for Game {
                 .enabled
                 .set_value_and_mark_modified(false);
         }
+
+        Ok(())
     }
 }
 
@@ -334,7 +339,7 @@ a reliable connection between the listener and any number of clients. Each such 
 is structured:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
@@ -342,6 +347,7 @@ is structured:</p>
         if let Some(client) = self.client.as_mut() {
             client.read_messages();
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>At first, the server tries to accept all incoming connections and only then tries to read all the incoming messages.

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -204,7 +204,7 @@ events that could be used in your game (some rare events are omitted):</p>
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) -&gt; GameResult {
         match event {
             // This branch should be used for pre-processed events that comes from
             // the main window.
@@ -244,6 +244,7 @@ impl Plugin for MyGame {
             },
             _ =&gt; (),
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

@@ -1,117 +1,149 @@
+use fyrox::renderer::Renderer;
 use fyrox::{
-    core::{algebra::Matrix4, pool::Handle},
+    core::{pool::Handle, sstorage::ImmutableString},
     graphics::{
-        buffer::{Buffer, BufferKind, BufferUsage},
-        error::FrameworkError,
-        framebuffer::{BufferDataUsage, BufferLocation, ResourceBindGroup, ResourceBinding},
-        geometry_buffer::GeometryBuffer,
-        gpu_program::GpuProgram,
-        uniform::StaticUniformBuffer,
-        DrawParameters, ElementRange, GeometryBufferExt,
+        buffer::BufferUsage, error::FrameworkError, geometry_buffer::GpuGeometryBuffer,
+        server::GraphicsServer,
     },
-    renderer::{RenderPassStatistics, Renderer, SceneRenderPass, SceneRenderPassContext},
+    renderer::{
+        cache::shader::{binding, property, PropertyGroup, RenderMaterial, RenderPassContainer},
+        framework::GeometryBufferExt,
+        RenderPassStatistics, SceneRenderPass, SceneRenderPassContext,
+    },
     scene::{mesh::surface::SurfaceData, Scene},
 };
-use std::any::{Any, TypeId};
-use std::{cell::RefCell, rc::Rc};
+use std::{any::TypeId, cell::RefCell, rc::Rc};
+
+struct MyPlugin;
 
 // ANCHOR: render_pass
-struct MyRenderPass {
-    enabled: bool,
-    shader: Box<dyn GpuProgram>,
-    target_scene: Handle<Scene>,
-    quad: Box<dyn GeometryBuffer>,
-    uniform_location: usize,
-    uniform_buffer: Box<dyn Buffer>,
+const SHADER: &'static str = r##"
+(
+    name: "Overlay",
+    resources: [
+        (
+            name: "properties",
+            kind: PropertyGroup([
+                (name: "worldViewProjectionMatrix", kind: Matrix4()),
+            ]),
+            binding: 0
+        ),
+    ],
+    passes: [
+        (
+            name: "Primary",
+
+            draw_parameters: DrawParameters(
+                cull_face: None,
+                color_write: ColorMask(
+                    red: true,
+                    green: true,
+                    blue: true,
+                    alpha: true,
+                ),
+                depth_write: false,
+                stencil_test: None,
+                depth_test: None,
+                blend: Some(BlendParameters(
+                    func: BlendFunc(
+                        sfactor: SrcAlpha,
+                        dfactor: OneMinusSrcAlpha,
+                        alpha_sfactor: SrcAlpha,
+                        alpha_dfactor: OneMinusSrcAlpha,
+                    ),
+                    equation: BlendEquation(
+                        rgb: Add,
+                        alpha: Add
+                    )
+                )),
+                stencil_op: StencilOp(
+                    fail: Keep,
+                    zfail: Keep,
+                    zpass: Keep,
+                    write_mask: 0xFFFF_FFFF,
+                ),
+                scissor_box: None
+            ),
+
+            vertex_shader:
+                r#"
+                    layout(location = 0) in vec3 vertexPosition;
+
+                    void main()
+                    {
+                        gl_Position = properties.worldViewProjectionMatrix * vec4(vertexPosition, 1.0);
+                    }
+                "#,
+
+            fragment_shader:
+                r#"
+                    out vec4 FragColor;
+
+                    void main()
+                    {
+                        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                    }
+                "#,
+        )
+    ]
+)
+"##;
+
+pub struct MyRenderPass {
+    quad: GpuGeometryBuffer,
+    shader: RenderPassContainer,
+    pub scene_handle: Handle<Scene>,
 }
 
 impl MyRenderPass {
-    pub fn new(
-        renderer: &mut Renderer,
-        target_scene: Handle<Scene>,
-    ) -> Result<Self, FrameworkError> {
-        let vs = r"
-                layout(location = 0) in vec3 vertexPosition;
-
-                layout(std140) uniform Uniforms {
-                    mat4 worldViewProjectionMatrix;
-                }                
-                         
-                void main()
-                {
-                    gl_Position = worldViewProjectionMatrix * vertexPosition;
-                }
-            ";
-
-        let fs = r"                
-                out vec4 FragColor;             
-                
-                void main()
-                {
-                    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-                }
-            ";
-
-        let shader = renderer.server.create_program("MyShader", vs, fs)?;
-        let uniform_buffer =
-            renderer
-                .server
-                .create_buffer(256, BufferKind::Uniform, BufferUsage::DynamicDraw)?;
-
-        uniform_buffer.write_data_of_type(
-            &StaticUniformBuffer::<256>::new()
-                .with(&Matrix4::identity())
-                .finish(),
-        )?;
-
-        Ok(Self {
-            enabled: true,
-            uniform_location: shader.uniform_block_index(&"Uniforms".into())?,
-            uniform_buffer,
-            target_scene,
-            quad: <dyn GeometryBuffer as GeometryBufferExt>::from_surface_data(
-                &SurfaceData::make_quad(&Matrix4::identity()),
+    pub fn new(server: &dyn GraphicsServer) -> Rc<RefCell<Self>> {
+        Rc::new(RefCell::new(Self {
+            quad: GpuGeometryBuffer::from_surface_data(
+                "Quad",
+                &SurfaceData::make_unit_xy_quad(),
                 BufferUsage::StaticDraw,
-                renderer.server.as_ref(),
-            )?,
-            shader,
-        })
+                server,
+            )
+            .unwrap(),
+            shader: RenderPassContainer::from_str(server, SHADER).unwrap(),
+            scene_handle: Default::default(),
+        }))
     }
 }
 
 impl SceneRenderPass for MyRenderPass {
-    fn on_ldr_render(
+    fn on_hdr_render(
         &mut self,
         ctx: SceneRenderPassContext,
     ) -> Result<RenderPassStatistics, FrameworkError> {
         let mut stats = RenderPassStatistics::default();
-
-        // Make sure to render only to target scene.
-        if self.enabled && ctx.scene_handle == self.target_scene {
-            let resources = ResourceBindGroup {
-                bindings: &[ResourceBinding::Buffer {
-                    buffer: self.uniform_buffer.as_ref(),
-                    binding: BufferLocation::Auto {
-                        shader_location: self.uniform_location,
-                    },
-                    data_usage: BufferDataUsage::default(),
-                }],
-            };
-            stats += ctx.framebuffer.draw(
-                self.quad.as_ref(),
-                ctx.viewport,
-                self.shader.as_ref(),
-                &DrawParameters::default(),
-                &[resources],
-                ElementRange::Full,
-            )?;
+        if ctx.scene_handle != self.scene_handle {
+            return Ok(stats);
         }
+
+        let view_projection = ctx.observer.position.view_projection_matrix;
+
+        let properties =
+            PropertyGroup::from([property("worldViewProjectionMatrix", &view_projection)]);
+        let material = RenderMaterial::from([binding("properties", &properties)]);
+
+        stats += self.shader.run_pass(
+            1,
+            &ImmutableString::new("Primary"),
+            ctx.framebuffer,
+            &self.quad,
+            ctx.observer.viewport,
+            &material,
+            ctx.uniform_buffer_cache,
+            Default::default(),
+            None,
+        )?;
 
         Ok(stats)
     }
 
     fn source_type_id(&self) -> TypeId {
-        ().type_id()
+        TypeId::of::<MyPlugin>()
     }
 }
 // ANCHOR_END: render_pass

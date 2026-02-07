@@ -3,6 +3,7 @@ pub mod keyboard_simple;
 pub mod mouse;
 pub mod mouse_simple;
 
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::reflect::prelude::*,
     core::visitor::prelude::*,
@@ -15,7 +16,7 @@ use fyrox::{
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn on_os_event(&mut self, event: &Event<()>, _context: PluginContext) {
+    fn on_os_event(&mut self, event: &Event<()>, _context: PluginContext) -> GameResult {
         match event {
             // This branch should be used for pre-processed events that comes from
             // the main window.
@@ -55,6 +56,7 @@ impl Plugin for MyGame {
             },
             _ => (),
         }
+        Ok(())
     }
 }
 // ANCHOR_END: events_example

@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{pool::Handle, reflect::prelude::*, visitor::prelude::*},
     plugin::{Plugin, PluginContext},
@@ -43,10 +44,11 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&mut self, _path: &Path, context: &mut PluginContext) {
+    fn on_scene_begin_loading(&mut self, _path: &Path, context: &mut PluginContext) -> GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -55,8 +57,9 @@ impl Plugin for MyGame {
         scene: Handle<Scene>,
         _data: &[u8],
         _context: &mut PluginContext,
-    ) {
+    ) -> GameResult {
         self.scene = scene;
+        Ok(())
     }
 }
 // ANCHOR_END: save

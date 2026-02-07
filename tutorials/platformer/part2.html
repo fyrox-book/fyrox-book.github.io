@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-025265cf.js"></script>
@@ -237,25 +237,30 @@ pub struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put initialization logic here.
+        Ok(())
     }
 
-    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // There should be a logic that depends on other scripts in scene.
         // It is called right after **all** scripts were initialized.
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) {
+    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) -&gt; GameResult {
         // Put de-initialization logic here.
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Respond to OS events here.
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put object logic here.
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -266,14 +271,11 @@ replace all the imports at the beginning of the <code>bot.rs</code> with the fol
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::Game;
+use fyrox::plugin::error::{GameError, GameResult};
 use fyrox::{
     core::{
-        algebra::{Vector2, Vector3},
-        pool::Handle,
-        reflect::prelude::*,
-        type_traits::prelude::*,
-        variable::InheritableVariable,
-        visitor::prelude::*,
+        algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
+        variable::InheritableVariable, visitor::prelude::*,
     },
     graph::SceneGraph,
     scene::{
@@ -290,7 +292,7 @@ use fyrox::{
 <p>We need to store a handle to the sprite in our script, add the following field in the <code>Bot</code> struct:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    rectangle: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    rectangle: InheritableVariable&lt;Handle&lt;Rectangle&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p>Open the skeleton prefab and assign the script to the root rigid body. Set the <code>rectangle</code> field to <code>Sprite (2D)</code> and
 save the prefab. Great, now let’s begin writing the actual AI code of the bot.</p>
@@ -301,33 +303,26 @@ to another. Add the following fields to the <code>Bot</code> script:</p>
 </span><span class="boring">fn main() {
 </span>    speed: InheritableVariable&lt;f32&gt;,
     direction: f32,
-    front_obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-    back_obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    front_obstacle_sensor: InheritableVariable&lt;Handle&lt;Collider&gt;&gt;,
+    back_obstacle_sensor: InheritableVariable&lt;Handle&lt;Collider&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p><code>speed</code> field will define overall movement speed of the bot and <code>direction</code> will be used to alternate movement direction
 along X axis. Open the skeleton prefab and set the speed to <code>1.2</code> and the direction to <code>-1.0</code>. Add the movement handling
 code somewhere in the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn do_move(&amp;mut self, ctx: &amp;mut ScriptContext) {
-        let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) else {
-            return;
-        };
+</span>    fn do_move(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
+        let graph = &amp;mut ctx.scene.graph;
 
-        let y_vel = rigid_body.lin_vel().y;
+        graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?
+            .set_lin_vel_x(-*self.speed * self.direction);
 
-        rigid_body.set_lin_vel(Vector2::new(-*self.speed * self.direction, y_vel));
+        graph
+            .try_get_mut(*self.rectangle)?
+            .set_scale_xyz(2.0 * self.direction.signum(), 2.0, 1.0);
 
-        // Also, inverse the sprite along the X axis.
-        let Some(rectangle) = ctx.scene.graph.try_get_mut(*self.rectangle) else {
-            return;
-        };
-
-        rectangle.local_transform_mut().set_scale(Vector3::new(
-            2.0 * self.direction.signum(),
-            2.0,
-            1.0,
-        ));
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is quite straightforward - at first, we’re doing a checked borrow of the node that contains the script. It must
@@ -336,7 +331,7 @@ added earlier. As the last step we’re changing horizontal scale of the sprite 
 way we’re flipping the sprite in the current direction. Now we need to call <code>do_move</code> method in <code>on_update</code> like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        self.do_move(ctx);
+</span>        self.do_move(ctx)?;
 <span class="boring">}</span></code></pre>
 <p>Open the main scene (<code>scene.rgs</code> by default) and find the skeleton prefab in the asset browser, drag’n’drop it in the
 scene and adjust its position to get something like this:</p>
@@ -357,7 +352,7 @@ there’s no need to manually place any way points.</p>
 <p>Obstacles checking algorithms is quite simple, add the following code in the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn has_obstacles(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; bool {
+</span>    fn has_obstacles(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; Result&lt;bool, GameError&gt; {
         let graph = &amp;ctx.scene.graph;
 
         // Select the sensor using current walking direction.
@@ -368,32 +363,23 @@ there’s no need to manually place any way points.</p>
         };
 
         // Check if it intersects something.
-        let Some(obstacle_sensor) = graph.try_get_of_type::&lt;Collider&gt;(sensor_handle) else {
-            return false;
-        };
+        let obstacle_sensor = graph.try_get(sensor_handle)?;
 
         for intersection in obstacle_sensor
             .intersects(&amp;ctx.scene.graph.physics2d)
             .filter(|i| i.has_any_active_contact)
         {
             for collider_handle in [intersection.collider1, intersection.collider2] {
-                let Some(other_collider) = graph.try_get_of_type::&lt;Collider&gt;(collider_handle)
-                else {
-                    continue;
-                };
-
-                let Some(rigid_body) = graph.try_get_of_type::&lt;RigidBody&gt;(other_collider.parent())
-                else {
-                    continue;
-                };
+                let other_collider = graph.try_get(collider_handle)?;
+                let rigid_body = graph.try_get_of_type::&lt;RigidBody&gt;(other_collider.parent())?;
 
                 if rigid_body.body_type() == RigidBodyType::Static {
-                    return true;
+                    return Ok(true);
                 }
             }
         }
 
-        false
+        Ok(false)
     }
 <span class="boring">}</span></code></pre>
 <p>At first, it selects the sensor using the current movement direction, then it fetches all intersection events from it
@@ -401,7 +387,7 @@ and checks if there’s at least one static rigid body intersected. Remember, th
 level tiles. As the final step, add the following code to the <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        if self.has_obstacles(ctx) {
+</span>        if self.has_obstacles(ctx)? {
             self.direction = -self.direction;
         }
 <span class="boring">}</span></code></pre>
@@ -425,16 +411,16 @@ Now add the following code in the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Bot {
-    fn has_ground_in_front(&amp;self, ctx: &amp;ScriptContext) -&gt; bool {
+    fn has_ground_in_front(&amp;self, ctx: &amp;ScriptContext) -&gt; Result&lt;bool, GameError&gt; {
+        let graph = &amp;ctx.scene.graph;
+
         // Do ground check using ray casting from the ground probe position down at some distance.
-        let Some(ground_probe) = ctx.scene.graph.try_get(*self.ground_probe) else {
-            return false;
-        };
+        let ground_probe = graph.try_get(*self.ground_probe)?;
 
         let ground_probe_position = ground_probe.global_position().xy();
 
         let mut intersections = Vec::new();
-        ctx.scene.graph.physics2d.cast_ray(
+        graph.physics2d.cast_ray(
             RayCastOptions {
                 ray_origin: ground_probe_position.into(),
                 // Cast the ray
@@ -448,30 +434,20 @@ Now add the following code in the <code>impl Bot</code>:</p>
         );
 
         for intersection in intersections {
-            let Some(collider) = ctx.scene.graph.try_get(intersection.collider) else {
-                continue;
-            };
-
-            let Some(rigid_body) = ctx
-                .scene
-                .graph
-                .try_get_of_type::&lt;RigidBody&gt;(collider.parent())
-            else {
-                continue;
-            };
-
+            let collider = graph.try_get(intersection.collider)?;
+            let rigid_body = graph.try_get_of_type::&lt;RigidBody&gt;(collider.parent())?;
+            let distance = intersection
+                .position
+                .coords
+                .metric_distance(&amp;ground_probe_position);
             if rigid_body.body_type() == RigidBodyType::Static
-                &amp;&amp; intersection
-                    .position
-                    .coords
-                    .metric_distance(&amp;ground_probe_position)
-                    &lt;= *self.ground_probe_distance
+                &amp;&amp; distance &lt;= *self.ground_probe_distance
             {
-                return true;
+                return Ok(true);
             }
         }
 
-        false
+        Ok(false)
     }
 <span class="boring">}</span></code></pre>
 <p>Open the skeleton prefab and create the ground probe like so:</p>
@@ -481,7 +457,7 @@ Now add the following code in the <code>impl Bot</code>:</p>
 </span><span class="boring">fn main() {
 </span>        self.ground_probe_timeout -= ctx.dt;
         if self.ground_probe_timeout &lt;= 0.0 {
-            if !self.has_ground_in_front(ctx) {
+            if !self.has_ground_in_front(ctx)? {
                 self.direction = -self.direction;
             }
             self.ground_probe_timeout = 0.3;
@@ -501,22 +477,21 @@ do is to slightly modify the plugin and the player script. Add the following fie
 <p>Now we need to set this handle somehow, the ideal place for it is <code>on_start</code> method of the <code>Player</code> script:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         ctx.plugins.get_mut::&lt;Game&gt;().player = ctx.handle;
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Great, now when the player script is created and initialized, it will register itself in the plugin. Now we can use this handle
 in the bot’s target searching routine. Add the following code to the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn search_target(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn search_target(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let game = ctx.plugins.get::&lt;Game&gt;();
 
         let self_position = ctx.scene.graph[ctx.handle].global_position();
 
-        let Some(player) = ctx.scene.graph.try_get(game.player) else {
-            return;
-        };
+        let player = ctx.scene.graph.try_get(game.player)?;
 
         let player_position = player.global_position();
 
@@ -524,6 +499,7 @@ in the bot’s target searching routine. Add the following code to the <code>imp
         if signed_distance.abs() &lt; 3.0 &amp;&amp; signed_distance.signum() != self.direction.signum() {
             self.target = game.player;
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is very straightforward - at first, we’re fetching a reference to the plugin (in which we’ve just stored player’s
@@ -533,8 +509,8 @@ some sensible threshold and also checking the sign of the distance. If the sign 
 the direction, then the bot can see the player. As the last step, call this method in the <code>on_update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
-        self.search_target(ctx);
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
+        self.search_target(ctx)?;
 <span class="boring">}</span></code></pre>
 <p>If there’s a target, then the bot will follow it and try to attack when it is close enough. To implement this, all we need
 to do is to alternate movement direction according to a target position. Add the following code in <code>on_update</code>, but after
@@ -590,22 +566,10 @@ apply the animation to the bot’s sprite. Add the following code at the end of 
 </span>        if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
             current_animation.update(ctx.dt);
 
-            if let Some(sprite) = ctx
-                .scene
+            ctx.scene
                 .graph
-                .try_get_mut_of_type::&lt;Rectangle&gt;(*self.rectangle)
-            {
-                // Set new frame to the sprite.
-                sprite
-                    .material()
-                    .data_ref()
-                    .bind("diffuseTexture", current_animation.texture());
-                sprite.set_uv_rect(
-                    current_animation
-                        .current_frame_uv_rect()
-                        .unwrap_or_default(),
-                );
-            }
+                .try_get_mut(*self.rectangle)?
+                .apply_animation(current_animation);
         }
 <span class="boring">}</span></code></pre>
 <p>Run the game and you should see something like this:</p>

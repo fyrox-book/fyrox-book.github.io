@@ -1,6 +1,6 @@
 use fyrox::core::algebra::Vector3;
 use fyrox::generic_animation::RootMotionSettings;
-use fyrox::graph::{BaseSceneGraph, SceneGraph, SceneGraphNode};
+use fyrox::graph::{SceneGraph, SceneGraphNode};
 use fyrox::scene::animation::absm::AnimationBlendingStateMachine;
 use fyrox::scene::rigidbody::RigidBody;
 use fyrox::{

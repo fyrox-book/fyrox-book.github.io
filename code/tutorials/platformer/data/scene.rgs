@@ -1,4 +1,4 @@
-FTAX:2;
+FTAX:0;
 __ROOT__[]
 {
 	Scene[]
@@ -272,48 +272,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:44bb32dd-65ea-4ac3-9f7e-875b67800e4e>]
-										{
-											Embedded[Id<u64:1>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:759964a4-e57e-4129-8cce-efcd7693bbd8>]
 									{
 										Transform[]
@@ -360,12 +318,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:44bb32dd-65ea-4ac3-9f7e-875b67800e4e>]
+										{
+											Embedded[Id<u64:1>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -535,48 +535,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:a18faa80-e035-415b-85a7-36bed791fd98>]
-										{
-											Embedded[Id<u64:2>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:79ee09fb-8347-4661-b387-86825eea3c6d>]
 									{
 										Transform[]
@@ -623,12 +581,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:a18faa80-e035-415b-85a7-36bed791fd98>]
+										{
+											Embedded[Id<u64:2>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -798,48 +798,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:d7eecd90-6920-4229-9415-216a5b3063c1>]
-										{
-											Embedded[Id<u64:3>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:2826da84-f3fb-4e3b-8512-c3fda6bf0f68>]
 									{
 										Transform[]
@@ -886,12 +844,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:d7eecd90-6920-4229-9415-216a5b3063c1>]
+										{
+											Embedded[Id<u64:3>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -1061,48 +1061,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:231d3fba-0a2f-42a2-beaf-fc65bc9c51aa>]
-										{
-											Embedded[Id<u64:4>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:c86f30f7-c2b7-49a5-b5d6-2284231f1d72>]
 									{
 										Transform[]
@@ -1149,12 +1107,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:231d3fba-0a2f-42a2-beaf-fc65bc9c51aa>]
+										{
+											Embedded[Id<u64:4>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -1324,48 +1324,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:738ff3e3-e0e7-4b25-b346-3f3e1f6f46b4>]
-										{
-											Embedded[Id<u64:5>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:c2fe2391-14b9-4f58-932c-a1a72420f885>]
 									{
 										Transform[]
@@ -1412,12 +1370,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:738ff3e3-e0e7-4b25-b346-3f3e1f6f46b4>]
+										{
+											Embedded[Id<u64:5>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -1587,48 +1587,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:e7346b43-fcd8-4bd2-b0b3-8aba99279a84>]
-										{
-											Embedded[Id<u64:6>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:5954c9c7-40cd-44f7-a166-6c95fffe706a>]
 									{
 										Transform[]
@@ -1675,12 +1633,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:e7346b43-fcd8-4bd2-b0b3-8aba99279a84>]
+										{
+											Embedded[Id<u64:6>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -1850,48 +1850,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:7c0b0c1a-9eae-4774-98ca-9230fa0c602a>]
-										{
-											Embedded[Id<u64:7>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:9a79fc53-3f47-4715-bb86-d0cfdef83a03>]
 									{
 										Transform[]
@@ -1938,12 +1896,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:7c0b0c1a-9eae-4774-98ca-9230fa0c602a>]
+										{
+											Embedded[Id<u64:7>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -2113,48 +2113,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:9d862e5e-3b7c-4567-a027-fdf1c4884fe6>]
-										{
-											Embedded[Id<u64:8>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:a40e26da-0629-496c-ad89-fbf212dd2f34>]
 									{
 										Transform[]
@@ -2201,12 +2159,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:9d862e5e-3b7c-4567-a027-fdf1c4884fe6>]
+										{
+											Embedded[Id<u64:8>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -2376,48 +2376,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:af52b69c-a704-4de5-af0b-36741d3d5f35>]
-										{
-											Embedded[Id<u64:9>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:c834f4be-bc08-4b52-9d14-86baf6b9327d>]
 									{
 										Transform[]
@@ -2464,12 +2422,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:af52b69c-a704-4de5-af0b-36741d3d5f35>]
+										{
+											Embedded[Id<u64:9>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -2639,48 +2639,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:875a662b-fe9e-4922-af30-b9ef5061d68c>]
-										{
-											Embedded[Id<u64:10>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:60d04e2f-e0bb-4508-9d54-5c741864f31e>]
 									{
 										Transform[]
@@ -2727,12 +2685,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:875a662b-fe9e-4922-af30-b9ef5061d68c>]
+										{
+											Embedded[Id<u64:10>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -2902,48 +2902,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:124087f6-7523-4c9c-8172-63bc7ecfff9e>]
-										{
-											Embedded[Id<u64:11>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:61542c34-e7d1-461c-ab50-ec93d6355c15>]
 									{
 										Transform[]
@@ -2990,12 +2948,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:124087f6-7523-4c9c-8172-63bc7ecfff9e>]
+										{
+											Embedded[Id<u64:11>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -3165,48 +3165,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:ece3734c-011e-4d21-b978-7963a05dd200>]
-										{
-											Embedded[Id<u64:12>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:35d75931-6af3-4574-83bb-b5e840b3fae1>]
 									{
 										Transform[]
@@ -3253,12 +3211,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:ece3734c-011e-4d21-b978-7963a05dd200>]
+										{
+											Embedded[Id<u64:12>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -3428,48 +3428,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:eb4b3da1-7121-4aa7-b1ab-194dd2d7f9e5>]
-										{
-											Embedded[Id<u64:13>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:11e76513-66c8-4082-bbf6-2baaad518042>]
 									{
 										Transform[]
@@ -3516,29 +3474,15 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
-								}
-							}
-						}
-					}
-					Item40[Generation<u32:1>]
-					{
-						Payload[IsSome<u8:1>]
-						{
-							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
-							{
-								NodeData[]
-								{
 									Material[Flags<u8:1>]
 									{
-										Value[Uuid<uuid:04ff4973-15af-4766-b20e-a4425059467f>]
+										Value[Uuid<uuid:eb4b3da1-7121-4aa7-b1ab-194dd2d7f9e5>]
 										{
-											Embedded[Id<u64:14>]
+											Embedded[Id<u64:13>]
 											{
 												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
 												{
@@ -3565,7 +3509,7 @@ __ROOT__[]
 																	{
 																		Value[IsSome<u8:1>]
 																		{
-																			Data[Uuid<uuid:ad7bf378-3c8f-40e2-86c6-ccefac08e760>]{}
+																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
 																		}
 																	}
 																}
@@ -3576,6 +3520,20 @@ __ROOT__[]
 											}
 										}
 									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
+								}
+							}
+						}
+					}
+					Item40[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
+							{
+								NodeData[]
+								{
 									Base[Name<str:"Tree">IsResourceInstance<bool:false>InstanceId<uuid:c8943b41-720e-4047-9412-fead1b4a183b>]
 									{
 										Transform[]
@@ -3622,29 +3580,15 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
-								}
-							}
-						}
-					}
-					Item41[Generation<u32:1>]
-					{
-						Payload[IsSome<u8:1>]
-						{
-							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
-							{
-								NodeData[]
-								{
 									Material[Flags<u8:1>]
 									{
-										Value[Uuid<uuid:34e80f68-f028-48d6-be93-d1ebb93f142c>]
+										Value[Uuid<uuid:04ff4973-15af-4766-b20e-a4425059467f>]
 										{
-											Embedded[Id<u64:15>]
+											Embedded[Id<u64:14>]
 											{
 												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
 												{
@@ -3682,6 +3626,20 @@ __ROOT__[]
 											}
 										}
 									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
+								}
+							}
+						}
+					}
+					Item41[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
+							{
+								NodeData[]
+								{
 									Base[Name<str:"TreeVariant">IsResourceInstance<bool:false>InstanceId<uuid:7d6ba1a8-5c52-445b-8f91-5b5d07d08140>]
 									{
 										Transform[]
@@ -3728,12 +3686,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:34e80f68-f028-48d6-be93-d1ebb93f142c>]
+										{
+											Embedded[Id<u64:15>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:ad7bf378-3c8f-40e2-86c6-ccefac08e760>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -3903,48 +3903,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:817ec9f4-75d0-4361-9752-85d51e064c4a>]
-										{
-											Embedded[Id<u64:16>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:24ee9c00-e75b-4ef2-bdcd-ac2d0db468f4>]
 									{
 										Transform[]
@@ -3991,12 +3949,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:817ec9f4-75d0-4361-9752-85d51e064c4a>]
+										{
+											Embedded[Id<u64:16>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -4166,48 +4166,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:899bff3b-4741-40ea-b6f9-e2030016e703>]
-										{
-											Embedded[Id<u64:17>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:0eb7425d-db05-4d43-801e-6f531b73add0>]
 									{
 										Transform[]
@@ -4254,12 +4212,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:899bff3b-4741-40ea-b6f9-e2030016e703>]
+										{
+											Embedded[Id<u64:17>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -4429,48 +4429,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:542c29f3-7fd2-4f90-80b5-1a76fbda3b26>]
-										{
-											Embedded[Id<u64:18>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:a8f7102f-8849-45ba-9753-026fedb989e1>]
 									{
 										Transform[]
@@ -4517,29 +4475,15 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
-								}
-							}
-						}
-					}
-					Item51[Generation<u32:1>]
-					{
-						Payload[IsSome<u8:1>]
-						{
-							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
-							{
-								NodeData[]
-								{
 									Material[Flags<u8:1>]
 									{
-										Value[Uuid<uuid:c037122d-3e68-4e13-aa7f-496f62fa103b>]
+										Value[Uuid<uuid:542c29f3-7fd2-4f90-80b5-1a76fbda3b26>]
 										{
-											Embedded[Id<u64:19>]
+											Embedded[Id<u64:18>]
 											{
 												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
 												{
@@ -4566,7 +4510,7 @@ __ROOT__[]
 																	{
 																		Value[IsSome<u8:1>]
 																		{
-																			Data[Uuid<uuid:d5ac77eb-7268-4dde-af61-4cf85c5b3757>]{}
+																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
 																		}
 																	}
 																}
@@ -4577,6 +4521,20 @@ __ROOT__[]
 											}
 										}
 									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
+								}
+							}
+						}
+					}
+					Item51[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
+							{
+								NodeData[]
+								{
 									Base[Name<str:"Stump">IsResourceInstance<bool:false>InstanceId<uuid:863f6f7a-de4a-4e4d-a97c-3603dc5257d8>]
 									{
 										Transform[]
@@ -4629,12 +4587,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:c037122d-3e68-4e13-aa7f-496f62fa103b>]
+										{
+											Embedded[Id<u64:19>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:d5ac77eb-7268-4dde-af61-4cf85c5b3757>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -4854,48 +4854,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:b55ad004-8c58-458c-bcf2-44d47ac53aa1>]
-										{
-											Embedded[Id<u64:20>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:edb9617b-0fe4-426d-9ed8-674e0ee1d20d>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"BodySprite">IsResourceInstance<bool:false>InstanceId<uuid:d2dfba72-ac20-454f-8bdb-36010e0ecbac>]
 									{
 										Transform[]
@@ -4942,12 +4900,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:0.143>H<f32:0.091>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:b55ad004-8c58-458c-bcf2-44d47ac53aa1>]
+										{
+											Embedded[Id<u64:20>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:edb9617b-0fe4-426d-9ed8-674e0ee1d20d>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -5196,48 +5196,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:6e478e8a-e947-4408-b0dc-faa56c51aa21>]
-										{
-											Embedded[Id<u64:21>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:aa91eacc-2725-4cd9-af79-a5e4cddbc7de>]
 									{
 										Transform[]
@@ -5284,12 +5242,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:6e478e8a-e947-4408-b0dc-faa56c51aa21>]
+										{
+											Embedded[Id<u64:21>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -5459,48 +5459,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:8f8af5a7-2abb-4538-a437-35434bfe11c1>]
-										{
-											Embedded[Id<u64:22>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:bb412277-07c8-4f5d-9baa-620f407d0bfe>]
 									{
 										Transform[]
@@ -5547,12 +5505,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:8f8af5a7-2abb-4538-a437-35434bfe11c1>]
+										{
+											Embedded[Id<u64:22>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -5722,48 +5722,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:c074fb47-a324-4dba-88c2-3f41c5f61547>]
-										{
-											Embedded[Id<u64:23>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:14b0e0d6-ded7-41d6-bbee-d3dfc4c89787>]
 									{
 										Transform[]
@@ -5810,12 +5768,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:c074fb47-a324-4dba-88c2-3f41c5f61547>]
+										{
+											Embedded[Id<u64:23>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -5985,48 +5985,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:e4707a76-e251-456f-9b1d-0f094cb1d8b0>]
-										{
-											Embedded[Id<u64:24>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:1ed46515-0a03-45b4-bafc-40eaa4e8126f>]
 									{
 										Transform[]
@@ -6073,12 +6031,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:e4707a76-e251-456f-9b1d-0f094cb1d8b0>]
+										{
+											Embedded[Id<u64:24>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -6248,48 +6248,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:2e8fa06e-005c-4d19-a304-5524a5d24d87>]
-										{
-											Embedded[Id<u64:25>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:e929f5ca-eefb-4b92-9cb9-27e014abeba4>]
 									{
 										Transform[]
@@ -6336,12 +6294,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:2e8fa06e-005c-4d19-a304-5524a5d24d87>]
+										{
+											Embedded[Id<u64:25>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -6511,48 +6511,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:7077cdf9-f2aa-47f5-8870-bf9667714365>]
-										{
-											Embedded[Id<u64:26>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:66d0f787-3567-4cd0-9116-c781eea1ce27>]
 									{
 										Transform[]
@@ -6599,12 +6557,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:7077cdf9-f2aa-47f5-8870-bf9667714365>]
+										{
+											Embedded[Id<u64:26>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -6774,48 +6774,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:0dc4f61f-91b1-4c93-b13a-f51f304331d4>]
-										{
-											Embedded[Id<u64:27>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:16edeca9-3c74-44e7-9bd2-9a882185b5ee>]
 									{
 										Transform[]
@@ -6862,12 +6820,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:0dc4f61f-91b1-4c93-b13a-f51f304331d4>]
+										{
+											Embedded[Id<u64:27>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -7037,48 +7037,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:e9edecd1-e48e-4655-abd3-20cac77fe2a8>]
-										{
-											Embedded[Id<u64:28>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:b3ccbe7a-8cbd-4d44-ab7d-3fd8a31ccea0>]
 									{
 										Transform[]
@@ -7125,12 +7083,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:e9edecd1-e48e-4655-abd3-20cac77fe2a8>]
+										{
+											Embedded[Id<u64:28>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -7300,48 +7300,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:b6a0a80d-09a6-411e-b079-f0f694fc9611>]
-										{
-											Embedded[Id<u64:29>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:49933393-c075-438c-8304-644181184271>]
 									{
 										Transform[]
@@ -7388,12 +7346,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:b6a0a80d-09a6-411e-b079-f0f694fc9611>]
+										{
+											Embedded[Id<u64:29>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -7563,48 +7563,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:9dab65aa-fc93-48ec-a44f-33aaaa4380a2>]
-										{
-											Embedded[Id<u64:30>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:8396cd1f-d200-4e07-a563-48c085832b6f>]
 									{
 										Transform[]
@@ -7651,12 +7609,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:9dab65aa-fc93-48ec-a44f-33aaaa4380a2>]
+										{
+											Embedded[Id<u64:30>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -7826,48 +7826,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:cff411ab-707f-488b-9050-5d005bd5a610>]
-										{
-											Embedded[Id<u64:31>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:dd98abe2-bdff-4ff4-a682-96394a31afae>]
 									{
 										Transform[]
@@ -7914,12 +7872,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:cff411ab-707f-488b-9050-5d005bd5a610>]
+										{
+											Embedded[Id<u64:31>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:b91d95c9-c692-4421-a526-d703c92c1d1a>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -8089,48 +8089,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:96b1f9ab-c2a4-4b7e-9758-ee7028147ce5>]
-										{
-											Embedded[Id<u64:32>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:cbf3710b-1bc2-4260-b442-b7501a3ce111>]
 									{
 										Transform[]
@@ -8177,12 +8135,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:96b1f9ab-c2a4-4b7e-9758-ee7028147ce5>]
+										{
+											Embedded[Id<u64:32>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -8352,48 +8352,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:a1db519e-07ec-413b-a1ec-02bf346aa923>]
-										{
-											Embedded[Id<u64:33>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:1d599505-fc05-4136-beb8-1c2ee58f5c3c>]
 									{
 										Transform[]
@@ -8440,12 +8398,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:a1db519e-07ec-413b-a1ec-02bf346aa923>]
+										{
+											Embedded[Id<u64:33>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -8615,48 +8615,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:4ba1dea5-f411-4111-9d2b-de1dd58c416f>]
-										{
-											Embedded[Id<u64:34>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:ed748c20-4c52-4b2c-80fa-540a104ff781>]
 									{
 										Transform[]
@@ -8703,12 +8661,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:4ba1dea5-f411-4111-9d2b-de1dd58c416f>]
+										{
+											Embedded[Id<u64:34>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -8878,48 +8878,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:a7233b40-b88d-4096-9e32-b75806260748>]
-										{
-											Embedded[Id<u64:35>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:e98de56b-827e-4fa0-8528-af3c35226ed8>]
 									{
 										Transform[]
@@ -8966,12 +8924,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:a7233b40-b88d-4096-9e32-b75806260748>]
+										{
+											Embedded[Id<u64:35>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -9141,48 +9141,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:6a34512d-7649-489d-9cc1-cc378c06cae3>]
-										{
-											Embedded[Id<u64:36>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:4f1f511e-bafb-4296-9050-c75a7e4f691d>]
 									{
 										Transform[]
@@ -9229,12 +9187,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:6a34512d-7649-489d-9cc1-cc378c06cae3>]
+										{
+											Embedded[Id<u64:36>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -9404,48 +9404,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:725464a5-347b-4d3d-9c0d-9065ac8cf781>]
-										{
-											Embedded[Id<u64:37>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:e2afc6de-d4cd-4169-a96a-0cdc60a290ea>]
 									{
 										Transform[]
@@ -9492,12 +9450,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:725464a5-347b-4d3d-9c0d-9065ac8cf781>]
+										{
+											Embedded[Id<u64:37>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:7b7aadab-893c-4f7a-ac71-d345f28db1e6>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -9667,48 +9667,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:1e2e2491-0d11-4702-bde0-53b0eebe9154>]
-										{
-											Embedded[Id<u64:38>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:6ba1f7f7-37b7-4673-a50c-5b9cf424b665>]
 									{
 										Transform[]
@@ -9755,12 +9713,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:1e2e2491-0d11-4702-bde0-53b0eebe9154>]
+										{
+											Embedded[Id<u64:38>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:021a7272-9bd6-48bd-8c48-0218737648fb>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -9930,48 +9930,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:dcf7335b-9dcf-4f3a-8353-3238beedc143>]
-										{
-											Embedded[Id<u64:39>]
-											{
-												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
-												{
-													Data[]
-													{
-														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
-														ResourceBindings[Count<u32:2>]
-														{
-															Item0[Key<str:"properties">]
-															{
-																Value[Id<u32:1>]
-																{
-																	0[]
-																	{
-																		Properties[Count<u32:0>]{}
-																	}
-																}
-															}
-															Item1[Key<str:"diffuseTexture">]
-															{
-																Value[Id<u32:0>]
-																{
-																	0[]
-																	{
-																		Value[IsSome<u8:1>]
-																		{
-																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:f333cf96-e540-4bcf-94e0-41e6ab604eef>]
 									{
 										Transform[]
@@ -10018,29 +9976,15 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
-								}
-							}
-						}
-					}
-					Item113[Generation<u32:1>]
-					{
-						Payload[IsSome<u8:1>]
-						{
-							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
-							{
-								NodeData[]
-								{
 									Material[Flags<u8:1>]
 									{
-										Value[Uuid<uuid:a4c0a6dd-0cb3-47c0-82b5-bee37974b879>]
+										Value[Uuid<uuid:dcf7335b-9dcf-4f3a-8353-3238beedc143>]
 										{
-											Embedded[Id<u64:40>]
+											Embedded[Id<u64:39>]
 											{
 												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
 												{
@@ -10067,7 +10011,7 @@ __ROOT__[]
 																	{
 																		Value[IsSome<u8:1>]
 																		{
-																			Data[Uuid<uuid:d5ac77eb-7268-4dde-af61-4cf85c5b3757>]{}
+																			Data[Uuid<uuid:35dcbfd9-e495-42b1-9b11-e433f0c360db>]{}
 																		}
 																	}
 																}
@@ -10078,6 +10022,20 @@ __ROOT__[]
 											}
 										}
 									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
+								}
+							}
+						}
+					}
+					Item113[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:bb57b5e0-367a-4490-bf30-7f547407d5b5>]
+							{
+								NodeData[]
+								{
 									Base[Name<str:"Stump">IsResourceInstance<bool:false>InstanceId<uuid:10cbf97e-e5c2-4de6-b592-1d614c4574a4>]
 									{
 										Transform[]
@@ -10124,12 +10082,54 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:a4c0a6dd-0cb3-47c0-82b5-bee37974b879>]
+										{
+											Embedded[Id<u64:40>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:55fa05b0-3c25-4e46-bae7-65f093185b75>]{}
+														ResourceBindings[Count<u32:2>]
+														{
+															Item0[Key<str:"properties">]
+															{
+																Value[Id<u32:1>]
+																{
+																	0[]
+																	{
+																		Properties[Count<u32:0>]{}
+																	}
+																}
+															}
+															Item1[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:d5ac77eb-7268-4dde-af61-4cf85c5b3757>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -10299,13 +10299,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:899bff3b-4741-40ea-b6f9-e2030016e703>]
-										{
-											Embedded[Id<u64:17>]{}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:0eb7425d-db05-4d43-801e-6f531b73add0>]
 									{
 										Transform[]
@@ -10352,12 +10345,19 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:899bff3b-4741-40ea-b6f9-e2030016e703>]
+										{
+											Embedded[Id<u64:17>]{}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -10527,13 +10527,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:817ec9f4-75d0-4361-9752-85d51e064c4a>]
-										{
-											Embedded[Id<u64:16>]{}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:24ee9c00-e75b-4ef2-bdcd-ac2d0db468f4>]
 									{
 										Transform[]
@@ -10580,12 +10573,19 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:817ec9f4-75d0-4361-9752-85d51e064c4a>]
+										{
+											Embedded[Id<u64:16>]{}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -10755,13 +10755,6 @@ __ROOT__[]
 							{
 								NodeData[]
 								{
-									Material[Flags<u8:1>]
-									{
-										Value[Uuid<uuid:542c29f3-7fd2-4f90-80b5-1a76fbda3b26>]
-										{
-											Embedded[Id<u64:18>]{}
-										}
-									}
 									Base[Name<str:"Sprite 2D">IsResourceInstance<bool:false>InstanceId<uuid:a8f7102f-8849-45ba-9753-026fedb989e1>]
 									{
 										Transform[]
@@ -10808,12 +10801,19 @@ __ROOT__[]
 									{
 										Value[R<u8:255>G<u8:255>B<u8:255>A<u8:255>]{}
 									}
-									FlipX[Value<bool:false>Flags<u8:1>]{}
-									FlipY[Value<bool:false>Flags<u8:1>]{}
 									UvRect[Flags<u8:1>]
 									{
 										Value[X<f32:0>Y<f32:0>W<f32:1>H<f32:1>]{}
 									}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:542c29f3-7fd2-4f90-80b5-1a76fbda3b26>]
+										{
+											Embedded[Id<u64:18>]{}
+										}
+									}
+									FlipX[Value<bool:false>Flags<u8:1>]{}
+									FlipY[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
 						}
@@ -11083,7 +11083,7 @@ __ROOT__[]
 						{
 							ArcData[Paused<bool:false>]
 							{
-								Listener[Basis<mat3:-0.9999576; 0.004731402; 0.007893174; 0.0000000004656613; 0.8577087; -0.5141359; 0.009202627; 0.51411414; 0.8576724>Position<vec3f32:-1.7476244; -1.2860758; -3.4673586>]{}
+								Listener[Basis<mat3:-1; 0; 0; 0; 1; 0; 0; 0; 1>Position<vec3f32:0; 1; -3>]{}
 								Sources[]
 								{
 									Records[Length<u32:0>]{}
@@ -11144,6 +11144,7 @@ __ROOT__[]
 				Gravity[Value<vec2f32:0; -9.81>Flags<u8:1>]{}
 			}
 			Lightmap[IsSome<u8:0>]{}
+			UserData[TypeUuid<uuid:00000000-0000-0000-0000-000000000000>]{}
 		}
 		Enabled[Value<bool:true>Flags<u8:1>]{}
 		RenderingOptions[Flags<u8:1>]

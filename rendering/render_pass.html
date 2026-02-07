@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -201,102 +201,133 @@ effects.</p>
 by experienced graphics programmers. Here’s the simplest render pass that renders unit quad without any textures.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct MyRenderPass {
-    enabled: bool,
-    shader: Box&lt;dyn GpuProgram&gt;,
-    target_scene: Handle&lt;Scene&gt;,
-    quad: Box&lt;dyn GeometryBuffer&gt;,
-    uniform_location: usize,
-    uniform_buffer: Box&lt;dyn Buffer&gt;,
+</span>const SHADER: &amp;'static str = r##"
+(
+    name: "Overlay",
+    resources: [
+        (
+            name: "properties",
+            kind: PropertyGroup([
+                (name: "worldViewProjectionMatrix", kind: Matrix4()),
+            ]),
+            binding: 0
+        ),
+    ],
+    passes: [
+        (
+            name: "Primary",
+
+            draw_parameters: DrawParameters(
+                cull_face: None,
+                color_write: ColorMask(
+                    red: true,
+                    green: true,
+                    blue: true,
+                    alpha: true,
+                ),
+                depth_write: false,
+                stencil_test: None,
+                depth_test: None,
+                blend: Some(BlendParameters(
+                    func: BlendFunc(
+                        sfactor: SrcAlpha,
+                        dfactor: OneMinusSrcAlpha,
+                        alpha_sfactor: SrcAlpha,
+                        alpha_dfactor: OneMinusSrcAlpha,
+                    ),
+                    equation: BlendEquation(
+                        rgb: Add,
+                        alpha: Add
+                    )
+                )),
+                stencil_op: StencilOp(
+                    fail: Keep,
+                    zfail: Keep,
+                    zpass: Keep,
+                    write_mask: 0xFFFF_FFFF,
+                ),
+                scissor_box: None
+            ),
+
+            vertex_shader:
+                r#"
+                    layout(location = 0) in vec3 vertexPosition;
+
+                    void main()
+                    {
+                        gl_Position = properties.worldViewProjectionMatrix * vec4(vertexPosition, 1.0);
+                    }
+                "#,
+
+            fragment_shader:
+                r#"
+                    out vec4 FragColor;
+
+                    void main()
+                    {
+                        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                    }
+                "#,
+        )
+    ]
+)
+"##;
+
+pub struct MyRenderPass {
+    quad: GpuGeometryBuffer,
+    shader: RenderPassContainer,
+    pub scene_handle: Handle&lt;Scene&gt;,
 }
 
 impl MyRenderPass {
-    pub fn new(
-        renderer: &amp;mut Renderer,
-        target_scene: Handle&lt;Scene&gt;,
-    ) -&gt; Result&lt;Self, FrameworkError&gt; {
-        let vs = r"
-                layout(location = 0) in vec3 vertexPosition;
-
-                layout(std140) uniform Uniforms {
-                    mat4 worldViewProjectionMatrix;
-                }                
-                         
-                void main()
-                {
-                    gl_Position = worldViewProjectionMatrix * vertexPosition;
-                }
-            ";
-
-        let fs = r"                
-                out vec4 FragColor;             
-                
-                void main()
-                {
-                    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-                }
-            ";
-
-        let shader = renderer.server.create_program("MyShader", vs, fs)?;
-        let uniform_buffer =
-            renderer
-                .server
-                .create_buffer(256, BufferKind::Uniform, BufferUsage::DynamicDraw)?;
-
-        uniform_buffer.write_data_of_type(
-            &amp;StaticUniformBuffer::&lt;256&gt;::new()
-                .with(&amp;Matrix4::identity())
-                .finish(),
-        )?;
-
-        Ok(Self {
-            enabled: true,
-            uniform_location: shader.uniform_block_index(&amp;"Uniforms".into())?,
-            uniform_buffer,
-            target_scene,
-            quad: &lt;dyn GeometryBuffer as GeometryBufferExt&gt;::from_surface_data(
-                &amp;SurfaceData::make_quad(&amp;Matrix4::identity()),
+    pub fn new(server: &amp;dyn GraphicsServer) -&gt; Rc&lt;RefCell&lt;Self&gt;&gt; {
+        Rc::new(RefCell::new(Self {
+            quad: GpuGeometryBuffer::from_surface_data(
+                "Quad",
+                &amp;SurfaceData::make_unit_xy_quad(),
                 BufferUsage::StaticDraw,
-                renderer.server.as_ref(),
-            )?,
-            shader,
-        })
+                server,
+            )
+            .unwrap(),
+            shader: RenderPassContainer::from_str(server, SHADER).unwrap(),
+            scene_handle: Default::default(),
+        }))
     }
 }
 
 impl SceneRenderPass for MyRenderPass {
-    fn on_ldr_render(
+    fn on_hdr_render(
         &amp;mut self,
         ctx: SceneRenderPassContext,
     ) -&gt; Result&lt;RenderPassStatistics, FrameworkError&gt; {
         let mut stats = RenderPassStatistics::default();
-
-        // Make sure to render only to target scene.
-        if self.enabled &amp;&amp; ctx.scene_handle == self.target_scene {
-            let resources = ResourceBindGroup {
-                bindings: &amp;[ResourceBinding::Buffer {
-                    buffer: self.uniform_buffer.as_ref(),
-                    binding: BufferLocation::Auto {
-                        shader_location: self.uniform_location,
-                    },
-                    data_usage: BufferDataUsage::default(),
-                }],
-            };
-            stats += ctx.framebuffer.draw(
-                self.quad.as_ref(),
-                ctx.viewport,
-                self.shader.as_ref(),
-                &amp;DrawParameters::default(),
-                &amp;[resources],
-                ElementRange::Full,
-            )?;
+        if ctx.scene_handle != self.scene_handle {
+            return Ok(stats);
         }
+
+        let view_projection = ctx.observer.position.view_projection_matrix;
+
+        let properties =
+            PropertyGroup::from([property("worldViewProjectionMatrix", &amp;view_projection)]);
+        let material = RenderMaterial::from([binding("properties", &amp;properties)]);
+
+        stats += self.shader.run_pass(
+            1,
+            &amp;ImmutableString::new("Primary"),
+            ctx.framebuffer,
+            &amp;self.quad,
+            ctx.observer.viewport,
+            &amp;material,
+            ctx.uniform_buffer_cache,
+            Default::default(),
+            None,
+        )?;
 
         Ok(stats)
     }
 
     fn source_type_id(&amp;self) -&gt; TypeId {
-        ().type_id()
+        TypeId::of::&lt;MyPlugin&gt;()
     }
 }
 <span class="boring">}</span></code></pre>

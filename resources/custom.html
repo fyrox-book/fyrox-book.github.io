@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -216,7 +216,7 @@ traits. Also, it must contain at least path to external file with the content. H
 contains some string data.</p>
 <pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Debug, Visit, Reflect, TypeUuidProvider)]
+</span>#[derive(Default, Debug, Clone, Visit, Reflect, TypeUuidProvider)]
 // Every resource must provide a unique identifier, that is used for dynamic type
 // casting, serialization, etc.
 #[type_uuid(id = "15551157-651b-4f1d-a5fb-6874fbfe8637")]
@@ -237,6 +237,10 @@ impl ResourceData for CustomResource {
 
     fn can_be_saved(&amp;self) -&gt; bool {
         true
+    }
+
+    fn try_clone_box(&amp;self) -&gt; Option&lt;Box&lt;dyn ResourceData&gt;&gt; {
+        Some(Box::new(self.clone()))
     }
 }
 
@@ -281,12 +285,13 @@ resource in the resource manager. This can be done by adding the following code 
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .resource_manager
             .state()
             .loaders
             .set(CustomResourceLoader);
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -302,15 +307,9 @@ add the following lines to <code>editor/src/main.rs</code> file, somewhere after
     let editor = Editor::new(None);
 
     // Register property editor.
-    editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
-        .property_editors
-        .insert(
-            ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
-                editor.message_sender.clone(),
-            ),
-        );
+    editor.property_editors.insert(
+        ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(editor.message_sender.clone()),
+    );
 
     // ...
 }</code></pre>

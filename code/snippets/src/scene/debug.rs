@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{
         color::Color, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
@@ -15,12 +16,13 @@ use fyrox::{
 struct MyScript {}
 
 impl ScriptTrait for MyScript {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let self_position = ctx.scene.graph[ctx.handle].global_position();
 
         ctx.scene
             .drawing_context
             .draw_sphere(self_position, 16, 16, 0.1, Color::GREEN);
+        Ok(())
     }
 }
 // ANCHOR_END: debug_drawing
@@ -32,7 +34,7 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn update(&mut self, context: &mut PluginContext) {
+    fn update(&mut self, context: &mut PluginContext) -> GameResult {
         // ANCHOR_END: update_begin
 
         // ANCHOR: clear
@@ -61,6 +63,8 @@ impl Plugin for Game {
         // ANCHOR_END: node_debug_drawing_specific
 
         // ANCHOR: update_end
+
+        Ok(())
     }
 }
 // ANCHOR_END: update_end

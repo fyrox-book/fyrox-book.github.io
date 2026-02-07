@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-025265cf.js"></script>
@@ -1210,20 +1210,22 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Begin multiple borrowing.
         let mbc = ctx.scene.graph.begin_multi_borrow();
 
         // Borrow immutably.
-        let some_node_ref_1 = mbc.try_get(self.some_node).unwrap();
+        let some_node_ref_1 = mbc.try_get(self.some_node)?;
 
         // Then borrow other nodes mutably.
-        let some_other_node_ref = mbc.try_get_mut(self.some_other_node).unwrap();
-        let yet_another_node_ref = mbc.try_get_mut(self.yet_another_node).unwrap();
+        let some_other_node_ref = mbc.try_get_mut(self.some_other_node)?;
+        let yet_another_node_ref = mbc.try_get_mut(self.yet_another_node)?;
 
         // We can borrow the same node immutably pretty much infinite number of times, if it wasn't
         // borrowed mutably.
-        let some_node_ref_2 = mbc.try_get(self.some_node).unwrap();
+        let some_node_ref_2 = mbc.try_get(self.some_node)?;
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -1251,37 +1253,31 @@ struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Begin multiple borrowing.
         let mbc = ctx.scene.graph.begin_multi_borrow();
 
         // At first, borrow a node on which this script is running on.
-        let this = mbc.get_mut(ctx.handle);
+        let this = mbc.try_get_mut(ctx.handle)?;
 
         // Try to borrow the target. It can fail in two cases:
         // 1) `self.target` is invalid or unassigned handle.
-        // 2) A node is already borrowed, this could only happen if the bot have itself as the target.
-        match mbc.try_get_mut(self.target) {
-            Ok(target) =&gt; {
-                // Check if we are close enough to target.
-                let close_enough = target
-                    .global_position()
-                    .metric_distance(&amp;this.global_position())
-                    &lt; 1.0;
+        // 2) A node is already borrowed, this could only happen if the bot has itself as the target.
+        let target = mbc.try_get_mut(self.target)?;
 
-                // Switch animations accordingly.
-                let mut absm = mbc
-                    .try_get_component_of_type_mut::&lt;AnimationBlendingStateMachine&gt;(self.absm)
-                    .unwrap();
-                absm.machine_mut()
-                    .get_value_mut_silent()
-                    .set_parameter("Attack", Parameter::Rule(close_enough));
-            }
-            Err(err) =&gt; {
-                // Optionally, you can print the actual reason why borrowing wasn't successful.
-                Log::err(err.to_string())
-            }
-        };
+        // Check if we are close enough to target.
+        let close_enough = target
+            .global_position()
+            .metric_distance(&amp;this.global_position())
+            &lt; 1.0;
+
+        // Switch animations accordingly.
+        let mut absm =
+            mbc.try_get_component_of_type_mut::&lt;AnimationBlendingStateMachine&gt;(self.absm)?;
+        absm.machine_mut()
+            .get_value_mut_silent()
+            .set_parameter("Attack", Parameter::Rule(close_enough));
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -1367,19 +1363,20 @@ struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Try to shoot the weapon.
-        if let Some(weapon) = ctx
+        let weapon = ctx
             .scene
             .graph
-            .try_get_script_component_of_mut::&lt;Weapon&gt;(self.weapon)
-        {
-            // !!! This will not compile, because it requires mutable access to the weapon and to
-            // the script context at the same time. This is impossible to do safely, because we've
-            // just borrowed the weapon from the context.
+            .try_get_script_component_of_mut::&lt;Weapon&gt;(self.weapon)?;
 
-            // weapon.shoot(ctx.handle, &amp;mut ctx.scene.graph);
-        }
+        // !!! This will not compile, because it requires mutable access to the weapon and to
+        // the script context at the same time. This is impossible to do safely, because we've
+        // just borrowed the weapon from the context.
+
+        // weapon.shoot(ctx.handle, &amp;mut ctx.scene.graph);
+
+        Ok(())
     }
 }
 
@@ -1411,23 +1408,26 @@ impl Weapon {
 
 #[derive(Debug)]
 pub struct ShootMessage;
+impl ScriptMessagePayload for ShootMessage {}
 
 impl ScriptTrait for Weapon {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Subscribe to shooting message.
         ctx.message_dispatcher
             .subscribe_to::&lt;ShootMessage&gt;(ctx.handle);
+        Ok(())
     }
 
     fn on_message(
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // Receive shooting messages.
         if message.downcast_ref::&lt;ShootMessage&gt;().is_some() {
             self.shoot(ctx.handle, &amp;mut ctx.scene.graph);
         }
+        Ok(())
     }
 }
 
@@ -1441,10 +1441,11 @@ struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Note, that we know nothing about the weapon here - just its handle and a message that it
         // can accept and process.
         ctx.message_sender.send_to_target(self.weapon, ShootMessage);
+        Ok(())
     }
 }
 
@@ -1728,57 +1729,72 @@ impl Game {
 }
 
 impl Plugin for Game {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         // Register scripts here.
+        Ok(())
     }
 
-    fn register_property_editors(&amp;self) -&gt; PropertyEditorDefinitionContainer {
+    fn register_property_editors(&amp;self, editors: Arc&lt;PropertyEditorDefinitionContainer&gt;) {
         // Register custom property editors for the editor here.
-        PropertyEditorDefinitionContainer::empty()
     }
 
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
+        Ok(())
     }
 
-    fn on_loaded(&amp;mut self, context: PluginContext) {
+    fn on_loaded(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // For hot reloading only! Only for development.
         // Re-initialize non-serializable data.
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, _context: PluginContext) {
+    fn on_deinit(&amp;mut self, _context: PluginContext) -&gt; GameResult {
         // Do a cleanup here.
+        Ok(())
     }
 
-    fn update(&amp;mut self, _context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, _context: &amp;mut PluginContext) -&gt; GameResult {
         // Add your global update code here.
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, _event: &amp;Event&lt;()&gt;, _context: PluginContext) {
+    fn on_os_event(&amp;mut self, _event: &amp;Event&lt;()&gt;, _context: PluginContext) -&gt; GameResult {
         // Do something on OS event here.
+        Ok(())
     }
 
-    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) {
+    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Executed when graphics context was initialized.
+        Ok(())
     }
 
-    fn before_rendering(&amp;mut self, context: PluginContext) {
+    fn before_rendering(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Executed before rendering begins.
+        Ok(())
     }
 
-    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) {
+    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Executed when graphics context was destroyed.
+        Ok(())
     }
 
-    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, _message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        _context: &amp;mut PluginContext,
+        _message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         // Handle UI events here.
+        Ok(())
     }
 
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         // Handle started scene loading here.
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -1787,12 +1803,14 @@ impl Plugin for Game {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
 
         self.scene = scene;
+
+        Ok(())
     }
 
     fn on_scene_loading_failed(
@@ -1800,8 +1818,9 @@ impl Plugin for Game {
         path: &amp;Path,
         error: &amp;VisitError,
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         // Handle failed scenes here.
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -1908,11 +1927,12 @@ Notice the <code>unwrap()</code> here, <code>window_target</code> could not be a
 in the editor, it tells the game instance to load it on startup. Let’s look closely at <code>Plugin::init</code> method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>The <code>scene_path</code> parameter is a path to a scene that is currently opened in the editor, your game should use it if you
@@ -1942,32 +1962,38 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put initialization logic here.
+        Ok(())
     }
 
-    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put start logic - it is called when every other script is already initialized.
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) {
+    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) -&gt; GameResult {
         // Put de-initialization logic here.
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Respond to OS events here.
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put object logic here.
+        Ok(())
     }
 
     fn on_message(
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // See "message passing" section below.
+        Ok(())
     }
 }
 
@@ -1975,11 +2001,12 @@ impl ScriptTrait for MyScript {
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .serialization_context
             .script_constructors
             .add::&lt;MyScript&gt;("My Script");
+        Ok(())
     }
 }
 
@@ -2050,11 +2077,12 @@ you need to register it in the list of script constructors like so:</p>
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .serialization_context
             .script_constructors
             .add::&lt;MyScript&gt;("My Script");
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -2158,6 +2186,7 @@ enum Message {
         attacker: Handle&lt;Node&gt;,
     },
 }
+impl ScriptMessagePayload for Message {}
 
 #[derive(Default, Clone, Reflect, Visit, Debug, ComponentProvider, TypeUuidProvider)]
 #[type_uuid(id = "eb3c6354-eaf5-4e43-827d-0bb10d6d966b")]
@@ -2165,12 +2194,13 @@ enum Message {
 struct Projectile;
 
 impl ScriptTrait for Projectile {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Broadcast the message globally.
         ctx.message_sender.send_global(Message::Damage {
             actor: Default::default(),
             attacker: ctx.handle,
         });
+        Ok(())
     }
 }
 
@@ -2180,20 +2210,22 @@ impl ScriptTrait for Projectile {
 struct LaserSight;
 
 impl ScriptTrait for LaserSight {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Subscript to messages.
         ctx.message_dispatcher.subscribe_to::&lt;Message&gt;(ctx.handle);
+        Ok(())
     }
 
     fn on_message(
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         _ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // React to message.
         if let Some(Message::Damage { actor, attacker }) = message.downcast_ref::&lt;Message&gt;() {
             Log::info(format!("{actor} damaged {attacker}",))
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -2220,28 +2252,25 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
-        if let Some(second_nodes_script_ref) = ctx
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
+        let second_nodes_script_ref = ctx
             .scene
             .graph
-            .try_get_script_of::&lt;MyOtherScript&gt;(self.second_node)
-        {
-            if second_nodes_script_ref.counter &gt; 60.0 {
-                Log::info("Done!");
-            }
+            .try_get_script_of::&lt;MyOtherScript&gt;(self.second_node)?;
+        if second_nodes_script_ref.counter &gt; 60.0 {
+            Log::info("Done!");
         }
 
         // The code below is equivalent to the code above. The only difference is that
         // it borrows the node and then borrows the script from it, giving you access
         // to the node.
-        if let Some(second_node_ref) = ctx.scene.graph.try_get(self.second_node) {
-            if let Some(second_nodes_script_ref) = second_node_ref.try_get_script::&lt;MyOtherScript&gt;()
-            {
-                if second_nodes_script_ref.counter &gt; 60.0 {
-                    Log::info("Done!");
-                }
+        let second_node_ref = ctx.scene.graph.try_get(self.second_node)?;
+        if let Some(second_nodes_script_ref) = second_node_ref.try_get_script::&lt;MyOtherScript&gt;() {
+            if second_nodes_script_ref.counter &gt; 60.0 {
+                Log::info("Done!");
             }
         }
+        Ok(())
     }
 }
 
@@ -2253,9 +2282,10 @@ struct MyOtherScript {
 }
 
 impl ScriptTrait for MyOtherScript {
-    fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Counting.
         self.counter += 1.0;
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -2269,13 +2299,14 @@ method (or <code>try_get_script_mut</code> for the alternative code).</p>
 your scene by using the following code:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         self.second_node = ctx
             .scene
             .graph
             .find_by_name_from_root("SomeName")
             .map(|(handle, _)| handle)
             .unwrap_or_default();
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code searches for a node with <code>SomeName</code> and assigns its handle to the <code>second_node</code> variable in the script
@@ -2303,14 +2334,15 @@ struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Get a reference to the plugin.
         let plugin = ctx.plugins.get_mut::&lt;GamePlugin&gt;();
         // Register self in the "global" list of bots.
         plugin.bots.push(ctx.handle);
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, ctx: &amp;mut ScriptDeinitContext) {
+    fn on_deinit(&amp;mut self, ctx: &amp;mut ScriptDeinitContext) -&gt; GameResult {
         let plugin = ctx.plugins.get_mut::&lt;GamePlugin&gt;();
         // Unregister the bot from the list.
         if let Some(index) = plugin
@@ -2320,15 +2352,17 @@ impl ScriptTrait for Bot {
         {
             plugin.bots.remove(index);
         }
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let plugin = ctx.plugins.get::&lt;GamePlugin&gt;();
         for bot in plugin.bots.iter() {
             if *bot != ctx.handle {
                 // Search for target.
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -2378,49 +2412,50 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Borrow a navigational mesh scene node first.
-        if let Some(navmesh_node) = ctx
+        let navmesh_node = ctx
             .scene
             .graph
-            .try_get_of_type::&lt;NavigationalMesh&gt;(self.navmesh)
-        {
-            // Take a shared reference to the internal navigational mesh.
-            let shared_navmesh = navmesh_node.navmesh();
+            .try_get_of_type::&lt;NavigationalMesh&gt;(self.navmesh)?;
 
-            // Spawn a task, that will calculate a long path.
-            ctx.task_pool.spawn_script_task(
-                ctx.scene_handle,
-                ctx.handle,
-                ctx.script_index,
-                async move {
-                    let navmesh = shared_navmesh.read();
+        // Take a shared reference to the internal navigational mesh.
+        let shared_navmesh = navmesh_node.navmesh();
 
-                    if let Some((_, begin_index)) =
-                        navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0))
+        // Spawn a task, that will calculate a long path.
+        ctx.task_pool.spawn_script_task(
+            ctx.scene_handle,
+            ctx.handle,
+            ctx.script_index,
+            async move {
+                let navmesh = shared_navmesh.read();
+
+                if let Some((_, begin_index)) = navmesh.query_closest(Vector3::new(1.0, 0.0, 3.0)) {
+                    if let Some((_, end_index)) =
+                        navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
                     {
-                        if let Some((_, end_index)) =
-                            navmesh.query_closest(Vector3::new(500.0, 0.0, 800.0))
+                        let mut path = Vec::new();
+                        if navmesh
+                            .build_path(begin_index, end_index, &amp;mut path)
+                            .is_ok()
                         {
-                            let mut path = Vec::new();
-                            if navmesh
-                                .build_path(begin_index, end_index, &amp;mut path)
-                                .is_ok()
-                            {
-                                return Some(path);
-                            }
+                            return Some(path);
                         }
                     }
+                }
 
-                    None
-                },
-                |path, this: &amp;mut MyScript, _ctx| {
-                    this.path = path;
+                None
+            },
+            |path, this: &amp;mut MyScript, _ctx| {
+                this.path = path;
 
-                    Log::info("Path is calculated!");
-                },
-            );
-        }
+                Log::info("Path is calculated!");
+
+                Ok(())
+            },
+        );
+
+        Ok(())
     }
 
     fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
@@ -2471,11 +2506,12 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn update(&amp;mut self, _context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, _context: &amp;mut PluginContext) -&gt; GameResult {
         // Do something with the data.
         if let Some(data) = self.data.take() {
             println!("The data is: {:?}", data);
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -2741,10 +2777,11 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Step 1. Kick off scene loading in a separate thread. This method could
         // be located in any place of your code.
-        context.async_scene_loader.request("path/to/your/scene.rgs")
+        context.async_scene_loader.request("path/to/your/scene.rgs");
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -2753,20 +2790,23 @@ impl Plugin for MyGame {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         // Step 2.
         // This method is called once a scene was fully loaded.
-        // You may want to remove previous scene first.
+        // You may want to remove the previous scene first.
         if self.main_scene.is_some() {
             context.scenes.remove(self.main_scene)
         }
 
-        // Remember new scene as main.
+        // Remember the new scene as main.
         self.main_scene = scene;
+
+        Ok(())
     }
 
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         // This method is called if a scene just began to load.
+        Ok(())
     }
 
     fn on_scene_loading_failed(
@@ -2774,8 +2814,9 @@ impl Plugin for MyGame {
         path: &amp;Path,
         error: &amp;VisitError,
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         // This method is called if a scene failed to load.
+        Ok(())
     }
 
     // ...
@@ -2824,13 +2865,14 @@ non-verified scenes (i.e. from game mods) and want to react somehow when the sce
 You can borrow a scene at any time using its handle and do some changes to it and its nodes:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
         if let Some(scene) = context.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <h2 id="building-a-scene-asynchronously"><a class="header" href="#building-a-scene-asynchronously">Building a scene asynchronously</a></h2>
@@ -3276,7 +3318,11 @@ cannot create a mesh in 3D modelling software.</p>
             25.0, 0.25, 25.0,
         ))),
     ))
-    .with_material(MaterialResource::new_ok(Uuid::new_v4(), ResourceKind::Embedded, material))
+    .with_material(MaterialResource::new_ok(
+        Uuid::new_v4(),
+        ResourceKind::Embedded,
+        material,
+    ))
     .build()])
     .build(&amp;mut scene.graph)
 }
@@ -6320,25 +6366,25 @@ struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Update the animation first, it will switch current frame automatically if needed.
         self.animation.update(ctx.dt);
 
-        if let Some(sprite) = ctx
+        let sprite = ctx
             .scene
             .graph
-            .try_get_mut(ctx.handle)
-            .and_then(|n| n.cast_mut::&lt;Rectangle&gt;())
-        {
-            // Assign the texture from the animation to the sprite first.
-            sprite
-                .material()
-                .data_ref()
-                .bind("diffuseTexture", self.animation.texture());
+            .try_get_mut_of_type::&lt;Rectangle&gt;(ctx.handle)?;
 
-            // Set the current animation's UV rect to the sprite.
-            sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
-        }
+        // Assign the texture from the animation to the sprite first.
+        sprite
+            .material()
+            .data_ref()
+            .bind("diffuseTexture", self.animation.texture());
+
+        // Set the current animation's UV rect to the sprite.
+        sprite.set_uv_rect(self.animation.current_frame_uv_rect().unwrap_or_default());
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6355,12 +6401,13 @@ context exactly for this purpose. For example, to visualize a point use the foll
 struct MyScript {}
 
 impl ScriptTrait for MyScript {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let self_position = ctx.scene.graph[ctx.handle].global_position();
 
         ctx.scene
             .drawing_context
             .draw_sphere(self_position, 16, 16, 0.1, Color::GREEN);
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6378,8 +6425,10 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         context.scenes[self.scene].drawing_context.clear_lines();
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6421,11 +6470,13 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         let scene = &amp;mut context.scenes[self.scene];
         for node in scene.graph.linear_iter() {
             node.debug_draw(&amp;mut scene.drawing_context);
         }
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6438,13 +6489,15 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         let scene = &amp;mut context.scenes[self.scene];
         for node in scene.graph.linear_iter() {
             if let Some(navmesh) = node.component_ref::&lt;NavigationalMesh&gt;() {
                 navmesh.debug_draw(&amp;mut scene.drawing_context);
             }
         }
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6459,9 +6512,11 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         let scene = &amp;mut context.scenes[self.scene];
         scene.graph.physics.draw(&amp;mut scene.drawing_context);
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6481,7 +6536,7 @@ events that could be used in your game (some rare events are omitted):</p>
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: PluginContext) -&gt; GameResult {
         match event {
             // This branch should be used for pre-processed events that comes from
             // the main window.
@@ -6521,6 +6576,7 @@ impl Plugin for MyGame {
             },
             _ =&gt; (),
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6554,7 +6610,7 @@ key was released and some action, but do not repeat the same action over and ove
 pub struct Player {}
 
 impl ScriptTrait for Player {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let node = &amp;mut ctx.scene.graph[ctx.handle];
         let transform = node.local_transform_mut();
 
@@ -6572,6 +6628,7 @@ impl ScriptTrait for Player {
         if ctx.input_state.is_key_pressed(KeyCode::Space) {
             transform.offset(Vector3::new(0.0, 1.0, 0.0));
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6593,7 +6650,7 @@ pub struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Listen to keyboard events, that comes to the main window.
         if let Event::WindowEvent {
             event: WindowEvent::KeyboardInput { event, .. },
@@ -6614,9 +6671,10 @@ impl ScriptTrait for Player {
                 }
             }
         }
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let node = &amp;mut ctx.scene.graph[ctx.handle];
         let transform = node.local_transform_mut();
         if self.move_left {
@@ -6625,6 +6683,7 @@ impl ScriptTrait for Player {
         if self.move_right {
             transform.offset(Vector3::new(1.0, 0.0, 0.0));
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6648,7 +6707,7 @@ pub struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let mouse_speed = ctx.input_state.mouse_speed();
         let limit = std::f32::consts::FRAC_PI_2;
 
@@ -6661,6 +6720,7 @@ impl ScriptTrait for Player {
             UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), self.pitch)
                 * UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw),
         );
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6676,7 +6736,7 @@ pub struct Player {
 }
 
 impl ScriptTrait for Player {
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // We'll listen to MouseMotion raw device event to rotate an object. It provides
         // offsets only.
         if let Event::DeviceEvent {
@@ -6690,15 +6750,17 @@ impl ScriptTrait for Player {
             self.pitch = (self.pitch + *dy as f32).clamp(-limit, limit);
             self.yaw += *dx as f32;
         }
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let node = &amp;mut ctx.scene.graph[ctx.handle];
         let transform = node.local_transform_mut();
         transform.set_rotation(
             UnitQuaternion::from_axis_angle(&amp;Vector3::x_axis(), self.pitch)
                 * UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw),
         );
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6718,12 +6780,13 @@ pub struct Clicker {
 }
 
 impl ScriptTrait for Clicker {
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         if ctx.input_state.is_left_mouse_button_pressed() {
             self.counter += 1;
         } else if ctx.input_state.is_left_mouse_button_released() {
             self.counter -= 1;
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -6738,7 +6801,7 @@ pub struct Clicker {
 }
 
 impl ScriptTrait for Clicker {
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         if let Event::WindowEvent {
             event: WindowEvent::MouseInput { button, state, .. },
             ..
@@ -6756,6 +6819,7 @@ impl ScriptTrait for Clicker {
                 }
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -7757,102 +7821,133 @@ effects.</p>
 by experienced graphics programmers. Here’s the simplest render pass that renders unit quad without any textures.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>struct MyRenderPass {
-    enabled: bool,
-    shader: Box&lt;dyn GpuProgram&gt;,
-    target_scene: Handle&lt;Scene&gt;,
-    quad: Box&lt;dyn GeometryBuffer&gt;,
-    uniform_location: usize,
-    uniform_buffer: Box&lt;dyn Buffer&gt;,
+</span>const SHADER: &amp;'static str = r##"
+(
+    name: "Overlay",
+    resources: [
+        (
+            name: "properties",
+            kind: PropertyGroup([
+                (name: "worldViewProjectionMatrix", kind: Matrix4()),
+            ]),
+            binding: 0
+        ),
+    ],
+    passes: [
+        (
+            name: "Primary",
+
+            draw_parameters: DrawParameters(
+                cull_face: None,
+                color_write: ColorMask(
+                    red: true,
+                    green: true,
+                    blue: true,
+                    alpha: true,
+                ),
+                depth_write: false,
+                stencil_test: None,
+                depth_test: None,
+                blend: Some(BlendParameters(
+                    func: BlendFunc(
+                        sfactor: SrcAlpha,
+                        dfactor: OneMinusSrcAlpha,
+                        alpha_sfactor: SrcAlpha,
+                        alpha_dfactor: OneMinusSrcAlpha,
+                    ),
+                    equation: BlendEquation(
+                        rgb: Add,
+                        alpha: Add
+                    )
+                )),
+                stencil_op: StencilOp(
+                    fail: Keep,
+                    zfail: Keep,
+                    zpass: Keep,
+                    write_mask: 0xFFFF_FFFF,
+                ),
+                scissor_box: None
+            ),
+
+            vertex_shader:
+                r#"
+                    layout(location = 0) in vec3 vertexPosition;
+
+                    void main()
+                    {
+                        gl_Position = properties.worldViewProjectionMatrix * vec4(vertexPosition, 1.0);
+                    }
+                "#,
+
+            fragment_shader:
+                r#"
+                    out vec4 FragColor;
+
+                    void main()
+                    {
+                        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                    }
+                "#,
+        )
+    ]
+)
+"##;
+
+pub struct MyRenderPass {
+    quad: GpuGeometryBuffer,
+    shader: RenderPassContainer,
+    pub scene_handle: Handle&lt;Scene&gt;,
 }
 
 impl MyRenderPass {
-    pub fn new(
-        renderer: &amp;mut Renderer,
-        target_scene: Handle&lt;Scene&gt;,
-    ) -&gt; Result&lt;Self, FrameworkError&gt; {
-        let vs = r"
-                layout(location = 0) in vec3 vertexPosition;
-
-                layout(std140) uniform Uniforms {
-                    mat4 worldViewProjectionMatrix;
-                }                
-                         
-                void main()
-                {
-                    gl_Position = worldViewProjectionMatrix * vertexPosition;
-                }
-            ";
-
-        let fs = r"                
-                out vec4 FragColor;             
-                
-                void main()
-                {
-                    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-                }
-            ";
-
-        let shader = renderer.server.create_program("MyShader", vs, fs)?;
-        let uniform_buffer =
-            renderer
-                .server
-                .create_buffer(256, BufferKind::Uniform, BufferUsage::DynamicDraw)?;
-
-        uniform_buffer.write_data_of_type(
-            &amp;StaticUniformBuffer::&lt;256&gt;::new()
-                .with(&amp;Matrix4::identity())
-                .finish(),
-        )?;
-
-        Ok(Self {
-            enabled: true,
-            uniform_location: shader.uniform_block_index(&amp;"Uniforms".into())?,
-            uniform_buffer,
-            target_scene,
-            quad: &lt;dyn GeometryBuffer as GeometryBufferExt&gt;::from_surface_data(
-                &amp;SurfaceData::make_quad(&amp;Matrix4::identity()),
+    pub fn new(server: &amp;dyn GraphicsServer) -&gt; Rc&lt;RefCell&lt;Self&gt;&gt; {
+        Rc::new(RefCell::new(Self {
+            quad: GpuGeometryBuffer::from_surface_data(
+                "Quad",
+                &amp;SurfaceData::make_unit_xy_quad(),
                 BufferUsage::StaticDraw,
-                renderer.server.as_ref(),
-            )?,
-            shader,
-        })
+                server,
+            )
+            .unwrap(),
+            shader: RenderPassContainer::from_str(server, SHADER).unwrap(),
+            scene_handle: Default::default(),
+        }))
     }
 }
 
 impl SceneRenderPass for MyRenderPass {
-    fn on_ldr_render(
+    fn on_hdr_render(
         &amp;mut self,
         ctx: SceneRenderPassContext,
     ) -&gt; Result&lt;RenderPassStatistics, FrameworkError&gt; {
         let mut stats = RenderPassStatistics::default();
-
-        // Make sure to render only to target scene.
-        if self.enabled &amp;&amp; ctx.scene_handle == self.target_scene {
-            let resources = ResourceBindGroup {
-                bindings: &amp;[ResourceBinding::Buffer {
-                    buffer: self.uniform_buffer.as_ref(),
-                    binding: BufferLocation::Auto {
-                        shader_location: self.uniform_location,
-                    },
-                    data_usage: BufferDataUsage::default(),
-                }],
-            };
-            stats += ctx.framebuffer.draw(
-                self.quad.as_ref(),
-                ctx.viewport,
-                self.shader.as_ref(),
-                &amp;DrawParameters::default(),
-                &amp;[resources],
-                ElementRange::Full,
-            )?;
+        if ctx.scene_handle != self.scene_handle {
+            return Ok(stats);
         }
+
+        let view_projection = ctx.observer.position.view_projection_matrix;
+
+        let properties =
+            PropertyGroup::from([property("worldViewProjectionMatrix", &amp;view_projection)]);
+        let material = RenderMaterial::from([binding("properties", &amp;properties)]);
+
+        stats += self.shader.run_pass(
+            1,
+            &amp;ImmutableString::new("Primary"),
+            ctx.framebuffer,
+            &amp;self.quad,
+            ctx.observer.viewport,
+            &amp;material,
+            ctx.uniform_buffer_cache,
+            Default::default(),
+            None,
+        )?;
 
         Ok(stats)
     }
 
     fn source_type_id(&amp;self) -&gt; TypeId {
-        ().type_id()
+        TypeId::of::&lt;MyPlugin&gt;()
     }
 }
 <span class="boring">}</span></code></pre>
@@ -8226,7 +8321,7 @@ traits. Also, it must contain at least path to external file with the content. H
 contains some string data.</p>
 <pre class="playground"><code class="language-rust no_run edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Debug, Visit, Reflect, TypeUuidProvider)]
+</span>#[derive(Default, Debug, Clone, Visit, Reflect, TypeUuidProvider)]
 // Every resource must provide a unique identifier, that is used for dynamic type
 // casting, serialization, etc.
 #[type_uuid(id = "15551157-651b-4f1d-a5fb-6874fbfe8637")]
@@ -8247,6 +8342,10 @@ impl ResourceData for CustomResource {
 
     fn can_be_saved(&amp;self) -&gt; bool {
         true
+    }
+
+    fn try_clone_box(&amp;self) -&gt; Option&lt;Box&lt;dyn ResourceData&gt;&gt; {
+        Some(Box::new(self.clone()))
     }
 }
 
@@ -8291,12 +8390,13 @@ resource in the resource manager. This can be done by adding the following code 
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .resource_manager
             .state()
             .loaders
             .set(CustomResourceLoader);
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -8312,15 +8412,9 @@ add the following lines to <code>editor/src/main.rs</code> file, somewhere after
     let editor = Editor::new(None);
 
     // Register property editor.
-    editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
-        .property_editors
-        .insert(
-            ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(
-                editor.message_sender.clone(),
-            ),
-        );
+    editor.property_editors.insert(
+        ResourceFieldPropertyEditorDefinition::&lt;CustomResource&gt;::new(editor.message_sender.clone()),
+    );
 
     // ...
 }</code></pre>
@@ -8412,16 +8506,19 @@ and <code>on_graphics_context_destroyed</code>:</p>
 struct Game {}
 
 impl Plugin for Game {
-    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) {
+    fn on_graphics_context_initialized(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // At this stage it is safe to call `as_initialized_mut`, because graphics context is guaranteed
         // to be alive when this method is being called.
         let graphics_context = context.graphics_context.as_initialized_mut();
 
         graphics_context.window.set_title("My Cool Game");
+
+        Ok(())
     }
 
-    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) {
-        println!("Graphics context was destroyed.")
+    fn on_graphics_context_destroyed(&amp;mut self, context: PluginContext) -&gt; GameResult {
+        println!("Graphics context was destroyed.");
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>You can also do a checked borrow of the graphics context at any place in a plugin. For example, the following
@@ -8429,13 +8526,14 @@ code tries to fetch current graphics context, and if it succeeds, then it prints
 title:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         if let GraphicsContext::Initialized(graphics_context) = context.graphics_context {
             graphics_context.window.set_title(&amp;format!(
                 "FPS: {}",
                 graphics_context.renderer.get_statistics().frames_per_second
             ));
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <h2 id="window"><a class="header" href="#window">Window</a></h2>
@@ -8642,6 +8740,7 @@ the same application), which is the easiest kind of server to implement. Its imp
 </span><span class="boring">fn main() {
 </span>// Implements listen server.
 #[derive(Default, Reflect, Debug)]
+#[reflect(non_cloneable)]
 pub struct Game {
     scene: Handle&lt;Scene&gt;,
     server: Option&lt;Server&gt;,
@@ -8649,12 +8748,13 @@ pub struct Game {
 }
 
 impl Plugin for Game {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         self.server = Some(Server::new());
         self.client = Some(Client::connect(Server::ADDRESS));
+        Ok(())
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
@@ -8662,6 +8762,7 @@ impl Plugin for Game {
         if let Some(client) = self.client.as_mut() {
             client.read_messages();
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -8670,7 +8771,7 @@ impl Plugin for Game {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
 
         if self.server.is_none() {
@@ -8680,6 +8781,8 @@ impl Plugin for Game {
                 .enabled
                 .set_value_and_mark_modified(false);
         }
+
+        Ok(())
     }
 }
 
@@ -8760,7 +8863,7 @@ a reliable connection between the listener and any number of clients. Each such 
 is structured:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
@@ -8768,6 +8871,7 @@ is structured:</p>
         if let Some(client) = self.client.as_mut() {
             client.read_messages();
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>At first, the server tries to accept all incoming connections and only then tries to read all the incoming messages.
@@ -9021,7 +9125,7 @@ be done like this:</p>
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
 
         if self.server.is_none() {
@@ -9031,6 +9135,8 @@ be done like this:</p>
                 .enabled
                 .set_value_and_mark_modified(false);
         }
+
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -9129,12 +9235,16 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                println!("The button was clicked!");
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        _context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.button) {
+            println!("The button was clicked!");
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -9264,16 +9374,20 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) -&gt; GameResult {
         ctx.task_pool.spawn_plugin_task(
-            UserInterface::load_from_file("data/my_ui_asset.ui", ctx.resource_manager.clone()),
-            |result, game: &amp;mut MyPlugin, ctx| match result {
-                Ok(ui) =&gt; {
-                    *ctx.user_interfaces.first_mut() = ui;
-                }
-                Err(e) =&gt; Log::err(format!("Unable to load a user interface! Reason: {:?}", e)),
+            UserInterface::load_from_file(
+                "data/my_ui_asset.ui",
+                ctx.widget_constructors.clone(),
+                ctx.dyn_type_constructors.clone(),
+                ctx.resource_manager.clone(),
+            ),
+            |result, game: &amp;mut MyPlugin, ctx| {
+                *ctx.user_interfaces.first_mut() = result?;
+                Ok(())
             },
         );
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -9339,7 +9453,7 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Add this code to your Plugin::init
 
         // Define the desired render target size.
@@ -9360,9 +9474,11 @@ impl Plugin for Game {
         let mut material = Material::standard();
         material.bind("diffuseTexture", Some(self.render_target.clone()));
         // This material **must** be assigned to some mesh in your scene!
+
+        Ok(())
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         // It is very important to update the UI every frame and process all events that
         // comes from it.
         self.my_ui
@@ -9371,9 +9487,11 @@ impl Plugin for Game {
         while let Some(message) = self.my_ui.poll_message() {
             // Do something with the events coming from the custom UI.
         }
+
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) -&gt; GameResult {
         // This is the tricky part. Event OS event handling will be different depending on the use case.
         // In cases if your UI just shows some information, this method can be fully removed. In case when
         // you need to interact with the UI, there are two different ways.
@@ -9387,19 +9505,22 @@ impl Plugin for Game {
                 self.my_ui.process_os_event(&amp;event);
             }
         }
+
+        Ok(())
     }
 
-    fn before_rendering(&amp;mut self, context: PluginContext) {
+    fn before_rendering(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Render the UI before every other rendering operation, this way the texture will be ready for use immediately.
         if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context {
-            Log::verify(graphics_context.renderer.render_ui_to_texture(
-                self.render_target.clone(),
-                self.screen_size,
-                self.my_ui.draw(),
-                Color::TRANSPARENT,
-                PixelKind::RGBA8,
-            ));
+            Log::verify(graphics_context.renderer.render_ui(UiRenderInfo {
+                ui: &amp;self.my_ui,
+                render_target: Some(self.render_target.clone()),
+                clear_color: Color::TRANSPARENT,
+                resource_manager: &amp;context.resource_manager,
+            }));
         }
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -9652,13 +9773,7 @@ pub enum MyButtonMessage {
     // A message, that will be emitted when our button is clicked.
     Click,
 }
-
-impl MyButtonMessage {
-    // A constructor for `Click` message.
-    define_constructor!(
-        MyButtonMessage:Click =&gt; fn click(), layout: false
-    );
-}
+impl MessageData for MyButtonMessage {}
 
 #[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
@@ -9673,21 +9788,19 @@ define_widget_deref!(MyButton);
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
         for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send_message(WidgetMessage::foreground(
+            ui.send(
                 handle,
-                MessageDirection::ToWidget,
-                Brush::Solid(color).into(),
-            ));
+                WidgetMessage::Foreground(Brush::Solid(color).into()),
+            );
         }
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
         border_color.set_brightness(border_color.brightness() - 20.0);
-        ui.send_message(WidgetMessage::background(
+        ui.send(
             self.border,
-            MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()).into(),
-        ));
+            WidgetMessage::Background(Brush::Solid(border_color.into()).into()),
+        );
     }
 }
 
@@ -9704,10 +9817,7 @@ impl Control for MyButton {
                 match msg {
                     WidgetMessage::MouseUp { .. } =&gt; {
                         // Send the message to outside world, saying that the button was clicked.
-                        ui.send_message(MyButtonMessage::click(
-                            self.handle(),
-                            MessageDirection::FromWidget,
-                        ));
+                        ui.post(self.handle(), MyButtonMessage::Click);
                         ui.release_mouse_capture();
                     }
                     WidgetMessage::MouseDown { .. } =&gt; {
@@ -9790,12 +9900,18 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if message.destination() == self.my_button {
             if let Some(MyButtonMessage::Click) = message.data() {
                 // Do something.
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -9818,13 +9934,7 @@ pub enum MyButtonMessage {
     // A message, that will be emitted when our button is clicked.
     Click,
 }
-
-impl MyButtonMessage {
-    // A constructor for `Click` message.
-    define_constructor!(
-        MyButtonMessage:Click =&gt; fn click(), layout: false
-    );
-}
+impl MessageData for MyButtonMessage {}
 
 #[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
@@ -9839,21 +9949,19 @@ define_widget_deref!(MyButton);
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
         for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send_message(WidgetMessage::foreground(
+            ui.send(
                 handle,
-                MessageDirection::ToWidget,
-                Brush::Solid(color).into(),
-            ));
+                WidgetMessage::Foreground(Brush::Solid(color).into()),
+            );
         }
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
         border_color.set_brightness(border_color.brightness() - 20.0);
-        ui.send_message(WidgetMessage::background(
+        ui.send(
             self.border,
-            MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()).into(),
-        ));
+            WidgetMessage::Background(Brush::Solid(border_color.into()).into()),
+        );
     }
 }
 
@@ -9870,10 +9978,7 @@ impl Control for MyButton {
                 match msg {
                     WidgetMessage::MouseUp { .. } =&gt; {
                         // Send the message to outside world, saying that the button was clicked.
-                        ui.send_message(MyButtonMessage::click(
-                            self.handle(),
-                            MessageDirection::FromWidget,
-                        ));
+                        ui.post(self.handle(), MyButtonMessage::Click);
                         ui.release_mouse_capture();
                     }
                     WidgetMessage::MouseDown { .. } =&gt; {
@@ -9986,12 +10091,18 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if message.destination() == self.my_button {
             if let Some(MyButtonMessage::Click) = message.data() {
                 // Do something.
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -10068,14 +10179,18 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                //
-                // Insert your code clicking handling code here.
-                //
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        _context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.button) {
+            //
+            // Insert your code clicking handling code here.
+            //
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -10107,14 +10222,16 @@ impl Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.quit_button_handle {
-                if let Some(window_target) = context.window_target {
-                    window_target.exit();
-                }
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.quit_button_handle) {
+            context.loop_controller.exit();
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -10277,7 +10394,12 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if let Some(CheckBoxMessage::Check(value)) = message.data() {
             if message.destination() == self.checkbox {
                 //
@@ -10285,6 +10407,7 @@ impl Plugin for Game {
                 //
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -10555,7 +10678,12 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
         if let Some(ExpanderMessage::Expand(expanded)) = message.data() {
             if message.destination() == self.expander
                 &amp;&amp; message.direction() == MessageDirection::FromWidget
@@ -10567,6 +10695,7 @@ impl Plugin for Game {
                 );
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -11076,16 +11205,18 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ScrollBarMessage::Value(value)) = message.data() {
-            if message.destination() == self.scroll_bar
-                &amp;&amp; message.direction() == MessageDirection::FromWidget
-            {
-                //
-                // Insert handler code here.
-                //
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ScrollBarMessage::Value(value)) = message.data_from(self.scroll_bar) {
+            //
+            // Insert handler code here.
+            //
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -12239,10 +12370,11 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -12251,8 +12383,9 @@ impl Plugin for MyGame {
         scene: Handle&lt;Scene&gt;,
         _data: &amp;[u8],
         _context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -12311,7 +12444,7 @@ impl MyGame {
         self.data.visit("Data", &amp;mut visitor).unwrap();
 
         // Save it to a file.
-        visitor.save_binary(Path::new("save.rgs")).unwrap()
+        visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
     pub fn load_game(&amp;mut self, context: &amp;mut PluginContext) {
@@ -12324,10 +12457,11 @@ impl MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) {
+    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
         if self.scene.is_some() {
             context.scenes.remove(self.scene);
         }
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -12336,13 +12470,15 @@ impl Plugin for MyGame {
         scene: Handle&lt;Scene&gt;,
         data: &amp;[u8],
         _context: &amp;mut PluginContext,
-    ) {
+    ) -&gt; GameResult {
         self.scene = scene;
 
         // Restore the data when the scene was loaded.
         if let Ok(mut visitor) = Visitor::load_from_memory(data) {
             self.data.visit("Data", &amp;mut visitor).unwrap();
         }
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -13508,16 +13644,13 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
 </span>use crate::bot::Bot;
 use fyrox::{
     core::{
-        algebra::{Vector2, Vector3},
-        pool::Handle,
-        reflect::prelude::*,
-        type_traits::prelude::*,
+        algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
         visitor::prelude::*,
     },
     event::{ElementState, Event, WindowEvent},
     graph::SceneGraph,
     keyboard::{KeyCode, PhysicalKey},
-    plugin::{Plugin, PluginContext, PluginRegistrationContext},
+    plugin::{error::GameResult, Plugin, PluginContext, PluginRegistrationContext},
     scene::{
         animation::spritesheet::SpriteSheetAnimation,
         dim2::{rectangle::Rectangle, rigidbody::RigidBody},
@@ -13540,16 +13673,24 @@ struct Player;
 
 impl ScriptTrait for Player {
     // Called once at initialization.
-    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {}
+    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
+        Ok(())
+    }
 
     // Put start logic - it is called when every other script is already initialized.
-    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {}
+    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
+        Ok(())
+    }
 
     // Called whenever there is an event from OS (mouse click, keypress, etc.)
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {}
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) -&gt; GameResult {
+        Ok(())
+    }
 
     // Called every frame at fixed rate of 60 FPS.
-    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {}
+    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
+        Ok(())
+    }
 }
 <span class="boring">}</span></code></pre>
 <p>This is a typical “skeleton” of any script, for now, its methods are pretty much empty, we’ll fill it with actual code very soon.
@@ -13578,7 +13719,7 @@ code snippet:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Plugin for Game {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         let script_constructors = &amp;context.serialization_context.script_constructors;
         script_constructors.add::&lt;Player&gt;("Player");
         // ...
@@ -13596,7 +13737,7 @@ we need to get its sprite first. Let’s start by adding the required field in t
 #[type_uuid(id = "c5671d19-9f1a-4286-8486-add4ebaadaec")]
 #[visit(optional)]
 struct Player {
-    sprite: Handle&lt;Node&gt;,
+    sprite: Handle&lt;Rectangle&gt;,
     // ... 
 <span class="boring">}</span></code></pre>
 <p>After adding this, the editor will be able to see the field and give you the ability to edit it in the Inspector.
@@ -13615,7 +13756,7 @@ Go to the <code>Player</code> structure and add the following fields:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>    // Called everytime when there is an event from OS (mouse click, key press, etc.)
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _context: &amp;mut ScriptContext) -&gt; GameResult {
         if let Event::WindowEvent { event, .. } = event {
             if let WindowEvent::KeyboardInput { event, .. } = event {
                 if let PhysicalKey::Code(keycode) = event.physical_key {
@@ -13630,31 +13771,38 @@ Go to the <code>Player</code> structure and add the following fields:</p>
                 }
             }
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>The code responds to OS events and modifies internal movement flags accordingly. Now we need to use the flags somehow, it’s time for
 <code>on_update</code>. The method is called each frame and allows you to put game logic there:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // The script can be assigned to any scene node, but we assert that it will work only with
         // 2d rigid body nodes.
-        if let Some(rigid_body) = context.scene.graph[context.handle].cast_mut::&lt;RigidBody&gt;() {
-            let x_speed = if self.move_left {
-                3.0
-            } else if self.move_right {
-                -3.0
-            } else {
-                0.0
-            };
+        let rigid_body = context
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(context.handle)?;
 
-            if self.jump {
-                rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0))
-            } else {
-                rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y))
-            };
-            // ...
-        }
+        let x_speed = if self.move_left {
+            3.0
+        } else if self.move_right {
+            -3.0
+        } else {
+            0.0
+        };
+
+        if self.jump {
+            rigid_body.set_lin_vel(Vector2::new(x_speed, 4.0))
+        } else {
+            rigid_body.set_lin_vel(Vector2::new(x_speed, rigid_body.lin_vel().y))
+        };
+        // ...
+
+
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Finally, some interesting code. At first, we check if the node to which the script is assigned is a 2d rigid body, next
@@ -13668,24 +13816,14 @@ but if we’ll move to the right - it looks like the player moves backward. Let�
 sprite. Add the following code at the end of the <code>if let ...</code> block of the code above:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            // It is always a good practice to check whether the handles are valid, at this point we don't know
-            // for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
-            // execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
-            if let Some(sprite) = context.scene.graph.try_get_mut(self.sprite) {
-                // We want to change player orientation only if he's moving.
-                if x_speed != 0.0 {
-                    let local_transform = sprite.local_transform_mut();
-
-                    let current_scale = **local_transform.scale();
-
-                    local_transform.set_scale(Vector3::new(
-                        // Just change X scaling to mirror player's sprite.
-                        current_scale.x.copysign(-x_speed),
-                        current_scale.y,
-                        current_scale.z,
-                    ));
-                }
-            }
+</span>        // It is always a good practice to check whether the handles are valid, at this point we don't know
+        // for sure what's the value of the `sprite` field. It can be unassigned and the following code won't
+        // execute. A simple `context.scene.graph[self.sprite]` would just panicked in this case.
+        let sprite = context.scene.graph.try_get_mut(self.sprite)?;
+        // We want to change player orientation only if he's moving.
+        if x_speed != 0.0 {
+            sprite.set_flip_x(x_speed &gt; 0.0);
+        }
 <span class="boring">}</span></code></pre>
 <p>The comments should clarify what’s going on here, but in short, we’re changing the horizontal scaling of the player’s sprite if the player is
 moving. The line <code>current_scale.x.copysign(-x_speed)</code> could be confusing, what it does? It replaces the sign of current horizontal scaling
@@ -13718,11 +13856,11 @@ Now we need to somehow switch animations. Go to <code>on_update</code> in <code>
 the <code>x_speed</code> declaration:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            if x_speed != 0.0 {
-                self.current_animation = 0;
-            } else {
-                self.current_animation = 1;
-            }
+</span>        if x_speed != 0.0 {
+            self.current_animation = 0;
+        } else {
+            self.current_animation = 1;
+        }
 <span class="boring">}</span></code></pre>
 <p>Here we assume that the run animation will be at index <code>1</code> and the idle animation at index <code>0</code>. We also need to
 apply the texture from the current animation to the player’s sprite, and add the following lines at the end of <code>on_update</code></p>
@@ -13731,23 +13869,11 @@ apply the texture from the current animation to the player’s sprite, and add t
 </span>        if let Some(current_animation) = self.animations.get_mut(self.current_animation as usize) {
             current_animation.update(context.dt);
 
-            if let Some(sprite) = context
+            context
                 .scene
                 .graph
-                .try_get_mut(self.sprite)
-                .and_then(|n| n.cast_mut::&lt;Rectangle&gt;())
-            {
-                // Set new frame to the sprite.
-                sprite
-                    .material()
-                    .data_ref()
-                    .bind("diffuseTexture", current_animation.texture());
-                sprite.set_uv_rect(
-                    current_animation
-                        .current_frame_uv_rect()
-                        .unwrap_or_default(),
-                );
-            }
+                .try_get_mut(self.sprite)?
+                .apply_animation(current_animation);
         }
 <span class="boring">}</span></code></pre>
 <p>The code is pretty straightforward - we start by trying to get a reference to the current animation by its index,
@@ -13808,25 +13934,30 @@ pub struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_init(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put initialization logic here.
+        Ok(())
     }
 
-    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // There should be a logic that depends on other scripts in scene.
         // It is called right after **all** scripts were initialized.
+        Ok(())
     }
 
-    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) {
+    fn on_deinit(&amp;mut self, context: &amp;mut ScriptDeinitContext) -&gt; GameResult {
         // Put de-initialization logic here.
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Respond to OS events here.
+        Ok(())
     }
 
-    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         // Put object logic here.
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -13837,14 +13968,11 @@ replace all the imports at the beginning of the <code>bot.rs</code> with the fol
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::Game;
+use fyrox::plugin::error::{GameError, GameResult};
 use fyrox::{
     core::{
-        algebra::{Vector2, Vector3},
-        pool::Handle,
-        reflect::prelude::*,
-        type_traits::prelude::*,
-        variable::InheritableVariable,
-        visitor::prelude::*,
+        algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
+        variable::InheritableVariable, visitor::prelude::*,
     },
     graph::SceneGraph,
     scene::{
@@ -13861,7 +13989,7 @@ use fyrox::{
 <p>We need to store a handle to the sprite in our script, add the following field in the <code>Bot</code> struct:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    rectangle: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    rectangle: InheritableVariable&lt;Handle&lt;Rectangle&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p>Open the skeleton prefab and assign the script to the root rigid body. Set the <code>rectangle</code> field to <code>Sprite (2D)</code> and
 save the prefab. Great, now let’s begin writing the actual AI code of the bot.</p>
@@ -13872,33 +14000,26 @@ to another. Add the following fields to the <code>Bot</code> script:</p>
 </span><span class="boring">fn main() {
 </span>    speed: InheritableVariable&lt;f32&gt;,
     direction: f32,
-    front_obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
-    back_obstacle_sensor: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    front_obstacle_sensor: InheritableVariable&lt;Handle&lt;Collider&gt;&gt;,
+    back_obstacle_sensor: InheritableVariable&lt;Handle&lt;Collider&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p><code>speed</code> field will define overall movement speed of the bot and <code>direction</code> will be used to alternate movement direction
 along X axis. Open the skeleton prefab and set the speed to <code>1.2</code> and the direction to <code>-1.0</code>. Add the movement handling
 code somewhere in the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn do_move(&amp;mut self, ctx: &amp;mut ScriptContext) {
-        let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) else {
-            return;
-        };
+</span>    fn do_move(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
+        let graph = &amp;mut ctx.scene.graph;
 
-        let y_vel = rigid_body.lin_vel().y;
+        graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?
+            .set_lin_vel_x(-*self.speed * self.direction);
 
-        rigid_body.set_lin_vel(Vector2::new(-*self.speed * self.direction, y_vel));
+        graph
+            .try_get_mut(*self.rectangle)?
+            .set_scale_xyz(2.0 * self.direction.signum(), 2.0, 1.0);
 
-        // Also, inverse the sprite along the X axis.
-        let Some(rectangle) = ctx.scene.graph.try_get_mut(*self.rectangle) else {
-            return;
-        };
-
-        rectangle.local_transform_mut().set_scale(Vector3::new(
-            2.0 * self.direction.signum(),
-            2.0,
-            1.0,
-        ));
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is quite straightforward - at first, we’re doing a checked borrow of the node that contains the script. It must
@@ -13907,7 +14028,7 @@ added earlier. As the last step we’re changing horizontal scale of the sprite 
 way we’re flipping the sprite in the current direction. Now we need to call <code>do_move</code> method in <code>on_update</code> like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        self.do_move(ctx);
+</span>        self.do_move(ctx)?;
 <span class="boring">}</span></code></pre>
 <p>Open the main scene (<code>scene.rgs</code> by default) and find the skeleton prefab in the asset browser, drag’n’drop it in the
 scene and adjust its position to get something like this:</p>
@@ -13928,7 +14049,7 @@ there’s no need to manually place any way points.</p>
 <p>Obstacles checking algorithms is quite simple, add the following code in the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn has_obstacles(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; bool {
+</span>    fn has_obstacles(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; Result&lt;bool, GameError&gt; {
         let graph = &amp;ctx.scene.graph;
 
         // Select the sensor using current walking direction.
@@ -13939,32 +14060,23 @@ there’s no need to manually place any way points.</p>
         };
 
         // Check if it intersects something.
-        let Some(obstacle_sensor) = graph.try_get_of_type::&lt;Collider&gt;(sensor_handle) else {
-            return false;
-        };
+        let obstacle_sensor = graph.try_get(sensor_handle)?;
 
         for intersection in obstacle_sensor
             .intersects(&amp;ctx.scene.graph.physics2d)
             .filter(|i| i.has_any_active_contact)
         {
             for collider_handle in [intersection.collider1, intersection.collider2] {
-                let Some(other_collider) = graph.try_get_of_type::&lt;Collider&gt;(collider_handle)
-                else {
-                    continue;
-                };
-
-                let Some(rigid_body) = graph.try_get_of_type::&lt;RigidBody&gt;(other_collider.parent())
-                else {
-                    continue;
-                };
+                let other_collider = graph.try_get(collider_handle)?;
+                let rigid_body = graph.try_get_of_type::&lt;RigidBody&gt;(other_collider.parent())?;
 
                 if rigid_body.body_type() == RigidBodyType::Static {
-                    return true;
+                    return Ok(true);
                 }
             }
         }
 
-        false
+        Ok(false)
     }
 <span class="boring">}</span></code></pre>
 <p>At first, it selects the sensor using the current movement direction, then it fetches all intersection events from it
@@ -13972,7 +14084,7 @@ and checks if there’s at least one static rigid body intersected. Remember, th
 level tiles. As the final step, add the following code to the <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        if self.has_obstacles(ctx) {
+</span>        if self.has_obstacles(ctx)? {
             self.direction = -self.direction;
         }
 <span class="boring">}</span></code></pre>
@@ -13996,16 +14108,16 @@ Now add the following code in the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Bot {
-    fn has_ground_in_front(&amp;self, ctx: &amp;ScriptContext) -&gt; bool {
+    fn has_ground_in_front(&amp;self, ctx: &amp;ScriptContext) -&gt; Result&lt;bool, GameError&gt; {
+        let graph = &amp;ctx.scene.graph;
+
         // Do ground check using ray casting from the ground probe position down at some distance.
-        let Some(ground_probe) = ctx.scene.graph.try_get(*self.ground_probe) else {
-            return false;
-        };
+        let ground_probe = graph.try_get(*self.ground_probe)?;
 
         let ground_probe_position = ground_probe.global_position().xy();
 
         let mut intersections = Vec::new();
-        ctx.scene.graph.physics2d.cast_ray(
+        graph.physics2d.cast_ray(
             RayCastOptions {
                 ray_origin: ground_probe_position.into(),
                 // Cast the ray
@@ -14019,30 +14131,20 @@ Now add the following code in the <code>impl Bot</code>:</p>
         );
 
         for intersection in intersections {
-            let Some(collider) = ctx.scene.graph.try_get(intersection.collider) else {
-                continue;
-            };
-
-            let Some(rigid_body) = ctx
-                .scene
-                .graph
-                .try_get_of_type::&lt;RigidBody&gt;(collider.parent())
-            else {
-                continue;
-            };
-
+            let collider = graph.try_get(intersection.collider)?;
+            let rigid_body = graph.try_get_of_type::&lt;RigidBody&gt;(collider.parent())?;
+            let distance = intersection
+                .position
+                .coords
+                .metric_distance(&amp;ground_probe_position);
             if rigid_body.body_type() == RigidBodyType::Static
-                &amp;&amp; intersection
-                    .position
-                    .coords
-                    .metric_distance(&amp;ground_probe_position)
-                    &lt;= *self.ground_probe_distance
+                &amp;&amp; distance &lt;= *self.ground_probe_distance
             {
-                return true;
+                return Ok(true);
             }
         }
 
-        false
+        Ok(false)
     }
 <span class="boring">}</span></code></pre>
 <p>Open the skeleton prefab and create the ground probe like so:</p>
@@ -14052,7 +14154,7 @@ Now add the following code in the <code>impl Bot</code>:</p>
 </span><span class="boring">fn main() {
 </span>        self.ground_probe_timeout -= ctx.dt;
         if self.ground_probe_timeout &lt;= 0.0 {
-            if !self.has_ground_in_front(ctx) {
+            if !self.has_ground_in_front(ctx)? {
                 self.direction = -self.direction;
             }
             self.ground_probe_timeout = 0.3;
@@ -14072,22 +14174,21 @@ do is to slightly modify the plugin and the player script. Add the following fie
 <p>Now we need to set this handle somehow, the ideal place for it is <code>on_start</code> method of the <code>Player</code> script:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         ctx.plugins.get_mut::&lt;Game&gt;().player = ctx.handle;
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Great, now when the player script is created and initialized, it will register itself in the plugin. Now we can use this handle
 in the bot’s target searching routine. Add the following code to the <code>impl Bot</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn search_target(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn search_target(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let game = ctx.plugins.get::&lt;Game&gt;();
 
         let self_position = ctx.scene.graph[ctx.handle].global_position();
 
-        let Some(player) = ctx.scene.graph.try_get(game.player) else {
-            return;
-        };
+        let player = ctx.scene.graph.try_get(game.player)?;
 
         let player_position = player.global_position();
 
@@ -14095,6 +14196,7 @@ in the bot’s target searching routine. Add the following code to the <code>imp
         if signed_distance.abs() &lt; 3.0 &amp;&amp; signed_distance.signum() != self.direction.signum() {
             self.target = game.player;
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is very straightforward - at first, we’re fetching a reference to the plugin (in which we’ve just stored player’s
@@ -14104,8 +14206,8 @@ some sensible threshold and also checking the sign of the distance. If the sign 
 the direction, then the bot can see the player. As the last step, call this method in the <code>on_update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
-        self.search_target(ctx);
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
+        self.search_target(ctx)?;
 <span class="boring">}</span></code></pre>
 <p>If there’s a target, then the bot will follow it and try to attack when it is close enough. To implement this, all we need
 to do is to alternate movement direction according to a target position. Add the following code in <code>on_update</code>, but after
@@ -14161,22 +14263,10 @@ apply the animation to the bot’s sprite. Add the following code at the end of 
 </span>        if let Some(current_animation) = self.animations.get_mut(*self.current_animation as usize) {
             current_animation.update(ctx.dt);
 
-            if let Some(sprite) = ctx
-                .scene
+            ctx.scene
                 .graph
-                .try_get_mut_of_type::&lt;Rectangle&gt;(*self.rectangle)
-            {
-                // Set new frame to the sprite.
-                sprite
-                    .material()
-                    .data_ref()
-                    .bind("diffuseTexture", current_animation.texture());
-                sprite.set_uv_rect(
-                    current_animation
-                        .current_frame_uv_rect()
-                        .unwrap_or_default(),
-                );
-            }
+                .try_get_mut(*self.rectangle)?
+                .apply_animation(current_animation);
         }
 <span class="boring">}</span></code></pre>
 <p>Run the game and you should see something like this:</p>
@@ -14366,11 +14456,12 @@ the following code to the method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Plugin for Game {
-    fn register(&amp;self, context: PluginRegistrationContext) {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
         context
             .serialization_context
             .script_constructors
             .add::&lt;Player&gt;("Player");
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Preparation steps are now finished, and we can start filling the script with some useful code. Navigate to the <code>player.rs</code>
@@ -14385,7 +14476,7 @@ pub struct Player {
 
     camera_hinge: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
-    state_machine: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+    state_machine: InheritableVariable&lt;Handle&lt;AnimationBlendingStateMachine&gt;&gt;,
 
     model_pivot: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 
@@ -14434,7 +14525,7 @@ you, then you should probably read <a href="#property-inheritance">this chapter<
 <p>We’ll start from keyboard and mouse event handling, add the following code to the <code>impl ScriptTrait for Player</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         match event {
             Event::WindowEvent { event, .. } =&gt; {
                 if let WindowEvent::KeyboardInput { event, .. } = event {
@@ -14460,6 +14551,7 @@ you, then you should probably read <a href="#property-inheritance">this chapter<
             }
             _ =&gt; (),
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code consists of two major sections: <code>KeyboardInput</code> event handling and <code>MouseMotion</code> event handling. Let’s start
@@ -14472,28 +14564,24 @@ for our camera. Pitch calculation also includes angle clamping in <code>-90.0..9
 the <code>on_update</code> method with the following code:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Step 1. Fetch the velocity vector from the animation blending state machine.
         let transform = ctx.scene.graph[*self.model].global_transform();
         let mut velocity = Vector3::default();
-        if let Some(state_machine) = ctx
-            .scene
-            .graph
-            .try_get(*self.state_machine)
-            .and_then(|node| node.component_ref::&lt;AnimationBlendingStateMachine&gt;())
-        {
-            if let Some(root_motion) = state_machine.machine().pose().root_motion() {
-                velocity = transform
-                    .transform_vector(&amp;root_motion.delta_position)
-                    .scale(1.0 / ctx.dt);
-            }
+        let state_machine = ctx.scene.graph.try_get(*self.state_machine)?;
+        if let Some(root_motion) = state_machine.machine().pose().root_motion() {
+            velocity = transform
+                .transform_vector(&amp;root_motion.delta_position)
+                .scale(1.0 / ctx.dt);
         }
 
         // Step 2. Apply the velocity to the rigid body and lock rotations.
-        if let Some(body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
-            body.set_ang_vel(Default::default());
-            body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
-        }
+        let body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?;
+        body.set_ang_vel(Default::default());
+        body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
 
         // Step 3. Rotate the model pivot according to the movement direction.
         let quat_yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw);
@@ -14501,9 +14589,11 @@ the <code>on_update</code> method with the following code:</p>
         if velocity.norm_squared() &gt; 0.0 {
             // Since we have free camera while not moving, we have to sync rotation of pivot
             // with rotation of camera so character will start moving in look direction.
-            if let Some(model_pivot) = ctx.scene.graph.try_get_mut(*self.model_pivot) {
-                model_pivot.local_transform_mut().set_rotation(quat_yaw);
-            }
+            ctx.scene
+                .graph
+                .try_get_mut(*self.model_pivot)?
+                .local_transform_mut()
+                .set_rotation(quat_yaw);
 
             // Apply additional rotation to model - it will turn in front of walking direction.
             let angle: f32 = if self.walk_left {
@@ -14530,46 +14620,42 @@ the <code>on_update</code> method with the following code:</p>
 
             self.model_yaw.set_target(angle.to_radians()).update(ctx.dt);
 
-            if let Some(model) = ctx.scene.graph.try_get_mut(*self.model) {
-                model
-                    .local_transform_mut()
-                    .set_rotation(UnitQuaternion::from_axis_angle(
-                        &amp;Vector3::y_axis(),
-                        self.model_yaw.angle,
-                    ));
-            }
-        }
-
-        if let Some(camera_pivot) = ctx.scene.graph.try_get_mut(*self.camera_pivot) {
-            camera_pivot.local_transform_mut().set_rotation(quat_yaw);
-        }
-
-        // Rotate camera hinge - this will make camera move up and down while look at character
-        // (well not exactly on character - on characters head)
-        if let Some(camera_hinge) = ctx.scene.graph.try_get_mut(*self.camera_hinge) {
-            camera_hinge
+            ctx.scene
+                .graph
+                .try_get_mut(*self.model)?
                 .local_transform_mut()
                 .set_rotation(UnitQuaternion::from_axis_angle(
-                    &amp;Vector3::x_axis(),
-                    self.pitch,
+                    &amp;Vector3::y_axis(),
+                    self.model_yaw.angle,
                 ));
         }
 
-        // Step 4. Feed the animation blending state machine with the current state of the player.
-        if let Some(state_machine) = ctx
-            .scene
+        ctx.scene
             .graph
-            .try_get_mut(*self.state_machine)
-            .and_then(|node| node.component_mut::&lt;AnimationBlendingStateMachine&gt;())
-        {
-            let moving =
-                self.walk_left || self.walk_right || self.walk_forward || self.walk_backward;
+            .try_get_mut(*self.camera_pivot)?
+            .local_transform_mut()
+            .set_rotation(quat_yaw);
 
-            state_machine
-                .machine_mut()
-                .get_value_mut_silent()
-                .set_parameter("Running", Parameter::Rule(moving));
-        }
+        // Rotate camera hinge - this will make camera move up and down while look at character
+        // (well not exactly on character - on characters head)
+        ctx.scene
+            .graph
+            .try_get_mut(*self.camera_hinge)?
+            .local_transform_mut()
+            .set_rotation(UnitQuaternion::from_axis_angle(
+                &amp;Vector3::x_axis(),
+                self.pitch,
+            ));
+
+        // Step 4. Feed the animation blending state machine with the current state of the player.
+        let state_machine = ctx.scene.graph.try_get_mut(*self.state_machine)?;
+        let moving = self.walk_left || self.walk_right || self.walk_forward || self.walk_backward;
+        state_machine
+            .machine_mut()
+            .get_value_mut_silent()
+            .set_parameter("Running", Parameter::Rule(moving));
+
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>That’s a big chunk of code, but it mostly consists of a set of separate steps. Let’s try to understand what each step does.</p>
@@ -14754,7 +14840,7 @@ The next thing that we need to do is properly react to incoming OS events to mod
 defined. Add the following code to the <code>on_os_event</code> method like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) {
+</span>    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, _ctx: &amp;mut ScriptContext) -&gt; GameResult {
         match event {
             // Raw mouse input is responsible for camera rotation.
             Event::DeviceEvent {
@@ -14778,18 +14864,10 @@ defined. Add the following code to the <code>on_os_event</code> method like so:<
                 if let PhysicalKey::Code(code) = event.physical_key {
                     let is_pressed = event.state == ElementState::Pressed;
                     match code {
-                        KeyCode::KeyW =&gt; {
-                            self.move_forward = is_pressed;
-                        }
-                        KeyCode::KeyS =&gt; {
-                            self.move_backward = is_pressed;
-                        }
-                        KeyCode::KeyA =&gt; {
-                            self.move_left = is_pressed;
-                        }
-                        KeyCode::KeyD =&gt; {
-                            self.move_right = is_pressed;
-                        }
+                        KeyCode::KeyW =&gt; self.move_forward = is_pressed,
+                        KeyCode::KeyS =&gt; self.move_backward = is_pressed,
+                        KeyCode::KeyA =&gt; self.move_left = is_pressed,
+                        KeyCode::KeyD =&gt; self.move_right = is_pressed,
                         _ =&gt; (),
                     }
                 }
@@ -14814,21 +14892,18 @@ axis and vertical mouse movement is used to rotate the camera around horizontal 
 the <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        let mut look_vector = Vector3::default();
-        let mut side_vector = Vector3::default();
-        if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
-            look_vector = camera.look_vector();
-            side_vector = camera.side_vector();
+</span>        let camera = ctx.scene.graph.try_get_mut(self.camera)?;
+        let look_vector = camera.look_vector();
+        let side_vector = camera.side_vector();
 
-            let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
-            let transform = camera.local_transform_mut();
-            transform.set_rotation(
-                UnitQuaternion::from_axis_angle(
-                    &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
-                    self.pitch.to_radians(),
-                ) * yaw,
-            );
-        }
+        let yaw = UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), self.yaw.to_radians());
+        let transform = camera.local_transform_mut();
+        transform.set_rotation(
+            UnitQuaternion::from_axis_angle(
+                &amp;UnitVector3::new_normalize(yaw * Vector3::x()),
+                self.pitch.to_radians(),
+            ) * yaw,
+        );
 <span class="boring">}</span></code></pre>
 <p>This piece of code is relatively straightforward: at first we’re trying to borrow the camera in the scene graph using
 its handle, if it is succeeded, we form two quaternions that represent rotations around Y and X axes and combine them
@@ -14836,37 +14911,41 @@ using simple multiplication.</p>
 <p>Next thing we’ll add movement code. Add the following code to the end of <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Borrow the node to which this script is assigned to. We also check if the node is RigidBody.
-        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
-            // Form a new velocity vector that corresponds to the pressed buttons.
-            let mut velocity = Vector3::new(0.0, 0.0, 0.0);
-            if self.move_forward {
-                velocity += look_vector;
-            }
-            if self.move_backward {
-                velocity -= look_vector;
-            }
-            if self.move_left {
-                velocity += side_vector;
-            }
-            if self.move_right {
-                velocity -= side_vector;
-            }
-
-            let y_vel = rigid_body.lin_vel().y;
-            if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
-                let movement_speed = 240.0 * ctx.dt;
-                rigid_body.set_lin_vel(Vector3::new(
-                    normalized_velocity.x * movement_speed,
-                    y_vel,
-                    normalized_velocity.z * movement_speed,
-                ));
-            } else {
-                // Hold player in-place in XZ plane when no button is pressed.
-                rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
-            }
+        let rigid_body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?;
+        // Form a new velocity vector that corresponds to the pressed buttons.
+        let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+        if self.move_forward {
+            velocity += look_vector;
         }
+        if self.move_backward {
+            velocity -= look_vector;
+        }
+        if self.move_left {
+            velocity += side_vector;
+        }
+        if self.move_right {
+            velocity -= side_vector;
+        }
+
+        let y_vel = rigid_body.lin_vel().y;
+        if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
+            let movement_speed = 240.0 * ctx.dt;
+            rigid_body.set_lin_vel(Vector3::new(
+                normalized_velocity.x * movement_speed,
+                y_vel,
+                normalized_velocity.z * movement_speed,
+            ));
+        } else {
+            // Hold player in-place in XZ plane when no button is pressed.
+            rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
+        }
+
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is responsible for movement when any of WSAD keys are pressed. At first, it tries to borrow the node to which
@@ -14943,10 +15022,11 @@ impl ScriptMessagePayload for ShootWeaponMessage {}
 to the <code>on_start</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         context
             .message_dispatcher
             .subscribe_to::&lt;ShootWeaponMessage&gt;(context.handle);
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>Every script has <code>on_message</code> method that is used for a message processing, we’ll use it for shooting. Add the following
@@ -14957,30 +15037,26 @@ code in the <code>impl ScriptTrait for Weapon</code>:</p>
         &amp;mut self,
         message: &amp;mut dyn ScriptMessagePayload,
         ctx: &amp;mut ScriptMessageContext,
-    ) {
+    ) -&gt; GameResult {
         // Check if we've received an appropriate message. This is needed because message channel is
         // common across all scripts.
         if message.downcast_ref::&lt;ShootWeaponMessage&gt;().is_some() {
             if let Some(projectile_prefab) = self.projectile.as_ref() {
                 // Try to get the position of the shooting point.
-                if let Some(shot_point) = ctx
-                    .scene
-                    .graph
-                    .try_get(*self.shot_point)
-                    .map(|point| point.global_position())
-                {
-                    // Shooting direction is just a direction of the weapon (its look vector)
-                    let direction = ctx.scene.graph[ctx.handle].look_vector();
+                let shot_point = ctx.scene.graph.try_get(*self.shot_point)?.global_position();
 
-                    // Finally instantiate our projectile at the position and direction.
-                    projectile_prefab.instantiate_at(
-                        ctx.scene,
-                        shot_point,
-                        math::vector_to_quat(direction),
-                    );
-                }
+                // Shooting direction is just a direction of the weapon (its look vector)
+                let direction = ctx.scene.graph[ctx.handle].look_vector();
+
+                // Finally instantiate our projectile at the position and direction.
+                projectile_prefab.instantiate_at(
+                    ctx.scene,
+                    shot_point,
+                    math::vector_to_quat(direction),
+                );
             }
         }
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is pretty straightforward: at first, we’re checking the message type, then we’re checking if we have a prefab
@@ -15032,7 +15108,7 @@ borrow the node and modify the trail’s length after ray casting.</p>
 <p>The ray casting itself is the core of our projectiles, add the following code to the <code>on_start</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) {
+</span>    fn on_start(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         let this_node = &amp;ctx.scene.graph[ctx.handle];
         let this_node_position = this_node.global_position();
 
@@ -15060,17 +15136,17 @@ borrow the node and modify the trail’s length after ray casting.</p>
             1000.0
         };
 
-        if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
-            let transform = trail_node.local_transform_mut();
-            let current_trail_scale = **transform.scale();
-            transform.set_scale(Vector3::new(
-                // Keep x scaling.
-                current_trail_scale.x,
-                trail_length,
-                // Keep z scaling.
-                current_trail_scale.z,
-            ));
-        }
+        let trail_node = ctx.scene.graph.try_get_mut(*self.trail)?;
+        let transform = trail_node.local_transform_mut();
+        let current_trail_scale = **transform.scale();
+        transform.set_scale(Vector3::new(
+            // Keep x scaling.
+            current_trail_scale.x,
+            trail_length,
+            // Keep z scaling.
+            current_trail_scale.z,
+        ));
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is pretty straightforward - at first we’re borrowing the node of the projectile, saving its global position
@@ -15139,8 +15215,9 @@ shoot with desired interval while we’re holding the mouse button. Add the two 
 desired period of shooting (in seconds). We’ll handle one of these variables in <code>on_update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) {
+</span>    fn on_update(&amp;mut self, context: &amp;mut ScriptContext) -&gt; GameResult {
         self.shot_timer -= context.dt;
+        Ok(())
     }
 <span class="boring">}</span></code></pre>
 <p>This code is very simple - it just decreases the timer and that’s all. Now let’s add a new condition to the
@@ -15148,7 +15225,7 @@ desired period of shooting (in seconds). We’ll handle one of these variables i
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>            if self.shot_timer &gt;= 0.0 {
-                return;
+                return Ok(());
             }
             // Reset the timer, this way the next shot cannot be done earlier than the interval.
             self.shot_timer = *self.shot_interval;
@@ -15197,22 +15274,20 @@ following code to at the end of <code>on_start</code> of <code>impl ScriptTrait 
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>        if let Some(intersection) = intersections.first() {
-            if let Some(collider) = ctx.scene.graph.try_get(intersection.collider) {
-                let rigid_body_handle = collider.parent();
-                if let Some(rigid_body) = ctx
-                    .scene
-                    .graph
-                    .try_get_mut_of_type::&lt;RigidBody&gt;(rigid_body_handle)
-                {
-                    if let Some(force_dir) = (intersection.position.coords - this_node_position)
-                        .try_normalize(f32::EPSILON)
-                    {
-                        let force = force_dir.scale(200.0);
+            let collider = ctx.scene.graph.try_get(intersection.collider)?;
+            let rigid_body_handle = collider.parent();
+            let rigid_body = ctx
+                .scene
+                .graph
+                .try_get_mut_of_type::&lt;RigidBody&gt;(rigid_body_handle)?;
 
-                        rigid_body.apply_force_at_point(force, intersection.position.coords);
-                        rigid_body.wake_up();
-                    }
-                }
+            if let Some(force_dir) =
+                (intersection.position.coords - this_node_position).try_normalize(f32::EPSILON)
+            {
+                let force = force_dir.scale(200.0);
+
+                rigid_body.apply_force_at_point(force, intersection.position.coords);
+                rigid_body.wake_up();
             }
         }
 <span class="boring">}</span></code></pre>
@@ -15232,26 +15307,26 @@ property of <code>m4.FBX</code> node with the following parameters:</p>
 player in the weapon script. Let’s add it to the <code>Weapon</code> struct:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    animation_player: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    animation_player: InheritableVariable&lt;Handle&lt;AnimationPlayer&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p>Add the following code to the <code>on_message</code> in <code>weapon.rs</code>, right after the shooting condition (<code>if self.shot_timer &gt;= 0.0 { ...</code>):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            if let Some(animation_player) = ctx
+</span>            let animation_player = ctx
                 .scene
                 .graph
-                .try_get_mut_of_type::&lt;AnimationPlayer&gt;(*self.animation_player)
+                .try_get_mut::&lt;AnimationPlayer&gt;(*self.animation_player)?;
+
+            if let Some(animation) = animation_player
+                .animations_mut()
+                .get_value_mut_silent()
+                .iter_mut()
+                .next()
             {
-                if let Some(animation) = animation_player
-                    .animations_mut()
-                    .get_value_mut_silent()
-                    .iter_mut()
-                    .next()
-                {
-                    animation.rewind();
-                    animation.set_enabled(true);
-                }
+                animation.rewind();
+                animation.set_enabled(true);
             }
+
 <span class="boring">}</span></code></pre>
 <p>Run the game, and you should see something like this when shooting:</p>
 <p><img src="tutorials/fps/tutorial-2/recoil.gif" alt="recoil"></p>
@@ -15386,14 +15461,17 @@ chasing the player. On to the code we go, add the following field to the <code>B
 the bot. Add the following code to the <code>on_update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle) {
-            let position = rigid_body.global_position();
-            let up_vector = rigid_body.up_vector();
-            let look_vector = rigid_body.look_vector();
+</span>        let rigid_body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::&lt;RigidBody&gt;(ctx.handle)?;
+        let position = rigid_body.global_position();
+        let up_vector = rigid_body.up_vector();
+        let look_vector = rigid_body.look_vector();
 
-            // Update the viewing frustum.
-            self.update_frustum(position, look_vector, up_vector, 20.0);
-        }
+        // Update the viewing frustum.
+        self.update_frustum(position, look_vector, up_vector, 20.0);
+
 <span class="boring">}</span></code></pre>
 <p>Now we need to check if the player’s position intersects with the frustum. Add the following code at the beginning
 of <code>on_update</code>:</p>
@@ -15438,7 +15516,7 @@ for that. Root motion will be extracted from the animation blending state machin
 add this code to the <code>Bot</code> struct:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    absm: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
+</span>    absm: InheritableVariable&lt;Handle&lt;AnimationBlendingStateMachine&gt;&gt;,
     model_root: InheritableVariable&lt;Handle&lt;Node&gt;&gt;,
 <span class="boring">}</span></code></pre>
 <p>The first field will hold a handle to the ABSM and the second - a handle to the 3D model root. We’ll assign
@@ -15449,18 +15527,13 @@ this vector to the rigid body of the bot:</p>
 </span>        let model_transform = ctx
             .scene
             .graph
-            .try_get(*self.model_root)
-            .map(|model| model.global_transform())
-            .unwrap_or_default();
+            .try_get(*self.model_root)?
+            .global_transform();
 
         let mut velocity = Vector3::default();
-        if let Some(state_machine) = ctx
-            .scene
-            .graph
-            .try_get_mut(*self.absm)
-            .and_then(|node| node.component_mut::&lt;AnimationBlendingStateMachine&gt;())
-        {
-        }
+        let state_machine = ctx.scene.graph.try_get_mut(*self.absm)?;
+
+
 <span class="boring">}</span></code></pre>
 <p>At first, we’re getting current world-space transform of the 3D model’s root and saving it into a local variable.
 Then we’re borrowing the ABSM we’ve made earlier and extracting the root motion offset vector. As a final step
@@ -15469,15 +15542,15 @@ the rigid body of the bot. To do that, add the following code at the end of the 
 we’re borrowing the rigid body):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            let y_vel = rigid_body.lin_vel().y;
-            rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
+</span>        let y_vel = rigid_body.lin_vel().y;
+        rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
 <span class="boring">}</span></code></pre>
 <p>Next we need to somehow inform the ABSM about the current state of the bot. Remember that we have two parameters
 in the ABSM? We need to set them from the code, it could be done like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            let y_vel = rigid_body.lin_vel().y;
-            rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
+</span>        let y_vel = rigid_body.lin_vel().y;
+        rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
 <span class="boring">}</span></code></pre>
 <p>Now it’s time to do small adjustments to our prefabs. Open the <code>zombie.rgs</code> prefab and assign the <code>Bot</code>
 script to the root node of the prefab, set its properties like so:</p>
@@ -15489,7 +15562,7 @@ the target (the player). Let’s fix that. At first, we need to calculate an ang
 We’ll calculate it using <code>atan2</code> trigonometric function, add the following code somewhere in <code>on_update</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>        let angle_to_target = ctx.scene.graph.try_get(self.target).map(|target| {
+</span>        let angle_to_target = ctx.scene.graph.try_get(self.target).ok().map(|target| {
             let self_position = ctx.scene.graph[ctx.handle].global_position();
             let look_dir = target.global_position() - self_position;
             look_dir.x.atan2(look_dir.z)
@@ -15500,11 +15573,11 @@ using <code>atan2(x, z)</code> trigonometric function. Let’s use this angle, a
 last <code>if</code> statement (where we’re borrowing the rigid body):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>            if let Some(angle) = angle_to_target {
-                rigid_body
-                    .local_transform_mut()
-                    .set_rotation(UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle));
-            }
+</span>        if let Some(angle) = angle_to_target {
+            rigid_body
+                .local_transform_mut()
+                .set_rotation(UnitQuaternion::from_axis_angle(&amp;Vector3::y_axis(), angle));
+        }
 <span class="boring">}</span></code></pre>
 <p>This code is trivial - we’re making a rotation quaternion, that rotates the bot around Y axis using the angle
 we’ve calculated.</p>

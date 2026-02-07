@@ -1,6 +1,7 @@
 use fyrox::gui::check_box::CheckBoxMessage;
 use fyrox::gui::message::UiMessage;
 use fyrox::gui::text::TextBuilder;
+use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::{
     core::pool::Handle,
@@ -40,7 +41,12 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
         if let Some(CheckBoxMessage::Check(value)) = message.data() {
             if message.destination() == self.checkbox {
                 //
@@ -48,6 +54,7 @@ impl Plugin for Game {
                 //
             }
         }
+        Ok(())
     }
 }
 // ANCHOR_END: usage_example

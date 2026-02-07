@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -250,14 +250,18 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                //
-                // Insert your code clicking handling code here.
-                //
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        _context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.button) {
+            //
+            // Insert your code clicking handling code here.
+            //
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -289,14 +293,16 @@ impl Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&amp;mut self, context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.quit_button_handle {
-                if let Some(window_target) = context.window_target {
-                    window_target.exit();
-                }
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.quit_button_handle) {
+            context.loop_controller.exit();
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

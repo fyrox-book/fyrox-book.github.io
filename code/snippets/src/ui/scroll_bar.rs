@@ -1,12 +1,13 @@
-use fyrox::gui::message::{MessageDirection, UiMessage};
+use fyrox::gui::message::{ UiMessage};
 use fyrox::gui::scroll_bar::ScrollBarMessage;
 use fyrox::gui::{
     core::pool::Handle,
     core::{reflect::prelude::*, visitor::prelude::*},
     scroll_bar::ScrollBarBuilder,
     widget::WidgetBuilder,
-    BuildContext, UiNode,
+    BuildContext, UiNode, UserInterface,
 };
+use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginContext};
 
 // ANCHOR: create_scroll_bar
@@ -26,16 +27,18 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
-        if let Some(ScrollBarMessage::Value(value)) = message.data() {
-            if message.destination() == self.scroll_bar
-                && message.direction() == MessageDirection::FromWidget
-            {
-                //
-                // Insert handler code here.
-                //
-            }
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
+        if let Some(ScrollBarMessage::Value(value)) = message.data_from(self.scroll_bar) {
+            //
+            // Insert handler code here.
+            //
         }
+        Ok(())
     }
 }
 // ANCHOR_END: usage_example

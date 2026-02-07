@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -214,7 +214,7 @@ struct Game {
 }
 
 impl Plugin for Game {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         // Add this code to your Plugin::init
 
         // Define the desired render target size.
@@ -235,9 +235,11 @@ impl Plugin for Game {
         let mut material = Material::standard();
         material.bind("diffuseTexture", Some(self.render_target.clone()));
         // This material **must** be assigned to some mesh in your scene!
+
+        Ok(())
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext) {
+    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         // It is very important to update the UI every frame and process all events that
         // comes from it.
         self.my_ui
@@ -246,9 +248,11 @@ impl Plugin for Game {
         while let Some(message) = self.my_ui.poll_message() {
             // Do something with the events coming from the custom UI.
         }
+
+        Ok(())
     }
 
-    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) -&gt; GameResult {
         // This is the tricky part. Event OS event handling will be different depending on the use case.
         // In cases if your UI just shows some information, this method can be fully removed. In case when
         // you need to interact with the UI, there are two different ways.
@@ -262,19 +266,22 @@ impl Plugin for Game {
                 self.my_ui.process_os_event(&amp;event);
             }
         }
+
+        Ok(())
     }
 
-    fn before_rendering(&amp;mut self, context: PluginContext) {
+    fn before_rendering(&amp;mut self, context: PluginContext) -&gt; GameResult {
         // Render the UI before every other rendering operation, this way the texture will be ready for use immediately.
         if let GraphicsContext::Initialized(ref mut graphics_context) = context.graphics_context {
-            Log::verify(graphics_context.renderer.render_ui_to_texture(
-                self.render_target.clone(),
-                self.screen_size,
-                self.my_ui.draw(),
-                Color::TRANSPARENT,
-                PixelKind::RGBA8,
-            ));
+            Log::verify(graphics_context.renderer.render_ui(UiRenderInfo {
+                ui: &amp;self.my_ui,
+                render_target: Some(self.render_target.clone()),
+                clear_color: Color::TRANSPARENT,
+                resource_manager: &amp;context.resource_manager,
+            }));
         }
+
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>

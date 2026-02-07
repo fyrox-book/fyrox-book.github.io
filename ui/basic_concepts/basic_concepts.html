@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-7e3fd68d.js";
+            window.path_to_searchindex_js = "../../searchindex-4cbe4cd3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-025265cf.js"></script>
@@ -262,12 +262,16 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&amp;mut self, _context: &amp;mut PluginContext, message: &amp;UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                println!("The button was clicked!");
-            }
+    fn on_ui_message(
+        &amp;mut self,
+        _context: &amp;mut PluginContext,
+        message: &amp;UiMessage,
+        ui_handle: Handle&lt;UserInterface&gt;,
+    ) -&gt; GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.button) {
+            println!("The button was clicked!");
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -397,16 +401,20 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) -&gt; GameResult {
         ctx.task_pool.spawn_plugin_task(
-            UserInterface::load_from_file("data/my_ui_asset.ui", ctx.resource_manager.clone()),
-            |result, game: &amp;mut MyPlugin, ctx| match result {
-                Ok(ui) =&gt; {
-                    *ctx.user_interfaces.first_mut() = ui;
-                }
-                Err(e) =&gt; Log::err(format!("Unable to load a user interface! Reason: {:?}", e)),
+            UserInterface::load_from_file(
+                "data/my_ui_asset.ui",
+                ctx.widget_constructors.clone(),
+                ctx.dyn_type_constructors.clone(),
+                ctx.resource_manager.clone(),
+            ),
+            |result, game: &amp;mut MyPlugin, ctx| {
+                *ctx.user_interfaces.first_mut() = result?;
+                Ok(())
             },
         );
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
