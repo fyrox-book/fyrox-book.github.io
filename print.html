@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a1627fda.js";
+            window.path_to_searchindex_js = "searchindex-1e011a71.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-025265cf.js"></script>
@@ -2535,7 +2535,7 @@ do not use a sledgehammer to hammer nails, unless you have a <em>huge</em> nail.
 <p>Pretty much every method of a plugin or a script returns a special type <code>GameResult</code> which is a wrapper over
 <code>Result&lt;(), GameError&gt;</code>. This allows you to easily handle various errors that may occur during the code execution by
 applying <code>?</code> operator.</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "bf0f9804-56cb-4a2e-beba-93d75371a568")]
@@ -2549,65 +2549,6 @@ impl ScriptTrait for MyScript {
         let node = context.scene.graph.try_get(context.handle)?;
         println!("{}", node.name());
         Ok(())
-    }
-}
-
-#[derive(Visit, Clone, Reflect, Debug)]
-struct MyPlugin;
-
-impl Plugin for MyPlugin {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
-        // This method can be called at any point in your game, this way you can enable or disable
-        // enhanced error data collection when needed.
-        enable_backtrace_capture(true);
-        Ok(())
-    }
-}
-
-#[derive(Visit, Clone, Reflect, Debug)]
-struct MyGame;
-
-// Define an error type for your game first.
-#[derive(Debug)]
-pub enum MyError {
-    NoScene,
-}
-impl std::error::Error for MyError {}
-impl Display for MyError {
-    fn fmt(&amp;self, f: &amp;mut Formatter&lt;'_&gt;) -&gt; std::fmt::Result {
-        match self {
-            MyError::NoScene =&gt; {
-                write!(f, "The scene is not specified!")
-            }
-        }
-    }
-}
-
-impl Plugin for MyGame {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
-        match scene_path {
-            Some(scene_path) =&gt; {
-                context.async_scene_loader.request(scene_path);
-                Ok(())
-            }
-            // Spawn an error.
-            None =&gt; Err(GameError::user(MyError::NoScene)),
-        }
-    }
-
-    fn on_game_error(&amp;mut self, context: &amp;mut PluginContext, error: &amp;GameError) -&gt; bool {
-        if let GameErrorKind::UserError(ref err) = error.kind {
-            if let Some(my_error) = err.downcast_ref::&lt;MyError&gt;() {
-                // Do something useful, for example show a warning message box.
-                // ...
-
-                // Mark the error as handled.
-                return true;
-            }
-        }
-
-        // The rest is unhandled.
-        false
     }
 }
 <span class="boring">}</span></code></pre>
