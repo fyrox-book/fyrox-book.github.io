@@ -16,7 +16,7 @@ struct SomeComplexData {
     bar: InheritableVariable<String>,
 }
 
-#[derive(Reflect, Debug)]
+#[derive(Reflect, Clone, Debug)]
 struct MyEntity {
     some_field: InheritableVariable<f32>,
 

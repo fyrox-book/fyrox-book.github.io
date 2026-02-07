@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -221,7 +221,7 @@ be useful for debugging to see trajectories and to trace short events. To clear 
 <code>clear_lines</code> method somewhere in your pluginâ€™s <code>update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -266,7 +266,7 @@ paths, however it could be very useful to actually see them when debugging gameâ
 <p>You can debug draw either all scene nodes at once:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -285,7 +285,7 @@ impl Plugin for Game {
 <p>Or filter out only specific ones:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -308,7 +308,7 @@ impl Plugin for Game {
 method of a physics world (2D or 3D) like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }

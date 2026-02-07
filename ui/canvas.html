@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -201,7 +201,7 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 <p>Use <code>CanvasBuilder</code> to create Canvas instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Canvas&gt; {
     CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
 }
 <span class="boring">}</span></code></pre>
@@ -210,7 +210,7 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 <p>Use <code>.with_desired_position</code> on children widgets to set specific position:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_canvas_with_children_widgets(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_canvas_with_children_widgets(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Canvas&gt; {
     CanvasBuilder::new(
         WidgetBuilder::new()
             .with_child(

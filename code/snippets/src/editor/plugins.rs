@@ -1,3 +1,5 @@
+use fyrox::graph::SceneGraph;
+use fyrox::gui::button::Button;
 use fyrox::{
     core::{
         algebra::{Vector2, Vector3},
@@ -7,8 +9,7 @@ use fyrox::{
         visitor::prelude::*,
     },
     engine::Engine,
-    graph::BaseSceneGraph,
-    gui::{BuildContext, UiNode},
+    gui::BuildContext,
     scene::{base::BaseBuilder, graph::Graph, node::Node, sprite::SpriteBuilder},
     script::ScriptTrait,
 };
@@ -51,14 +52,10 @@ impl EditorPlugin for MyPlugin {
     // ANCHOR_END: plugin_impl_1
     fn on_sync_to_model(&mut self, editor: &mut Editor) {}
 
-    fn on_update(&mut self, editor: &mut Editor) {}
-
     // ANCHOR: selection_1
     fn on_message(&mut self, message: &Message, editor: &mut Editor) {
         // Fetch the active scene.
-        let Some(entry) = editor.scenes.current_scene_entry_mut() else {
-            return;
-        };
+        let entry = editor.scenes.current_scene_entry_mut();
 
         let Some(selection) = entry.selection.as_graph() else {
             return;
@@ -89,7 +86,7 @@ impl EditorPlugin for MyPlugin {
                 if scene
                     .graph
                     .try_get_script_of::<MyScript>(*node_handle)
-                    .is_some()
+                    .is_ok()
                 {
                     self.node_handle = *node_handle;
 
@@ -177,7 +174,10 @@ impl InteractionMode for MyInteractionMode {
                 cursor_pos: mouse_pos,
                 editor_only: true,
                 filter: Some(&mut |handle, _| handle != self.move_gizmo.origin),
-                ..Default::default()
+                ignore_back_faces: false,
+                use_picking_loop: false,
+                method: Default::default(),
+                settings: &settings.selection,
             },
         ) {
             // The gizmo needs to be fed with input events as well, so it can react to the cursor.
@@ -221,7 +221,7 @@ impl InteractionMode for MyInteractionMode {
         let scene = &mut engine.scenes[game_scene.scene];
 
         if let Some(drag_context) = self.drag_context.take() {
-            if let Some(script) = scene
+            if let Ok(script) = scene
                 .graph
                 .try_get_script_of_mut::<MyScript>(self.node_handle)
             {
@@ -270,7 +270,7 @@ impl InteractionMode for MyInteractionMode {
                 drag_context.plane_kind,
             );
 
-            if let Some(script) = scene
+            if let Ok(script) = scene
                 .graph
                 .try_get_script_of_mut::<MyScript>(self.node_handle)
             {
@@ -303,7 +303,7 @@ impl InteractionMode for MyInteractionMode {
     fn deactivate(&mut self, controller: &dyn SceneController, engine: &mut Engine) {}
 
     // ANCHOR: make_button
-    fn make_button(&mut self, ctx: &mut BuildContext, selected: bool) -> Handle<UiNode> {
+    fn make_button(&mut self, ctx: &mut BuildContext, selected: bool) -> Handle<Button> {
         make_interaction_mode_button(ctx, include_bytes!("icon.png"), "Line Edit Mode", selected)
     }
     // ANCHOR_END: make_button
@@ -332,7 +332,7 @@ impl LinePointsGizmo {
         game_scene: &GameScene,
         graph: &mut Graph,
     ) {
-        let Some(script) = graph.try_get_script_of::<MyScript>(node_handle) else {
+        let Ok(script) = graph.try_get_script_of::<MyScript>(node_handle) else {
             return;
         };
         let points = script.points.clone();
@@ -346,7 +346,7 @@ impl LinePointsGizmo {
                     .with_size(0.1)
                     .build(graph);
 
-                self.point_nodes.push(point_node);
+                self.point_nodes.push(point_node.to_base());
 
                 // Link the sprite with the special scene node - the name of it should clearly state
                 // its purpose.
@@ -417,7 +417,7 @@ fn set_point_1(node_handle: Handle<Node>, message_sender: &MessageSender) {
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::<MyScript>()
-                .unwrap()
+                .map(|s| s as &mut dyn Reflect)
         },
     ))
 }
@@ -436,7 +436,7 @@ fn add_collection_element(node_handle: Handle<Node>, message_sender: &MessageSen
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::<MyScript>()
-                .unwrap()
+                .map(|s| s as &mut dyn Reflect)
         },
     ))
 }
@@ -455,7 +455,7 @@ fn remove_collection_element(node_handle: Handle<Node>, message_sender: &Message
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::<MyScript>()
-                .unwrap()
+                .map(|s| s as &mut dyn Reflect)
         },
     ))
 }

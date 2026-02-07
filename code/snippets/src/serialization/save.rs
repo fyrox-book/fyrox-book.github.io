@@ -7,7 +7,7 @@ use fyrox::{
 use std::path::Path;
 
 // ANCHOR: save
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyGame {
     scene: Handle<Scene>,
 }
@@ -31,7 +31,7 @@ impl MyGame {
             .save("Scene", &mut visitor)
             .unwrap();
         // Save it to a file.
-        visitor.save_binary(Path::new("save.rgs")).unwrap()
+        visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
     fn load_game(&mut self, context: &mut PluginContext) {

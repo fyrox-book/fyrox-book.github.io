@@ -8,12 +8,12 @@ use fyrox::{
         },
         widget::WidgetBuilder,
         window::{WindowBuilder, WindowTitle},
-        BuildContext, UiNode, UserInterface,
+        BuildContext, UserInterface,
     },
 };
 
 // ANCHOR: create_docking_manager
-fn create_docking_manager(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_docking_manager(ctx: &mut BuildContext) -> Handle<DockingManager> {
     let top_window = WindowBuilder::new(WidgetBuilder::new())
         .with_title(WindowTitle::text("Top Window"))
         .build(ctx);
@@ -48,9 +48,10 @@ fn create_docking_manager(ctx: &mut BuildContext) -> Handle<UiNode> {
 // ANCHOR: save_layout
 fn save_layout(
     ui: &UserInterface,
-    docking_manager_handle: Handle<UiNode>,
+    docking_manager_handle: Handle<DockingManager>,
 ) -> Option<DockingManagerLayoutDescriptor> {
-    ui.try_get_of_type::<DockingManager>(docking_manager_handle)
+    ui.try_get(docking_manager_handle)
+        .ok()
         .as_ref()
         .map(|docking_manager| docking_manager.layout(ui))
 }

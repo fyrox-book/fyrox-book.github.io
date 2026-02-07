@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-025265cf.js"></script>
@@ -1711,7 +1711,7 @@ it is possible to change scenes, add render passes, change resolution, etc. whic
 and it looks something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 pub struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -1997,7 +1997,7 @@ impl ScriptTrait for MyScript {
     }
 }
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -2073,7 +2073,7 @@ to an object. <code>PluginConstructor</code> trait has <code>register</code> met
 you need to register it in the list of script constructors like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -2318,7 +2318,7 @@ searching in the entire scene graph at every frame.</p>
 <p>Accessing plugins from scripts is very easy, all you need to do is to call <code>get/get_mut</code> method from <code>ctx.plugins</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Debug, Reflect, Visit)]
+</span>#[derive(Default, Debug, Clone, Reflect, Visit)]
 struct GamePlugin {
     bots: Vec&lt;Handle&lt;Node&gt;&gt;,
 }
@@ -2458,7 +2458,7 @@ impl ScriptTrait for MyScript {
         Ok(())
     }
 
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Draw the computed path.
         if let Some(path) = self.path.as_ref() {
             for segment in path.windows(2) {
@@ -2469,6 +2469,7 @@ impl ScriptTrait for MyScript {
                 })
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -2476,7 +2477,7 @@ impl ScriptTrait for MyScript {
 separate script instances. A plugin task is a bit easier to use:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Debug, Visit, Reflect)]
+</span>#[derive(Debug, Visit, Clone, Reflect)]
 struct MyGame {
     data: Option&lt;Vec&lt;u8&gt;&gt;,
 }
@@ -2497,6 +2498,7 @@ impl MyGame {
             |data, game: &amp;mut MyGame, _context| {
                 // Store the data in the game instance.
                 game.data = Some(data);
+                Ok(())
             },
         );
 
@@ -2550,7 +2552,7 @@ impl ScriptTrait for MyScript {
     }
 }
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -2562,7 +2564,7 @@ impl Plugin for MyPlugin {
     }
 }
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame;
 
 // Define an error type for your game first.
@@ -2594,7 +2596,7 @@ impl Plugin for MyGame {
     }
 
     fn on_game_error(&amp;mut self, context: &amp;mut PluginContext, error: &amp;GameError) -&gt; bool {
-        if let Some(GameErrorKind::UserError(ref err)) = error.kind {
+        if let GameErrorKind::UserError(ref err) = error.kind {
             if let Some(my_error) = err.downcast_ref::&lt;MyError&gt;() {
                 // Do something useful, for example show a warning message box.
                 // ...
@@ -2619,7 +2621,7 @@ complicate tracking of the original source of error. Backtrace capture can be en
 method.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -2639,7 +2641,7 @@ be disabled in production builds.</p>
 the <code>Plugin::on_game_error</code> method for that:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame;
 
 // Define an error type for your game first.
@@ -2671,7 +2673,7 @@ impl Plugin for MyGame {
     }
 
     fn on_game_error(&amp;mut self, context: &amp;mut PluginContext, error: &amp;GameError) -&gt; bool {
-        if let Some(GameErrorKind::UserError(ref err)) = error.kind {
+        if let GameErrorKind::UserError(ref err) = error.kind {
             if let Some(my_error) = err.downcast_ref::&lt;MyError&gt;() {
                 // Do something useful, for example show a warning message box.
                 // ...
@@ -2742,11 +2744,7 @@ to engine instance.</p>
     let executor = Executor::from_params(
         EventLoop::new().ok(),
         GraphicsContextParams {
-            window_attributes: WindowAttributes {
-                // Set window title.
-                title: "My Game".to_string(),
-                ..Default::default()
-            },
+            window_attributes: WindowAttributes::default().with_title("My Game"),
             vsync: true,
             msaa_sample_count: None,
             graphics_server_constructor: Default::default(),
@@ -2771,7 +2769,7 @@ manually by instantiating the respective prefabs at runtime.</p>
 scene. After a scene is created, you can load it using async scene loader:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame {
     main_scene: Handle&lt;Scene&gt;,
 }
@@ -2868,7 +2866,7 @@ You can borrow a scene at any time using its handle and do some changes to it an
 </span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
-        if let Some(scene) = context.scenes.try_get(self.main_scene) {
+        if let Ok(scene) = context.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }
@@ -2932,7 +2930,7 @@ builder must know how to build Base node. While it may sound confusing, it is ac
 Consider this example:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(
         // Here we passing a base builder. Note that, since we can build Base node separately
         // we can pass any custom values to it while building.
@@ -2952,11 +2950,11 @@ the CameraBuilder’s instance properties. This is a very flexible mechanism, al
 in a declarative manner:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(
         BaseBuilder::new()
             // Add some children nodes.
-            .with_children(&amp;[
+            .with_child(
                 // A staff...
                 MeshBuilder::new(
                     BaseBuilder::new()
@@ -2968,6 +2966,8 @@ in a declarative manner:</p>
                         ),
                 )
                 .build(&amp;mut scene.graph),
+            )
+            .with_child(
                 // and a spell.
                 SpriteBuilder::new(
                     BaseBuilder::new()
@@ -2979,7 +2979,7 @@ in a declarative manner:</p>
                         ),
                 )
                 .build(&amp;mut scene.graph),
-            ])
+            )
             .with_local_transform(
                 TransformBuilder::new()
                     .with_local_position(Vector3::new(2.0, 0.0, 3.0))
@@ -3140,7 +3140,7 @@ struct SomeComplexData {
     bar: InheritableVariable&lt;String&gt;,
 }
 
-#[derive(Reflect, Debug)]
+#[derive(Reflect, Clone, Debug)]
 struct MyEntity {
     some_field: InheritableVariable&lt;f32&gt;,
 
@@ -3181,17 +3181,18 @@ node types):</p>
 to build a hierarchy of any complexity:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    let handle =
-        PivotBuilder::new(
-            BaseBuilder::new().with_children(&amp;[
-                CameraBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph),
-                PivotBuilder::new(BaseBuilder::new().with_children(&amp;[
-                    PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph),
-                ]))
+</span>    let handle = PivotBuilder::new(
+        BaseBuilder::new()
+            .with_child(CameraBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph))
+            .with_child(
+                PivotBuilder::new(
+                    BaseBuilder::new()
+                        .with_child(PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph)),
+                )
                 .build(&amp;mut scene.graph),
-            ]),
-        )
-        .build(&amp;mut scene.graph);
+            ),
+    )
+    .build(&amp;mut scene.graph);
 <span class="boring">}</span></code></pre>
 <p>Note that when we’re building a <code>Camera</code> instance, we’re passing a new instance of <code>BaseBuilder</code> to it, this
 instance can also be used to set some properties and a set of children nodes.</p>
@@ -3202,10 +3203,9 @@ instance can also be used to set some properties and a set of children nodes.</p
 
     let child_base = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
 
-    let base =
-        PivotBuilder::new(BaseBuilder::new().with_children(&amp;[child_base])).build(&amp;mut scene.graph);
+    let base = PivotBuilder::new(BaseBuilder::new().with_child(child_base)).build(&amp;mut scene.graph);
 
-    let handle = PivotBuilder::new(BaseBuilder::new().with_children(&amp;[camera, base]))
+    let handle = PivotBuilder::new(BaseBuilder::new().with_child(camera).with_child(base))
         .build(&amp;mut scene.graph);
 <span class="boring">}</span></code></pre>
 <p>However, it looks less informative, because it loses the hierarchical view and it is harder to tell the relations
@@ -3291,7 +3291,7 @@ properly.</p>
 cannot create a mesh in 3D modelling software.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_procedural_mesh(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+</span>fn create_procedural_mesh(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Mesh&gt; {
     let mut material = Material::standard();
 
     // Material is completely optional, but here we'll demonstrate that it is possible to
@@ -3361,7 +3361,7 @@ For example, the following code extracts world-space positions of every vertex o
                 if let Some(bone_node) = surface
                     .bones()
                     .get(*index as usize)
-                    .and_then(|bone_handle| graph.try_get(*bone_handle))
+                    .and_then(|bone_handle| graph.try_get(*bone_handle).ok())
                 {
                     let bone_transform =
                         bone_node.global_transform() * bone_node.inv_bind_pose_transform();
@@ -3425,7 +3425,7 @@ used to light the scene. To change it, use the following code snippet:</p>
 }
 
 fn set_scene_skybox(scene: &amp;mut Scene, resource_manager: ResourceManager) {
-    scene.set_skybox(create_skybox(resource_manager));
+    scene.set_skybox(Some(block_on(create_skybox(resource_manager))));
 }
 <span class="boring">}</span></code></pre>
 <p>This, however, may still produce weird lighting inside indoor scenes - all objects will be equally lit from
@@ -3464,7 +3464,7 @@ scenes.</p>
 <p>A directional light source could be created like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;DirectionalLight&gt; {
     DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new())).build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre>
@@ -3473,7 +3473,7 @@ scenes.</p>
 like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_oriented_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_oriented_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;DirectionalLight&gt; {
     DirectionalLightBuilder::new(BaseLightBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
@@ -3492,7 +3492,7 @@ like this:</p>
 An example of a point light source: light bulb.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;PointLight&gt; {
     PointLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_radius(5.0)
         .build(&amp;mut scene.graph)
@@ -3503,7 +3503,7 @@ An example of a point light source: light bulb.</p>
 a spotlight source: flashlight.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;SpotLight&gt; {
     SpotLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_distance(5.0)
         .with_hotspot_cone_angle(50.0f32.to_radians())
@@ -3586,7 +3586,7 @@ using the camera.</p>
 at (0.0, 10.0, 0.0) point with a rendering position offset by 10 units along X axis.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_probe(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_probe(graph: &amp;mut Graph) -&gt; Handle&lt;ReflectionProbe&gt; {
     ReflectionProbeBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
@@ -3619,7 +3619,7 @@ Use <a href="#rectangle-node">Rectangle node</a> if you need 2D sprites.</p>
 <p>A sprite instance could be created using <code>SpriteBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Sprite&gt; {
     SpriteBuilder::new(BaseBuilder::new())
         .with_size(2.0)
         .with_rotation(45.0f32.to_radians())
@@ -3633,7 +3633,7 @@ Use <a href="#rectangle-node">Rectangle node</a> if you need 2D sprites.</p>
 </span>fn create_sprite_with_texture(
     scene: &amp;mut Scene,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
+) -&gt; Handle&lt;Sprite&gt; {
     let mut material = Material::standard_sprite();
     material.bind(
         "diffuseTexture",
@@ -3643,7 +3643,11 @@ Use <a href="#rectangle-node">Rectangle node</a> if you need 2D sprites.</p>
     // Material resources can be shared across multiple sprites (via simple `clone`).
     // This significantly improves performance if you have multiple rectangles with the
     // same material.
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("4799c329-5aa2-468d-a079-ea2170be1c74"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     SpriteBuilder::new(BaseBuilder::new())
         .with_material(material_resource)
@@ -3736,7 +3740,11 @@ only practice matters here.</p>
         "diffuseTexture",
         Some(resource_manager.request::&lt;Texture&gt;("data/particles/smoke_04.tga")),
     );
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("cdd749d7-0761-40f2-ac6f-66f67bf6f158"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     ParticleSystemBuilder::new(
         BaseBuilder::new()
@@ -3957,7 +3965,7 @@ updating other details of the internal state of the <code>BrushContext</code>.</
 pub fn create_random_two_layer_terrain(
     graph: &amp;mut Graph,
     resource_manager: &amp;ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
+) -&gt; Handle&lt;Terrain&gt; {
     let terrain = TerrainBuilder::new(BaseBuilder::new())
         .with_layers(vec![
             Layer {
@@ -3969,7 +3977,11 @@ pub fn create_random_two_layer_terrain(
                         "examples/data/Grass_DiffuseColor.jpg",
                         "examples/data/Grass_NormalColor.jpg",
                     );
-                    MaterialResource::new_ok(ResourceKind::Embedded, material)
+                    MaterialResource::new_ok(
+                        uuid!("4374fc82-ef19-4eea-a518-8a6f8afa7dba"),
+                        ResourceKind::Embedded,
+                        material,
+                    )
                 },
                 ..Default::default()
             },
@@ -3982,14 +3994,18 @@ pub fn create_random_two_layer_terrain(
                         "examples/data/Rock_DiffuseColor.jpg",
                         "examples/data/Rock_Normal.jpg",
                     );
-                    MaterialResource::new_ok(ResourceKind::Embedded, material)
+                    MaterialResource::new_ok(
+                        uuid!("19b0df85-201e-40c5-96d7-577ee6f75e7c"),
+                        ResourceKind::Embedded,
+                        material,
+                    )
                 },
                 ..Default::default()
             },
         ])
         .build(graph);
 
-    let terrain_ref = graph[terrain].as_terrain_mut();
+    let terrain_ref = &amp;mut graph[terrain];
     let mut context = BrushContext::default();
 
     // Draw something on the terrain.
@@ -4100,7 +4116,7 @@ that “intersects” with the frustum will be rendered.</p>
 <p>An instance of camera node could be created using <code>CameraBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         // Set some properties.
         .with_fov(80.0f32.to_radians())
@@ -4123,7 +4139,7 @@ parameters that describes frustum volume:</p>
 <p>Here is a simple example of how to create a camera with perspective projection:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Perspective(PerspectiveProjection {
             // Keep in mind that field of view expressed in radians!
@@ -4148,7 +4164,7 @@ size by multiplying vertical size with aspect ratio.</p>
 <p>Here is a simple example of how to create a camera with orthographic projection:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_orthographic_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_orthographic_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Orthographic(OrthographicProjection {
             vertical_size: 5.0,
@@ -4192,7 +4208,7 @@ via color grading LUT effect. When used wisely, it can significantly improve per
 <p>To use color grading LUT you could do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_camera_with_lut(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera_with_lut(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_color_grading_enabled(true)
         .with_color_grading_lut(
@@ -4301,7 +4317,7 @@ bullet holes, blood splatter, dirt, cracks and so on. Here is the example of the
 <p>A decal instance can be created using DecalBuilder:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_decal(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+</span>fn create_decal(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Decal&gt; {
     DecalBuilder::new(BaseBuilder::new())
         .with_diffuse_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/decal.png"))
         .build(&amp;mut scene.graph)
@@ -4342,7 +4358,7 @@ an orthographic camera:</p>
 <p>Use the RectangleBuilder to create Rectangle nodes:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_rect(graph: &amp;mut Graph, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+</span>fn create_rect(graph: &amp;mut Graph, resource_manager: ResourceManager) -&gt; Handle&lt;Rectangle&gt; {
     let mut material = Material::standard_2d();
     material.bind(
         "diffuseTexture",
@@ -4352,7 +4368,11 @@ an orthographic camera:</p>
     // Material resources can be shared across multiple rectangles (via simple `clone`).
     // This significantly improves performance if you have multiple rectangles with the
     // same material.
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("32689007-2c4e-4cba-bfca-e39713542ac7"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     RectangleBuilder::new(
         BaseBuilder::new().with_local_transform(
@@ -4453,9 +4473,13 @@ procedural worlds, while the editor-based approach is good for hand-crafted worl
 lays grass on top of it.</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_tile_map(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_tile_map(graph: &amp;mut Graph) -&gt; Handle&lt;TileMap&gt; {
     // Each tile could have its own material, for simplicity it is just a standard 2D material.
-    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_tile());
+    let material = MaterialResource::new_ok(
+        uuid!("cdbe4110-1889-4069-9c84-ded1d3028b17"),
+        ResourceKind::Embedded,
+        Material::standard_tile(),
+    );
 
     // Create a tile set - it is a data source for the tile map. Tile map will reference the tiles
     // stored in the tile set by handles. We'll create two tile types with different colors.
@@ -4515,7 +4539,11 @@ lays grass on top of it.</p>
     // Finally we create our tile set and add our page to it at position (0,0).
     let mut tile_set = TileSet::default();
     tile_set.insert_page(Vector2::new(0, 0), page);
-    let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
+    let tile_set = TileSetResource::new_ok(
+        uuid!("a937e9a6-3332-4466-b5f3-1e6e69e1349a"),
+        ResourceKind::Embedded,
+        tile_set,
+    );
 
     // This positions of all the tiles in our tile map using their TileDefinitionHandle
     // to find the tiles in the tile set.
@@ -4744,7 +4772,7 @@ In code it could be done something like this:</p>
         .build(graph);
 
     // Create a static rigid body with the tile map collider.
-    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_children(&amp;[collider]))
+    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_child(collider))
         .with_body_type(RigidBodyType::Static)
         .build(graph);
 }
@@ -4775,7 +4803,11 @@ const SLIME: i32 = 2;
 const SURFACE_TYPE_UUID: Uuid = uuid!("a70a754b-eed5-4e60-bf8a-3239f0b6004b");
 
 fn create_tile_map_with_props(graph: &amp;mut Graph) {
-    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_2d());
+    let material = MaterialResource::new_ok(
+        uuid!("3b2bcda5-0045-426b-b1f7-61a54d9e803a"),
+        ResourceKind::Embedded,
+        Material::standard_2d(),
+    );
 
     let mut tiles = TileGridMap::default();
     let stone_tile = TileDefinitionHandle::new(0, 0, 0, 0);
@@ -4835,7 +4867,11 @@ fn create_tile_map_with_props(graph: &amp;mut Graph) {
         prop_type: TileSetPropertyType::F32,
         named_values: Vec::default(),
     });
-    let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
+    let tile_set = TileSetResource::new_ok(
+        uuid!("355f9cee-6af0-4068-9740-922c8a7720a6"),
+        ResourceKind::Embedded,
+        tile_set,
+    );
 
     // ..
 }
@@ -5010,14 +5046,14 @@ your objects.</p>
 <p>Use RigidBodyBuilder to create a rigid body instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_cube_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_cube_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;RigidBody&gt; {
     RigidBodyBuilder::new(
-        BaseBuilder::new().with_children(&amp;[
+        BaseBuilder::new().with_child(
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]),
+        ),
     )
     .with_mass(2.0)
     .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
@@ -5059,14 +5095,14 @@ applying force to a rigid body: at center of mass or at particular point at the 
 do simulation for the body. This can be achieved by making the rigid body <em>kinematic</em>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;RigidBody&gt; {
     RigidBodyBuilder::new(
-        BaseBuilder::new().with_children(&amp;[
+        BaseBuilder::new().with_child(
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]),
+        ),
     )
     .with_body_type(RigidBodyType::KinematicPositionBased)
     .build(graph)
@@ -5122,7 +5158,7 @@ rigid bodies.</p>
 <p>Use ColliderBuilder to create an instance of collider from code with any shape you want.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_capsule_collider(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_capsule_collider(graph: &amp;mut Graph) -&gt; Handle&lt;Collider&gt; {
     ColliderBuilder::new(BaseBuilder::new())
         .with_shape(ColliderShape::capsule_y(0.5, 0.2))
         .with_friction(1.0)
@@ -5177,7 +5213,11 @@ can be initiated by moving the joint to some other position by changing local tr
 <p>To create a joint from code use <code>JointBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_joint(graph: &amp;mut Graph, body1: Handle&lt;Node&gt;, body2: Handle&lt;Node&gt;) -&gt; Handle&lt;Node&gt; {
+</span>fn create_joint(
+    graph: &amp;mut Graph,
+    body1: Handle&lt;RigidBody&gt;,
+    body2: Handle&lt;RigidBody&gt;,
+) -&gt; Handle&lt;Joint&gt; {
     JointBuilder::new(BaseBuilder::new())
         .with_body1(body1)
         .with_body2(body2)
@@ -5424,7 +5464,7 @@ audio processing could found <a href="#audio-bus">here</a>.</li>
 <p>Then, the node is built using the standard builder pattern:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn build_sound_node(resource_manager: &amp;ResourceManager, scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn build_sound_node(resource_manager: &amp;ResourceManager, scene: &amp;mut Scene) -&gt; Handle&lt;Sound&gt; {
     let sound = resource_manager.request::&lt;SoundBuffer&gt;("/path/to/resource.ogg");
 
     SoundBuilder::new(BaseBuilder::new())
@@ -5611,7 +5651,7 @@ fn use_animation() {
     let mut graph = Graph::new();
     let some_node = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut graph);
     // Create the animation.
-    let mut animation = create_animation(some_node);
+    let mut animation = create_animation(some_node.to_base());
     // Emulate some ticks (like it was updated from the main loop of your game).
     for _ in 0..10 {
         animation.tick(1.0 / 60.0);
@@ -5687,8 +5727,13 @@ asynchronous loading on all platforms.</p>
 enable/disable animations when needed by finding them by name from code and switching <code>Enabled</code> property:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn enable_animation(animation_player: Handle&lt;Node&gt;, graph: &amp;mut Graph, name: &amp;str, enabled: bool) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
+</span>fn enable_animation(
+    animation_player: Handle&lt;AnimationPlayer&gt;,
+    graph: &amp;mut Graph,
+    name: &amp;str,
+    enabled: bool,
+) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
         // chapter for more info).
         let animations = animation_player.animations_mut().get_value_mut_silent();
@@ -6128,12 +6173,12 @@ your animation. Please note the comment about signal’s uuid in the code below.
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn add_signal(
-    animation_player: Handle&lt;Node&gt;,
+    animation_player: Handle&lt;AnimationPlayer&gt;,
     animation_name: &amp;str,
     signal_name: &amp;str,
     graph: &amp;mut Graph,
 ) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
         if let Some((_, animation)) = animations.find_by_name_mut(animation_name) {
             // This uuid should be unique, you could also use Uuid::new_v4() method, but it
@@ -6153,12 +6198,12 @@ just borrow your animation from the animation player and pop animation event one
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn react_to_signal_events(
-    animation_player: Handle&lt;Node&gt;,
+    animation_player: Handle&lt;AnimationPlayer&gt;,
     animation_name: &amp;str,
     signal_name: &amp;str,
     graph: &amp;mut Graph,
 ) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
 
         // Ideally, animation fetching should be done via its handle (the first argument of the
@@ -6185,20 +6230,12 @@ of animations manually.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn collect_events_from_absm(
-    absm: Handle&lt;Node&gt;,
+    absm: Handle&lt;AnimationBlendingStateMachine&gt;,
     strategy: AnimationEventCollectionStrategy,
     ctx: &amp;mut ScriptContext,
 ) -&gt; LayerAnimationEventsCollection {
-    if let Some(absm) = ctx
-        .scene
-        .graph
-        .try_get_of_type::&lt;AnimationBlendingStateMachine&gt;(absm)
-    {
-        if let Some(animation_player) = ctx
-            .scene
-            .graph
-            .try_get_of_type::&lt;AnimationPlayer&gt;(absm.animation_player())
-        {
+    if let Ok(absm) = ctx.scene.graph.try_get(absm) {
+        if let Ok(animation_player) = ctx.scene.graph.try_get(absm.animation_player()) {
             // Fetch a layer first, it could be any layer of the ABMS, but for simplicity
             // we'll use the first layer.
             if let Some(layer) = absm.machine().layers().first() {
@@ -6254,17 +6291,13 @@ be ignored. Also, if you don’t have any turns in your animation, you can also 
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn setup_root_motion(
-    animation_player: Handle&lt;Node&gt;,
+    animation_player: Handle&lt;AnimationPlayer&gt;,
     animation: Handle&lt;Animation&gt;,
     root_node: Handle&lt;Node&gt;,
     ctx: &amp;mut ScriptContext,
 ) {
-    if let Some(animation_player) = ctx
-        .scene
-        .graph
-        .try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player)
-    {
-        if let Some(animation) = animation_player.animations_mut().try_get_mut(animation) {
+    if let Ok(animation_player) = ctx.scene.graph.try_get_mut(animation_player) {
+        if let Ok(animation) = animation_player.animations_mut().try_get_mut(animation) {
             animation.set_root_motion_settings(Some(RootMotionSettings {
                 node: root_node,
                 ignore_x_movement: false,
@@ -6295,20 +6328,15 @@ In general, it could look something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_and_apply_root_motion(
-    absm: Handle&lt;Node&gt;,
-    rigid_body: Handle&lt;Node&gt;,
+    absm: Handle&lt;AnimationBlendingStateMachine&gt;,
+    rigid_body: Handle&lt;RigidBody&gt;,
     character_model: Handle&lt;Node&gt;,
     ctx: &amp;mut ScriptContext,
 ) {
     // Step 1. Fetch the velocity vector from the animation blending state machine.
     let transform = ctx.scene.graph[character_model].global_transform();
     let mut velocity = Vector3::default();
-    if let Some(state_machine) = ctx
-        .scene
-        .graph
-        .try_get(absm)
-        .and_then(|node| node.component_ref::&lt;AnimationBlendingStateMachine&gt;())
-    {
+    if let Ok(state_machine) = ctx.scene.graph.try_get(absm) {
         if let Some(root_motion) = state_machine.machine().pose().root_motion() {
             velocity = transform
                 .transform_vector(&amp;root_motion.delta_position)
@@ -6317,7 +6345,7 @@ In general, it could look something like this:</p>
     }
 
     // Step 2. Apply the velocity to the rigid body and lock rotations.
-    if let Some(body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(rigid_body) {
+    if let Ok(body) = ctx.scene.graph.try_get_mut(rigid_body) {
         body.set_ang_vel(Default::default());
         body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
     }
@@ -6419,7 +6447,7 @@ be useful for debugging to see trajectories and to trace short events. To clear 
 <code>clear_lines</code> method somewhere in your plugin’s <code>update</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -6464,7 +6492,7 @@ paths, however it could be very useful to actually see them when debugging game�
 <p>You can debug draw either all scene nodes at once:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -6483,7 +6511,7 @@ impl Plugin for Game {
 <p>Or filter out only specific ones:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -6506,7 +6534,7 @@ impl Plugin for Game {
 method of a physics world (2D or 3D) like so:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle&lt;Scene&gt;,
 }
@@ -6532,7 +6560,7 @@ to react to OS events on plugin scale and the latter - on script scale. Here’s
 events that could be used in your game (some rare events are omitted):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Reflect, Debug, Visit)]
+</span>#[derive(Reflect, Clone, Debug, Visit)]
 struct MyGame {}
 
 impl Plugin for MyGame {
@@ -7491,7 +7519,7 @@ if you don’t need to support such platforms, you can access the underlying gra
 use compute shaders as you want:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn use_gl_compute_shader(ctx: &amp;PluginContext) {
+</span>fn use_gl_compute_shader(ctx: &amp;mut PluginContext) {
     let GraphicsContext::Initialized(initialized_context) = ctx.graphics_context else {
         return;
     };
@@ -7653,6 +7681,7 @@ and the actual generation cancellation. When the generation is done, you should 
 
     MeshBuilder::new(BaseBuilder::new())
         .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+            uuid!("2b7b876d-29d5-4e08-93fc-d93d894f5459"),
             ResourceKind::Embedded,
             data,
         ))
@@ -7670,9 +7699,15 @@ and the actual generation cancellation. When the generation is done, you should 
     .build(&amp;mut scene.graph);
 
     // Prepare the data for generation using the scene.
-    let data =
-        LightmapInputData::from_scene(&amp;scene, |_, _| true, Default::default(), Default::default())
-            .unwrap();
+    let data = LightmapInputData::from_scene(
+        "lightmapTexture",
+        6,
+        &amp;scene,
+        |_, _| true,
+        Default::default(),
+        Default::default(),
+    )
+    .unwrap();
 
     // Generate the lightmap.
     let lightmap = Lightmap::new(data, 64, 0.005, Default::default(), Default::default()).unwrap();
@@ -7699,7 +7734,7 @@ need to change the light maps on the fly, you can use the following code:</p>
         "a/path/to/lightmap.lmp",
         resource_manager,
     ))
-    .unwrap();
+    .ok();
 
     scene.graph.set_lightmap(light_map).unwrap();
 }
@@ -8164,6 +8199,7 @@ avoided by embedding resources directly in the binary of your game using <code>i
 </span>fn embedded_resource() -&gt; Option&lt;Resource&lt;Texture&gt;&gt; {
     let data = include_bytes!("texture.png");
     TextureResource::load_from_memory(
+        uuid!("cb05986b-5483-4509-826c-8d90280b2eb8"),
         Default::default(),
         data,
         TextureImportOptions::default()
@@ -8386,7 +8422,7 @@ resource in the resource manager. This can be done by adding the following code 
 <code>impl PluginConstructor for GameConstructor</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame {}
 
 impl Plugin for MyGame {
@@ -8394,8 +8430,7 @@ impl Plugin for MyGame {
         context
             .resource_manager
             .state()
-            .loaders
-            .set(CustomResourceLoader);
+            .add_loader(CustomResourceLoader);
         Ok(())
     }
 }
@@ -8502,7 +8537,7 @@ will be called when the graphics context is either created or destroyed - <code>
 and <code>on_graphics_context_destroyed</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {}
 
 impl Plugin for Game {
@@ -8616,11 +8651,13 @@ method if the main window:</p>
             vsync: true,
             msaa_sample_count: None,
             graphics_server_constructor: GraphicsServerConstructor::default(),
+            named_objects: false,
         },
-        resource_manager: ResourceManager::new(task_pool.clone()),
+        resource_manager: ResourceManager::new(Arc::new(FsResourceIo), task_pool.clone()),
         serialization_context,
         task_pool,
         widget_constructors: Arc::new(new_widget_constructor_container()),
+        dyn_type_constructors: Arc::new(Default::default()),
     })
     .unwrap();
 
@@ -8628,6 +8665,7 @@ method if the main window:</p>
     let fixed_time_step = 1.0 / 60.0;
     let mut lag = 0.0;
 
+    #[allow(deprecated)]
     event_loop
         .run(move |event, window_target| {
             window_target.set_control_flow(ControlFlow::Wait);
@@ -8666,7 +8704,12 @@ method if the main window:</p>
                         // ************************
 
                         // It is very important to update the engine every frame!
-                        engine.update(fixed_time_step, window_target, &amp;mut lag, Default::default());
+                        engine.update(
+                            fixed_time_step,
+                            ApplicationLoopController::ActiveEventLoop(window_target),
+                            &amp;mut lag,
+                            Default::default(),
+                        );
                     }
 
                     if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {
@@ -8796,6 +8839,12 @@ pub struct Server {
     prev_node_states: FxHashMap&lt;Handle&lt;Node&gt;, NodeState&gt;,
 }
 
+impl Clone for Server {
+    fn clone(&amp;self) -&gt; Self {
+        panic!("non-cloneable!")
+    }
+}
+
 impl Server {
     const ADDRESS: &amp;'static str = "127.0.0.1:10000";
 
@@ -8826,9 +8875,16 @@ impl Server {
 }
 
 #[derive(Reflect)]
+#[reflect(non_cloneable)]
 pub struct Client {
     #[reflect(hidden)]
     connection: NetStream,
+}
+
+impl Clone for Client {
+    fn clone(&amp;self) -&gt; Self {
+        panic!("non-cloneable!")
+    }
 }
 
 impl Client {
@@ -8937,7 +8993,7 @@ across all clients, and it will make client-server synchronization reliable, sin
 a scene node:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub fn create_node_with_id(scene: &amp;mut Scene, id: Uuid) -&gt; Handle&lt;Node&gt; {
+</span>pub fn create_node_with_id(scene: &amp;mut Scene, id: Uuid) -&gt; Handle&lt;Pivot&gt; {
     PivotBuilder::new(BaseBuilder::new().with_instance_id(SceneNodeId(id))).build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre>
@@ -9022,23 +9078,15 @@ pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &am
         // The resource itself could be used as a task.
         ctx.resource_manager.request::&lt;Model&gt;(&amp;desc.path),
         // This closure will be called when the task (resource loading) is completed.
-        move |result, game: &amp;mut Game, ctx| match result {
-            Ok(model) =&gt; {
-                let scene = &amp;mut ctx.scenes[game.scene];
-                model
-                    .begin_instantiation(scene)
-                    .with_position(desc.position)
-                    .with_rotation(desc.rotation)
-                    .with_ids(&amp;desc.ids)
-                    .finish();
-            }
-            Err(err) =&gt; {
-                Log::err(format!(
-                    "Unable to instantiate {} prefab. Reason: {:?}",
-                    desc.path.display(),
-                    err
-                ));
-            }
+        move |result, game: &amp;mut Game, ctx| {
+            let scene = &amp;mut ctx.scenes[game.scene];
+            result?
+                .begin_instantiation(scene)
+                .with_position(desc.position)
+                .with_rotation(desc.rotation)
+                .with_ids(&amp;desc.ids)
+                .finish();
+            Ok(())
         },
     );
 }
@@ -9062,7 +9110,7 @@ pub struct NodeState {
 
 impl Server {
     pub fn sync(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let scene = ok_or_return!(ctx.scenes.try_get(scene));
         let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
         for (handle, node) in scene.graph.pair_iter() {
             entity_states.push(NodeState {
@@ -9087,7 +9135,7 @@ a simple, yet very efficient way of reducing the required network bandwidth and 
 </span><span class="boring">fn main() {
 </span>impl Server {
     pub fn sync_with_delta_compression(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let scene = ok_or_return!(ctx.scenes.try_get(scene));
         let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
         for (handle, node) in scene.graph.pair_iter() {
             let current_state = NodeState {
@@ -9229,7 +9277,7 @@ UI, it would force you to wrap it in <code>Rc&lt;RefCell&lt;..&gt;&gt;</code>/<c
 <p>Message dispatcher is very easy to write, all you need to do is to handle UI messages in <code>Plugin::on_ui_message</code> method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     button: Handle&lt;UiNode&gt;,
 }
@@ -9291,7 +9339,7 @@ widget in series of nested call of other widget builders. In code, it looks some
 </span>fn create_fancy_button(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
@@ -9314,7 +9362,7 @@ that contains text with some icon. To do that, replace <code>.with_text("My Butt
 </span>fn create_fancy_button_with_text(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
@@ -9347,7 +9395,7 @@ the fluent syntax:</p>
 </span>fn create_fancy_button_with_shortcut(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
     let image;
     ButtonBuilder::new(WidgetBuilder::new())
@@ -9368,7 +9416,7 @@ editor. See <a href="#ui-editor">Editor</a> chapter for more info.</p>
 <p>When a user interface is ready to be loaded in your game, you can do this like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     button: Handle&lt;UiNode&gt;,
 }
@@ -9444,7 +9492,7 @@ offscreen due to engine design. However, you can create a new user interface ins
 then render it to a texture. This could be done like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Visit, Reflect, Debug)]
+</span>#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct Game {
     // Add these fields to your game.
     my_ui: UserInterface,
@@ -9540,7 +9588,7 @@ scene and then use the texture (render target) in an <code>Image</code> widget.<
     height: u32,
     scene: &amp;mut Scene,
     context: &amp;mut PluginContext,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     // Create render target first.
     let render_target = TextureResource::new_render_target(width, height);
 
@@ -9585,8 +9633,9 @@ very simple:</p>
 </span><span class="boring">fn main() {
 </span>fn load_font_from_memory(data: Vec&lt;u8&gt;) -&gt; Resource&lt;Font&gt; {
     Resource::new_ok(
+        uuid!("6e0816bd-4c90-4f0d-9827-d6ecdde8d39c"),
         ResourceKind::Embedded,
-        Font::from_memory(data, 1024).unwrap(),
+        Font::from_memory(data, 1024, Default::default(), Default::default()).unwrap(),
     )
 }
 <span class="boring">}</span></code></pre>
@@ -9602,8 +9651,9 @@ a data buffer and create font using the data buffer:</p>
         .unwrap();
 
     Resource::new_ok(
+        uuid!("8e6e90be-e8af-4b7d-99e0-381868666ec0"),
         ResourceKind::Embedded,
-        Font::from_memory(data, 1024).unwrap(),
+        Font::from_memory(data, 1024, FontStyles::default(), Default::default()).unwrap(),
     )
 }
 <span class="boring">}</span></code></pre>
@@ -9621,7 +9671,7 @@ code snippet:</p>
 <p>All you need to do is to set font size in your Text or TextBox widgets like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text("Some text")
         .with_font_size(30.0.into()) // Sets the desired font size.
@@ -9632,11 +9682,7 @@ code snippet:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn set_font_size(text: Handle&lt;UiNode&gt;, ui: &amp;UserInterface, new_font_size: f32) {
-    ui.send_message(TextMessage::font_size(
-        text,
-        MessageDirection::ToWidget,
-        new_font_size.into(),
-    ))
+    ui.send(text, TextMessage::FontSize(new_font_size.into()))
 }
 <span class="boring">}</span></code></pre>
 <h2 id="important-notes"><a class="header" href="#important-notes">Important notes</a></h2>
@@ -9779,20 +9825,22 @@ impl MessageData for MyButtonMessage {}
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
 struct MyButton {
     widget: Widget,
-    border: Handle&lt;UiNode&gt;,
-    text: Handle&lt;UiNode&gt;,
+    border: Handle&lt;Border&gt;,
+    text: Handle&lt;Text&gt;,
 }
 
 define_widget_deref!(MyButton);
 
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
-        for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send(
-                handle,
-                WidgetMessage::Foreground(Brush::Solid(color).into()),
-            );
-        }
+        ui.send(
+            self.border,
+            WidgetMessage::Foreground(Brush::Solid(border_color).into()),
+        );
+        ui.send(
+            self.text,
+            WidgetMessage::Foreground(Brush::Solid(text_color).into()),
+        );
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
@@ -9894,7 +9942,7 @@ fn my_button_builder_usage(ctx: &amp;mut BuildContext) {
         .build(ctx);
 }
 
-#[derive(Default, Visit, Reflect, Debug)]
+#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     my_button: Handle&lt;UiNode&gt;,
 }
@@ -9940,20 +9988,22 @@ impl MessageData for MyButtonMessage {}
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
 struct MyButton {
     widget: Widget,
-    border: Handle&lt;UiNode&gt;,
-    text: Handle&lt;UiNode&gt;,
+    border: Handle&lt;Border&gt;,
+    text: Handle&lt;Text&gt;,
 }
 
 define_widget_deref!(MyButton);
 
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
-        for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send(
-                handle,
-                WidgetMessage::Foreground(Brush::Solid(color).into()),
-            );
-        }
+        ui.send(
+            self.border,
+            WidgetMessage::Foreground(Brush::Solid(border_color).into()),
+        );
+        ui.send(
+            self.text,
+            WidgetMessage::Foreground(Brush::Solid(text_color).into()),
+        );
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
@@ -10085,7 +10135,7 @@ in an application. All you need to do is to catch <code>MyButtonMessage::Click</
 in response:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Visit, Reflect, Debug)]
+</span>#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     my_button: Handle&lt;UiNode&gt;,
 }
@@ -10126,7 +10176,7 @@ being used.</p>
 <p>To create a simple button with text you should do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;Button&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_text("Click me!")
         .build(&amp;mut ui.build_ctx())
@@ -10136,7 +10186,7 @@ being used.</p>
 right aligned):</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_button_custom(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_button_custom(ui: &amp;mut UserInterface) -&gt; Handle&lt;Button&gt; {
     ButtonBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
@@ -10155,7 +10205,7 @@ right aligned):</p>
 </span>fn create_fancy_button(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
@@ -10173,7 +10223,7 @@ right aligned):</p>
 useful:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Debug, Reflect, Visit)]
+</span>#[derive(Debug, Clone, Reflect, Visit)]
 struct MyGame {
     button: Handle&lt;UiNode&gt;,
 }
@@ -10198,12 +10248,12 @@ impl Plugin for MyGame {
 <p>This example shows how to create a button that will close your game.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
-    quit_button_handle: Handle&lt;UiNode&gt;,
+    quit_button_handle: Handle&lt;Button&gt;,
 }
 
-fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;Button&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
@@ -10241,7 +10291,7 @@ impl Plugin for Game {
 thick border around a button widget:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_border_with_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_border_with_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;Border&gt; {
     BorderBuilder::new(
         WidgetBuilder::new().with_child(
             TextBuilder::new(WidgetBuilder::new())
@@ -10271,7 +10321,7 @@ The foreground will set the style of the boarder itself, while setting the backg
 the border. Below is an example of a blue border and a red background with white text inside.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_blue_border_with_red_background(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_blue_border_with_red_background(ui: &amp;mut UserInterface) -&gt; Handle&lt;Border&gt; {
     BorderBuilder::new(
         WidgetBuilder::new()
             .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)).into())
@@ -10305,7 +10355,7 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 <p>Use <code>CanvasBuilder</code> to create Canvas instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_canvas(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Canvas&gt; {
     CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
 }
 <span class="boring">}</span></code></pre>
@@ -10314,7 +10364,7 @@ is also canvas, so any widgets that are not attached to any other widgets can ha
 <p>Use <code>.with_desired_position</code> on children widgets to set specific position:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_canvas_with_children_widgets(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_canvas_with_children_widgets(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Canvas&gt; {
     CanvasBuilder::new(
         WidgetBuilder::new()
             .with_child(
@@ -10355,7 +10405,7 @@ data have such state.</p>
 <p>To create a checkbox you should do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_checkbox(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_checkbox(ui: &amp;mut UserInterface) -&gt; Handle&lt;CheckBox&gt; {
     CheckBoxBuilder::new(WidgetBuilder::new())
         // A custom value can be set during initialization.
         .checked(Some(true))
@@ -10369,7 +10419,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
 <p>Here’s an example of checkbox with textual content.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_checkbox_with_text(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_checkbox_with_text(ui: &amp;mut UserInterface) -&gt; Handle&lt;CheckBox&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     CheckBoxBuilder::new(WidgetBuilder::new())
@@ -10388,7 +10438,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
 a <code>CheckBoxMessage::Check</code> message. To do so, you can do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Default)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     checkbox: Handle&lt;UiNode&gt;,
 }
@@ -10441,7 +10491,7 @@ feedback the user.</p>
 <h2 id="example-3"><a class="header" href="#example-3">Example</a></h2>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_decorator(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_decorator(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Decorator&gt; {
     DecoratorBuilder::new(BorderBuilder::new(WidgetBuilder::new()))
         .with_hover_brush(Brush::Solid(Color::opaque(0, 255, 0)).into())
         .build(ctx)
@@ -10477,7 +10527,7 @@ windows. Only the windows from this list can be docked.</p>
 into two smaller tiles where each tile holds a separate window.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_docking_manager(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_docking_manager(ctx: &amp;mut BuildContext) -&gt; Handle&lt;DockingManager&gt; {
     let top_window = WindowBuilder::new(WidgetBuilder::new())
         .with_title(WindowTitle::text("Top Window"))
         .build(ctx);
@@ -10516,9 +10566,10 @@ save it and then load on the next session. Use the following code to save the la
 </span><span class="boring">fn main() {
 </span>fn save_layout(
     ui: &amp;UserInterface,
-    docking_manager_handle: Handle&lt;UiNode&gt;,
+    docking_manager_handle: Handle&lt;DockingManager&gt;,
 ) -&gt; Option&lt;DockingManagerLayoutDescriptor&gt; {
-    ui.try_get_of_type::&lt;DockingManager&gt;(docking_manager_handle)
+    ui.try_get(docking_manager_handle)
+        .ok()
         .as_ref()
         .map(|docking_manager| docking_manager.layout(ui))
 }
@@ -10537,16 +10588,19 @@ list to select its current item. It is used to show a single selected item in a 
 <p>A dropdown list with two text items with the last one selected, could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_drop_down_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_drop_down_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;DropdownList&gt; {
     DropdownListBuilder::new(WidgetBuilder::new())
-        .with_items(vec![
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item 0")
-                .build(ctx),
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item 1")
-                .build(ctx),
-        ])
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item 0")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item 1")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
         .with_selected(1)
         .build(ctx)
 }
@@ -10556,7 +10610,7 @@ in some other widget that shows the current state of items (selected, hovered, c
 of the most convenient ways of doing this is to use Decorator widget:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn make_item(text: &amp;str, ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn make_item(text: &amp;str, ctx: &amp;mut BuildContext) -&gt; Handle&lt;Decorator&gt; {
     DecoratorBuilder::new(BorderBuilder::new(
         WidgetBuilder::new().with_child(
             TextBuilder::new(WidgetBuilder::new())
@@ -10567,9 +10621,9 @@ of the most convenient ways of doing this is to use Decorator widget:</p>
     .build(ctx)
 }
 
-fn create_drop_down_list_with_decorators(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+fn create_drop_down_list_with_decorators(ctx: &amp;mut BuildContext) -&gt; Handle&lt;DropdownList&gt; {
     DropdownListBuilder::new(WidgetBuilder::new())
-        .with_items(vec![make_item("Item 0", ctx), make_item("Item 1", ctx)])
+        .with_items(vec![make_item("Item 0", ctx), make_item("Item 1", ctx)].to_base())
         .with_selected(1)
         .build(ctx)
 }
@@ -10585,13 +10639,11 @@ selection changes, use the following code:</p>
 
 impl Foo {
     fn on_ui_message(&amp;mut self, message: &amp;UiMessage) {
-        if let Some(DropdownListMessage::SelectionChanged(new_selection)) = message.data() {
-            if message.destination() == self.dropdown_list
-                &amp;&amp; message.direction() == MessageDirection::FromWidget
-            {
-                // Do something.
-                dbg!(new_selection);
-            }
+        if let Some(DropdownListMessage::Selection(new_selection)) =
+            message.data_from(self.dropdown_list)
+        {
+            // Do something.
+            dbg!(new_selection);
         }
     }
 }
@@ -10614,7 +10666,7 @@ create collapsible regions with headers.</p>
 buttons a content:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_expander(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_expander(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Expander&gt; {
     ExpanderBuilder::new(WidgetBuilder::new())
         // Header is visible all the time.
         .with_header(
@@ -10648,7 +10700,7 @@ of <code>crate::check_box::CheckBox</code> widget. By changing the arrow, you ca
 For example, you can set the new check box with image check marks, which will use custom graphics:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_expander_with_image(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_expander_with_image(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Expander&gt; {
     ExpanderBuilder::new(WidgetBuilder::new())
         .with_checkbox(
             CheckBoxBuilder::new(WidgetBuilder::new())
@@ -10672,7 +10724,7 @@ For example, you can set the new check box with image check marks, which will us
 <p>Use <code>ExpanderMessage::Expand</code> message to catch the moment when its state changes:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Default)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     expander: Handle&lt;UiNode&gt;,
 }
@@ -10712,7 +10764,7 @@ implies, is able to position children widgets into a grid of specifically sized 
 <p>Here is a simple example that positions several text widgets into a 2 by 2 grid:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
+</span>fn create_text_grid(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;Grid&gt; {
     GridBuilder::new(
         WidgetBuilder::new()
             .with_child(
@@ -10768,7 +10820,7 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
 <h2 id="usage-4"><a class="header" href="#usage-4">Usage</a></h2>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;Image&gt; {
     // You must explicitly set width and height of the image, otherwise it will collapse to a
     // point and you won't see anything.
     let width = 100.0;
@@ -10792,7 +10844,7 @@ bounds first and then create an Image width these bounds:</p>
 </span>async fn create_image_equal_in_size_to_source(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
         .request::&lt;Texture&gt;("path/to/your/texture.png")
@@ -10824,7 +10876,7 @@ promise immediately:</p>
 </span>fn create_image_sync(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     fyrox::core::futures::executor::block_on(create_image_equal_in_size_to_source(
         ctx,
         resource_manager,
@@ -10838,7 +10890,7 @@ promise immediately:</p>
 </span>fn create_flipped_image(
     ctx: &amp;mut BuildContext,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
         .with_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/texture.png"))
@@ -10865,16 +10917,19 @@ items, see the section below).</p>
 <p><code>ListView</code> can be created using <code>ListViewBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ListView&gt; {
     ListViewBuilder::new(WidgetBuilder::new())
-        .with_items(vec![
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item0")
-                .build(ctx),
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item1")
-                .build(ctx),
-        ])
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item0")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item1")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre>
@@ -10886,18 +10941,21 @@ in rare cases you might want to use something else. For example, you could use <
 selectable “tiles”:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_list_with_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_list_with_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ListView&gt; {
     ListViewBuilder::new(WidgetBuilder::new())
         // Using WrapPanel instead of StackPanel:
         .with_items_panel(WrapPanelBuilder::new(WidgetBuilder::new()).build(ctx))
-        .with_items(vec![
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item0")
-                .build(ctx),
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item1")
-                .build(ctx),
-        ])
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item0")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item1")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre>
@@ -10908,11 +10966,7 @@ you can change it at runtime by sending [<code>ListViewMessage::SelectionChanged
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn change_selection(my_list_view: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ListViewMessage::selection(
-        my_list_view,
-        MessageDirection::ToWidget,
-        vec![1],
-    ));
+    ui.send(my_list_view, ListViewMessage::Selection(vec![1]));
 }
 <span class="boring">}</span></code></pre>
 <p>It is also possible to not have selected item at all, to do this you need to send an empty vector as a selection.
@@ -10921,12 +10975,8 @@ you need to listen to the same message but with opposite direction, like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn do_something(my_list_view: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
-    if let Some(ListViewMessage::SelectionChanged(selection)) = message.data() {
-        if message.destination() == my_list_view
-            &amp;&amp; message.direction() == MessageDirection::FromWidget
-        {
-            println!("New selection is: {:?}", selection);
-        }
+    if let Some(ListViewMessage::Selection(selection)) = message.data_from(my_list_view) {
+        println!("New selection is: {:?}", selection);
     }
 }
 <span class="boring">}</span></code></pre>
@@ -10944,13 +10994,10 @@ you need to listen to the same message but with opposite direction, like so:</p>
         TextBuilder::new(WidgetBuilder::new())
             .with_text("Item1")
             .build(ctx),
-    ];
+    ]
+    .to_base();
     // Then send the message with their handles to the list view.
-    ui.send_message(ListViewMessage::items(
-        my_list_view,
-        MessageDirection::ToWidget,
-        items,
-    ));
+    ui.send(my_list_view, ListViewMessage::Items(items));
 }
 <span class="boring">}</span></code></pre>
 <h2 id="bringing-a-particular-item-into-view"><a class="header" href="#bringing-a-particular-item-into-view">Bringing a particular item into view</a></h2>
@@ -10961,11 +11008,7 @@ message:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn bring_item_into_view(my_list_view: Handle&lt;UiNode&gt;, my_item: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ListViewMessage::bring_item_into_view(
-        my_list_view,
-        MessageDirection::ToWidget,
-        my_item,
-    ));
+    ui.send(my_list_view, ListViewMessage::BringItemIntoView(my_item));
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -10982,7 +11025,7 @@ type.</p>
 <p>Use <code>NumericUpDownBuilder</code> to create a new instance of the <code>NumericUpDown</code> widget:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(123.0f32)
         .build(ctx)
@@ -10997,7 +11040,7 @@ and <code>NumericUpDownBuilder::with_max_value</code> (or changed at runtime usi
 messages):</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget_with_limits(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget_with_limits(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(123.0f32)
         .with_min_value(42.0)
@@ -11011,7 +11054,7 @@ messages):</p>
 provides a way to set the step of the value (for increment and decrement at the same time):</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget_with_step(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget_with_step(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(125.0f32)
         .with_step(5.0)
@@ -11025,7 +11068,7 @@ the actual value is rounded). For example, in some cases you might get irrationa
 but you interested in only first two decimal places. In this case you can set the precision to <code>2</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget_with_precision(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget_with_precision(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(0.3333333f32)
         .with_precision(2)
@@ -11039,7 +11082,7 @@ but you interested in only first two decimal places. In this case you can set th
 <p>A simple popup with a button could be created using the following code:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_with_button(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_with_button(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Popup&gt; {
     PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -11053,7 +11096,7 @@ but you interested in only first two decimal places. In this case you can set th
 it, otherwise you won’t see it:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_with_button_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_with_button_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;Popup&gt; {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -11062,7 +11105,7 @@ it, otherwise you won’t see it:</p>
         )
         .build(&amp;mut ui.build_ctx());
     // Open the popup explicitly.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 <span class="boring">}</span></code></pre>
@@ -11071,7 +11114,7 @@ it, otherwise you won’t see it:</p>
 they’re usually open above some other widget with specific alignment (right, left, center, etc.).</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_with_button_and_placement_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_with_button_and_placement_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;Popup&gt; {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -11082,7 +11125,7 @@ they’re usually open above some other widget with specific alignment (right, l
         .with_placement(Placement::Cursor(Handle::NONE))
         .build(&amp;mut ui.build_ctx());
     // Open the popup explicitly at the current placement.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 <span class="boring">}</span></code></pre>
@@ -11096,7 +11139,7 @@ is used to display content of the list. In this case, you could specify the plac
 </span>fn create_popup_with_button_and_bottom_placement_and_open_it(
     dropdown_list: Handle&lt;UiNode&gt;,
     ui: &amp;mut UserInterface,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Popup&gt; {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -11107,7 +11150,7 @@ is used to display content of the list. In this case, you could specify the plac
         .with_placement(Placement::LeftBottom(dropdown_list))
         .build(&amp;mut ui.build_ctx());
     // Open the popup explicitly at the current placement.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 <span class="boring">}</span></code></pre>
@@ -11122,7 +11165,7 @@ you can see it almost every time you use context menus in various apps. There ar
 and it can be turned off:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_that_stays_open(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_that_stays_open(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Popup&gt; {
     PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -11145,7 +11188,7 @@ show progress for long actions.</p>
 <h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ProgressBar&gt; {
     ProgressBarBuilder::new(WidgetBuilder::new())
         // Keep mind, that the progress is "normalized", which means that it is defined on
         // [0..1] range, where 0 - no progress at all, 1 - maximum progress.
@@ -11163,11 +11206,7 @@ methods respectively. These methods can accept any widget, but usually it i a
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn change_progress(progress_bar: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ProgressBarMessage::progress(
-        progress_bar,
-        MessageDirection::ToWidget,
-        0.33,
-    ));
+    ui.send(progress_bar, ProgressBarMessage::Progress(0.33));
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -11187,7 +11226,7 @@ value that lies within some range.</p>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_scroll_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ScrollBar&gt; {
     ScrollBarBuilder::new(WidgetBuilder::new())
         .with_min(0.0)
         .with_max(200.0)
@@ -11199,7 +11238,7 @@ value that lies within some range.</p>
 of the scroll bar, use <code>ScrollBarMessage::Value</code> message:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Default)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     scroll_bar: Handle&lt;UiNode&gt;,
 }
@@ -11243,7 +11282,7 @@ scrolling functionality.</p>
 <h2 id="examples-3"><a class="header" href="#examples-3">Examples</a></h2>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_scroll_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ScrollPanel&gt; {
     ScrollPanelBuilder::new(
         WidgetBuilder::new().with_child(
             GridBuilder::new(
@@ -11281,16 +11320,11 @@ scrolling functionality.</p>
     vertical: f32,
     ui: &amp;UserInterface,
 ) {
-    ui.send_message(ScrollPanelMessage::horizontal_scroll(
+    ui.send(
         scroll_panel,
-        MessageDirection::ToWidget,
-        horizontal,
-    ));
-    ui.send_message(ScrollPanelMessage::vertical_scroll(
-        scroll_panel,
-        MessageDirection::ToWidget,
-        vertical,
-    ));
+        ScrollPanelMessage::HorizontalScroll(horizontal),
+    );
+    ui.send(scroll_panel, ScrollPanelMessage::VerticalScroll(vertical));
 }
 <span class="boring">}</span></code></pre>
 <h2 id="bringing-child-into-view"><a class="header" href="#bringing-child-into-view">Bringing child into view</a></h2>
@@ -11298,11 +11332,7 @@ scrolling functionality.</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn bring_child_into_view(scroll_panel: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ScrollPanelMessage::bring_into_view(
-        scroll_panel,
-        MessageDirection::ToWidget,
-        child,
-    ))
+    ui.send(scroll_panel, ScrollPanelMessage::BringIntoView(child))
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -11316,7 +11346,7 @@ the content.</p>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_scroll_viewer(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_viewer(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ScrollViewer&gt; {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         .with_content(
             StackPanelBuilder::new(
@@ -11343,7 +11373,7 @@ the content.</p>
 scrolls vertical axis, which can be changed by holding <code>Shift</code> key. Scrolling speed can be set during the build phase:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_scroll_viewer_with_speed(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_viewer_with_speed(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ScrollViewer&gt; {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         // Set vertical scrolling speed twice as fast as default scrolling speed.
         .with_v_scroll_speed(60.0)
@@ -11358,11 +11388,7 @@ scrolls vertical axis, which can be changed by holding <code>Shift</code> key. S
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn bring_child_into_view(scroll_viewer: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ScrollViewerMessage::bring_into_view(
-        scroll_viewer,
-        MessageDirection::ToWidget,
-        child,
-    ))
+    ui.send(scroll_viewer, ScrollViewerMessage::BringIntoView(child))
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -11390,7 +11416,7 @@ will always be centered in the current screen bounds. It creates something simil
 but not so fancy.</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_always_centered_game_menu(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_always_centered_game_menu(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Screen&gt; {
     // Screen widget will provide current screen size to its Grid widget as a layout constraint,
     // thus making it fit to the current screen bounds.
     ScreenBuilder::new(
@@ -11442,7 +11468,7 @@ So the first widget added will be at the top or left most position, while each a
 bottom or continue from left most to right most. The below example code places 3 text widgets into a vertical stack:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
+</span>fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;StackPanel&gt; {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(
@@ -11473,7 +11499,7 @@ Horizontal, Left most to right most. This is done using the StackPanelBuilder’
 with a gui::Orientation enum value. <strong>By default,</strong> all StackPanel’s are Vertical.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_horizontal_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
+</span>fn create_horizontal_stack_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;StackPanel&gt; {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(
@@ -11507,22 +11533,28 @@ header and the other representing the tab’s contents.</p>
 </span>fn create_tab_control(ctx: &amp;mut BuildContext) {
     TabControlBuilder::new(WidgetBuilder::new())
         .with_tab(TabDefinition {
+            uuid: uuid!("fefcd6a1-4872-4571-8562-77a32c33bcaf"),
             header: TextBuilder::new(WidgetBuilder::new())
                 .with_text("First")
-                .build(ctx),
+                .build(ctx)
+                .to_base(),
             content: TextBuilder::new(WidgetBuilder::new())
                 .with_text("First tab's contents!")
-                .build(ctx),
+                .build(ctx)
+                .to_base(),
             can_be_closed: true,
             user_data: None,
         })
         .with_tab(TabDefinition {
+            uuid: uuid!("042bd473-afc6-438c-93f0-2a81b11bc02f"),
             header: TextBuilder::new(WidgetBuilder::new())
                 .with_text("Second")
-                .build(ctx),
+                .build(ctx)
+                .to_base(),
             content: TextBuilder::new(WidgetBuilder::new())
                 .with_text("Second tab's contents!")
-                .build(ctx),
+                .build(ctx)
+                .to_base(),
             can_be_closed: true,
             user_data: None,
         })
@@ -11547,12 +11579,15 @@ code example and you will get a decent look:</p>
 </span><span class="boring">fn main() {
 </span>fn create_tab_control_with_header(ctx: &amp;mut BuildContext) {
     TabControlBuilder::new(WidgetBuilder::new()).with_tab(TabDefinition {
+        uuid: uuid!("e866c6ea-de94-4471-ba4a-9920631189d6"),
         header: TextBuilder::new(WidgetBuilder::new().with_margin(Thickness::uniform(4.0)))
             .with_text("First")
-            .build(ctx),
+            .build(ctx)
+            .to_base(),
         content: TextBuilder::new(WidgetBuilder::new())
             .with_text("First tab's contents!")
-            .build(ctx),
+            .build(ctx)
+            .to_base(),
         can_be_closed: true,
         user_data: None,
     });
@@ -11566,7 +11601,7 @@ alignment, and so on.</p>
 <p>An instance of the Text widget could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
@@ -11578,7 +11613,7 @@ alignment, and so on.</p>
 centered text could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
@@ -11590,7 +11625,7 @@ centered text could be created like so:</p>
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
         .with_text(text)
@@ -11602,7 +11637,7 @@ centered text could be created like so:</p>
 text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <code>Text</code> widget!</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Border&gt; {
     let text_widget =
         TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
             .with_text(text)
@@ -11621,7 +11656,7 @@ position the border, not the text.</p>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_colored_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_colored_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     //               vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
@@ -11635,7 +11670,7 @@ position the border, not the text.</p>
     ui: &amp;mut UserInterface,
     text: &amp;str,
     resource_manager: &amp;ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
@@ -11651,7 +11686,7 @@ on the background colors. This effect could be used for subtitles. Shadows are p
 is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
@@ -11683,11 +11718,7 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn request_change_text(ui: &amp;UserInterface, text_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
-    ui.send_message(TextMessage::text(
-        text_widget_handle,
-        MessageDirection::ToWidget,
-        text.to_owned(),
-    ))
+    ui.send(text_widget_handle, TextMessage::Text(text.to_owned()))
 }
 <span class="boring">}</span></code></pre>
 <p>Please keep in mind, that like any other situation when you “changing” something via messages, you should remember
@@ -11701,7 +11732,7 @@ word wrapping, text alignment, and so on.</p>
 <p>An instance of the TextBox widget could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
@@ -11713,7 +11744,7 @@ word wrapping, text alignment, and so on.</p>
 centered text could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
@@ -11725,7 +11756,7 @@ centered text could be created like so:</p>
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
         .with_text(text)
@@ -11736,7 +11767,7 @@ centered text could be created like so:</p>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_colored_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_colored_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     //                  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
@@ -11750,7 +11781,7 @@ centered text could be created like so:</p>
     ui: &amp;mut UserInterface,
     text: &amp;str,
     resource_manager: &amp;ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
@@ -11766,7 +11797,7 @@ independent on the background colors. This effect could be used for subtitles. S
 need to do is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
@@ -11802,11 +11833,7 @@ need to do is to enable them, setup desired thickness, offset and brush (solid c
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn request_change_text(ui: &amp;UserInterface, text_box_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
-    ui.send_message(TextMessage::text(
-        text_box_widget_handle,
-        MessageDirection::ToWidget,
-        text.to_owned(),
-    ))
+    ui.send(text_box_widget_handle, TextMessage::Text(text.to_owned()))
 }
 <span class="boring">}</span></code></pre>
 <p>Please keep in mind, that like any other situation when you “changing” something via messages, you should remember
@@ -11864,7 +11891,7 @@ pressed. This is <strong>default</strong> behavior. In case of multiline text bo
 phone number. A filter can be specified at build stage like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_box_with_filter(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_box_with_filter(ui: &amp;mut UserInterface) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         // Specify a filter that will pass only digits.
         .with_filter(Arc::new(Mutex::new(|c: char| c.is_ascii_digit())))
@@ -12064,7 +12091,11 @@ on the picture above there are two yellow lines forming a cross.</p>
 <p>The following example creates a cross shape with given size and thickness:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn make_cross_vector_image(ctx: &amp;mut BuildContext, size: f32, thickness: f32) -&gt; Handle&lt;UiNode&gt; {
+</span>fn make_cross_vector_image(
+    ctx: &amp;mut BuildContext,
+    size: f32,
+    thickness: f32,
+) -&gt; Handle&lt;VectorImage&gt; {
     VectorImageBuilder::new(
         WidgetBuilder::new()
             // Color of the image is defined by the foreground brush of the base widget.
@@ -12152,7 +12183,7 @@ that does not have enough space on current line, will automatically be placed on
 <p>Use <code>WrapPanelBuilder</code> to create new wrap panel instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_wrap_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_wrap_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;WrapPanel&gt; {
     WrapPanelBuilder::new(WidgetBuilder::new())
         .with_orientation(Orientation::Horizontal)
         .build(ctx)
@@ -12257,9 +12288,9 @@ like so:</p>
         object.visit("MyObject", &amp;mut visitor)?;
 
         // Dump to the path.
-        visitor.save_binary(path)
+        visitor.save_binary_to_file(path)
     } else {
-        let mut visitor = Visitor::load_binary(path).await?;
+        let mut visitor = Visitor::load_binary_from_file(path).await?;
 
         // Create default instance of an object.
         let mut my_object = MyStruct::default();
@@ -12333,7 +12364,7 @@ your scene which can be loaded later as an ordinary scene and the engine will do
 this system is very simple:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Default)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyGame {
     scene: Handle&lt;Scene&gt;,
 }
@@ -12357,7 +12388,7 @@ impl MyGame {
             .save("Scene", &amp;mut visitor)
             .unwrap();
         // Save it to a file.
-        visitor.save_binary(Path::new("save.rgs")).unwrap()
+        visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
     fn load_game(&amp;mut self, context: &amp;mut PluginContext) {
@@ -12407,13 +12438,13 @@ respective methods for saving/loading. Also, these methods could be used when a 
 to do:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Default)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyData {
     foo: String,
     bar: u32,
 }
 
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyGame {
     scene: Handle&lt;Scene&gt;,
     data: MyData,
@@ -12565,7 +12596,7 @@ file, after editor’s initialization.</p>
 editor will be <code>InspectablePropertyEditorDefinition</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Reflect, Debug)]
+</span>#[derive(Reflect, Clone, Debug)]
 struct MyStruct {
     foo: u32,
     bar: String,
@@ -12573,8 +12604,6 @@ struct MyStruct {
 
 fn add_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
 }
@@ -12605,8 +12634,6 @@ enum MyEnum {
 
 fn add_enum_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(EnumPropertyEditorDefinition::&lt;MyEnum&gt;::new());
 }
@@ -12632,23 +12659,17 @@ struct MyScript {
 
 fn add_inheritable_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // This is responsible for supporting inheritable properties in scripts.
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InheritablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // Alternatively, the two previous insertions could be replaced by a single call of helper
     // method:
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .register_inheritable_inspectable::&lt;MyStruct&gt;();
 }
@@ -12666,24 +12687,18 @@ struct MyOtherScript {
 
 fn add_collection_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // VecCollectionPropertyEditorDefinition is used to create a property editor for Vec&lt;MyStruct&gt;,
     // internally it uses a registered property editor for its generic argument (MyStruct).
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(VecCollectionPropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // Alternatively, you can use a special helper method to replace the two blocks above by a
     // single one.
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .register_inheritable_vec_collection::&lt;MyOtherStruct&gt;();
 }
@@ -12811,9 +12826,7 @@ suitable for editing via our plugin, this is where <code>on_message</code> could
 </span><span class="boring">fn main() {
 </span>    fn on_message(&amp;mut self, message: &amp;Message, editor: &amp;mut Editor) {
         // Fetch the active scene.
-        let Some(entry) = editor.scenes.current_scene_entry_mut() else {
-            return;
-        };
+        let entry = editor.scenes.current_scene_entry_mut();
 
         let Some(selection) = entry.selection.as_graph() else {
             return;
@@ -12835,7 +12848,7 @@ suitable for editing via our plugin, this is where <code>on_message</code> could
                 if scene
                     .graph
                     .try_get_script_of::&lt;MyScript&gt;(*node_handle)
-                    .is_some()
+                    .is_ok()
                 {
                     self.node_handle = *node_handle;
 
@@ -12867,7 +12880,7 @@ impl LinePointsGizmo {
         game_scene: &amp;GameScene,
         graph: &amp;mut Graph,
     ) {
-        let Some(script) = graph.try_get_script_of::&lt;MyScript&gt;(node_handle) else {
+        let Ok(script) = graph.try_get_script_of::&lt;MyScript&gt;(node_handle) else {
             return;
         };
         let points = script.points.clone();
@@ -12881,7 +12894,7 @@ impl LinePointsGizmo {
                     .with_size(0.1)
                     .build(graph);
 
-                self.point_nodes.push(point_node);
+                self.point_nodes.push(point_node.to_base());
 
                 // Link the sprite with the special scene node - the name of it should clearly state
                 // its purpose.
@@ -12985,7 +12998,7 @@ impl MyInteractionMode {
 <p>Now onto the <code>InteractionMode</code> trait implementation, let’s start by adding implementation for <code>make_button</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn make_button(&amp;mut self, ctx: &amp;mut BuildContext, selected: bool) -&gt; Handle&lt;UiNode&gt; {
+</span>    fn make_button(&amp;mut self, ctx: &amp;mut BuildContext, selected: bool) -&gt; Handle&lt;Button&gt; {
         make_interaction_mode_button(ctx, include_bytes!("icon.png"), "Line Edit Mode", selected)
     }
 <span class="boring">}</span></code></pre>
@@ -13016,7 +13029,10 @@ method:</p>
                 cursor_pos: mouse_pos,
                 editor_only: true,
                 filter: Some(&amp;mut |handle, _| handle != self.move_gizmo.origin),
-                ..Default::default()
+                ignore_back_faces: false,
+                use_picking_loop: false,
+                method: Default::default(),
+                settings: &amp;settings.selection,
             },
         ) {
             // The gizmo needs to be fed with input events as well, so it can react to the cursor.
@@ -13075,7 +13091,7 @@ and there’s some point selected.</p>
                 drag_context.plane_kind,
             );
 
-            if let Some(script) = scene
+            if let Ok(script) = scene
                 .graph
                 .try_get_script_of_mut::&lt;MyScript&gt;(self.node_handle)
             {
@@ -13104,7 +13120,7 @@ and there’s some point selected.</p>
         let scene = &amp;mut engine.scenes[game_scene.scene];
 
         if let Some(drag_context) = self.drag_context.take() {
-            if let Some(script) = scene
+            if let Ok(script) = scene
                 .graph
                 .try_get_script_of_mut::&lt;MyScript&gt;(self.node_handle)
             {
@@ -13294,7 +13310,7 @@ change position of a point at index 1:</p>
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::&lt;MyScript&gt;()
-                .unwrap()
+                .map(|s| s as &amp;mut dyn Reflect)
         },
     ))
 }
@@ -13322,7 +13338,7 @@ is something like this:</p>
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::&lt;MyScript&gt;()
-                .unwrap()
+                .map(|s| s as &amp;mut dyn Reflect)
         },
     ))
 }
@@ -13348,7 +13364,7 @@ use this index in the command. Typical usage is something like this:</p>
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::&lt;MyScript&gt;()
-                .unwrap()
+                .map(|s| s as &amp;mut dyn Reflect)
         },
     ))
 }

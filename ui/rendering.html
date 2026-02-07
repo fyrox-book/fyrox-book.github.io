@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -205,7 +205,7 @@ offscreen due to engine design. However, you can create a new user interface ins
 then render it to a texture. This could be done like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Visit, Reflect, Debug)]
+</span>#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct Game {
     // Add these fields to your game.
     my_ui: UserInterface,
@@ -301,7 +301,7 @@ scene and then use the texture (render target) in an <code>Image</code> widget.<
     height: u32,
     scene: &amp;mut Scene,
     context: &amp;mut PluginContext,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     // Create render target first.
     let render_target = TextureResource::new_render_target(width, height);
 

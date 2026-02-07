@@ -1,6 +1,6 @@
 use fyrox::core::pool::Handle;
 use fyrox::core::ComponentProvider;
-use fyrox::graph::BaseSceneGraph;
+use fyrox::graph::SceneGraph;
 use fyrox::scene::graph::Graph;
 use fyrox::scene::node::Node;
 use fyrox::{

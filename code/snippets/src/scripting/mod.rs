@@ -131,7 +131,7 @@ impl ScriptTrait for LaserSight {
 // ANCHOR_END: message_passing
 
 // ANCHOR: access_plugin
-#[derive(Default, Debug, Reflect, Visit)]
+#[derive(Default, Debug, Clone, Reflect, Visit)]
 struct GamePlugin {
     bots: Vec<Handle<Node>>,
 }

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -199,14 +199,14 @@ your objects.</p>
 <p>Use RigidBodyBuilder to create a rigid body instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_cube_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_cube_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;RigidBody&gt; {
     RigidBodyBuilder::new(
-        BaseBuilder::new().with_children(&amp;[
+        BaseBuilder::new().with_child(
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]),
+        ),
     )
     .with_mass(2.0)
     .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
@@ -248,14 +248,14 @@ applying force to a rigid body: at center of mass or at particular point at the 
 do simulation for the body. This can be achieved by making the rigid body <em>kinematic</em>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_kinematic_rigid_body(graph: &amp;mut Graph) -&gt; Handle&lt;RigidBody&gt; {
     RigidBodyBuilder::new(
-        BaseBuilder::new().with_children(&amp;[
+        BaseBuilder::new().with_child(
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]),
+        ),
     )
     .with_body_type(RigidBodyType::KinematicPositionBased)
     .build(graph)

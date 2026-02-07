@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -281,7 +281,7 @@ resource in the resource manager. This can be done by adding the following code 
 <code>impl PluginConstructor for GameConstructor</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame {}
 
 impl Plugin for MyGame {
@@ -289,8 +289,7 @@ impl Plugin for MyGame {
         context
             .resource_manager
             .state()
-            .loaders
-            .set(CustomResourceLoader);
+            .add_loader(CustomResourceLoader);
         Ok(())
     }
 }

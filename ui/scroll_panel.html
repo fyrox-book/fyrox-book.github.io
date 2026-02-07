@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -200,7 +200,7 @@ scrolling functionality.</p>
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_scroll_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_scroll_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ScrollPanel&gt; {
     ScrollPanelBuilder::new(
         WidgetBuilder::new().with_child(
             GridBuilder::new(
@@ -238,16 +238,11 @@ scrolling functionality.</p>
     vertical: f32,
     ui: &amp;UserInterface,
 ) {
-    ui.send_message(ScrollPanelMessage::horizontal_scroll(
+    ui.send(
         scroll_panel,
-        MessageDirection::ToWidget,
-        horizontal,
-    ));
-    ui.send_message(ScrollPanelMessage::vertical_scroll(
-        scroll_panel,
-        MessageDirection::ToWidget,
-        vertical,
-    ));
+        ScrollPanelMessage::HorizontalScroll(horizontal),
+    );
+    ui.send(scroll_panel, ScrollPanelMessage::VerticalScroll(vertical));
 }
 <span class="boring">}</span></code></pre>
 <h2 id="bringing-child-into-view"><a class="header" href="#bringing-child-into-view">Bringing child into view</a></h2>
@@ -255,11 +250,7 @@ scrolling functionality.</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn bring_child_into_view(scroll_panel: Handle&lt;UiNode&gt;, child: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ScrollPanelMessage::bring_into_view(
-        scroll_panel,
-        MessageDirection::ToWidget,
-        child,
-    ))
+    ui.send(scroll_panel, ScrollPanelMessage::BringIntoView(child))
 }
 <span class="boring">}</span></code></pre>
 

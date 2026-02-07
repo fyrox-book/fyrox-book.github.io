@@ -1,4 +1,5 @@
-use fyrox::graph::BaseSceneGraph;
+use fyrox::graph::SceneGraph;
+use fyrox::scene::sound::Sound;
 use fyrox::{
     asset::manager::ResourceManager,
     core::pool::Handle,
@@ -19,7 +20,7 @@ pub fn load_sound(path: &Path, resource_manager: &ResourceManager) -> SoundBuffe
 // ANCHOR_END: load_sound
 
 // ANCHOR: build_sound_node
-fn build_sound_node(resource_manager: &ResourceManager, scene: &mut Scene) -> Handle<Node> {
+fn build_sound_node(resource_manager: &ResourceManager, scene: &mut Scene) -> Handle<Sound> {
     let sound = resource_manager.request::<SoundBuffer>("/path/to/resource.ogg");
 
     SoundBuilder::new(BaseBuilder::new())

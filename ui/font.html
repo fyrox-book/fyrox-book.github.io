@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -211,8 +211,9 @@ very simple:</p>
 </span><span class="boring">fn main() {
 </span>fn load_font_from_memory(data: Vec&lt;u8&gt;) -&gt; Resource&lt;Font&gt; {
     Resource::new_ok(
+        uuid!("6e0816bd-4c90-4f0d-9827-d6ecdde8d39c"),
         ResourceKind::Embedded,
-        Font::from_memory(data, 1024).unwrap(),
+        Font::from_memory(data, 1024, Default::default(), Default::default()).unwrap(),
     )
 }
 <span class="boring">}</span></code></pre>
@@ -228,8 +229,9 @@ a data buffer and create font using the data buffer:</p>
         .unwrap();
 
     Resource::new_ok(
+        uuid!("8e6e90be-e8af-4b7d-99e0-381868666ec0"),
         ResourceKind::Embedded,
-        Font::from_memory(data, 1024).unwrap(),
+        Font::from_memory(data, 1024, FontStyles::default(), Default::default()).unwrap(),
     )
 }
 <span class="boring">}</span></code></pre>
@@ -247,7 +249,7 @@ code snippet:</p>
 <p>All you need to do is to set font size in your Text or TextBox widgets like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn text(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text("Some text")
         .with_font_size(30.0.into()) // Sets the desired font size.
@@ -258,11 +260,7 @@ code snippet:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn set_font_size(text: Handle&lt;UiNode&gt;, ui: &amp;UserInterface, new_font_size: f32) {
-    ui.send_message(TextMessage::font_size(
-        text,
-        MessageDirection::ToWidget,
-        new_font_size.into(),
-    ))
+    ui.send(text, TextMessage::FontSize(new_font_size.into()))
 }
 <span class="boring">}</span></code></pre>
 <h2 id="important-notes"><a class="header" href="#important-notes">Important notes</a></h2>

@@ -1,5 +1,4 @@
-use fyrox::gui::message::MessageDirection;
-use fyrox::gui::scroll_panel::ScrollPanelMessage;
+use fyrox::gui::scroll_panel::{ScrollPanel, ScrollPanelMessage};
 use fyrox::gui::{
     button::ButtonBuilder,
     core::{algebra::Vector2, pool::Handle},
@@ -10,7 +9,7 @@ use fyrox::gui::{
 };
 
 // ANCHOR: create_scroll_panel
-fn create_scroll_panel(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_scroll_panel(ctx: &mut BuildContext) -> Handle<ScrollPanel> {
     ScrollPanelBuilder::new(
         WidgetBuilder::new().with_child(
             GridBuilder::new(
@@ -46,25 +45,16 @@ fn set_scrolling_value(
     vertical: f32,
     ui: &UserInterface,
 ) {
-    ui.send_message(ScrollPanelMessage::horizontal_scroll(
+    ui.send(
         scroll_panel,
-        MessageDirection::ToWidget,
-        horizontal,
-    ));
-    ui.send_message(ScrollPanelMessage::vertical_scroll(
-        scroll_panel,
-        MessageDirection::ToWidget,
-        vertical,
-    ));
+        ScrollPanelMessage::HorizontalScroll(horizontal),
+    );
+    ui.send(scroll_panel, ScrollPanelMessage::VerticalScroll(vertical));
 }
 // ANCHOR_END: set_scrolling_value
 
 // ANCHOR: bring_child_into_view
 fn bring_child_into_view(scroll_panel: Handle<UiNode>, child: Handle<UiNode>, ui: &UserInterface) {
-    ui.send_message(ScrollPanelMessage::bring_into_view(
-        scroll_panel,
-        MessageDirection::ToWidget,
-        child,
-    ))
+    ui.send(scroll_panel, ScrollPanelMessage::BringIntoView(child))
 }
 // ANCHOR_END: bring_child_into_view

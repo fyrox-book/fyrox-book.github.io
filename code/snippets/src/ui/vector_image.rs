@@ -1,13 +1,18 @@
+use fyrox::gui::vector_image::VectorImage;
 use fyrox::gui::{
     core::{algebra::Vector2, pool::Handle},
     style::{resource::StyleResourceExt, Style},
     vector_image::{Primitive, VectorImageBuilder},
     widget::WidgetBuilder,
-    BuildContext, UiNode,
+    BuildContext,
 };
 
 // ANCHOR: make_cross_vector_image
-fn make_cross_vector_image(ctx: &mut BuildContext, size: f32, thickness: f32) -> Handle<UiNode> {
+fn make_cross_vector_image(
+    ctx: &mut BuildContext,
+    size: f32,
+    thickness: f32,
+) -> Handle<VectorImage> {
     VectorImageBuilder::new(
         WidgetBuilder::new()
             // Color of the image is defined by the foreground brush of the base widget.

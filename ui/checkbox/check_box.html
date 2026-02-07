@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-025265cf.js"></script>
@@ -204,7 +204,7 @@ data have such state.</p>
 <p>To create a checkbox you should do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_checkbox(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_checkbox(ui: &amp;mut UserInterface) -&gt; Handle&lt;CheckBox&gt; {
     CheckBoxBuilder::new(WidgetBuilder::new())
         // A custom value can be set during initialization.
         .checked(Some(true))
@@ -218,7 +218,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
 <p>Here’s an example of checkbox with textual content.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_checkbox_with_text(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_checkbox_with_text(ui: &amp;mut UserInterface) -&gt; Handle&lt;CheckBox&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     CheckBoxBuilder::new(WidgetBuilder::new())
@@ -237,7 +237,7 @@ For checkbox with text, you could use <code>TextBuilder</code> to create textual
 a <code>CheckBoxMessage::Check</code> message. To do so, you can do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug, Default)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     checkbox: Handle&lt;UiNode&gt;,
 }

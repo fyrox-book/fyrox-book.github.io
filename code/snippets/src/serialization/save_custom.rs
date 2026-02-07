@@ -7,13 +7,13 @@ use fyrox::{
 use std::path::Path;
 
 // ANCHOR: save
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyData {
     foo: String,
     bar: u32,
 }
 
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyGame {
     scene: Handle<Scene>,
     data: MyData,

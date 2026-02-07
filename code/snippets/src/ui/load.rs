@@ -1,4 +1,3 @@
-
 use fyrox::core::pool::Handle;
 use fyrox::gui::{UiNode, UserInterface};
 use fyrox::plugin::error::GameResult;
@@ -6,7 +5,7 @@ use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::{core::reflect::prelude::*, core::visitor::prelude::*};
 
 // ANCHOR: load_ui
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     button: Handle<UiNode>,
 }

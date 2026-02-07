@@ -1,5 +1,6 @@
 use fyrox::asset::manager::ResourceManager;
 use fyrox::asset::untyped::ResourceKind;
+use fyrox::core::uuid;
 use fyrox::scene::mesh::surface::SurfaceResource;
 use fyrox::{
     asset::ResourceData,
@@ -32,6 +33,7 @@ fn generate_lightmap() {
 
     MeshBuilder::new(BaseBuilder::new())
         .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+            uuid!("2b7b876d-29d5-4e08-93fc-d93d894f5459"),
             ResourceKind::Embedded,
             data,
         ))
@@ -49,9 +51,15 @@ fn generate_lightmap() {
     .build(&mut scene.graph);
 
     // Prepare the data for generation using the scene.
-    let data =
-        LightmapInputData::from_scene(&scene, |_, _| true, Default::default(), Default::default())
-            .unwrap();
+    let data = LightmapInputData::from_scene(
+        "lightmapTexture",
+        6,
+        &scene,
+        |_, _| true,
+        Default::default(),
+        Default::default(),
+    )
+    .unwrap();
 
     // Generate the lightmap.
     let lightmap = Lightmap::new(data, 64, 0.005, Default::default(), Default::default()).unwrap();
@@ -74,7 +82,7 @@ fn change_light_map(scene: &mut Scene, resource_manager: ResourceManager) {
         "a/path/to/lightmap.lmp",
         resource_manager,
     ))
-    .unwrap();
+    .ok();
 
     scene.graph.set_lightmap(light_map).unwrap();
 }

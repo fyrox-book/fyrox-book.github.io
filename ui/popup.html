@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -197,7 +197,7 @@
 <p>A simple popup with a button could be created using the following code:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_with_button(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_with_button(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Popup&gt; {
     PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -211,7 +211,7 @@
 it, otherwise you won’t see it:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_with_button_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_with_button_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;Popup&gt; {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -220,7 +220,7 @@ it, otherwise you won’t see it:</p>
         )
         .build(&amp;mut ui.build_ctx());
     // Open the popup explicitly.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 <span class="boring">}</span></code></pre>
@@ -229,7 +229,7 @@ it, otherwise you won’t see it:</p>
 they’re usually open above some other widget with specific alignment (right, left, center, etc.).</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_with_button_and_placement_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_with_button_and_placement_and_open_it(ui: &amp;mut UserInterface) -&gt; Handle&lt;Popup&gt; {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -240,7 +240,7 @@ they’re usually open above some other widget with specific alignment (right, l
         .with_placement(Placement::Cursor(Handle::NONE))
         .build(&amp;mut ui.build_ctx());
     // Open the popup explicitly at the current placement.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 <span class="boring">}</span></code></pre>
@@ -254,7 +254,7 @@ is used to display content of the list. In this case, you could specify the plac
 </span>fn create_popup_with_button_and_bottom_placement_and_open_it(
     dropdown_list: Handle&lt;UiNode&gt;,
     ui: &amp;mut UserInterface,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Popup&gt; {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -265,7 +265,7 @@ is used to display content of the list. In this case, you could specify the plac
         .with_placement(Placement::LeftBottom(dropdown_list))
         .build(&amp;mut ui.build_ctx());
     // Open the popup explicitly at the current placement.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 <span class="boring">}</span></code></pre>
@@ -280,7 +280,7 @@ you can see it almost every time you use context menus in various apps. There ar
 and it can be turned off:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_popup_that_stays_open(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_popup_that_stays_open(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Popup&gt; {
     PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())

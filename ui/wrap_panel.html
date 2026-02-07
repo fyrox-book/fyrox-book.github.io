@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -199,7 +199,7 @@ that does not have enough space on current line, will automatically be placed on
 <p>Use <code>WrapPanelBuilder</code> to create new wrap panel instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_wrap_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_wrap_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;WrapPanel&gt; {
     WrapPanelBuilder::new(WidgetBuilder::new())
         .with_orientation(Orientation::Horizontal)
         .build(ctx)

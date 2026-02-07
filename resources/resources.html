@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -310,6 +310,7 @@ avoided by embedding resources directly in the binary of your game using <code>i
 </span>fn embedded_resource() -&gt; Option&lt;Resource&lt;Texture&gt;&gt; {
     let data = include_bytes!("texture.png");
     TextureResource::load_from_memory(
+        uuid!("cb05986b-5483-4509-826c-8d90280b2eb8"),
         Default::default(),
         data,
         TextureImportOptions::default()

@@ -12,7 +12,7 @@ use std::path::Path;
 use std::sync::Arc;
 
 // ANCHOR: plugin_structure
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 pub struct Game {
     scene: Handle<Scene>,
 }

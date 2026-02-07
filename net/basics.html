@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -272,6 +272,12 @@ pub struct Server {
     prev_node_states: FxHashMap&lt;Handle&lt;Node&gt;, NodeState&gt;,
 }
 
+impl Clone for Server {
+    fn clone(&amp;self) -&gt; Self {
+        panic!("non-cloneable!")
+    }
+}
+
 impl Server {
     const ADDRESS: &amp;'static str = "127.0.0.1:10000";
 
@@ -302,9 +308,16 @@ impl Server {
 }
 
 #[derive(Reflect)]
+#[reflect(non_cloneable)]
 pub struct Client {
     #[reflect(hidden)]
     connection: NetStream,
+}
+
+impl Clone for Client {
+    fn clone(&amp;self) -&gt; Self {
+        panic!("non-cloneable!")
+    }
 }
 
 impl Client {
@@ -413,7 +426,7 @@ across all clients, and it will make client-server synchronization reliable, sin
 a scene node:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub fn create_node_with_id(scene: &amp;mut Scene, id: Uuid) -&gt; Handle&lt;Node&gt; {
+</span>pub fn create_node_with_id(scene: &amp;mut Scene, id: Uuid) -&gt; Handle&lt;Pivot&gt; {
     PivotBuilder::new(BaseBuilder::new().with_instance_id(SceneNodeId(id))).build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre>
@@ -498,23 +511,15 @@ pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &am
         // The resource itself could be used as a task.
         ctx.resource_manager.request::&lt;Model&gt;(&amp;desc.path),
         // This closure will be called when the task (resource loading) is completed.
-        move |result, game: &amp;mut Game, ctx| match result {
-            Ok(model) =&gt; {
-                let scene = &amp;mut ctx.scenes[game.scene];
-                model
-                    .begin_instantiation(scene)
-                    .with_position(desc.position)
-                    .with_rotation(desc.rotation)
-                    .with_ids(&amp;desc.ids)
-                    .finish();
-            }
-            Err(err) =&gt; {
-                Log::err(format!(
-                    "Unable to instantiate {} prefab. Reason: {:?}",
-                    desc.path.display(),
-                    err
-                ));
-            }
+        move |result, game: &amp;mut Game, ctx| {
+            let scene = &amp;mut ctx.scenes[game.scene];
+            result?
+                .begin_instantiation(scene)
+                .with_position(desc.position)
+                .with_rotation(desc.rotation)
+                .with_ids(&amp;desc.ids)
+                .finish();
+            Ok(())
         },
     );
 }

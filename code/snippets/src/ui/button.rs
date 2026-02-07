@@ -1,3 +1,4 @@
+use fyrox::gui::button::Button;
 use fyrox::plugin::error::GameResult;
 use fyrox::{
     asset::manager::ResourceManager,
@@ -15,7 +16,7 @@ use fyrox::{
 };
 
 // ANCHOR: create_button
-fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_button(ui: &mut UserInterface) -> Handle<Button> {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_text("Click me!")
         .build(&mut ui.build_ctx())
@@ -23,7 +24,7 @@ fn create_button(ui: &mut UserInterface) -> Handle<UiNode> {
 // ANCHOR_END: create_button
 
 // ANCHOR: create_button_custom
-fn create_button_custom(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_button_custom(ui: &mut UserInterface) -> Handle<Button> {
     ButtonBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
@@ -40,7 +41,7 @@ fn create_button_custom(ui: &mut UserInterface) -> Handle<UiNode> {
 fn create_fancy_button(
     ui: &mut UserInterface,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Button> {
     let ctx = &mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
@@ -55,7 +56,7 @@ fn create_fancy_button(
 // ANCHOR_END: create_fancy_button
 
 // ANCHOR: button_click_handling
-#[derive(Debug, Reflect, Visit)]
+#[derive(Debug, Clone, Reflect, Visit)]
 struct MyGame {
     button: Handle<UiNode>,
 }
@@ -78,12 +79,12 @@ impl Plugin for MyGame {
 // ANCHOR_END: button_click_handling
 
 // ANCHOR: quit_button
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
-    quit_button_handle: Handle<UiNode>,
+    quit_button_handle: Handle<Button>,
 }
 
-fn create_quit_button(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_quit_button(ui: &mut UserInterface) -> Handle<Button> {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_content(
             TextBuilder::new(WidgetBuilder::new())

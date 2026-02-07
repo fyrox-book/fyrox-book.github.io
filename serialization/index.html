@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -283,9 +283,9 @@ like so:</p>
         object.visit("MyObject", &amp;mut visitor)?;
 
         // Dump to the path.
-        visitor.save_binary(path)
+        visitor.save_binary_to_file(path)
     } else {
-        let mut visitor = Visitor::load_binary(path).await?;
+        let mut visitor = Visitor::load_binary_from_file(path).await?;
 
         // Create default instance of an object.
         let mut my_object = MyStruct::default();

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -196,7 +196,7 @@
 thick border around a button widget:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_border_with_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_border_with_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;Border&gt; {
     BorderBuilder::new(
         WidgetBuilder::new().with_child(
             TextBuilder::new(WidgetBuilder::new())
@@ -226,7 +226,7 @@ The foreground will set the style of the boarder itself, while setting the backg
 the border. Below is an example of a blue border and a red background with white text inside.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_blue_border_with_red_background(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_blue_border_with_red_background(ui: &amp;mut UserInterface) -&gt; Handle&lt;Border&gt; {
     BorderBuilder::new(
         WidgetBuilder::new()
             .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)).into())

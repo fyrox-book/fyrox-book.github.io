@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -212,7 +212,7 @@ impl ScriptTrait for MyScript {
     }
 }
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -224,7 +224,7 @@ impl Plugin for MyPlugin {
     }
 }
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame;
 
 // Define an error type for your game first.
@@ -256,7 +256,7 @@ impl Plugin for MyGame {
     }
 
     fn on_game_error(&amp;mut self, context: &amp;mut PluginContext, error: &amp;GameError) -&gt; bool {
-        if let Some(GameErrorKind::UserError(ref err)) = error.kind {
+        if let GameErrorKind::UserError(ref err) = error.kind {
             if let Some(my_error) = err.downcast_ref::&lt;MyError&gt;() {
                 // Do something useful, for example show a warning message box.
                 // ...
@@ -281,7 +281,7 @@ complicate tracking of the original source of error. Backtrace capture can be en
 method.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -301,7 +301,7 @@ be disabled in production builds.</p>
 the <code>Plugin::on_game_error</code> method for that:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame;
 
 // Define an error type for your game first.
@@ -333,7 +333,7 @@ impl Plugin for MyGame {
     }
 
     fn on_game_error(&amp;mut self, context: &amp;mut PluginContext, error: &amp;GameError) -&gt; bool {
-        if let Some(GameErrorKind::UserError(ref err)) = error.kind {
+        if let GameErrorKind::UserError(ref err) = error.kind {
             if let Some(my_error) = err.downcast_ref::&lt;MyError&gt;() {
                 // Do something useful, for example show a warning message box.
                 // ...

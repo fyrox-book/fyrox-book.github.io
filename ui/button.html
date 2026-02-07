@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -197,7 +197,7 @@
 <p>To create a simple button with text you should do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;Button&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_text("Click me!")
         .build(&amp;mut ui.build_ctx())
@@ -207,7 +207,7 @@
 right aligned):</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_button_custom(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_button_custom(ui: &amp;mut UserInterface) -&gt; Handle&lt;Button&gt; {
     ButtonBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_content(
             TextBuilder::new(WidgetBuilder::new())
@@ -226,7 +226,7 @@ right aligned):</p>
 </span>fn create_fancy_button(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
@@ -244,7 +244,7 @@ right aligned):</p>
 useful:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Debug, Reflect, Visit)]
+</span>#[derive(Debug, Clone, Reflect, Visit)]
 struct MyGame {
     button: Handle&lt;UiNode&gt;,
 }
@@ -269,12 +269,12 @@ impl Plugin for MyGame {
 <p>This example shows how to create a button that will close your game.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
-    quit_button_handle: Handle&lt;UiNode&gt;,
+    quit_button_handle: Handle&lt;Button&gt;,
 }
 
-fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+fn create_quit_button(ui: &amp;mut UserInterface) -&gt; Handle&lt;Button&gt; {
     ButtonBuilder::new(WidgetBuilder::new())
         .with_content(
             TextBuilder::new(WidgetBuilder::new())

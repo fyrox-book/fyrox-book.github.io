@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-025265cf.js"></script>
@@ -221,17 +221,13 @@ be ignored. Also, if you don’t have any turns in your animation, you can also 
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn setup_root_motion(
-    animation_player: Handle&lt;Node&gt;,
+    animation_player: Handle&lt;AnimationPlayer&gt;,
     animation: Handle&lt;Animation&gt;,
     root_node: Handle&lt;Node&gt;,
     ctx: &amp;mut ScriptContext,
 ) {
-    if let Some(animation_player) = ctx
-        .scene
-        .graph
-        .try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player)
-    {
-        if let Some(animation) = animation_player.animations_mut().try_get_mut(animation) {
+    if let Ok(animation_player) = ctx.scene.graph.try_get_mut(animation_player) {
+        if let Ok(animation) = animation_player.animations_mut().try_get_mut(animation) {
             animation.set_root_motion_settings(Some(RootMotionSettings {
                 node: root_node,
                 ignore_x_movement: false,
@@ -262,20 +258,15 @@ In general, it could look something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_and_apply_root_motion(
-    absm: Handle&lt;Node&gt;,
-    rigid_body: Handle&lt;Node&gt;,
+    absm: Handle&lt;AnimationBlendingStateMachine&gt;,
+    rigid_body: Handle&lt;RigidBody&gt;,
     character_model: Handle&lt;Node&gt;,
     ctx: &amp;mut ScriptContext,
 ) {
     // Step 1. Fetch the velocity vector from the animation blending state machine.
     let transform = ctx.scene.graph[character_model].global_transform();
     let mut velocity = Vector3::default();
-    if let Some(state_machine) = ctx
-        .scene
-        .graph
-        .try_get(absm)
-        .and_then(|node| node.component_ref::&lt;AnimationBlendingStateMachine&gt;())
-    {
+    if let Ok(state_machine) = ctx.scene.graph.try_get(absm) {
         if let Some(root_motion) = state_machine.machine().pose().root_motion() {
             velocity = transform
                 .transform_vector(&amp;root_motion.delta_position)
@@ -284,7 +275,7 @@ In general, it could look something like this:</p>
     }
 
     // Step 2. Apply the velocity to the rigid body and lock rotations.
-    if let Some(body) = ctx.scene.graph.try_get_mut_of_type::&lt;RigidBody&gt;(rigid_body) {
+    if let Ok(body) = ctx.scene.graph.try_get_mut(rigid_body) {
         body.set_ang_vel(Default::default());
         body.set_lin_vel(Vector3::new(velocity.x, body.lin_vel().y, velocity.z));
     }

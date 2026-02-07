@@ -3,6 +3,7 @@ use fyrox::asset::untyped::ResourceKind;
 use fyrox::core::algebra::Vector3;
 use fyrox::core::color::Color;
 use fyrox::core::color_gradient::{ColorGradient, GradientPoint};
+use fyrox::core::uuid::uuid;
 use fyrox::material::{Material, MaterialResource};
 use fyrox::resource::texture::Texture;
 use fyrox::scene::base::BaseBuilder;
@@ -19,7 +20,11 @@ fn create_smoke(graph: &mut Graph, resource_manager: &mut ResourceManager, pos: 
         "diffuseTexture",
         Some(resource_manager.request::<Texture>("data/particles/smoke_04.tga")),
     );
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("cdd749d7-0761-40f2-ac6f-66f67bf6f158"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     ParticleSystemBuilder::new(
         BaseBuilder::new()

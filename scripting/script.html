@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -248,7 +248,7 @@ impl ScriptTrait for MyScript {
     }
 }
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -324,7 +324,7 @@ to an object. <code>PluginConstructor</code> trait has <code>register</code> met
 you need to register it in the list of script constructors like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -569,7 +569,7 @@ searching in the entire scene graph at every frame.</p>
 <p>Accessing plugins from scripts is very easy, all you need to do is to call <code>get/get_mut</code> method from <code>ctx.plugins</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Debug, Reflect, Visit)]
+</span>#[derive(Default, Debug, Clone, Reflect, Visit)]
 struct GamePlugin {
     bots: Vec&lt;Handle&lt;Node&gt;&gt;,
 }

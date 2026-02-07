@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -689,7 +689,7 @@ if you don’t need to support such platforms, you can access the underlying gra
 use compute shaders as you want:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn use_gl_compute_shader(ctx: &amp;PluginContext) {
+</span>fn use_gl_compute_shader(ctx: &amp;mut PluginContext) {
     let GraphicsContext::Initialized(initialized_context) = ctx.graphics_context else {
         return;
     };

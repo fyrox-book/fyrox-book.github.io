@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -239,7 +239,7 @@ audio processing could found <a href="bus.html">here</a>.</li>
 <p>Then, the node is built using the standard builder pattern:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn build_sound_node(resource_manager: &amp;ResourceManager, scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn build_sound_node(resource_manager: &amp;ResourceManager, scene: &amp;mut Scene) -&gt; Handle&lt;Sound&gt; {
     let sound = resource_manager.request::&lt;SoundBuffer&gt;("/path/to/resource.ogg");
 
     SoundBuilder::new(BaseBuilder::new())

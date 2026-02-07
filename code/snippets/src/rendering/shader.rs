@@ -21,7 +21,7 @@ fn create_material(resource_manager: &ResourceManager) -> MaterialResource {
 // ANCHOR_END: create_material
 
 // ANCHOR: use_gl_compute_shader
-fn use_gl_compute_shader(ctx: &PluginContext) {
+fn use_gl_compute_shader(ctx: &mut PluginContext) {
     let GraphicsContext::Initialized(initialized_context) = ctx.graphics_context else {
         return;
     };

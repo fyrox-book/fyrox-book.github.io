@@ -1,16 +1,16 @@
+use fyrox::scene::probe::ReflectionProbe;
 use fyrox::{
     core::{algebra::Vector3, pool::Handle},
     scene::{
         base::BaseBuilder,
         graph::Graph,
-        node::Node,
         probe::{ReflectionProbeBuilder, UpdateMode},
         transform::TransformBuilder,
     },
 };
 
 // ANCHOR: create_probe
-fn create_probe(graph: &mut Graph) -> Handle<Node> {
+fn create_probe(graph: &mut Graph) -> Handle<ReflectionProbe> {
     ReflectionProbeBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()

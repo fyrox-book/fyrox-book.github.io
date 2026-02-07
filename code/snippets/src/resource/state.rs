@@ -1,5 +1,5 @@
 use fyrox::asset::Resource;
-use fyrox::core::futures;
+use fyrox::core::{futures, uuid};
 use fyrox::resource::texture::{
     CompressionOptions, Texture, TextureImportOptions, TextureMinificationFilter, TextureResource,
     TextureResourceExtension,
@@ -46,6 +46,7 @@ fn block_and_wait(texture_resource: Resource<Texture>) {
 fn embedded_resource() -> Option<Resource<Texture>> {
     let data = include_bytes!("texture.png");
     TextureResource::load_from_memory(
+        uuid!("cb05986b-5483-4509-826c-8d90280b2eb8"),
         Default::default(),
         data,
         TextureImportOptions::default()

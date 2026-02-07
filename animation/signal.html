@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -214,12 +214,12 @@ your animation. Please note the comment about signal’s uuid in the code below.
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn add_signal(
-    animation_player: Handle&lt;Node&gt;,
+    animation_player: Handle&lt;AnimationPlayer&gt;,
     animation_name: &amp;str,
     signal_name: &amp;str,
     graph: &amp;mut Graph,
 ) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
         if let Some((_, animation)) = animations.find_by_name_mut(animation_name) {
             // This uuid should be unique, you could also use Uuid::new_v4() method, but it
@@ -239,12 +239,12 @@ just borrow your animation from the animation player and pop animation event one
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn react_to_signal_events(
-    animation_player: Handle&lt;Node&gt;,
+    animation_player: Handle&lt;AnimationPlayer&gt;,
     animation_name: &amp;str,
     signal_name: &amp;str,
     graph: &amp;mut Graph,
 ) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
 
         // Ideally, animation fetching should be done via its handle (the first argument of the
@@ -271,20 +271,12 @@ of animations manually.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn collect_events_from_absm(
-    absm: Handle&lt;Node&gt;,
+    absm: Handle&lt;AnimationBlendingStateMachine&gt;,
     strategy: AnimationEventCollectionStrategy,
     ctx: &amp;mut ScriptContext,
 ) -&gt; LayerAnimationEventsCollection {
-    if let Some(absm) = ctx
-        .scene
-        .graph
-        .try_get_of_type::&lt;AnimationBlendingStateMachine&gt;(absm)
-    {
-        if let Some(animation_player) = ctx
-            .scene
-            .graph
-            .try_get_of_type::&lt;AnimationPlayer&gt;(absm.animation_player())
-        {
+    if let Ok(absm) = ctx.scene.graph.try_get(absm) {
+        if let Ok(animation_player) = ctx.scene.graph.try_get(absm.animation_player()) {
             // Fetch a layer first, it could be any layer of the ABMS, but for simplicity
             // we'll use the first layer.
             if let Some(layer) = absm.machine().layers().first() {

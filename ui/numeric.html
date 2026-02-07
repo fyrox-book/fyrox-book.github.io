@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -199,7 +199,7 @@ type.</p>
 <p>Use <code>NumericUpDownBuilder</code> to create a new instance of the <code>NumericUpDown</code> widget:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(123.0f32)
         .build(ctx)
@@ -214,7 +214,7 @@ and <code>NumericUpDownBuilder::with_max_value</code> (or changed at runtime usi
 messages):</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget_with_limits(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget_with_limits(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(123.0f32)
         .with_min_value(42.0)
@@ -228,7 +228,7 @@ messages):</p>
 provides a way to set the step of the value (for increment and decrement at the same time):</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget_with_step(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget_with_step(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(125.0f32)
         .with_step(5.0)
@@ -242,7 +242,7 @@ the actual value is rounded). For example, in some cases you might get irrationa
 but you interested in only first two decimal places. In this case you can set the precision to <code>2</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_numeric_widget_with_precision(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_numeric_widget_with_precision(ctx: &amp;mut BuildContext) -&gt; Handle&lt;NumericUpDown&lt;f32&gt;&gt; {
     NumericUpDownBuilder::new(WidgetBuilder::new())
         .with_value(0.3333333f32)
         .with_precision(2)

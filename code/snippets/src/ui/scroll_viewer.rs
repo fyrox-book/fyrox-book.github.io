@@ -1,5 +1,4 @@
-use fyrox::gui::message::MessageDirection;
-use fyrox::gui::scroll_viewer::ScrollViewerMessage;
+use fyrox::gui::scroll_viewer::{ScrollViewer, ScrollViewerMessage};
 use fyrox::gui::{
     button::ButtonBuilder, core::pool::Handle, scroll_viewer::ScrollViewerBuilder,
     stack_panel::StackPanelBuilder, text::TextBuilder, widget::WidgetBuilder, BuildContext, UiNode,
@@ -7,7 +6,7 @@ use fyrox::gui::{
 };
 
 // ANCHOR: create_scroll_viewer
-fn create_scroll_viewer(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_scroll_viewer(ctx: &mut BuildContext) -> Handle<ScrollViewer> {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         .with_content(
             StackPanelBuilder::new(
@@ -30,7 +29,7 @@ fn create_scroll_viewer(ctx: &mut BuildContext) -> Handle<UiNode> {
 // ANCHOR_END: create_scroll_viewer
 
 // ANCHOR: create_scroll_viewer_with_speed
-fn create_scroll_viewer_with_speed(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_scroll_viewer_with_speed(ctx: &mut BuildContext) -> Handle<ScrollViewer> {
     ScrollViewerBuilder::new(WidgetBuilder::new())
         // Set vertical scrolling speed twice as fast as default scrolling speed.
         .with_v_scroll_speed(60.0)
@@ -42,10 +41,6 @@ fn create_scroll_viewer_with_speed(ctx: &mut BuildContext) -> Handle<UiNode> {
 
 // ANCHOR: bring_child_into_view
 fn bring_child_into_view(scroll_viewer: Handle<UiNode>, child: Handle<UiNode>, ui: &UserInterface) {
-    ui.send_message(ScrollViewerMessage::bring_into_view(
-        scroll_viewer,
-        MessageDirection::ToWidget,
-        child,
-    ))
+    ui.send(scroll_viewer, ScrollViewerMessage::BringIntoView(child))
 }
 // ANCHOR_END: bring_child_into_view

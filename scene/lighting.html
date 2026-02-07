@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -236,7 +236,7 @@ used to light the scene. To change it, use the following code snippet:</p>
 }
 
 fn set_scene_skybox(scene: &amp;mut Scene, resource_manager: ResourceManager) {
-    scene.set_skybox(create_skybox(resource_manager));
+    scene.set_skybox(Some(block_on(create_skybox(resource_manager))));
 }
 <span class="boring">}</span></code></pre>
 <p>This, however, may still produce weird lighting inside indoor scenes - all objects will be equally lit from

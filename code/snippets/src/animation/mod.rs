@@ -90,7 +90,7 @@ fn use_animation() {
     let mut graph = Graph::new();
     let some_node = PivotBuilder::new(BaseBuilder::new()).build(&mut graph);
     // Create the animation.
-    let mut animation = create_animation(some_node);
+    let mut animation = create_animation(some_node.to_base());
     // Emulate some ticks (like it was updated from the main loop of your game).
     for _ in 0..10 {
         animation.tick(1.0 / 60.0);
@@ -136,8 +136,13 @@ async fn create_animated_character(
 // ANCHOR_END: create_animated_character
 
 // ANCHOR: enable_animation
-fn enable_animation(animation_player: Handle<Node>, graph: &mut Graph, name: &str, enabled: bool) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::<AnimationPlayer>(animation_player) {
+fn enable_animation(
+    animation_player: Handle<AnimationPlayer>,
+    graph: &mut Graph,
+    name: &str,
+    enabled: bool,
+) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
         // chapter for more info).
         let animations = animation_player.animations_mut().get_value_mut_silent();

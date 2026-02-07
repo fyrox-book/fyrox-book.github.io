@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -198,7 +198,7 @@ So the first widget added will be at the top or left most position, while each a
 bottom or continue from left most to right most. The below example code places 3 text widgets into a vertical stack:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
+</span>fn create_stack_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;StackPanel&gt; {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(
@@ -229,7 +229,7 @@ Horizontal, Left most to right most. This is done using the StackPanelBuilder’
 with a gui::Orientation enum value. <strong>By default,</strong> all StackPanel’s are Vertical.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_horizontal_stack_panel(ctx: &amp;mut BuildContext) -&gt; fyrox::core::pool::Handle&lt;UiNode&gt; {
+</span>fn create_horizontal_stack_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;StackPanel&gt; {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -220,7 +220,7 @@ windows. Only the windows from this list can be docked.</p>
 into two smaller tiles where each tile holds a separate window.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_docking_manager(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_docking_manager(ctx: &amp;mut BuildContext) -&gt; Handle&lt;DockingManager&gt; {
     let top_window = WindowBuilder::new(WidgetBuilder::new())
         .with_title(WindowTitle::text("Top Window"))
         .build(ctx);
@@ -259,9 +259,10 @@ save it and then load on the next session. Use the following code to save the la
 </span><span class="boring">fn main() {
 </span>fn save_layout(
     ui: &amp;UserInterface,
-    docking_manager_handle: Handle&lt;UiNode&gt;,
+    docking_manager_handle: Handle&lt;DockingManager&gt;,
 ) -&gt; Option&lt;DockingManagerLayoutDescriptor&gt; {
-    ui.try_get_of_type::&lt;DockingManager&gt;(docking_manager_handle)
+    ui.try_get(docking_manager_handle)
+        .ok()
         .as_ref()
         .map(|docking_manager| docking_manager.layout(ui))
 }

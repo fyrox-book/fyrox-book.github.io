@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -228,20 +228,22 @@ impl MessageData for MyButtonMessage {}
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
 struct MyButton {
     widget: Widget,
-    border: Handle&lt;UiNode&gt;,
-    text: Handle&lt;UiNode&gt;,
+    border: Handle&lt;Border&gt;,
+    text: Handle&lt;Text&gt;,
 }
 
 define_widget_deref!(MyButton);
 
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
-        for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send(
-                handle,
-                WidgetMessage::Foreground(Brush::Solid(color).into()),
-            );
-        }
+        ui.send(
+            self.border,
+            WidgetMessage::Foreground(Brush::Solid(border_color).into()),
+        );
+        ui.send(
+            self.text,
+            WidgetMessage::Foreground(Brush::Solid(text_color).into()),
+        );
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
@@ -343,7 +345,7 @@ fn my_button_builder_usage(ctx: &amp;mut BuildContext) {
         .build(ctx);
 }
 
-#[derive(Default, Visit, Reflect, Debug)]
+#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     my_button: Handle&lt;UiNode&gt;,
 }
@@ -389,20 +391,22 @@ impl MessageData for MyButtonMessage {}
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
 struct MyButton {
     widget: Widget,
-    border: Handle&lt;UiNode&gt;,
-    text: Handle&lt;UiNode&gt;,
+    border: Handle&lt;Border&gt;,
+    text: Handle&lt;Text&gt;,
 }
 
 define_widget_deref!(MyButton);
 
 impl MyButton {
     fn set_colors(&amp;self, ui: &amp;UserInterface, text_color: Color, border_color: Color) {
-        for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send(
-                handle,
-                WidgetMessage::Foreground(Brush::Solid(color).into()),
-            );
-        }
+        ui.send(
+            self.border,
+            WidgetMessage::Foreground(Brush::Solid(border_color).into()),
+        );
+        ui.send(
+            self.text,
+            WidgetMessage::Foreground(Brush::Solid(text_color).into()),
+        );
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
@@ -534,7 +538,7 @@ in an application. All you need to do is to catch <code>MyButtonMessage::Click</
 in response:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Default, Visit, Reflect, Debug)]
+</span>#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     my_button: Handle&lt;UiNode&gt;,
 }

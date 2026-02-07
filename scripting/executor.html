@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -243,11 +243,7 @@ to engine instance.</p>
     let executor = Executor::from_params(
         EventLoop::new().ok(),
         GraphicsContextParams {
-            window_attributes: WindowAttributes {
-                // Set window title.
-                title: "My Game".to_string(),
-                ..Default::default()
-            },
+            window_attributes: WindowAttributes::default().with_title("My Game"),
             vsync: true,
             msaa_sample_count: None,
             graphics_server_constructor: Default::default(),

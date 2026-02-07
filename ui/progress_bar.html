@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -198,7 +198,7 @@ show progress for long actions.</p>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ProgressBar&gt; {
     ProgressBarBuilder::new(WidgetBuilder::new())
         // Keep mind, that the progress is "normalized", which means that it is defined on
         // [0..1] range, where 0 - no progress at all, 1 - maximum progress.
@@ -216,11 +216,7 @@ methods respectively. These methods can accept any widget, but usually it i a
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn change_progress(progress_bar: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ProgressBarMessage::progress(
-        progress_bar,
-        MessageDirection::ToWidget,
-        0.33,
-    ));
+    ui.send(progress_bar, ProgressBarMessage::Progress(0.33));
 }
 <span class="boring">}</span></code></pre>
 

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -232,7 +232,7 @@ builder must know how to build Base node. While it may sound confusing, it is ac
 Consider this example:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(
         // Here we passing a base builder. Note that, since we can build Base node separately
         // we can pass any custom values to it while building.
@@ -252,11 +252,11 @@ the CameraBuilder’s instance properties. This is a very flexible mechanism, al
 in a declarative manner:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_node(scene: &amp;mut Scene) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(
         BaseBuilder::new()
             // Add some children nodes.
-            .with_children(&amp;[
+            .with_child(
                 // A staff...
                 MeshBuilder::new(
                     BaseBuilder::new()
@@ -268,6 +268,8 @@ in a declarative manner:</p>
                         ),
                 )
                 .build(&amp;mut scene.graph),
+            )
+            .with_child(
                 // and a spell.
                 SpriteBuilder::new(
                     BaseBuilder::new()
@@ -279,7 +281,7 @@ in a declarative manner:</p>
                         ),
                 )
                 .build(&amp;mut scene.graph),
-            ])
+            )
             .with_local_transform(
                 TransformBuilder::new()
                     .with_local_position(Vector3::new(2.0, 0.0, 3.0))

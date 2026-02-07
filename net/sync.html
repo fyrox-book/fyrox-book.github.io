@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -206,7 +206,7 @@ pub struct NodeState {
 
 impl Server {
     pub fn sync(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let scene = ok_or_return!(ctx.scenes.try_get(scene));
         let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
         for (handle, node) in scene.graph.pair_iter() {
             entity_states.push(NodeState {
@@ -231,7 +231,7 @@ a simple, yet very efficient way of reducing the required network bandwidth and 
 </span><span class="boring">fn main() {
 </span>impl Server {
     pub fn sync_with_delta_compression(&amp;mut self, scene: Handle&lt;Scene&gt;, ctx: &amp;mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let scene = ok_or_return!(ctx.scenes.try_get(scene));
         let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
         for (handle, node) in scene.graph.pair_iter() {
             let current_state = NodeState {

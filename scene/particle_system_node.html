@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -266,7 +266,11 @@ only practice matters here.</p>
         "diffuseTexture",
         Some(resource_manager.request::&lt;Texture&gt;("data/particles/smoke_04.tga")),
     );
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("cdd749d7-0761-40f2-ac6f-66f67bf6f158"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     ParticleSystemBuilder::new(
         BaseBuilder::new()

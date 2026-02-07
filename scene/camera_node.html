@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -200,7 +200,7 @@ that “intersects” with the frustum will be rendered.</p>
 <p>An instance of camera node could be created using <code>CameraBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera(scene: &amp;mut Scene) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         // Set some properties.
         .with_fov(80.0f32.to_radians())
@@ -223,7 +223,7 @@ parameters that describes frustum volume:</p>
 <p>Here is a simple example of how to create a camera with perspective projection:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_perspective_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Perspective(PerspectiveProjection {
             // Keep in mind that field of view expressed in radians!
@@ -248,7 +248,7 @@ size by multiplying vertical size with aspect ratio.</p>
 <p>Here is a simple example of how to create a camera with orthographic projection:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_orthographic_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_orthographic_camera(graph: &amp;mut Graph) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Orthographic(OrthographicProjection {
             vertical_size: 5.0,
@@ -292,7 +292,7 @@ via color grading LUT effect. When used wisely, it can significantly improve per
 <p>To use color grading LUT you could do something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_camera_with_lut(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Node&gt; {
+</span>fn create_camera_with_lut(scene: &amp;mut Scene, resource_manager: ResourceManager) -&gt; Handle&lt;Camera&gt; {
     CameraBuilder::new(BaseBuilder::new())
         .with_color_grading_enabled(true)
         .with_color_grading_lut(

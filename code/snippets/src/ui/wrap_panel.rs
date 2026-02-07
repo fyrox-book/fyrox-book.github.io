@@ -1,10 +1,11 @@
+use fyrox::gui::wrap_panel::WrapPanel;
 use fyrox::{
     core::pool::Handle,
-    gui::{widget::WidgetBuilder, wrap_panel::WrapPanelBuilder, BuildContext, Orientation, UiNode},
+    gui::{widget::WidgetBuilder, wrap_panel::WrapPanelBuilder, BuildContext, Orientation},
 };
 
 // ANCHOR: create_wrap_panel
-fn create_wrap_panel(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_wrap_panel(ctx: &mut BuildContext) -> Handle<WrapPanel> {
     WrapPanelBuilder::new(WidgetBuilder::new())
         .with_orientation(Orientation::Horizontal)
         .build(ctx)

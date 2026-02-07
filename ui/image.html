@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -198,7 +198,7 @@ widget is the only way to draw a bitmap. Usage of the Image is very simple:</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_image(ctx: &amp;mut BuildContext, resource_manager: ResourceManager) -&gt; Handle&lt;Image&gt; {
     // You must explicitly set width and height of the image, otherwise it will collapse to a
     // point and you won't see anything.
     let width = 100.0;
@@ -222,7 +222,7 @@ bounds first and then create an Image width these bounds:</p>
 </span>async fn create_image_equal_in_size_to_source(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
         .request::&lt;Texture&gt;("path/to/your/texture.png")
@@ -254,7 +254,7 @@ promise immediately:</p>
 </span>fn create_image_sync(
     ctx: &amp;mut BuildContext&lt;'_&gt;,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     fyrox::core::futures::executor::block_on(create_image_equal_in_size_to_source(
         ctx,
         resource_manager,
@@ -268,7 +268,7 @@ promise immediately:</p>
 </span>fn create_flipped_image(
     ctx: &amp;mut BuildContext,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Image&gt; {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
         .with_texture(resource_manager.request::&lt;Texture&gt;("path/to/your/texture.png"))

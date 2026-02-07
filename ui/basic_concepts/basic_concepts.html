@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-025265cf.js"></script>
@@ -256,7 +256,7 @@ UI, it would force you to wrap it in <code>Rc&lt;RefCell&lt;..&gt;&gt;</code>/<c
 <p>Message dispatcher is very easy to write, all you need to do is to handle UI messages in <code>Plugin::on_ui_message</code> method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     button: Handle&lt;UiNode&gt;,
 }
@@ -318,7 +318,7 @@ widget in series of nested call of other widget builders. In code, it looks some
 </span>fn create_fancy_button(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
@@ -341,7 +341,7 @@ that contains text with some icon. To do that, replace <code>.with_text("My Butt
 </span>fn create_fancy_button_with_text(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
@@ -374,7 +374,7 @@ the fluent syntax:</p>
 </span>fn create_fancy_button_with_shortcut(
     ui: &amp;mut UserInterface,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Button&gt; {
     let ctx = &amp;mut ui.build_ctx();
     let image;
     ButtonBuilder::new(WidgetBuilder::new())
@@ -395,7 +395,7 @@ editor. See <a href="../editor/editor.html">Editor</a> chapter for more info.</p
 <p>When a user interface is ready to be loaded in your game, you can do this like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     button: Handle&lt;UiNode&gt;,
 }

@@ -1,5 +1,6 @@
 mod client_server;
 
+use fyrox::scene::pivot::Pivot;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
@@ -23,12 +24,12 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 // ANCHOR: create_node_with_id
-pub fn create_node_with_id(scene: &mut Scene, id: Uuid) -> Handle<Node> {
+pub fn create_node_with_id(scene: &mut Scene, id: Uuid) -> Handle<Pivot> {
     PivotBuilder::new(BaseBuilder::new().with_instance_id(SceneNodeId(id))).build(&mut scene.graph)
 }
 // ANCHOR_END: create_node_with_id
 
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 pub struct Game {
     scene: Handle<Scene>,
 }
@@ -101,23 +102,15 @@ pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &mu
         // The resource itself could be used as a task.
         ctx.resource_manager.request::<Model>(&desc.path),
         // This closure will be called when the task (resource loading) is completed.
-        move |result, game: &mut Game, ctx| match result {
-            Ok(model) => {
-                let scene = &mut ctx.scenes[game.scene];
-                model
-                    .begin_instantiation(scene)
-                    .with_position(desc.position)
-                    .with_rotation(desc.rotation)
-                    .with_ids(&desc.ids)
-                    .finish();
-            }
-            Err(err) => {
-                Log::err(format!(
-                    "Unable to instantiate {} prefab. Reason: {:?}",
-                    desc.path.display(),
-                    err
-                ));
-            }
+        move |result, game: &mut Game, ctx| {
+            let scene = &mut ctx.scenes[game.scene];
+            result?
+                .begin_instantiation(scene)
+                .with_position(desc.position)
+                .with_rotation(desc.rotation)
+                .with_ids(&desc.ids)
+                .finish();
+            Ok(())
         },
     );
 }

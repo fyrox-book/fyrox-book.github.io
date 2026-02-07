@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -198,7 +198,7 @@ alignment, and so on.</p>
 <p>An instance of the Text widget could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
@@ -210,7 +210,7 @@ alignment, and so on.</p>
 centered text could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
@@ -222,7 +222,7 @@ centered text could be created like so:</p>
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
         .with_text(text)
@@ -234,7 +234,7 @@ centered text could be created like so:</p>
 text. <strong>Caveat:</strong> <code>Widget::background</code> is ignored for <code>Text</code> widget!</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_background(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Border&gt; {
     let text_widget =
         TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
             .with_text(text)
@@ -253,7 +253,7 @@ position the border, not the text.</p>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_colored_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_colored_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     //               vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
@@ -267,7 +267,7 @@ position the border, not the text.</p>
     ui: &amp;mut UserInterface,
     text: &amp;str,
     resource_manager: &amp;ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new())
         .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
@@ -283,7 +283,7 @@ on the background colors. This effect could be used for subtitles. Shadows are p
 is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;Text&gt; {
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
@@ -315,11 +315,7 @@ is to enable them, setup desired thickness, offset and brush (solid color or gra
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn request_change_text(ui: &amp;UserInterface, text_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
-    ui.send_message(TextMessage::text(
-        text_widget_handle,
-        MessageDirection::ToWidget,
-        text.to_owned(),
-    ))
+    ui.send(text_widget_handle, TextMessage::Text(text.to_owned()))
 }
 <span class="boring">}</span></code></pre>
 <p>Please keep in mind, that like any other situation when you “changing” something via messages, you should remember

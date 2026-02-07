@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -215,7 +215,7 @@ using the camera.</p>
 at (0.0, 10.0, 0.0) point with a rendering position offset by 10 units along X axis.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_probe(graph: &amp;mut Graph) -&gt; Handle&lt;Node&gt; {
+</span>fn create_probe(graph: &amp;mut Graph) -&gt; Handle&lt;ReflectionProbe&gt; {
     ReflectionProbeBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()

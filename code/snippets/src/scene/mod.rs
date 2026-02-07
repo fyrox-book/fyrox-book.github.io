@@ -34,7 +34,7 @@ use fyrox::{
 use std::path::Path;
 
 // ANCHOR: load_scene
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame {
     main_scene: Handle<Scene>,
 }
@@ -89,7 +89,7 @@ impl Plugin for MyGame {
     fn update(&mut self, context: &mut PluginContext) -> GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
-        if let Some(scene) = context.scenes.try_get(self.main_scene) {
+        if let Ok(scene) = context.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }

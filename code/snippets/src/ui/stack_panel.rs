@@ -1,10 +1,12 @@
+use fyrox::core::pool::Handle;
+use fyrox::gui::stack_panel::StackPanel;
 use fyrox::gui::{
     stack_panel::StackPanelBuilder, text::TextBuilder, widget::WidgetBuilder, BuildContext,
-    Orientation, UiNode,
+    Orientation,
 };
 
 // ANCHOR: create_stack_panel
-fn create_stack_panel(ctx: &mut BuildContext) -> fyrox::core::pool::Handle<UiNode> {
+fn create_stack_panel(ctx: &mut BuildContext) -> Handle<StackPanel> {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(
@@ -28,7 +30,7 @@ fn create_stack_panel(ctx: &mut BuildContext) -> fyrox::core::pool::Handle<UiNod
 // ANCHOR_END: create_stack_panel
 
 // ANCHOR: create_horizontal_stack_panel
-fn create_horizontal_stack_panel(ctx: &mut BuildContext) -> fyrox::core::pool::Handle<UiNode> {
+fn create_horizontal_stack_panel(ctx: &mut BuildContext) -> Handle<StackPanel> {
     StackPanelBuilder::new(
         WidgetBuilder::new()
             .with_child(

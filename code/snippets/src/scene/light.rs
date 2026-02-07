@@ -1,10 +1,12 @@
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::algebra::{UnitQuaternion, Vector3};
 use fyrox::core::color::Color;
+use fyrox::core::futures::executor::block_on;
 use fyrox::gui::texture::TextureWrapMode;
 use fyrox::resource::texture::Texture;
-use fyrox::scene::light::point::PointLightBuilder;
-use fyrox::scene::light::spot::SpotLightBuilder;
+use fyrox::scene::light::directional::DirectionalLight;
+use fyrox::scene::light::point::{PointLight, PointLightBuilder};
+use fyrox::scene::light::spot::{SpotLight, SpotLightBuilder};
 use fyrox::scene::light::BaseLight;
 use fyrox::scene::skybox::{SkyBox, SkyBoxBuilder};
 use fyrox::scene::transform::TransformBuilder;
@@ -21,13 +23,13 @@ use fyrox::{
 };
 
 // ANCHOR: create_directional_light
-fn create_directional_light(scene: &mut Scene) -> Handle<Node> {
+fn create_directional_light(scene: &mut Scene) -> Handle<DirectionalLight> {
     DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new())).build(&mut scene.graph)
 }
 // ANCHOR_END: create_directional_light
 
 // ANCHOR: create_oriented_directional_light
-fn create_oriented_directional_light(scene: &mut Scene) -> Handle<Node> {
+fn create_oriented_directional_light(scene: &mut Scene) -> Handle<DirectionalLight> {
     DirectionalLightBuilder::new(BaseLightBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
@@ -43,7 +45,7 @@ fn create_oriented_directional_light(scene: &mut Scene) -> Handle<Node> {
 // ANCHOR_END: create_oriented_directional_light
 
 // ANCHOR: create_point_light
-fn create_point_light(scene: &mut Scene) -> Handle<Node> {
+fn create_point_light(scene: &mut Scene) -> Handle<PointLight> {
     PointLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_radius(5.0)
         .build(&mut scene.graph)
@@ -51,7 +53,7 @@ fn create_point_light(scene: &mut Scene) -> Handle<Node> {
 // ANCHOR_END: create_point_light
 
 // ANCHOR: create_spot_light
-fn create_spot_light(scene: &mut Scene) -> Handle<Node> {
+fn create_spot_light(scene: &mut Scene) -> Handle<SpotLight> {
     SpotLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_distance(5.0)
         .with_hotspot_cone_angle(50.0f32.to_radians())
@@ -128,6 +130,6 @@ async fn create_skybox(resource_manager: ResourceManager) -> SkyBox {
 }
 
 fn set_scene_skybox(scene: &mut Scene, resource_manager: ResourceManager) {
-    scene.set_skybox(create_skybox(resource_manager));
+    scene.set_skybox(Some(block_on(create_skybox(resource_manager))));
 }
 // ANCHOR_END: set_scene_skybox

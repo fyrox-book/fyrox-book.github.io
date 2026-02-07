@@ -1,12 +1,11 @@
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::algebra::Vector2;
 use fyrox::core::color::Color;
-use fyrox::gui::border::BorderBuilder;
+use fyrox::gui::border::{Border, BorderBuilder};
 use fyrox::gui::brush::Brush;
 use fyrox::gui::font::Font;
 use fyrox::gui::formatted_text::WrapMode;
-use fyrox::gui::message::MessageDirection;
-use fyrox::gui::text::TextMessage;
+use fyrox::gui::text::{Text, TextMessage};
 use fyrox::gui::{HorizontalAlignment, VerticalAlignment};
 use fyrox::{
     core::pool::Handle,
@@ -14,7 +13,7 @@ use fyrox::{
 };
 
 // ANCHOR: create_text
-fn create_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+fn create_text(ui: &mut UserInterface, text: &str) -> Handle<Text> {
     TextBuilder::new(WidgetBuilder::new())
         .with_text(text)
         .build(&mut ui.build_ctx())
@@ -22,7 +21,7 @@ fn create_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 // ANCHOR_END: create_text
 
 // ANCHOR: create_centered_text
-fn create_centered_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+fn create_centered_text(ui: &mut UserInterface, text: &str) -> Handle<Text> {
     TextBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
@@ -32,7 +31,7 @@ fn create_centered_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
 // ANCHOR_END: create_centered_text
 
 // ANCHOR: create_text_with_word_wrap
-fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<Text> {
     TextBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
         .with_text(text)
@@ -41,7 +40,7 @@ fn create_text_with_word_wrap(ui: &mut UserInterface, text: &str) -> Handle<UiNo
 // ANCHOR_END: create_text_with_word_wrap
 
 // ANCHOR: create_text_with_background
-fn create_text_with_background(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+fn create_text_with_background(ui: &mut UserInterface, text: &str) -> Handle<Border> {
     let text_widget =
         TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
             .with_text(text)
@@ -56,7 +55,7 @@ fn create_text_with_background(ui: &mut UserInterface, text: &str) -> Handle<UiN
 // ANCHOR_END: create_text_with_background
 
 // ANCHOR: create_colored_text
-fn create_colored_text(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+fn create_colored_text(ui: &mut UserInterface, text: &str) -> Handle<Text> {
     //               vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
@@ -69,7 +68,7 @@ fn create_text_with_font(
     ui: &mut UserInterface,
     text: &str,
     resource_manager: &ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Text> {
     TextBuilder::new(WidgetBuilder::new())
         .with_font(resource_manager.request::<Font>("path/to/your/font.ttf"))
         .with_text(text)
@@ -80,7 +79,7 @@ fn create_text_with_font(
 // ANCHOR_END: create_text_with_font
 
 // ANCHOR: create_red_text_with_black_shadows
-fn create_red_text_with_black_shadows(ui: &mut UserInterface, text: &str) -> Handle<UiNode> {
+fn create_red_text_with_black_shadows(ui: &mut UserInterface, text: &str) -> Handle<Text> {
     TextBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
@@ -97,10 +96,6 @@ fn create_red_text_with_black_shadows(ui: &mut UserInterface, text: &str) -> Han
 
 // ANCHOR: request_change_text
 fn request_change_text(ui: &UserInterface, text_widget_handle: Handle<UiNode>, text: &str) {
-    ui.send_message(TextMessage::text(
-        text_widget_handle,
-        MessageDirection::ToWidget,
-        text.to_owned(),
-    ))
+    ui.send(text_widget_handle, TextMessage::Text(text.to_owned()))
 }
 // ANCHOR_END: request_change_text

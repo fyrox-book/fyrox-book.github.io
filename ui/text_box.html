@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -198,7 +198,7 @@ word wrapping, text alignment, and so on.</p>
 <p>An instance of the TextBox widget could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_text(text)
         .build(&amp;mut ui.build_ctx())
@@ -210,7 +210,7 @@ word wrapping, text alignment, and so on.</p>
 centered text could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_centered_text(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_horizontal_text_alignment(HorizontalAlignment::Center)
         .with_vertical_text_alignment(VerticalAlignment::Center)
@@ -222,7 +222,7 @@ centered text could be created like so:</p>
 <code>NoWrap</code>, <code>Letter</code>, <code>Word</code>. An instance of text with word-based wrapping could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_with_word_wrap(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_wrap(WrapMode::Word)
         .with_text(text)
@@ -233,7 +233,7 @@ centered text could be created like so:</p>
 <p>To set a color of the text just use <code>.with_foreground(..)</code> of the <code>WidgetBuilder</code> while building the text instance:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_colored_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_colored_text_box(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     //                  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
@@ -247,7 +247,7 @@ centered text could be created like so:</p>
     ui: &amp;mut UserInterface,
     text: &amp;str,
     resource_manager: &amp;ResourceManager,
-) -&gt; Handle&lt;UiNode&gt; {
+) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         .with_font(resource_manager.request::&lt;Font&gt;("path/to/your/font.ttf"))
         .with_text(text)
@@ -263,7 +263,7 @@ independent on the background colors. This effect could be used for subtitles. S
 need to do is to enable them, setup desired thickness, offset and brush (solid color or gradient).</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_red_text_with_black_shadows(ui: &amp;mut UserInterface, text: &amp;str) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new().with_foreground(Brush::Solid(Color::RED).into()))
         .with_text(text)
         // Enable shadows.
@@ -299,11 +299,7 @@ need to do is to enable them, setup desired thickness, offset and brush (solid c
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn request_change_text(ui: &amp;UserInterface, text_box_widget_handle: Handle&lt;UiNode&gt;, text: &amp;str) {
-    ui.send_message(TextMessage::text(
-        text_box_widget_handle,
-        MessageDirection::ToWidget,
-        text.to_owned(),
-    ))
+    ui.send(text_box_widget_handle, TextMessage::Text(text.to_owned()))
 }
 <span class="boring">}</span></code></pre>
 <p>Please keep in mind, that like any other situation when you “changing” something via messages, you should remember
@@ -361,7 +357,7 @@ pressed. This is <strong>default</strong> behavior. In case of multiline text bo
 phone number. A filter can be specified at build stage like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_text_box_with_filter(ui: &amp;mut UserInterface) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_text_box_with_filter(ui: &amp;mut UserInterface) -&gt; Handle&lt;TextBox&gt; {
     TextBoxBuilder::new(WidgetBuilder::new())
         // Specify a filter that will pass only digits.
         .with_filter(Arc::new(Mutex::new(|c: char| c.is_ascii_digit())))

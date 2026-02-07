@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -202,7 +202,7 @@ Use <a href="./rectangle.html">Rectangle node</a> if you need 2D sprites.</p>
 <p>A sprite instance could be created using <code>SpriteBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_sprite(scene: &amp;mut Scene) -&gt; Handle&lt;Sprite&gt; {
     SpriteBuilder::new(BaseBuilder::new())
         .with_size(2.0)
         .with_rotation(45.0f32.to_radians())
@@ -216,7 +216,7 @@ Use <a href="./rectangle.html">Rectangle node</a> if you need 2D sprites.</p>
 </span>fn create_sprite_with_texture(
     scene: &amp;mut Scene,
     resource_manager: ResourceManager,
-) -&gt; Handle&lt;Node&gt; {
+) -&gt; Handle&lt;Sprite&gt; {
     let mut material = Material::standard_sprite();
     material.bind(
         "diffuseTexture",
@@ -226,7 +226,11 @@ Use <a href="./rectangle.html">Rectangle node</a> if you need 2D sprites.</p>
     // Material resources can be shared across multiple sprites (via simple `clone`).
     // This significantly improves performance if you have multiple rectangles with the
     // same material.
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("4799c329-5aa2-468d-a079-ea2170be1c74"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     SpriteBuilder::new(BaseBuilder::new())
         .with_material(material_resource)

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -277,7 +277,7 @@ impl ScriptTrait for MyScript {
         Ok(())
     }
 
-    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) {
+    fn on_update(&amp;mut self, ctx: &amp;mut ScriptContext) -&gt; GameResult {
         // Draw the computed path.
         if let Some(path) = self.path.as_ref() {
             for segment in path.windows(2) {
@@ -288,6 +288,7 @@ impl ScriptTrait for MyScript {
                 })
             }
         }
+        Ok(())
     }
 }
 <span class="boring">}</span></code></pre>
@@ -295,7 +296,7 @@ impl ScriptTrait for MyScript {
 separate script instances. A plugin task is a bit easier to use:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Debug, Visit, Reflect)]
+</span>#[derive(Debug, Visit, Clone, Reflect)]
 struct MyGame {
     data: Option&lt;Vec&lt;u8&gt;&gt;,
 }
@@ -316,6 +317,7 @@ impl MyGame {
             |data, game: &amp;mut MyGame, _context| {
                 // Store the data in the game instance.
                 game.data = Some(data);
+                Ok(())
             },
         );
 

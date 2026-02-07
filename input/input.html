@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -200,7 +200,7 @@ to react to OS events on plugin scale and the latter - on script scale. Here’s
 events that could be used in your game (some rare events are omitted):</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Reflect, Debug, Visit)]
+</span>#[derive(Reflect, Clone, Debug, Visit)]
 struct MyGame {}
 
 impl Plugin for MyGame {

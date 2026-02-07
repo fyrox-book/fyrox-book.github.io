@@ -1,4 +1,5 @@
 use fyrox::core::Uuid;
+use fyrox::graph::SceneGraph;
 use fyrox::{
     asset::{manager::ResourceManager, untyped::ResourceKind},
     core::{
@@ -41,7 +42,7 @@ fn load_model_to_scene(
 // ANCHOR_END: load_model_to_scene
 
 // ANCHOR: create_procedural_mesh
-fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
+fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Mesh> {
     let mut material = Material::standard();
 
     // Material is completely optional, but here we'll demonstrate that it is possible to
@@ -104,7 +105,7 @@ fn extract_world_space_vertices(mesh: &Mesh, graph: &Graph) -> Vec<Vector3<f32>>
                 if let Some(bone_node) = surface
                     .bones()
                     .get(*index as usize)
-                    .and_then(|bone_handle| graph.try_get(*bone_handle))
+                    .and_then(|bone_handle| graph.try_get(*bone_handle).ok())
                 {
                     let bone_transform =
                         bone_node.global_transform() * bone_node.inv_bind_pose_transform();

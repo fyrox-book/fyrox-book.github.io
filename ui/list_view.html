@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -200,16 +200,19 @@ items, see the section below).</p>
 <p><code>ListView</code> can be created using <code>ListViewBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ListView&gt; {
     ListViewBuilder::new(WidgetBuilder::new())
-        .with_items(vec![
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item0")
-                .build(ctx),
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item1")
-                .build(ctx),
-        ])
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item0")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item1")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre>
@@ -221,18 +224,21 @@ in rare cases you might want to use something else. For example, you could use <
 selectable “tiles”:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_list_with_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_list_with_panel(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ListView&gt; {
     ListViewBuilder::new(WidgetBuilder::new())
         // Using WrapPanel instead of StackPanel:
         .with_items_panel(WrapPanelBuilder::new(WidgetBuilder::new()).build(ctx))
-        .with_items(vec![
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item0")
-                .build(ctx),
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item1")
-                .build(ctx),
-        ])
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item0")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item1")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
         .build(ctx)
 }
 <span class="boring">}</span></code></pre>
@@ -243,11 +249,7 @@ you can change it at runtime by sending [<code>ListViewMessage::SelectionChanged
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn change_selection(my_list_view: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ListViewMessage::selection(
-        my_list_view,
-        MessageDirection::ToWidget,
-        vec![1],
-    ));
+    ui.send(my_list_view, ListViewMessage::Selection(vec![1]));
 }
 <span class="boring">}</span></code></pre>
 <p>It is also possible to not have selected item at all, to do this you need to send an empty vector as a selection.
@@ -256,12 +258,8 @@ you need to listen to the same message but with opposite direction, like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn do_something(my_list_view: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
-    if let Some(ListViewMessage::SelectionChanged(selection)) = message.data() {
-        if message.destination() == my_list_view
-            &amp;&amp; message.direction() == MessageDirection::FromWidget
-        {
-            println!("New selection is: {:?}", selection);
-        }
+    if let Some(ListViewMessage::Selection(selection)) = message.data_from(my_list_view) {
+        println!("New selection is: {:?}", selection);
     }
 }
 <span class="boring">}</span></code></pre>
@@ -279,13 +277,10 @@ you need to listen to the same message but with opposite direction, like so:</p>
         TextBuilder::new(WidgetBuilder::new())
             .with_text("Item1")
             .build(ctx),
-    ];
+    ]
+    .to_base();
     // Then send the message with their handles to the list view.
-    ui.send_message(ListViewMessage::items(
-        my_list_view,
-        MessageDirection::ToWidget,
-        items,
-    ));
+    ui.send(my_list_view, ListViewMessage::Items(items));
 }
 <span class="boring">}</span></code></pre>
 <h2 id="bringing-a-particular-item-into-view"><a class="header" href="#bringing-a-particular-item-into-view">Bringing a particular item into view</a></h2>
@@ -296,11 +291,7 @@ message:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn bring_item_into_view(my_list_view: Handle&lt;UiNode&gt;, my_item: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
-    ui.send_message(ListViewMessage::bring_item_into_view(
-        my_list_view,
-        MessageDirection::ToWidget,
-        my_item,
-    ));
+    ui.send(my_list_view, ListViewMessage::BringItemIntoView(my_item));
 }
 <span class="boring">}</span></code></pre>
 

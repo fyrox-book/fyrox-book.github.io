@@ -57,9 +57,9 @@ async fn visit_my_structure(path: &Path, object: &mut MyStruct, write: bool) -> 
         object.visit("MyObject", &mut visitor)?;
 
         // Dump to the path.
-        visitor.save_binary(path)
+        visitor.save_binary_to_file(path)
     } else {
-        let mut visitor = Visitor::load_binary(path).await?;
+        let mut visitor = Visitor::load_binary_from_file(path).await?;
 
         // Create default instance of an object.
         let mut my_object = MyStruct::default();

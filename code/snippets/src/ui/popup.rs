@@ -1,12 +1,11 @@
 use fyrox::core::pool::Handle;
 use fyrox::gui::button::ButtonBuilder;
-use fyrox::gui::message::MessageDirection;
-use fyrox::gui::popup::{Placement, PopupBuilder, PopupMessage};
+use fyrox::gui::popup::{Placement, Popup, PopupBuilder, PopupMessage};
 use fyrox::gui::widget::WidgetBuilder;
 use fyrox::gui::{BuildContext, UiNode, UserInterface};
 
 // ANCHOR: create_popup_with_button
-fn create_popup_with_button(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_popup_with_button(ctx: &mut BuildContext) -> Handle<Popup> {
     PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -18,7 +17,7 @@ fn create_popup_with_button(ctx: &mut BuildContext) -> Handle<UiNode> {
 // ANCHOR_END: create_popup_with_button
 
 // ANCHOR: create_popup_with_button_and_open_it
-fn create_popup_with_button_and_open_it(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_popup_with_button_and_open_it(ui: &mut UserInterface) -> Handle<Popup> {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -27,13 +26,13 @@ fn create_popup_with_button_and_open_it(ui: &mut UserInterface) -> Handle<UiNode
         )
         .build(&mut ui.build_ctx());
     // Open the popup explicitly.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 // ANCHOR_END: create_popup_with_button_and_open_it
 
 // ANCHOR: create_popup_with_button_and_placement_and_open_it
-fn create_popup_with_button_and_placement_and_open_it(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_popup_with_button_and_placement_and_open_it(ui: &mut UserInterface) -> Handle<Popup> {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -44,7 +43,7 @@ fn create_popup_with_button_and_placement_and_open_it(ui: &mut UserInterface) ->
         .with_placement(Placement::Cursor(Handle::NONE))
         .build(&mut ui.build_ctx());
     // Open the popup explicitly at the current placement.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 // ANCHOR_END: create_popup_with_button_and_placement_and_open_it
@@ -53,7 +52,7 @@ fn create_popup_with_button_and_placement_and_open_it(ui: &mut UserInterface) ->
 fn create_popup_with_button_and_bottom_placement_and_open_it(
     dropdown_list: Handle<UiNode>,
     ui: &mut UserInterface,
-) -> Handle<UiNode> {
+) -> Handle<Popup> {
     let popup = PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())
@@ -64,13 +63,13 @@ fn create_popup_with_button_and_bottom_placement_and_open_it(
         .with_placement(Placement::LeftBottom(dropdown_list))
         .build(&mut ui.build_ctx());
     // Open the popup explicitly at the current placement.
-    ui.send_message(PopupMessage::open(popup, MessageDirection::ToWidget));
+    ui.send(popup, PopupMessage::Open);
     popup
 }
 // ANCHOR_END: create_popup_with_button_and_bottom_placement_and_open_it
 
 // ANCHOR: create_popup_that_stays_open
-fn create_popup_that_stays_open(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_popup_that_stays_open(ctx: &mut BuildContext) -> Handle<Popup> {
     PopupBuilder::new(WidgetBuilder::new())
         .with_content(
             ButtonBuilder::new(WidgetBuilder::new())

@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -279,7 +279,7 @@ fn use_animation() {
     let mut graph = Graph::new();
     let some_node = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut graph);
     // Create the animation.
-    let mut animation = create_animation(some_node);
+    let mut animation = create_animation(some_node.to_base());
     // Emulate some ticks (like it was updated from the main loop of your game).
     for _ in 0..10 {
         animation.tick(1.0 / 60.0);
@@ -355,8 +355,13 @@ asynchronous loading on all platforms.</p>
 enable/disable animations when needed by finding them by name from code and switching <code>Enabled</code> property:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn enable_animation(animation_player: Handle&lt;Node&gt;, graph: &amp;mut Graph, name: &amp;str, enabled: bool) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::&lt;AnimationPlayer&gt;(animation_player) {
+</span>fn enable_animation(
+    animation_player: Handle&lt;AnimationPlayer&gt;,
+    graph: &amp;mut Graph,
+    name: &amp;str,
+    enabled: bool,
+) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         // `get_value_mut_silent` prevents marking the variable as modified (see Property Inheritance
         // chapter for more info).
         let animations = animation_player.animations_mut().get_value_mut_silent();

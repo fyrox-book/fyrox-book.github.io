@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -207,7 +207,7 @@ file, after editor’s initialization.</p>
 editor will be <code>InspectablePropertyEditorDefinition</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Reflect, Debug)]
+</span>#[derive(Reflect, Clone, Debug)]
 struct MyStruct {
     foo: u32,
     bar: String,
@@ -215,8 +215,6 @@ struct MyStruct {
 
 fn add_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyStruct&gt;::new());
 }
@@ -247,8 +245,6 @@ enum MyEnum {
 
 fn add_enum_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(EnumPropertyEditorDefinition::&lt;MyEnum&gt;::new());
 }
@@ -274,23 +270,17 @@ struct MyScript {
 
 fn add_inheritable_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // This is responsible for supporting inheritable properties in scripts.
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InheritablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // Alternatively, the two previous insertions could be replaced by a single call of helper
     // method:
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .register_inheritable_inspectable::&lt;MyStruct&gt;();
 }
@@ -308,24 +298,18 @@ struct MyOtherScript {
 
 fn add_collection_property_editor(editor: &amp;Editor) {
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(InspectablePropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // VecCollectionPropertyEditorDefinition is used to create a property editor for Vec&lt;MyStruct&gt;,
     // internally it uses a registered property editor for its generic argument (MyStruct).
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .insert(VecCollectionPropertyEditorDefinition::&lt;MyOtherStruct&gt;::new());
 
     // Alternatively, you can use a special helper method to replace the two blocks above by a
     // single one.
     editor
-        .plugins
-        .get::&lt;InspectorPlugin&gt;()
         .property_editors
         .register_inheritable_vec_collection::&lt;MyOtherStruct&gt;();
 }

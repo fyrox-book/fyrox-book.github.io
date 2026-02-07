@@ -1,5 +1,6 @@
 use fyrox::asset::untyped::ResourceKind;
 use fyrox::core::math::Rect;
+use fyrox::core::uuid::uuid;
 use fyrox::material::{Material, MaterialResource};
 use fyrox::scene::dim2::rectangle::Rectangle;
 use fyrox::{
@@ -7,13 +8,13 @@ use fyrox::{
     core::{algebra::Vector3, color::Color, pool::Handle},
     resource::texture::Texture,
     scene::{
-        base::BaseBuilder, dim2::rectangle::RectangleBuilder, graph::Graph, node::Node,
+        base::BaseBuilder, dim2::rectangle::RectangleBuilder, graph::Graph,
         transform::TransformBuilder,
     },
 };
 
 // ANCHOR: create_rect
-fn create_rect(graph: &mut Graph, resource_manager: ResourceManager) -> Handle<Node> {
+fn create_rect(graph: &mut Graph, resource_manager: ResourceManager) -> Handle<Rectangle> {
     let mut material = Material::standard_2d();
     material.bind(
         "diffuseTexture",
@@ -23,7 +24,11 @@ fn create_rect(graph: &mut Graph, resource_manager: ResourceManager) -> Handle<N
     // Material resources can be shared across multiple rectangles (via simple `clone`).
     // This significantly improves performance if you have multiple rectangles with the
     // same material.
-    let material_resource = MaterialResource::new_ok(ResourceKind::Embedded, material);
+    let material_resource = MaterialResource::new_ok(
+        uuid!("32689007-2c4e-4cba-bfca-e39713542ac7"),
+        ResourceKind::Embedded,
+        material,
+    );
 
     RectangleBuilder::new(
         BaseBuilder::new().with_local_transform(

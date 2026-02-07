@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -252,9 +252,7 @@ suitable for editing via our plugin, this is where <code>on_message</code> could
 </span><span class="boring">fn main() {
 </span>    fn on_message(&amp;mut self, message: &amp;Message, editor: &amp;mut Editor) {
         // Fetch the active scene.
-        let Some(entry) = editor.scenes.current_scene_entry_mut() else {
-            return;
-        };
+        let entry = editor.scenes.current_scene_entry_mut();
 
         let Some(selection) = entry.selection.as_graph() else {
             return;
@@ -276,7 +274,7 @@ suitable for editing via our plugin, this is where <code>on_message</code> could
                 if scene
                     .graph
                     .try_get_script_of::&lt;MyScript&gt;(*node_handle)
-                    .is_some()
+                    .is_ok()
                 {
                     self.node_handle = *node_handle;
 
@@ -308,7 +306,7 @@ impl LinePointsGizmo {
         game_scene: &amp;GameScene,
         graph: &amp;mut Graph,
     ) {
-        let Some(script) = graph.try_get_script_of::&lt;MyScript&gt;(node_handle) else {
+        let Ok(script) = graph.try_get_script_of::&lt;MyScript&gt;(node_handle) else {
             return;
         };
         let points = script.points.clone();
@@ -322,7 +320,7 @@ impl LinePointsGizmo {
                     .with_size(0.1)
                     .build(graph);
 
-                self.point_nodes.push(point_node);
+                self.point_nodes.push(point_node.to_base());
 
                 // Link the sprite with the special scene node - the name of it should clearly state
                 // its purpose.
@@ -426,7 +424,7 @@ impl MyInteractionMode {
 <p>Now onto the <code>InteractionMode</code> trait implementation, let’s start by adding implementation for <code>make_button</code> method:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn make_button(&amp;mut self, ctx: &amp;mut BuildContext, selected: bool) -&gt; Handle&lt;UiNode&gt; {
+</span>    fn make_button(&amp;mut self, ctx: &amp;mut BuildContext, selected: bool) -&gt; Handle&lt;Button&gt; {
         make_interaction_mode_button(ctx, include_bytes!("icon.png"), "Line Edit Mode", selected)
     }
 <span class="boring">}</span></code></pre>
@@ -457,7 +455,10 @@ method:</p>
                 cursor_pos: mouse_pos,
                 editor_only: true,
                 filter: Some(&amp;mut |handle, _| handle != self.move_gizmo.origin),
-                ..Default::default()
+                ignore_back_faces: false,
+                use_picking_loop: false,
+                method: Default::default(),
+                settings: &amp;settings.selection,
             },
         ) {
             // The gizmo needs to be fed with input events as well, so it can react to the cursor.
@@ -516,7 +517,7 @@ and there’s some point selected.</p>
                 drag_context.plane_kind,
             );
 
-            if let Some(script) = scene
+            if let Ok(script) = scene
                 .graph
                 .try_get_script_of_mut::&lt;MyScript&gt;(self.node_handle)
             {
@@ -545,7 +546,7 @@ and there’s some point selected.</p>
         let scene = &amp;mut engine.scenes[game_scene.scene];
 
         if let Some(drag_context) = self.drag_context.take() {
-            if let Some(script) = scene
+            if let Ok(script) = scene
                 .graph
                 .try_get_script_of_mut::&lt;MyScript&gt;(self.node_handle)
             {
@@ -735,7 +736,7 @@ change position of a point at index 1:</p>
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::&lt;MyScript&gt;()
-                .unwrap()
+                .map(|s| s as &amp;mut dyn Reflect)
         },
     ))
 }
@@ -763,7 +764,7 @@ is something like this:</p>
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::&lt;MyScript&gt;()
-                .unwrap()
+                .map(|s| s as &amp;mut dyn Reflect)
         },
     ))
 }
@@ -789,7 +790,7 @@ use this index in the command. Typical usage is something like this:</p>
                 .graph
                 .node_mut(node_handle)
                 .try_get_script_mut::&lt;MyScript&gt;()
-                .unwrap()
+                .map(|s| s as &amp;mut dyn Reflect)
         },
     ))
 }

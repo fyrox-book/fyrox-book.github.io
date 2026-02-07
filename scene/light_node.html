@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -203,7 +203,7 @@ scenes.</p>
 <p>A directional light source could be created like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;DirectionalLight&gt; {
     DirectionalLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new())).build(&amp;mut scene.graph)
 }
 <span class="boring">}</span></code></pre>
@@ -212,7 +212,7 @@ scenes.</p>
 like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_oriented_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_oriented_directional_light(scene: &amp;mut Scene) -&gt; Handle&lt;DirectionalLight&gt; {
     DirectionalLightBuilder::new(BaseLightBuilder::new(
         BaseBuilder::new().with_local_transform(
             TransformBuilder::new()
@@ -231,7 +231,7 @@ like this:</p>
 An example of a point light source: light bulb.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_point_light(scene: &amp;mut Scene) -&gt; Handle&lt;PointLight&gt; {
     PointLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_radius(5.0)
         .build(&amp;mut scene.graph)
@@ -242,7 +242,7 @@ An example of a point light source: light bulb.</p>
 a spotlight source: flashlight.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;Node&gt; {
+</span>fn create_spot_light(scene: &amp;mut Scene) -&gt; Handle&lt;SpotLight&gt; {
     SpotLightBuilder::new(BaseLightBuilder::new(BaseBuilder::new()))
         .with_distance(5.0)
         .with_hotspot_cone_angle(50.0f32.to_radians())

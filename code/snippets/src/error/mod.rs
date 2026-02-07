@@ -1,4 +1,3 @@
-use fyrox::core::warn;
 use fyrox::graph::SceneGraph;
 use fyrox::plugin::error::{GameError, GameErrorKind};
 use fyrox::{
@@ -29,7 +28,7 @@ impl ScriptTrait for MyScript {
 // ANCHOR: error_handling
 
 // ANCHOR: enable_backtrace_capture
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
@@ -43,7 +42,7 @@ impl Plugin for MyPlugin {
 // ANCHOR_END: enable_backtrace_capture
 
 // ANCHOR: error_handler
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame;
 
 // Define an error type for your game first.
@@ -75,7 +74,7 @@ impl Plugin for MyGame {
     }
 
     fn on_game_error(&mut self, context: &mut PluginContext, error: &GameError) -> bool {
-        if let Some(GameErrorKind::UserError(ref err)) = error.kind {
+        if let GameErrorKind::UserError(ref err) = error.kind {
             if let Some(my_error) = err.downcast_ref::<MyError>() {
                 // Do something useful, for example show a warning message box.
                 // ...

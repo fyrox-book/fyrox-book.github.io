@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -209,17 +209,18 @@ node types):</p>
 to build a hierarchy of any complexity:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    let handle =
-        PivotBuilder::new(
-            BaseBuilder::new().with_children(&amp;[
-                CameraBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph),
-                PivotBuilder::new(BaseBuilder::new().with_children(&amp;[
-                    PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph),
-                ]))
+</span>    let handle = PivotBuilder::new(
+        BaseBuilder::new()
+            .with_child(CameraBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph))
+            .with_child(
+                PivotBuilder::new(
+                    BaseBuilder::new()
+                        .with_child(PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph)),
+                )
                 .build(&amp;mut scene.graph),
-            ]),
-        )
-        .build(&amp;mut scene.graph);
+            ),
+    )
+    .build(&amp;mut scene.graph);
 <span class="boring">}</span></code></pre>
 <p>Note that when we’re building a <code>Camera</code> instance, we’re passing a new instance of <code>BaseBuilder</code> to it, this
 instance can also be used to set some properties and a set of children nodes.</p>
@@ -230,10 +231,9 @@ instance can also be used to set some properties and a set of children nodes.</p
 
     let child_base = PivotBuilder::new(BaseBuilder::new()).build(&amp;mut scene.graph);
 
-    let base =
-        PivotBuilder::new(BaseBuilder::new().with_children(&amp;[child_base])).build(&amp;mut scene.graph);
+    let base = PivotBuilder::new(BaseBuilder::new().with_child(child_base)).build(&amp;mut scene.graph);
 
-    let handle = PivotBuilder::new(BaseBuilder::new().with_children(&amp;[camera, base]))
+    let handle = PivotBuilder::new(BaseBuilder::new().with_child(camera).with_child(base))
         .build(&amp;mut scene.graph);
 <span class="boring">}</span></code></pre>
 <p>However, it looks less informative, because it loses the hierarchical view and it is harder to tell the relations

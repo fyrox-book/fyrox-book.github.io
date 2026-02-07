@@ -1,5 +1,7 @@
 use fyrox::asset::untyped::ResourceKind;
+use fyrox::core::uuid;
 use fyrox::material::MaterialResource;
+use fyrox::scene::terrain::Terrain;
 use fyrox::{
     asset::manager::ResourceManager,
     core::{algebra::Vector2, algebra::Vector3, pool::Handle},
@@ -9,7 +11,6 @@ use fyrox::{
     scene::{
         base::BaseBuilder,
         graph::Graph,
-        node::Node,
         terrain::{Brush, BrushContext, BrushMode, BrushShape, BrushTarget, Layer, TerrainBuilder},
     },
 };
@@ -35,7 +36,7 @@ fn setup_layer_material(
 pub fn create_random_two_layer_terrain(
     graph: &mut Graph,
     resource_manager: &ResourceManager,
-) -> Handle<Node> {
+) -> Handle<Terrain> {
     let terrain = TerrainBuilder::new(BaseBuilder::new())
         .with_layers(vec![
             Layer {
@@ -47,7 +48,11 @@ pub fn create_random_two_layer_terrain(
                         "examples/data/Grass_DiffuseColor.jpg",
                         "examples/data/Grass_NormalColor.jpg",
                     );
-                    MaterialResource::new_ok(ResourceKind::Embedded, material)
+                    MaterialResource::new_ok(
+                        uuid!("4374fc82-ef19-4eea-a518-8a6f8afa7dba"),
+                        ResourceKind::Embedded,
+                        material,
+                    )
                 },
                 ..Default::default()
             },
@@ -60,14 +65,18 @@ pub fn create_random_two_layer_terrain(
                         "examples/data/Rock_DiffuseColor.jpg",
                         "examples/data/Rock_Normal.jpg",
                     );
-                    MaterialResource::new_ok(ResourceKind::Embedded, material)
+                    MaterialResource::new_ok(
+                        uuid!("19b0df85-201e-40c5-96d7-577ee6f75e7c"),
+                        ResourceKind::Embedded,
+                        material,
+                    )
                 },
                 ..Default::default()
             },
         ])
         .build(graph);
 
-    let terrain_ref = graph[terrain].as_terrain_mut();
+    let terrain_ref = &mut graph[terrain];
     let mut context = BrushContext::default();
 
     // Draw something on the terrain.

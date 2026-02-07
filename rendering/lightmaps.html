@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -246,6 +246,7 @@ and the actual generation cancellation. When the generation is done, you should 
 
     MeshBuilder::new(BaseBuilder::new())
         .with_surfaces(vec![SurfaceBuilder::new(SurfaceResource::new_ok(
+            uuid!("2b7b876d-29d5-4e08-93fc-d93d894f5459"),
             ResourceKind::Embedded,
             data,
         ))
@@ -263,9 +264,15 @@ and the actual generation cancellation. When the generation is done, you should 
     .build(&amp;mut scene.graph);
 
     // Prepare the data for generation using the scene.
-    let data =
-        LightmapInputData::from_scene(&amp;scene, |_, _| true, Default::default(), Default::default())
-            .unwrap();
+    let data = LightmapInputData::from_scene(
+        "lightmapTexture",
+        6,
+        &amp;scene,
+        |_, _| true,
+        Default::default(),
+        Default::default(),
+    )
+    .unwrap();
 
     // Generate the lightmap.
     let lightmap = Lightmap::new(data, 64, 0.005, Default::default(), Default::default()).unwrap();
@@ -292,7 +299,7 @@ need to change the light maps on the fly, you can use the following code:</p>
         "a/path/to/lightmap.lmp",
         resource_manager,
     ))
-    .unwrap();
+    .ok();
 
     scene.graph.set_lightmap(light_map).unwrap();
 }

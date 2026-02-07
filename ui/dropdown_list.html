@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4cbe4cd3.js";
+            window.path_to_searchindex_js = "../searchindex-a1627fda.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-025265cf.js"></script>
@@ -199,16 +199,19 @@ list to select its current item. It is used to show a single selected item in a 
 <p>A dropdown list with two text items with the last one selected, could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn create_drop_down_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn create_drop_down_list(ctx: &amp;mut BuildContext) -&gt; Handle&lt;DropdownList&gt; {
     DropdownListBuilder::new(WidgetBuilder::new())
-        .with_items(vec![
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item 0")
-                .build(ctx),
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("Item 1")
-                .build(ctx),
-        ])
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item 0")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item 1")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
         .with_selected(1)
         .build(ctx)
 }
@@ -218,7 +221,7 @@ in some other widget that shows the current state of items (selected, hovered, c
 of the most convenient ways of doing this is to use Decorator widget:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn make_item(text: &amp;str, ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+</span>fn make_item(text: &amp;str, ctx: &amp;mut BuildContext) -&gt; Handle&lt;Decorator&gt; {
     DecoratorBuilder::new(BorderBuilder::new(
         WidgetBuilder::new().with_child(
             TextBuilder::new(WidgetBuilder::new())
@@ -229,9 +232,9 @@ of the most convenient ways of doing this is to use Decorator widget:</p>
     .build(ctx)
 }
 
-fn create_drop_down_list_with_decorators(ctx: &amp;mut BuildContext) -&gt; Handle&lt;UiNode&gt; {
+fn create_drop_down_list_with_decorators(ctx: &amp;mut BuildContext) -&gt; Handle&lt;DropdownList&gt; {
     DropdownListBuilder::new(WidgetBuilder::new())
-        .with_items(vec![make_item("Item 0", ctx), make_item("Item 1", ctx)])
+        .with_items(vec![make_item("Item 0", ctx), make_item("Item 1", ctx)].to_base())
         .with_selected(1)
         .build(ctx)
 }
@@ -247,13 +250,11 @@ selection changes, use the following code:</p>
 
 impl Foo {
     fn on_ui_message(&amp;mut self, message: &amp;UiMessage) {
-        if let Some(DropdownListMessage::SelectionChanged(new_selection)) = message.data() {
-            if message.destination() == self.dropdown_list
-                &amp;&amp; message.direction() == MessageDirection::FromWidget
-            {
-                // Do something.
-                dbg!(new_selection);
-            }
+        if let Some(DropdownListMessage::Selection(new_selection)) =
+            message.data_from(self.dropdown_list)
+        {
+            // Do something.
+            dbg!(new_selection);
         }
     }
 }
