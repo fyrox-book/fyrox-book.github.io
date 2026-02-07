@@ -1,7 +1,8 @@
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::futures::executor::block_on;
-use fyrox::graph::BaseSceneGraph;
+use fyrox::graph::SceneGraph;
 use fyrox::resource::model::{Model, ModelResourceExtension};
+use fyrox::scene::camera::Camera;
 use fyrox::scene::mesh::MeshBuilder;
 use fyrox::scene::sprite::SpriteBuilder;
 use fyrox::{
@@ -12,7 +13,7 @@ use fyrox::{
 };
 
 // ANCHOR: create_camera
-fn create_camera(scene: &mut Scene) -> Handle<Node> {
+fn create_camera(scene: &mut Scene) -> Handle<Camera> {
     CameraBuilder::new(
         // Here we passing a base builder. Note that, since we can build Base node separately
         // we can pass any custom values to it while building.
@@ -29,11 +30,11 @@ fn create_camera(scene: &mut Scene) -> Handle<Node> {
 // ANCHOR_END: create_camera
 
 // ANCHOR: create_node
-fn create_node(scene: &mut Scene) -> Handle<Node> {
+fn create_node(scene: &mut Scene) -> Handle<Camera> {
     CameraBuilder::new(
         BaseBuilder::new()
             // Add some children nodes.
-            .with_children(&[
+            .with_child(
                 // A staff...
                 MeshBuilder::new(
                     BaseBuilder::new()
@@ -45,6 +46,8 @@ fn create_node(scene: &mut Scene) -> Handle<Node> {
                         ),
                 )
                 .build(&mut scene.graph),
+            )
+            .with_child(
                 // and a spell.
                 SpriteBuilder::new(
                     BaseBuilder::new()
@@ -56,7 +59,7 @@ fn create_node(scene: &mut Scene) -> Handle<Node> {
                         ),
                 )
                 .build(&mut scene.graph),
-            ])
+            )
             .with_local_transform(
                 TransformBuilder::new()
                     .with_local_position(Vector3::new(2.0, 0.0, 3.0))

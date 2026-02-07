@@ -26,9 +26,13 @@ use fyrox::{
 };
 
 // ANCHOR: create_tile_map
-fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
+fn create_tile_map(graph: &mut Graph) -> Handle<TileMap> {
     // Each tile could have its own material, for simplicity it is just a standard 2D material.
-    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_tile());
+    let material = MaterialResource::new_ok(
+        uuid!("cdbe4110-1889-4069-9c84-ded1d3028b17"),
+        ResourceKind::Embedded,
+        Material::standard_tile(),
+    );
 
     // Create a tile set - it is a data source for the tile map. Tile map will reference the tiles
     // stored in the tile set by handles. We'll create two tile types with different colors.
@@ -88,7 +92,11 @@ fn create_tile_map(graph: &mut Graph) -> Handle<Node> {
     // Finally we create our tile set and add our page to it at position (0,0).
     let mut tile_set = TileSet::default();
     tile_set.insert_page(Vector2::new(0, 0), page);
-    let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
+    let tile_set = TileSetResource::new_ok(
+        uuid!("a937e9a6-3332-4466-b5f3-1e6e69e1349a"),
+        ResourceKind::Embedded,
+        tile_set,
+    );
 
     // This positions of all the tiles in our tile map using their TileDefinitionHandle
     // to find the tiles in the tile set.
@@ -125,7 +133,7 @@ fn add_tile_map_physics(tile_map: Handle<Node>, graph: &mut Graph) {
         .build(graph);
 
     // Create a static rigid body with the tile map collider.
-    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_children(&[collider]))
+    let rigid_body = RigidBodyBuilder::new(BaseBuilder::new().with_child(collider))
         .with_body_type(RigidBodyType::Static)
         .build(graph);
 }
@@ -137,7 +145,11 @@ const SLIME: i32 = 2;
 const SURFACE_TYPE_UUID: Uuid = uuid!("a70a754b-eed5-4e60-bf8a-3239f0b6004b");
 
 fn create_tile_map_with_props(graph: &mut Graph) {
-    let material = MaterialResource::new_ok(ResourceKind::Embedded, Material::standard_2d());
+    let material = MaterialResource::new_ok(
+        uuid!("3b2bcda5-0045-426b-b1f7-61a54d9e803a"),
+        ResourceKind::Embedded,
+        Material::standard_2d(),
+    );
 
     let mut tiles = TileGridMap::default();
     let stone_tile = TileDefinitionHandle::new(0, 0, 0, 0);
@@ -197,7 +209,11 @@ fn create_tile_map_with_props(graph: &mut Graph) {
         prop_type: TileSetPropertyType::F32,
         named_values: Vec::default(),
     });
-    let tile_set = TileSetResource::new_ok(ResourceKind::Embedded, tile_set);
+    let tile_set = TileSetResource::new_ok(
+        uuid!("355f9cee-6af0-4068-9740-922c8a7720a6"),
+        ResourceKind::Embedded,
+        tile_set,
+    );
 
     // ..
 }

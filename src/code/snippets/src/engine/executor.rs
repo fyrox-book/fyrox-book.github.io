@@ -8,11 +8,7 @@ fn main() {
     let executor = Executor::from_params(
         EventLoop::new().ok(),
         GraphicsContextParams {
-            window_attributes: WindowAttributes {
-                // Set window title.
-                title: "My Game".to_string(),
-                ..Default::default()
-            },
+            window_attributes: WindowAttributes::default().with_title("My Game"),
             vsync: true,
             msaa_sample_count: None,
             graphics_server_constructor: Default::default(),

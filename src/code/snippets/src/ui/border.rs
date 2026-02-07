@@ -1,13 +1,14 @@
+use fyrox::gui::border::Border;
 use fyrox::{
     core::{color::Color, pool::Handle},
     gui::{
         border::BorderBuilder, brush::Brush, text::TextBuilder, widget::WidgetBuilder, Thickness,
-        UiNode, UserInterface,
+        UserInterface,
     },
 };
 
 // ANCHOR: create_border_with_button
-fn create_border_with_button(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_border_with_button(ui: &mut UserInterface) -> Handle<Border> {
     BorderBuilder::new(
         WidgetBuilder::new().with_child(
             TextBuilder::new(WidgetBuilder::new())
@@ -30,7 +31,7 @@ fn create_border_with_button(ui: &mut UserInterface) -> Handle<UiNode> {
 // ANCHOR_END: create_border_with_button
 
 // ANCHOR: create_blue_border_with_red_background
-fn create_blue_border_with_red_background(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_blue_border_with_red_background(ui: &mut UserInterface) -> Handle<Border> {
     BorderBuilder::new(
         WidgetBuilder::new()
             .with_foreground(Brush::Solid(Color::opaque(0, 0, 200)).into())

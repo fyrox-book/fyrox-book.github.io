@@ -1,3 +1,5 @@
+use fyrox::asset::io::FsResourceIo;
+use fyrox::engine::ApplicationLoopController;
 use fyrox::{
     asset::manager::ResourceManager,
     core::{
@@ -33,11 +35,13 @@ fn main() {
             vsync: true,
             msaa_sample_count: None,
             graphics_server_constructor: GraphicsServerConstructor::default(),
+            named_objects: false,
         },
-        resource_manager: ResourceManager::new(task_pool.clone()),
+        resource_manager: ResourceManager::new(Arc::new(FsResourceIo), task_pool.clone()),
         serialization_context,
         task_pool,
         widget_constructors: Arc::new(new_widget_constructor_container()),
+        dyn_type_constructors: Arc::new(Default::default()),
     })
     .unwrap();
 
@@ -45,6 +49,7 @@ fn main() {
     let fixed_time_step = 1.0 / 60.0;
     let mut lag = 0.0;
 
+    #[allow(deprecated)]
     event_loop
         .run(move |event, window_target| {
             window_target.set_control_flow(ControlFlow::Wait);
@@ -83,7 +88,12 @@ fn main() {
                         // ************************
 
                         // It is very important to update the engine every frame!
-                        engine.update(fixed_time_step, window_target, &mut lag, Default::default());
+                        engine.update(
+                            fixed_time_step,
+                            ApplicationLoopController::ActiveEventLoop(window_target),
+                            &mut lag,
+                            Default::default(),
+                        );
                     }
 
                     if let GraphicsContext::Initialized(ref ctx) = engine.graphics_context {

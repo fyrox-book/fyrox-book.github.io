@@ -12,7 +12,7 @@ use fyrox::{
 };
 
 // ANCHOR: events_example
-#[derive(Reflect, Debug, Visit)]
+#[derive(Reflect, Clone, Debug, Visit)]
 struct MyGame {}
 
 impl Plugin for MyGame {

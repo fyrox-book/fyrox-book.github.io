@@ -1,4 +1,4 @@
-use fyrox::gui::check_box::CheckBoxMessage;
+use fyrox::gui::check_box::{CheckBox, CheckBoxMessage};
 use fyrox::gui::message::UiMessage;
 use fyrox::gui::text::TextBuilder;
 use fyrox::plugin::error::GameResult;
@@ -10,7 +10,7 @@ use fyrox::{
 };
 
 // ANCHOR: create_checkbox
-fn create_checkbox(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_checkbox(ui: &mut UserInterface) -> Handle<CheckBox> {
     CheckBoxBuilder::new(WidgetBuilder::new())
         // A custom value can be set during initialization.
         .checked(Some(true))
@@ -19,7 +19,7 @@ fn create_checkbox(ui: &mut UserInterface) -> Handle<UiNode> {
 // ANCHOR_END: create_checkbox
 
 // ANCHOR: create_checkbox_with_text
-fn create_checkbox_with_text(ui: &mut UserInterface) -> Handle<UiNode> {
+fn create_checkbox_with_text(ui: &mut UserInterface) -> Handle<CheckBox> {
     let ctx = &mut ui.build_ctx();
 
     CheckBoxBuilder::new(WidgetBuilder::new())
@@ -35,7 +35,7 @@ fn create_checkbox_with_text(ui: &mut UserInterface) -> Handle<UiNode> {
 // ANCHOR_END: create_checkbox_with_text
 
 // ANCHOR: usage_example
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     checkbox: Handle<UiNode>,
 }

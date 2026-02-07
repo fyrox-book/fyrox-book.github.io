@@ -15,17 +15,18 @@ fn build_node(scene: &mut Scene) {
 
 fn build_complex_node(scene: &mut Scene) {
     // ANCHOR: build_complex_node
-    let handle =
-        PivotBuilder::new(
-            BaseBuilder::new().with_children(&[
-                CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph),
-                PivotBuilder::new(BaseBuilder::new().with_children(&[
-                    PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph),
-                ]))
+    let handle = PivotBuilder::new(
+        BaseBuilder::new()
+            .with_child(CameraBuilder::new(BaseBuilder::new()).build(&mut scene.graph))
+            .with_child(
+                PivotBuilder::new(
+                    BaseBuilder::new()
+                        .with_child(PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph)),
+                )
                 .build(&mut scene.graph),
-            ]),
-        )
-        .build(&mut scene.graph);
+            ),
+    )
+    .build(&mut scene.graph);
     // ANCHOR_END: build_complex_node
 }
 
@@ -35,10 +36,9 @@ fn build_complex_node_flat(scene: &mut Scene) {
 
     let child_base = PivotBuilder::new(BaseBuilder::new()).build(&mut scene.graph);
 
-    let base =
-        PivotBuilder::new(BaseBuilder::new().with_children(&[child_base])).build(&mut scene.graph);
+    let base = PivotBuilder::new(BaseBuilder::new().with_child(child_base)).build(&mut scene.graph);
 
-    let handle = PivotBuilder::new(BaseBuilder::new().with_children(&[camera, base]))
+    let handle = PivotBuilder::new(BaseBuilder::new().with_child(camera).with_child(base))
         .build(&mut scene.graph);
     // ANCHOR_END: build_complex_node_flat
 }

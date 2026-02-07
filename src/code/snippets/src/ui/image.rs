@@ -1,13 +1,14 @@
+use fyrox::gui::image::Image;
 use fyrox::resource::texture::TextureKind;
 use fyrox::{
     asset::manager::ResourceManager,
     core::pool::Handle,
-    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext, UiNode},
+    gui::{image::ImageBuilder, widget::WidgetBuilder, BuildContext},
     resource::texture::Texture,
 };
 
 // ANCHOR: create_image
-fn create_image(ctx: &mut BuildContext, resource_manager: ResourceManager) -> Handle<UiNode> {
+fn create_image(ctx: &mut BuildContext, resource_manager: ResourceManager) -> Handle<Image> {
     // You must explicitly set width and height of the image, otherwise it will collapse to a
     // point and you won't see anything.
     let width = 100.0;
@@ -25,7 +26,7 @@ fn create_image(ctx: &mut BuildContext, resource_manager: ResourceManager) -> Ha
 async fn create_image_equal_in_size_to_source(
     ctx: &mut BuildContext<'_>,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Image> {
     // Ask resource manager to load the texture and wait while it loads using `.await`.
     if let Ok(texture) = resource_manager
         .request::<Texture>("path/to/your/texture.png")
@@ -53,7 +54,7 @@ async fn create_image_equal_in_size_to_source(
 fn create_image_sync(
     ctx: &mut BuildContext<'_>,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Image> {
     fyrox::core::futures::executor::block_on(create_image_equal_in_size_to_source(
         ctx,
         resource_manager,
@@ -65,7 +66,7 @@ fn create_image_sync(
 fn create_flipped_image(
     ctx: &mut BuildContext,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Image> {
     ImageBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
         .with_flip(true) // Flips an image vertically
         .with_texture(resource_manager.request::<Texture>("path/to/your/texture.png"))

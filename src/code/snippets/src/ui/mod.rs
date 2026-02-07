@@ -30,7 +30,7 @@ pub mod wrap_panel;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;
-use fyrox::gui::button::ButtonBuilder;
+use fyrox::gui::button::{Button, ButtonBuilder};
 use fyrox::gui::grid::{Column, GridBuilder, Row};
 use fyrox::gui::image::ImageBuilder;
 use fyrox::gui::text::TextBuilder;
@@ -47,7 +47,7 @@ use fyrox::{
 };
 
 // ANCHOR: message_passing
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     button: Handle<UiNode>,
 }
@@ -71,7 +71,7 @@ impl Plugin for MyPlugin {
 fn create_fancy_button(
     ui: &mut UserInterface,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Button> {
     let ctx = &mut ui.build_ctx();
     ButtonBuilder::new(WidgetBuilder::new())
         .with_back(
@@ -88,7 +88,7 @@ fn create_fancy_button(
 fn create_fancy_button_with_text(
     ui: &mut UserInterface,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Button> {
     let ctx = &mut ui.build_ctx();
 
     ButtonBuilder::new(WidgetBuilder::new())
@@ -119,7 +119,7 @@ fn create_fancy_button_with_text(
 fn create_fancy_button_with_shortcut(
     ui: &mut UserInterface,
     resource_manager: ResourceManager,
-) -> Handle<UiNode> {
+) -> Handle<Button> {
     let ctx = &mut ui.build_ctx();
     let image;
     ButtonBuilder::new(WidgetBuilder::new())

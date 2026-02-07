@@ -54,7 +54,7 @@ impl ScriptTrait for MyScript {
 // ANCHOR: example_script
 
 // ANCHOR: register
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyPlugin;
 
 impl Plugin for MyPlugin {

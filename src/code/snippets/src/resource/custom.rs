@@ -81,7 +81,7 @@ impl ResourceLoader for CustomResourceLoader {
 // ANCHOR_END: custom_resource
 
 // ANCHOR: custom_resource_registration
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct MyGame {}
 
 impl Plugin for MyGame {
@@ -89,8 +89,7 @@ impl Plugin for MyGame {
         context
             .resource_manager
             .state()
-            .loaders
-            .set(CustomResourceLoader);
+            .add_loader(CustomResourceLoader);
         Ok(())
     }
 }

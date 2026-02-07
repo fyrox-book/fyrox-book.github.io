@@ -1,5 +1,5 @@
-use fyrox::gui::message::{ UiMessage};
-use fyrox::gui::scroll_bar::ScrollBarMessage;
+use fyrox::gui::message::UiMessage;
+use fyrox::gui::scroll_bar::{ScrollBar, ScrollBarMessage};
 use fyrox::gui::{
     core::pool::Handle,
     core::{reflect::prelude::*, visitor::prelude::*},
@@ -11,7 +11,7 @@ use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginContext};
 
 // ANCHOR: create_scroll_bar
-fn create_scroll_bar(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_scroll_bar(ctx: &mut BuildContext) -> Handle<ScrollBar> {
     ScrollBarBuilder::new(WidgetBuilder::new())
         .with_min(0.0)
         .with_max(200.0)
@@ -21,7 +21,7 @@ fn create_scroll_bar(ctx: &mut BuildContext) -> Handle<UiNode> {
 // ANCHOR_END: create_scroll_bar
 
 // ANCHOR: usage_example
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     scroll_bar: Handle<UiNode>,
 }

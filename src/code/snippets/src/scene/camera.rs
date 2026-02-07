@@ -22,7 +22,7 @@ use fyrox::{
 };
 
 // ANCHOR: create_camera
-fn create_camera(scene: &mut Scene) -> Handle<Node> {
+fn create_camera(scene: &mut Scene) -> Handle<Camera> {
     CameraBuilder::new(BaseBuilder::new())
         // Set some properties.
         .with_fov(80.0f32.to_radians())
@@ -32,7 +32,7 @@ fn create_camera(scene: &mut Scene) -> Handle<Node> {
 // ANCHOR_END: create_camera
 
 // ANCHOR: create_perspective_camera
-fn create_perspective_camera(graph: &mut Graph) -> Handle<Node> {
+fn create_perspective_camera(graph: &mut Graph) -> Handle<Camera> {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Perspective(PerspectiveProjection {
             // Keep in mind that field of view expressed in radians!
@@ -45,7 +45,7 @@ fn create_perspective_camera(graph: &mut Graph) -> Handle<Node> {
 // ANCHOR_END: create_perspective_camera
 
 // ANCHOR: create_orthographic_camera
-fn create_orthographic_camera(graph: &mut Graph) -> Handle<Node> {
+fn create_orthographic_camera(graph: &mut Graph) -> Handle<Camera> {
     CameraBuilder::new(BaseBuilder::new())
         .with_projection(Projection::Orthographic(OrthographicProjection {
             vertical_size: 5.0,
@@ -57,7 +57,7 @@ fn create_orthographic_camera(graph: &mut Graph) -> Handle<Node> {
 // ANCHOR_END: create_orthographic_camera
 
 // ANCHOR: create_camera_with_lut
-fn create_camera_with_lut(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Node> {
+fn create_camera_with_lut(scene: &mut Scene, resource_manager: ResourceManager) -> Handle<Camera> {
     CameraBuilder::new(BaseBuilder::new())
         .with_color_grading_enabled(true)
         .with_color_grading_lut(

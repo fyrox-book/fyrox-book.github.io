@@ -1,6 +1,5 @@
 use fyrox::core::color::Color;
-use fyrox::gui::image::ImageBuilder;
-use fyrox::gui::UiNode;
+use fyrox::gui::image::{Image, ImageBuilder};
 use fyrox::plugin::error::GameResult;
 use fyrox::renderer::ui_renderer::UiRenderInfo;
 use fyrox::{
@@ -17,7 +16,7 @@ use fyrox::{
 };
 
 // ANCHOR: rendering
-#[derive(Default, Visit, Reflect, Debug)]
+#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct Game {
     // Add these fields to your game.
     my_ui: UserInterface,
@@ -104,7 +103,7 @@ fn reroute_scene_rendering(
     height: u32,
     scene: &mut Scene,
     context: &mut PluginContext,
-) -> Handle<UiNode> {
+) -> Handle<Image> {
     // Create render target first.
     let render_target = TextureResource::new_render_target(width, height);
 

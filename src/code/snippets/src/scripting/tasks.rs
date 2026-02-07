@@ -68,7 +68,7 @@ impl ScriptTrait for MyScript {
         Ok(())
     }
 
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         // Draw the computed path.
         if let Some(path) = self.path.as_ref() {
             for segment in path.windows(2) {
@@ -79,12 +79,13 @@ impl ScriptTrait for MyScript {
                 })
             }
         }
+        Ok(())
     }
 }
 // ANCHOR_END: script_task
 
 // ANCHOR: plugin_task
-#[derive(Debug, Visit, Reflect)]
+#[derive(Debug, Visit, Clone, Reflect)]
 struct MyGame {
     data: Option<Vec<u8>>,
 }
@@ -105,6 +106,7 @@ impl MyGame {
             |data, game: &mut MyGame, _context| {
                 // Store the data in the game instance.
                 game.data = Some(data);
+                Ok(())
             },
         );
 

@@ -5,20 +5,19 @@ use fyrox::{
         base::BaseBuilder,
         collider::{ColliderBuilder, ColliderShape},
         graph::Graph,
-        node::Node,
         rigidbody::RigidBodyBuilder,
     },
 };
 
 // ANCHOR: create_cube_rigid_body
-fn create_cube_rigid_body(graph: &mut Graph) -> Handle<Node> {
+fn create_cube_rigid_body(graph: &mut Graph) -> Handle<RigidBody> {
     RigidBodyBuilder::new(
-        BaseBuilder::new().with_children(&[
+        BaseBuilder::new().with_child(
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]),
+        ),
     )
     .with_mass(2.0)
     .with_lin_vel(Vector3::new(0.0, 3.0, 1.0))
@@ -40,14 +39,14 @@ fn apply_force_and_torque(rigid_body: &mut RigidBody) {
 // ANCHOR_END: apply_force_and_torque
 
 // ANCHOR: create_kinematic_rigid_body
-fn create_kinematic_rigid_body(graph: &mut Graph) -> Handle<Node> {
+fn create_kinematic_rigid_body(graph: &mut Graph) -> Handle<RigidBody> {
     RigidBodyBuilder::new(
-        BaseBuilder::new().with_children(&[
+        BaseBuilder::new().with_child(
             // Rigid body must have at least one collider
             ColliderBuilder::new(BaseBuilder::new())
                 .with_shape(ColliderShape::cuboid(0.5, 0.5, 0.5))
                 .build(graph),
-        ]),
+        ),
     )
     .with_body_type(RigidBodyType::KinematicPositionBased)
     .build(graph)

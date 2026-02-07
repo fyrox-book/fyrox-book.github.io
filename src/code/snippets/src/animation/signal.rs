@@ -7,17 +7,17 @@ use fyrox::scene::animation::absm::{
 };
 use fyrox::{
     core::{pool::Handle, uuid::uuid},
-    scene::{animation::AnimationPlayer, graph::Graph, node::Node},
+    scene::{animation::AnimationPlayer, graph::Graph},
 };
 
 // ANCHOR: add_signal
 fn add_signal(
-    animation_player: Handle<Node>,
+    animation_player: Handle<AnimationPlayer>,
     animation_name: &str,
     signal_name: &str,
     graph: &mut Graph,
 ) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::<AnimationPlayer>(animation_player) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
         if let Some((_, animation)) = animations.find_by_name_mut(animation_name) {
             // This uuid should be unique, you could also use Uuid::new_v4() method, but it
@@ -34,12 +34,12 @@ fn add_signal(
 
 // ANCHOR: react_to_signal_events
 fn react_to_signal_events(
-    animation_player: Handle<Node>,
+    animation_player: Handle<AnimationPlayer>,
     animation_name: &str,
     signal_name: &str,
     graph: &mut Graph,
 ) {
-    if let Some(animation_player) = graph.try_get_mut_of_type::<AnimationPlayer>(animation_player) {
+    if let Ok(animation_player) = graph.try_get_mut(animation_player) {
         let animations = animation_player.animations_mut().get_value_mut_silent();
 
         // Ideally, animation fetching should be done via its handle (the first argument of the
@@ -60,20 +60,12 @@ fn react_to_signal_events(
 
 // ANCHOR: collect_events_from_absm
 fn collect_events_from_absm(
-    absm: Handle<Node>,
+    absm: Handle<AnimationBlendingStateMachine>,
     strategy: AnimationEventCollectionStrategy,
     ctx: &mut ScriptContext,
 ) -> LayerAnimationEventsCollection {
-    if let Some(absm) = ctx
-        .scene
-        .graph
-        .try_get_of_type::<AnimationBlendingStateMachine>(absm)
-    {
-        if let Some(animation_player) = ctx
-            .scene
-            .graph
-            .try_get_of_type::<AnimationPlayer>(absm.animation_player())
-        {
+    if let Ok(absm) = ctx.scene.graph.try_get(absm) {
+        if let Ok(animation_player) = ctx.scene.graph.try_get(absm.animation_player()) {
             // Fetch a layer first, it could be any layer of the ABMS, but for simplicity
             // we'll use the first layer.
             if let Some(layer) = absm.machine().layers().first() {

@@ -6,7 +6,7 @@ use fyrox::{
 };
 
 // ANCHOR: graphics_context
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {}
 
 impl Plugin for Game {

@@ -1,3 +1,4 @@
+use fyrox::core::ok_or_return;
 use fyrox::fxhash::FxHashMap;
 use fyrox::plugin::error::GameResult;
 use fyrox::scene::node::Node;
@@ -8,7 +9,6 @@ use fyrox::{
         net::{NetListener, NetStream},
         pool::Handle,
         reflect::prelude::*,
-        some_or_return,
         visitor::prelude::*,
     },
     graph::SceneGraph,
@@ -100,6 +100,12 @@ pub struct Server {
     prev_node_states: FxHashMap<Handle<Node>, NodeState>,
 }
 
+impl Clone for Server {
+    fn clone(&self) -> Self {
+        panic!("non-cloneable!")
+    }
+}
+
 impl Server {
     const ADDRESS: &'static str = "127.0.0.1:10000";
 
@@ -130,9 +136,16 @@ impl Server {
 }
 
 #[derive(Reflect)]
+#[reflect(non_cloneable)]
 pub struct Client {
     #[reflect(hidden)]
     connection: NetStream,
+}
+
+impl Clone for Client {
+    fn clone(&self) -> Self {
+        panic!("non-cloneable!")
+    }
 }
 
 impl Client {
@@ -193,7 +206,7 @@ pub struct NodeState {
 
 impl Server {
     pub fn sync(&mut self, scene: Handle<Scene>, ctx: &mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let scene = ok_or_return!(ctx.scenes.try_get(scene));
         let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
         for (handle, node) in scene.graph.pair_iter() {
             entity_states.push(NodeState {
@@ -210,7 +223,7 @@ impl Server {
 // ANCHOR: syncing_with_delta_compression
 impl Server {
     pub fn sync_with_delta_compression(&mut self, scene: Handle<Scene>, ctx: &mut PluginContext) {
-        let scene = some_or_return!(ctx.scenes.try_get(scene));
+        let scene = ok_or_return!(ctx.scenes.try_get(scene));
         let mut entity_states = Vec::with_capacity(scene.graph.capacity() as usize);
         for (handle, node) in scene.graph.pair_iter() {
             let current_state = NodeState {

@@ -1,19 +1,20 @@
+use fyrox::gui::canvas::Canvas;
 use fyrox::{
     core::{algebra::Vector2, pool::Handle},
     gui::{
         button::ButtonBuilder, canvas::CanvasBuilder, text::TextBuilder, widget::WidgetBuilder,
-        BuildContext, UiNode,
+        BuildContext,
     },
 };
 
 // ANCHOR: create_canvas
-fn create_canvas(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_canvas(ctx: &mut BuildContext) -> Handle<Canvas> {
     CanvasBuilder::new(WidgetBuilder::new()).build(ctx)
 }
 // ANCHOR_END: create_canvas
 
 // ANCHOR: create_canvas_with_children_widgets
-fn create_canvas_with_children_widgets(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_canvas_with_children_widgets(ctx: &mut BuildContext) -> Handle<Canvas> {
     CanvasBuilder::new(
         WidgetBuilder::new()
             .with_child(

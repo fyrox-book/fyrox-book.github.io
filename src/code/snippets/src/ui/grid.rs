@@ -1,12 +1,13 @@
+use fyrox::gui::grid::Grid;
 use fyrox::gui::{
     grid::{GridBuilder, GridDimension},
     text::TextBuilder,
     widget::WidgetBuilder,
-    BuildContext, UiNode,
+    BuildContext,
 };
 
 // ANCHOR: create_text_grid
-fn create_text_grid(ctx: &mut BuildContext) -> fyrox::core::pool::Handle<UiNode> {
+fn create_text_grid(ctx: &mut BuildContext) -> fyrox::core::pool::Handle<Grid> {
     GridBuilder::new(
         WidgetBuilder::new()
             .with_child(

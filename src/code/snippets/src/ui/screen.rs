@@ -1,3 +1,4 @@
+use fyrox::gui::screen::Screen;
 use fyrox::gui::{
     button::ButtonBuilder,
     core::pool::Handle,
@@ -5,11 +6,11 @@ use fyrox::gui::{
     screen::ScreenBuilder,
     stack_panel::StackPanelBuilder,
     widget::WidgetBuilder,
-    BuildContext, UiNode,
+    BuildContext,
 };
 
 // ANCHOR: create_always_centered_game_menu
-fn create_always_centered_game_menu(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_always_centered_game_menu(ctx: &mut BuildContext) -> Handle<Screen> {
     // Screen widget will provide current screen size to its Grid widget as a layout constraint,
     // thus making it fit to the current screen bounds.
     ScreenBuilder::new(

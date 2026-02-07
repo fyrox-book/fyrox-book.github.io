@@ -28,7 +28,7 @@ impl ScriptTrait for MyScript {
 // ANCHOR_END: debug_drawing
 
 // ANCHOR: update_begin
-#[derive(Visit, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug)]
 struct Game {
     scene: Handle<Scene>,
 }

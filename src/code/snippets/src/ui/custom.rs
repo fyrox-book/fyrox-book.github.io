@@ -1,4 +1,6 @@
+use fyrox::gui::border::Border;
 use fyrox::gui::message::MessageData;
+use fyrox::gui::text::Text;
 use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{
@@ -54,20 +56,22 @@ impl MessageData for MyButtonMessage {}
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
 struct MyButton {
     widget: Widget,
-    border: Handle<UiNode>,
-    text: Handle<UiNode>,
+    border: Handle<Border>,
+    text: Handle<Text>,
 }
 
 define_widget_deref!(MyButton);
 
 impl MyButton {
     fn set_colors(&self, ui: &UserInterface, text_color: Color, border_color: Color) {
-        for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send(
-                handle,
-                WidgetMessage::Foreground(Brush::Solid(color).into()),
-            );
-        }
+        ui.send(
+            self.border,
+            WidgetMessage::Foreground(Brush::Solid(border_color).into()),
+        );
+        ui.send(
+            self.text,
+            WidgetMessage::Foreground(Brush::Solid(text_color).into()),
+        );
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
@@ -175,7 +179,7 @@ fn my_button_builder_usage(ctx: &mut BuildContext) {
 // ANCHOR_END: my_button_builder_usage
 
 // ANCHOR: reacting_to_click_messages
-#[derive(Default, Visit, Reflect, Debug)]
+#[derive(Default, Visit, Clone, Reflect, Debug)]
 struct MyPlugin {
     my_button: Handle<UiNode>,
 }

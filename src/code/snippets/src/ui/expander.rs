@@ -1,6 +1,6 @@
 use fyrox::core::{reflect::prelude::*, visitor::prelude::*};
 use fyrox::gui::check_box::CheckBoxBuilder;
-use fyrox::gui::expander::ExpanderMessage;
+use fyrox::gui::expander::{Expander, ExpanderMessage};
 use fyrox::gui::image::ImageBuilder;
 use fyrox::gui::message::{MessageDirection, UiMessage};
 use fyrox::gui::{
@@ -12,7 +12,7 @@ use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginContext};
 
 // ANCHOR: create_expander
-fn create_expander(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_expander(ctx: &mut BuildContext) -> Handle<Expander> {
     ExpanderBuilder::new(WidgetBuilder::new())
         // Header is visible all the time.
         .with_header(
@@ -42,7 +42,7 @@ fn create_expander(ctx: &mut BuildContext) -> Handle<UiNode> {
 // ANCHOR_END: create_expander
 
 // ANCHOR: create_expander_with_image
-fn create_expander_with_image(ctx: &mut BuildContext) -> Handle<UiNode> {
+fn create_expander_with_image(ctx: &mut BuildContext) -> Handle<Expander> {
     ExpanderBuilder::new(WidgetBuilder::new())
         .with_checkbox(
             CheckBoxBuilder::new(WidgetBuilder::new())
@@ -64,7 +64,7 @@ fn create_expander_with_image(ctx: &mut BuildContext) -> Handle<UiNode> {
 // ANCHOR_END: create_expander_with_image
 
 // ANCHOR: message_handling
-#[derive(Visit, Reflect, Debug, Default)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct Game {
     expander: Handle<UiNode>,
 }
