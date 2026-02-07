@@ -29,9 +29,16 @@
             light_scatter_enabled: true,
             fxaa: true,
             use_parallax_mapping: true,
-            use_bloom: true,
             use_occlusion_culling: false,
             use_light_occlusion_culling: false,
+            hdr_settings: (
+                use_hdr: true,
+                luminance_calculation_method: DownSampling,
+                bloom_settings: (
+                    use_bloom: true,
+                    threshold: 1.01,
+                ),
+            ),
         ),
         z_near: 0.025,
         z_far: 128.0,
@@ -183,6 +190,7 @@
     general: (
         show_node_removal_dialog: true,
         suspend_unfocused_editor: true,
+        keep_editor_active: false,
         script_editor: SystemDefault,
         max_history_entries: 512,
         generate_previews: true,
@@ -222,6 +230,7 @@
             start: 0.0,
             end: 100.0,
         ),
+        exposure: Manual(1.0),
     ),
     navmesh: (
         draw_all: true,
@@ -494,29 +503,16 @@
     scene_settings: {
         "data/scene.rgs": (
             camera_settings: (
-                position: (3.0429707, -1.5831695, -1.9284489),
-                yaw: 1.4599999,
-                pitch: 0.6300001,
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
                     z_far: 128.0,
                 )),
             ),
-            node_infos: {
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 147,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
+            node_infos: {},
         ),
     },
     recent: (
@@ -526,7 +522,7 @@
     ),
     windows: (
         window_position: (-8.0, -8.0),
-        window_size: (1920.0, 1017.0),
+        window_size: (2560.0, 1377.0),
         window_maximized: true,
         layout: None,
     ),
