@@ -19,6 +19,7 @@ pub mod sprite;
 pub mod terrain;
 pub mod tilemap;
 
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{algebra::Vector3, pool::Handle, reflect::prelude::*, visitor::prelude::*},
     plugin::{Plugin, PluginContext},
@@ -39,10 +40,11 @@ struct MyGame {
 }
 
 impl Plugin for MyGame {
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
         // Step 1. Kick off scene loading in a separate thread. This method could
         // be located in any place of your code.
-        context.async_scene_loader.request("path/to/your/scene.rgs")
+        context.async_scene_loader.request("path/to/your/scene.rgs");
+        Ok(())
     }
 
     fn on_scene_loaded(
@@ -51,20 +53,23 @@ impl Plugin for MyGame {
         scene: Handle<Scene>,
         data: &[u8],
         context: &mut PluginContext,
-    ) {
+    ) -> GameResult {
         // Step 2.
         // This method is called once a scene was fully loaded.
-        // You may want to remove previous scene first.
+        // You may want to remove the previous scene first.
         if self.main_scene.is_some() {
             context.scenes.remove(self.main_scene)
         }
 
-        // Remember new scene as main.
+        // Remember the new scene as main.
         self.main_scene = scene;
+
+        Ok(())
     }
 
-    fn on_scene_begin_loading(&mut self, path: &Path, context: &mut PluginContext) {
+    fn on_scene_begin_loading(&mut self, path: &Path, context: &mut PluginContext) -> GameResult {
         // This method is called if a scene just began to load.
+        Ok(())
     }
 
     fn on_scene_loading_failed(
@@ -72,21 +77,23 @@ impl Plugin for MyGame {
         path: &Path,
         error: &VisitError,
         context: &mut PluginContext,
-    ) {
+    ) -> GameResult {
         // This method is called if a scene failed to load.
+        Ok(())
     }
 
     // ...
     // ANCHOR_END: load_scene
 
     // ANCHOR: scene_borrowing
-    fn update(&mut self, context: &mut PluginContext) {
+    fn update(&mut self, context: &mut PluginContext) -> GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
         if let Some(scene) = context.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }
+        Ok(())
     }
     // ANCHOR_END: scene_borrowing
 }

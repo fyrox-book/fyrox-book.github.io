@@ -1,21 +1,27 @@
-use fyrox::core::color::{Color, Hsv};
-use fyrox::core::{ComponentProvider, TypeUuidProvider};
-use fyrox::gui::border::BorderBuilder;
-use fyrox::gui::brush::Brush;
-use fyrox::gui::message::MessageDirection;
-use fyrox::gui::text::TextBuilder;
-use fyrox::gui::widget::{WidgetBuilder, WidgetMessage};
-use fyrox::gui::{
-    define_constructor, BuildContext, HorizontalAlignment, Thickness, VerticalAlignment,
-};
-use fyrox::plugin::{Plugin, PluginContext};
+use fyrox::gui::message::MessageData;
+use fyrox::plugin::error::GameResult;
 use fyrox::{
-    core::{pool::Handle, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
-    gui::{
-        define_widget_deref, message::UiMessage, widget::Widget, Control, UiNode, UserInterface,
+    core::{
+        color::{Color, Hsv},
+        pool::Handle,
+        reflect::prelude::*,
+        type_traits::prelude::*,
+        visitor::prelude::*,
+        ComponentProvider, TypeUuidProvider,
     },
+    gui::{
+        border::BorderBuilder,
+        brush::Brush,
+        define_widget_deref,
+        message::UiMessage,
+        text::TextBuilder,
+        widget::Widget,
+        widget::{WidgetBuilder, WidgetMessage},
+        BuildContext, Control, HorizontalAlignment, Thickness, UiNode, UserInterface,
+        VerticalAlignment,
+    },
+    plugin::{Plugin, PluginContext},
 };
-use std::ops::{Deref, DerefMut};
 
 // ANCHOR: widget_skeleton
 #[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
@@ -42,13 +48,7 @@ pub enum MyButtonMessage {
     // A message, that will be emitted when our button is clicked.
     Click,
 }
-
-impl MyButtonMessage {
-    // A constructor for `Click` message.
-    define_constructor!(
-        MyButtonMessage:Click => fn click(), layout: false
-    );
-}
+impl MessageData for MyButtonMessage {}
 
 #[derive(Clone, Debug, Reflect, Visit, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "e3b067e1-f3d8-4bac-a272-3c9edd960bf3")]
@@ -63,21 +63,19 @@ define_widget_deref!(MyButton);
 impl MyButton {
     fn set_colors(&self, ui: &UserInterface, text_color: Color, border_color: Color) {
         for (handle, color) in [(self.border, border_color), (self.text, text_color)] {
-            ui.send_message(WidgetMessage::foreground(
+            ui.send(
                 handle,
-                MessageDirection::ToWidget,
-                Brush::Solid(color).into(),
-            ));
+                WidgetMessage::Foreground(Brush::Solid(color).into()),
+            );
         }
 
         // Make the fill brush of the border slightly dimmer than the input value.
         let mut border_color = Hsv::from(border_color);
         border_color.set_brightness(border_color.brightness() - 20.0);
-        ui.send_message(WidgetMessage::background(
+        ui.send(
             self.border,
-            MessageDirection::ToWidget,
-            Brush::Solid(border_color.into()).into(),
-        ));
+            WidgetMessage::Background(Brush::Solid(border_color.into()).into()),
+        );
     }
 }
 
@@ -94,10 +92,7 @@ impl Control for MyButton {
                 match msg {
                     WidgetMessage::MouseUp { .. } => {
                         // Send the message to outside world, saying that the button was clicked.
-                        ui.send_message(MyButtonMessage::click(
-                            self.handle(),
-                            MessageDirection::FromWidget,
-                        ));
+                        ui.post(self.handle(), MyButtonMessage::Click);
                         ui.release_mouse_capture();
                     }
                     WidgetMessage::MouseDown { .. } => {
@@ -186,12 +181,18 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
+    fn on_ui_message(
+        &mut self,
+        context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
         if message.destination() == self.my_button {
             if let Some(MyButtonMessage::Click) = message.data() {
                 // Do something.
             }
         }
+        Ok(())
     }
 }
 // ANCHOR_END: reacting_to_click_messages

@@ -1,6 +1,7 @@
 use fyrox::asset::io::ResourceIo;
 use fyrox::asset::loader::LoaderPayload;
 use fyrox::asset::state::LoadError;
+use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginRegistrationContext};
 use fyrox::{
     asset::{
@@ -13,14 +14,13 @@ use fyrox::{
     },
 };
 use fyroxed_base::plugins::inspector::editors::resource::ResourceFieldPropertyEditorDefinition;
-use fyroxed_base::plugins::inspector::InspectorPlugin;
 use fyroxed_base::Editor;
 use std::error::Error;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 // ANCHOR: custom_resource
-#[derive(Default, Debug, Visit, Reflect, TypeUuidProvider)]
+#[derive(Default, Debug, Clone, Visit, Reflect, TypeUuidProvider)]
 // Every resource must provide a unique identifier, that is used for dynamic type
 // casting, serialization, etc.
 #[type_uuid(id = "15551157-651b-4f1d-a5fb-6874fbfe8637")]
@@ -41,6 +41,10 @@ impl ResourceData for CustomResource {
 
     fn can_be_saved(&self) -> bool {
         true
+    }
+
+    fn try_clone_box(&self) -> Option<Box<dyn ResourceData>> {
+        Some(Box::new(self.clone()))
     }
 }
 
@@ -81,12 +85,13 @@ impl ResourceLoader for CustomResourceLoader {
 struct MyGame {}
 
 impl Plugin for MyGame {
-    fn register(&self, context: PluginRegistrationContext) {
+    fn register(&self, context: PluginRegistrationContext) -> GameResult {
         context
             .resource_manager
             .state()
             .loaders
             .set(CustomResourceLoader);
+        Ok(())
     }
 }
 // ANCHOR_END: custom_resource_registration
@@ -97,15 +102,9 @@ fn main() {
     let editor = Editor::new(None);
 
     // Register property editor.
-    editor
-        .plugins
-        .get::<InspectorPlugin>()
-        .property_editors
-        .insert(
-            ResourceFieldPropertyEditorDefinition::<CustomResource>::new(
-                editor.message_sender.clone(),
-            ),
-        );
+    editor.property_editors.insert(
+        ResourceFieldPropertyEditorDefinition::<CustomResource>::new(editor.message_sender.clone()),
+    );
 
     // ...
 }

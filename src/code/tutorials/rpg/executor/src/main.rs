@@ -1,9 +1,10 @@
 //! Executor with your game connected to it as a plugin.
 use fyrox::engine::executor::Executor;
+use fyrox::event_loop::EventLoop;
 use rpg::Game;
 
 fn main() {
-    let mut executor = Executor::new();
-    executor.add_plugin_constructor(Game::default());
+    let mut executor = Executor::new(EventLoop::new().ok());
+    executor.add_plugin(Game::default());
     executor.run()
 }

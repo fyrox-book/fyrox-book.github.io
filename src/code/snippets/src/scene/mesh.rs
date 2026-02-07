@@ -1,3 +1,4 @@
+use fyrox::core::Uuid;
 use fyrox::{
     asset::{manager::ResourceManager, untyped::ResourceKind},
     core::{
@@ -5,7 +6,6 @@ use fyrox::{
         futures::executor::block_on,
         pool::Handle,
     },
-    graph::BaseSceneGraph,
     material::{Material, MaterialResource},
     resource::{
         model::{Model, ModelResourceExtension},
@@ -68,7 +68,11 @@ fn create_procedural_mesh(scene: &mut Scene, resource_manager: ResourceManager) 
             25.0, 0.25, 25.0,
         ))),
     ))
-    .with_material(MaterialResource::new_ok(Uuid::new_v4(), ResourceKind::Embedded, material))
+    .with_material(MaterialResource::new_ok(
+        Uuid::new_v4(),
+        ResourceKind::Embedded,
+        material,
+    ))
     .build()])
     .build(&mut scene.graph)
 }

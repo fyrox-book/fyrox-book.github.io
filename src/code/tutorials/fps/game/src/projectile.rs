@@ -1,4 +1,5 @@
 use fyrox::graph::SceneGraph;
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{
         algebra::Vector3, math, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
@@ -24,7 +25,7 @@ pub struct Projectile {
 
 impl ScriptTrait for Projectile {
     // ANCHOR: on_start_begin
-    fn on_start(&mut self, ctx: &mut ScriptContext) {
+    fn on_start(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let this_node = &ctx.scene.graph[ctx.handle];
         let this_node_position = this_node.global_position();
 
@@ -52,17 +53,16 @@ impl ScriptTrait for Projectile {
             1000.0
         };
 
-        if let Some(trail_node) = ctx.scene.graph.try_get_mut(*self.trail) {
-            let transform = trail_node.local_transform_mut();
-            let current_trail_scale = **transform.scale();
-            transform.set_scale(Vector3::new(
-                // Keep x scaling.
-                current_trail_scale.x,
-                trail_length,
-                // Keep z scaling.
-                current_trail_scale.z,
-            ));
-        }
+        let trail_node = ctx.scene.graph.try_get_mut(*self.trail)?;
+        let transform = trail_node.local_transform_mut();
+        let current_trail_scale = **transform.scale();
+        transform.set_scale(Vector3::new(
+            // Keep x scaling.
+            current_trail_scale.x,
+            trail_length,
+            // Keep z scaling.
+            current_trail_scale.z,
+        ));
         // ANCHOR_END: on_start_begin
 
         // ANCHOR: effect_spawn
@@ -79,27 +79,26 @@ impl ScriptTrait for Projectile {
 
         // ANCHOR: object_pushing
         if let Some(intersection) = intersections.first() {
-            if let Some(collider) = ctx.scene.graph.try_get(intersection.collider) {
-                let rigid_body_handle = collider.parent();
-                if let Some(rigid_body) = ctx
-                    .scene
-                    .graph
-                    .try_get_mut_of_type::<RigidBody>(rigid_body_handle)
-                {
-                    if let Some(force_dir) = (intersection.position.coords - this_node_position)
-                        .try_normalize(f32::EPSILON)
-                    {
-                        let force = force_dir.scale(200.0);
+            let collider = ctx.scene.graph.try_get(intersection.collider)?;
+            let rigid_body_handle = collider.parent();
+            let rigid_body = ctx
+                .scene
+                .graph
+                .try_get_mut_of_type::<RigidBody>(rigid_body_handle)?;
 
-                        rigid_body.apply_force_at_point(force, intersection.position.coords);
-                        rigid_body.wake_up();
-                    }
-                }
+            if let Some(force_dir) =
+                (intersection.position.coords - this_node_position).try_normalize(f32::EPSILON)
+            {
+                let force = force_dir.scale(200.0);
+
+                rigid_body.apply_force_at_point(force, intersection.position.coords);
+                rigid_body.wake_up();
             }
         }
         // ANCHOR_END: object_pushing
 
         // ANCHOR: on_start_end
+        Ok(())
     }
     // ANCHOR_END: on_start_end
 }

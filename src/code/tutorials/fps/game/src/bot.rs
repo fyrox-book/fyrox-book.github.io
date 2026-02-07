@@ -1,6 +1,7 @@
 use crate::player::Player;
 use fyrox::core::algebra::UnitQuaternion;
-use fyrox::graph::{SceneGraph, SceneGraphNode};
+use fyrox::graph::SceneGraph;
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{
         algebra::{Matrix4, Point3, Vector3},
@@ -12,7 +13,7 @@ use fyrox::{
         visitor::prelude::*,
     },
     scene::{animation::absm::prelude::*, node::Node, rigidbody::RigidBody},
-    script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
+    script::{ScriptContext, ScriptTrait},
 };
 
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
@@ -26,7 +27,7 @@ pub struct Bot {
     // ANCHOR_END: frustum
 
     // ANCHOR: absm_model_root_fields
-    absm: InheritableVariable<Handle<Node>>,
+    absm: InheritableVariable<Handle<AnimationBlendingStateMachine>>,
     model_root: InheritableVariable<Handle<Node>>,
     // ANCHOR_END: absm_model_root_fields
 
@@ -71,20 +72,7 @@ impl Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_init(&mut self, _context: &mut ScriptContext) {
-        // Put initialization logic here.
-    }
-
-    fn on_start(&mut self, _context: &mut ScriptContext) {
-        // There should be a logic that depends on other scripts in scene.
-        // It is called right after **all** scripts were initialized.
-    }
-
-    fn on_deinit(&mut self, _context: &mut ScriptDeinitContext) {
-        // Put de-initialization logic here.
-    }
-
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         // ANCHOR: frustum_check
         // Look for targets only if we don't have one.
         if self.target.is_none() {
@@ -116,38 +104,33 @@ impl ScriptTrait for Bot {
         let model_transform = ctx
             .scene
             .graph
-            .try_get(*self.model_root)
-            .map(|model| model.global_transform())
-            .unwrap_or_default();
+            .try_get(*self.model_root)?
+            .global_transform();
 
         let mut velocity = Vector3::default();
-        if let Some(state_machine) = ctx
-            .scene
-            .graph
-            .try_get_mut(*self.absm)
-            .and_then(|node| node.component_mut::<AnimationBlendingStateMachine>())
-        {
-            // ANCHOR_END: root_motion_1
-            if let Some(root_motion) = state_machine.machine().pose().root_motion() {
-                velocity = model_transform
-                    .transform_vector(&root_motion.delta_position)
-                    .scale(1.0 / ctx.dt);
-            }
+        let state_machine = ctx.scene.graph.try_get_mut(*self.absm)?;
 
-            // ANCHOR: absm_parameters
-            state_machine
-                .machine_mut()
-                .get_value_mut_silent()
-                .set_parameter("Run", Parameter::Rule(self.target.is_some()))
-                .set_parameter("Attack", Parameter::Rule(close_to_target));
-            // ANCHOR_END: absm_parameters
-
-            // ANCHOR: root_motion_2
+        // ANCHOR_END: root_motion_1
+        if let Some(root_motion) = state_machine.machine().pose().root_motion() {
+            velocity = model_transform
+                .transform_vector(&root_motion.delta_position)
+                .scale(1.0 / ctx.dt);
         }
+
+        // ANCHOR: absm_parameters
+        state_machine
+            .machine_mut()
+            .get_value_mut_silent()
+            .set_parameter("Run", Parameter::Rule(self.target.is_some()))
+            .set_parameter("Attack", Parameter::Rule(close_to_target));
+        // ANCHOR_END: absm_parameters
+
+        // ANCHOR: root_motion_2
+
         // ANCHOR_END: root_motion_2
 
         // ANCHOR: angle_calculation
-        let angle_to_target = ctx.scene.graph.try_get(self.target).map(|target| {
+        let angle_to_target = ctx.scene.graph.try_get(self.target).ok().map(|target| {
             let self_position = ctx.scene.graph[ctx.handle].global_position();
             let look_dir = target.global_position() - self_position;
             look_dir.x.atan2(look_dir.z)
@@ -155,30 +138,34 @@ impl ScriptTrait for Bot {
         // ANCHOR_END: angle_calculation
 
         // ANCHOR: on_update_1
-        if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
-            let position = rigid_body.global_position();
-            let up_vector = rigid_body.up_vector();
-            let look_vector = rigid_body.look_vector();
+        let rigid_body = ctx
+            .scene
+            .graph
+            .try_get_mut_of_type::<RigidBody>(ctx.handle)?;
+        let position = rigid_body.global_position();
+        let up_vector = rigid_body.up_vector();
+        let look_vector = rigid_body.look_vector();
 
-            // Update the viewing frustum.
-            self.update_frustum(position, look_vector, up_vector, 20.0);
-            // ANCHOR_END: on_update_1
+        // Update the viewing frustum.
+        self.update_frustum(position, look_vector, up_vector, 20.0);
+        // ANCHOR_END: on_update_1
 
-            // ANCHOR: rigid_body_velocity
-            let y_vel = rigid_body.lin_vel().y;
-            rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
-            // ANCHOR_END: rigid_body_velocity
+        // ANCHOR: rigid_body_velocity
+        let y_vel = rigid_body.lin_vel().y;
+        rigid_body.set_lin_vel(Vector3::new(velocity.x, y_vel, velocity.z));
+        // ANCHOR_END: rigid_body_velocity
 
-            // ANCHOR: angle_usage
-            if let Some(angle) = angle_to_target {
-                rigid_body
-                    .local_transform_mut()
-                    .set_rotation(UnitQuaternion::from_axis_angle(&Vector3::y_axis(), angle));
-            }
-            // ANCHOR_END: angle_usage
-
-            // ANCHOR: on_update_2
+        // ANCHOR: angle_usage
+        if let Some(angle) = angle_to_target {
+            rigid_body
+                .local_transform_mut()
+                .set_rotation(UnitQuaternion::from_axis_angle(&Vector3::y_axis(), angle));
         }
+        // ANCHOR_END: angle_usage
+
+        // ANCHOR: on_update_2
+
         // ANCHOR_END: on_update_2
+        Ok(())
     }
 }

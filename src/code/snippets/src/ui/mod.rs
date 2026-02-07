@@ -36,6 +36,7 @@ use fyrox::gui::image::ImageBuilder;
 use fyrox::gui::text::TextBuilder;
 use fyrox::gui::widget::WidgetBuilder;
 use fyrox::gui::UserInterface;
+use fyrox::plugin::error::GameResult;
 use fyrox::resource::texture::Texture;
 use fyrox::{
     core::pool::Handle,
@@ -52,12 +53,16 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn on_ui_message(&mut self, _context: &mut PluginContext, message: &UiMessage) {
-        if let Some(ButtonMessage::Click) = message.data() {
-            if message.destination() == self.button {
-                println!("The button was clicked!");
-            }
+    fn on_ui_message(
+        &mut self,
+        _context: &mut PluginContext,
+        message: &UiMessage,
+        ui_handle: Handle<UserInterface>,
+    ) -> GameResult {
+        if let Some(ButtonMessage::Click) = message.data_from(self.button) {
+            println!("The button was clicked!");
         }
+        Ok(())
     }
 }
 // ANCHOR_END: message_passing

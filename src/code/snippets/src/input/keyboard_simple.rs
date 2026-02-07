@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::{
     core::{algebra::Vector3, reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
     keyboard::KeyCode,
@@ -11,7 +12,7 @@ use fyrox::{
 pub struct Player {}
 
 impl ScriptTrait for Player {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         let node = &mut ctx.scene.graph[ctx.handle];
         let transform = node.local_transform_mut();
 
@@ -29,6 +30,7 @@ impl ScriptTrait for Player {
         if ctx.input_state.is_key_pressed(KeyCode::Space) {
             transform.offset(Vector3::new(0.0, 1.0, 0.0));
         }
+        Ok(())
     }
 }
 // ANCHOR_END: keyboard

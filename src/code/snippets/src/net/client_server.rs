@@ -1,4 +1,5 @@
 use fyrox::fxhash::FxHashMap;
+use fyrox::plugin::error::GameResult;
 use fyrox::scene::node::Node;
 use fyrox::{
     core::{
@@ -39,6 +40,7 @@ pub enum ClientMessage {
 // ANCHOR: client_server
 // Implements listen server.
 #[derive(Default, Reflect, Debug)]
+#[reflect(non_cloneable)]
 pub struct Game {
     scene: Handle<Scene>,
     server: Option<Server>,
@@ -46,13 +48,14 @@ pub struct Game {
 }
 
 impl Plugin for Game {
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
         self.server = Some(Server::new());
         self.client = Some(Client::connect(Server::ADDRESS));
+        Ok(())
     }
 
     // ANCHOR: update_loop
-    fn update(&mut self, context: &mut PluginContext) {
+    fn update(&mut self, context: &mut PluginContext) -> GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
@@ -60,6 +63,7 @@ impl Plugin for Game {
         if let Some(client) = self.client.as_mut() {
             client.read_messages();
         }
+        Ok(())
     }
     // ANCHOR_END: update_loop
 
@@ -70,7 +74,7 @@ impl Plugin for Game {
         scene: Handle<Scene>,
         data: &[u8],
         context: &mut PluginContext,
-    ) {
+    ) -> GameResult {
         self.scene = scene;
 
         if self.server.is_none() {
@@ -80,6 +84,8 @@ impl Plugin for Game {
                 .enabled
                 .set_value_and_mark_modified(false);
         }
+
+        Ok(())
     }
     // ANCHOR_END: disable_physics
 }

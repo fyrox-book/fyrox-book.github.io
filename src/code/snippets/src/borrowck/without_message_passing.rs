@@ -1,4 +1,5 @@
 use fyrox::graph::SceneGraph;
+use fyrox::plugin::error::GameResult;
 use fyrox::scene::graph::physics::RayCastOptions;
 use fyrox::scene::graph::Graph;
 use fyrox::{
@@ -66,19 +67,20 @@ struct Bot {
 }
 
 impl ScriptTrait for Bot {
-    fn on_update(&mut self, ctx: &mut ScriptContext) {
+    fn on_update(&mut self, ctx: &mut ScriptContext) -> GameResult {
         // Try to shoot the weapon.
-        if let Some(weapon) = ctx
+        let weapon = ctx
             .scene
             .graph
-            .try_get_script_component_of_mut::<Weapon>(self.weapon)
-        {
-            // !!! This will not compile, because it requires mutable access to the weapon and to
-            // the script context at the same time. This is impossible to do safely, because we've
-            // just borrowed the weapon from the context.
+            .try_get_script_component_of_mut::<Weapon>(self.weapon)?;
 
-            // weapon.shoot(ctx.handle, &mut ctx.scene.graph);
-        }
+        // !!! This will not compile, because it requires mutable access to the weapon and to
+        // the script context at the same time. This is impossible to do safely, because we've
+        // just borrowed the weapon from the context.
+
+        // weapon.shoot(ctx.handle, &mut ctx.scene.graph);
+
+        Ok(())
     }
 }
 

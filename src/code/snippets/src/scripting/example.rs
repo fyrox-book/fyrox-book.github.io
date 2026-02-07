@@ -1,3 +1,4 @@
+use fyrox::plugin::error::GameResult;
 use fyrox::plugin::{Plugin, PluginRegistrationContext};
 use fyrox::scene::node::Node;
 use fyrox::script::{ScriptMessageContext, ScriptMessagePayload};
@@ -16,32 +17,38 @@ struct MyScript {
 }
 
 impl ScriptTrait for MyScript {
-    fn on_init(&mut self, context: &mut ScriptContext) {
+    fn on_init(&mut self, context: &mut ScriptContext) -> GameResult {
         // Put initialization logic here.
+        Ok(())
     }
 
-    fn on_start(&mut self, context: &mut ScriptContext) {
+    fn on_start(&mut self, context: &mut ScriptContext) -> GameResult {
         // Put start logic - it is called when every other script is already initialized.
+        Ok(())
     }
 
-    fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
+    fn on_deinit(&mut self, context: &mut ScriptDeinitContext) -> GameResult {
         // Put de-initialization logic here.
+        Ok(())
     }
 
-    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) {
+    fn on_os_event(&mut self, event: &Event<()>, context: &mut ScriptContext) -> GameResult {
         // Respond to OS events here.
+        Ok(())
     }
 
-    fn on_update(&mut self, context: &mut ScriptContext) {
+    fn on_update(&mut self, context: &mut ScriptContext) -> GameResult {
         // Put object logic here.
+        Ok(())
     }
 
     fn on_message(
         &mut self,
         message: &mut dyn ScriptMessagePayload,
         ctx: &mut ScriptMessageContext,
-    ) {
+    ) -> GameResult {
         // See "message passing" section below.
+        Ok(())
     }
 }
 // ANCHOR: example_script
@@ -51,11 +58,12 @@ impl ScriptTrait for MyScript {
 struct MyPlugin;
 
 impl Plugin for MyPlugin {
-    fn register(&self, context: PluginRegistrationContext) {
+    fn register(&self, context: PluginRegistrationContext) -> GameResult {
         context
             .serialization_context
             .script_constructors
             .add::<MyScript>("My Script");
+        Ok(())
     }
 }
 // ANCHOR_END: register
