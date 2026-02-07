@@ -8,6 +8,7 @@ fn main() {
     let mut editor = Editor::new(Some(StartupData {
         working_directory: Default::default(),
         scenes: vec!["data/scene.rgs".into()],
+        named_objects: false,
     }));
     editor.add_game_plugin(Game::default());
     editor.run(event_loop)

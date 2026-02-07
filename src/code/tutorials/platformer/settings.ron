@@ -529,7 +529,7 @@
     ),
     windows: (
         window_position: (-8.0, -8.0),
-        window_size: (1920.0, 1017.0),
+        window_size: (2560.0, 1377.0),
         window_maximized: true,
         layout: None,
     ),
