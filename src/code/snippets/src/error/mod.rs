@@ -1,3 +1,6 @@
+use fyrox::core::warn;
+use fyrox::graph::SceneGraph;
+use fyrox::plugin::error::{GameError, GameErrorKind};
 use fyrox::{
     core::pool::Handle,
     core::{reflect::prelude::*, type_traits::prelude::*, visitor::prelude::*},
@@ -6,7 +9,7 @@ use fyrox::{
     scene::node::Node,
     script::{ScriptContext, ScriptTrait},
 };
-use fyrox::graph::SceneGraph;
+use std::fmt::{Display, Formatter};
 
 // ANCHOR: error_handling
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
@@ -38,3 +41,52 @@ impl Plugin for MyPlugin {
     }
 }
 // ANCHOR_END: enable_backtrace_capture
+
+// ANCHOR: error_handler
+#[derive(Visit, Reflect, Debug)]
+struct MyGame;
+
+// Define an error type for your game first.
+#[derive(Debug)]
+pub enum MyError {
+    NoScene,
+}
+impl std::error::Error for MyError {}
+impl Display for MyError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MyError::NoScene => {
+                write!(f, "The scene is not specified!")
+            }
+        }
+    }
+}
+
+impl Plugin for MyGame {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
+        match scene_path {
+            Some(scene_path) => {
+                context.async_scene_loader.request(scene_path);
+                Ok(())
+            }
+            // Spawn an error.
+            None => Err(GameError::user(MyError::NoScene)),
+        }
+    }
+
+    fn on_game_error(&mut self, context: &mut PluginContext, error: &GameError) -> bool {
+        if let Some(GameErrorKind::UserError(ref err)) = error.kind {
+            if let Some(my_error) = err.downcast_ref::<MyError>() {
+                // Do something useful, for example show a warning message box.
+                // ...
+
+                // Mark the error as handled.
+                return true;
+            }
+        }
+
+        // The rest is unhandled.
+        false
+    }
+}
+// ANCHOR_END: error_handler
