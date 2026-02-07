@@ -25,7 +25,7 @@ impl ScriptTrait for MyScript {
         Ok(())
     }
 }
-// ANCHOR: error_handling
+// ANCHOR_END: error_handling
 
 // ANCHOR: enable_backtrace_capture
 #[derive(Visit, Clone, Reflect, Debug)]

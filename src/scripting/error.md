@@ -4,7 +4,7 @@ Pretty much every method of a plugin or a script returns a special type `GameRes
 `Result<(), GameError>`. This allows you to easily handle various errors that may occur during the code execution by
 applying `?` operator.
 
-```rust
+```rust,no_run
 {{#include ../code/snippets/src/error/mod.rs:error_handling}}
 ```
 
