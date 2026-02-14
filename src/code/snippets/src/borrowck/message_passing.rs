@@ -22,7 +22,7 @@ impl Weapon {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, ScriptMessagePayload)]
 pub struct ShootMessage;
 impl ScriptMessagePayload for ShootMessage {}
 

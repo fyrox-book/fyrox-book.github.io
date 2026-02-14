@@ -79,7 +79,7 @@ impl ScriptTrait for MyOtherScript {
 // ANCHOR_END: access_other_2
 
 // ANCHOR: message_passing
-#[derive(Debug)]
+#[derive(Debug, ScriptMessagePayload)]
 enum Message {
     Damage {
         actor: Handle<Node>,
