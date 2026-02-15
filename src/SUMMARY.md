@@ -148,6 +148,7 @@
     - [PC](./shipping/pc.md)
     - [WebAssembly](./shipping/wasm.md)
     - [Android](./shipping/android.md)
+    - [CI/CD Integration](./shipping/ci_cd.md)
 - [Tutorials](./tutorials/tutorials.md)
     - [2D Platformer Tutorial](./tutorials/platformer/intro.md)
         - [Character Controller](./tutorials/platformer/part1.md)
