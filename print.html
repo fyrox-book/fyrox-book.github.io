@@ -47,10 +47,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1e011a71.js";
+            window.path_to_searchindex_js = "searchindex-fa0a6535.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-025265cf.js"></script>
+        <script src="toc-a2edd599.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -13482,6 +13482,76 @@ of it to your <code>PATH</code> variable. On Windows it could be <code>C:\Progra
 </code></pre>
 <h2 id="automation"><a class="header" href="#automation">Automation</a></h2>
 <p>Use the <a href="#shipping">project exporter</a> for automated builds.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cicd-integration"><a class="header" href="#cicd-integration">CI/CD Integration</a></h1>
+<p>It is also possible to configure continuous integration/continuous delivery (CI/CD) for games made with Fyrox. Each
+project built using the project manager has a special crate called <code>export-cli</code>. This crate offers a command line
+interface (CLI) for the same functionality that the editor uses when you export the game from it.</p>
+<h2 id="options"><a class="header" href="#options">Options</a></h2>
+<p>There are number of useful options that can be used to simplify testing of the produced builds.</p>
+<ul>
+<li><code>-h</code>, <code>--help</code> - show the detailed usage instructions for the CLI.</li>
+<li><code>-V</code>, <code>--version</code> - prints version of the CLI.</li>
+<li><code>--target_platform &lt;pc/wasm/android&gt;</code> - the target platform to build the game to. Must be one of: <code>pc, android, wasm</code>.
+Keep in mind, that you must also set the appropriate <code>build_target</code> parameter if you’re using cross compilation (for
+example, creating a WebAssembly or Android build from PC). Default value is <code>pc</code>.</li>
+<li><code>--build_target &lt;target triple&gt;</code> - the name of the build target. The <code>default</code> value forces to compile the game to the
+default target of the current toolchain. Usually this parameter can be left unchanged, unless you need
+cross-compilation to some specific platform and architecture (see below). WebAssembly builds requires this parameter
+to be <code>wasm32-unknown-unknown</code>. Android builds require one of the following: <code>armv7-linux-androideabi</code> for 32-bit and
+<code>aarch64-linux-android</code> for 64-bit. The full list of build
+targets <a href="https://doc.rust-lang.org/nightly/rustc/platform-support.html">can be found here</a>. Default value is
+<code>default</code>.</li>
+<li><code>--destination_folder &lt;path&gt;</code> - the destination folder for the build. Default value is <code>./build/</code>.</li>
+<li><code>--include_used_assets</code> - a flag, that defines whether the project exporter should include only used assets in the
+final build or not. If specified, then this flag essentially forces the exporter to scan all the assets for
+cross-links and if there’s at least one usage then such asset will be included in the final build. This option could
+be useful if your project has a lot of “dangling” resources, and you don’t want to search all the used resources
+yourself. Use this option carefully, because it won’t include assets that you manually load from code bypassing the
+resource manager. In this case, the project manager will simply ignore such “unknown” files. This option is disabled
+by default, because it may produce unwanted side effects in some projects.</li>
+<li><code>--ignored_extensions &lt;ext1,ext2,..,extN&gt;</code> - specifies a set of file extensions that should be ignored. Each extension
+must be separated by a comma. For example: <code>log,txt,iml</code>. Default value is <code>log</code>, which excludes Fyrox log file.</li>
+<li><code>-r</code>, <code>--run_after_build</code> - if specified, the exporter will try to run the exported project after the successful
+build. This option is disabled by default.</li>
+<li><code>-o</code>, <code>--open_destination_folder</code> - if specified, the exporter will try to open the build folder in the default file
+manager of your OS after the successful build. This option is disabled by default.</li>
+<li><code>-c</code>, <code>--convert_assets</code> - if specified, the exporter will try to convert all supported assets to their “shipping”
+version. For example, native game scenes and UIs will be converted from ASCII to binary if this option is specified.
+This option is enabled by default.</li>
+<li><code>-e</code>, <code>--enable_optimization</code> - if specified, enables all possible optimizations for the build. This option is enabled
+by default.</li>
+</ul>
+<h2 id="examples-5"><a class="header" href="#examples-5">Examples</a></h2>
+<p>The typical usage varies on the target platform. Keep in mind that you can also add all the arguments listed above
+for the commands below.</p>
+<h3 id="pc-1"><a class="header" href="#pc-1">PC</a></h3>
+<p>When building for Windows/Linux/macOS on the same OS (Windows → Windows, etc.) then all you need is to run the tool
+with default arguments:</p>
+<pre><code class="language-shell">cargo run --package export-cli
+</code></pre>
+<p>Cross-compilation requires build target to be specified, for example if you’re making Linux build from Windows you can
+do something like this:</p>
+<pre><code class="language-shell">cargo run --package export-cli -- --build-target x86_64-unknown-linux-gnu
+</code></pre>
+<h3 id="webassembly-1"><a class="header" href="#webassembly-1">WebAssembly</a></h3>
+<p>WebAssembly builds usually performed on Windows/Linux/macOS machine so it essentially requires cross-compilation and a
+typical command to build the game can be something like this:</p>
+<pre><code class="language-shell">cargo run --package export-cli -- --target-platform android --build-target wasm32-unknown-unknown
+</code></pre>
+<p>Keep in mind that WebAssembly builds were tested only on <code>wasm32-unknown-unknown</code> build target.</p>
+<h3 id="android-1"><a class="header" href="#android-1">Android</a></h3>
+<p>Android builds usually performed on Windows/Linux/macOS machine so it essentially requires cross-compilation and a
+typical command to build the game can be something like this for 64-bit version:</p>
+<pre><code class="language-shell">cargo run --package export-cli -- --target-platform android --build-target aarch64-linux-android
+</code></pre>
+<p>32-bit version requires different build target:</p>
+<pre><code class="language-shell">cargo run --package export-cli -- --target-platform android --build-target armv7-linux-androideabi
+</code></pre>
+<h2 id="cicd-script"><a class="header" href="#cicd-script">CI/CD Script</a></h2>
+<p>The actual script depends on the runner, but the general logic should be the same: run the <code>export-cli</code> tool, copy
+produced build from the build folder (default is <code>./build/</code>) to the build storage and that’s pretty much it. The runner
+may require some additional setup steps, like those specified in the installation guide of the engine.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tutorials"><a class="header" href="#tutorials">Tutorials</a></h1>
 <p>The book offers a set of tutorials of how to write a game of specific genre using the engine. Every tutorial starts
