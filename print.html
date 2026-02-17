@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a2edd599.js"></script>
@@ -456,6 +456,8 @@ framework, but there are plenty of them in the Rust ecosystem.</p>
 <p>In Fyrox, you break down your game in a set of reusable scenes. Pretty much anything can be a scene: a player, a weapon,
 a bot, level parts, etc. Scenes can be nested one into another, this helps you to break down complex scenes into reusable
 parts. A Scene in Fyrox also plays the role of a prefab, there’s pretty much no difference between them.</p>
+<p>There are two main kinds of scenes in Fyrox: game scene and user interface. Both supports prefabs, but only
+game scene can have scripts.</p>
 <h2 id="nodes-and-scene-graph"><a class="header" href="#nodes-and-scene-graph">Nodes and Scene Graph</a></h2>
 <p>A scene is made of one or more nodes. Every scene must have at least one root node, to which everything else is attached.
 A scene node contains specific set of properties as well as a number of scripts which are responsible for custom
@@ -637,6 +639,7 @@ following structure (some files are omitted to be less verbose):</p>
 ├───executor
 ├───executor-android
 ├───executor-wasm
+├───export-cli
 └───game-dylib
 </code></pre>
 <p>The most important parts in this structure:</p>
@@ -648,6 +651,7 @@ following structure (some files are omitted to be less verbose):</p>
 <li><code>executor</code> - entry point for PC (can be deleted if not needed).</li>
 <li><code>executor-android</code> - entry point for Android (can be deleted if not needed).</li>
 <li><code>executor-wasm</code> - entry point for WebAssembly (can be deleted if not needed).</li>
+<li><code>export-cli</code> - command line interface for a <a href="#cicd-integration">tool that handles project export</a>.</li>
 <li><code>game-dylib</code> - special “bridge” for native code hot reloading functionality (can be deleted if not needed).</li>
 </ul>
 <p>To run the project, select the new project in the list and click <code>Edit</code> button to run the editor, or <code>Run</code> to run
@@ -1711,21 +1715,9 @@ it is possible to change scenes, add render passes, change resolution, etc. whic
 and it looks something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Clone, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 pub struct Game {
     scene: Handle&lt;Scene&gt;,
-}
-
-impl Game {
-    pub fn new(scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; Self {
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
-    }
 }
 
 impl Plugin for Game {
@@ -1738,11 +1730,9 @@ impl Plugin for Game {
         // Register custom property editors for the editor here.
     }
 
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
+        context.load_scene_or_ui::&lt;Self&gt;(scene_path.unwrap_or("data/scene.rgs"));
         Ok(())
     }
 
@@ -1789,37 +1779,6 @@ impl Plugin for Game {
         ui_handle: Handle&lt;UserInterface&gt;,
     ) -&gt; GameResult {
         // Handle UI events here.
-        Ok(())
-    }
-
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
-        // Handle started scene loading here.
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        _path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-
-        self.scene = scene;
-
-        Ok(())
-    }
-
-    fn on_scene_loading_failed(
-        &amp;mut self,
-        path: &amp;Path,
-        error: &amp;VisitError,
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        // Handle failed scenes here.
         Ok(())
     }
 }
@@ -1881,7 +1840,6 @@ context is something like this:</p>
     pub performance_statistics: &amp;'a PerformanceStatistics,
     pub elapsed_time: f32,
     pub script_processor: &amp;'a ScriptProcessor,
-    pub async_scene_loader: &amp;'a mut AsyncSceneLoader,
     pub loop_controller: ApplicationLoopController&lt;'b&gt;,
     pub task_pool: &amp;'a mut TaskPoolHandler,
 }
@@ -1927,11 +1885,9 @@ Notice the <code>unwrap()</code> here, <code>window_target</code> could not be a
 in the editor, it tells the game instance to load it on startup. Let’s look closely at <code>Plugin::init</code> method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
+</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
+        context.load_scene_or_ui::&lt;Self&gt;(scene_path.unwrap_or("data/scene.rgs"));
         Ok(())
     }
 <span class="boring">}</span></code></pre>
@@ -2602,10 +2558,13 @@ impl Display for MyError {
 }
 
 impl Plugin for MyGame {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
         match scene_path {
             Some(scene_path) =&gt; {
-                context.async_scene_loader.request(scene_path);
+                context.load_scene(scene_path, false, |result, game: &amp;mut MyGame, ctx| {
+                    ctx.scenes.add(result?.payload);
+                    Ok(())
+                });
                 Ok(())
             }
             // Spawn an error.
@@ -2715,46 +2674,40 @@ struct MyGame {
     main_scene: Handle&lt;Scene&gt;,
 }
 
-impl Plugin for MyGame {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
-        // Step 1. Kick off scene loading in a separate thread. This method could
-        // be located in any place of your code.
-        context.async_scene_loader.request("path/to/your/scene.rgs");
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        // Step 2.
-        // This method is called once a scene was fully loaded.
+impl MyGame {
+    fn load_scene(&amp;mut self, path: &amp;str, ctx: &amp;mut PluginContext) {
         // You may want to remove the previous scene first.
         if self.main_scene.is_some() {
-            context.scenes.remove(self.main_scene)
+            ctx.scenes.remove(self.main_scene)
         }
 
-        // Remember the new scene as main.
-        self.main_scene = scene;
-
-        Ok(())
+        // Step 1. Kick off scene loading in a separate thread. This method could
+        // be located in any place of your code.
+        ctx.load_scene(
+            path,
+            false,
+            |result, game: &amp;mut MyGame, ctx: &amp;mut PluginContext| {
+                game.on_scene_loading_result(result, ctx)
+            },
+        );
     }
 
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
-        // This method is called if a scene just began to load.
-        Ok(())
-    }
-
-    fn on_scene_loading_failed(
+    fn on_scene_loading_result(
         &amp;mut self,
-        path: &amp;Path,
-        error: &amp;VisitError,
-        context: &amp;mut PluginContext,
+        result: SceneLoaderResult,
+        ctx: &amp;mut PluginContext,
     ) -&gt; GameResult {
-        // This method is called if a scene failed to load.
+        // Step 2.
+        // Remember the new scene as main.
+        // This method is called once a scene was fully loaded.
+        self.main_scene = ctx.scenes.add(result?.payload);
+        Ok(())
+    }
+}
+
+impl Plugin for MyGame {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut ctx: PluginContext) -&gt; GameResult {
+        self.load_scene(scene_path.unwrap_or("path/to/your/scene.rgs"), &amp;mut ctx);
         Ok(())
     }
 
@@ -2804,10 +2757,10 @@ non-verified scenes (i.e. from game mods) and want to react somehow when the sce
 You can borrow a scene at any time using its handle and do some changes to it and its nodes:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
+</span>    fn update(&amp;mut self, ctx: &amp;mut PluginContext) -&gt; GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
-        if let Ok(scene) = context.scenes.try_get(self.main_scene) {
+        if let Ok(scene) = ctx.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }
@@ -8731,6 +8684,26 @@ pub struct Game {
     client: Option&lt;Client&gt;,
 }
 
+impl Game {
+    fn on_scene_loading_result(
+        &amp;mut self,
+        result: SceneLoaderResult,
+        context: &amp;mut PluginContext,
+    ) -&gt; GameResult {
+        self.scene = context.scenes.add(result?.payload);
+
+        if self.server.is_none() {
+            context.scenes[self.scene]
+                .graph
+                .physics
+                .enabled
+                .set_value_and_mark_modified(false);
+        }
+
+        Ok(())
+    }
+}
+
 impl Plugin for Game {
     fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         self.server = Some(Server::new());
@@ -8738,34 +8711,14 @@ impl Plugin for Game {
         Ok(())
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
+    fn update(&amp;mut self, ctx: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
         }
         if let Some(client) = self.client.as_mut() {
-            client.read_messages();
+            client.read_messages(ctx);
         }
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        self.scene = scene;
-
-        if self.server.is_none() {
-            context.scenes[scene]
-                .graph
-                .physics
-                .enabled
-                .set_value_and_mark_modified(false);
-        }
-
         Ok(())
     }
 }
@@ -8835,9 +8788,18 @@ impl Client {
         }
     }
 
-    pub fn read_messages(&amp;mut self) {
+    pub fn read_messages(&amp;mut self, ctx: &amp;mut PluginContext) {
         self.connection
-            .process_input::&lt;ServerMessage&gt;(|msg| info!("Received server message: {msg:?}"));
+            .process_input::&lt;ServerMessage&gt;(|msg| match msg {
+                ServerMessage::LoadLevel { .. } =&gt; {
+                    ctx.load_scene(
+                        "data/my_scene.rgs",
+                        false,
+                        |result, game: &amp;mut Game, ctx| game.on_scene_loading_result(result, ctx),
+                    );
+                }
+                msg =&gt; info!("Received server message: {msg:?}"),
+            });
     }
 
     pub fn send_message_to_server(&amp;mut self, message: ClientMessage) {
@@ -8860,13 +8822,13 @@ a reliable connection between the listener and any number of clients. Each such 
 is structured:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
+</span>    fn update(&amp;mut self, ctx: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
         }
         if let Some(client) = self.client.as_mut() {
-            client.read_messages();
+            client.read_messages(ctx);
         }
         Ok(())
     }
@@ -9108,17 +9070,15 @@ is overwritten by the server state anyway. That being said, the client must have
 be done like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_scene_loaded(
+</span>    fn on_scene_loading_result(
         &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
+        result: SceneLoaderResult,
         context: &amp;mut PluginContext,
     ) -&gt; GameResult {
-        self.scene = scene;
+        self.scene = context.scenes.add(result?.payload);
 
         if self.server.is_none() {
-            context.scenes[scene]
+            context.scenes[self.scene]
                 .graph
                 .physics
                 .enabled
@@ -9363,19 +9323,11 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) -&gt; GameResult {
-        ctx.task_pool.spawn_plugin_task(
-            UserInterface::load_from_file(
-                "data/my_ui_asset.ui",
-                ctx.widget_constructors.clone(),
-                ctx.dyn_type_constructors.clone(),
-                ctx.resource_manager.clone(),
-            ),
-            |result, game: &amp;mut MyPlugin, ctx| {
-                *ctx.user_interfaces.first_mut() = result?;
-                Ok(())
-            },
-        );
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut ctx: PluginContext) -&gt; GameResult {
+        ctx.load_ui("data/my_ui_asset.ui", |result, game: &amp;mut MyPlugin, ctx| {
+            ctx.user_interfaces.add(result?.payload);
+            Ok(())
+        });
         Ok(())
     }
 }
@@ -12306,20 +12258,35 @@ this system is very simple:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(Visit, Clone, Reflect, Debug, Default)]
+struct MyData {
+    foo: String,
+    bar: u32,
+}
+
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 struct MyGame {
     scene: Handle&lt;Scene&gt;,
+    data: MyData,
 }
 
 impl MyGame {
-    fn new(scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; Self {
-        // Load the scene as usual.
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
+    fn load_scene(&amp;mut self, path: &amp;str, ctx: &amp;mut PluginContext) -&gt; GameResult {
+        if self.scene.is_some() {
+            ctx.scenes.remove(self.scene);
         }
+        ctx.load_scene(path, false, |result, game: &amp;mut MyGame, ctx| {
+            game.on_scene_loading_result(result, ctx)
+        });
+        Ok(())
+    }
+
+    fn on_scene_loading_result(
+        &amp;mut self,
+        result: SceneLoaderResult,
+        ctx: &amp;mut PluginContext,
+    ) -&gt; GameResult {
+        self.scene = ctx.scenes.add(result?.payload);
+        Ok(())
     }
 
     fn save_game(&amp;mut self, context: &amp;mut PluginContext) {
@@ -12332,34 +12299,21 @@ impl MyGame {
         visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
-    fn load_game(&amp;mut self, context: &amp;mut PluginContext) {
-        // Loading of a saved game is very easy - just ask the engine to load your save file.
+    pub fn load_game(&amp;mut self, ctx: &amp;mut PluginContext) {
+        // Loading of a saved game is very easy - just ask the engine to load your scene.
         // Note the difference with `Game::new` - here we use `request_raw` instead of
         // `request` method. The main difference is that `request` creates a derived scene
         // from a source scene, but `request_raw` loads the scene without any modifications.
-        context.async_scene_loader.request_raw("save.rgs");
+        self.load_scene("save.rgs", ctx).unwrap();
     }
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        _path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        _data: &amp;[u8],
-        _context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        self.scene = scene;
-        Ok(())
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
+        self.load_scene(scene_path.unwrap_or("data/scene.rgs"), &amp;mut context)
     }
 }
+
 <span class="boring">}</span></code></pre>
 <p>This is a typical structure of a game that supports saving and loading. As you can see, it is pretty much the same as
 the standard code, that can be generated by <code>fyrox-template</code>. The main difference here is two new methods with
@@ -12392,16 +12346,29 @@ struct MyGame {
 }
 
 impl MyGame {
-    fn new(scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; Self {
-        // Load the scene as usual.
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-            data: Default::default(),
+    fn load_scene(&amp;mut self, path: &amp;str, derived: bool, ctx: &amp;mut PluginContext) -&gt; GameResult {
+        if self.scene.is_some() {
+            ctx.scenes.remove(self.scene);
         }
+        ctx.load_scene(path, derived, |result, game: &amp;mut MyGame, ctx| {
+            game.on_scene_loading_result(result, ctx)
+        });
+        Ok(())
+    }
+
+    fn on_scene_loading_result(
+        &amp;mut self,
+        result: SceneLoaderResult,
+        ctx: &amp;mut PluginContext,
+    ) -&gt; GameResult {
+        let SceneLoaderOutput { payload, data, .. } = result?;
+        self.scene = ctx.scenes.add(payload);
+
+        // Restore the data when the scene was loaded.
+        let mut visitor = Visitor::load_from_memory(&amp;data)?;
+        self.data.visit("Data", &amp;mut visitor)?;
+
+        Ok(())
     }
 
     fn save_game(&amp;mut self, context: &amp;mut PluginContext) {
@@ -12419,40 +12386,21 @@ impl MyGame {
         visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
-    pub fn load_game(&amp;mut self, context: &amp;mut PluginContext) {
+    pub fn load_game(&amp;mut self, ctx: &amp;mut PluginContext) {
         // Loading of a saved game is very easy - just ask the engine to load your scene.
         // Note the difference with `Game::new` - here we use `request_raw` instead of
         // `request` method. The main difference is that `request` creates a derived scene
         // from a source scene, but `request_raw` loads the scene without any modifications.
-        context.async_scene_loader.request_raw("save.rgs");
+        self.load_scene("save.rgs", false, ctx).unwrap();
     }
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&amp;mut self, _path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        _path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        _context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        self.scene = scene;
-
-        // Restore the data when the scene was loaded.
-        if let Ok(mut visitor) = Visitor::load_from_memory(data) {
-            self.data.visit("Data", &amp;mut visitor).unwrap();
-        }
-
-        Ok(())
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
+        self.load_scene(scene_path.unwrap_or("data/scene.rgs"), true, &amp;mut context)
     }
 }
+
 <span class="boring">}</span></code></pre>
 <p>The main difference here with the code snippet from the previous section is that now we have <code>MyData</code> structure which
 we want to save in a save file as well as current scene. We’re doing that in <code>save_game</code> method by

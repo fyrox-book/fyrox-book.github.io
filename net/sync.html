@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -263,17 +263,15 @@ is overwritten by the server state anyway. That being said, the client must have
 be done like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn on_scene_loaded(
+</span>    fn on_scene_loading_result(
         &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
+        result: SceneLoaderResult,
         context: &amp;mut PluginContext,
     ) -&gt; GameResult {
-        self.scene = scene;
+        self.scene = context.scenes.add(result?.payload);
 
         if self.server.is_none() {
-            context.scenes[scene]
+            context.scenes[self.scene]
                 .graph
                 .physics
                 .enabled

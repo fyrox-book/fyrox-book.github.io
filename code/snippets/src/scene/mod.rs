@@ -20,6 +20,7 @@ pub mod terrain;
 pub mod tilemap;
 
 use fyrox::plugin::error::GameResult;
+use fyrox::plugin::SceneLoaderResult;
 use fyrox::{
     core::{algebra::Vector3, pool::Handle, reflect::prelude::*, visitor::prelude::*},
     plugin::{Plugin, PluginContext},
@@ -31,7 +32,6 @@ use fyrox::{
         Scene,
     },
 };
-use std::path::Path;
 
 // ANCHOR: load_scene
 #[derive(Visit, Clone, Reflect, Debug)]
@@ -39,46 +39,40 @@ struct MyGame {
     main_scene: Handle<Scene>,
 }
 
-impl Plugin for MyGame {
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
-        // Step 1. Kick off scene loading in a separate thread. This method could
-        // be located in any place of your code.
-        context.async_scene_loader.request("path/to/your/scene.rgs");
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        path: &Path,
-        scene: Handle<Scene>,
-        data: &[u8],
-        context: &mut PluginContext,
-    ) -> GameResult {
-        // Step 2.
-        // This method is called once a scene was fully loaded.
+impl MyGame {
+    fn load_scene(&mut self, path: &str, ctx: &mut PluginContext) {
         // You may want to remove the previous scene first.
         if self.main_scene.is_some() {
-            context.scenes.remove(self.main_scene)
+            ctx.scenes.remove(self.main_scene)
         }
 
-        // Remember the new scene as main.
-        self.main_scene = scene;
-
-        Ok(())
+        // Step 1. Kick off scene loading in a separate thread. This method could
+        // be located in any place of your code.
+        ctx.load_scene(
+            path,
+            false,
+            |result, game: &mut MyGame, ctx: &mut PluginContext| {
+                game.on_scene_loading_result(result, ctx)
+            },
+        );
     }
 
-    fn on_scene_begin_loading(&mut self, path: &Path, context: &mut PluginContext) -> GameResult {
-        // This method is called if a scene just began to load.
-        Ok(())
-    }
-
-    fn on_scene_loading_failed(
+    fn on_scene_loading_result(
         &mut self,
-        path: &Path,
-        error: &VisitError,
-        context: &mut PluginContext,
+        result: SceneLoaderResult,
+        ctx: &mut PluginContext,
     ) -> GameResult {
-        // This method is called if a scene failed to load.
+        // Step 2.
+        // Remember the new scene as main.
+        // This method is called once a scene was fully loaded.
+        self.main_scene = ctx.scenes.add(result?.payload);
+        Ok(())
+    }
+}
+
+impl Plugin for MyGame {
+    fn init(&mut self, scene_path: Option<&str>, mut ctx: PluginContext) -> GameResult {
+        self.load_scene(scene_path.unwrap_or("path/to/your/scene.rgs"), &mut ctx);
         Ok(())
     }
 
@@ -86,10 +80,10 @@ impl Plugin for MyGame {
     // ANCHOR_END: load_scene
 
     // ANCHOR: scene_borrowing
-    fn update(&mut self, context: &mut PluginContext) -> GameResult {
+    fn update(&mut self, ctx: &mut PluginContext) -> GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
-        if let Ok(scene) = context.scenes.try_get(self.main_scene) {
+        if let Ok(scene) = ctx.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }

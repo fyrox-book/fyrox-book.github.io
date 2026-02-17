@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -203,6 +203,8 @@ framework, but there are plenty of them in the Rust ecosystem.</p>
 <p>In Fyrox, you break down your game in a set of reusable scenes. Pretty much anything can be a scene: a player, a weapon,
 a bot, level parts, etc. Scenes can be nested one into another, this helps you to break down complex scenes into reusable
 parts. A Scene in Fyrox also plays the role of a prefab, there’s pretty much no difference between them.</p>
+<p>There are two main kinds of scenes in Fyrox: game scene and user interface. Both supports prefabs, but only
+game scene can have scripts.</p>
 <h2 id="nodes-and-scene-graph"><a class="header" href="#nodes-and-scene-graph">Nodes and Scene Graph</a></h2>
 <p>A scene is made of one or more nodes. Every scene must have at least one root node, to which everything else is attached.
 A scene node contains specific set of properties as well as a number of scripts which are responsible for custom

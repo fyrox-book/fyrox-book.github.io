@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -283,6 +283,7 @@ following structure (some files are omitted to be less verbose):</p>
 ├───executor
 ├───executor-android
 ├───executor-wasm
+├───export-cli
 └───game-dylib
 </code></pre>
 <p>The most important parts in this structure:</p>
@@ -294,6 +295,7 @@ following structure (some files are omitted to be less verbose):</p>
 <li><code>executor</code> - entry point for PC (can be deleted if not needed).</li>
 <li><code>executor-android</code> - entry point for Android (can be deleted if not needed).</li>
 <li><code>executor-wasm</code> - entry point for WebAssembly (can be deleted if not needed).</li>
+<li><code>export-cli</code> - command line interface for a <a href="../shipping/ci_cd.html">tool that handles project export</a>.</li>
 <li><code>game-dylib</code> - special “bridge” for native code hot reloading functionality (can be deleted if not needed).</li>
 </ul>
 <p>To run the project, select the new project in the list and click <code>Edit</code> button to run the editor, or <code>Run</code> to run

@@ -4,8 +4,8 @@ use fyrox::{
     engine::task::TaskPoolHandler,
     engine::ApplicationLoopController,
     engine::{
-        AsyncSceneLoader, GraphicsContext, PerformanceStatistics, ScriptMessageDispatcher,
-        ScriptProcessor, SerializationContext,
+        GraphicsContext, PerformanceStatistics, ScriptMessageDispatcher, ScriptProcessor,
+        SerializationContext,
     },
     gui::constructor::WidgetConstructorContainer,
     gui::UiContainer,
@@ -46,7 +46,6 @@ pub struct PluginContext<'a, 'b> {
     pub performance_statistics: &'a PerformanceStatistics,
     pub elapsed_time: f32,
     pub script_processor: &'a ScriptProcessor,
-    pub async_scene_loader: &'a mut AsyncSceneLoader,
     pub loop_controller: ApplicationLoopController<'b>,
     pub task_pool: &'a mut TaskPoolHandler,
 }

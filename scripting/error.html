@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -262,10 +262,13 @@ impl Display for MyError {
 }
 
 impl Plugin for MyGame {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
         match scene_path {
             Some(scene_path) =&gt; {
-                context.async_scene_loader.request(scene_path);
+                context.load_scene(scene_path, false, |result, game: &amp;mut MyGame, ctx| {
+                    ctx.scenes.add(result?.payload);
+                    Ok(())
+                });
                 Ok(())
             }
             // Spawn an error.

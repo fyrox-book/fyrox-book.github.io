@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -211,46 +211,40 @@ struct MyGame {
     main_scene: Handle&lt;Scene&gt;,
 }
 
-impl Plugin for MyGame {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
-        // Step 1. Kick off scene loading in a separate thread. This method could
-        // be located in any place of your code.
-        context.async_scene_loader.request("path/to/your/scene.rgs");
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        // Step 2.
-        // This method is called once a scene was fully loaded.
+impl MyGame {
+    fn load_scene(&amp;mut self, path: &amp;str, ctx: &amp;mut PluginContext) {
         // You may want to remove the previous scene first.
         if self.main_scene.is_some() {
-            context.scenes.remove(self.main_scene)
+            ctx.scenes.remove(self.main_scene)
         }
 
-        // Remember the new scene as main.
-        self.main_scene = scene;
-
-        Ok(())
+        // Step 1. Kick off scene loading in a separate thread. This method could
+        // be located in any place of your code.
+        ctx.load_scene(
+            path,
+            false,
+            |result, game: &amp;mut MyGame, ctx: &amp;mut PluginContext| {
+                game.on_scene_loading_result(result, ctx)
+            },
+        );
     }
 
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
-        // This method is called if a scene just began to load.
-        Ok(())
-    }
-
-    fn on_scene_loading_failed(
+    fn on_scene_loading_result(
         &amp;mut self,
-        path: &amp;Path,
-        error: &amp;VisitError,
-        context: &amp;mut PluginContext,
+        result: SceneLoaderResult,
+        ctx: &amp;mut PluginContext,
     ) -&gt; GameResult {
-        // This method is called if a scene failed to load.
+        // Step 2.
+        // Remember the new scene as main.
+        // This method is called once a scene was fully loaded.
+        self.main_scene = ctx.scenes.add(result?.payload);
+        Ok(())
+    }
+}
+
+impl Plugin for MyGame {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut ctx: PluginContext) -&gt; GameResult {
+        self.load_scene(scene_path.unwrap_or("path/to/your/scene.rgs"), &amp;mut ctx);
         Ok(())
     }
 
@@ -300,10 +294,10 @@ non-verified scenes (i.e. from game mods) and want to react somehow when the sce
 You can borrow a scene at any time using its handle and do some changes to it and its nodes:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
+</span>    fn update(&amp;mut self, ctx: &amp;mut PluginContext) -&gt; GameResult {
         // Borrow a scene using its handle. `try_get` performs immutable borrow, to mutably borrow the scene
         // use `try_get_mut`.
-        if let Ok(scene) = context.scenes.try_get(self.main_scene) {
+        if let Ok(scene) = ctx.scenes.try_get(self.main_scene) {
             // Do something.
             println!("{:?}", scene.graph.performance_statistics);
         }

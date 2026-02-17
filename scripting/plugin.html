@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -205,21 +205,9 @@ it is possible to change scenes, add render passes, change resolution, etc. whic
 and it looks something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>#[derive(Visit, Clone, Reflect, Debug)]
+</span>#[derive(Visit, Clone, Reflect, Debug, Default)]
 pub struct Game {
     scene: Handle&lt;Scene&gt;,
-}
-
-impl Game {
-    pub fn new(scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; Self {
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
-    }
 }
 
 impl Plugin for Game {
@@ -232,11 +220,9 @@ impl Plugin for Game {
         // Register custom property editors for the editor here.
     }
 
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
+        context.load_scene_or_ui::&lt;Self&gt;(scene_path.unwrap_or("data/scene.rgs"));
         Ok(())
     }
 
@@ -283,37 +269,6 @@ impl Plugin for Game {
         ui_handle: Handle&lt;UserInterface&gt;,
     ) -&gt; GameResult {
         // Handle UI events here.
-        Ok(())
-    }
-
-    fn on_scene_begin_loading(&amp;mut self, path: &amp;Path, context: &amp;mut PluginContext) -&gt; GameResult {
-        // Handle started scene loading here.
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        _path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-
-        self.scene = scene;
-
-        Ok(())
-    }
-
-    fn on_scene_loading_failed(
-        &amp;mut self,
-        path: &amp;Path,
-        error: &amp;VisitError,
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        // Handle failed scenes here.
         Ok(())
     }
 }
@@ -375,7 +330,6 @@ context is something like this:</p>
     pub performance_statistics: &amp;'a PerformanceStatistics,
     pub elapsed_time: f32,
     pub script_processor: &amp;'a ScriptProcessor,
-    pub async_scene_loader: &amp;'a mut AsyncSceneLoader,
     pub loop_controller: ApplicationLoopController&lt;'b&gt;,
     pub task_pool: &amp;'a mut TaskPoolHandler,
 }
@@ -421,11 +375,9 @@ Notice the <code>unwrap()</code> here, <code>window_target</code> could not be a
 in the editor, it tells the game instance to load it on startup. Let’s look closely at <code>Plugin::init</code> method:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
+</span>    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut context: PluginContext) -&gt; GameResult {
         // Do initialization logic here. Usually it just requests a scene:
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
+        context.load_scene_or_ui::&lt;Self&gt;(scene_path.unwrap_or("data/scene.rgs"));
         Ok(())
     }
 <span class="boring">}</span></code></pre>

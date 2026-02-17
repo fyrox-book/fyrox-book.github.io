@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a2edd599.js"></script>
@@ -401,19 +401,11 @@ struct MyPlugin {
 }
 
 impl Plugin for MyPlugin {
-    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, ctx: PluginContext) -&gt; GameResult {
-        ctx.task_pool.spawn_plugin_task(
-            UserInterface::load_from_file(
-                "data/my_ui_asset.ui",
-                ctx.widget_constructors.clone(),
-                ctx.dyn_type_constructors.clone(),
-                ctx.resource_manager.clone(),
-            ),
-            |result, game: &amp;mut MyPlugin, ctx| {
-                *ctx.user_interfaces.first_mut() = result?;
-                Ok(())
-            },
-        );
+    fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, mut ctx: PluginContext) -&gt; GameResult {
+        ctx.load_ui("data/my_ui_asset.ui", |result, game: &amp;mut MyPlugin, ctx| {
+            ctx.user_interfaces.add(result?.payload);
+            Ok(())
+        });
         Ok(())
     }
 }

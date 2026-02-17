@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fa0a6535.js";
+            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a2edd599.js"></script>
@@ -223,6 +223,26 @@ pub struct Game {
     client: Option&lt;Client&gt;,
 }
 
+impl Game {
+    fn on_scene_loading_result(
+        &amp;mut self,
+        result: SceneLoaderResult,
+        context: &amp;mut PluginContext,
+    ) -&gt; GameResult {
+        self.scene = context.scenes.add(result?.payload);
+
+        if self.server.is_none() {
+            context.scenes[self.scene]
+                .graph
+                .physics
+                .enabled
+                .set_value_and_mark_modified(false);
+        }
+
+        Ok(())
+    }
+}
+
 impl Plugin for Game {
     fn init(&amp;mut self, scene_path: Option&lt;&amp;str&gt;, context: PluginContext) -&gt; GameResult {
         self.server = Some(Server::new());
@@ -230,34 +250,14 @@ impl Plugin for Game {
         Ok(())
     }
 
-    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
+    fn update(&amp;mut self, ctx: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
         }
         if let Some(client) = self.client.as_mut() {
-            client.read_messages();
+            client.read_messages(ctx);
         }
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &amp;mut self,
-        path: &amp;Path,
-        scene: Handle&lt;Scene&gt;,
-        data: &amp;[u8],
-        context: &amp;mut PluginContext,
-    ) -&gt; GameResult {
-        self.scene = scene;
-
-        if self.server.is_none() {
-            context.scenes[scene]
-                .graph
-                .physics
-                .enabled
-                .set_value_and_mark_modified(false);
-        }
-
         Ok(())
     }
 }
@@ -327,9 +327,18 @@ impl Client {
         }
     }
 
-    pub fn read_messages(&amp;mut self) {
+    pub fn read_messages(&amp;mut self, ctx: &amp;mut PluginContext) {
         self.connection
-            .process_input::&lt;ServerMessage&gt;(|msg| info!("Received server message: {msg:?}"));
+            .process_input::&lt;ServerMessage&gt;(|msg| match msg {
+                ServerMessage::LoadLevel { .. } =&gt; {
+                    ctx.load_scene(
+                        "data/my_scene.rgs",
+                        false,
+                        |result, game: &amp;mut Game, ctx| game.on_scene_loading_result(result, ctx),
+                    );
+                }
+                msg =&gt; info!("Received server message: {msg:?}"),
+            });
     }
 
     pub fn send_message_to_server(&amp;mut self, message: ClientMessage) {
@@ -352,13 +361,13 @@ a reliable connection between the listener and any number of clients. Each such 
 is structured:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    fn update(&amp;mut self, context: &amp;mut PluginContext) -&gt; GameResult {
+</span>    fn update(&amp;mut self, ctx: &amp;mut PluginContext) -&gt; GameResult {
         if let Some(server) = self.server.as_mut() {
             server.accept_connections();
             server.read_messages();
         }
         if let Some(client) = self.client.as_mut() {
-            client.read_messages();
+            client.read_messages(ctx);
         }
         Ok(())
     }
