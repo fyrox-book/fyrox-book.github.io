@@ -62,10 +62,13 @@ impl Display for MyError {
 }
 
 impl Plugin for MyGame {
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
+    fn init(&mut self, scene_path: Option<&str>, mut context: PluginContext) -> GameResult {
         match scene_path {
             Some(scene_path) => {
-                context.async_scene_loader.request(scene_path);
+                context.load_scene(scene_path, false, |result, game: &mut MyGame, ctx| {
+                    ctx.scenes.add(result?.payload);
+                    Ok(())
+                });
                 Ok(())
             }
             // Spawn an error.

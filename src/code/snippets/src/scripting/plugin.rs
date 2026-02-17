@@ -8,25 +8,12 @@ use fyrox::{
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
-use std::path::Path;
 use std::sync::Arc;
 
 // ANCHOR: plugin_structure
-#[derive(Visit, Clone, Reflect, Debug)]
+#[derive(Visit, Clone, Reflect, Debug, Default)]
 pub struct Game {
     scene: Handle<Scene>,
-}
-
-impl Game {
-    pub fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-        }
-    }
 }
 
 impl Plugin for Game {
@@ -40,11 +27,9 @@ impl Plugin for Game {
     }
 
     // ANCHOR: plugin_init
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
+    fn init(&mut self, scene_path: Option<&str>, mut context: PluginContext) -> GameResult {
         // Do initialization logic here. Usually it just requests a scene:
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
+        context.load_scene_or_ui::<Self>(scene_path.unwrap_or("data/scene.rgs"));
         Ok(())
     }
     // ANCHOR_END: plugin_init
@@ -92,37 +77,6 @@ impl Plugin for Game {
         ui_handle: Handle<UserInterface>,
     ) -> GameResult {
         // Handle UI events here.
-        Ok(())
-    }
-
-    fn on_scene_begin_loading(&mut self, path: &Path, context: &mut PluginContext) -> GameResult {
-        // Handle started scene loading here.
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        _path: &Path,
-        scene: Handle<Scene>,
-        data: &[u8],
-        context: &mut PluginContext,
-    ) -> GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-
-        self.scene = scene;
-
-        Ok(())
-    }
-
-    fn on_scene_loading_failed(
-        &mut self,
-        path: &Path,
-        error: &VisitError,
-        context: &mut PluginContext,
-    ) -> GameResult {
-        // Handle failed scenes here.
         Ok(())
     }
 }

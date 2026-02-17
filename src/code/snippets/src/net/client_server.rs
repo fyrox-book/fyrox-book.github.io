@@ -1,24 +1,21 @@
-use fyrox::core::ok_or_return;
-use fyrox::fxhash::FxHashMap;
-use fyrox::plugin::error::GameResult;
-use fyrox::scene::node::Node;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, Vector3},
         info,
         net::{NetListener, NetStream},
+        ok_or_return,
         pool::Handle,
         reflect::prelude::*,
         visitor::prelude::*,
     },
+    fxhash::FxHashMap,
     graph::SceneGraph,
-    plugin::{Plugin, PluginContext},
-    scene::{base::SceneNodeId, Scene},
+    plugin::{error::GameResult, Plugin, PluginContext, SceneLoaderResult},
+    scene::{base::SceneNodeId, node::Node, Scene},
 };
 use serde::{Deserialize, Serialize};
 use std::{
     fmt::{Debug, Formatter},
-    path::Path,
     path::PathBuf,
 };
 
@@ -47,38 +44,17 @@ pub struct Game {
     client: Option<Client>,
 }
 
-impl Plugin for Game {
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
-        self.server = Some(Server::new());
-        self.client = Some(Client::connect(Server::ADDRESS));
-        Ok(())
-    }
-
-    // ANCHOR: update_loop
-    fn update(&mut self, context: &mut PluginContext) -> GameResult {
-        if let Some(server) = self.server.as_mut() {
-            server.accept_connections();
-            server.read_messages();
-        }
-        if let Some(client) = self.client.as_mut() {
-            client.read_messages();
-        }
-        Ok(())
-    }
-    // ANCHOR_END: update_loop
-
+impl Game {
     // ANCHOR: disable_physics
-    fn on_scene_loaded(
+    fn on_scene_loading_result(
         &mut self,
-        path: &Path,
-        scene: Handle<Scene>,
-        data: &[u8],
+        result: SceneLoaderResult,
         context: &mut PluginContext,
     ) -> GameResult {
-        self.scene = scene;
+        self.scene = context.scenes.add(result?.payload);
 
         if self.server.is_none() {
-            context.scenes[scene]
+            context.scenes[self.scene]
                 .graph
                 .physics
                 .enabled
@@ -88,6 +64,27 @@ impl Plugin for Game {
         Ok(())
     }
     // ANCHOR_END: disable_physics
+}
+
+impl Plugin for Game {
+    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
+        self.server = Some(Server::new());
+        self.client = Some(Client::connect(Server::ADDRESS));
+        Ok(())
+    }
+
+    // ANCHOR: update_loop
+    fn update(&mut self, ctx: &mut PluginContext) -> GameResult {
+        if let Some(server) = self.server.as_mut() {
+            server.accept_connections();
+            server.read_messages();
+        }
+        if let Some(client) = self.client.as_mut() {
+            client.read_messages(ctx);
+        }
+        Ok(())
+    }
+    // ANCHOR_END: update_loop
 }
 
 #[derive(Reflect)]
@@ -155,9 +152,18 @@ impl Client {
         }
     }
 
-    pub fn read_messages(&mut self) {
+    pub fn read_messages(&mut self, ctx: &mut PluginContext) {
         self.connection
-            .process_input::<ServerMessage>(|msg| info!("Received server message: {msg:?}"));
+            .process_input::<ServerMessage>(|msg| match msg {
+                ServerMessage::LoadLevel { .. } => {
+                    ctx.load_scene(
+                        "data/my_scene.rgs",
+                        false,
+                        |result, game: &mut Game, ctx| game.on_scene_loading_result(result, ctx),
+                    );
+                }
+                msg => info!("Received server message: {msg:?}"),
+            });
     }
 
     pub fn send_message_to_server(&mut self, message: ClientMessage) {

@@ -1,11 +1,11 @@
 [package]
 name = "fyrox-book-code"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 
 [dependencies]
-fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "2650b077b08c5b6e8d07c2a69c7817c919dc7408" }
-fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "2650b077b08c5b6e8d07c2a69c7817c919dc7408" }
+fyrox = { git = "https://github.com/FyroxEngine/Fyrox", rev = "9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0" }
+fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0" }
 strum = "0.27"
 strum_macros = "0.27"
 serde = "1"

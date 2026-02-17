@@ -1,4 +1,5 @@
 use fyrox::plugin::error::GameResult;
+use fyrox::plugin::{SceneLoaderOutput, SceneLoaderResult};
 use fyrox::{
     core::{pool::Handle, reflect::prelude::*, visitor::prelude::*},
     plugin::{Plugin, PluginContext},
@@ -20,16 +21,29 @@ struct MyGame {
 }
 
 impl MyGame {
-    fn new(scene_path: Option<&str>, context: PluginContext) -> Self {
-        // Load the scene as usual.
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-
-        Self {
-            scene: Handle::NONE,
-            data: Default::default(),
+    fn load_scene(&mut self, path: &str, derived: bool, ctx: &mut PluginContext) -> GameResult {
+        if self.scene.is_some() {
+            ctx.scenes.remove(self.scene);
         }
+        ctx.load_scene(path, derived, |result, game: &mut MyGame, ctx| {
+            game.on_scene_loading_result(result, ctx)
+        });
+        Ok(())
+    }
+
+    fn on_scene_loading_result(
+        &mut self,
+        result: SceneLoaderResult,
+        ctx: &mut PluginContext,
+    ) -> GameResult {
+        let SceneLoaderOutput { payload, data, .. } = result?;
+        self.scene = ctx.scenes.add(payload);
+
+        // Restore the data when the scene was loaded.
+        let mut visitor = Visitor::load_from_memory(&data)?;
+        self.data.visit("Data", &mut visitor)?;
+
+        Ok(())
     }
 
     fn save_game(&mut self, context: &mut PluginContext) {
@@ -47,38 +61,19 @@ impl MyGame {
         visitor.save_binary_to_file(Path::new("save.rgs")).unwrap()
     }
 
-    pub fn load_game(&mut self, context: &mut PluginContext) {
+    pub fn load_game(&mut self, ctx: &mut PluginContext) {
         // Loading of a saved game is very easy - just ask the engine to load your scene.
         // Note the difference with `Game::new` - here we use `request_raw` instead of
         // `request` method. The main difference is that `request` creates a derived scene
         // from a source scene, but `request_raw` loads the scene without any modifications.
-        context.async_scene_loader.request_raw("save.rgs");
+        self.load_scene("save.rgs", false, ctx).unwrap();
     }
 }
 
 impl Plugin for MyGame {
-    fn on_scene_begin_loading(&mut self, _path: &Path, context: &mut PluginContext) -> GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        _path: &Path,
-        scene: Handle<Scene>,
-        data: &[u8],
-        _context: &mut PluginContext,
-    ) -> GameResult {
-        self.scene = scene;
-
-        // Restore the data when the scene was loaded.
-        if let Ok(mut visitor) = Visitor::load_from_memory(data) {
-            self.data.visit("Data", &mut visitor).unwrap();
-        }
-
-        Ok(())
+    fn init(&mut self, scene_path: Option<&str>, mut context: PluginContext) -> GameResult {
+        self.load_scene(scene_path.unwrap_or("data/scene.rgs"), true, &mut context)
     }
 }
+
 // ANCHOR_END: save

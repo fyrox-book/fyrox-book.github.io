@@ -109,6 +109,7 @@ YourProject
 ├───executor
 ├───executor-android
 ├───executor-wasm
+├───export-cli
 └───game-dylib
 ```
 
@@ -121,6 +122,7 @@ The most important parts in this structure:
 - `executor` - entry point for PC (can be deleted if not needed).
 - `executor-android` - entry point for Android (can be deleted if not needed).
 - `executor-wasm` - entry point for WebAssembly (can be deleted if not needed).
+- `export-cli` - command line interface for a [tool that handles project export](../shipping/ci_cd.md). 
 - `game-dylib` - special "bridge" for native code hot reloading functionality (can be deleted if not needed). 
 
 To run the project, select the new project in the list and click `Edit` button to run the editor, or `Run` to run 

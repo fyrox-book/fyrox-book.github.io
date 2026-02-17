@@ -16,6 +16,9 @@ In Fyrox, you break down your game in a set of reusable scenes. Pretty much anyt
 a bot, level parts, etc. Scenes can be nested one into another, this helps you to break down complex scenes into reusable
 parts. A Scene in Fyrox also plays the role of a prefab, there's pretty much no difference between them.
 
+There are two main kinds of scenes in Fyrox: game scene and user interface. Both supports prefabs, but only
+game scene can have scripts.
+
 ## Nodes and Scene Graph
 
 A scene is made of one or more nodes. Every scene must have at least one root node, to which everything else is attached.
