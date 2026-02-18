@@ -2,6 +2,7 @@ pub mod keyboard;
 pub mod keyboard_simple;
 pub mod mouse;
 pub mod mouse_simple;
+mod text;
 
 use fyrox::plugin::error::GameResult;
 use fyrox::{

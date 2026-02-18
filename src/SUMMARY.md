@@ -65,7 +65,7 @@
 - [Input Handling](./input/input.md)
     - [Keyboard](./input/keyboard.md)
     - [Mouse](./input/mouse.md)
-    - [Raw Text Input (WIP)](./input/text.md)
+    - [Raw Text Input](./input/text.md)
 - [Artificial Intelligence (WIP)](./ai/ai.md)
     - [Behaviour Trees (WIP)](./ai/beh_tree.md)
     - [Path Finding](./ai/pathfinding.md)
