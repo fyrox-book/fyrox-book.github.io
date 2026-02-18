@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Raw Text Input (WIP) - Fyrox Book</title>
+        <title>Raw Text Input - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3f2e8aac.js";
+            window.path_to_searchindex_js = "../searchindex-eab9bce4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-a2edd599.js"></script>
+        <script src="../toc-5129c951.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,7 +191,27 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="raw-text-input-wip"><a class="header" href="#raw-text-input-wip">Raw Text Input (WIP)</a></h1>
+                        <h1 id="raw-text-input"><a class="header" href="#raw-text-input">Raw Text Input</a></h1>
+<p>Sometimes there’s a need to catch all text input events. This can be done by listening to <code>WindowEvent::KeyboardInput</code>
+like so:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Visit, Clone, Reflect, Debug)]
+struct MyPlugin;
+
+impl Plugin for MyPlugin {
+    fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) -&gt; GameResult {
+        if let Event::WindowEvent { event, .. } = event {
+            if let WindowEvent::KeyboardInput { event, .. } = event {
+                if let Some(text) = event.text {
+                    println!("{}", text);
+                }
+            }
+        }
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre>
 
                     </main>
 
