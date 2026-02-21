@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Behaviour Trees (WIP) - Fyrox Book</title>
+        <title>Behavior Trees - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-eab9bce4.js";
+            window.path_to_searchindex_js = "../searchindex-84d5581e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-5129c951.js"></script>
+        <script src="../toc-555993d9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,7 +191,41 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="behaviour-trees-wip"><a class="header" href="#behaviour-trees-wip">Behaviour Trees (WIP)</a></h1>
+                        <h1 id="behavior-trees"><a class="header" href="#behavior-trees">Behavior Trees</a></h1>
+<p>Naive approach for implementing logic of NPCs using a bunch of <code>if</code>s and flags often leads to very convoluted
+code. Behavior trees aims to solve this issue by creating a tree where each node represents an action and
+a condition.</p>
+<p>Behavior tree consists of at least one node, where each node can do something useful and define execution branch. A node
+can contain either one of built-in behavior, or a user-defined behavior.</p>
+<p>Built-in nodes defined by <code>BehaviorNode</code>:</p>
+<ul>
+<li><code>BehaviorNode::Root</code> - entry point of the tree, can contain only one child node.</li>
+<li><code>BehaviorNode::Composite</code> - composite behavior node that contains multiple children nodes. The actual
+behavior of this node is defined by its kind, which can be one of the following:
+<ul>
+<li><code>CompositeNodeKind::Sequence</code> - node will execute children nodes consecutively until <code>Status::Failure</code> is returned
+from any descendant node. In other words <code>Sequence</code> implements <strong>AND</strong> logical function.</li>
+<li><code>CompositeNodeKind::Selector</code> - node will execute children until <code>Status::Success</code> is returned from any descendant
+node. In other worlds <code>Selector</code> implements <strong>OR</strong> logical function.</li>
+</ul>
+</li>
+<li><code>BehaviorNode::Inverter</code> - A node, that inverts its child state ([<code>Status::Failure</code>] becomes [<code>Status::Success</code>] and
+vice versa, [<code>Status::Running</code>] remains unchanged)</li>
+<li><code>BehaviorNode::Leaf</code> - a node with user-defined logic.</li>
+</ul>
+<p>Each node implements the <code>Behavior</code> trait, which defines the actual logic.</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Behavior&lt;'a&gt;: BaseBehavior {
+    /// A context in which the behavior will be performed.
+    type Context;
+
+    /// A function that will be called each frame depending on
+    /// the current execution path of the behavior tree it belongs
+    /// to.
+    fn tick(&amp;mut self, context: &amp;mut Self::Context) -&gt; Result&lt;Status, GameError&gt;;
+}
+<span class="boring">}</span></code></pre>
 
                     </main>
 
