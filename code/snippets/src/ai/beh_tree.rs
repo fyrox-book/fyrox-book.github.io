@@ -1,154 +1,148 @@
-use fyrox::core::visitor::prelude::*;
-use fyrox::plugin::error::GameError;
-use fyrox::plugin::PluginContext;
-use fyrox::utils::behavior::{inverter, leaf, selector, sequence, Behavior, Status};
+use fyrox::{
+    core::visitor::prelude::*,
+    dispatch_behavior_variants,
+    utils::behavior::{leaf, sequence, Behavior, BehaviorResult, BehaviorTree, Status},
+};
 
-#[derive(Debug, PartialEq, Visit, Clone, Default)]
-pub enum Action {
-    #[default]
-    Unknown,
-    IsDead(IsDead),
-    StayDead(StayDead),
-    FindTarget(FindTarget),
-    ReachedTarget(IsTargetCloseBy),
-    MoveToTarget(MoveToTarget),
-    CanMeleeAttack(CanMeleeAttack),
-    AimOnTarget(AimOnTarget),
-    DoMeleeAttack(DoMeleeAttack),
-    CanShootTarget(CanShootTarget),
-    ShootTarget(ShootTarget),
-    NeedsThreatenTarget(NeedsThreatenTarget),
-    ThreatenTarget(ThreatenTarget),
+// ANCHOR: beh_tree
+struct Environment {
+    // > 0 - door in front of
+    // < 0 - door is behind
+    distance_to_door: f32,
+    door_opened: bool,
+    done: bool,
 }
 
-impl<'a> Behavior<'a> for Action {
-    type Context = PluginContext<'a, 'a>;
-
-    fn tick(&mut self, context: &mut Self::Context) -> Result<Status, GameError> {
-        match self {
-            Action::Unknown => unreachable!(),
-            Action::FindTarget(v) => v.tick(context),
-            Action::ReachedTarget(v) => v.tick(context),
-            Action::MoveToTarget(v) => v.tick(context),
-            Action::DoMeleeAttack(v) => v.tick(context),
-            Action::ShootTarget(v) => v.tick(context),
-            Action::CanMeleeAttack(v) => v.tick(context),
-            Action::IsDead(v) => v.tick(context),
-            Action::StayDead(v) => v.tick(context),
-            Action::AimOnTarget(v) => v.tick(context),
-            Action::CanShootTarget(v) => v.tick(context),
-            Action::NeedsThreatenTarget(v) => v.tick(context),
-            Action::ThreatenTarget(v) => v.tick(context),
+impl Default for Environment {
+    fn default() -> Self {
+        Self {
+            distance_to_door: 3.0,
+            door_opened: false,
+            done: false,
         }
     }
 }
 
-#[derive(Default, Debug, Visit, Clone)]
-pub struct BotBehavior {
-    pub tree: BehaviorTree<Action>,
-}
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct WalkAction;
 
-impl BotBehavior {
-    pub fn new(spine: Handle<Node>, close_combat_distance: f32) -> Self {
-        let mut tree = BehaviorTree::new();
-        let bt = &mut tree;
+impl Behavior<'_> for WalkAction {
+    type Context = Environment;
 
-        let dead_seq = sequence([IsDead::new_action(bt), StayDead::new_action(bt)], bt);
-
-        let threaten_seq = sequence(
-            [
-                leaf(Action::NeedsThreatenTarget(NeedsThreatenTarget), bt),
-                leaf(AimOnTarget::new_action(spine, AimTarget::ActualTarget), bt),
-                leaf(Action::ThreatenTarget(ThreatenTarget::default()), bt),
-            ],
-            bt,
-        );
-
-        let shooting_distance = 4.0;
-        let shoot_seq = sequence(
-            [
-                leaf(Action::CanShootTarget(CanShootTarget), bt),
-                selector(
-                    [
-                        sequence(
-                            [
-                                inverter(IsTargetCloseBy::make(shooting_distance, bt), bt),
-                                leaf(
-                                    AimOnTarget::new_action(spine, AimTarget::SteeringTarget),
-                                    bt,
-                                ),
-                                leaf(
-                                    Action::MoveToTarget(MoveToTarget {
-                                        min_distance: shooting_distance,
-                                    }),
-                                    bt,
-                                ),
-                            ],
-                            bt,
-                        ),
-                        leaf(AimOnTarget::new_action(spine, AimTarget::ActualTarget), bt),
-                    ],
-                    bt,
-                ),
-                leaf(Action::ShootTarget(ShootTarget), bt),
-            ],
-            bt,
-        );
-
-        let melee_seq = sequence(
-            [
-                selector(
-                    [
-                        sequence(
-                            [
-                                inverter(
-                                    leaf(
-                                        Action::ReachedTarget(IsTargetCloseBy {
-                                            min_distance: close_combat_distance,
-                                        }),
-                                        bt,
-                                    ),
-                                    bt,
-                                ),
-                                leaf(
-                                    AimOnTarget::new_action(spine, AimTarget::SteeringTarget),
-                                    bt,
-                                ),
-                                leaf(
-                                    Action::MoveToTarget(MoveToTarget {
-                                        min_distance: close_combat_distance,
-                                    }),
-                                    bt,
-                                ),
-                            ],
-                            bt,
-                        ),
-                        leaf(AimOnTarget::new_action(spine, AimTarget::ActualTarget), bt),
-                    ],
-                    bt,
-                ),
-                leaf(Action::CanMeleeAttack(CanMeleeAttack), bt),
-                leaf(Action::DoMeleeAttack(DoMeleeAttack::default()), bt),
-            ],
-            bt,
-        );
-
-        let entry = selector(
-            [
-                dead_seq,
-                sequence(
-                    [
-                        leaf(Action::FindTarget(FindTarget::default()), bt),
-                        sequence([selector([threaten_seq, shoot_seq, melee_seq], bt)], bt),
-                    ],
-                    bt,
-                ),
-            ],
-            bt,
-        );
-
-        tree.set_entry_node(entry);
-
-        Self { tree }
+    fn tick(&mut self, context: &mut Self::Context) -> BehaviorResult {
+        if context.distance_to_door <= 0.0 {
+            Ok(Status::Success)
+        } else {
+            context.distance_to_door -= 0.1;
+            println!(
+                "Approaching door, remaining distance: {}",
+                context.distance_to_door
+            );
+            Ok(Status::Running)
+        }
     }
 }
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct OpenDoorAction;
+
+impl Behavior<'_> for OpenDoorAction {
+    type Context = Environment;
+
+    fn tick(&mut self, context: &mut Self::Context) -> BehaviorResult {
+        if !context.door_opened {
+            context.door_opened = true;
+            println!("Door was opened!");
+        }
+        Ok(Status::Success)
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct StepThroughAction;
+
+impl Behavior<'_> for StepThroughAction {
+    type Context = Environment;
+
+    fn tick(&mut self, context: &mut Self::Context) -> BehaviorResult {
+        if context.distance_to_door < -1.0 {
+            Ok(Status::Success)
+        } else {
+            context.distance_to_door -= 0.1;
+            println!(
+                "Stepping through doorway, remaining distance: {}",
+                -1.0 - context.distance_to_door
+            );
+            Ok(Status::Running)
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct CloseDoorAction;
+
+impl Behavior<'_> for CloseDoorAction {
+    type Context = Environment;
+
+    fn tick(&mut self, context: &mut Self::Context) -> BehaviorResult {
+        if context.door_opened {
+            context.door_opened = false;
+            context.done = true;
+            println!("Door was closed");
+        }
+        Ok(Status::Success)
+    }
+}
+
+#[derive(Debug, PartialEq, Visit, Clone)]
+enum BotAction {
+    Walk(WalkAction),
+    OpenDoor(OpenDoorAction),
+    StepThrough(StepThroughAction),
+    CloseDoor(CloseDoorAction),
+}
+
+impl Default for BotAction {
+    fn default() -> Self {
+        Self::Walk(Default::default())
+    }
+}
+
+dispatch_behavior_variants!(
+    BotAction,
+    Environment,
+    Walk,
+    OpenDoor,
+    StepThrough,
+    CloseDoor
+);
+
+fn create_tree() -> BehaviorTree<BotAction> {
+    let mut tree = BehaviorTree::new();
+
+    let entry = sequence(
+        [
+            leaf(BotAction::Walk(WalkAction), &mut tree),
+            leaf(BotAction::OpenDoor(OpenDoorAction), &mut tree),
+            leaf(BotAction::StepThrough(StepThroughAction), &mut tree),
+            leaf(BotAction::CloseDoor(CloseDoorAction), &mut tree),
+        ],
+        &mut tree,
+    );
+
+    tree.set_entry_node(entry);
+
+    tree
+}
+
+fn test_behavior() {
+    let tree = create_tree();
+
+    let mut ctx = Environment::default();
+
+    while !ctx.done {
+        tree.tick(&mut ctx).unwrap();
+    }
+}
+
+// ANCHOR_END: beh_tree

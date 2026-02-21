@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-84d5581e.js";
+            window.path_to_searchindex_js = "searchindex-809ab3a6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-555993d9.js"></script>
@@ -6777,9 +6777,10 @@ includes A* path finding, navigation meshes, behavior trees.</p>
 <h1 id="behavior-trees"><a class="header" href="#behavior-trees">Behavior Trees</a></h1>
 <p>Naive approach for implementing logic of NPCs using a bunch of <code>if</code>s and flags often leads to very convoluted
 code. Behavior trees aims to solve this issue by creating a tree where each node represents an action and
-a condition.</p>
-<p>Behavior tree consists of at least one node, where each node can do something useful and define execution branch. A node
-can contain either one of built-in behavior, or a user-defined behavior.</p>
+a condition to select the next execution node.</p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>The behavior tree consists of at least one node, where each node can do something useful and define execution branch. A
+node can contain either one of built-in behavior, or a user-defined behavior.</p>
 <p>Built-in nodes defined by <code>BehaviorNode</code>:</p>
 <ul>
 <li><code>BehaviorNode::Root</code> - entry point of the tree, can contain only one child node.</li>
@@ -6792,10 +6793,12 @@ from any descendant node. In other words <code>Sequence</code> implements <stron
 node. In other worlds <code>Selector</code> implements <strong>OR</strong> logical function.</li>
 </ul>
 </li>
-<li><code>BehaviorNode::Inverter</code> - A node, that inverts its child state ([<code>Status::Failure</code>] becomes [<code>Status::Success</code>] and
-vice versa, [<code>Status::Running</code>] remains unchanged)</li>
-<li><code>BehaviorNode::Leaf</code> - a node with user-defined logic.</li>
+<li><code>BehaviorNode::Inverter</code> - A node, that inverts its child state (<code>Status::Failure</code> becomes <code>Status::Success</code> and
+vice versa, <code>Status::Running</code> remains unchanged)</li>
+<li><code>BehaviorNode::Leaf</code> - a node with user-defined logic, contains an instance of a type that implements <code>Behavior</code>
+trait.</li>
 </ul>
+<h2 id="behavior-trait"><a class="header" href="#behavior-trait"><code>Behavior</code> trait</a></h2>
 <p>Each node implements the <code>Behavior</code> trait, which defines the actual logic.</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -6808,6 +6811,161 @@ vice versa, [<code>Status::Running</code>] remains unchanged)</li>
     /// to.
     fn tick(&amp;mut self, context: &amp;mut Self::Context) -&gt; Result&lt;Status, GameError&gt;;
 }
+<span class="boring">}</span></code></pre>
+<p>The <code>Context</code> is typically <code>PluginContext</code>, but can be any type that may contain additional information. The logic of
+the behavior is defined by the contents of <code>tick</code> method. This method accepts a context and returns execution result.
+On success, it returns one of the <code>Status</code> enumeration variants or <code>GameError</code> on failure (
+see <a href="#error-handling">error handling chapter</a> for more info). <code>Status</code> enumeration has the following variants:</p>
+<ul>
+<li><code>Status::Success</code> - an action was successful.</li>
+<li><code>Status::Failure</code> - failed to perform an action.</li>
+<li><code>Status::Running</code> - need another iteration to perform an action.</li>
+</ul>
+<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<p>The following example shows a simple behavior tree for a “bot” that can walk, open doors, step through doorways and
+close the door after itself.</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Environment {
+    // &gt; 0 - door in front of
+    // &lt; 0 - door is behind
+    distance_to_door: f32,
+    door_opened: bool,
+    done: bool,
+}
+
+impl Default for Environment {
+    fn default() -&gt; Self {
+        Self {
+            distance_to_door: 3.0,
+            door_opened: false,
+            done: false,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct WalkAction;
+
+impl Behavior&lt;'_&gt; for WalkAction {
+    type Context = Environment;
+
+    fn tick(&amp;mut self, context: &amp;mut Self::Context) -&gt; BehaviorResult {
+        if context.distance_to_door &lt;= 0.0 {
+            Ok(Status::Success)
+        } else {
+            context.distance_to_door -= 0.1;
+            println!(
+                "Approaching door, remaining distance: {}",
+                context.distance_to_door
+            );
+            Ok(Status::Running)
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct OpenDoorAction;
+
+impl Behavior&lt;'_&gt; for OpenDoorAction {
+    type Context = Environment;
+
+    fn tick(&amp;mut self, context: &amp;mut Self::Context) -&gt; BehaviorResult {
+        if !context.door_opened {
+            context.door_opened = true;
+            println!("Door was opened!");
+        }
+        Ok(Status::Success)
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct StepThroughAction;
+
+impl Behavior&lt;'_&gt; for StepThroughAction {
+    type Context = Environment;
+
+    fn tick(&amp;mut self, context: &amp;mut Self::Context) -&gt; BehaviorResult {
+        if context.distance_to_door &lt; -1.0 {
+            Ok(Status::Success)
+        } else {
+            context.distance_to_door -= 0.1;
+            println!(
+                "Stepping through doorway, remaining distance: {}",
+                -1.0 - context.distance_to_door
+            );
+            Ok(Status::Running)
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Visit, Clone)]
+struct CloseDoorAction;
+
+impl Behavior&lt;'_&gt; for CloseDoorAction {
+    type Context = Environment;
+
+    fn tick(&amp;mut self, context: &amp;mut Self::Context) -&gt; BehaviorResult {
+        if context.door_opened {
+            context.door_opened = false;
+            context.done = true;
+            println!("Door was closed");
+        }
+        Ok(Status::Success)
+    }
+}
+
+#[derive(Debug, PartialEq, Visit, Clone)]
+enum BotAction {
+    Walk(WalkAction),
+    OpenDoor(OpenDoorAction),
+    StepThrough(StepThroughAction),
+    CloseDoor(CloseDoorAction),
+}
+
+impl Default for BotAction {
+    fn default() -&gt; Self {
+        Self::Walk(Default::default())
+    }
+}
+
+dispatch_behavior_variants!(
+    BotAction,
+    Environment,
+    Walk,
+    OpenDoor,
+    StepThrough,
+    CloseDoor
+);
+
+fn create_tree() -&gt; BehaviorTree&lt;BotAction&gt; {
+    let mut tree = BehaviorTree::new();
+
+    let entry = sequence(
+        [
+            leaf(BotAction::Walk(WalkAction), &amp;mut tree),
+            leaf(BotAction::OpenDoor(OpenDoorAction), &amp;mut tree),
+            leaf(BotAction::StepThrough(StepThroughAction), &amp;mut tree),
+            leaf(BotAction::CloseDoor(CloseDoorAction), &amp;mut tree),
+        ],
+        &amp;mut tree,
+    );
+
+    tree.set_entry_node(entry);
+
+    tree
+}
+
+fn test_behavior() {
+    let tree = create_tree();
+
+    let mut ctx = Environment::default();
+
+    while !ctx.done {
+        tree.tick(&amp;mut ctx).unwrap();
+    }
+}
+
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="path-finding"><a class="header" href="#path-finding">Path Finding</a></h1>
@@ -8301,7 +8459,7 @@ on Android.</li>
 <li>Register the resource loader in the resource manager.</li>
 </ol>
 <p>See the code snippet in the next section as a guide.</p>
-<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<h2 id="example-2"><a class="header" href="#example-2">Example</a></h2>
 <p>Custom resource is just an ordinary struct with some data. It must implement <code>Debug</code>, <code>Reflect</code>, <code>Visit</code>, <code>ResourceData</code>
 traits. Also, it must contain at least path to external file with the content. Here’s the simplest custom resource, that
 contains some string data.</p>
@@ -9050,7 +9208,7 @@ pub fn on_prefab_message_received_async(desc: InstantiatePrefabMessage, ctx: &am
     );
 }
 <span class="boring">}</span></code></pre>
-<h2 id="example-2"><a class="header" href="#example-2">Example</a></h2>
+<h2 id="example-3"><a class="header" href="#example-3">Example</a></h2>
 <p>There’s one quite large multiplayer game built with Fyrox - <a href="https://github.com/mrDIMAS/FishFolly">Fish Folly</a>. It is
 a “Fall Guys”-like platformer.</p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -10437,7 +10595,7 @@ normal appearance:</p>
 <p>This element is widely used to provide some generic visual behaviour for various widgets. For example, it used in
 buttons, tree items, dropdown list items, etc.; in other words - everywhere where a widget needs to give visual
 feedback the user.</p>
-<h2 id="example-3"><a class="header" href="#example-3">Example</a></h2>
+<h2 id="example-4"><a class="header" href="#example-4">Example</a></h2>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_decorator(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Decorator&gt; {
@@ -10471,7 +10629,7 @@ width.</li>
 <p>The docking manager can control an unlimited number of floating windows, floating windows can be
 docked and vice versa. When a window is undocked, it is automatically placed into a list of floating
 windows. Only the windows from this list can be docked.</p>
-<h2 id="example-4"><a class="header" href="#example-4">Example</a></h2>
+<h2 id="example-5"><a class="header" href="#example-5">Example</a></h2>
 <p>The following example shows how to create a docking manager with one root tile split vertically
 into two smaller tiles where each tile holds a separate window.</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
@@ -10533,7 +10691,7 @@ to its defaults.</p>
 <p><img src="ui/dropdown_list.gif" alt="dropdown list"></p>
 <p>Drop-down list is a control which shows the currently selected item and provides a dropdown
 list to select its current item. It is used to show a single selected item in a compact way.</p>
-<h2 id="example-5"><a class="header" href="#example-5">Example</a></h2>
+<h2 id="example-6"><a class="header" href="#example-6">Example</a></h2>
 <p>A dropdown list with two text items with the last one selected, could be created like so:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -10862,7 +11020,7 @@ to mismatch of coordinates of UI and graphics API. The UI has origin at left top
 <p>List view is used to display lists with arbitrary items. It supports multiple selection and by
 default, it stacks the items vertically (this can be changed by providing a custom panel for the
 items, see the section below).</p>
-<h2 id="example-6"><a class="header" href="#example-6">Example</a></h2>
+<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
 <p><code>ListView</code> can be created using <code>ListViewBuilder</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11134,7 +11292,7 @@ lists, etc. To enable this option, use <code>PopupBuilder::with_smart_placement<
 <p><img src="ui/progress_bar.gif" alt="progress bar"></p>
 <p>Progress bar is used to show a bar that fills in from left to right according to the progress value. It is used to
 show progress for long actions.</p>
-<h2 id="example-7"><a class="header" href="#example-7">Example</a></h2>
+<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ProgressBar&gt; {
@@ -11171,7 +11329,7 @@ methods respectively. These methods can accept any widget, but usually it i a
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
+<h2 id="example-9"><a class="header" href="#example-9">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11291,7 +11449,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="#window-1">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-9"><a class="header" href="#example-9">Example</a></h2>
+<h2 id="example-10"><a class="header" href="#example-10">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

@@ -1406,7 +1406,7 @@ dependencies = [
 [[package]]
 name = "fyrox"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fyrox-impl",
 ]
@@ -1414,7 +1414,7 @@ dependencies = [
 [[package]]
 name = "fyrox-animation"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1427,7 +1427,7 @@ dependencies = [
 [[package]]
 name = "fyrox-autotile"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fxhash",
  "nalgebra 0.34.1",
@@ -1449,7 +1449,7 @@ dependencies = [
 [[package]]
 name = "fyrox-build-tools"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "cargo_metadata",
  "clap",
@@ -1464,7 +1464,7 @@ dependencies = [
 [[package]]
 name = "fyrox-core"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "android-activity",
  "arrayvec",
@@ -1498,7 +1498,7 @@ dependencies = [
 [[package]]
 name = "fyrox-core-derive"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "convert_case",
  "darling",
@@ -1511,7 +1511,7 @@ dependencies = [
 [[package]]
 name = "fyrox-graph"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1521,7 +1521,7 @@ dependencies = [
 [[package]]
 name = "fyrox-graphics"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "bytemuck",
  "fyrox-core",
@@ -1533,7 +1533,7 @@ dependencies = [
 [[package]]
 name = "fyrox-graphics-gl"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1551,7 +1551,7 @@ dependencies = [
 [[package]]
 name = "fyrox-impl"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "approx",
  "base64",
@@ -1604,7 +1604,7 @@ dependencies = [
 [[package]]
 name = "fyrox-material"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1636,7 +1636,7 @@ dependencies = [
 [[package]]
 name = "fyrox-math"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1649,7 +1649,7 @@ dependencies = [
 [[package]]
 name = "fyrox-resource"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1662,7 +1662,7 @@ dependencies = [
 [[package]]
 name = "fyrox-sound"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "fyrox-core",
  "fyrox-resource",
@@ -1678,7 +1678,7 @@ dependencies = [
 [[package]]
 name = "fyrox-texture"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "ddsfile",
  "fast_image_resize",
@@ -1695,7 +1695,7 @@ dependencies = [
 [[package]]
 name = "fyrox-ui"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "bytemuck",
  "copypasta",
@@ -1719,7 +1719,7 @@ dependencies = [
 [[package]]
 name = "fyroxed_base"
 version = "1.0.0"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0#9a05b10a7f1928e61f96d61400e9ecd94e9aa4b0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=1f5df507f8518808cba50559fbca7b4f1dde9743#1f5df507f8518808cba50559fbca7b4f1dde9743"
 dependencies = [
  "bitflags 2.10.0",
  "cargo_metadata",
