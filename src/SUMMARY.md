@@ -117,7 +117,7 @@
         - [Inspector (WIP)](./ui/inspector.md)
         - [List view](./ui/list_view.md)
         - [Menu (WIP)](./ui/menu.md)
-        - [Message box (WIP)](./ui/message_box.md)
+        - [Message box](./ui/message_box.md)
         - [Numeric field](./ui/numeric.md)
         - [Popup](./ui/popup.md)
         - [Progress bar](./ui/progress_bar.md)
