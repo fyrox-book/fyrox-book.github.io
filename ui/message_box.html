@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Message box (WIP) - Fyrox Book</title>
+        <title>Message box - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-809ab3a6.js";
+            window.path_to_searchindex_js = "../searchindex-aad552cb.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-555993d9.js"></script>
+        <script src="../toc-be454662.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,8 +191,60 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="message-box-wip"><a class="header" href="#message-box-wip">Message box (WIP)</a></h1>
+                        <h1 id="message-box"><a class="header" href="#message-box">Message box</a></h1>
 <p><img src="message_box.gif" alt="message box"></p>
+<p>Message box is a window that is used to show standard confirmation/information dialogues, for example, closing a
+document with unsaved changes. It has a title, some text, and a fixed set of buttons (Yes, No, Cancel in different
+combinations).</p>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<p>A simple message box with two buttons (Yes and No) and some text can be created like so:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_message_box(ctx: &amp;mut BuildContext) -&gt; Handle&lt;MessageBox&gt; {
+   MessageBoxBuilder::new(WindowBuilder::new(WidgetBuilder::new()))
+       .with_buttons(MessageBoxButtons::YesNo)
+       .with_text("Do you want to save your changes?")
+       .build(ctx)
+}
+<span class="boring">}</span></code></pre>
+<p>To “catch” the moment when any of the buttons will be clicked, you should listen for <code>MessageBoxMessage::Close</code>
+message:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_ui_message(my_message_box: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if message.destination() == my_message_box {
+        if let Some(MessageBoxMessage::Close(result)) = message.data() {
+            match result {
+                MessageBoxResult::No =&gt; {
+                    println!("No");
+                }
+                MessageBoxResult::Yes =&gt; {
+                    println!("Yes");
+                }
+                _ =&gt; (),
+            }
+        }
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>To open an existing message box, use <code>MessageBoxMessage::Open</code>. You can optionally specify a new title and a text for
+the message box:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn open_message_box(my_message_box: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+   ui.send(
+       my_message_box,
+       MessageBoxMessage::Open {
+           title: Some("This is the new title".to_string()),
+           text: Some("This is the new text".to_string()),
+       },
+   )
+}
+<span class="boring">}</span></code></pre>
+<h2 id="styling"><a class="header" href="#styling">Styling</a></h2>
+<p>There’s no way to change the style of the message box, nor add some widgets to it. If you need a custom message box,
+then you need to create your own widget. This message box is meant to be used as a standard dialog box for standard
+situations in the UI.</p>
 
                     </main>
 
