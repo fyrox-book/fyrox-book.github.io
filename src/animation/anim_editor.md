@@ -124,7 +124,7 @@ various transition rules between current and the next. The editor looks like thi
 
 ## Property Binding
 
-To animate a property all you need to do is to click on `Add Track...` button at the bottom of the track list, select
+To animate a property all you need to do is to click on `Add Track` button at the bottom of the track list, select
 a node to animate and then select a property that will be animated. There are two windows that will be shown one after
 another:
 
