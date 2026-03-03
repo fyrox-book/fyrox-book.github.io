@@ -81,6 +81,9 @@ The track list contains a list of tracks of nodes that will be animated. It look
 
 - `Remove Selected Tracks` - removes selected tracks; you can remove multiple tracks at a time by selecting them while
   holding `Ctrl`.
+- `Set Target...` - sets a new target node for the track. 
+- `Rebind...` - rebind the track to other property of the same node of the same type.
+- `Duplicate` - duplicates the track.
 
 ## Curve Editor
 
@@ -93,8 +96,8 @@ various transition rules between current and the next. The editor looks like thi
    move the playback cursor at the click position. You can move it by clicking at the cursor and moving the mouse while
    holding the left mouse button. Animation signals can be moved in the same fashion.
 2. `Parametric Curve` - a curve that defines how a value changes over time.
-3. `Time Thumb` - animation playback cursor, useful only for preview.
-4. `Animation Signal` - some animation signal that will produce animation events when the playback cursor passes it.
+3. `Animation Signal` - some animation signal that will produce animation events when the playback cursor passes it.
+4. `Time Thumb` - animation playback cursor, useful only for preview.
 
 ### Time Ruler Context Menu
 
@@ -113,10 +116,11 @@ various transition rules between current and the next. The editor looks like thi
 - `Remove` - removes all selected keys. You can select multiple keys either by box selection (click and drag the mouse
   to active box selection) or by clicking on separate keys while holding `Ctrl`.
 - `Key...` - allows you to change the interpolation type of key. It could be one of the following values: Constant,
-  Linear,
-  Cubic.
+  Linear, Cubic.
 - `Zoom To Fit` - tries to find zooming values (for both axes) and the view position with which the entire curve fits in
   the viewport.
+- `Copy Selected Keys` - copies the selected keys to the clipboard.
+- `Paste Keys` - pastes the keys from the keyboard.
 
 ## Property Binding
 
