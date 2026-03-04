@@ -22,7 +22,7 @@ work exactly the same.
 
 ## How to enable
 
-You can enable/disable/setup it in the drop-down menu that opens by clicking `RM` button in the animation editor.
+You can enable/disable/setup it in the drop-down menu that opens by clicking the button with walking person icon in the animation editor.
 Keep in mind, that root motion should be configured on _per animation_ basis. Most of the animations does not
 need the root motion at all.
 
