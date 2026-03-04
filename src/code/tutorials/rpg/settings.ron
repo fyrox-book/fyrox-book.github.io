@@ -1,6 +1,7 @@
 (
     selection: (
         ignore_back_faces: false,
+        hull_less_object_selection_radius: 0.33,
         track_selection: true,
     ),
     graphics: (
@@ -26,19 +27,188 @@
             use_ssao: true,
             ssao_radius: 0.5,
             light_scatter_enabled: true,
-            fxaa: false,
-            use_parallax_mapping: false,
-            use_bloom: true,
+            fxaa: true,
+            use_parallax_mapping: true,
+            use_occlusion_culling: false,
+            use_light_occlusion_culling: false,
+            hdr_settings: (
+                use_hdr: true,
+                luminance_calculation_method: DownSampling,
+                bloom_settings: (
+                    use_bloom: true,
+                    threshold: 1.01,
+                ),
+            ),
         ),
         z_near: 0.025,
         z_far: 128.0,
+        draw_grid: true,
+        gizmo_scale: 1.0,
+    ),
+    build: (
+        selected_profile: 0,
+        profiles: [
+            (
+                name: "Debug",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                        ],
+                        environment_variables: [],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                    ],
+                    environment_variables: [],
+                ),
+            ),
+            (
+                name: "Debug (HR)",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "game_dylib",
+                            "--no-default-features",
+                            "--features",
+                            "dylib-engine",
+                            "--profile",
+                            "dev-hot-reload",
+                        ],
+                        environment_variables: [
+                            (
+                                name: "RUSTFLAGS",
+                                value: "-C prefer-dynamic=yes",
+                            ),
+                        ],
+                    ),
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                            "--no-default-features",
+                            "--features",
+                            "dylib",
+                            "--profile",
+                            "dev-hot-reload",
+                        ],
+                        environment_variables: [
+                            (
+                                name: "RUSTFLAGS",
+                                value: "-C prefer-dynamic=yes",
+                            ),
+                        ],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                        "--no-default-features",
+                        "--features",
+                        "dylib",
+                        "--profile",
+                        "dev-hot-reload",
+                    ],
+                    environment_variables: [
+                        (
+                            name: "RUSTFLAGS",
+                            value: "-C prefer-dynamic=yes",
+                        ),
+                    ],
+                ),
+            ),
+            (
+                name: "Release",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                            "--release",
+                        ],
+                        environment_variables: [],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                        "--release",
+                    ],
+                    environment_variables: [],
+                ),
+            ),
+            (
+                name: "Release (HR)",
+                build_commands: [
+                    (
+                        command: "cargo",
+                        args: [
+                            "build",
+                            "--package",
+                            "executor",
+                            "--release",
+                            "--release",
+                        ],
+                        environment_variables: [],
+                    ),
+                ],
+                run_command: (
+                    command: "cargo",
+                    args: [
+                        "run",
+                        "--package",
+                        "executor",
+                        "--release",
+                        "--release",
+                    ],
+                    environment_variables: [],
+                ),
+            ),
+        ],
+        pc_build_targets: [
+            "default",
+        ],
+        wasm_build_targets: [
+            "wasm32-unknown-unknown",
+        ],
+        android_build_targets: [
+            "armv7-linux-androideabi",
+            "aarch64-linux-android",
+        ],
     ),
     general: (
         show_node_removal_dialog: true,
         suspend_unfocused_editor: true,
+        keep_editor_active: false,
+        script_editor: SystemDefault,
+        max_history_entries: 512,
+        generate_previews: true,
+        max_log_entries: 256,
+        style: Dark,
     ),
     debugging: (
-        show_physics: false,
+        show_physics: true,
         show_bounds: true,
         show_tbn: false,
         show_terrains: false,
@@ -64,28 +234,28 @@
     ),
     camera: (
         speed: 10.0,
-        invert_dragging: false,
-        drag_speed: 0.01,
+        sensitivity: 1.0,
         zoom_speed: 0.5,
         zoom_range: (
             start: 0.0,
             end: 100.0,
         ),
+        exposure: Manual(1.0),
     ),
     navmesh: (
         draw_all: true,
         vertex_radius: 0.2,
     ),
     key_bindings: (
-        move_forward: Some(KeyW),
-        move_back: Some(KeyS),
-        move_left: Some(KeyA),
-        move_right: Some(KeyD),
-        move_up: Some(KeyQ),
-        move_down: Some(KeyE),
-        speed_up: Some(ControlLeft),
-        slow_down: Some(ShiftLeft),
-        undo: Some(
+        move_forward: r#Some(KeyW),
+        move_back: r#Some(KeyS),
+        move_left: r#Some(KeyA),
+        move_right: r#Some(KeyD),
+        move_up: r#Some(KeyE),
+        move_down: r#Some(KeyQ),
+        speed_up: r#Some(ControlLeft),
+        slow_down: r#Some(ShiftLeft),
+        undo: r#Some(
             code: KeyZ,
             modifiers: (
                 alt: false,
@@ -94,7 +264,7 @@
                 system: false,
             ),
         ),
-        redo: Some(
+        redo: r#Some(
             code: KeyY,
             modifiers: (
                 alt: false,
@@ -103,7 +273,7 @@
                 system: false,
             ),
         ),
-        enable_select_mode: Some(
+        enable_select_mode: r#Some(
             code: Digit1,
             modifiers: (
                 alt: false,
@@ -112,7 +282,7 @@
                 system: false,
             ),
         ),
-        enable_move_mode: Some(
+        enable_move_mode: r#Some(
             code: Digit2,
             modifiers: (
                 alt: false,
@@ -121,7 +291,7 @@
                 system: false,
             ),
         ),
-        enable_rotate_mode: Some(
+        enable_rotate_mode: r#Some(
             code: Digit3,
             modifiers: (
                 alt: false,
@@ -130,7 +300,7 @@
                 system: false,
             ),
         ),
-        enable_scale_mode: Some(
+        enable_scale_mode: r#Some(
             code: Digit4,
             modifiers: (
                 alt: false,
@@ -139,7 +309,7 @@
                 system: false,
             ),
         ),
-        enable_navmesh_mode: Some(
+        enable_navmesh_mode: r#Some(
             code: Digit5,
             modifiers: (
                 alt: false,
@@ -148,7 +318,7 @@
                 system: false,
             ),
         ),
-        enable_terrain_mode: Some(
+        enable_terrain_mode: r#Some(
             code: Digit6,
             modifiers: (
                 alt: false,
@@ -157,7 +327,7 @@
                 system: false,
             ),
         ),
-        save_scene: Some(
+        save_scene: r#Some(
             code: KeyS,
             modifiers: (
                 alt: false,
@@ -166,7 +336,25 @@
                 system: false,
             ),
         ),
-        load_scene: Some(
+        save_scene_as: r#Some(
+            code: KeyS,
+            modifiers: (
+                alt: false,
+                shift: true,
+                control: true,
+                system: false,
+            ),
+        ),
+        save_all_scenes: r#Some(
+            code: KeyS,
+            modifiers: (
+                alt: true,
+                shift: false,
+                control: true,
+                system: false,
+            ),
+        ),
+        load_scene: r#Some(
             code: KeyL,
             modifiers: (
                 alt: false,
@@ -175,7 +363,7 @@
                 system: false,
             ),
         ),
-        copy_selection: Some(
+        copy_selection: r#Some(
             code: KeyC,
             modifiers: (
                 alt: false,
@@ -184,7 +372,7 @@
                 system: false,
             ),
         ),
-        paste: Some(
+        paste: r#Some(
             code: KeyV,
             modifiers: (
                 alt: false,
@@ -193,7 +381,7 @@
                 system: false,
             ),
         ),
-        new_scene: Some(
+        new_scene: r#Some(
             code: KeyN,
             modifiers: (
                 alt: false,
@@ -202,7 +390,7 @@
                 system: false,
             ),
         ),
-        close_scene: Some(
+        close_scene: r#Some(
             code: KeyQ,
             modifiers: (
                 alt: false,
@@ -211,7 +399,7 @@
                 system: false,
             ),
         ),
-        remove_selection: Some(
+        remove_selection: r#Some(
             code: Delete,
             modifiers: (
                 alt: false,
@@ -220,7 +408,7 @@
                 system: false,
             ),
         ),
-        focus: Some(
+        focus: r#Some(
             code: KeyF,
             modifiers: (
                 alt: false,
@@ -230,7 +418,7 @@
             ),
         ),
         terrain_key_bindings: (
-            modify_height_map_mode: Some(
+            modify_height_map_mode: r#Some(
                 code: F1,
                 modifiers: (
                     alt: false,
@@ -239,7 +427,7 @@
                     system: false,
                 ),
             ),
-            draw_on_mask_mode: Some(
+            draw_on_mask_mode: r#Some(
                 code: F2,
                 modifiers: (
                     alt: false,
@@ -248,7 +436,7 @@
                     system: false,
                 ),
             ),
-            flatten_slopes_mode: Some(
+            flatten_slopes_mode: r#Some(
                 code: F3,
                 modifiers: (
                     alt: false,
@@ -257,7 +445,7 @@
                     system: false,
                 ),
             ),
-            increase_brush_size: Some(
+            increase_brush_size: r#Some(
                 code: BracketRight,
                 modifiers: (
                     alt: false,
@@ -266,7 +454,7 @@
                     system: false,
                 ),
             ),
-            decrease_brush_size: Some(
+            decrease_brush_size: r#Some(
                 code: BracketLeft,
                 modifiers: (
                     alt: false,
@@ -275,7 +463,7 @@
                     system: false,
                 ),
             ),
-            increase_brush_opacity: Some(
+            increase_brush_opacity: r#Some(
                 code: Period,
                 modifiers: (
                     alt: false,
@@ -284,7 +472,7 @@
                     system: false,
                 ),
             ),
-            decrease_brush_opacity: Some(
+            decrease_brush_opacity: r#Some(
                 code: Comma,
                 modifiers: (
                     alt: false,
@@ -293,7 +481,7 @@
                     system: false,
                 ),
             ),
-            prev_layer: Some(
+            prev_layer: r#Some(
                 code: Semicolon,
                 modifiers: (
                     alt: false,
@@ -302,7 +490,7 @@
                     system: false,
                 ),
             ),
-            next_layer: Some(
+            next_layer: r#Some(
                 code: Quote,
                 modifiers: (
                     alt: false,
@@ -312,532 +500,29 @@
                 ),
             ),
         ),
+        run_game: r#Some(
+            code: F5,
+            modifiers: (
+                alt: false,
+                shift: false,
+                control: false,
+                system: false,
+            ),
+        ),
     ),
-    scene_settings: {
-        "data/models/tree.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-            ),
-            node_infos: {
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "\\\\?\\I:\\RustEngine\\fyrox-tutorials\\rpg-tutorial1-character-controller\\data\\models\\paladin\\paladin.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-            ),
-            node_infos: {},
-        ),
-        "data/models/wood_cabin/wooden_cabin.rgs": (
-            camera_settings: (
-                position: (-1.9107504, 1.7785295, -2.5889034),
-                yaw: 0.30000004,
-                pitch: -0.039999995,
-            ),
-            node_infos: {
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "\\\\?\\I:\\RustEngine\\fyrox-tutorials\\rpg-tutorial1-character-controller\\data\\scene.rgs": (
-            camera_settings: (
-                position: (-0.47119832, 3.3900604, 5.653226),
-                yaw: 12.180136,
-                pitch: 0.4107959,
-            ),
-            node_infos: {
-                (
-                    index: 375,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 44,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 41,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 49,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 45,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 42,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 57,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "\\\\?\\I:\\RustEngine\\fyrox-tutorials\\rpg-tutorial1-character-controller\\data\\models\\wood_cabin\\wooden_cabin.rgs": (
-            camera_settings: (
-                position: (-2.5076818, 4.0969925, 1.371464),
-                yaw: -0.020000115,
-                pitch: 0.3400006,
-            ),
-            node_infos: {
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 46,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "\\\\?\\I:\\RustEngine\\fyrox-tutorials\\rpg-tutorial1-character-controller\\data\\models\\tree.rgs": (
-            camera_settings: (
-                position: (0.6212349, 0.76047355, 1.436752),
-                yaw: 0.68000144,
-                pitch: 0.07999982,
-            ),
-            node_infos: {},
-        ),
-        "\\\\?\\I:\\RustEngine\\fyrox-tutorials\\rpg-tutorial1-character-controller\\data\\models\\barrel\\barrel.rgs": (
-            camera_settings: (
-                position: (-0.8685769, -1.1397644, 0.6477623),
-                yaw: -0.8999996,
-                pitch: 0.6200005,
-            ),
-            node_infos: {},
-        ),
-        "data/models/paladin/paladin.rgs": (
-            camera_settings: (
-                position: (0.0007041693, 0.8627034, -0.00091071427),
-                yaw: -2.88,
-                pitch: 0.3107969,
-            ),
-            node_infos: {
-                (
-                    index: 8,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 115,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 77,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 114,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 41,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 117,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 116,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 78,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 3,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 74,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 118,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 113,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 6,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 76,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 75,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 42,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "data/scene.rgs": (
-            camera_settings: (
-                position: (-1.3429474, 1.4865986, -0.29959202),
-                yaw: -0.5200043,
-                pitch: 0.31079608,
-            ),
-            node_infos: {
-                (
-                    index: 433,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 344,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 281,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 396,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 428,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 8,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 511,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 381,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 392,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 77,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 284,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 440,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 404,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 417,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 341,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 74,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 399,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 387,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 422,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 387,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 432,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 411,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-    },
+    log: (
+        log_info: true,
+        log_warning: true,
+        log_error: true,
+    ),
+    scene_settings: {},
     recent: (
-        scenes: [
-            "data/models/barrel/barrel.rgs",
-            "data/models/paladin/paladin.rgs",
-            "data/models/tree.rgs",
-            "data/models/wood_cabin/wooden_cabin.rgs",
-            "data/scene.rgs",
-        ],
+        scenes: [],
     ),
     windows: (
-        window_position: (1145.0, 400.0),
-        window_size: (1406.0, 968.0),
-        layout: Some((
-            floating_windows: [
-                (
-                    name: "AnimationEditor",
-                    position: (0.0, 0.0),
-                    size: (734.39, 347.375),
-                ),
-                (
-                    name: "AsbmEditor",
-                    position: (0.0, 0.0),
-                    size: (0.0, 0.0),
-                ),
-                (
-                    name: "ParticleSystemPanel",
-                    position: (0.0, 0.0),
-                    size: (0.0, 0.0),
-                ),
-                (
-                    name: "CameraPanel",
-                    position: (0.0, 0.0),
-                    size: (0.0, 0.0),
-                ),
-                (
-                    name: "AudioPreviewPanel",
-                    position: (0.0, 0.0),
-                    size: (0.0, 0.0),
-                ),
-                (
-                    name: "NavmeshPanel",
-                    position: (0.0, 0.0),
-                    size: (0.0, 0.0),
-                ),
-                (
-                    name: "DocPanel",
-                    position: (0.0, 0.0),
-                    size: (0.0, 0.0),
-                ),
-            ],
-            root_tile_descriptor: Some((
-                content: SplitTiles((
-                    splitter: 0.75,
-                    orientation: Vertical,
-                    children: ((
-                        content: SplitTiles((
-                            splitter: 0.20412518,
-                            orientation: Horizontal,
-                            children: ((
-                                content: Window("WorldOutliner"),
-                            ), (
-                                content: SplitTiles((
-                                    splitter: 0.66,
-                                    orientation: Horizontal,
-                                    children: ((
-                                        content: SplitTiles((
-                                            splitter: 0.5,
-                                            orientation: Vertical,
-                                            children: ((
-                                                content: Window("SceneViewer"),
-                                            ), (
-                                                content: Window("AnimationEditor"),
-                                            )),
-                                        )),
-                                    ), (
-                                        content: Window("Inspector"),
-                                    )),
-                                )),
-                            )),
-                        )),
-                    ), (
-                        content: SplitTiles((
-                            splitter: 0.66,
-                            orientation: Horizontal,
-                            children: ((
-                                content: SplitTiles((
-                                    splitter: 0.8,
-                                    orientation: Horizontal,
-                                    children: ((
-                                        content: Window("AssetBrowser"),
-                                    ), (
-                                        content: Window("CommandStackPanel"),
-                                    )),
-                                )),
-                            ), (
-                                content: SplitTiles((
-                                    splitter: 0.5,
-                                    orientation: Horizontal,
-                                    children: ((
-                                        content: Window("LogPanel"),
-                                    ), (
-                                        content: Window("AudioPanel"),
-                                    )),
-                                )),
-                            )),
-                        )),
-                    )),
-                )),
-            )),
-        )),
+        window_position: (-8.0, -8.0),
+        window_size: (2560.0, 1377.0),
+        window_maximized: true,
+        layout: None,
     ),
 )

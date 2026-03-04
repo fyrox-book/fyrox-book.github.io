@@ -186,6 +186,16 @@
                 ),
             ),
         ],
+        pc_build_targets: [
+            "default",
+        ],
+        wasm_build_targets: [
+            "wasm32-unknown-unknown",
+        ],
+        android_build_targets: [
+            "armv7-linux-androideabi",
+            "aarch64-linux-android",
+        ],
     ),
     general: (
         show_node_removal_dialog: true,
@@ -499,6 +509,11 @@
                 system: false,
             ),
         ),
+    ),
+    log: (
+        log_info: true,
+        log_warning: true,
+        log_error: true,
     ),
     scene_settings: {
         "data/scene.rgs": (

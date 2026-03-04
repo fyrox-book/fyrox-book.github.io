@@ -1,6 +1,7 @@
 // ANCHOR: player_mod_reg
 use crate::{bot::Bot, player::Player, projectile::Projectile, weapon::Weapon};
 use fyrox::plugin::error::GameResult;
+use fyrox::plugin::SceneLoaderResult;
 use fyrox::{
     core::pool::Handle,
     core::{reflect::prelude::*, visitor::prelude::*},
@@ -19,6 +20,20 @@ pub mod weapon;
 #[derive(Visit, Reflect, Default, Debug, Clone)]
 pub struct Game {
     scene: Handle<Scene>,
+}
+
+impl Game {
+    fn on_scene_loading_result(
+        &mut self,
+        result: SceneLoaderResult,
+        ctx: &mut PluginContext,
+    ) -> GameResult {
+        if self.scene.is_some() {
+            ctx.scenes.remove(self.scene);
+        }
+        self.scene = ctx.scenes.add(result?.payload);
+        Ok(())
+    }
 }
 
 impl Plugin for Game {
@@ -53,28 +68,12 @@ impl Plugin for Game {
         Ok(())
     }
 
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-        Ok(())
-    }
-
-    fn on_scene_begin_loading(&mut self, _path: &Path, ctx: &mut PluginContext) -> GameResult {
-        if self.scene.is_some() {
-            ctx.scenes.remove(self.scene);
-        }
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        _path: &Path,
-        scene: Handle<Scene>,
-        _data: &[u8],
-        _context: &mut PluginContext,
-    ) -> GameResult {
-        self.scene = scene;
+    fn init(&mut self, scene_path: Option<&str>, mut context: PluginContext) -> GameResult {
+        context.load_scene(
+            scene_path.unwrap_or("data/scene.rgs"),
+            false,
+            |result, game: &mut Game, ctx| game.on_scene_loading_result(result, ctx),
+        );
         Ok(())
     }
 }

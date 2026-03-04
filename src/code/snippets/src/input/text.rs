@@ -1,10 +1,7 @@
 use fyrox::{
     core::{reflect::prelude::*, visitor::prelude::*},
     event::{Event, WindowEvent},
-    plugin::{
-        error::{enable_backtrace_capture, GameResult},
-        Plugin, PluginContext,
-    },
+    plugin::{error::GameResult, Plugin, PluginContext},
 };
 
 // ANCHOR: raw_text_input
@@ -15,7 +12,7 @@ impl Plugin for MyPlugin {
     fn on_os_event(&mut self, event: &Event<()>, context: PluginContext) -> GameResult {
         if let Event::WindowEvent { event, .. } = event {
             if let WindowEvent::KeyboardInput { event, .. } = event {
-                if let Some(text) = event.text {
+                if let Some(ref text) = event.text {
                     println!("{}", text);
                 }
             }
