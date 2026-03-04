@@ -186,6 +186,16 @@
                 ),
             ),
         ],
+        pc_build_targets: [
+            "default",
+        ],
+        wasm_build_targets: [
+            "wasm32-unknown-unknown",
+        ],
+        android_build_targets: [
+            "armv7-linux-androideabi",
+            "aarch64-linux-android",
+        ],
     ),
     general: (
         show_node_removal_dialog: true,
@@ -500,12 +510,17 @@
             ),
         ),
     ),
+    log: (
+        log_info: true,
+        log_warning: true,
+        log_error: true,
+    ),
     scene_settings: {
         "data/scene.rgs": (
             camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
+                position: (0.9311897, -3.0977342, 0.41622066),
+                yaw: -0.00000025331974,
+                pitch: 0.12000017,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
@@ -514,7 +529,13 @@
             ),
             node_infos: {
                 (
-                    index: 6,
+                    index: 52,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 54,
                     generation: 1,
                 ): (
                     is_expanded: true,

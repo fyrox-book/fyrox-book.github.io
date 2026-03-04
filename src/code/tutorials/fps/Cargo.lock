@@ -660,7 +660,7 @@ checksum = "0b023947811758c97c59bf9d1c188fd619ad4718dcaa767947df1cadb14f39f4"
 dependencies = [
  "glob",
  "libc",
- "libloading",
+ "libloading 0.8.9",
 ]
 
 [[package]]
@@ -965,7 +965,7 @@ version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "330c60081dcc4c72131f8eb70510f1ac07223e5d4163db481a04a0befcffa412"
 dependencies = [
- "libloading",
+ "libloading 0.8.9",
 ]
 
 [[package]]
@@ -1445,16 +1445,16 @@ dependencies = [
 
 [[package]]
 name = "fyrox"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fyrox-impl",
 ]
 
 [[package]]
 name = "fyrox-animation"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1466,8 +1466,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-autotile"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fxhash",
  "nalgebra 0.34.1",
@@ -1476,19 +1476,23 @@ dependencies = [
 
 [[package]]
 name = "fyrox-build-tools"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
+ "cargo_metadata",
+ "clap",
  "fyrox-core",
  "fyrox-resource",
  "fyrox-ui",
+ "open",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
 name = "fyrox-core"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "android-activity",
  "arrayvec",
@@ -1500,10 +1504,9 @@ dependencies = [
  "futures",
  "fxhash",
  "fyrox-core-derive",
- "fyrox-math 1.0.0-rc.1 (git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6)",
+ "fyrox-math 1.0.0",
  "instant",
  "js-sys",
- "lazy_static",
  "memoffset",
  "nalgebra 0.34.1",
  "notify",
@@ -1522,8 +1525,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-core-derive"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "convert_case",
  "darling",
@@ -1535,8 +1538,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-graph"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1545,8 +1548,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-graphics"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "bytemuck",
  "fyrox-core",
@@ -1557,8 +1560,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-graphics-gl"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1575,8 +1578,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-impl"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "approx",
  "base64",
@@ -1603,8 +1606,7 @@ dependencies = [
  "image",
  "imageproc",
  "inflate",
- "lazy_static",
- "libloading",
+ "libloading 0.9.0",
  "lightmap",
  "open",
  "opener",
@@ -1629,15 +1631,14 @@ dependencies = [
 
 [[package]]
 name = "fyrox-material"
-version = "1.0.0-rc.2"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fxhash",
  "fyrox-core",
  "fyrox-graphics",
  "fyrox-resource",
  "fyrox-texture",
- "lazy_static",
  "regex",
  "ron",
  "serde",
@@ -1648,9 +1649,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox-math"
-version = "1.0.0-rc.1"
+version = "1.0.0-rc.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0bb5fa074e8ece9b795f968e688706cacff55a7d1ad8c6ae7dea2d7e457339c"
+checksum = "85c29d0ef1f72545bb316121825bc6006b6e94ae7d12fb07a9e6ac479b61937f"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1662,8 +1663,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-math"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1675,8 +1676,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-resource"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1688,8 +1689,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-sound"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "fyrox-core",
  "fyrox-resource",
@@ -1704,8 +1705,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-texture"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "ddsfile",
  "fast_image_resize",
@@ -1713,7 +1714,6 @@ dependencies = [
  "fyrox-core",
  "fyrox-resource",
  "image",
- "lazy_static",
  "serde",
  "strum",
  "strum_macros",
@@ -1722,8 +1722,8 @@ dependencies = [
 
 [[package]]
 name = "fyrox-ui"
-version = "1.0.0-rc.2"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "bytemuck",
  "copypasta",
@@ -1736,7 +1736,6 @@ dependencies = [
  "fyrox-material",
  "fyrox-resource",
  "fyrox-texture",
- "lazy_static",
  "notify",
  "serde",
  "strum",
@@ -1747,8 +1746,8 @@ dependencies = [
 
 [[package]]
 name = "fyroxed_base"
-version = "1.0.0-rc.1"
-source = "git+https://github.com/FyroxEngine/Fyrox?rev=c79a44fb76bf9084a735220a3aade3fb84dcdca6#c79a44fb76bf9084a735220a3aade3fb84dcdca6"
+version = "1.0.0"
+source = "git+https://github.com/FyroxEngine/Fyrox?rev=16dcf6e910e7665ceb73056a96ef1446e5662329#16dcf6e910e7665ceb73056a96ef1446e5662329"
 dependencies = [
  "bitflags 2.10.0",
  "cargo_metadata",
@@ -1756,7 +1755,6 @@ dependencies = [
  "fyrox-build-tools",
  "image",
  "imageproc",
- "lazy_static",
  "notify",
  "open",
  "opener",
@@ -1931,8 +1929,7 @@ checksum = "0cc23270f6e1808e30a928bdc84dea0b9b4136a8bc82338574f23baf47bbd280"
 [[package]]
 name = "glow"
 version = "0.16.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5e5ea60d70410161c8bf5da3fdfeaa1c72ed2c15f8bbb9d19fe3a4fad085f08"
+source = "git+https://github.com/grovesNL/glow?rev=d645b97f1e26bb1a79b73f77c1c29312cdeca5c2#d645b97f1e26bb1a79b73f77c1c29312cdeca5c2"
 dependencies = [
  "js-sys",
  "slotmap",
@@ -1989,7 +1986,7 @@ dependencies = [
  "glutin_egl_sys",
  "glutin_glx_sys",
  "glutin_wgl_sys",
- "libloading",
+ "libloading 0.8.9",
  "objc2 0.6.3",
  "objc2-app-kit 0.3.2",
  "objc2-core-foundation",
@@ -2523,6 +2520,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "libloading"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "754ca22de805bb5744484a5b151a9e1a8e837d5dc232c2d7d8c2e3492edc8b60"
+dependencies = [
+ "cfg-if",
+ "windows-link",
+]
+
+[[package]]
 name = "libm"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2541,13 +2548,13 @@ dependencies = [
 
 [[package]]
 name = "lightmap"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b655dabe1d88c3297dd0ad41b9816fef42714a5280fe7ce86ef42e1e6b984aa"
+checksum = "fde77e8284b251bff3e01446030315f503a005789423a807561dc8b0e3797918"
 dependencies = [
  "arrayvec",
  "fxhash",
- "fyrox-math 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fyrox-math 1.0.0-rc.2",
  "nalgebra 0.34.1",
  "rayon",
  "uvgen",
@@ -3642,9 +3649,9 @@ dependencies = [
 
 [[package]]
 name = "rapier2d"
-version = "0.30.1"
+version = "0.31.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eab12a465faea032e025eb97a3b0763422391c3edb98200ed5efd516307df550"
+checksum = "7dbf9046b02ffdaff5a8b65405e5e557d71dfb13e74d335fcf9fd12ad6c503a7"
 dependencies = [
  "approx",
  "arrayvec",
@@ -3667,9 +3674,9 @@ dependencies = [
 
 [[package]]
 name = "rapier3d"
-version = "0.30.1"
+version = "0.31.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bd27b8eb36d0833fa0f2aea40164fabfad0fc34b9932286ae9e84f3452f5364"
+checksum = "68073fdc88f6b709002767ce8deffffb05ac06824bf9f98a23e270bcea64ba9f"
 dependencies = [
  "approx",
  "arrayvec",
@@ -4644,9 +4651,9 @@ dependencies = [
 
 [[package]]
 name = "tinyaudio"
-version = "1.1.0"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e28f61bcbbeed46a2b3080aa12f480e059e7b319f79361f1b89af5e60d023cc9"
+checksum = "db2bb6a423a786a941cbc5a6544693727d832ec2c088d7da097a9d3bcf0431b5"
 dependencies = [
  "alsa-sys",
  "core-foundation-sys",
@@ -5602,7 +5609,7 @@ dependencies = [
  "as-raw-xcb-connection",
  "gethostname",
  "libc",
- "libloading",
+ "libloading 0.8.9",
  "once_cell",
  "rustix 1.1.2",
  "x11rb-protocol",
