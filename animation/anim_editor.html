@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-fdfb8795.js";
+            window.path_to_searchindex_js = "../searchindex-2e240fb3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-be454662.js"></script>
@@ -261,6 +261,9 @@ tracks that belong to a particular scene node.</li>
 <ul>
 <li><code>Remove Selected Tracks</code> - removes selected tracks; you can remove multiple tracks at a time by selecting them while
 holding <code>Ctrl</code>.</li>
+<li><code>Set Target...</code> - sets a new target node for the track.</li>
+<li><code>Rebind...</code> - rebind the track to other property of the same node of the same type.</li>
+<li><code>Duplicate</code> - duplicates the track.</li>
 </ul>
 <h2 id="curve-editor"><a class="header" href="#curve-editor">Curve Editor</a></h2>
 <p>Curve editor allows you to edit parametric curves (one at a time). A curve consists of zero or more key frames with
@@ -271,8 +274,8 @@ various transition rules between current and the next. The editor looks like thi
 move the playback cursor at the click position. You can move it by clicking at the cursor and moving the mouse while
 holding the left mouse button. Animation signals can be moved in the same fashion.</li>
 <li><code>Parametric Curve</code> - a curve that defines how a value changes over time.</li>
-<li><code>Time Thumb</code> - animation playback cursor, useful only for preview.</li>
 <li><code>Animation Signal</code> - some animation signal that will produce animation events when the playback cursor passes it.</li>
+<li><code>Time Thumb</code> - animation playback cursor, useful only for preview.</li>
 </ol>
 <h3 id="time-ruler-context-menu"><a class="header" href="#time-ruler-context-menu">Time Ruler Context Menu</a></h3>
 <p><img src="./ae_time_ruler_context_menu.png" alt="time ruler context menu"></p>
@@ -289,13 +292,14 @@ holding the left mouse button. Animation signals can be moved in the same fashio
 <li><code>Remove</code> - removes all selected keys. You can select multiple keys either by box selection (click and drag the mouse
 to active box selection) or by clicking on separate keys while holding <code>Ctrl</code>.</li>
 <li><code>Key...</code> - allows you to change the interpolation type of key. It could be one of the following values: Constant,
-Linear,
-Cubic.</li>
+Linear, Cubic.</li>
 <li><code>Zoom To Fit</code> - tries to find zooming values (for both axes) and the view position with which the entire curve fits in
 the viewport.</li>
+<li><code>Copy Selected Keys</code> - copies the selected keys to the clipboard.</li>
+<li><code>Paste Keys</code> - pastes the keys from the keyboard.</li>
 </ul>
 <h2 id="property-binding"><a class="header" href="#property-binding">Property Binding</a></h2>
-<p>To animate a property all you need to do is to click on <code>Add Track...</code> button at the bottom of the track list, select
+<p>To animate a property all you need to do is to click on <code>Add Track</code> button at the bottom of the track list, select
 a node to animate and then select a property that will be animated. There are two windows that will be shown one after
 another:</p>
 <p><img src="./ae_add_track_select_node.png" alt="step1"></p>
