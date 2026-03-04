@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-93387f45.js";
+            window.path_to_searchindex_js = "searchindex-a71b5066.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-be454662.js"></script>
@@ -6772,7 +6772,7 @@ impl Plugin for MyPlugin {
     fn on_os_event(&amp;mut self, event: &amp;Event&lt;()&gt;, context: PluginContext) -&gt; GameResult {
         if let Event::WindowEvent { event, .. } = event {
             if let WindowEvent::KeyboardInput { event, .. } = event {
-                if let Some(text) = event.text {
+                if let Some(ref text) = event.text {
                     println!("{}", text);
                 }
             }
@@ -13619,7 +13619,9 @@ with the suffix <code>_once</code>:</p>
     warn!("This is some warning");
     err!("This is some error");
 
-    Log::set_verbosity(MessageKind::Warning);
+    Log::set_log_info(false);
+    Log::set_log_warning(true);
+    Log::set_log_error(true);
 
     info!("This is some info"); // This won't be printed.
     warn!("This is some warning");

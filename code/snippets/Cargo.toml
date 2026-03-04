@@ -9,4 +9,4 @@ fyroxed_base = { git = "https://github.com/FyroxEngine/Fyrox", rev = "16dcf6e910
 strum = "0.27"
 strum_macros = "0.27"
 serde = "1"
-glow = "0.16.0"
+glow = { git = "https://github.com/grovesNL/glow", rev = "d645b97f1e26bb1a79b73f77c1c29312cdeca5c2" }

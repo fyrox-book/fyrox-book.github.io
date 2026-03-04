@@ -1,4 +1,4 @@
-use fyrox::core::log::{Log, MessageKind};
+use fyrox::core::log::Log;
 use fyrox::core::{err, err_once, info, info_once, warn, warn_once};
 use std::fs::File;
 
@@ -51,7 +51,9 @@ pub fn set_verbosity() {
     warn!("This is some warning");
     err!("This is some error");
 
-    Log::set_verbosity(MessageKind::Warning);
+    Log::set_log_info(false);
+    Log::set_log_warning(true);
+    Log::set_log_error(true);
 
     info!("This is some info"); // This won't be printed.
     warn!("This is some warning");
