@@ -5,6 +5,7 @@ mod residuals;
 
 // ANCHOR: imports
 use crate::bot::Bot;
+use fyrox::plugin::SceneLoaderResult;
 use fyrox::{
     core::{
         algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
@@ -34,6 +35,20 @@ pub struct Game {
     // ANCHOR_END: player_field
 }
 
+impl Game {
+    fn on_scene_loading_result(
+        &mut self,
+        result: SceneLoaderResult,
+        ctx: &mut PluginContext,
+    ) -> GameResult {
+        if self.scene.is_some() {
+            ctx.scenes.remove(self.scene);
+        }
+        self.scene = ctx.scenes.add(result?.payload);
+        Ok(())
+    }
+}
+
 // ANCHOR: register
 impl Plugin for Game {
     fn register(&self, context: PluginRegistrationContext) -> GameResult {
@@ -45,26 +60,12 @@ impl Plugin for Game {
         Ok(())
     }
 
-    fn init(&mut self, scene_path: Option<&str>, context: PluginContext) -> GameResult {
-        context
-            .async_scene_loader
-            .request(scene_path.unwrap_or("data/scene.rgs"));
-        Ok(())
-    }
-
-    fn on_scene_loaded(
-        &mut self,
-        _path: &Path,
-        scene: Handle<Scene>,
-        _data: &[u8],
-        context: &mut PluginContext,
-    ) -> GameResult {
-        if self.scene.is_some() {
-            context.scenes.remove(self.scene);
-        }
-
-        self.scene = scene;
-
+    fn init(&mut self, scene_path: Option<&str>, mut ctx: PluginContext) -> GameResult {
+        ctx.load_scene(
+            scene_path.unwrap_or("data/scene.rgs"),
+            false,
+            |result, game: &mut Game, ctx| game.on_scene_loading_result(result, ctx),
+        );
         Ok(())
     }
 

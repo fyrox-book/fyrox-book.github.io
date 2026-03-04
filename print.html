@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3df55abf.js";
+            window.path_to_searchindex_js = "searchindex-93387f45.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-be454662.js"></script>
@@ -13895,6 +13895,7 @@ at the beginning of the <code>game/src/lib.rs</code>:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use crate::bot::Bot;
+use fyrox::plugin::SceneLoaderResult;
 use fyrox::{
     core::{
         algebra::Vector2, pool::Handle, reflect::prelude::*, type_traits::prelude::*,
