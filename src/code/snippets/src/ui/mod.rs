@@ -12,6 +12,8 @@ pub mod grid;
 pub mod image;
 pub mod list_view;
 pub mod load;
+mod message_box;
+mod navigation;
 pub mod numeric;
 pub mod popup;
 pub mod progress;
@@ -27,7 +29,6 @@ pub mod text_box;
 pub mod vector_image;
 pub mod window;
 pub mod wrap_panel;
-mod message_box;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;

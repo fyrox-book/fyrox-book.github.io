@@ -121,7 +121,7 @@
         - [Menu (WIP)](./ui/menu.md)
         - [Message box](./ui/message_box.md)
         - [Numeric field](./ui/numeric.md)
-        - [Navigation (WIP)](./ui/navigation.md)
+        - [Navigation](./ui/navigation.md)
         - [Nine slice (WIP)](./ui/nine_slice.md)
         - [Popup](./ui/popup.md)
         - [Progress bar](./ui/progress_bar.md)
