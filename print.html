@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1fa90dad.js";
+            window.path_to_searchindex_js = "searchindex-ac795d41.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5891d368.js"></script>
@@ -9830,10 +9830,10 @@ check marks for every of three states as well as a widget that is used as a back
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="widgets-1"><a class="header" href="#widgets-1">Widgets</a></h1>
 <p>The subsections of this chapter explains how to use every widget built into Fyrox. The widgets in the table of contents
-to the left are ordered in alphebetical order. However, below we will order them by primary function to help introduce
+to the left are ordered in alphabetical order. However, below we will order them by primary function to help introduce
 them to new users.</p>
 <h2 id="containers"><a class="header" href="#containers">Containers</a></h2>
-<p>The Container widgets primary purpose is to contain other widgets. They are mostly used as a tool to layout the UI in
+<p>The Container widgets primary purpose is to contain other widgets. They are mostly used as a tool to lay out the UI in
 visually different ways.</p>
 <ul>
 <li><a href="#stack-panel">Stack panel</a>: The Stack Panel arranges widgets in a linear fashion, either vertically or horizontally depending
@@ -9843,23 +9843,17 @@ adjacent to the first line. Can arrange widgets either vertically or horizontall
 <li><a href="#grid">Grid</a>: The Grid arranges widgets into rows and columns with given size constraints.</li>
 <li><a href="#canvas">Canvas</a>: The Canvas arranges widgets with pixel perfect precision.\</li>
 <li><a href="#window-1">Window</a>: The Window holds other widgets in a panel that can be configured at setup to be move-able, expanded and
-contracted via user input, exited, and have a displayed label. The window has a title bar to assist with these features.
-<ul>
+contracted via user input, exited, and have a displayed label. The window has a title bar to assist with these features.</li>
 <li><a href="#message-box">Message Box</a>: The Message Box is a Window that has been streamlined to show standard confirmation/information
 dialogues, for example, closing a document with unsaved changes. It has a title, some text, and a fixed set of buttons
 (Yes, No, Cancel in different combinations).</li>
-</ul>
-</li>
 <li><a href="#menu-wip">Menu</a>: The Menu is a root container for Menu Items, an example could be a menu strip with File, Edit, View,
 etc. items.</li>
 <li><a href="#popup">Popup</a>: The Popup is a panel that locks input to its content while it is open. A simple example of it could
 be a context menu.</li>
-<li><a href="#scroll-viewer">Scroll Viewer</a>: The ScrollViewer is a wrapper for Scroll Panel that adds two scroll bars to it.
-<ul>
+<li><a href="#scroll-viewer">Scroll Viewer</a>: The ScrollViewer is a wrapper for Scroll Panel that adds two scroll bars to it.</li>
 <li><a href="#scroll-panel">Scroll Panel</a>: The Scroll Panel is a panel that allows you to apply some offset to children widgets. It is
 used to create “scrollable” area in conjunction with the Scroll Viewer.</li>
-</ul>
-</li>
 <li><a href="#expander">Expander</a>: The Expander handles hiding and showing multiple panels of widgets in an according style UI element.
 Multiple panels can be shown or hidden at any time based on user input.</li>
 <li><a href="#tab-control">Tab Control</a>: The Tab Control handles hiding several panels of widgets, only showing the one that the user has
@@ -9867,6 +9861,9 @@ selected.</li>
 <li><a href="#docking-manager">Docking Manager</a>: The Docking manager allows you to dock windows and hold them in-place.</li>
 <li><a href="#tree">Tree</a>: The Tree allows you to create views for hierarchical data.</li>
 <li><a href="#screen">Screen</a>: Screen is a widget that always has the size of the screen of the UI in which it is used.</li>
+<li><a href="#dropdown-menu-wip">Dropdown Menu</a> - <strong>TODO</strong></li>
+<li><a href="#selector-wip">Selector</a> - <strong>TODO</strong></li>
+<li><a href="#navigation-wip">Navigation</a> - <strong>TODO</strong></li>
 </ul>
 <h2 id="visual"><a class="header" href="#visual">Visual</a></h2>
 <p>The Visual widgets primary purpose is to provide the user feedback generally without the user directly interacting with them.</p>
@@ -9875,15 +9872,13 @@ selected.</li>
 <li><a href="#image">Image</a>: The Image widget is used to display a pixel image to the user.</li>
 <li><a href="#vector-image">Vector Image</a>: The Vector Image is used to render vector instructions as a graphical element.</li>
 <li><a href="#rect-editor-wip">Rect</a>: The Rect allows you to specify numeric values for X, Y, Width, and Height of a rectangle.</li>
-<li><a href="#progress-bar">Progress Bar</a>: The Progress Bar shows a bar whoes fill state can be adjusted to indicate visually how full
+<li><a href="#progress-bar">Progress Bar</a>: The Progress Bar shows a bar whose fill state can be adjusted to indicate visually how full
 something is, for example how close to 100% is a loading process.</li>
 <li><a href="#decorator">Decorator</a>: The Decorator is used to style any widget. It has support for different styles depending on various
-events like mouse hover or click.
-<ul>
+events like mouse hover or click.</li>
 <li><a href="#border">Border</a>: The Border widget is used in conjunction with the Decorator widget to provide configurable boarders
 to any widget for styling purposes.</li>
-</ul>
-</li>
+<li><a href="#nine-slice-wip">Nine Slice</a> - <strong>TODO</strong></li>
 </ul>
 <h2 id="controls-1"><a class="header" href="#controls-1">Controls</a></h2>
 <p>Control widgets primary purpose is to provide users with intractable UI elements to control some aspect of the program.</p>
@@ -9905,7 +9900,16 @@ list to select an item.</li>
 <li><a href="#inspector-wip">Inspector</a>: The Inspector automatically creates and handles the input of UI elements based on a populated
 Inspector Context given to it allowing the user to adjust values of a variety of models without manually creating UI’s
 for each type.</li>
+<li><a href="#thumb-wip">Thumb</a> - <strong>TODO</strong></li>
+<li><a href="#key-binding-wip">Key Binding</a> - <strong>TODO</strong></li>
+<li><a href="#toggle-button-wip">Toggle Button</a> - <strong>TODO</strong></li>
 </ul>
+<h2 id="full-list"><a class="header" href="#full-list">Full List</a></h2>
+<p>The book describes only those widgets that are usable in game development, the full number of widgets in the
+engine is more than 115. The list above describes nearly one third of the total number. See implementors of
+<code>Control</code> <a href="https://docs.rs/fyrox/latest/fyrox/gui/trait.Control.html">trait in the API docs</a>, keep in mind
+that some of the widgets are available only in the editor, which means that they can be used to write editor
+plugins.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="custom-widget"><a class="header" href="#custom-widget">Custom Widget</a></h1>
 <p>It is possible to create your own widgets, that could solve a specific task that couldn’t be solved easily with the
