@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Navigation (WIP) - Fyrox Book</title>
+        <title>Navigation - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ac795d41.js";
+            window.path_to_searchindex_js = "../searchindex-1e8c11f6.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-5891d368.js"></script>
+        <script src="../toc-e2cb3fa9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,7 +191,42 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="navigation-wip"><a class="header" href="#navigation-wip">Navigation (WIP)</a></h1>
+                        <h1 id="navigation"><a class="header" href="#navigation">Navigation</a></h1>
+<p>A widget, that handles keyboard navigation on its descendant widgets using Tab key. It should
+be used as a root widget for a hierarchy, that should support Tab key navigation:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_navigation_layer(ctx: &amp;mut BuildContext) {
+    NavigationLayerBuilder::new(
+        WidgetBuilder::new().with_child(
+            StackPanelBuilder::new(
+                WidgetBuilder::new()
+                    .with_child(
+                        // This widget won't participate in Tab key navigation.
+                        TextBuilder::new(WidgetBuilder::new())
+                            .with_text("Do something?")
+                            .build(ctx),
+                    )
+                    // The keyboard focus for the following two buttons can be cycled using Tab/Shift+Tab.
+                    .with_child(
+                        ButtonBuilder::new(WidgetBuilder::new().with_tab_index(Some(0)))
+                            .with_text("OK")
+                            .build(ctx),
+                    )
+                    .with_child(
+                        ButtonBuilder::new(WidgetBuilder::new().with_tab_index(Some(1)))
+                            .with_text("Cancel")
+                            .build(ctx),
+                    ),
+            )
+            .build(ctx),
+        ),
+    )
+    .build(ctx);
+}
+<span class="boring">}</span></code></pre>
+<p>This example shows how to create a simple confirmation dialog, that allows a user to use Tab key
+to cycle from one button to another. A focused button then can be “clicked” using Enter key.</p>
 
                     </main>
 
