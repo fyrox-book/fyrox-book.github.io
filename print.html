@@ -47,10 +47,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1e8c11f6.js";
+            window.path_to_searchindex_js = "searchindex-bc833076.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e2cb3fa9.js"></script>
+        <script src="toc-06c93f4b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -9878,7 +9878,7 @@ something is, for example how close to 100% is a loading process.</li>
 events like mouse hover or click.</li>
 <li><a href="#border">Border</a>: The Border widget is used in conjunction with the Decorator widget to provide configurable boarders
 to any widget for styling purposes.</li>
-<li><a href="#nine-slice-wip">Nine Slice</a> - <strong>TODO</strong></li>
+<li><a href="#nine-patch">Nine Slice</a> - <strong>TODO</strong></li>
 </ul>
 <h2 id="controls-1"><a class="header" href="#controls-1">Controls</a></h2>
 <p>Control widgets primary purpose is to provide users with intractable UI elements to control some aspect of the program.</p>
@@ -11292,7 +11292,62 @@ be used as a root widget for a hierarchy, that should support Tab key navigation
 <p>This example shows how to create a simple confirmation dialog, that allows a user to use Tab key
 to cycle from one button to another. A focused button then can be “clicked” using Enter key.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="nine-slice-wip"><a class="header" href="#nine-slice-wip">Nine Slice (WIP)</a></h1>
+<h1 id="nine-patch"><a class="header" href="#nine-patch">Nine Patch</a></h1>
+<p><code>NinePatch</code> widget is used to split an image in nine sections, where each corner section will
+remain the same, while the middle parts between each corner will be used to evenly fill the
+space. This widget is primarily used in the UI to create resizable frames, buttons, windows, etc.</p>
+<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
+<p>Let’s say we want to make a stretchable container for various items, but want to keep the corners undistorted.
+We’ll use the following frame:</p>
+<p><img src="ui/9slice.png" alt="9-slice"></p>
+<p>The easiest way of creating such a nine patch frame is to use the texture slice editor, that can be opened
+by clicking on <code>Edit...</code> button of the texture slice field:</p>
+<p><img src="ui/9slice_editor.PNG" alt="9-slice-editor"></p>
+<p>As you can see, the corners of the frame are not distorted.</p>
+<p>The same effect can be achieved from code. The following examples shows how to create a nine-patch widget with a texture
+and some margins.</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_nine_patch(texture: TextureResource, ui: &amp;mut UserInterface) -&gt; Handle&lt;NinePatch&gt; {
+    NinePatchBuilder::new(WidgetBuilder::new())
+        // Specify margins for each side in pixels.
+        .with_left_margin(12)
+        .with_right_margin(12)
+        .with_top_margin(12)
+        .with_bottom_margin(12)
+        .with_texture(texture)
+        .build(&amp;mut ui.build_ctx())
+}
+<span class="boring">}</span></code></pre>
+<h2 id="atlas-region"><a class="header" href="#atlas-region">Atlas Region</a></h2>
+<p>It is also possible to specify an atlas region where the source image is located:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_nine_patch_with_region(
+    texture: TextureResource,
+    ui: &amp;mut UserInterface,
+) -&gt; Handle&lt;NinePatch&gt; {
+    NinePatchBuilder::new(WidgetBuilder::new())
+        // Specify margins for each side in pixels.
+        .with_left_margin(12)
+        .with_right_margin(12)
+        .with_top_margin(12)
+        .with_bottom_margin(12)
+        .with_texture(texture)
+        // Additionally, you can also specify a region in a texture to use. It is useful if you
+        // have a texture atlas where most of the UI elements are packed.
+        .with_texture_region(Rect::new(200, 200, 400, 400))
+        .build(&amp;mut ui.build_ctx())
+}
+<span class="boring">}</span></code></pre>
+<h2 id="stretch-mode"><a class="header" href="#stretch-mode">Stretch Mode</a></h2>
+<p><img src="ui/9slice_stretch.png" alt="9-slice-stretch"></p>
+<p>It is also possible to specify stretch mode for every part except the corners. This can be done by selecting
+the desired mode in <code>Stretch Mode</code> property.</p>
+<h2 id="center-hole"><a class="header" href="#center-hole">Center Hole</a></h2>
+<p><img src="ui/9slice_center.png" alt="9-slice-center"></p>
+<p>Sometimes there’s no need to draw the center tile, it can be achieved by unchecking the <code>Draw Center</code> bool
+property.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="popup"><a class="header" href="#popup">Popup</a></h1>
 <p>Popup is used to display other widgets in floating panel that could lock input in its own bounds.</p>
@@ -11403,7 +11458,7 @@ lists, etc. To enable this option, use <code>PopupBuilder::with_smart_placement<
 <p><img src="ui/progress_bar.gif" alt="progress bar"></p>
 <p>Progress bar is used to show a bar that fills in from left to right according to the progress value. It is used to
 show progress for long actions.</p>
-<h2 id="example-8"><a class="header" href="#example-8">Example</a></h2>
+<h2 id="example-9"><a class="header" href="#example-9">Example</a></h2>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_progress_bar(ctx: &amp;mut BuildContext) -&gt; Handle&lt;ProgressBar&gt; {
@@ -11440,7 +11495,7 @@ methods respectively. These methods can accept any widget, but usually it i a
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-9"><a class="header" href="#example-9">Example</a></h2>
+<h2 id="example-10"><a class="header" href="#example-10">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11560,7 +11615,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="#window-1">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-10"><a class="header" href="#example-10">Example</a></h2>
+<h2 id="example-11"><a class="header" href="#example-11">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
