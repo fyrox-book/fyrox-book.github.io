@@ -14,6 +14,7 @@ pub mod list_view;
 pub mod load;
 mod message_box;
 mod navigation;
+mod nine_patch;
 pub mod numeric;
 pub mod popup;
 pub mod progress;

@@ -122,7 +122,7 @@
         - [Message box](./ui/message_box.md)
         - [Numeric field](./ui/numeric.md)
         - [Navigation](./ui/navigation.md)
-        - [Nine slice (WIP)](./ui/nine_slice.md)
+        - [Nine Patch](ui/nine_patch.md)
         - [Popup](./ui/popup.md)
         - [Progress bar](./ui/progress_bar.md)
         - [Range (WIP)](./ui/range.md)

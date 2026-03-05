@@ -52,7 +52,7 @@ something is, for example how close to 100% is a loading process.
 events like mouse hover or click.
 * [Border](./border.md): The Border widget is used in conjunction with the Decorator widget to provide configurable boarders 
   to any widget for styling purposes.
-* [Nine Slice](./nine_slice.md) - **TODO**
+* [Nine Slice](nine_patch.md) - **TODO**
 
 ## Controls
 
