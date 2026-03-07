@@ -39,8 +39,9 @@ Every project has its own item in the list of projects, it shows important infor
 
 1. Project name.
 2. Full path to the project.
-3. Version of the engine the project uses.
-4. Code hot reloading marker. 
+3. Size of the project on disk.
+4. Version of the engine the project uses.
+5. Code hot reloading marker. 
 
 ## Project Management
 
