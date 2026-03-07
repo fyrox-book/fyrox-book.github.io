@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-bc833076.js";
+            window.path_to_searchindex_js = "../searchindex-916e8753.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-06c93f4b.js"></script>
@@ -193,15 +193,29 @@
                     <main>
                         <h1 id="system-requirements"><a class="header" href="#system-requirements">System Requirements</a></h1>
 <p>As any other software, Fyrox has its own system requirements that will provide the best user experience.</p>
+<blockquote>
+<p>⚠️ Do not try to run the engine on virtual machines, pretty much all of them have rudimentary support for
+graphics APIs which won’t let you run the engine. If the editor fails to start, then it is most likely your video card
+does not support OpenGL 3.3+.</p>
+</blockquote>
+<h2 id="minimum-requirements"><a class="header" href="#minimum-requirements">Minimum Requirements</a></h2>
+<p>The following system requirements are just the bare minimum to be able to compile and run relatively small game with
+simple graphics:</p>
 <ul>
 <li><strong>CPU</strong> - at least 2 core CPU with 1.5 GHz per each core. The more is better.</li>
-<li><strong>GPU</strong> - any relatively modern GPU with OpenGL 3.3+ support. If the editor fails to start, then it is most likely your
-video card does not support OpenGL 3.3+. Do <strong>not</strong> try to run the editor on virtual machines, pretty much all of them
-have rudimentary support for graphics APIs which won’t let you run the editor.</li>
-<li><strong>RAM</strong> - at least 1 Gb of RAM. The more is better.</li>
-<li><strong>VRAM</strong> - at least 256 Mb of video memory. It highly depends on your game.</li>
+<li><strong>GPU</strong> - any relatively modern GPU with OpenGL 3.3+ support with at least 128 Mb of video memory.</li>
+<li><strong>RAM</strong> - at least 512 Mb of RAM. The more is better.</li>
+</ul>
+<p>The actual system requirements highly depend on your game.</p>
+<h2 id="recommended-system-configuration-for-development"><a class="header" href="#recommended-system-configuration-for-development">Recommended System Configuration for Development</a></h2>
+<p>The following system configurations is recommended for the development process:</p>
+<ul>
+<li><strong>CPU</strong> - 6 core CPU with 3.6 GHz per each core.</li>
+<li><strong>GPU</strong> - any relatively modern GPU with OpenGL 3.3+ support with 2 Gb of video memory.</li>
+<li><strong>RAM</strong> - 16 Gb of RAM.</li>
 <li><strong>Monitor</strong> - 1920x1080 or higher resolution, lower resolutions may work as well.</li>
 </ul>
+<p>The crucial part for the development is the CPU, the better the CPU the faster the compilation will be.</p>
 <h2 id="supported-platforms"><a class="header" href="#supported-platforms">Supported Platforms</a></h2>
 <div class="table-wrapper">
 <table>
@@ -214,12 +228,14 @@ have rudimentary support for graphics APIs which won’t let you run the editor.
 <tr><td>macOS</td><td>✅¹</td><td>✅</td></tr>
 <tr><td>WebAssembly</td><td>✅</td><td>❌²</td></tr>
 <tr><td>Android</td><td>✅</td><td>❌²</td></tr>
-<tr><td>iOS</td><td>✅</td><td>❌²</td></tr>
+<tr><td>iOS</td><td>❓</td><td>❌²</td></tr>
 </tbody>
 </table>
 </div>
 <ul>
 <li>✅ - first-class support</li>
+<li>❓ - theoretically compilable, but not tested to be runnable.
+See <a href="https://github.com/FyroxEngine/Fyrox/issues/726">this issue</a> for more info.</li>
 <li>❌ - not supported</li>
 <li>¹ - macOS suffers from bad GPU performance on Intel chipsets, M1+ works well.</li>
 <li>² - the editor works only on PC, it requires rich filesystem functionality as well as decent threading support.</li>
