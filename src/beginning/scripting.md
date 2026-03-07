@@ -84,7 +84,7 @@ For NixOS, run `nix develop` from the root of your project to open a shell with 
 
 ## Project Manager
 
-[![project manager](https://fyrox.rs/assets/0.36/project_manager.png)](https://fyrox.rs/download.html)
+[![project manager](project_manager.png)](https://fyrox.rs/download.html)
 
 [Project manager](https://fyrox.rs/download.html) is a part of the engine that allows you to manage multiple projects made with the engine all at once.
 It allows you to create a new project or import an existing one, run the project or edit it in the editor,
