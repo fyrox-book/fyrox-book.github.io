@@ -9,7 +9,7 @@ is a half of the overall success.
 
 This section explains how to use the engine with RustRover and how to prepare it for the most efficient workflow.
 RustRover is the recommended IDE for the engine. It is free for non-commercial use and works on pretty much every
-major platform. A typical workflow is presented on this picture (keep in mind that it uses Classic UI extension):
+major platform. A typical workflow is presented on this picture:
 
 ![RustRover IDE](rr_ide.png)
 
