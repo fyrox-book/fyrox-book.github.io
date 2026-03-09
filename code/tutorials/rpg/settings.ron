@@ -516,11 +516,11 @@
         log_error: true,
     ),
     scene_settings: {
-        "data/models/paladin/paladin.rgs": (
+        "data/models/barrel/barrel.rgs": (
             camera_settings: (
-                position: (0.10303402, 1.5039064, -0.60645163),
-                yaw: -1.7899973,
-                pitch: 0.66079694,
+                position: (-0.8716359, -0.5274018, -0.18356295),
+                yaw: 4.700002,
+                pitch: 0.68079704,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
@@ -529,29 +529,37 @@
             ),
             node_infos: {
                 (
-                    index: 113,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 15,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 112,
+                    index: 45,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 113,
+                    index: 42,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/models/wood_cabin/wooden_cabin.rgs": (
+            camera_settings: (
+                position: (0.11844218, -0.8581563, -0.00032424927),
+                yaw: 3.009999,
+                pitch: 0.4799998,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 128.0,
+                )),
+            ),
+            node_infos: {
                 (
                     index: 0,
                     generation: 1,
@@ -564,21 +572,143 @@
                 ): (
                     is_expanded: true,
                 ),
+            },
+        ),
+        "data/models/paladin/paladin.rgs": (
+            camera_settings: (
+                position: (0.4375595, 1.0897272, -0.14917639),
+                yaw: -1.6099977,
+                pitch: 0.85079676,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 128.0,
+                )),
+            ),
+            node_infos: {
                 (
-                    index: 133,
-                    generation: 2,
+                    index: 95,
+                    generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 119,
-                    generation: 3,
+                    index: 54,
+                    generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 131,
-                    generation: 3,
+                    index: 68,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 82,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 81,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 48,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 100,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 61,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 56,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 51,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 69,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 52,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 102,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 101,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 97,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 79,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 53,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 99,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 84,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 83,
+                    generation: 1,
                 ): (
                     is_expanded: true,
                 ),
@@ -589,14 +719,218 @@
                     is_expanded: true,
                 ),
                 (
+                    index: 60,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 50,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 57,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 96,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 58,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 92,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 87,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 17,
                     generation: 2,
                 ): (
                     is_expanded: true,
                 ),
                 (
+                    index: 72,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 16,
                     generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 103,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 108,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 70,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 63,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 104,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 47,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 46,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 98,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 76,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 131,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 78,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 15,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 64,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 85,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 86,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 133,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 80,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 113,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 113,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 112,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 119,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 42,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 107,
+                    generation: 1,
                 ): (
                     is_expanded: true,
                 ),
@@ -630,9 +964,9 @@
         ),
         "data/scene.rgs": (
             camera_settings: (
-                position: (13.00051, 2.5323586, 8.43091),
-                yaw: 7.5699997,
-                pitch: 0.7099998,
+                position: (16.206366, -0.06591749, 16.221031),
+                yaw: 6.5600405,
+                pitch: 0.5007967,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
@@ -641,20 +975,26 @@
             ),
             node_infos: {
                 (
-                    index: 122,
-                    generation: 1,
+                    index: 47,
+                    generation: 3,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 43,
-                    generation: 1,
+                    index: 57,
+                    generation: 3,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 42,
-                    generation: 1,
+                    index: 63,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 25,
+                    generation: 3,
                 ): (
                     is_expanded: true,
                 ),
@@ -665,7 +1005,91 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 79,
+                    index: 74,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 48,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 54,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 26,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 73,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 11,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 164,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 67,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 27,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 166,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 165,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 51,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 60,
                     generation: 3,
                 ): (
                     is_expanded: true,
@@ -677,8 +1101,284 @@
                     is_expanded: true,
                 ),
                 (
+                    index: 59,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 20,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 141,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 29,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 69,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 80,
                     generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 35,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 21,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 42,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 152,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 165,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 22,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 79,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 32,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 104,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 52,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 75,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 68,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 37,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 105,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 28,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 64,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 164,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 151,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 72,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 45,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 38,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 46,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 24,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 166,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 30,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 39,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 40,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 31,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 23,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 61,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 33,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 34,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 76,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 122,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 55,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 71,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 106,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 62,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 50,
+                    generation: 3,
                 ): (
                     is_expanded: true,
                 ),
@@ -688,12 +1388,68 @@
                 ): (
                     is_expanded: true,
                 ),
+                (
+                    index: 41,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 70,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 36,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 53,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 19,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 56,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 58,
+                    generation: 3,
+                ): (
+                    is_expanded: true,
+                ),
             },
         ),
     },
     recent: (
         scenes: [
+            "data/models/barrel/barrel.rgs",
             "data/models/paladin/paladin.rgs",
+            "data/models/wood_cabin/wooden_cabin.rgs",
             "data/scene.rgs",
             "data/unnamed.rgs",
         ],
