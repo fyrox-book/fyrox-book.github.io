@@ -8,7 +8,6 @@ use fyrox::{
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::Scene,
 };
-use std::path::Path;
 
 mod player;
 
@@ -50,4 +49,5 @@ impl Plugin for Game {
         );
         Ok(())
     }
+
 }
