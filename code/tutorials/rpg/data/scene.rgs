@@ -8,7 +8,7 @@ __ROOT__[]
 			Root[Index<u32:0>Generation<u32:1>]{}
 			Pool[]
 			{
-				Records[Length<u32:209>]
+				Records[Length<u32:226>]
 				{
 					Item0[Generation<u32:1>]
 					{
@@ -32,7 +32,7 @@ __ROOT__[]
 									}
 									Visibility[Value<bool:true>Flags<u8:1>]{}
 									Parent[Index<u32:0>Generation<u32:0>]{}
-									Children[Length<u32:17>]
+									Children[Length<u32:26>]
 									{
 										Item0[Index<u32:43>Generation<u32:1>]{}
 										Item1[Index<u32:121>Generation<u32:1>]{}
@@ -51,6 +51,15 @@ __ROOT__[]
 										Item14[Index<u32:100>Generation<u32:2>]{}
 										Item15[Index<u32:94>Generation<u32:2>]{}
 										Item16[Index<u32:88>Generation<u32:2>]{}
+										Item17[Index<u32:82>Generation<u32:2>]{}
+										Item18[Index<u32:210>Generation<u32:1>]{}
+										Item19[Index<u32:212>Generation<u32:1>]{}
+										Item20[Index<u32:214>Generation<u32:1>]{}
+										Item21[Index<u32:216>Generation<u32:1>]{}
+										Item22[Index<u32:218>Generation<u32:1>]{}
+										Item23[Index<u32:220>Generation<u32:1>]{}
+										Item24[Index<u32:222>Generation<u32:1>]{}
+										Item25[Index<u32:224>Generation<u32:1>]{}
 									}
 									Resource[IsSome<u8:0>]{}
 									Lifetime[Flags<u8:1>]
@@ -1253,7 +1262,7 @@ __ROOT__[]
 											{
 												Heightmap[IsSome<u8:1>]
 												{
-													Data[Uuid<uuid:c89458d8-bef5-4602-b28b-11277f5234c3>]
+													Data[Uuid<uuid:bf0fa8cc-4bae-4da2-a39a-77ebdea3afa6>]
 													{
 														Embedded[Id<u64:4>]
 														{
@@ -1275,7 +1284,7 @@ __ROOT__[]
 												HoleMask[IsSome<u8:0>]{}
 												LayerMasks[Length<u32:3>]
 												{
-													Item0[Uuid<uuid:c2107615-aaae-43bb-a240-84e02f285477>]
+													Item0[Uuid<uuid:837c8e03-987b-4ebd-bee9-4d638b5630a0>]
 													{
 														Embedded[Id<u64:5>]
 														{
@@ -1293,7 +1302,7 @@ __ROOT__[]
 															}
 														}
 													}
-													Item1[Uuid<uuid:65aa32a9-b3f0-4f66-8e1f-b2f70e11a838>]
+													Item1[Uuid<uuid:c0a0c225-cf8f-4c94-b70b-fd5526e875c2>]
 													{
 														Embedded[Id<u64:6>]
 														{
@@ -1311,7 +1320,7 @@ __ROOT__[]
 															}
 														}
 													}
-													Item2[Uuid<uuid:0398a51d-03e0-4520-b897-255cc2dde769>]
+													Item2[Uuid<uuid:376f1962-6238-42c5-aba4-acbaa7cea2a1>]
 													{
 														Embedded[Id<u64:7>]
 														{
@@ -2320,17 +2329,83 @@ __ROOT__[]
 							}
 						}
 					}
-					Item80[Generation<u32:1>]
+					Item80[Generation<u32:2>]
 					{
-						Payload[IsSome<u8:0>]{}
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:44d1c94e-354f-4f9a-b918-9d31c28aa16a>]
+							{
+								NodeData[AutoApply<bool:true>]
+								{
+									Base[Name<str:"AnimationPlayer">IsResourceInstance<bool:false>InstanceId<uuid:cb862aae-7b5b-4db4-b6f4-c2f8e2a55ca8>]
+									{
+										Transform[]{}
+										Parent[Index<u32:82>Generation<u32:2>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:8441c482-b176-4a83-b60e-9e0548ce5f3a>]{}
+										}
+										Original[Index<u32:2>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
 					}
-					Item81[Generation<u32:1>]
+					Item81[Generation<u32:2>]
 					{
-						Payload[IsSome<u8:0>]{}
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"Campfire">IsResourceInstance<bool:false>InstanceId<uuid:bb5a38ad-2710-4ae0-ac76-cc6151c9f34a>]
+									{
+										Transform[]{}
+										Parent[Index<u32:82>Generation<u32:2>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:8441c482-b176-4a83-b60e-9e0548ce5f3a>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
 					}
-					Item82[Generation<u32:1>]
+					Item82[Generation<u32:2>]
 					{
-						Payload[IsSome<u8:0>]{}
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"Campfire.fbx">IsResourceInstance<bool:true>InstanceId<uuid:2596e832-1ecb-4331-a1ae-21e5f4a68dfa>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.02; 0.02; 0.02>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:33.135353; 0; 27.434801>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:3>]
+									{
+										Item0[Index<u32:81>Generation<u32:2>]{}
+										Item1[Index<u32:80>Generation<u32:2>]{}
+										Item2[Index<u32:209>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:8441c482-b176-4a83-b60e-9e0548ce5f3a>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
 					}
 					Item83[Generation<u32:2>]
 					{
@@ -4819,8 +4894,563 @@ __ROOT__[]
 							}
 						}
 					}
+					Item209[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:8b210eff-97a4-494f-ba7a-a581d3f4a442>]
+							{
+								NodeData[]
+								{
+									Base[Name<str:"ParticleSystem">IsResourceInstance<bool:false>InstanceId<uuid:389aad0a-4232-4b20-9e10-2fe22b664753>]
+									{
+										Transform[]
+										{
+											LocalScale[Value<vec3f32:50; 50; 50>Flags<u8:1>]{}
+											LocalPosition[Value<vec3f32:0; 0; 0>Flags<u8:1>]{}
+											LocalRotation[Value<quat:0; 0; 0; 1>Flags<u8:1>]{}
+											PreRotation[Value<quat:0; 0; 0; 1>Flags<u8:1>]{}
+											PostRotation[Value<quat:0; 0; 0; 1>Flags<u8:1>]{}
+											RotationOffset[Value<vec3f32:0; 0; 0>Flags<u8:1>]{}
+											RotationPivot[Value<vec3f32:0; 0; 0>Flags<u8:1>]{}
+											ScalingOffset[Value<vec3f32:0; 0; 0>Flags<u8:1>]{}
+											ScalingPivot[Value<vec3f32:0; 0; 0>Flags<u8:1>]{}
+										}
+										Visibility[Value<bool:true>Flags<u8:1>]{}
+										Parent[Index<u32:82>Generation<u32:2>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:0>]{}
+										Lifetime[Flags<u8:1>]
+										{
+											Value[IsSome<u8:0>]{}
+										}
+										LodGroup[Flags<u8:1>]
+										{
+											Value[IsSome<u8:0>]{}
+										}
+										Original[Index<u32:0>Generation<u32:0>]{}
+										Tag[Value<str:"">Flags<u8:1>]{}
+										Properties[Flags<u8:1>]
+										{
+											Value[Length<u32:0>]{}
+										}
+										FrustumCulling[Value<bool:true>Flags<u8:1>]{}
+										CastShadows[Value<bool:true>Flags<u8:1>]{}
+										Enabled[Value<bool:true>Flags<u8:1>]{}
+										RenderMask[Value<u32:4294967295>Flags<u8:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+									Emitters[Flags<u8:1>]
+									{
+										Value[Length<u32:1>KindId<i32:2>]
+										{
+											Item0[Radius<f32:0.2>]
+											{
+												Emitter[Position<vec3f32:0; 0; 0>SpawnRate<u32:250>AliveParticles<u32:0>ResurrectParticles<bool:true>SpawnedParticles<u64:0>]
+												{
+													MaxParticles[IsSome<u8:1>Data<u32:500>]{}
+													LifeTime[Start<f32:0.2>End<f32:1>]{}
+													Size[Start<f32:0.125>End<f32:0.25>]{}
+													SizeModifier[Start<f32:0.0005>End<f32:0.001>]{}
+													XVelocity[Start<f32:-0.001>End<f32:0.001>]{}
+													YVelocity[Start<f32:-0.001>End<f32:0.001>]{}
+													ZVelocity[Start<f32:-0.001>End<f32:0.001>]{}
+													RotationSpeed[Start<f32:-0.02>End<f32:0.02>]{}
+													Rotation[Start<f32:-3.1415927>End<f32:3.1415927>]{}
+												}
+											}
+										}
+									}
+									Acceleration[Value<vec3f32:0; 9.81; 0>Flags<u8:1>]{}
+									ColorGradient[Flags<u8:1>]
+									{
+										Value[]
+										{
+											Points[Length<u32:4>]
+											{
+												Item0[Location<f32:0.089171976>]
+												{
+													Color[R<u8:255>G<u8:174>B<u8:0>A<u8:255>]{}
+												}
+												Item1[Location<f32:0.2388535>]
+												{
+													Color[R<u8:155>G<u8:83>B<u8:0>A<u8:255>]{}
+												}
+												Item2[Location<f32:0.7101911>]
+												{
+													Color[R<u8:95>G<u8:95>B<u8:95>A<u8:255>]{}
+												}
+												Item3[Location<f32:0.9044586>]
+												{
+													Color[R<u8:255>G<u8:255>B<u8:255>A<u8:0>]{}
+												}
+											}
+										}
+									}
+									Enabled[Value<bool:true>Flags<u8:1>]{}
+									Particles[Length<u32:0>]{}
+									FreeParticles[Length<u32:0>]{}
+									Rng[Seed<u64:3735928559>]{}
+									VisibleDistance[Value<f32:30>Flags<u8:1>]{}
+									CoordinateSystem[Flags<u8:1>]
+									{
+										Value[Id<u32:0>]{}
+									}
+									FadeoutMargin[Value<f32:1.5>Flags<u8:1>]{}
+									Material[Flags<u8:1>]
+									{
+										Value[Uuid<uuid:0fd1b3fb-08d2-4bc0-812a-e0d942923950>]
+										{
+											Embedded[Id<u64:8>]
+											{
+												ArcData[TypeUuid<uuid:0e54fe44-0c58-4108-a681-d6eefc88c234>]
+												{
+													Data[]
+													{
+														Shader[Uuid<uuid:eb474445-6a25-4481-bca9-f919699c300f>]{}
+														ResourceBindings[Count<u32:1>]
+														{
+															Item0[Key<str:"diffuseTexture">]
+															{
+																Value[Id<u32:0>]
+																{
+																	0[]
+																	{
+																		Value[IsSome<u8:1>]
+																		{
+																			Data[Uuid<uuid:de8606f4-93f1-4e9d-abe5-cedaffd24621>]{}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					Item210[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:37.457462; -0.366931; 27.064936>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:211>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item211[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:210>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item212[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:36.323597; -0.36693102; 29.717949>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:213>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item213[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:212>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item214[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:33.795937; -0.36693102; 30.72444>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:215>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item215[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:214>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item216[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:31.152643; -0.366931; 31.55444>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:217>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item217[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:216>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item218[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:24.183334; -0.366931; 26.507631>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:219>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item219[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:218>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item220[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:25.837105; -0.366931; 24.41911>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:221>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item221[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:220>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item222[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:27.963375; -0.366931; 22.371798>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:223>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item223[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:222>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
+					Item224[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:dd2ecb96-b1f4-4ee0-943b-2a4d1844e3bb>]
+							{
+								NodeData[Name<str:"bush.fbx">IsResourceInstance<bool:true>InstanceId<uuid:3c089679-51dc-46e0-ab7d-d3f0b1d6a453>]
+								{
+									Transform[]
+									{
+										LocalScale[Value<vec3f32:0.01; 0.01; 0.01>Flags<u8:1>]{}
+										LocalPosition[Value<vec3f32:30.420288; -0.366931; 21.0936>Flags<u8:1>]{}
+									}
+									Parent[Index<u32:0>Generation<u32:1>]{}
+									Children[Length<u32:1>]
+									{
+										Item0[Index<u32:225>Generation<u32:1>]{}
+									}
+									Resource[IsSome<u8:1>]
+									{
+										Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+									}
+									Original[Index<u32:0>Generation<u32:1>]{}
+									Scripts[Length<u32:0>]{}
+								}
+							}
+						}
+					}
+					Item225[Generation<u32:1>]
+					{
+						Payload[IsSome<u8:1>]
+						{
+							Data[TypeUuid<uuid:caaf9d7b-bd74-48ce-b7cc-57e9dc65c2e6>]
+							{
+								NodeData[BlendShapesPropertyName<str:"blendShapesStorage">]
+								{
+									Common[Name<str:"bush">IsResourceInstance<bool:false>InstanceId<uuid:ae640a74-8b27-40e2-a481-3578b3e2e826>]
+									{
+										Transform[]{}
+										Parent[Index<u32:224>Generation<u32:1>]{}
+										Children[Length<u32:0>]{}
+										Resource[IsSome<u8:1>]
+										{
+											Data[Uuid<uuid:3801dcfa-91b3-49e5-a576-a5f2d34aee9b>]{}
+										}
+										Original[Index<u32:1>Generation<u32:1>]{}
+										Scripts[Length<u32:0>]{}
+									}
+								}
+							}
+						}
+					}
 				}
-				FreeStack[Length<u32:44>Item0<u32:80>Item1<u32:81>Item2<u32:82>Item3<u32:167>Item4<u32:168>Item5<u32:169>Item6<u32:170>Item7<u32:171>Item8<u32:172>Item9<u32:173>Item10<u32:174>Item11<u32:175>Item12<u32:176>Item13<u32:177>Item14<u32:178>Item15<u32:179>Item16<u32:180>Item17<u32:181>Item18<u32:182>Item19<u32:183>Item20<u32:184>Item21<u32:185>Item22<u32:186>Item23<u32:187>Item24<u32:188>Item25<u32:189>Item26<u32:190>Item27<u32:191>Item28<u32:192>Item29<u32:193>Item30<u32:194>Item31<u32:195>Item32<u32:196>Item33<u32:197>Item34<u32:198>Item35<u32:199>Item36<u32:200>Item37<u32:201>Item38<u32:202>Item39<u32:203>Item40<u32:204>Item41<u32:205>Item42<u32:206>Item43<u32:207>]{}
+				FreeStack[Length<u32:41>Item0<u32:167>Item1<u32:168>Item2<u32:169>Item3<u32:170>Item4<u32:171>Item5<u32:172>Item6<u32:173>Item7<u32:174>Item8<u32:175>Item9<u32:176>Item10<u32:177>Item11<u32:178>Item12<u32:179>Item13<u32:180>Item14<u32:181>Item15<u32:182>Item16<u32:183>Item17<u32:184>Item18<u32:185>Item19<u32:186>Item20<u32:187>Item21<u32:188>Item22<u32:189>Item23<u32:190>Item24<u32:191>Item25<u32:192>Item26<u32:193>Item27<u32:194>Item28<u32:195>Item29<u32:196>Item30<u32:197>Item31<u32:198>Item32<u32:199>Item33<u32:200>Item34<u32:201>Item35<u32:202>Item36<u32:203>Item37<u32:204>Item38<u32:205>Item39<u32:206>Item40<u32:207>]{}
 			}
 			SoundContext[]
 			{
@@ -4828,11 +5458,11 @@ __ROOT__[]
 				{
 					State[IsSome<u8:1>]
 					{
-						Data[Id<u64:8>]
+						Data[Id<u64:9>]
 						{
 							ArcData[Paused<bool:false>]
 							{
-								Listener[Basis<mat3:-0.6911459; -0.000000014901161; 0.7227152; 0.5188454; 0.6961346; 0.49618146; 0.50310713; -0.7179112; 0.48113066>Position<vec3f32:33.47725; 16.123915; 24.738932>]{}
+								Listener[Basis<mat3:0.9973562; -0.0000000037252903; -0.072669595; -0.057408422; 0.61311674; -0.7879037; -0.04455494; -0.7899924; -0.6114957>Position<vec3f32:34.377987; 7.6431894; 33.861515>]{}
 								Sources[]
 								{
 									Records[Length<u32:0>]{}
