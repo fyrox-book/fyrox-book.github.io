@@ -30,34 +30,15 @@ In this tutorial we'll make something similar. Check the video with final result
 <iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 As you can see, at the end of the tutorial we'll be able to walk and explore a small fantasy world. Let's start by 
-creating a new game project, by running the following command:
+creating a new game project, open the project manager and create a new project:
 
-`fyrox-template init --name=rpg --style=3d`
+![pm open](pm_start.png)
 
-This command will create a new cargo workspace with a few projects inside, we're interested only in `game` folder
-in this tutorial.
+Select the created project and click `Edit` button:
 
-```text
-rpg
-├───data
-├───editor
-│   └───src
-├───executor
-│   └───src
-├───executor-android
-│   └───src
-├───executor-wasm
-│   └───src
-└───game
-    └───src
-```
+![pm open](pm_edit.png)
 
-Learn more about `fyrox-template` command [here](../../../beginning/scripting.md). Now we can run
-the game using `cargo run --package executor` command, and you should see a white cube floating in blue space. 
-
-> ️⚠️ There are two important commands:  
-> To run the game use: `cargo run --package executor` command  
-> To run the editor use: `cargo run --package editor` command.
+Wait until the project is fully compiled and then the editor will show up.
 
 ## Assets
 
@@ -73,7 +54,7 @@ while preserving "connection" between all properties of the nodes. It means, tha
 the changes will be reflected on every instance of it; on those properties that weren't modified. This is a condensed 
 explanation, that may look a bit complicated - [read this](../../../scene/prefab.md) to learn more about prefabs.
 
-Now let's open the editor (`cargo run --package editor`) and start making our prefab by creating a new scene. Save the
+Now let's open the editor and start making our prefab by creating a new scene. Save the
 scene to `data/models/paladin/paladin.rgs` by going to `File -> Save`. In the opened window, find the path and click 
 `Save`:
 
