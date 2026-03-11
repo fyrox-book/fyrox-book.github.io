@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-e8043b8d.js";
+            window.path_to_searchindex_js = "../../../searchindex-fd449c1c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-06c93f4b.js"></script>
@@ -223,28 +223,11 @@ continue making your own game. It is very ambitious, but totally doable with the
 In this tutorial we’ll make something similar. Check the video with final result of the tutorial:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/l2ZbDpoIdqk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 <p>As you can see, at the end of the tutorial we’ll be able to walk and explore a small fantasy world. Let’s start by
-creating a new game project, by running the following command:</p>
-<p><code>fyrox-template init --name=rpg --style=3d</code></p>
-<p>This command will create a new cargo workspace with a few projects inside, we’re interested only in <code>game</code> folder
-in this tutorial.</p>
-<pre><code class="language-text">rpg
-├───data
-├───editor
-│   └───src
-├───executor
-│   └───src
-├───executor-android
-│   └───src
-├───executor-wasm
-│   └───src
-└───game
-    └───src
-</code></pre>
-<p>Learn more about <code>fyrox-template</code> command <a href="../../../beginning/scripting.html">here</a>. Now we can run
-the game using <code>cargo run --package executor</code> command, and you should see a white cube floating in blue space.</p>
-<blockquote>
-<p>️⚠️ There are two important commands:<br>To run the game use: <code>cargo run --package executor</code> command<br>To run the editor use: <code>cargo run --package editor</code> command.</p>
-</blockquote>
+creating a new game project, open the project manager and create a new project:</p>
+<p><img src="pm_start.png" alt="pm open"></p>
+<p>Select the created project and click <code>Edit</code> button:</p>
+<p><img src="pm_edit.png" alt="pm open"></p>
+<p>Wait until the project is fully compiled and then the editor will show up.</p>
 <h2 id="assets"><a class="header" href="#assets">Assets</a></h2>
 <p>For any kind of game you need a lot of various assets, in our case we need a 3D model for our character, a set of
 animations, a level, a set of textures for terrain, trees and bushes, barrels, etc. I prepared all assets as a single
@@ -255,7 +238,7 @@ what the prefab is - prefab a scene, that contains some scene nodes, which can b
 while preserving “connection” between all properties of the nodes. It means, that if you change something in a prefab,
 the changes will be reflected on every instance of it; on those properties that weren’t modified. This is a condensed
 explanation, that may look a bit complicated - <a href="../../../scene/prefab.html">read this</a> to learn more about prefabs.</p>
-<p>Now let’s open the editor (<code>cargo run --package editor</code>) and start making our prefab by creating a new scene. Save the
+<p>Now let’s open the editor and start making our prefab by creating a new scene. Save the
 scene to <code>data/models/paladin/paladin.rgs</code> by going to <code>File -&gt; Save</code>. In the opened window, find the path and click
 <code>Save</code>:</p>
 <p><img src="save_prefab.png" alt="save prefab"></p>
