@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-fd449c1c.js";
+            window.path_to_searchindex_js = "../../searchindex-916d505f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-06c93f4b.js"></script>
@@ -212,6 +212,8 @@ property in the inspector and open the material editor, drag the <code>skeleton.
 <code>diffuseTexture</code> property in the material editor. Set the <code>UV Rect -&gt; Size</code> property to <code>0.077; 0.2</code> to select a single
 sprite from the sprite sheet, and you should see something similar to this:</p>
 <p><img src="skeleton_prefab.png" alt="skeleton prefab"></p>
+<p>Properties of the <code>skeleton.png</code> should be something like this. Do not forget to click <code>Apply</code> after changing settings.</p>
+<p><img src="skeleton_prefab_texture.png" alt="skeleton prefab texture"></p>
 <p>If you look closely at the world viewer, you should notice a small warning sign near the rigid body - the editor tells
 us that we’ve forgotten to add a collider to the rigid body. Let’s fix this by right-clicking on the rigid body, then
 select <code>Create Child -&gt; Physics 2D -&gt; Collider</code>. Select the collider and set its shape to <code>Capsule</code> in the properties
