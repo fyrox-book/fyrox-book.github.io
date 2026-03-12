@@ -27,6 +27,10 @@ sprite from the sprite sheet, and you should see something similar to this:
 
 ![skeleton prefab](skeleton_prefab.png)
 
+Properties of the `skeleton.png` should be something like this. Do not forget to click `Apply` after changing settings.
+
+![skeleton prefab texture](skeleton_prefab_texture.png)
+
 If you look closely at the world viewer, you should notice a small warning sign near the rigid body - the editor tells 
 us that we've forgotten to add a collider to the rigid body. Let's fix this by right-clicking on the rigid body, then 
 select `Create Child -> Physics 2D -> Collider`. Select the collider and set its shape to `Capsule` in the properties 
