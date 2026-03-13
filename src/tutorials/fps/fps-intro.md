@@ -12,4 +12,4 @@ Source code for the entire tutorial is [available here](https://github.com/fyrox
 
 ## Engine Version
 
-This tutorial is made using Fyrox 0.34.
+This tutorial is made using Fyrox 1.0.0

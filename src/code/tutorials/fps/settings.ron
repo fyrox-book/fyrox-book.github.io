@@ -518,6 +518,38 @@
     scene_settings: {
         "data/scene.rgs": (
             camera_settings: (
+                position: (-2.3150716, 1.3461397, -0.119345486),
+                yaw: -1.1999991,
+                pitch: 0.6407964,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 128.0,
+                )),
+            ),
+            node_infos: {
+                (
+                    index: 7,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 18,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/player/player.rgs": (
+            camera_settings: (
                 position: (0.0, 1.0, 0.0),
                 yaw: 0.0,
                 pitch: 0.0,
@@ -527,17 +559,25 @@
                     z_far: 128.0,
                 )),
             ),
-            node_infos: {},
+            node_infos: {
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
         ),
     },
     recent: (
         scenes: [
+            "data/player/player.rgs",
             "data/scene.rgs",
         ],
     ),
     windows: (
         window_position: (-8.0, -8.0),
-        window_size: (2560.0, 1377.0),
+        window_size: (1920.0, 1017.0),
         window_maximized: true,
         layout: None,
     ),
