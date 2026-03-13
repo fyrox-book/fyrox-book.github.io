@@ -518,9 +518,9 @@
     scene_settings: {
         "data/scene.rgs": (
             camera_settings: (
-                position: (0.44930142, 0.72445226, 0.97878456),
-                yaw: 0.42000017,
-                pitch: 0.55079716,
+                position: (0.8423121, 0.7277181, 1.7978668),
+                yaw: 0.6299998,
+                pitch: 0.46079758,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
@@ -542,6 +542,18 @@
                 ),
                 (
                     index: 18,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 33,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 103,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -606,6 +618,62 @@
                 ),
             },
         ),
+        "data/models/zombie/zombie.rgs": (
+            camera_settings: (
+                position: (-0.59006906, -0.07446003, -1.2979975),
+                yaw: 3.6299953,
+                pitch: 0.5900002,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 128.0,
+                )),
+            ),
+            node_infos: {
+                (
+                    index: 70,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 17,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 69,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 71,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 12,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
         "data/models/m4.rgs": (
             camera_settings: (
                 position: (-1.4047139, -0.9024544, 0.72083294),
@@ -643,6 +711,7 @@
         scenes: [
             "data/models/bullet.rgs",
             "data/models/m4.rgs",
+            "data/models/zombie/zombie.rgs",
             "data/player/player.rgs",
             "data/scene.rgs",
         ],
