@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-648bf231.js";
+            window.path_to_searchindex_js = "../../../searchindex-92a5b717.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-06c93f4b.js"></script>
@@ -199,14 +199,13 @@ manager and create a new project:</p>
 <p><img src="pm_start.png" alt="pm open"></p>
 <p>Select the created project and click <code>Edit</code> button:</p>
 <p><img src="pm_edit.png" alt="pm open"></p>
-<p>Wait until the project is fully compiled and then the editor will show up.</p>
-<h2 id="player-prefab"><a class="header" href="#player-prefab">Player Prefab</a></h2>
-<p>Let’s start by creating a <a href="../../../scene/prefab.html">prefab</a> for the player. First-person shooters use quite simple
-layouts for characters - usually, it is just a physical capsule with a camera on top of it. Run the editor using the
-following command:</p>
-<pre><code class="language-shell">cargo run --package editor
-</code></pre>
+<p>Wait until the project is fully compiled and then the editor will show up:</p>
 <p><img src="editor_1.png" alt="editor startup"></p>
+<h2 id="player-prefab"><a class="header" href="#player-prefab">Player Prefab</a></h2>
+<p>Let’s start by creating a <a href="../../../scene/prefab.html">prefab</a> for the player. First-person shooters use quite simple layouts for characters</p>
+<ul>
+<li>usually, it is just a physical capsule with a camera on top of it.</li>
+</ul>
 <p>By default, <code>scene.rgs</code> scene is loaded, and it is our main scene, but for our player prefab we need a separate scene.
 Go to <code>File</code> menu and click <code>New Scene</code>. Save the scene in <code>data/player</code> folder as <code>player.rgs</code>.</p>
 <p>Great, now we are ready to create the prefab. Right-click on the <code>__ROOT__</code> node in the World Viewer and find <code>Replace Node</code>
