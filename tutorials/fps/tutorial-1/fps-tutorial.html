@@ -46,7 +46,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-03a02198.js";
+            window.path_to_searchindex_js = "../../../searchindex-dd10bd44.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-06c93f4b.js"></script>
@@ -194,25 +194,12 @@
                         <h1 id="first-person-shooter-tutorial"><a class="header" href="#first-person-shooter-tutorial">First-Person Shooter Tutorial</a></h1>
 <p>In this tutorial, we’ll create a first-person shooter game.</p>
 <p>Before we begin, make sure you know how to create projects and run the game and the editor. Read
-<a href="../../../beginning/scripting.html">this chapter</a> first and let’s start by creating a new project by executing the following
-command in some directory:</p>
-<pre><code class="language-shell">fyrox-template init --name=fps --style=3d
-</code></pre>
-<p>This command will create a new cargo workspace with a few projects inside, we’re interested only in <code>game</code> folder
-in this tutorial.</p>
-<pre><code class="language-text">fps
-├───data
-├───editor
-│   └───src
-├───executor
-│   └───src
-├───executor-android
-│   └───src
-├───executor-wasm
-│   └───src
-└───game
-    └───src
-</code></pre>
+<a href="../../../beginning/scripting.html">this chapter</a> first and let’s start by creating a new game project, open the project
+manager and create a new project:</p>
+<p><img src="pm_start.png" alt="pm open"></p>
+<p>Select the created project and click <code>Edit</code> button:</p>
+<p><img src="pm_edit.png" alt="pm open"></p>
+<p>Wait until the project is fully compiled and then the editor will show up.</p>
 <h2 id="player-prefab"><a class="header" href="#player-prefab">Player Prefab</a></h2>
 <p>Let’s start by creating a <a href="../../../scene/prefab.html">prefab</a> for the player. First-person shooters use quite simple
 layouts for characters - usually, it is just a physical capsule with a camera on top of it. Run the editor using the
