@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-dd10bd44.js";
+            window.path_to_searchindex_js = "../../searchindex-648bf231.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-06c93f4b.js"></script>
@@ -212,25 +212,14 @@
 <p>You can find the source code of the tutorial <a href="https://github.com/fyrox-book/fyrox-book.github.io/tree/main/src/code/tutorials/platformer">here</a>, you can
 test it yourself by cloning the repository and <code>cargo run --package editor --release</code> in the <code>platformer</code> directory.</p>
 <h2 id="project"><a class="header" href="#project">Project</a></h2>
-<p>Let’s start by making a new project using the special tiny tool - <code>fyrox-template</code> - it allows you to generate all boilerplate
-parts in a single call. Install it using the following command:</p>
-<pre><code class="language-shell">cargo install fyrox-template
-</code></pre>
-<p>Navigate to a folder where you want the project to be created and do the following command:</p>
-<pre><code class="language-shell">fyrox-template init --name platformer --style 2d
-</code></pre>
-<p>The tool accepts two arguments - project name and a style, we’re interested in 2D game so the style is set to 2D. After
-the project is generated, you should memorize two commands:</p>
-<ul>
-<li><code>cargo run --package editor --release</code> - launches the editor with your game attached, the editor allows you to run your game
-inside it and edit game entities. It is intended to be used only for development.</li>
-<li><code>cargo run --package executor --release</code> - creates and runs the production binary of your game that can be shipped (for
-example - to a store).</li>
-</ul>
-<p>Navigate to the <code>platformer</code> directory and run <code>cargo run --package editor --release</code>, after some time you should see the editor:</p>
+<p>Let’s start by creating a new game project, open the project manager and create a new project:</p>
+<p><img src="pm_start.png" alt="pm open"></p>
+<p>Select the created project and click <code>Edit</code> button:</p>
+<p><img src="pm_edit.png" alt="pm open"></p>
+<p>Wait until the project is fully compiled, after some time you should see the editor:</p>
 <p><img src="editor.png" alt="editor"></p>
 <p>Great! Now we can start making our game. Go to <code>game/src/lib.rs</code> - it is where your game logic is located, as you can see
-the <code>fyrox-template</code> generate quite some code for you. There are tiny comments about which place is for what. For more info
+the project managed generated quite some code for you. There are tiny comments about which place is for what. For more info
 about each method, please refer <a href="https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html">to the docs</a>.</p>
 <h2 id="using-the-editor"><a class="header" href="#using-the-editor">Using the Editor</a></h2>
 <p>For now, we don’t even need to write a single line of code, we can create a scene entirely in the editor. This section will guide
