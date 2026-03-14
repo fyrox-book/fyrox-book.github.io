@@ -3,31 +3,16 @@
 In this tutorial, we'll create a first-person shooter game. 
 
 Before we begin, make sure you know how to create projects and run the game and the editor. Read 
-[this chapter](../../../beginning/scripting.md) first and let's start by creating a new project by executing the following 
-command in some directory:
+[this chapter](../../../beginning/scripting.md) first and let's start by creating a new game project, open the project 
+manager and create a new project:
 
-```shell
-fyrox-template init --name=fps --style=3d
-```
+![pm open](pm_start.png)
 
-This command will create a new cargo workspace with a few projects inside, we're interested only in `game` folder
-in this tutorial.
+Select the created project and click `Edit` button:
 
+![pm open](pm_edit.png)
 
-```text
-fps
-├───data
-├───editor
-│   └───src
-├───executor
-│   └───src
-├───executor-android
-│   └───src
-├───executor-wasm
-│   └───src
-└───game
-    └───src
-```
+Wait until the project is fully compiled and then the editor will show up.
 
 ## Player Prefab
 
