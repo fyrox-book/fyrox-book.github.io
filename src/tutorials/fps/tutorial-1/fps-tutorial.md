@@ -12,19 +12,14 @@ Select the created project and click `Edit` button:
 
 ![pm open](pm_edit.png)
 
-Wait until the project is fully compiled and then the editor will show up.
+Wait until the project is fully compiled and then the editor will show up:
+
+![editor startup](editor_1.png)
 
 ## Player Prefab
 
-Let's start by creating a [prefab](../../../scene/prefab.md) for the player. First-person shooters use quite simple 
-layouts for characters - usually, it is just a physical capsule with a camera on top of it. Run the editor using the 
-following command:
-
-```shell
-cargo run --package editor
-```
-
-![editor startup](editor_1.png)
+Let's start by creating a [prefab](../../../scene/prefab.md) for the player. First-person shooters use quite simple layouts for characters
+- usually, it is just a physical capsule with a camera on top of it.
 
 By default, `scene.rgs` scene is loaded, and it is our main scene, but for our player prefab we need a separate scene.
 Go to `File` menu and click `New Scene`. Save the scene in `data/player` folder as `player.rgs`. 
