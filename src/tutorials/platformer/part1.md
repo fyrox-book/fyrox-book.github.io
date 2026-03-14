@@ -22,33 +22,20 @@ test it yourself by cloning the repository and `cargo run --package editor --rel
 
 ## Project
 
-Let's start by making a new project using the special tiny tool - `fyrox-template` - it allows you to generate all boilerplate
-parts in a single call. Install it using the following command:
+Let's start by creating a new game project, open the project manager and create a new project:
 
-```shell
-cargo install fyrox-template
-```
+![pm open](pm_start.png)
 
-Navigate to a folder where you want the project to be created and do the following command:
+Select the created project and click `Edit` button:
 
-```shell
-fyrox-template init --name platformer --style 2d
-```
+![pm open](pm_edit.png)
 
-The tool accepts two arguments - project name and a style, we're interested in 2D game so the style is set to 2D. After
-the project is generated, you should memorize two commands:
-
-- `cargo run --package editor --release` - launches the editor with your game attached, the editor allows you to run your game
-inside it and edit game entities. It is intended to be used only for development.
-- `cargo run --package executor --release` - creates and runs the production binary of your game that can be shipped (for
-example - to a store).
-
-Navigate to the `platformer` directory and run `cargo run --package editor --release`, after some time you should see the editor:
+Wait until the project is fully compiled, after some time you should see the editor:
 
 ![editor](editor.png)
 
 Great! Now we can start making our game. Go to `game/src/lib.rs` - it is where your game logic is located, as you can see
-the `fyrox-template` generate quite some code for you. There are tiny comments about which place is for what. For more info
+the project managed generated quite some code for you. There are tiny comments about which place is for what. For more info
 about each method, please refer [to the docs](https://docs.rs/fyrox/latest/fyrox/plugin/trait.Plugin.html).
 
 ## Using the Editor
