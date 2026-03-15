@@ -33,17 +33,17 @@ In both ways you still need to select an an animation blending state machine nod
 
 ![toolbar](./absm_toolbar.png)
 
-1. `Preview Switch` - enables or disables preview mode for the ABSM. See [Preview Mode](#preview-mode) section for more
+1. `Add Layer` - adds a new layer with the name in the `Layer Name` text box to the ABSM. ABSM can have multiple layers
+   with the same name, but it strongly advised to set unique names here.
+2. `Layer Selector` - allows you to select a layer for editing, default selection is none.
+3. `Layer Mask` - opens a `Layer Mask Editor` and helps you to edit the layer mask of the current layer. See
+   [Layer Mask](#layer-mask) section for more info.
+4. `Layer Name` - name of the selected layer. Type a new name here to rename currently selected layer (hit enter or just
+   click elsewhere to rename).
+5. `Remove Current Layer` - removes currently selected layer. You can delete all layers, but in this case your ABSM won't
+   have any effect.
+6. `Preview Switch` - enables or disables preview mode for the ABSM. See [Preview Mode](#preview-mode) section for more
 info.
-2. `Layer Name` - name of the selected layer. Type a new name here to rename currently selected layer (hit enter or just
-click elsewhere to rename).
-3. `Add Layer` - adds a new layer with the name in the `Layer Name` text box to the ABSM. ABSM can have multiple layers
-with the same name, but it strongly advised to set unique names here.
-4. `Remove Current Layer` - removes currently selected layer. You can delete all layers, but in this case your ABSM won't
-have any effect.
-5. `Layer Selector` - allows you to select a layer for editing, default selection is none.
-6. `Layer Mask` - opens a `Layer Mask Editor` and helps you to edit the layer mask of the current layer. See 
-[Layer Mask](#layer-mask) section for more info.
 
 ## Parameters
 
