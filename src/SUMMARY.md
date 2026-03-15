@@ -166,6 +166,5 @@
         - [Character Controller](tutorials/fps/tutorial-1/fps-tutorial.md)
         - [Weapons](tutorials/fps/tutorial-2/fps-tutorial-2.md)
         - [Bots and AI](tutorials/fps/tutorial-3/fps-tutorial-3.md)
-    - [User Interface Tutorial (WIP)](tutorials/ui/ui-tutorial.md)
     - [Community Tutorials](tutorials/community.md)
 - [Performance](./performance/index.md)
