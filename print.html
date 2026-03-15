@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-70cd3866.js";
+            window.path_to_searchindex_js = "searchindex-f78c6fb3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-06c93f4b.js"></script>
@@ -2676,7 +2676,7 @@ to engine instance.</p>
 interact with other scenes, it is very useful for many more or less complex games.</p>
 <p>What game scenes cannot handle is user interface entities, they’re handled by a separate scene class,
 so-called UI scene. UI scenes are discussed in the <a href="#user-interface">respective chapter</a>. UI can still
-be incorporated in the game scene, see <a href="#rendering-2">this chapter</a> for more info.</p>
+be incorporated in the game scene, see <a href="#rendering-3">this chapter</a> for more info.</p>
 <h2 id="how-to-create"><a class="header" href="#how-to-create">How to create</a></h2>
 <p>A scene could be created either in the editor or programmatically. You can also combine both approaches, where
 you build all “static” content in the editor and adding rest of the entities (bots, interactive objects, etc.)
@@ -7156,7 +7156,10 @@ navigational mesh from the scene graph by its name:</p>
 radius using <code>set_radius</code> method. By default, it is set to 0.2 meters, which is an average radius that is suitable for
 most of the cases.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="rendering-wip"><a class="header" href="#rendering-wip">Rendering (WIP)</a></h1>
+<h1 id="rendering-2"><a class="header" href="#rendering-2">Rendering</a></h1>
+<p>This section of the book covers rendering details of the engine. Fyrox has a quite flexible renderer that can
+be modified for your needs. Rendering can be modified via shaders, materials, render passes. See respective
+chapter for more info.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="shaders"><a class="header" href="#shaders">Shaders</a></h1>
 <p>Shader is a set of programs that run directly on graphics adapter. Each program from the set is called
@@ -9614,7 +9617,7 @@ editor is a new feature of the engine and the book’s chapters could lack some 
 <h2 id="video"><a class="header" href="#video">Video</a></h2>
 <p>The following video shows how to create a simple main menu for a 2D platformer.</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/qQTxEK5TTxM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe><div style="break-before: page; page-break-before: always;"></div>
-<h1 id="rendering-2"><a class="header" href="#rendering-2">Rendering</a></h1>
+<h1 id="rendering-3"><a class="header" href="#rendering-3">Rendering</a></h1>
 <p>User interface is usually rendered directly on screen, and in most cases this is enough. However, there are some
 specific cases when you need to incorporate user interface in your game scene as an interactive screen (holographic,
 for example) or to render some scene inside some UI element (to create some sort of in-game CCTV, for example). This
