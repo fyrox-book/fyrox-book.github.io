@@ -10592,7 +10592,7 @@ __ROOT__[]
 						{
 							ArcData[Paused<bool:false>]
 							{
-								Listener[Basis<mat3:-1; 0; 0; 0; 1; 0; 0; 0; 1>Position<vec3f32:1.3582332; -3.193261; -3>]{}
+								Listener[Basis<mat3:-1; 0; 0; 0; 1; 0; 0; 0; 1>Position<vec3f32:0.26299512; -3.2994823; -3>]{}
 								Sources[]
 								{
 									Records[Length<u32:0>]{}
