@@ -518,7 +518,7 @@
     scene_settings: {
         "data/scene.rgs": (
             camera_settings: (
-                position: (1.3582332, -3.193261, -3.0),
+                position: (0.26299512, -3.2994823, -3.0),
                 yaw: 0.019999828,
                 pitch: 0.120000206,
                 projection: Orthographic((
