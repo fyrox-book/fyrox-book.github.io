@@ -1,0 +1,26 @@
+[package]
+name = "executor-android"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.android]
+# This folder is used as a temporary storage for assets. Project exporter will clone everything
+# from data folder to this folder and cargo-apk will create the apk with these assets.
+assets = "assets"
+strip = "strip"
+
+[package.metadata.android.sdk]
+min_sdk_version = 26
+target_sdk_version = 30
+max_sdk_version = 29
+
+[package.metadata.android.signing.release]
+path = "release.keystore"
+keystore_password = "fyrox-template"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+fyrox = { workspace = true }
+platformer = { path = "../game" }
