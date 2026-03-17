@@ -4775,7 +4775,7 @@ __ROOT__[]
 										FrustumCulling[Value<bool:true>Flags<u8:1>]{}
 										CastShadows[Value<bool:true>Flags<u8:1>]{}
 										Enabled[Value<bool:true>Flags<u8:1>]{}
-										RenderMask[Value<u32:4294967295>Flags<u8:1>]{}
+										RenderMask[Value<u32:4294934527>Flags<u8:1>]{}
 										Scripts[Length<u32:0>]{}
 									}
 									Projection[Flags<u8:1>]
@@ -4796,7 +4796,7 @@ __ROOT__[]
 									}
 									Exposure[Flags<u8:1>]
 									{
-										Value[Id<u32:1>0<f32:2.7182817>]{}
+										Value[Id<u32:1>0<f32:1>]{}
 									}
 									ColorGradingLut[Flags<u8:1>]
 									{
@@ -10592,7 +10592,7 @@ __ROOT__[]
 						{
 							ArcData[Paused<bool:false>]
 							{
-								Listener[Basis<mat3:-1; 0; 0; 0; 1; 0; 0; 0; 1>Position<vec3f32:0.7115735; -3.0026422; -6>]{}
+								Listener[Basis<mat3:-1; 0; 0; 0; 1; 0; 0; 0; 1>Position<vec3f32:1.3582332; -3.193261; -3>]{}
 								Sources[]
 								{
 									Records[Length<u32:0>]{}
@@ -10663,7 +10663,7 @@ __ROOT__[]
 				RenderTarget[IsSome<u8:0>]{}
 				ClearColor[IsSome<u8:0>]{}
 				PolygonRasterizationMode[Id<u32:2>]{}
-				AmbientLightingColor[R<u8:192>G<u8:192>B<u8:192>A<u8:255>]{}
+				AmbientLightingColor[R<u8:205>G<u8:205>B<u8:205>A<u8:255>]{}
 				EnvironmentLightingSource[Id<u32:1>]{}
 			}
 		}
