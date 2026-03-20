@@ -516,11 +516,11 @@
         log_error: true,
     ),
     scene_settings: {
-        "data/scene.rgs": (
+        "data/models/m4.rgs": (
             camera_settings: (
-                position: (0.8423121, 0.7277181, 1.7978668),
-                yaw: 0.6299998,
-                pitch: 0.46079758,
+                position: (-1.4047139, -0.9024544, 0.72083294),
+                yaw: -1.1800009,
+                pitch: 0.56000036,
                 projection: Perspective((
                     fov: 1.3089969,
                     z_near: 0.025,
@@ -529,31 +529,19 @@
             ),
             node_infos: {
                 (
-                    index: 7,
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 4,
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 18,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 33,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 103,
+                    index: 9,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -579,13 +567,13 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 1,
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 0,
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -605,13 +593,57 @@
             ),
             node_infos: {
                 (
-                    index: 0,
+                    index: 3,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 3,
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
+        "data/scene.rgs": (
+            camera_settings: (
+                position: (0.8423121, 0.7277181, 1.7978668),
+                yaw: 0.6299998,
+                pitch: 0.46079758,
+                projection: Perspective((
+                    fov: 1.3089969,
+                    z_near: 0.025,
+                    z_far: 128.0,
+                )),
+            ),
+            node_infos: {
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 33,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 103,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 18,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 7,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -637,13 +669,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 17,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 1,
+                    index: 12,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -661,39 +687,13 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 12,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 0,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-            },
-        ),
-        "data/models/m4.rgs": (
-            camera_settings: (
-                position: (-1.4047139, -0.9024544, 0.72083294),
-                yaw: -1.1800009,
-                pitch: 0.56000036,
-                projection: Perspective((
-                    fov: 1.3089969,
-                    z_near: 0.025,
-                    z_far: 128.0,
-                )),
-            ),
-            node_infos: {
-                (
                     index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 9,
+                    index: 17,
                     generation: 1,
                 ): (
                     is_expanded: true,

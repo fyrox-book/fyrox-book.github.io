@@ -1262,7 +1262,7 @@ __ROOT__[]
 											{
 												Heightmap[IsSome<u8:1>]
 												{
-													Data[Uuid<uuid:bf0fa8cc-4bae-4da2-a39a-77ebdea3afa6>]
+													Data[Uuid<uuid:127c626d-45c2-4502-8d87-85e6bbc8c7df>]
 													{
 														Embedded[Id<u64:4>]
 														{
@@ -1284,7 +1284,7 @@ __ROOT__[]
 												HoleMask[IsSome<u8:0>]{}
 												LayerMasks[Length<u32:3>]
 												{
-													Item0[Uuid<uuid:837c8e03-987b-4ebd-bee9-4d638b5630a0>]
+													Item0[Uuid<uuid:532ad749-79ba-4c48-bdb1-40ee7afe6f2f>]
 													{
 														Embedded[Id<u64:5>]
 														{
@@ -1302,7 +1302,7 @@ __ROOT__[]
 															}
 														}
 													}
-													Item1[Uuid<uuid:c0a0c225-cf8f-4c94-b70b-fd5526e875c2>]
+													Item1[Uuid<uuid:3393e218-0690-4536-97f7-f72f3b238d45>]
 													{
 														Embedded[Id<u64:6>]
 														{
@@ -1320,7 +1320,7 @@ __ROOT__[]
 															}
 														}
 													}
-													Item2[Uuid<uuid:376f1962-6238-42c5-aba4-acbaa7cea2a1>]
+													Item2[Uuid<uuid:a4e1f68c-1966-4679-ad87-f0257371e048>]
 													{
 														Embedded[Id<u64:7>]
 														{
@@ -2324,6 +2324,7 @@ __ROOT__[]
 									XRotationLocked[Value<bool:true>Flags<u8:1>]{}
 									YRotationLocked[Value<bool:true>Flags<u8:1>]{}
 									ZRotationLocked[Value<bool:true>Flags<u8:1>]{}
+									CcdEnabled[Value<bool:false>Flags<u8:1>]{}
 									CanSleep[Value<bool:false>Flags<u8:1>]{}
 								}
 							}
@@ -5462,7 +5463,7 @@ __ROOT__[]
 						{
 							ArcData[Paused<bool:false>]
 							{
-								Listener[Basis<mat3:0.9973562; -0.0000000037252903; -0.072669595; -0.057408422; 0.61311674; -0.7879037; -0.04455494; -0.7899924; -0.6114957>Position<vec3f32:34.377987; 7.6431894; 33.861515>]{}
+								Listener[Basis<mat3:0.96267825; 0; 0.27064866; 0.13466747; 0.8674221; -0.47900274; 0.2347666; -0.49757308; -0.8350483>Position<vec3f32:32.84696; 4.0602455; 25.45898>]{}
 								Sources[]
 								{
 									Records[Length<u32:0>]{}
