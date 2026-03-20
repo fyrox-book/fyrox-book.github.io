@@ -1,0 +1,15 @@
+{
+  "name": "executor-wasm",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "executor_wasm_bg.wasm",
+    "executor_wasm.js",
+    "executor_wasm.d.ts"
+  ],
+  "main": "executor_wasm.js",
+  "types": "executor_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

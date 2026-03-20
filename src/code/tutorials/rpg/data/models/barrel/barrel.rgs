@@ -73,7 +73,7 @@ __ROOT__[]
 									YRotationLocked[Value<bool:false>Flags<u8:1>]{}
 									ZRotationLocked[Value<bool:false>Flags<u8:1>]{}
 									TranslationLocked[Value<bool:false>Flags<u8:1>]{}
-									CcdEnabled[Value<bool:false>Flags<u8:1>]{}
+									CcdEnabled[Value<bool:true>Flags<u8:1>]{}
 									CanSleep[Value<bool:true>Flags<u8:1>]{}
 									Dominance[Value<i8:0>Flags<u8:1>]{}
 									GravityScale[Value<f32:1>Flags<u8:1>]{}
