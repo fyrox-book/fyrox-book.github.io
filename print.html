@@ -47,10 +47,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-87b6546f.js";
+            window.path_to_searchindex_js = "searchindex-9bf2b649.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-39570255.js"></script>
+        <script src="toc-03bf2098.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -9882,7 +9882,7 @@ selected.</li>
 <li><a href="#tree">Tree</a>: The Tree allows you to create views for hierarchical data.</li>
 <li><a href="#screen">Screen</a>: Screen is a widget that always has the size of the screen of the UI in which it is used.</li>
 <li><a href="#dropdown-menu-wip">Dropdown Menu</a> - <strong>TODO</strong></li>
-<li><a href="#selector-wip">Selector</a> - <strong>TODO</strong></li>
+<li><a href="#selector">Selector</a> - <strong>TODO</strong></li>
 <li><a href="#navigation">Navigation</a> - <strong>TODO</strong></li>
 </ul>
 <h2 id="visual"><a class="header" href="#visual">Visual</a></h2>
@@ -11816,7 +11816,51 @@ with a gui::Orientation enum value. <strong>By default,</strong> all StackPanel�
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="selector-wip"><a class="header" href="#selector-wip">Selector (WIP)</a></h1>
+<h1 id="selector"><a class="header" href="#selector">Selector</a></h1>
+<p>Selector is a simple container widget that allows selecting an item from a fixed set of items.
+Selector widget shows the currently selected item at the center and two buttons on the sides
+that allows selecting either the previous or the next item.</p>
+<h2 id="example-12"><a class="header" href="#example-12">Example</a></h2>
+<p>The following examples creates a new selector with three items and selects the middle one as
+active. The items can be of any type, even mixed types are allowed.</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_selector(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Selector&gt; {
+    SelectorBuilder::new(WidgetBuilder::new())
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item1")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item2")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item3")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
+        .with_current_item(1)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre>
+<h2 id="selection-2"><a class="header" href="#selection-2">Selection</a></h2>
+<p>The newly selected item index can be received from a selector by listening to [<code>SelectorMessage::Current</code>]
+message. To select a new item from code, send the same message with the desired index:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_ui_message(selector: Handle&lt;Selector&gt;, message: &amp;UiMessage, ui: &amp;UserInterface) {
+    if let Some(SelectorMessage::Current(Some(index))) = message.data_from(selector) {
+        println!("The new selection is {index}!");
+
+        if *index != 0 {
+            // The selection can be changed by sending the same message to the widget:
+            ui.send(selector, SelectorMessage::Current(Some(0)));
+        }
+    }
+}
+<span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tab-control"><a class="header" href="#tab-control">Tab Control</a></h1>
 <p>The Tab Control handles the visibility of several tabs, only showing a single tab that the user has selected via the
@@ -13005,7 +13049,7 @@ fn add_collection_property_editor(editor: &amp;Editor) {
 <p>This chapter should help you to have better understanding of how to configure the editor and which settings
 are responsible for what.</p>
 <p><img src="editor/settings.png" alt="settings"></p>
-<h2 id="selection-2"><a class="header" href="#selection-2">Selection</a></h2>
+<h2 id="selection-3"><a class="header" href="#selection-3">Selection</a></h2>
 <p>This section contains options for objects selection.</p>
 <ul>
 <li><code>Ignore Back Faces</code> - if set, forces mouse picking to ignore back faces of triangles, allowing you to “click-thru”

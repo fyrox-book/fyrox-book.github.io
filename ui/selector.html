@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Selector (WIP) - Fyrox Book</title>
+        <title>Selector - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-87b6546f.js";
+            window.path_to_searchindex_js = "../searchindex-9bf2b649.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-39570255.js"></script>
+        <script src="../toc-03bf2098.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,7 +191,51 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="selector-wip"><a class="header" href="#selector-wip">Selector (WIP)</a></h1>
+                        <h1 id="selector"><a class="header" href="#selector">Selector</a></h1>
+<p>Selector is a simple container widget that allows selecting an item from a fixed set of items.
+Selector widget shows the currently selected item at the center and two buttons on the sides
+that allows selecting either the previous or the next item.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>The following examples creates a new selector with three items and selects the middle one as
+active. The items can be of any type, even mixed types are allowed.</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_selector(ctx: &amp;mut BuildContext) -&gt; Handle&lt;Selector&gt; {
+    SelectorBuilder::new(WidgetBuilder::new())
+        .with_items(
+            vec![
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item1")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item2")
+                    .build(ctx),
+                TextBuilder::new(WidgetBuilder::new())
+                    .with_text("Item3")
+                    .build(ctx),
+            ]
+            .to_base(),
+        )
+        .with_current_item(1)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre>
+<h2 id="selection"><a class="header" href="#selection">Selection</a></h2>
+<p>The newly selected item index can be received from a selector by listening to [<code>SelectorMessage::Current</code>]
+message. To select a new item from code, send the same message with the desired index:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn on_ui_message(selector: Handle&lt;Selector&gt;, message: &amp;UiMessage, ui: &amp;UserInterface) {
+    if let Some(SelectorMessage::Current(Some(index))) = message.data_from(selector) {
+        println!("The new selection is {index}!");
+
+        if *index != 0 {
+            // The selection can be changed by sending the same message to the widget:
+            ui.send(selector, SelectorMessage::Current(Some(0)));
+        }
+    }
+}
+<span class="boring">}</span></code></pre>
 
                     </main>
 
