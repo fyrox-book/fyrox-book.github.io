@@ -132,7 +132,7 @@
         - [Scroll viewer](./ui/scroll_viewer.md)
         - [Screen](./ui/screen.md)
         - [Stack panel](./ui/stack_panel.md)
-        - [Selector (WIP)](./ui/selector.md)
+        - [Selector](./ui/selector.md)
         - [Tab control](./ui/tab_control.md)
         - [Text](./ui/text.md)
         - [Text box](./ui/text_box.md)
