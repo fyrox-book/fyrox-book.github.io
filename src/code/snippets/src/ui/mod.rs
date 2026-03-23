@@ -31,6 +31,7 @@ pub mod vector_image;
 pub mod window;
 pub mod wrap_panel;
 mod selector;
+mod rect;
 
 use fyrox::asset::manager::ResourceManager;
 use fyrox::core::reflect::Reflect;

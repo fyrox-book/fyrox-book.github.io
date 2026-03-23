@@ -126,7 +126,7 @@
         - [Popup](./ui/popup.md)
         - [Progress bar](./ui/progress_bar.md)
         - [Range (WIP)](./ui/range.md)
-        - [Rect (WIP)](./ui/rect.md)
+        - [Rect](./ui/rect.md)
         - [Scroll bar](./ui/scroll_bar.md)
         - [Scroll panel](./ui/scroll_panel.md)
         - [Scroll viewer](./ui/scroll_viewer.md)
