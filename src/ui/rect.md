@@ -9,7 +9,7 @@ of a rect, two for its size.
 
 Rect editor can be created using `RectEditorBuilder`, like so:
 
-```rust
+```rust,no_run
 {{#include ../code/snippets/src/ui/rect.rs:create_rect_editor}}
 ```
 
@@ -17,12 +17,12 @@ Rect editor can be created using `RectEditorBuilder`, like so:
 
 To change the value of a rect editor, use `RectEditorMessage::Value` message:
 
-```rust
+```rust,no_run
 {{#include ../code/snippets/src/ui/rect.rs:change_value}}
 ```
 
 To "catch" the moment when the value of a rect editor has changed, listen to the same message, but check its direction:
 
-```rust
+```rust,no_run
 {{#include ../code/snippets/src/ui/rect.rs:fetch_value}}
 ```

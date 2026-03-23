@@ -125,7 +125,7 @@
         - [Nine Patch](ui/nine_patch.md)
         - [Popup](./ui/popup.md)
         - [Progress bar](./ui/progress_bar.md)
-        - [Range (WIP)](./ui/range.md)
+        - [Range](./ui/range.md)
         - [Rect](./ui/rect.md)
         - [Scroll bar](./ui/scroll_bar.md)
         - [Scroll panel](./ui/scroll_panel.md)
