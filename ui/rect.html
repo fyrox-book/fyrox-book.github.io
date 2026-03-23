@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-f9566156.js";
+            window.path_to_searchindex_js = "../searchindex-f9ca12dc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-ab2b3193.js"></script>
+        <script src="../toc-64f82f00.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -197,7 +197,7 @@
 of a rect, two for its size.</p>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>Rect editor can be created using <code>RectEditorBuilder</code>, like so:</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_rect_editor(ctx: &amp;mut BuildContext) -&gt; Handle&lt;RectEditor&lt;u32&gt;&gt; {
     RectEditorBuilder::new(WidgetBuilder::new())
@@ -207,7 +207,7 @@ of a rect, two for its size.</p>
 <span class="boring">}</span></code></pre>
 <h2 id="value"><a class="header" href="#value">Value</a></h2>
 <p>To change the value of a rect editor, use <code>RectEditorMessage::Value</code> message:</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn change_value(rect_editor: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
     ui.send(
@@ -217,7 +217,7 @@ of a rect, two for its size.</p>
 }
 <span class="boring">}</span></code></pre>
 <p>To “catch” the moment when the value of a rect editor has changed, listen to the same message, but check its direction:</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_value(rect_editor: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
     if let Some(RectEditorMessage::Value(value)) = message.data::&lt;RectEditorMessage&lt;u32&gt;&gt;() {

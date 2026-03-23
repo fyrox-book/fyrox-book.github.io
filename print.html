@@ -47,10 +47,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f9566156.js";
+            window.path_to_searchindex_js = "searchindex-f9ca12dc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-ab2b3193.js"></script>
+        <script src="toc-64f82f00.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -9910,7 +9910,7 @@ to any widget for styling purposes.</li>
 with certain other widgets to provide content scrolling capabilities.</li>
 <li><a href="#numericupdown-widget">Numeric Field</a>: The Numeric Field provides the ability to adjust a number via increment and decrement buttons or
 direct input. The number can be constrained to remain inside a specific range or have a specific step.</li>
-<li><a href="#range-wip">Range</a>: The Range allows the user to edit a numeric range - specify its beginning and end values.</li>
+<li><a href="#range">Range</a>: The Range allows the user to edit a numeric range - specify its beginning and end values.</li>
 <li><a href="#list-view">List View</a>: The List View provides a control where users can select from a list of items.</li>
 <li><a href="#dropdown-list">Dropdown List</a>: The Drop-down List is a control which shows the currently selected item and provides a drop-down
 list to select an item.</li>
@@ -11503,16 +11503,53 @@ methods respectively. These methods can accept any widget, but usually it i a
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="range-wip"><a class="header" href="#range-wip">Range (WIP)</a></h1>
+<h1 id="range"><a class="header" href="#range">Range</a></h1>
 <p><img src="ui/range_editor.gif" alt="range editor"></p>
+<p>Range editor is used to display and edit closed ranges like <code>0..1</code>. The widget is generic over numeric type,
+so you can display and editor ranges of any type, such as <code>u32</code>, <code>f32</code>, <code>f64</code>, etc.</p>
+<h2 id="example-10"><a class="header" href="#example-10">Example</a></h2>
+<p>You can create range editors using [<code>RangeEditorBuilder</code>], like so:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_range_editor(ctx: &amp;mut BuildContext) -&gt; Handle&lt;RangeEditor&lt;u32&gt;&gt; {
+    RangeEditorBuilder::new(WidgetBuilder::new())
+        .with_value(0u32..100u32)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre>
+<p>This example creates an editor for <code>Range&lt;u32&gt;</code> type with <code>0..100</code> value.</p>
+<h2 id="value"><a class="header" href="#value">Value</a></h2>
+<p>To change the current value of a range editor, use [<code>RangeEditorMessage::Value</code>] message:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_value(range_editor: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send(range_editor, RangeEditorMessage::Value(5u32..20u32))
+}
+<span class="boring">}</span></code></pre>
+<p>To “catch” the moment when the value has changed, use the same message, but check for [<code>MessageDirection::FromWidget</code>]
+direction
+on the message:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn fetch_value(range_editor: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if let Some(RangeEditorMessage::Value(range)) =
+        message.data_from::&lt;RangeEditorMessage&lt;u32&gt;&gt;(range_editor)
+    {
+        println!("The new value is: {:?}", range)
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>Be very careful about the type of the range when sending a message, you need to send a range of exact type, that match
+the type
+of your editor, otherwise the message have no effect. The same applied to fetching.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="rect-editor"><a class="header" href="#rect-editor">Rect editor</a></h1>
 <p><img src="ui/rect.gif" alt="rect"></p>
 <p>Rect editor widget is used to show and edit <code>Rect</code> values. It shows four numeric fields: two for the top left corner
 of a rect, two for its size.</p>
-<h2 id="example-10"><a class="header" href="#example-10">Example</a></h2>
+<h2 id="example-11"><a class="header" href="#example-11">Example</a></h2>
 <p>Rect editor can be created using <code>RectEditorBuilder</code>, like so:</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn create_rect_editor(ctx: &amp;mut BuildContext) -&gt; Handle&lt;RectEditor&lt;u32&gt;&gt; {
     RectEditorBuilder::new(WidgetBuilder::new())
@@ -11520,9 +11557,9 @@ of a rect, two for its size.</p>
         .build(ctx)
 }
 <span class="boring">}</span></code></pre>
-<h2 id="value"><a class="header" href="#value">Value</a></h2>
+<h2 id="value-1"><a class="header" href="#value-1">Value</a></h2>
 <p>To change the value of a rect editor, use <code>RectEditorMessage::Value</code> message:</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn change_value(rect_editor: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
     ui.send(
@@ -11532,7 +11569,7 @@ of a rect, two for its size.</p>
 }
 <span class="boring">}</span></code></pre>
 <p>To “catch” the moment when the value of a rect editor has changed, listen to the same message, but check its direction:</p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_value(rect_editor: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
     if let Some(RectEditorMessage::Value(value)) = message.data::&lt;RectEditorMessage&lt;u32&gt;&gt;() {
@@ -11551,7 +11588,7 @@ of a rect, two for its size.</p>
 on the bar. Usually it is used in pair with <code>ScrollPanel</code> to create something like
 <code>ScrollViewer</code> widget. However, it could also be used to create sliders to show some
 value that lies within some range.</p>
-<h2 id="example-11"><a class="header" href="#example-11">Example</a></h2>
+<h2 id="example-12"><a class="header" href="#example-12">Example</a></h2>
 <p>A simple example of how to create a new <code>ScrollBar</code> could be something like this:</p>
 <pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11671,7 +11708,7 @@ scrolling functionality.</p>
 size to ensure that all of it will be accessible in its parent widget bounds. For example, it could be used in a
 <a href="#window-1">Window</a> widget to allow a content of the window to be accessible, even if the window is smaller than
 the content.</p>
-<h2 id="example-12"><a class="header" href="#example-12">Example</a></h2>
+<h2 id="example-13"><a class="header" href="#example-13">Example</a></h2>
 <p>A scroll viewer widget could be created using <code>ScrollViewerBuilder</code>:</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -11856,7 +11893,7 @@ with a gui::Orientation enum value. <strong>By default,</strong> all StackPanel�
 <p>Selector is a simple container widget that allows selecting an item from a fixed set of items.
 Selector widget shows the currently selected item at the center and two buttons on the sides
 that allows selecting either the previous or the next item.</p>
-<h2 id="example-13"><a class="header" href="#example-13">Example</a></h2>
+<h2 id="example-14"><a class="header" href="#example-14">Example</a></h2>
 <p>The following examples creates a new selector with three items and selects the middle one as
 active. The items can be of any type, even mixed types are allowed.</p>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]

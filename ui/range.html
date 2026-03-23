@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Range (WIP) - Fyrox Book</title>
+        <title>Range - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-f9566156.js";
+            window.path_to_searchindex_js = "../searchindex-f9ca12dc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-ab2b3193.js"></script>
+        <script src="../toc-64f82f00.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,8 +191,45 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="range-wip"><a class="header" href="#range-wip">Range (WIP)</a></h1>
+                        <h1 id="range"><a class="header" href="#range">Range</a></h1>
 <p><img src="range_editor.gif" alt="range editor"></p>
+<p>Range editor is used to display and edit closed ranges like <code>0..1</code>. The widget is generic over numeric type,
+so you can display and editor ranges of any type, such as <code>u32</code>, <code>f32</code>, <code>f64</code>, etc.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>You can create range editors using [<code>RangeEditorBuilder</code>], like so:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_range_editor(ctx: &amp;mut BuildContext) -&gt; Handle&lt;RangeEditor&lt;u32&gt;&gt; {
+    RangeEditorBuilder::new(WidgetBuilder::new())
+        .with_value(0u32..100u32)
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre>
+<p>This example creates an editor for <code>Range&lt;u32&gt;</code> type with <code>0..100</code> value.</p>
+<h2 id="value"><a class="header" href="#value">Value</a></h2>
+<p>To change the current value of a range editor, use [<code>RangeEditorMessage::Value</code>] message:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_value(range_editor: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send(range_editor, RangeEditorMessage::Value(5u32..20u32))
+}
+<span class="boring">}</span></code></pre>
+<p>To “catch” the moment when the value has changed, use the same message, but check for [<code>MessageDirection::FromWidget</code>]
+direction
+on the message:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn fetch_value(range_editor: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if let Some(RangeEditorMessage::Value(range)) =
+        message.data_from::&lt;RangeEditorMessage&lt;u32&gt;&gt;(range_editor)
+    {
+        println!("The new value is: {:?}", range)
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>Be very careful about the type of the range when sending a message, you need to send a range of exact type, that match
+the type
+of your editor, otherwise the message have no effect. The same applied to fetching.</p>
 
                     </main>
 
