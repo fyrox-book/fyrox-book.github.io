@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Rect (WIP) - Fyrox Book</title>
+        <title>Rect - Fyrox Book</title>
 
 
         <!-- Custom HTML head -->
@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-9bf2b649.js";
+            window.path_to_searchindex_js = "../searchindex-f9566156.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-03bf2098.js"></script>
+        <script src="../toc-ab2b3193.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,8 +191,44 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="rect-editor-wip"><a class="header" href="#rect-editor-wip">Rect editor (WIP)</a></h1>
+                        <h1 id="rect-editor"><a class="header" href="#rect-editor">Rect editor</a></h1>
 <p><img src="rect.gif" alt="rect"></p>
+<p>Rect editor widget is used to show and edit <code>Rect</code> values. It shows four numeric fields: two for the top left corner
+of a rect, two for its size.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>Rect editor can be created using <code>RectEditorBuilder</code>, like so:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn create_rect_editor(ctx: &amp;mut BuildContext) -&gt; Handle&lt;RectEditor&lt;u32&gt;&gt; {
+    RectEditorBuilder::new(WidgetBuilder::new())
+        .with_value(Rect::new(0, 0, 10, 20))
+        .build(ctx)
+}
+<span class="boring">}</span></code></pre>
+<h2 id="value"><a class="header" href="#value">Value</a></h2>
+<p>To change the value of a rect editor, use <code>RectEditorMessage::Value</code> message:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn change_value(rect_editor: Handle&lt;UiNode&gt;, ui: &amp;UserInterface) {
+    ui.send(
+        rect_editor,
+        RectEditorMessage::Value(Rect::new(20, 20, 60, 80)),
+    );
+}
+<span class="boring">}</span></code></pre>
+<p>To “catch” the moment when the value of a rect editor has changed, listen to the same message, but check its direction:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn fetch_value(rect_editor: Handle&lt;UiNode&gt;, message: &amp;UiMessage) {
+    if let Some(RectEditorMessage::Value(value)) = message.data::&lt;RectEditorMessage&lt;u32&gt;&gt;() {
+        if message.destination() == rect_editor
+            &amp;&amp; message.direction() == MessageDirection::FromWidget
+        {
+            println!("The new value is: {:?}", value)
+        }
+    }
+}
+<span class="boring">}</span></code></pre>
 
                     </main>
 
