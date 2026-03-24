@@ -47,10 +47,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f9ca12dc.js";
+            window.path_to_searchindex_js = "searchindex-57b7390e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-64f82f00.js"></script>
+        <script src="toc-e7d6d06f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -9867,7 +9867,7 @@ contracted via user input, exited, and have a displayed label. The window has a 
 <li><a href="#message-box">Message Box</a>: The Message Box is a Window that has been streamlined to show standard confirmation/information
 dialogues, for example, closing a document with unsaved changes. It has a title, some text, and a fixed set of buttons
 (Yes, No, Cancel in different combinations).</li>
-<li><a href="#menu-wip">Menu</a>: The Menu is a root container for Menu Items, an example could be a menu strip with File, Edit, View,
+<li><a href="ui/menu.html">Menu</a>: The Menu is a root container for Menu Items, an example could be a menu strip with File, Edit, View,
 etc. items.</li>
 <li><a href="#popup">Popup</a>: The Popup is a panel that locks input to its content while it is open. A simple example of it could
 be a context menu.</li>
@@ -9881,7 +9881,7 @@ selected.</li>
 <li><a href="#docking-manager">Docking Manager</a>: The Docking manager allows you to dock windows and hold them in-place.</li>
 <li><a href="#tree">Tree</a>: The Tree allows you to create views for hierarchical data.</li>
 <li><a href="#screen">Screen</a>: Screen is a widget that always has the size of the screen of the UI in which it is used.</li>
-<li><a href="#dropdown-menu-wip">Dropdown Menu</a> - <strong>TODO</strong></li>
+<li><a href="ui/dropdown_menu.html">Dropdown Menu</a> - <strong>TODO</strong></li>
 <li><a href="#selector">Selector</a> - <strong>TODO</strong></li>
 <li><a href="#navigation">Navigation</a> - <strong>TODO</strong></li>
 </ul>
@@ -9914,15 +9914,15 @@ direct input. The number can be constrained to remain inside a specific range or
 <li><a href="#list-view">List View</a>: The List View provides a control where users can select from a list of items.</li>
 <li><a href="#dropdown-list">Dropdown List</a>: The Drop-down List is a control which shows the currently selected item and provides a drop-down
 list to select an item.</li>
-<li><a href="#file-browser-wip">File Browser</a>: The File Browser is a tree view of the file system allowing the user to select a file or folder.</li>
-<li><a href="#curve-editor-wip">Curve Editor</a>: The CurveEditor allows editing parametric curves - adding points, and setting up transitions
+<li><a href="ui/file_browser.html">File Browser</a>: The File Browser is a tree view of the file system allowing the user to select a file or folder.</li>
+<li><a href="ui/curve_editor.html">Curve Editor</a>: The CurveEditor allows editing parametric curves - adding points, and setting up transitions
 (constant, linear, cubic) between them.</li>
-<li><a href="#inspector-wip">Inspector</a>: The Inspector automatically creates and handles the input of UI elements based on a populated
+<li><a href="ui/inspector.html">Inspector</a>: The Inspector automatically creates and handles the input of UI elements based on a populated
 Inspector Context given to it allowing the user to adjust values of a variety of models without manually creating UI’s
 for each type.</li>
-<li><a href="#thumb-wip">Thumb</a> - <strong>TODO</strong></li>
-<li><a href="#key-binding-wip">Key Binding</a> - <strong>TODO</strong></li>
-<li><a href="#toggle-button-wip">Toggle Button</a> - <strong>TODO</strong></li>
+<li><a href="ui/thumb.html">Thumb</a> - <strong>TODO</strong></li>
+<li><a href="ui/key_binding.html">Key Binding</a> - <strong>TODO</strong></li>
+<li><a href="ui/toggle_button.html">Toggle Button</a> - <strong>TODO</strong></li>
 </ul>
 <h2 id="full-list"><a class="header" href="#full-list">Full List</a></h2>
 <p>The book describes only those widgets that are usable in game development, the full number of widgets in the
@@ -10616,9 +10616,6 @@ customization:</p>
 <li><code>.with_undefined_mark(..)</code> - sets the widget that will be used as undefined icon.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="curve-editor-wip"><a class="header" href="#curve-editor-wip">Curve editor (WIP)</a></h1>
-<p><img src="ui/curve_editor.png" alt="curve editor"></p>
-<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="decorator"><a class="header" href="#decorator">Decorator</a></h1>
 <p>A visual element that changes its appearance by listening specific events. It can have “pressed”, “hover”, “selected” or
 normal appearance:</p>
@@ -10800,8 +10797,6 @@ dropdown list using <code>DropdownListMessage::Items</code> message.</p>
 <p>A dropdown list could be opened and closed manually using <code>DropdownListMessage::Open</code> and
 <code>DropdownListMessage::Close</code> messages.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="dropdown-menu-wip"><a class="header" href="#dropdown-menu-wip">Dropdown Menu (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="expander"><a class="header" href="#expander">Expander</a></h1>
 <p><img src="ui/expander.gif" alt="expander"></p>
 <p>Expander is a simple collapsible container that has a header and collapsible/expandable content zone. It is used to
@@ -10898,10 +10893,6 @@ impl Plugin for Game {
 <span class="boring">}</span></code></pre>
 <p>To switch expander state at runtime, send <code>ExpanderMessage::Expand</code> to your Expander widget instance with
 <code>MessageDirection::ToWidget</code>.</p>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="file-browser-wip"><a class="header" href="#file-browser-wip">File browser (WIP)</a></h1>
-<p><img src="ui/file_browser.gif" alt="file browser"></p>
-<p>FileBrowser widget is a simple file system tree, FileSelector is a window with FileBrowser and few buttons.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="grid"><a class="header" href="#grid">Grid</a></h1>
 <p>Grids are one of several methods to position multiple widgets in relation to each other. A Grid Widget, as the name
@@ -11049,12 +11040,6 @@ to mismatch of coordinates of UI and graphics API. The UI has origin at left top
 <li>Your source image is vertically mirrored.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="key-binding-wip"><a class="header" href="#key-binding-wip">Key Binding (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="inspector-wip"><a class="header" href="#inspector-wip">Inspector (WIP)</a></h1>
-<p><img src="ui/inspector.png" alt="inspector"></p>
-<p>A widget that allows you to generate visual representation for arbitrary structures, that implement <code>Reflect</code> trait.</p>
-<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="list-view"><a class="header" href="#list-view">List view</a></h1>
 <p><img src="ui/list_view.gif" alt="list view"></p>
 <p>List view is used to display lists with arbitrary items. It supports multiple selection and by
@@ -11158,8 +11143,6 @@ message:</p>
     ui.send(my_list_view, ListViewMessage::BringItemIntoView(my_item));
 }
 <span class="boring">}</span></code></pre>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="menu-wip"><a class="header" href="#menu-wip">Menu (WIP)</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="message-box"><a class="header" href="#message-box">Message box</a></h1>
 <p><img src="ui/message_box.gif" alt="message box"></p>
@@ -12488,10 +12471,6 @@ could useful to highlight something visually.</p>
 }
 <span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="toggle-button-wip"><a class="header" href="#toggle-button-wip">Toggle Button (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="thumb-wip"><a class="header" href="#thumb-wip">Thumb (WIP)</a></h1>
-<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vector-image"><a class="header" href="#vector-image">Vector image</a></h1>
 <p>Vector image is used to create images, that consists from a fixed set of basic primitives, such as lines,
 triangles, rectangles, etc. It could be used to create simple images that can be infinitely scaled without
@@ -12993,7 +12972,7 @@ is better to show how to use a thing from both sides at once (code and editor), 
 Check next chapters to learn more about a part that interests you now.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="property-editors"><a class="header" href="#property-editors">Property Editors</a></h1>
-<p>The editor uses <a href="#inspector-wip">Inspector</a> widget to show the contents of your scripts and when you’re using
+<p>The editor uses <a href="ui/inspector.html">Inspector</a> widget to show the contents of your scripts and when you’re using
 custom structures inside your scripts the editor needs to know how to show them in the UI. Inspector widget has a
 special mechanism for this called <em>property editors</em>. Basically, it defines a pair <code>TypeId -&gt; Widget</code> - a type has
 an associated widget that is responsible for showing the content of the type and (optionally) edit it. If there’s no
@@ -13116,7 +13095,7 @@ fn add_collection_property_editor(editor: &amp;Editor) {
 }
 <span class="boring">}</span></code></pre>
 <h2 id="custom-property-editors"><a class="header" href="#custom-property-editors">Custom Property Editors</a></h2>
-<p>See <a href="#inspector-wip">Inspector</a> widget chapter to learn how to create custom property editors.</p>
+<p>See <a href="ui/inspector.html">Inspector</a> widget chapter to learn how to create custom property editors.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="settings-2"><a class="header" href="#settings-2">Settings</a></h1>
 <p>This chapter should help you to have better understanding of how to configure the editor and which settings
