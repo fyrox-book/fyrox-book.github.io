@@ -70,10 +70,11 @@ You can use any other textures and build your level as you like. After doing all
 
 ![editor_step1](editor_step1.png)
 
-Clone the block by selecting its rigid body and pressing `Ctrl+C` followed by `Ctrl+V`, navigate to sprite in the copy and change its
-texture to either the left or right end of the block. Use `Move Tool` to move the block somewhere you like (you can also use grid-snapping
-by going to `File -> Setting` and setting `Snap To Grid` for `Move Interaction Mode`). Do this one more time for the opposite end and you
-should get something like this:
+Clone the block by selecting its rigid body and pressing `Ctrl+C` followed by `Ctrl+V`, navigate to sprite in the copy,
+click `Make Unique` on the `Material` property and change its diffuse texture to either the left or right end of the 
+block. Use `Move Tool` to move the block somewhere you like (you can also use grid-snapping by going to `File -> Setting` 
+and setting `Snap To Grid` for `Move Interaction Mode`). Do this one more time for the opposite end, and you should get 
+something like this:
 
 ![editor_step2](editor_step2.png)
 
