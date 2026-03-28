@@ -91,7 +91,7 @@ clone it. Switch body type of the copy to `Dynamic`. Now change its sprite textu
 
 Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to
-`data/characters/adventurer/adventurer-Sheet.png`. Set its uv rect to `(0.0, 0.0, 0.143, 0.091)` to see only one frame.
+`data/characters/adventurer/adventurer-Sheet.png`. Select the sprite on `Wolrd Viewer`, and go to `Inspector` Set its uv rect to `(0.0, 0.0)` for position and `(0.143, 0.091)` for size to see only one frame.
 We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our 
 camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
 and set the `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to 
