@@ -55,7 +55,7 @@ we'll start by adding a simple ground block. Right-click on `__ROOT__` of the sc
 `Add Child -> Physics2D -> Rigid Body`. This will create a rigid body for the ground block, select the rigid body, and
 set `Body Type` to `Static` in `Inspector`, by doing this we're telling the physics engine that our ground block should not move
 and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions, 
-right-click on the rigid body in `Inspector` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
+right-click on the rigid body in `World Viewer` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
 body, by default it has a `Cuboid` shape with a `1.0` meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click `Add Child -> 2D -> Rectangle`. This adds a simple 2D sprite, select it and set a texture
 to it by finding the `Material` property in the Inspector, clicking `Edit` button near it and setting the `diffuseTexture`
