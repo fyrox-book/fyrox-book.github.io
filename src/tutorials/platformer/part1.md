@@ -55,7 +55,7 @@ we'll start by adding a simple ground block. Right-click on `__ROOT__` of the sc
 `Add Child -> Physics2D -> Rigid Body`. This will create a rigid body for the ground block, select the rigid body, and
 set `Body Type` to `Static` in `Inspector`, by doing this we're telling the physics engine that our ground block should not move
 and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions, 
-right-click on the rigid body in `Inspector` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
+right-click on the rigid body in `World Viewer` and click `Add Child -> Physics2D -> Collider`. We've just added a new collider to the rigid
 body, by default it has a `Cuboid` shape with a `1.0` meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click `Add Child -> 2D -> Rectangle`. This adds a simple 2D sprite, select it and set a texture
 to it by finding the `Material` property in the Inspector, clicking `Edit` button near it and setting the `diffuseTexture`
@@ -91,7 +91,7 @@ clone it. Switch body type of the copy to `Dynamic`. Now change its sprite textu
 
 Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to
-`data/characters/adventurer/adventurer-Sheet.png`. Set its uv rect to `(0.0, 0.0, 0.143, 0.091)` to see only one frame.
+`data/characters/adventurer/adventurer-Sheet.png`. Select the sprite on `World Viewer`, and go to `Inspector` Set its uv rect to `(0.0, 0.0)` for position and `(0.143, 0.091)` for size to see only one frame.
 We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our 
 camera will have no background, there'll be a black "void", this is not great and let's fix that. Select the camera
 and set the `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to 
