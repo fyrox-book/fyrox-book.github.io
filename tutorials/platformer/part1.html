@@ -46,7 +46,7 @@
             const path_to_root = "../../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c20b3595.js";
+            window.path_to_searchindex_js = "../../searchindex-c9232b51.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-e7d6d06f.js"></script>
@@ -264,10 +264,11 @@ clone it. Switch body type of the copy to <code>Dynamic</code>. Now change its s
 parameters - <code>Begin = 0.0, 0.0</code> and <code>End = 0.0, 0.3</code>. Add a 2D sprite (rectangle) to the rigid body and set its texture to
 <code>data/characters/adventurer/adventurer-Sheet.png</code>. Set its uv rect to <code>(0.0, 0.0, 0.143, 0.091)</code> to see only one frame.
 We also need a camera, otherwise, we won’t see anything. Add it as a child to a player’s rigid body. By default, our
-camera will have no background, there’ll be a black “void”, this is not great and let’s fix that. Select the camera
+camera will have a default background, this is not great and let’s fix that. Go to <code>File -&gt; Current Scene Settings</code>
 and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag’n’drop it to
-the <code>Front</code> field of the <code>Skybox</code> property. Don’t forget to adjust the far plane distance to something like <code>20.0</code>,
-otherwise, you’ll see just a portion of the background image. If everything is done correctly, you should get something like this:</p>
+the <code>Front</code> field of the <code>Skybox</code> property. Don’t forget to adjust the far plane distance to something like <code>20.0</code> on the
+camera, otherwise, you’ll see just a portion of the background image. If everything is done correctly, you should get
+something like this:</p>
 <p><img src="editor_step5.png" alt="editor_step5"></p>
 <p>Save your scene by goint to <code>File -&gt; Save Scene</code>. Now we can run the game using the <code>Play/Stop</code> button at the top of the
 scene previewer. You should see pretty much the same as in the scene preview, except
