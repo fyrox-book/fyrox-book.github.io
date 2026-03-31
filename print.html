@@ -47,7 +47,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c9232b51.js";
+            window.path_to_searchindex_js = "searchindex-c134b303.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e7d6d06f.js"></script>
@@ -14068,7 +14068,7 @@ we’ll start by adding a simple ground block. Right-click on <code>__ROOT__</co
 <code>Add Child -&gt; Physics2D -&gt; Rigid Body</code>. This will create a rigid body for the ground block, select the rigid body, and
 set <code>Body Type</code> to <code>Static</code> in <code>Inspector</code>, by doing this we’re telling the physics engine that our ground block should not move
 and be rock-solid. Every rigid body requires a collider, otherwise, the physics engine will not know how to handle collisions,
-right-click on the rigid body in <code>Inspector</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We’ve just added a new collider to the rigid
+right-click on the rigid body in <code>World Viewer</code> and click <code>Add Child -&gt; Physics2D -&gt; Collider</code>. We’ve just added a new collider to the rigid
 body, by default it has a <code>Cuboid</code> shape with a <code>1.0</code> meter in height and width. Finally, we need to add some graphics to the rigid body,
 right-click on the rigid body and click <code>Add Child -&gt; 2D -&gt; Rectangle</code>. This adds a simple 2D sprite, select it and set a texture
 to it by finding the <code>Material</code> property in the Inspector, clicking <code>Edit</code> button near it and setting the <code>diffuseTexture</code>
@@ -14096,13 +14096,13 @@ clone it. Switch body type of the copy to <code>Dynamic</code>. Now change its s
 <p><img src="tutorials/platformer/editor_step4.png" alt="editor_step4"></p>
 <p>Now for the player. As always, let’s start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - <code>Begin = 0.0, 0.0</code> and <code>End = 0.0, 0.3</code>. Add a 2D sprite (rectangle) to the rigid body and set its texture to
-<code>data/characters/adventurer/adventurer-Sheet.png</code>. Set its uv rect to <code>(0.0, 0.0, 0.143, 0.091)</code> to see only one frame.
+<code>data/characters/adventurer/adventurer-Sheet.png</code>. Select the sprite on <code>World Viewer</code>, and go to <code>Inspector</code> Set its uv rect to <code>(0.0, 0.0)</code> for position and <code>(0.143, 0.091)</code> for size to see only one frame.
 We also need a camera, otherwise, we won’t see anything. Add it as a child to a player’s rigid body. By default, our
 camera will have a default background, this is not great and let’s fix that. Go to <code>File -&gt; Current Scene Settings</code>
 and set the <code>Skybox</code> property to <code>Some</code>. Now go to asset browser and find <code>data/background/BG.png</code>, drag’n’drop it to
 the <code>Front</code> field of the <code>Skybox</code> property. Don’t forget to adjust the far plane distance to something like <code>20.0</code> on the
-camera, otherwise, you’ll see just a portion of the background image. If everything is done correctly, you should get
-something like this:</p>
+camera, otherwise, you’ll see just a portion of the background image. If everything is done correctly, you should get</p>
+<p>something like this:</p>
 <p><img src="tutorials/platformer/editor_step5.png" alt="editor_step5"></p>
 <p>Save your scene by goint to <code>File -&gt; Save Scene</code>. Now we can run the game using the <code>Play/Stop</code> button at the top of the
 scene previewer. You should see pretty much the same as in the scene preview, except
