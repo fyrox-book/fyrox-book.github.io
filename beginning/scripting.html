@@ -46,7 +46,7 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3ab705c0.js";
+            window.path_to_searchindex_js = "../searchindex-338b86c1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e7d6d06f.js"></script>
@@ -192,6 +192,140 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="installation-and-project-creation"><a class="header" href="#installation-and-project-creation">Installation and Project Creation</a></h1>
+<p>Fyrox is a compiled game engine, this means that your game needs to be compiled to native code before it can be run.
+This fact requires a specific project structure which is generated when you’re making a new project. This project
+consists of a few Rust crates (game, editor, executors for each platform). Every Fyrox game is just a plugin for both
+the engine and the editor crates. This approach allows the game to run from the editor and enables editing of the game
+entities from within it, or just run the game without the editor (since not every game needs an editor). This chapter
+will cover how to install the engine with its platform-specific dependencies, how to use the plugins and scripting
+system, and how to run the editor.</p>
+<h2 id="platform-specific-dependencies"><a class="header" href="#platform-specific-dependencies">Platform-specific Dependencies</a></h2>
+<p>Before starting to use the engine, make sure all required platform-specific development dependencies are installed. If
+using Windows or macOS, no additional dependencies are required other than
+the <a href="https://rustup.rs">latest Rust installed</a> with the appropriate toolchain for your platform.</p>
+<h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
+<p>On Linux, Fyrox needs the following libraries for development: <code>libxcb-shape0</code>, <code>libxcb-xfixes0</code>, <code>libxcb1</code>,
+<code>libxkbcommon</code>, <code>libasound2</code>, <code>libegl-mesa0</code> and the <code>build-essential</code> package group.</p>
+<p>For Debian based distros like Ubuntu, they can be installed like below:</p>
+<pre><code class="language-shell">sudo apt install libxcb-shape0-dev libxcb-xfixes0-dev libxcb1-dev libxkbcommon-dev libasound2-dev libegl-mesa0 build-essential
+</code></pre>
+<p>For NixOS, run <code>nix develop</code> from the root of your project to open a shell with all the required dependencies.
+<code>flake.nix</code> is included in the generated project for you. It’s content is the following:</p>
+<details>
+<summary>flake.nix</summary>
+<pre><code class="language-nix">{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = {
+    nixpkgs,
+    rust-overlay,
+    ...
+  }:
+  let
+    overlays = [
+      (import rust-overlay)
+    ];
+
+    systems = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+
+    forAllSystems = f:
+      nixpkgs.lib.genAttrs systems
+      (system: f { pkgs = import nixpkgs { inherit system overlays; }; });
+  in
+  {
+    devShells = forAllSystems ({ pkgs }: with pkgs; {
+      default = mkShell rec {
+        nativeBuildInputs = [
+          pkg-config
+          rust-bin.stable.latest.default
+        ];
+
+        buildInputs = [
+          libx11
+          libxcb
+          alsa-lib
+          wayland
+          libxkbcommon
+          libGL
+        ];
+
+        LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+
+        # Remove this if you don't need LSP support
+        RUST_SRC_PATH = "${rust-bin.stable.latest.rust-src}/lib/rustlib/src/rust/library";
+      };
+    });
+  };
+}
+</code></pre>
+</details>
+<h2 id="project-manager"><a class="header" href="#project-manager">Project Manager</a></h2>
+<p><a href="https://fyrox.rs/download.html"><img src="project_manager.png" alt="project manager"></a></p>
+<p><a href="https://fyrox.rs/download.html">Project manager</a> is a part of the engine that allows you to manage multiple projects made with the engine all at once.
+It allows you to create a new project or import an existing one, run the project or edit it in the editor,
+upgrade the project to a selected version of the engine, and many more options. If you want to learn more about
+the project manager, read <a href="project_manager.html">this chapter</a>.</p>
+<p><a href="https://fyrox.rs/download.html">Download the project manager</a> for your OS from the website or install it using
+<code>cargo install fyrox-project-manager</code> and run it. Then click the <code>+Create</code> button, select the path where you want the
+project to be located and click <code>Create</code>. The project manager will create a new directory for your project with the
+following structure (some files are omitted to be less verbose):</p>
+<pre><code class="language-text">YourProject
+├───Cargo.toml
+├───data
+│       scene.rgs
+├───game
+│   │   Cargo.toml
+│   └───src
+│           lib.rs
+├───editor
+├───executor
+├───executor-android
+├───executor-wasm
+├───export-cli
+└───game-dylib
+</code></pre>
+<p>The most important parts in this structure:</p>
+<ul>
+<li><code>Cargo.toml</code> - the workspace of your project.</li>
+<li><code>game</code> - your game code.</li>
+<li><code>data</code> - the folder where all the assets must be located (subfolders allowed).</li>
+<li><code>editor</code> - the editor for your project (can be deleted if not needed).</li>
+<li><code>executor</code> - entry point for PC (can be deleted if not needed).</li>
+<li><code>executor-android</code> - entry point for Android (can be deleted if not needed).</li>
+<li><code>executor-wasm</code> - entry point for WebAssembly (can be deleted if not needed).</li>
+<li><code>export-cli</code> - command line interface for a <a href="../shipping/ci_cd.html">tool that handles project export</a>.</li>
+<li><code>game-dylib</code> - special “bridge” for native code hot reloading functionality (can be deleted if not needed).</li>
+</ul>
+<p>To run the project, select the new project in the list and click <code>Edit</code> button to run the editor, or <code>Run</code> to run
+the game without the editor (the game can also be run from the editor). Learn more about the
+<a href="project_manager.html">project manager here</a>.</p>
+<p>Your project needs to be compiled from scratch before it can be run, it may take some time, usually it takes up to 10
+minutes on a CPU with 4 cores (8 core CPU will compile the engine in just 5 minutes or so). Next runs of the editor will
+only compile your game, which usually takes a few seconds. Anyway, after some time you should see the editor window.</p>
+<p><img src="editor.png" alt="editor"></p>
+<p>To cut down iteration times, you may want to use a powerful-yet-dangerous tool called native code hot reloading.
+Learn more about it in <a href="hot_reloading.html">this chapter</a>.</p>
+<h2 id="usage-modes"><a class="header" href="#usage-modes">Usage Modes</a></h2>
+<p>There are a number of ways in which you can use the engine. For example, if you don’t need the editor, just don’t
+use it. You can still compile your game to a desired platform. Even the project manager and the projects it
+generates aren’t mandatory at all.</p>
+<p>If you want to manually initialize the engine without all these fancy bells and whistles, read
+<a href="../engine/manual_initialization.html">the respective chapter</a>. Keep in mind, however, that this book is written
+in assumption that you’re using the engine in the recommended way and all non-standard usage may result in
+unexpected behavior. The recommended approach does all the “heavy lifting” for you.</p>
+<h2 id="adding-game-logic"><a class="header" href="#adding-game-logic">Adding Game Logic</a></h2>
+<p>Any object-specific game logic should be added using scripts. A script is a “container” for data and code, that will be
+executed by the engine. Read the <a href="../scripting/scripting.html">respective chapter</a> to learn how to create, edit, and use scripts
+in your game.</p>
 
                     </main>
 
