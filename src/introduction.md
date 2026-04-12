@@ -2,7 +2,7 @@
 
 Practical reference and user guides for [Fyrox Game Engine](https://github.com/FyroxEngine/Fyrox) and its editor [FyroxEd](https://github.com/FyroxEngine/Fyrox/tree/master/editor).
 
-> ⚠️ Tip: If you want to start using the engine as fast as possible - read this [chapter](./beginning/scripting.md).
+> ⚠️ Tip: If you want to start using the engine as fast as possible - read this [chapter](./beginning/installation_and_project_creation.md).
 
 ## Engine Version
 

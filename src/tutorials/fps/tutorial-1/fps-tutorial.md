@@ -3,7 +3,7 @@
 In this tutorial, we'll create a first-person shooter game. 
 
 Before we begin, make sure you know how to create projects and run the game and the editor. Read 
-[this chapter](../../../beginning/scripting.md) first and let's start by creating a new game project, open the project 
+[this chapter](../../../beginning/installation_and_project_creation.md) first and let's start by creating a new game project, open the project 
 manager and create a new project:
 
 ![pm open](pm_start.png)

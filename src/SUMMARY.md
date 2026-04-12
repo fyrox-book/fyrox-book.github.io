@@ -8,7 +8,7 @@
     - [Design Philosophy and Goals](./introduction/philosophy_and_goals.md)
     - [Frequently Asked Questions](./introduction/faq.md)
 - [Getting started](./beginning/getting_started.md)
-    - [Installation and Project Creation](./beginning/scripting.md)
+    - [Installation and Project Creation](./beginning/installation_and_project_creation.md)
         - [Manual Installation](./beginning/manual_installation.md)
     - [Editor Overview](./beginning/editor_overview.md)
     - [Scene and Scene Graph](./beginning/scene_and_scene_graph.md)
