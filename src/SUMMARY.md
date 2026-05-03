@@ -143,6 +143,7 @@
     - [Plugins](./editor/plugins.md)
 - [Miscellaneous](./misc/misc.md)
     - [Log](./misc/log.md)
+    - [Dynamic Types](./misc/dyn_type.md)
 - [Shipping](./shipping/shipping.md)
     - [PC](./shipping/pc.md)
     - [WebAssembly](./shipping/wasm.md)

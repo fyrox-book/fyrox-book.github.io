@@ -1,3 +1,5 @@
+mod dyn_type;
+
 use fyrox::core::log::Log;
 use fyrox::core::{err, err_once, info, info_once, warn, warn_once};
 use std::fs::File;

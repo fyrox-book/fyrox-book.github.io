@@ -63,6 +63,13 @@ responsive while the game is doing a hard job loading the world for you. Got it 
 needed to create/load large scenes with tons of resources without blocking the main thread, thus leaving the game
 fully responsive.
 
+## User Data
+
+It is possible to assign arbitrary data structure to the engine scene (both from the editor and code). This ability is
+very useful in cases where you need to have some "global" data for your scene. The typical use case for user data is
+to store handles to some scene nodes, so these handles can be accessed directly from your plugin or scripts. User data
+is based on [dynamic types](../misc/dyn_type.md).
+
 ## Managing multiple scenes
 
 Usually you should have only one scene active (unless you're making something very special), you should use
