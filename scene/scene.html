@@ -46,10 +46,10 @@
             const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-338b86c1.js";
+            window.path_to_searchindex_js = "../searchindex-ebe87f60.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-e7d6d06f.js"></script>
+        <script src="../toc-3cc2cb1f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -311,6 +311,11 @@ loading screens and loading screen has some fancy interactive stuff with progres
 responsive while the game is doing a hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking the main thread, thus leaving the game
 fully responsive.</p>
+<h2 id="user-data"><a class="header" href="#user-data">User Data</a></h2>
+<p>It is possible to assign arbitrary data structure to the engine scene (both from the editor and code). This ability is
+very useful in cases where you need to have some “global” data for your scene. The typical use case for user data is
+to store handles to some scene nodes, so these handles can be accessed directly from your plugin or scripts. User data
+is based on <a href="../misc/dyn_type.html">dynamic types</a>.</p>
 <h2 id="managing-multiple-scenes"><a class="header" href="#managing-multiple-scenes">Managing multiple scenes</a></h2>
 <p>Usually you should have only one scene active (unless you’re making something very special), you should use
 <code>.enabled</code> flag of a scene to turn it off or on. Deactivated scenes won’t be rendered, the physics won’t be

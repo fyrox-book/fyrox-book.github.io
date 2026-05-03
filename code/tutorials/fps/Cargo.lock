@@ -1445,14 +1445,14 @@ dependencies = [
 
 [[package]]
 name = "fyrox"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fyrox-impl",
 ]
 
 [[package]]
 name = "fyrox-animation"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1464,7 +1464,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-autotile"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fxhash",
  "nalgebra 0.34.1",
@@ -1473,7 +1473,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-build-tools"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "cargo_metadata",
  "clap",
@@ -1487,7 +1487,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-core"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "android-activity",
  "arrayvec",
@@ -1499,7 +1499,7 @@ dependencies = [
  "futures",
  "fxhash",
  "fyrox-core-derive",
- "fyrox-math 1.0.0",
+ "fyrox-math 2.0.0-rc.1",
  "instant",
  "js-sys",
  "memoffset",
@@ -1520,7 +1520,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-core-derive"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "convert_case",
  "darling",
@@ -1532,7 +1532,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-graph"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1541,7 +1541,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-graphics"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "bytemuck",
  "fyrox-core",
@@ -1552,7 +1552,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-graphics-gl"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1569,7 +1569,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-impl"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "approx",
  "base64",
@@ -1621,7 +1621,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-material"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1638,9 +1638,9 @@ dependencies = [
 
 [[package]]
 name = "fyrox-math"
-version = "1.0.0-rc.2"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "85c29d0ef1f72545bb316121825bc6006b6e94ae7d12fb07a9e6ac479b61937f"
+checksum = "580239dda8f5a637fe476b027d47d9c5ab27a7e2bf078bce190ad3ef722f7080"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1652,7 +1652,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-math"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1664,7 +1664,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-resource"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fxhash",
  "fyrox-core",
@@ -1676,7 +1676,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-sound"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "fyrox-core",
  "fyrox-resource",
@@ -1691,7 +1691,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-texture"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "ddsfile",
  "fast_image_resize",
@@ -1707,7 +1707,7 @@ dependencies = [
 
 [[package]]
 name = "fyrox-ui"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "bytemuck",
  "copypasta",
@@ -1730,7 +1730,7 @@ dependencies = [
 
 [[package]]
 name = "fyroxed_base"
-version = "1.0.0"
+version = "2.0.0-rc.1"
 dependencies = [
  "bitflags 2.10.0",
  "cargo_metadata",
@@ -2549,13 +2549,13 @@ dependencies = [
 
 [[package]]
 name = "lightmap"
-version = "0.4.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fde77e8284b251bff3e01446030315f503a005789423a807561dc8b0e3797918"
+checksum = "53037dd8a57d6de77be087073d7d868b9d2ddb8a55e2a9ca9885f39aea9f7755"
 dependencies = [
  "arrayvec",
  "fxhash",
- "fyrox-math 1.0.0-rc.2",
+ "fyrox-math 1.0.1",
  "nalgebra 0.34.1",
  "rayon",
  "uvgen",

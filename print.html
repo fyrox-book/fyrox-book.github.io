@@ -47,10 +47,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-338b86c1.js";
+            window.path_to_searchindex_js = "searchindex-ebe87f60.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e7d6d06f.js"></script>
+        <script src="toc-3cc2cb1f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -2798,6 +2798,11 @@ loading screens and loading screen has some fancy interactive stuff with progres
 responsive while the game is doing a hard job loading the world for you. Got it already? Asynchronous scene loading is
 needed to create/load large scenes with tons of resources without blocking the main thread, thus leaving the game
 fully responsive.</p>
+<h2 id="user-data"><a class="header" href="#user-data">User Data</a></h2>
+<p>It is possible to assign arbitrary data structure to the engine scene (both from the editor and code). This ability is
+very useful in cases where you need to have some “global” data for your scene. The typical use case for user data is
+to store handles to some scene nodes, so these handles can be accessed directly from your plugin or scripts. User data
+is based on <a href="#dynamic-types">dynamic types</a>.</p>
 <h2 id="managing-multiple-scenes"><a class="header" href="#managing-multiple-scenes">Managing multiple scenes</a></h2>
 <p>Usually you should have only one scene active (unless you’re making something very special), you should use
 <code>.enabled</code> flag of a scene to turn it off or on. Deactivated scenes won’t be rendered, the physics won’t be
@@ -9362,6 +9367,11 @@ when its minimal valuable version is ready, rent a server and test it with playe
 <p>Fyrox features an extremely powerful and flexible node-based user interface system. Power and flexibility comes with
 a certain price: it has a steep learning curve. This chapter will cover user interface usage in the engine, explain
 basic concepts, provide information about most commonly used widgets, and so on.</p>
+<h2 id="user-data-1"><a class="header" href="#user-data-1">User Data</a></h2>
+<p>It is possible to assign arbitrary data structure to the user interface (both from the editor and code). This ability is
+very useful in cases where you need to have some “global” data for your user interface. The typical use case for user data is
+to store handles to some widgets (for example, handles to buttons in your main menu), so these handles can be accessed
+directly from your plugin or scripts. User data is based on <a href="#dynamic-types">dynamic types</a>.</p>
 <h2 id="web-demo-1"><a class="header" href="#web-demo-1">Web Demo</a></h2>
 <p>You can explore UI system capabilities in this <a href="https://fyrox.rs/assets/demo/ui/index.html">web demo</a>. Keep in mind,
 that it was designed to run on PC and wasn’t tested on mobile devices.</p>
@@ -13858,6 +13868,37 @@ with the suffix <code>_once</code>:</p>
     warn!("This is some warning");
     err!("This is some error");
 <span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="dynamic-types"><a class="header" href="#dynamic-types">Dynamic Types</a></h1>
+<p>Dynamic type (dyntype for short) is a user-defined data structure that supports additional features which makes it
+available from the editor and serializable to the standard asset format. Dyntypes also supports handles to scene or
+ui nodes, and the engine will maintain their correctness automatically. Typical definition of a dyntype could be the
+following:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Visit, Reflect, TypeUuidProvider, Clone, Default)]
+#[type_uuid(id = "df479e17-1db1-449f-b91b-029d05332c9b")]
+struct MyData {
+    target_name: String,
+    rigid_body: Handle&lt;RigidBody&gt;
+}
+<span class="boring">}</span></code></pre>
+<h2 id="registration"><a class="header" href="#registration">Registration</a></h2>
+<p>Dyntypes must be registered in the engine to be serialiable, otherwise the engine will simply ignore them. This can
+be done like so:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Plugin for MyGame {
+    fn register(&amp;self, context: PluginRegistrationContext) -&gt; GameResult {
+        context.dyn_type_constructors.add::&lt;MyData, Self&gt;("My Data");
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre>
+<h2 id="hot-reloading"><a class="header" href="#hot-reloading">Hot-reloading</a></h2>
+<p>Dyntypes are also correctly handled during native code hot reloading; the engine will serialize their content first
+before the reload and then deserialize it back in the type instance after the reload is finished. This fact makes
+dyntypes safe in native code hot reloading.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="shipping"><a class="header" href="#shipping">Shipping</a></h1>
 <p>This chapter explains how to build your game for various target platforms. On most platforms (PC, WebAssembly) you can
