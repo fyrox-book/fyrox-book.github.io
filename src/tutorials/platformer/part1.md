@@ -91,7 +91,8 @@ clone it. Switch body type of the copy to `Dynamic`. Now change its sprite textu
 
 Now for the player. As always, let's start by creating a new rigid body, adding a 2D collider to it, and setting its shape to capsule with the following
 parameters - `Begin = 0.0, 0.0` and `End = 0.0, 0.3`. Add a 2D sprite (rectangle) to the rigid body and set its texture to
-`data/characters/adventurer/adventurer-Sheet.png`. Select the sprite on `World Viewer`, and go to `Inspector` Set its uv rect to `(0.0, 0.0)` for position and `(0.143, 0.091)` for size to see only one frame.
+`data/characters/adventurer/adventurer-Sheet.png`, also make sure the camera has the `Project` property set as `Orthographic`. Select the 
+sprite on `World Viewer`, and go to `Inspector` Set its uv rect to `(0.0, 0.0)` for position and `(0.143, 0.091)` for size to see only one frame.
 We also need a camera, otherwise, we won't see anything. Add it as a child to a player's rigid body. By default, our 
 camera will have a default background, this is not great and let's fix that. Go to `File -> Current Scene Settings`
 and set the `Skybox` property to `Some`. Now go to asset browser and find `data/background/BG.png`, drag'n'drop it to 
@@ -109,6 +110,8 @@ for service graphics, such as rigid body shapes, node bounds, and so on. Now we 
 As the last preparation step, let's import all entities at the beginning, so you don't need to find them manually, add the following code
 at the beginning of the `game/src/lib.rs`:
 
+This snippet includes an import called `bot`, which will be used later in the tutorial but if you haven't taken the files from the repository 
+or created your own, just left it commented for now.
 ```rust,no_run
 {{#include ../../code/tutorials/platformer/game/src/lib.rs:imports}}
 ```
@@ -197,7 +200,8 @@ we're checking movement flags and form horizontal speed, and applying velocity t
 the jump button was pressed - apply horizontal velocity and some vertical velocity for jumping. If the jump button wasn't pressed -
 just change horizontal velocity - this will allow the player to free fall.
 
-Run the editor and enter play mode, press `[A][D][Space]` buttons to check if everything works correctly - the player should move
+Run the editor, then first, select your `Player Rigid Body` and make sure the property `Rotation Locked` is set, otherwise after jump your Player will start rotating.
+Now enter play mode, press `[A][D][Space]` buttons to check if everything works correctly - the player should move
 horizontally and be able to jump. You can jump to the boxes on the right and push them off the ledge.
 
 The movement is working, but the player does not change orientation, if we'll go to the left - it looks ok (despite the lack of animation),
